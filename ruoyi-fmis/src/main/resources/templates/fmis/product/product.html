@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('业务产品列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>产品名称：</p>
+                                <input type="text" name="name"/>
+                            </li>
+                            <li>
+                                <p>系列 数据字典：</p>
+                                <input type="text" name="series"/>
+                            </li>
+                            <li>
+                                <p>产品型号：</p>
+                                <input type="text" name="model"/>
+                            </li>
+                            <li>
+                                <p>规格：</p>
+                                <input type="text" name="specifications"/>
+                            </li>
+                            <li>
+                                <p>公称压力：</p>
+                                <input type="text" name="nominalPressure"/>
+                            </li>
+                            <li>
+                                <p>连接方式：</p>
+                                <select name="connectionType" th:with="type=${@dict.getType('')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <p>阀体材质：</p>
+                                <input type="text" name="valvebodyMaterial"/>
+                            </li>
+                            <li>
+                                <p>阀板材质：</p>
+                                <input type="text" name="valveMaterial"/>
+                            </li>
+                            <li>
+                                <p>密封材质：</p>
+                                <input type="text" name="sealingMaterial"/>
+                            </li>
+                            <li>
+                                <p>阀芯材质：</p>
+                                <input type="text" name="valveElement"/>
+                            </li>
+                            <li>
+                                <p>驱动形式：</p>
+                                <input type="text" name="driveForm"/>
+                            </li>
+                            <li>
+                                <p>产品单价：</p>
+                                <input type="text" name="price"/>
+                            </li>
+                            <li>
+                                <p>供应商名称：</p>
+                                <input type="text" name="supplier"/>
+                            </li>
+                            <li>
+                                <p>状态：</p>
+                                <select name="status">
+                                    <option value="">所有</option>
+                                </select>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="fmis:product:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="fmis:product:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="fmis:product:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="fmis:product:export">
+                    <i class="fa fa-download"></i> 导出
+                 </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('fmis:product:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('fmis:product:remove')}]];
+        var prefix = ctx + "fmis/product";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "业务产品",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'productId', 
+                    title : '产品id',
+                    visible: false
+                },
+                {
+                    field : 'name', 
+                    title : '产品名称'
+                },
+                {
+                    field : 'series', 
+                    title : '系列 数据字典'
+                },
+                {
+                    field : 'model', 
+                    title : '产品型号'
+                },
+                {
+                    field : 'specifications', 
+                    title : '规格'
+                },
+                {
+                    field : 'nominalPressure', 
+                    title : '公称压力'
+                },
+                {
+                    field : 'connectionType', 
+                    title : '连接方式'
+                },
+                {
+                    field : 'valvebodyMaterial', 
+                    title : '阀体材质'
+                },
+                {
+                    field : 'valveMaterial', 
+                    title : '阀板材质'
+                },
+                {
+                    field : 'sealingMaterial', 
+                    title : '密封材质'
+                },
+                {
+                    field : 'valveElement', 
+                    title : '阀芯材质'
+                },
+                {
+                    field : 'driveForm', 
+                    title : '驱动形式'
+                },
+                {
+                    field : 'price', 
+                    title : '产品单价'
+                },
+                {
+                    field : 'supplier', 
+                    title : '供应商名称'
+                },
+                {
+                    field : 'remark', 
+                    title : '备注'
+                },
+                {
+                    field : 'status', 
+                    title : '状态'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.productId + '\')"><i class="fa fa-edit"></i> 编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.productId + '\')"><i class="fa fa-remove"></i> 删除</a>');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

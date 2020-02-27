@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改业务产品')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-product-edit" th:object="${bizProduct}">
+            <input name="productId" th:field="*{productId}" type="hidden">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">产品名称：</label>
+                <div class="col-sm-8">
+                    <input name="name" th:field="*{name}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">系列 数据字典：</label>
+                <div class="col-sm-8">
+                    <input name="series" th:field="*{series}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">产品型号：</label>
+                <div class="col-sm-8">
+                    <input name="model" th:field="*{model}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">规格：</label>
+                <div class="col-sm-8">
+                    <input name="specifications" th:field="*{specifications}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">公称压力：</label>
+                <div class="col-sm-8">
+                    <input name="nominalPressure" th:field="*{nominalPressure}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">连接方式：</label>
+                <div class="col-sm-8">
+                    <select name="connectionType" class="form-control m-b">
+                        <option value="">所有</option>
+                    </select>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">阀体材质：</label>
+                <div class="col-sm-8">
+                    <input name="valvebodyMaterial" th:field="*{valvebodyMaterial}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">阀板材质：</label>
+                <div class="col-sm-8">
+                    <input name="valveMaterial" th:field="*{valveMaterial}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">密封材质：</label>
+                <div class="col-sm-8">
+                    <input name="sealingMaterial" th:field="*{sealingMaterial}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">阀芯材质：</label>
+                <div class="col-sm-8">
+                    <input name="valveElement" th:field="*{valveElement}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">驱动形式：</label>
+                <div class="col-sm-8">
+                    <input name="driveForm" th:field="*{driveForm}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">产品单价：</label>
+                <div class="col-sm-8">
+                    <input name="price" th:field="*{price}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">供应商名称：</label>
+                <div class="col-sm-8">
+                    <input name="supplier" th:field="*{supplier}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">状态：</label>
+                <div class="col-sm-8">
+                    <div class="radio-box">
+                        <input type="radio" name="status" value="">
+                        <label th:for="status" th:text="未知"></label>
+                    </div>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "fmis/product";
+        $("#form-product-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-product-edit').serialize());
+            }
+        }
+    </script>
+</body>
+</html>
