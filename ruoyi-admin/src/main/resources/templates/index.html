@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="renderer" content="webkit">
-    <title>闲鹿工作流首页</title>
+    <title>山西好利</title>
     <!--[if lt IE 9]>
     <meta http-equiv="refresh" content="0;ie.html"/>
     <![endif]-->
@@ -30,7 +30,7 @@
         <div class="sidebar-collapse">
             <ul class="nav" id="side-menu">
                 <li class="logo">
-				     <span class="logo-lg">🦌 闲鹿工作流</span>
+				     <span class="logo-lg">山西好利</span>
             	</li>
             	<li>
             		<div class="user-panel">
@@ -51,7 +51,7 @@
                  <li class="active">
                     <a href="index.html"><i class="fa fa-home"></i> <span class="nav-label">主页</span> <span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
-                        <li class="active"><a class="menuItem" th:href="@{/system/main}">了解闲鹿工作流</a></li>
+                        <li class="active"><a class="menuItem" th:href="@{/system/main}">Welcome</a></li>
                     </ul>
                 </li>
                 <li th:each="menu : ${menus}">
@@ -70,6 +70,7 @@
 						</li>
 					</ul>
                 </li>
+				<!--
                 <li th:if="${demoEnabled}">
                     <a href="#"><i class="fa fa-desktop"></i><span class="nav-label">实例演示</span><span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level collapse">
@@ -161,6 +162,8 @@
 	                    </li>
                     </ul>
                 </li>
+
+				-->
             </ul>
         </div>
     </nav>
@@ -228,7 +231,7 @@
                     th:src="@{/system/main}" frameborder="0" seamless></iframe>
         </div>
         <div class="footer">
-            <div class="pull-right">© [[${copyrightYear}]] RuoYi Copyright, made with <a href="https://gitee.com/calvinhwang123/RuoYi-Process" target="_blank">一只闲鹿 🦌</a>.</div>
+            <div class="pull-right">© [[${copyrightYear}]] RuoYi Copyright, made with <a href="https://gitee.com/calvinhwang123/RuoYi-Process" target="_blank">山西好利</a>.</div>
         </div>
     </div>
     <!--右侧部分结束-->
