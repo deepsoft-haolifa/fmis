@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.fmis.suppliers.mapper.BizSuppliersMapper">
+    
+    <resultMap type="BizSuppliers" id="BizSuppliersResult">
+        <result property="suppliersId"    column="suppliers_id"    />
+        <result property="name"    column="name"    />
+        <result property="address"    column="address"    />
+        <result property="telphone"    column="telphone"    />
+        <result property="fax"    column="fax"    />
+        <result property="email"    column="email"    />
+        <result property="siteUrl"    column="site_url"    />
+        <result property="ownerId"    column="owner_id"    />
+        <result property="contact"    column="contact"    />
+        <result property="manageState"    column="manage_state"    />
+        <result property="marketDistribution"    column="market_distribution"    />
+        <result property="targetCustomer"    column="target_customer"    />
+        <result property="humanCapitalMeasure"    column="human_capital_measure"    />
+        <result property="taxpayer"    column="taxpayer"    />
+        <result property="remark"    column="remark"    />
+        <result property="status"    column="status"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBizSuppliersVo">
+        select suppliers_id, name, address, telphone, fax, email, site_url, owner_id, contact, manage_state, market_distribution, target_customer, human_capital_measure, taxpayer, remark, status, del_flag, create_by, create_time, update_by, update_time from biz_suppliers
+    </sql>
+
+    <select id="selectBizSuppliersList" parameterType="BizSuppliers" resultMap="BizSuppliersResult">
+        <include refid="selectBizSuppliersVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="telphone != null  and telphone != ''"> and telphone = #{telphone}</if>
+            <if test="email != null  and email != ''"> and email = #{email}</if>
+            <if test="ownerId != null  and ownerId != ''"> and owner_id = #{ownerId}</if>
+            <if test="contact != null  and contact != ''"> and contact = #{contact}</if>
+            <if test="manageState != null  and manageState != ''"> and manage_state = #{manageState}</if>
+            <if test="marketDistribution != null  and marketDistribution != ''"> and market_distribution = #{marketDistribution}</if>
+            <if test="targetCustomer != null  and targetCustomer != ''"> and target_customer = #{targetCustomer}</if>
+            <if test="humanCapitalMeasure != null  and humanCapitalMeasure != ''"> and human_capital_measure = #{humanCapitalMeasure}</if>
+            <if test="taxpayer != null  and taxpayer != ''"> and taxpayer = #{taxpayer}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectBizSuppliersById" parameterType="Long" resultMap="BizSuppliersResult">
+        <include refid="selectBizSuppliersVo"/>
+        where suppliers_id = #{suppliersId}
+    </select>
+        
+    <insert id="insertBizSuppliers" parameterType="BizSuppliers" useGeneratedKeys="true" keyProperty="suppliersId">
+        insert into biz_suppliers
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null  and name != ''">name,</if>
+            <if test="address != null  and address != ''">address,</if>
+            <if test="telphone != null  and telphone != ''">telphone,</if>
+            <if test="fax != null  and fax != ''">fax,</if>
+            <if test="email != null  and email != ''">email,</if>
+            <if test="siteUrl != null  and siteUrl != ''">site_url,</if>
+            <if test="ownerId != null  and ownerId != ''">owner_id,</if>
+            <if test="contact != null  and contact != ''">contact,</if>
+            <if test="manageState != null  and manageState != ''">manage_state,</if>
+            <if test="marketDistribution != null  and marketDistribution != ''">market_distribution,</if>
+            <if test="targetCustomer != null  and targetCustomer != ''">target_customer,</if>
+            <if test="humanCapitalMeasure != null  and humanCapitalMeasure != ''">human_capital_measure,</if>
+            <if test="taxpayer != null  and taxpayer != ''">taxpayer,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+            <if test="status != null  and status != ''">status,</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null  and name != ''">#{name},</if>
+            <if test="address != null  and address != ''">#{address},</if>
+            <if test="telphone != null  and telphone != ''">#{telphone},</if>
+            <if test="fax != null  and fax != ''">#{fax},</if>
+            <if test="email != null  and email != ''">#{email},</if>
+            <if test="siteUrl != null  and siteUrl != ''">#{siteUrl},</if>
+            <if test="ownerId != null  and ownerId != ''">#{ownerId},</if>
+            <if test="contact != null  and contact != ''">#{contact},</if>
+            <if test="manageState != null  and manageState != ''">#{manageState},</if>
+            <if test="marketDistribution != null  and marketDistribution != ''">#{marketDistribution},</if>
+            <if test="targetCustomer != null  and targetCustomer != ''">#{targetCustomer},</if>
+            <if test="humanCapitalMeasure != null  and humanCapitalMeasure != ''">#{humanCapitalMeasure},</if>
+            <if test="taxpayer != null  and taxpayer != ''">#{taxpayer},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBizSuppliers" parameterType="BizSuppliers">
+        update biz_suppliers
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null  and name != ''">name = #{name},</if>
+            <if test="address != null  and address != ''">address = #{address},</if>
+            <if test="telphone != null  and telphone != ''">telphone = #{telphone},</if>
+            <if test="fax != null  and fax != ''">fax = #{fax},</if>
+            <if test="email != null  and email != ''">email = #{email},</if>
+            <if test="siteUrl != null  and siteUrl != ''">site_url = #{siteUrl},</if>
+            <if test="ownerId != null  and ownerId != ''">owner_id = #{ownerId},</if>
+            <if test="contact != null  and contact != ''">contact = #{contact},</if>
+            <if test="manageState != null  and manageState != ''">manage_state = #{manageState},</if>
+            <if test="marketDistribution != null  and marketDistribution != ''">market_distribution = #{marketDistribution},</if>
+            <if test="targetCustomer != null  and targetCustomer != ''">target_customer = #{targetCustomer},</if>
+            <if test="humanCapitalMeasure != null  and humanCapitalMeasure != ''">human_capital_measure = #{humanCapitalMeasure},</if>
+            <if test="taxpayer != null  and taxpayer != ''">taxpayer = #{taxpayer},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+            <if test="status != null  and status != ''">status = #{status},</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+        </trim>
+        where suppliers_id = #{suppliersId}
+    </update>
+
+    <delete id="deleteBizSuppliersById" parameterType="Long">
+        delete from biz_suppliers where suppliers_id = #{suppliersId}
+    </delete>
+
+    <delete id="deleteBizSuppliersByIds" parameterType="String">
+        delete from biz_suppliers where suppliers_id in 
+        <foreach item="suppliersId" collection="array" open="(" separator="," close=")">
+            #{suppliersId}
+        </foreach>
+    </delete>
+    
+</mapper>

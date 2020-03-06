@@ -61,5 +61,11 @@
             <artifactId>batik-svggen</artifactId>
             <version>1.7</version>
         </dependency>
+        <dependency>
+            <groupId>com.ruoyi.process</groupId>
+            <artifactId>ruoyi-process</artifactId>
+            <version>1.0.0</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 </project>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增客户')" />
+    <th:block th:include="include :: datetimepicker-css" />
+    <th:block th:include="include :: select2-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-customer-add">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">备案日期：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="recordDate" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">商务公司代码：</label>
+                <div class="col-sm-8">
+                    <input name="companyCode" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">客户所属区域：</label>
+                <div class="col-sm-8">
+                    <select name="area" class="form-control m-b" th:with="type=${@dict.getType('customer_area')}">
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">项目备案号：</label>
+                <div class="col-sm-8">
+                    <input name="recordCode" class="form-control" type="text">
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">业务负责人：</label>
+                <div class="col-sm-8">
+                    <select id="user" class="form-control select2-multiple" > <!--multiple-->
+                        <option th:each="user:${users}" th:value="${user.id}" th:text="${user.id} + ' ' + ${user.first}"></option>
+                    </select>
+                </div>
+            </div>
+            <!--
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">业务负责人：</label>
+                <div class="col-sm-8">
+                    <input name="ownerUserId" class="form-control" type="text">
+                </div>
+            </div>
+            -->
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">客户名称：</label>
+                <div class="col-sm-8">
+                    <input name="name" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">项目名称：</label>
+                <div class="col-sm-8">
+                    <input name="projectAme" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">联系人姓名：</label>
+                <div class="col-sm-8">
+                    <input name="contactName" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">联系人职务：</label>
+                <div class="col-sm-8">
+                    <input name="contactPosition" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">联系人电话：</label>
+                <div class="col-sm-8">
+                    <input name="contactPhone" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">联系人邮箱：</label>
+                <div class="col-sm-8">
+                    <input name="contactEmail" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">品牌：</label>
+                <div class="col-sm-8">
+                    <input name="brand" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">客户/信息：</label>
+                <div class="col-sm-8">
+                    <input name="info" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">涉及产品：</label>
+                <div class="col-sm-8">
+                    <input name="productInfo" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">状态：</label>
+                <div class="col-sm-8">
+                    <div class="radio-box">
+                        <input type="radio" name="status" value="">
+                        <label th:for="status" th:text="未知"></label>
+                    </div>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">删除标志：</label>
+                <div class="col-sm-8">
+                    <input name="delFlag" class="form-control" type="text">
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <th:block th:include="include :: select2-js" />
+    <script type="text/javascript">
+        var prefix = ctx + "fmis/customer"
+        $("#form-customer-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                var data = $('#form-customer-add').serializeArray();
+                var userIds = $.form.selectSelects("user");
+                data.push({"name": "ownerUserId", "value": userIds});
+                $.operate.save(prefix + "/add", data);
+            }
+        }
+
+        $("input[name='recordDate']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+    </script>
+</body>
+</html>

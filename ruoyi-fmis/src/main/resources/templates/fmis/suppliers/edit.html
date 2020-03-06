@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改供应商')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-suppliers-edit" th:object="${bizSuppliers}">
+            <input name="suppliersId" th:field="*{suppliersId}" type="hidden">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">公司名称：</label>
+                <div class="col-sm-8">
+                    <input name="name" th:field="*{name}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">地址：</label>
+                <div class="col-sm-8">
+                    <input name="address" th:field="*{address}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">电话：</label>
+                <div class="col-sm-8">
+                    <input name="telphone" th:field="*{telphone}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">传真：</label>
+                <div class="col-sm-8">
+                    <input name="fax" th:field="*{fax}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">Email：</label>
+                <div class="col-sm-8">
+                    <input name="email" th:field="*{email}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">网址：</label>
+                <div class="col-sm-8">
+                    <input name="siteUrl" th:field="*{siteUrl}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">负责人：</label>
+                <div class="col-sm-8">
+                    <select name="ownerId" class="form-control m-b">
+                        <option value="">所有</option>
+                    </select>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">联系人：</label>
+                <div class="col-sm-8">
+                    <input name="contact" th:field="*{contact}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">经营形态：</label>
+                <div class="col-sm-8">
+                    <input name="manageState" th:field="*{manageState}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">市场分布：</label>
+                <div class="col-sm-8">
+                    <input name="marketDistribution" th:field="*{marketDistribution}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">目标客户：</label>
+                <div class="col-sm-8">
+                    <input name="targetCustomer" th:field="*{targetCustomer}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">人力资源状况：</label>
+                <div class="col-sm-8">
+                    <input name="humanCapitalMeasure" th:field="*{humanCapitalMeasure}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">一般纳税人：</label>
+                <div class="col-sm-8">
+                    <input name="taxpayer" th:field="*{taxpayer}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">状态：</label>
+                <div class="col-sm-8">
+                    <div class="radio-box">
+                        <input type="radio" name="status" value="">
+                        <label th:for="status" th:text="未知"></label>
+                    </div>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "fmis/suppliers";
+        $("#form-suppliers-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-suppliers-edit').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

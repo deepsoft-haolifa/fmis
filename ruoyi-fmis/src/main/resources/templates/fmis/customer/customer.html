@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('客户列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li class="select-time">
+                                <p>备案日期：</p>
+                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginRecordDate]"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endRecordDate]"/>
+                            </li>
+                            <li>
+                                <p>商务公司代码：</p>
+                                <input type="text" name="companyCode"/>
+                            </li>
+                            <li>
+                                <p>客户所属区域：</p>
+                                <select name="area" th:with="type=${@dict.getType('customer_area')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <p>项目备案号：</p>
+                                <input type="text" name="recordCode"/>
+                            </li>
+                            <li>
+                                <p>业务负责人：</p>
+                                <input type="text" name="ownerUserId"/>
+                            </li>
+                            <li>
+                                <p>客户名称：</p>
+                                <input type="text" name="name"/>
+                            </li>
+                            <li>
+                                <p>项目名称：</p>
+                                <input type="text" name="projectAme"/>
+                            </li>
+                            <li>
+                                <p>联系人姓名：</p>
+                                <input type="text" name="contactName"/>
+                            </li>
+                            <li>
+                                <p>联系人职务：</p>
+                                <input type="text" name="contactPosition"/>
+                            </li>
+                            <li>
+                                <p>联系人电话：</p>
+                                <input type="text" name="contactPhone"/>
+                            </li>
+                            <li>
+                                <p>联系人邮箱：</p>
+                                <input type="text" name="contactEmail"/>
+                            </li>
+                            <li>
+                                <p>品牌：</p>
+                                <input type="text" name="brand"/>
+                            </li>
+                            <li>
+                                <p>客户/信息：</p>
+                                <input type="text" name="info"/>
+                            </li>
+                            <li>
+                                <p>涉及产品：</p>
+                                <input type="text" name="productInfo"/>
+                            </li>
+                            <li>
+                                <p>状态：</p>
+                                <select name="status">
+                                    <option value="">所有</option>
+                                </select>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="fmis:customer:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="fmis:customer:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="fmis:customer:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="fmis:customer:export">
+                    <i class="fa fa-download"></i> 导出
+                 </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('fmis:customer:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('fmis:customer:remove')}]];
+        var areaDatas = [[${@dict.getType('customer_area')}]];
+        var prefix = ctx + "fmis/customer";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "客户",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'customerId', 
+                    title : '客户ID',
+                    visible: false
+                },
+                {
+                    field : 'recordDate', 
+                    title : '备案日期'
+                },
+                {
+                    field : 'companyCode', 
+                    title : '商务公司代码'
+                },
+                {
+                    field : 'area', 
+                    title : '客户所属区域',
+                    formatter: function(value, row, index) {
+                       return $.table.selectDictLabel(areaDatas, value);
+                    }
+                },
+                {
+                    field : 'recordCode', 
+                    title : '项目备案号'
+                },
+                {
+                    field : 'ownerUserId', 
+                    title : '业务负责人'
+                },
+                {
+                    field : 'name', 
+                    title : '客户名称'
+                },
+                {
+                    field : 'projectAme', 
+                    title : '项目名称'
+                },
+                {
+                    field : 'contactName', 
+                    title : '联系人姓名'
+                },
+                {
+                    field : 'contactPosition', 
+                    title : '联系人职务'
+                },
+                {
+                    field : 'contactPhone', 
+                    title : '联系人电话'
+                },
+                {
+                    field : 'contactEmail', 
+                    title : '联系人邮箱'
+                },
+                {
+                    field : 'brand', 
+                    title : '品牌'
+                },
+                {
+                    field : 'info', 
+                    title : '客户/信息'
+                },
+                {
+                    field : 'productInfo', 
+                    title : '涉及产品'
+                },
+                {
+                    field : 'remark', 
+                    title : '备注'
+                },
+                {
+                    field : 'status', 
+                    title : '状态'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.customerId + '\')"><i class="fa fa-edit"></i> 编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.customerId + '\')"><i class="fa fa-remove"></i> 删除</a>');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>
