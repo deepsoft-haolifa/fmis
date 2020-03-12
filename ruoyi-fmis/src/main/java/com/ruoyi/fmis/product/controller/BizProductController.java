@@ -1,6 +1,11 @@
 package com.ruoyi.fmis.product.controller;
 
 import java.util.List;
+
+import com.ruoyi.common.json.JSONObject;
+import com.ruoyi.fmis.common.BizConstants;
+import com.ruoyi.fmis.dict.domain.BizDict;
+import com.ruoyi.fmis.dict.service.IBizDictService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -32,6 +37,9 @@ public class BizProductController extends BaseController {
 
     @Autowired
     private IBizProductService bizProductService;
+
+    @Autowired
+    private IBizDictService bizDictService;
 
     @RequiresPermissions("fmis:product:view")
     @GetMapping()
@@ -67,9 +75,12 @@ public class BizProductController extends BaseController {
      * 新增业务产品
      */
     @GetMapping("/add")
-    public String add() {
+    public String add(ModelMap mmap) {
+        mmap.put("seriesSelect",bizDictService.selectBizDictByProductType(BizConstants.productTypeCode));
         return prefix + "/add";
     }
+
+
 
     /**
      * 新增保存业务产品
@@ -81,6 +92,13 @@ public class BizProductController extends BaseController {
     public AjaxResult addSave(BizProduct bizProduct) {
         return toAjax(bizProductService.insertBizProduct(bizProduct));
     }
+
+    @PostMapping("/findProductTypeDict")
+    @ResponseBody
+    public JSONObject findProductTypeDict(Long dictId) {
+        return bizDictService.selectProductTypeDict(dictId);
+    }
+
 
     /**
      * 修改业务产品

@@ -13,9 +13,15 @@
                 </div>
             </div>
             <div class="form-group">    
-                <label class="col-sm-3 control-label">系列 数据字典：</label>
+                <label class="col-sm-3 control-label">系列：</label>
                 <div class="col-sm-8">
+                    <select name="series" id="series" class="form-control select2-multiple" > <!--multiple-->
+                        <option>请选择</option>
+                        <option th:each="series:${seriesSelect}" th:value="${series.dictId}" th:text="${series.name} + ' ' + ${series.code}"></option>
+                    </select>
+                    <!--
                     <input name="series" class="form-control" type="text">
+                    -->
                 </div>
             </div>
             <div class="form-group">    
@@ -27,52 +33,52 @@
             <div class="form-group">    
                 <label class="col-sm-3 control-label">规格：</label>
                 <div class="col-sm-8">
+                    <select name="specifications" id="specifications" class="form-control select2-multiple" ><option>请选择</option></select>
+                    <!--
                     <input name="specifications" class="form-control" type="text">
+                    -->
                 </div>
             </div>
             <div class="form-group">    
                 <label class="col-sm-3 control-label">公称压力：</label>
                 <div class="col-sm-8">
-                    <input name="nominalPressure" class="form-control" type="text">
+                    <select name="nominalPressure" id="nominalPressure" class="form-control select2-multiple" ><option>请选择</option></select>
                 </div>
             </div>
             <div class="form-group">    
                 <label class="col-sm-3 control-label">连接方式：</label>
                 <div class="col-sm-8">
-                    <select name="connectionType" class="form-control m-b">
-                        <option value="">所有</option>
-                    </select>
-                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+                    <select name="connectionType" id="connectionType" class="form-control select2-multiple" ><option>请选择</option></select>
                 </div>
             </div>
             <div class="form-group">    
                 <label class="col-sm-3 control-label">阀体材质：</label>
                 <div class="col-sm-8">
-                    <input name="valvebodyMaterial" class="form-control" type="text">
+                    <select name="valvebodyMaterial" id="valvebodyMaterial" class="form-control select2-multiple" ><option>请选择</option></select>
                 </div>
             </div>
             <div class="form-group">    
                 <label class="col-sm-3 control-label">阀板材质：</label>
                 <div class="col-sm-8">
-                    <input name="valveMaterial" class="form-control" type="text">
+                    <input id="valveMaterial" name="valveMaterial" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">    
                 <label class="col-sm-3 control-label">密封材质：</label>
                 <div class="col-sm-8">
-                    <input name="sealingMaterial" class="form-control" type="text">
+                    <select name="sealingMaterial" id="sealingMaterial" class="form-control select2-multiple" ><option>请选择</option></select>
                 </div>
             </div>
             <div class="form-group">    
                 <label class="col-sm-3 control-label">阀芯材质：</label>
                 <div class="col-sm-8">
-                    <input name="valveElement" class="form-control" type="text">
+                    <select name="valveElement" id="valveElement" class="form-control select2-multiple" ><option>请选择</option></select>
                 </div>
             </div>
             <div class="form-group">    
                 <label class="col-sm-3 control-label">驱动形式：</label>
                 <div class="col-sm-8">
-                    <input name="driveForm" class="form-control" type="text">
+                    <select name="driveForm" id="driveForm" class="form-control select2-multiple" ><option>请选择</option></select>
                 </div>
             </div>
             <div class="form-group">    
@@ -87,22 +93,7 @@
                     <input name="supplier" class="form-control" type="text">
                 </div>
             </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">状态：</label>
-                <div class="col-sm-8">
-                    <div class="radio-box">
-                        <input type="radio" name="status" value="">
-                        <label th:for="status" th:text="未知"></label>
-                    </div>
-                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">删除标志：</label>
-                <div class="col-sm-8">
-                    <input name="delFlag" class="form-control" type="text">
-                </div>
-            </div>
+
         </form>
     </div>
     <th:block th:include="include :: footer" />
@@ -112,8 +103,55 @@
             focusCleanup: true
         });
 
+        $("#series").change(function (){
+            var series = $("#series").val();
+            console.log("series=" + series);
+            if (series == null || series == "请选择") {
+                $("#specifications").html("")
+                return;
+            }
+            $.ajax({
+              url:prefix + "/findProductTypeDict",
+              type : "post",
+              data : {"dictId" : series},
+              success : function (data) {
+                  var specificationArray = data["specification"];
+                  setDataToOption(specificationArray,"specifications");
+                  //nominalPressure
+                  var nominalPressures = data["nominalPressure"];
+                  setDataToOption(nominalPressures,"nominalPressure");
+
+                  var linkTypes = data["linkType"];
+                  setDataToOption(linkTypes,"connectionType");
+
+                  var sealingMaterials = data["sealingMaterial"];
+                  setDataToOption(sealingMaterials,"sealingMaterial");
+
+                  var spoolMaterials = data["spoolMaterial"];//valveElement
+                  setDataToOption(spoolMaterials,"valveElement");
+
+                  var driveModes = data["driveMode"];
+                  setDataToOption(driveModes,"driveForm");
+
+                  //bodyMaterial
+                  var bodyMaterials = data["bodyMaterial"];
+                  setDataToOption(bodyMaterials,"valvebodyMaterial");
+              }
+            })
+        });
+
+        function setDataToOption(dataArray,selectId) {
+            $("#" + selectId).html("");
+            $("#" + selectId).append("<option>请选择</option>")
+            for (var i = 0; i < dataArray.length; i++) {
+                var specificationObj = dataArray[i];
+                $("#" + selectId).append("<option value='" + specificationObj.dictId + "'>" + specificationObj.name + "</option>")
+            }
+        }
+
         function submitHandler() {
             if ($.validate.form()) {
+                console.log($('#form-product-add').serialize());
                 $.operate.save(prefix + "/add", $('#form-product-add').serialize());
             }
         }
