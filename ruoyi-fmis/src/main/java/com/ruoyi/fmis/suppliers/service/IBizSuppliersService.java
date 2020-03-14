@@ -26,6 +26,12 @@ public interface IBizSuppliersService {
      */
     public List<BizSuppliers> selectBizSuppliersList(BizSuppliers bizSuppliers);
 
+
+    /**
+     * 查询所有的供应商 除了删除和停用
+     * @return
+     */
+    public List<BizSuppliers> selectAllList();
     /**
      * 新增供应商
      *

@@ -42,6 +42,13 @@ public class BizSuppliersServiceImpl implements IBizSuppliersService {
         return bizSuppliersMapper.selectBizSuppliersList(bizSuppliers);
     }
 
+    @Override
+    public List<BizSuppliers> selectAllList() {
+        BizSuppliers bizSuppliers = new BizSuppliers();
+        bizSuppliers.setDelFlag("0");
+        bizSuppliers.setStatus("0");
+        return bizSuppliersMapper.selectBizSuppliersList(bizSuppliers);
+    }
     /**
      * 新增供应商
      *

@@ -15,63 +15,6 @@
                                 <input type="text" name="name"/>
                             </li>
                             <li>
-                                <p>系列：</p>
-                                <input type="text" name="series"/>
-                            </li>
-                            <li>
-                                <p>产品型号：</p>
-                                <input type="text" name="model"/>
-                            </li>
-                            <li>
-                                <p>规格：</p>
-                                <input type="text" name="specifications"/>
-                            </li>
-                            <li>
-                                <p>公称压力：</p>
-                                <input type="text" name="nominalPressure"/>
-                            </li>
-                            <li>
-                                <p>连接方式：</p>
-                                <select name="connectionType" th:with="type=${@dict.getType('')}">
-                                    <option value="">所有</option>
-                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                                </select>
-                            </li>
-                            <li>
-                                <p>阀体材质：</p>
-                                <input type="text" name="valvebodyMaterial"/>
-                            </li>
-                            <li>
-                                <p>阀板材质：</p>
-                                <input type="text" name="valveMaterial"/>
-                            </li>
-                            <li>
-                                <p>密封材质：</p>
-                                <input type="text" name="sealingMaterial"/>
-                            </li>
-                            <li>
-                                <p>阀芯材质：</p>
-                                <input type="text" name="valveElement"/>
-                            </li>
-                            <li>
-                                <p>驱动形式：</p>
-                                <input type="text" name="driveForm"/>
-                            </li>
-                            <li>
-                                <p>产品单价：</p>
-                                <input type="text" name="price"/>
-                            </li>
-                            <li>
-                                <p>供应商名称：</p>
-                                <input type="text" name="supplier"/>
-                            </li>
-                            <li>
-                                <p>状态：</p>
-                                <select name="status">
-                                    <option value="">所有</option>
-                                </select>
-                            </li>
-                            <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
                                 <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
                             </li>
@@ -90,9 +33,10 @@
                 <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="fmis:product:remove">
                     <i class="fa fa-remove"></i> 删除
                 </a>
+                <!--
                 <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="fmis:product:export">
                     <i class="fa fa-download"></i> 导出
-                 </a>
+                 </a> -->
             </div>
             <div class="col-sm-12 select-table table-striped">
                 <table id="bootstrap-table"></table>
@@ -127,7 +71,7 @@
                 },
                 {
                     field : 'series', 
-                    title : '系列 数据字典'
+                    title : '系列'
                 },
                 {
                     field : 'model', 
@@ -176,10 +120,6 @@
                 {
                     field : 'remark', 
                     title : '备注'
-                },
-                {
-                    field : 'status', 
-                    title : '状态'
                 },
                 {
                     title: '操作',

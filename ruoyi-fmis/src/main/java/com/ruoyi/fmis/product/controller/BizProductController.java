@@ -6,6 +6,8 @@ import com.ruoyi.common.json.JSONObject;
 import com.ruoyi.fmis.common.BizConstants;
 import com.ruoyi.fmis.dict.domain.BizDict;
 import com.ruoyi.fmis.dict.service.IBizDictService;
+import com.ruoyi.fmis.suppliers.domain.BizSuppliers;
+import com.ruoyi.fmis.suppliers.service.IBizSuppliersService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -40,6 +42,9 @@ public class BizProductController extends BaseController {
 
     @Autowired
     private IBizDictService bizDictService;
+
+    @Autowired
+    private IBizSuppliersService bizSuppliersService;
 
     @RequiresPermissions("fmis:product:view")
     @GetMapping()
@@ -77,6 +82,7 @@ public class BizProductController extends BaseController {
     @GetMapping("/add")
     public String add(ModelMap mmap) {
         mmap.put("seriesSelect",bizDictService.selectBizDictByProductType(BizConstants.productTypeCode));
+        mmap.put("suppliers",bizSuppliersService.selectAllList());
         return prefix + "/add";
     }
 
@@ -107,6 +113,26 @@ public class BizProductController extends BaseController {
     public String edit(@PathVariable("productId") Long productId, ModelMap mmap) {
         BizProduct bizProduct = bizProductService.selectBizProductById(productId);
         mmap.put("bizProduct", bizProduct);
+
+        List<BizDict> bizDictList = bizDictService.selectBizDictByProductType(BizConstants.productTypeCode);
+
+        for (BizDict bizDict : bizDictList) {
+            String dictId = bizDict.getDictId().toString();
+            if (dictId.equals(bizProduct.getSeries())) {
+                bizDict.setFlag(true);
+            }
+        }
+
+        mmap.put("seriesSelect",bizDictList);
+
+        List<BizSuppliers> suppliersList = bizSuppliersService.selectAllList();
+        for (BizSuppliers suppliers : suppliersList) {
+            String supplierId = bizProduct.getSupplier();
+            if (supplierId.equals(suppliers.getSuppliersId().toString())) {
+                suppliers.setFlag(true);
+            }
+        }
+        mmap.put("suppliers",suppliersList);
         return prefix + "/edit";
     }
 

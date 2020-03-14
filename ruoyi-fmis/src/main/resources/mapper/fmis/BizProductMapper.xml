@@ -28,14 +28,29 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateTime"    column="update_time"    />
     </resultMap>
 
-    <sql id="selectBizProductVo">
-        select product_id, name, series, model, specifications, nominal_pressure, connection_type, valvebody_material, valve_material, sealing_material, valve_element, drive_form, price, supplier, remark, status, del_flag, create_by, create_time, update_by, update_time from biz_product
+    <sql id="selectBizProductNameVo">
+        select p.product_id, p.name, d.name as series, p.model, d1.name as specifications, d2.name as nominal_pressure, d3.name as connection_type, d6.name as valvebody_material, p.valve_material, d4.name as sealing_material, d5.name as valve_element, d7.name as drive_form, p.price, s.name as supplier, p.remark, p.status, p.del_flag, p.create_by, p.create_time, p.update_by, p.update_time from biz_product p
+        left join biz_dict d on  d.parent_id=1 and p.series=d.dict_id
+        left join biz_dict d1 on d1.parent_type='specification' and d1.dict_id=p.specifications
+        left join biz_dict d2 on d2.parent_type='nominal_pressure' and d2.dict_id=p.nominal_pressure
+        left join biz_dict d3 on d3.parent_type='link_type' and d3.dict_id=p.connection_type
+        left join biz_dict d4 on d4.parent_type='sealing_material' and d4.dict_id=p.sealing_material
+        left join biz_dict d5 on d5.parent_type='spool_material' and d5.dict_id=p.valve_element
+        left join biz_dict d6 on d6.parent_type='body_material' and d6.dict_id=p.valvebody_material
+        left join biz_dict d7 on d7.parent_type='drive_mode' and d7.dict_id=p.drive_form
+        left join biz_suppliers s on s.suppliers_id=p.supplier
     </sql>
 
+
+    <sql id="selectBizProductVo">
+      select product_id, name, series, model, specifications, nominal_pressure, connection_type, valvebody_material, valve_material, sealing_material, valve_element, drive_form, price, supplier, remark, status, del_flag, create_by, create_time, update_by, update_time from biz_product
+    </sql>
+
+
     <select id="selectBizProductList" parameterType="BizProduct" resultMap="BizProductResult">
-        <include refid="selectBizProductVo"/>
+        <include refid="selectBizProductNameVo"/>
         <where>  
-            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="name != null  and name != ''"> and p.name like concat('%', #{name}, '%')</if>
             <if test="series != null  and series != ''"> and series = #{series}</if>
             <if test="model != null  and model != ''"> and model = #{model}</if>
             <if test="specifications != null  and specifications != ''"> and specifications = #{specifications}</if>

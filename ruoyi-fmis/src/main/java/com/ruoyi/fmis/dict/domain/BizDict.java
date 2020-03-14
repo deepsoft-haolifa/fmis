@@ -42,6 +42,21 @@ public class BizDict extends BaseEntity {
     @Excel(name = "上级type")
     private String parentType;
 
+
+    /** 是否存在此标识 默认不存在 */
+    private boolean flag = false;
+
+
+    public boolean isFlag()
+    {
+        return flag;
+    }
+
+    public void setFlag(boolean flag)
+    {
+        this.flag = flag;
+    }
+
     public void setDictId(Long dictId) {
         this.dictId = dictId;
     }
