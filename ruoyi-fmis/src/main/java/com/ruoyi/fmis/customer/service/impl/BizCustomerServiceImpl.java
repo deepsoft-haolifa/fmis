@@ -2,6 +2,7 @@ package com.ruoyi.fmis.customer.service.impl;
 
 import java.util.List;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.framework.util.ShiroUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.fmis.customer.mapper.BizCustomerMapper;
@@ -17,6 +18,8 @@ import com.ruoyi.common.core.text.Convert;
  */
 @Service
 public class BizCustomerServiceImpl implements IBizCustomerService {
+
+
     @Autowired
     private BizCustomerMapper bizCustomerMapper;
 
@@ -51,6 +54,7 @@ public class BizCustomerServiceImpl implements IBizCustomerService {
     @Override
     public int insertBizCustomer(BizCustomer bizCustomer) {
         bizCustomer.setCreateTime(DateUtils.getNowDate());
+        bizCustomer.setCreateBy(ShiroUtils.getUserId().toString());
         return bizCustomerMapper.insertBizCustomer(bizCustomer);
     }
 
@@ -63,6 +67,7 @@ public class BizCustomerServiceImpl implements IBizCustomerService {
     @Override
     public int updateBizCustomer(BizCustomer bizCustomer) {
         bizCustomer.setUpdateTime(DateUtils.getNowDate());
+        bizCustomer.setUpdateBy(ShiroUtils.getUserId().toString());
         return bizCustomerMapper.updateBizCustomer(bizCustomer);
     }
 

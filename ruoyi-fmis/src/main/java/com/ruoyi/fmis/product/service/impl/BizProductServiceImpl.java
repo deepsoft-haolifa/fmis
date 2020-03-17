@@ -5,6 +5,7 @@ import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.fmis.product.domain.BizProduct;
 import com.ruoyi.fmis.product.mapper.BizProductMapper;
 import com.ruoyi.fmis.product.service.IBizProductService;
+import com.ruoyi.framework.util.ShiroUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.common.core.text.Convert;
@@ -51,6 +52,7 @@ public class BizProductServiceImpl implements IBizProductService {
     @Override
     public int insertBizProduct(BizProduct bizProduct) {
         bizProduct.setCreateTime(DateUtils.getNowDate());
+        bizProduct.setCreateBy(ShiroUtils.getUserId().toString());
         return bizProductMapper.insertBizProduct(bizProduct);
     }
 
@@ -63,6 +65,7 @@ public class BizProductServiceImpl implements IBizProductService {
     @Override
     public int updateBizProduct(BizProduct bizProduct) {
         bizProduct.setUpdateTime(DateUtils.getNowDate());
+        bizProduct.setUpdateBy(ShiroUtils.getUserId().toString());
         return bizProductMapper.updateBizProduct(bizProduct);
     }
 

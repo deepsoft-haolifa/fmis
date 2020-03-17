@@ -1,4 +1,4 @@
-package com.ruoyi.fmis.web.controller.fmis;
+package com.ruoyi.fmis.customer.controller;
 
 import java.util.List;
 
@@ -78,7 +78,7 @@ public class BizCustomerController extends BaseController {
      */
     @GetMapping("/add")
     public String add(ModelMap mmap) {
-        mmap.put("users", actIdUserService.selectActIdUserList(null));
+        mmap.put("users", userService.selectUserList(new SysUser()));
         return prefix + "/add";
     }
 
@@ -99,7 +99,7 @@ public class BizCustomerController extends BaseController {
     @GetMapping("/edit/{customerId}")
     public String edit(@PathVariable("customerId") Long customerId, ModelMap mmap) {
         BizCustomer bizCustomer = bizCustomerService.selectBizCustomerById(customerId);
-        mmap.put("usersel", userService.selectUserByLoginName(bizCustomer.getOwnerUserId()));
+        mmap.put("usersel", userService.selectUserById(Long.parseLong(bizCustomer.getOwnerUserId())));
         mmap.put("users", userService.selectUserList(new SysUser()));
         mmap.put("bizCustomer", bizCustomer);
         return prefix + "/edit";

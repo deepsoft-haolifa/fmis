@@ -1,4 +1,4 @@
-package com.ruoyi.fmis.web.controller.fmis;
+package com.ruoyi.fmis.productref.controller;
 
 import java.util.List;
 import org.apache.shiro.authz.annotation.RequiresPermissions;

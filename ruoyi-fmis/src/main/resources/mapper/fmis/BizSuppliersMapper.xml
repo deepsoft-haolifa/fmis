@@ -33,21 +33,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select suppliers_id, name, address, telphone, fax, email, site_url, owner_id, contact, manage_state, market_distribution, target_customer, human_capital_measure, taxpayer, remark, status, del_flag, create_by, create_time, update_by, update_time,nick_name from biz_suppliers
     </sql>
 
+    <sql id="selectBizSuppliersDictVo">
+        select s.suppliers_id, s.name, s.address, s.telphone, s.fax, s.email, s.site_url, u.user_name as owner_id, s.contact, s.manage_state, s.market_distribution, s.target_customer, s.human_capital_measure, s.taxpayer, s.remark, s.status, s.del_flag, s.create_by, s.create_time, s.update_by, s.update_time,s.nick_name from biz_suppliers s
+        join sys_user u on s.owner_id=u.user_id
+    </sql>
+
     <select id="selectBizSuppliersList" parameterType="BizSuppliers" resultMap="BizSuppliersResult">
-        <include refid="selectBizSuppliersVo"/>
+        <include refid="selectBizSuppliersDictVo"/>
         <where>  
-            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
-            <if test="telphone != null  and telphone != ''"> and telphone = #{telphone}</if>
-            <if test="email != null  and email != ''"> and email = #{email}</if>
-            <if test="ownerId != null  and ownerId != ''"> and owner_id = #{ownerId}</if>
-            <if test="contact != null  and contact != ''"> and contact = #{contact}</if>
-            <if test="manageState != null  and manageState != ''"> and manage_state = #{manageState}</if>
-            <if test="marketDistribution != null  and marketDistribution != ''"> and market_distribution = #{marketDistribution}</if>
-            <if test="targetCustomer != null  and targetCustomer != ''"> and target_customer = #{targetCustomer}</if>
-            <if test="humanCapitalMeasure != null  and humanCapitalMeasure != ''"> and human_capital_measure = #{humanCapitalMeasure}</if>
-            <if test="taxpayer != null  and taxpayer != ''"> and taxpayer = #{taxpayer}</if>
-            <if test="status != null  and status != ''"> and status = #{status}</if>
-            <if test="nickName != null  and nickName != ''"> and nick_name like concat('%', #{nickName}, '%')</if>
+            <if test="name != null  and name != ''"> and s.name like concat('%', #{name}, '%')</if>
+            <if test="telphone != null  and telphone != ''"> and s.telphone = #{telphone}</if>
+            <if test="email != null  and email != ''"> and s.email = #{email}</if>
+            <if test="ownerId != null  and ownerId != ''"> and s.owner_id = #{ownerId}</if>
+            <if test="contact != null  and contact != ''"> and s.contact = #{contact}</if>
+            <if test="manageState != null  and manageState != ''"> and s.manage_state = #{manageState}</if>
+            <if test="marketDistribution != null  and marketDistribution != ''"> and s.market_distribution = #{marketDistribution}</if>
+            <if test="targetCustomer != null  and targetCustomer != ''"> and s.target_customer = #{targetCustomer}</if>
+            <if test="humanCapitalMeasure != null  and humanCapitalMeasure != ''"> and s.human_capital_measure = #{humanCapitalMeasure}</if>
+            <if test="taxpayer != null  and taxpayer != ''"> and s.taxpayer = #{taxpayer}</if>
+            <if test="status != null  and status != ''"> and s.status = #{status}</if>
+            <if test="nickName != null  and nickName != ''"> and s.nick_name like concat('%', #{nickName}, '%')</if>
         </where>
     </select>
     

@@ -1,6 +1,9 @@
-package com.ruoyi.fmis.web.controller.fmis;
+package com.ruoyi.fmis.suppliers.controller;
 
 import java.util.List;
+
+import com.ruoyi.system.domain.SysUser;
+import com.ruoyi.system.service.ISysUserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -32,6 +35,9 @@ public class BizSuppliersController extends BaseController {
 
     @Autowired
     private IBizSuppliersService bizSuppliersService;
+
+    @Autowired
+    private ISysUserService userService;
 
     @RequiresPermissions("fmis:suppliers:view")
     @GetMapping()
@@ -67,7 +73,8 @@ public class BizSuppliersController extends BaseController {
      * 新增供应商
      */
     @GetMapping("/add")
-    public String add() {
+    public String add(ModelMap mmap) {
+        mmap.put("users", userService.selectUserList(new SysUser()));
         return prefix + "/add";
     }
 
@@ -88,6 +95,8 @@ public class BizSuppliersController extends BaseController {
     @GetMapping("/edit/{suppliersId}")
     public String edit(@PathVariable("suppliersId") Long suppliersId, ModelMap mmap) {
         BizSuppliers bizSuppliers = bizSuppliersService.selectBizSuppliersById(suppliersId);
+        mmap.put("usersel", userService.selectUserById(Long.parseLong(bizSuppliers.getOwnerId())));
+        mmap.put("users", userService.selectUserList(new SysUser()));
         mmap.put("bizSuppliers", bizSuppliers);
         return prefix + "/edit";
     }

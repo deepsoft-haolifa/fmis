@@ -2,6 +2,7 @@ package com.ruoyi.fmis.suppliers.service.impl;
 
 import java.util.List;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.framework.util.ShiroUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.fmis.suppliers.mapper.BizSuppliersMapper;
@@ -58,6 +59,7 @@ public class BizSuppliersServiceImpl implements IBizSuppliersService {
     @Override
     public int insertBizSuppliers(BizSuppliers bizSuppliers) {
         bizSuppliers.setCreateTime(DateUtils.getNowDate());
+        bizSuppliers.setCreateBy(ShiroUtils.getUserId().toString());
         return bizSuppliersMapper.insertBizSuppliers(bizSuppliers);
     }
 
@@ -70,6 +72,7 @@ public class BizSuppliersServiceImpl implements IBizSuppliersService {
     @Override
     public int updateBizSuppliers(BizSuppliers bizSuppliers) {
         bizSuppliers.setUpdateTime(DateUtils.getNowDate());
+        bizSuppliers.setUpdateBy(ShiroUtils.getUserId().toString());
         return bizSuppliersMapper.updateBizSuppliers(bizSuppliers);
     }
 

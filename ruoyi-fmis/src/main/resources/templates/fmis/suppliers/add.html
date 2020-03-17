@@ -2,6 +2,7 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" >
 <head>
     <th:block th:include="include :: header('新增供应商')" />
+    <th:block th:include="include :: select2-css" />
 </head>
 <body class="white-bg">
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
@@ -53,8 +54,12 @@
             <div class="form-group">    
                 <label class="col-sm-3 control-label">负责人：</label>
                 <div class="col-sm-8">
+                    <!--
                     <select name="ownerId" class="form-control m-b">
                         <option value="">所有</option>
+                    </select>-->
+                    <select id="user" class="form-control select2-multiple" > <!--multiple-->
+                        <option th:each="user:${users}" th:value="${user.userId}" th:text="${user.userName} + ' ' + ${user.loginName}" ></option>
                     </select>
                 </div>
             </div>
@@ -104,6 +109,7 @@
         </form>
     </div>
     <th:block th:include="include :: footer" />
+    <th:block th:include="include :: select2-js" />
     <script type="text/javascript">
         var prefix = ctx + "fmis/suppliers"
         $("#form-suppliers-add").validate({
@@ -112,7 +118,10 @@
 
         function submitHandler() {
             if ($.validate.form()) {
-                $.operate.save(prefix + "/add", $('#form-suppliers-add').serialize());
+                var data = $('#form-suppliers-add').serializeArray();
+                var userIds = $.form.selectSelects("user");
+                data.push({"name": "ownerId", "value": userIds});
+                $.operate.save(prefix + "/add", data);
             }
         }
     </script>
