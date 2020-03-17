@@ -42,6 +42,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         left join biz_dict d7 on d7.parent_type='drive_mode' and d7.dict_id=p.drive_form
         left join biz_dict d8 on d8.parent_type='structural_type' and d8.dict_id=p.structural_style
         left join biz_suppliers s on s.suppliers_id=p.supplier
+
+        left join sys_user u on u.user_id=p.create_by
+        left join sys_dept dt on u.dept_id=dt.dept_id
+
+        where p.del_flag = '0'
+        <!-- 数据范围过滤 -->
+        ${params.dataScope}
     </sql>
 
 

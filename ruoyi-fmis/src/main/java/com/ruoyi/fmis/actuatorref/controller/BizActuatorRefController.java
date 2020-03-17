@@ -1,6 +1,9 @@
-package com.ruoyi.fmis.web.controller.fmis;
+package com.ruoyi.fmis.actuatorref.controller;
 
 import java.util.List;
+
+import com.ruoyi.fmis.common.BizConstants;
+import com.ruoyi.fmis.dict.service.IBizDictService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -32,6 +35,9 @@ public class BizActuatorRefController extends BaseController {
 
     @Autowired
     private IBizActuatorRefService bizActuatorRefService;
+
+    @Autowired
+    private IBizDictService bizDictService;
 
     @RequiresPermissions("fmis:actuatorRef:view")
     @GetMapping()
@@ -67,7 +73,10 @@ public class BizActuatorRefController extends BaseController {
      * 新增执行器关系管理
      */
     @GetMapping("/add")
-    public String add() {
+    public String add(ModelMap mmap) {
+        mmap.put("specifications",bizDictService.selectProductDictForParentType(BizConstants.specificationCode,0L));
+        mmap.put("nominalPressures",bizDictService.selectProductDictForParentType(BizConstants.nominalPressure,0L));
+
         return prefix + "/add";
     }
 
@@ -88,6 +97,11 @@ public class BizActuatorRefController extends BaseController {
     @GetMapping("/edit/{arId}")
     public String edit(@PathVariable("arId") Long arId, ModelMap mmap) {
         BizActuatorRef bizActuatorRef = bizActuatorRefService.selectBizActuatorRefById(arId);
+
+        mmap.put("specifications",bizDictService.selectProductDictForParentType(BizConstants.specificationCode,Long.parseLong(bizActuatorRef.getValveType())));
+        mmap.put("nominalPressures",bizDictService.selectProductDictForParentType(BizConstants.nominalPressure,Long.parseLong(bizActuatorRef.getPressure())));
+
+
         mmap.put("bizActuatorRef", bizActuatorRef);
         return prefix + "/edit";
     }

@@ -33,9 +33,10 @@
                 <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="fmis:actuatorRef:remove">
                     <i class="fa fa-remove"></i> 删除
                 </a>
+                <!--
                 <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="fmis:actuatorRef:export">
                     <i class="fa fa-download"></i> 导出
-                 </a>
+                 </a>-->
             </div>
             <div class="col-sm-12 select-table table-striped">
                 <table id="bootstrap-table"></table>
@@ -46,6 +47,10 @@
     <script th:inline="javascript">
         var editFlag = [[${@permission.hasPermi('fmis:actuatorRef:edit')}]];
         var removeFlag = [[${@permission.hasPermi('fmis:actuatorRef:remove')}]];
+
+        var driverTypeData = [[${@dict.getType('actuator_driver_type')}]];
+        var mediumTypeData = [[${@dict.getType('actuator_medium_type')}]];
+
         var prefix = ctx + "fmis/actuatorRef";
 
         $(function() {
@@ -70,15 +75,21 @@
                 },
                 {
                     field : 'driveType', 
-                    title : '驱动类型'
+                    title : '驱动类型',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(driverTypeData, value);
+                    }
                 },
                 {
                     field : 'mediaType', 
-                    title : '介质类型'
+                    title : '介质类型',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(mediumTypeData, value);
+                    }
                 },
                 {
                     field : 'valveType', 
-                    title : '阀门规格 对应产品表规格'
+                    title : '阀门规格'
                 },
                 {
                     field : 'topFlange', 
@@ -86,7 +97,7 @@
                 },
                 {
                     field : 'pressure', 
-                    title : '压力 对应产品表压力'
+                    title : '压力'
                 },
                 {
                     field : 'torsion', 
@@ -107,6 +118,13 @@
                 {
                     field : 'remark', 
                     title : '备注'
+                },
+                {
+                    field : 'createTime',
+                    title : '创建时间'
+                },{
+                    field : 'updateTime',
+                    title : '修改时间'
                 },
                 {
                     title: '操作',

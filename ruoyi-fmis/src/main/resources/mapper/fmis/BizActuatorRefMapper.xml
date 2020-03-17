@@ -39,10 +39,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select ar_id, brand, drive_type, media_type, valve_type, top_flange, pressure, torsion, multiplying_power, drive_mode, fit_type, string1, string2, string3, string4, string5, string6, string7, string8, string9, string10, remark, status, del_flag, create_by, create_time, update_by, update_time from biz_actuator_ref
     </sql>
 
+    <sql id="selectBizActuatorRefDictVo">
+      select ar.ar_id, ar.brand, ar.drive_type, ar.media_type, d1.name as valve_type, ar.top_flange, d2.name as pressure, ar.torsion, ar.multiplying_power, ar.drive_mode, ar.fit_type, ar.string1, ar.string2, ar.string3, ar.string4, ar.string5, ar.string6, ar.string7, ar.string8, ar.string9, ar.string10, ar.remark, ar.status, ar.del_flag, ar.create_by, ar.create_time, ar.update_by, ar.update_time from biz_actuator_ref ar
+        left join biz_dict d1 on d1.dict_id=ar.valve_type
+	    left join biz_dict d2 on d2.dict_id=ar.pressure
+    </sql>
+
     <select id="selectBizActuatorRefList" parameterType="BizActuatorRef" resultMap="BizActuatorRefResult">
-        <include refid="selectBizActuatorRefVo"/>
+        <include refid="selectBizActuatorRefDictVo"/>
         <where>  
-            <if test="brand != null  and brand != ''"> and brand = #{brand}</if>
+            <if test="brand != null  and brand != ''"> and ar.brand like concat('%', #{brand}, '%')</if>
         </where>
     </select>
     

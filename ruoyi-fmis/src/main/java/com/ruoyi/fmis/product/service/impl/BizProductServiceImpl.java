@@ -1,6 +1,8 @@
 package com.ruoyi.fmis.product.service.impl;
 
 import java.util.List;
+
+import com.ruoyi.common.annotation.DataScope;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.fmis.product.domain.BizProduct;
 import com.ruoyi.fmis.product.mapper.BizProductMapper;
@@ -39,6 +41,7 @@ public class BizProductServiceImpl implements IBizProductService {
      * @return 业务产品
      */
     @Override
+    @DataScope(deptAlias = "dt", userAlias = "u")
     public List<BizProduct> selectBizProductList(BizProduct bizProduct) {
         return bizProductMapper.selectBizProductList(bizProduct);
     }

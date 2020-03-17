@@ -16,28 +16,26 @@
             <div class="form-group">    
                 <label class="col-sm-3 control-label">驱动类型：</label>
                 <div class="col-sm-8">
-                    <select name="driveType" class="form-control m-b">
-                        <option value="">所有</option>
+                    <select name="driveType" class="form-control m-b" th:with="type=${@dict.getType('actuator_driver_type')}">
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{driveType}"></option>
                     </select>
-                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
                 </div>
             </div>
             <div class="form-group">    
                 <label class="col-sm-3 control-label">介质类型：</label>
                 <div class="col-sm-8">
-                    <select name="mediaType" class="form-control m-b">
-                        <option value="">所有</option>
+                    <select name="mediaType" class="form-control m-b" th:with="type=${@dict.getType('actuator_medium_type')}">
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                     </select>
-                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
                 </div>
             </div>
             <div class="form-group">    
                 <label class="col-sm-3 control-label">阀门规格 对应产品表规格：</label>
                 <div class="col-sm-8">
-                    <select name="valveType" class="form-control m-b">
-                        <option value="">所有</option>
+                    <select name="valveType" id="valveType" class="form-control select2-multiple" > <!--multiple-->
+                        <option>请选择</option>
+                        <option th:each="specification:${specifications}" th:value="${specification.dictId}" th:text="${specification.name}" th:selected="${specification.flag}"></option>
                     </select>
-                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
                 </div>
             </div>
             <div class="form-group">    
@@ -49,7 +47,10 @@
             <div class="form-group">    
                 <label class="col-sm-3 control-label">压力 对应产品表压力：</label>
                 <div class="col-sm-8">
-                    <input name="pressure" th:field="*{pressure}" class="form-control" type="text">
+                    <select name="pressure" id="pressure" class="form-control select2-multiple" > <!--multiple-->
+                        <option>请选择</option>
+                        <option th:each="nominalPressure:${nominalPressures}" th:value="${nominalPressure.dictId}" th:text="${nominalPressure.name}" th:selected="${nominalPressure.flag}"></option>
+                    </select>
                 </div>
             </div>
             <div class="form-group">    
@@ -73,10 +74,14 @@
             <div class="form-group">    
                 <label class="col-sm-3 control-label">适配系列：</label>
                 <div class="col-sm-8">
-                    <select name="fitType" class="form-control m-b">
-                        <option value="">所有</option>
-                    </select>
-                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+                    <input name="fitType" th:field="*{fitType}" class="form-control" type="text">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">备注：</label>
+                <div class="col-sm-8">
+                    <input name="remark" th:field="*{remark}" class="form-control" type="text">
                 </div>
             </div>
         </form>
