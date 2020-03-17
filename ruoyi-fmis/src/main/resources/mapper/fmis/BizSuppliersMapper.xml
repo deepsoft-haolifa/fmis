@@ -26,10 +26,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createTime"    column="create_time"    />
         <result property="updateBy"    column="update_by"    />
         <result property="updateTime"    column="update_time"    />
+        <result property="nickName"    column="nick_name"    />
     </resultMap>
 
     <sql id="selectBizSuppliersVo">
-        select suppliers_id, name, address, telphone, fax, email, site_url, owner_id, contact, manage_state, market_distribution, target_customer, human_capital_measure, taxpayer, remark, status, del_flag, create_by, create_time, update_by, update_time from biz_suppliers
+        select suppliers_id, name, address, telphone, fax, email, site_url, owner_id, contact, manage_state, market_distribution, target_customer, human_capital_measure, taxpayer, remark, status, del_flag, create_by, create_time, update_by, update_time,nick_name from biz_suppliers
     </sql>
 
     <select id="selectBizSuppliersList" parameterType="BizSuppliers" resultMap="BizSuppliersResult">
@@ -46,6 +47,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="humanCapitalMeasure != null  and humanCapitalMeasure != ''"> and human_capital_measure = #{humanCapitalMeasure}</if>
             <if test="taxpayer != null  and taxpayer != ''"> and taxpayer = #{taxpayer}</if>
             <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="nickName != null  and nickName != ''"> and nick_name like concat('%', #{nickName}, '%')</if>
         </where>
     </select>
     
@@ -77,6 +79,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null ">create_time,</if>
             <if test="updateBy != null  and updateBy != ''">update_by,</if>
             <if test="updateTime != null ">update_time,</if>
+            <if test="nickName != null  and nickName != ''">nick_name,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="name != null  and name != ''">#{name},</if>
@@ -99,6 +102,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null ">#{createTime},</if>
             <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
             <if test="updateTime != null ">#{updateTime},</if>
+            <if test="nickName != null  and nickName != ''">#{nickName},</if>
          </trim>
     </insert>
 
@@ -125,6 +129,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null ">create_time = #{createTime},</if>
             <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
             <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="nickName != null  and nickName != ''">nick_name = #{nickName},</if>
         </trim>
         where suppliers_id = #{suppliersId}
     </update>

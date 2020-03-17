@@ -61,6 +61,8 @@ public class BizProduct extends BaseEntity {
     @Excel(name = "驱动形式")
     private String driveForm;
 
+
+
     /** 产品单价 */
     @Excel(name = "产品单价")
     private Double price;
@@ -75,6 +77,18 @@ public class BizProduct extends BaseEntity {
 
     /** 删除标志（0代表存在 2代表删除） */
     private String delFlag;
+
+
+    /** 结构形式 */
+    @Excel(name = "结构形式")
+    private String structuralStyle;
+    public void setStructuralStyle(String structuralStyle) {
+        this.structuralStyle = structuralStyle;
+    }
+    public String getStructuralStyle() {
+        return structuralStyle;
+    }
+
 
     public void setProductId(Long productId) {
         this.productId = productId;
@@ -213,6 +227,7 @@ public class BizProduct extends BaseEntity {
             .append("createTime", getCreateTime())
             .append("updateBy", getUpdateBy())
             .append("updateTime", getUpdateTime())
+            .append("structuralStyle", getStructuralStyle())
             .toString();
     }
 }

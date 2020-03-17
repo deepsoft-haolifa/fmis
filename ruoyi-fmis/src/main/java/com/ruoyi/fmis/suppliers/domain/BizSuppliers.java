@@ -89,6 +89,16 @@ public class BizSuppliers extends BaseEntity {
         this.flag = flag;
     }
 
+    /** 代号 */
+    @Excel(name = "代号")
+    private String nickName;
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+    public String getNickName() {
+        return nickName;
+    }
+
     public void setSuppliersId(Long suppliersId) {
         this.suppliersId = suppliersId;
     }
@@ -226,6 +236,7 @@ public class BizSuppliers extends BaseEntity {
             .append("createTime", getCreateTime())
             .append("updateBy", getUpdateBy())
             .append("updateTime", getUpdateTime())
+            .append("nickName", getNickName())
             .toString();
     }
 }

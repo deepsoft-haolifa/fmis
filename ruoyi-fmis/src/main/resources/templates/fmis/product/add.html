@@ -52,18 +52,28 @@
                     <select name="connectionType" id="connectionType" class="form-control select2-multiple" ><option>请选择</option></select>
                 </div>
             </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">结构形式：</label>
+                <div class="col-sm-8">
+                    <select name="structuralStyle" id="structuralStyle" class="form-control select2-multiple" ><option>请选择</option></select>
+                </div>
+            </div>
+
             <div class="form-group">    
                 <label class="col-sm-3 control-label">阀体材质：</label>
                 <div class="col-sm-8">
                     <select name="valvebodyMaterial" id="valvebodyMaterial" class="form-control select2-multiple" ><option>请选择</option></select>
                 </div>
             </div>
+            <!--
             <div class="form-group">    
                 <label class="col-sm-3 control-label">阀板材质：</label>
                 <div class="col-sm-8">
                     <input id="valveMaterial" name="valveMaterial" class="form-control" type="text">
                 </div>
             </div>
+            -->
             <div class="form-group">    
                 <label class="col-sm-3 control-label">密封材质：</label>
                 <div class="col-sm-8">
@@ -126,6 +136,7 @@
                 $("#valveElement").html("");
                 $("#driveForm").html("");
                 $("#valvebodyMaterial").html("");
+                $("#structuralStyle").html("");
                 return;
             }
             $.ajax({
@@ -154,6 +165,10 @@
                   //bodyMaterial
                   var bodyMaterials = data["bodyMaterial"];
                   setDataToOption(bodyMaterials,"valvebodyMaterial");
+
+                  var structuralStyles = data["structuralStyle"];
+                  setDataToOption(structuralStyles,"structuralStyle");
+
               }
             })
         });

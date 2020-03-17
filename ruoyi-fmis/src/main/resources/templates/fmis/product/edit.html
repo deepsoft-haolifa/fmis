@@ -63,6 +63,14 @@
                     <select name="connectionType" id="connectionType" class="form-control select2-multiple" ><option>请选择</option></select>
                 </div>
             </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">结构形式：</label>
+                <div class="col-sm-8">
+                    <select name="structuralStyle" id="structuralStyle" class="form-control select2-multiple" ><option>请选择</option></select>
+                </div>
+            </div>
+
             <div class="form-group">
                 <label class="col-sm-3 control-label">阀体材质：</label>
                 <div class="col-sm-8">
@@ -137,6 +145,7 @@
                 $("#valveElement").html("");
                 $("#driveForm").html("");
                 $("#valvebodyMaterial").html("");
+                $("#structuralStyle").html("");
                 return;
             }
             $.ajax({
@@ -166,6 +175,9 @@
                     //bodyMaterial
                     var bodyMaterials = data["bodyMaterial"];
                     setDataToOption(bodyMaterials,"valvebodyMaterial");
+
+                    var structuralStyles = data["structuralStyle"];
+                    setDataToOption(structuralStyles,"structuralStyle");
                 }
             })
         });
@@ -177,6 +189,9 @@
         var sealingMaterialProduct = "[[${bizProduct.sealingMaterial}]]";
         var valveElementProduct = "[[${bizProduct.valveElement}]]";
         var driveFormProduct = "[[${bizProduct.driveForm}]]";
+
+        var structuralStyleProduct = "[[${bizProduct.structuralStyle}]]";
+
         function setDataToOption(dataArray,selectId) {
             $("#" + selectId).html("");
             $("#" + selectId).append("<option>请选择</option>")
@@ -196,6 +211,8 @@
                 } else if (valveElementProduct.toString() == specificationObj.dictId.toString()) {
                     selectStr = "selected";
                 } else if (driveFormProduct.toString() == specificationObj.dictId.toString()) {
+                    selectStr = "selected";
+                } else if (structuralStyleProduct.toString() == specificationObj.dictId.toString()) {
                     selectStr = "selected";
                 }
                 $("#" + selectId).append("<option value='" + specificationObj.dictId + "' " + selectStr + ">" + specificationObj.name + "</option>")

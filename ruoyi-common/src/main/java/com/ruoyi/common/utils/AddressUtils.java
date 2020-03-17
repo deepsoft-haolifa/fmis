@@ -16,7 +16,8 @@ public class AddressUtils
 {
     private static final Logger log = LoggerFactory.getLogger(AddressUtils.class);
 
-    public static final String IP_URL = "http://ip.taobao.com/service/getIpInfo.php";
+    //http://ip.taobao.com/service/getIpInfo.php
+    public static final String IP_URL = "http://baidu.com";
 
     public static String getRealAddressByIP(String ip)
     {

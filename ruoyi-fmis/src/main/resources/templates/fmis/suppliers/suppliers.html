@@ -15,49 +15,8 @@
                                 <input type="text" name="name"/>
                             </li>
                             <li>
-                                <p>电话：</p>
-                                <input type="text" name="telphone"/>
-                            </li>
-                            <li>
-                                <p>Email：</p>
-                                <input type="text" name="email"/>
-                            </li>
-                            <li>
-                                <p>负责人：</p>
-                                <select name="ownerId" th:with="type=${@dict.getType('')}">
-                                    <option value="">所有</option>
-                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                                </select>
-                            </li>
-                            <li>
-                                <p>联系人：</p>
-                                <input type="text" name="contact"/>
-                            </li>
-                            <li>
-                                <p>经营形态：</p>
-                                <input type="text" name="manageState"/>
-                            </li>
-                            <li>
-                                <p>市场分布：</p>
-                                <input type="text" name="marketDistribution"/>
-                            </li>
-                            <li>
-                                <p>目标客户：</p>
-                                <input type="text" name="targetCustomer"/>
-                            </li>
-                            <li>
-                                <p>人力资源状况：</p>
-                                <input type="text" name="humanCapitalMeasure"/>
-                            </li>
-                            <li>
-                                <p>一般纳税人：</p>
-                                <input type="text" name="taxpayer"/>
-                            </li>
-                            <li>
-                                <p>状态：</p>
-                                <select name="status">
-                                    <option value="">所有</option>
-                                </select>
+                                <p>代号：</p>
+                                <input type="text" name="nickName"/>
                             </li>
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
@@ -114,6 +73,10 @@
                     title : '公司名称'
                 },
                 {
+                    field : 'nickName',
+                    title : '代号'
+                },
+                {
                     field : 'address', 
                     title : '地址'
                 },
@@ -166,8 +129,11 @@
                     title : '备注'
                 },
                 {
-                    field : 'status', 
-                    title : '状态'
+                    field : 'createTime',
+                    title : '创建时间'
+                },{
+                    field : 'updateTime',
+                    title : '修改时间'
                 },
                 {
                     title: '操作',

@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.fmis.actuator.mapper.BizActuatorMapper">
+    
+    <resultMap type="BizActuator" id="BizActuatorResult">
+        <result property="actuatorId"    column="actuator_id"    />
+        <result property="name"    column="name"    />
+        <result property="brand"    column="brand"    />
+        <result property="manufacturer"    column="manufacturer"    />
+        <result property="setupType"    column="setup_type"    />
+        <result property="outputTorque"    column="output_torque"    />
+        <result property="actionType"    column="action_type"    />
+        <result property="controlCircuit"    column="control_circuit"    />
+        <result property="adaptableVoltage"    column="adaptable_voltage"    />
+        <result property="protectionLevel"    column="protection_level"    />
+        <result property="qualityLevel"    column="quality_level"    />
+        <result property="explosionLevel"    column="explosion_level"    />
+        <result property="price"    column="price"    />
+        <result property="remark"    column="remark"    />
+        <result property="string1"    column="string1"    />
+        <result property="string2"    column="string2"    />
+        <result property="string3"    column="string3"    />
+        <result property="string4"    column="string4"    />
+        <result property="string5"    column="string5"    />
+        <result property="string6"    column="string6"    />
+        <result property="string7"    column="string7"    />
+        <result property="string8"    column="string8"    />
+        <result property="string9"    column="string9"    />
+        <result property="string10"    column="string10"    />
+        <result property="status"    column="status"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBizActuatorVo">
+        select actuator_id, name, brand, manufacturer, setup_type, output_torque, action_type, control_circuit, adaptable_voltage, protection_level, quality_level, explosion_level, price, remark, string1, string2, string3, string4, string5, string6, string7, string8, string9, string10, status, del_flag, create_by, create_time, update_by, update_time from biz_actuator
+    </sql>
+
+    <select id="selectBizActuatorList" parameterType="BizActuator" resultMap="BizActuatorResult">
+        <include refid="selectBizActuatorVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectBizActuatorById" parameterType="Long" resultMap="BizActuatorResult">
+        <include refid="selectBizActuatorVo"/>
+        where actuator_id = #{actuatorId}
+    </select>
+        
+    <insert id="insertBizActuator" parameterType="BizActuator" useGeneratedKeys="true" keyProperty="actuatorId">
+        insert into biz_actuator
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null  and name != ''">name,</if>
+            <if test="brand != null  and brand != ''">brand,</if>
+            <if test="manufacturer != null  and manufacturer != ''">manufacturer,</if>
+            <if test="setupType != null  and setupType != ''">setup_type,</if>
+            <if test="outputTorque != null  and outputTorque != ''">output_torque,</if>
+            <if test="actionType != null  and actionType != ''">action_type,</if>
+            <if test="controlCircuit != null  and controlCircuit != ''">control_circuit,</if>
+            <if test="adaptableVoltage != null  and adaptableVoltage != ''">adaptable_voltage,</if>
+            <if test="protectionLevel != null  and protectionLevel != ''">protection_level,</if>
+            <if test="qualityLevel != null  and qualityLevel != ''">quality_level,</if>
+            <if test="explosionLevel != null  and explosionLevel != ''">explosion_level,</if>
+            <if test="price != null ">price,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+            <if test="string1 != null  and string1 != ''">string1,</if>
+            <if test="string2 != null  and string2 != ''">string2,</if>
+            <if test="string3 != null  and string3 != ''">string3,</if>
+            <if test="string4 != null  and string4 != ''">string4,</if>
+            <if test="string5 != null  and string5 != ''">string5,</if>
+            <if test="string6 != null  and string6 != ''">string6,</if>
+            <if test="string7 != null  and string7 != ''">string7,</if>
+            <if test="string8 != null  and string8 != ''">string8,</if>
+            <if test="string9 != null  and string9 != ''">string9,</if>
+            <if test="string10 != null  and string10 != ''">string10,</if>
+            <if test="status != null  and status != ''">status,</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null  and name != ''">#{name},</if>
+            <if test="brand != null  and brand != ''">#{brand},</if>
+            <if test="manufacturer != null  and manufacturer != ''">#{manufacturer},</if>
+            <if test="setupType != null  and setupType != ''">#{setupType},</if>
+            <if test="outputTorque != null  and outputTorque != ''">#{outputTorque},</if>
+            <if test="actionType != null  and actionType != ''">#{actionType},</if>
+            <if test="controlCircuit != null  and controlCircuit != ''">#{controlCircuit},</if>
+            <if test="adaptableVoltage != null  and adaptableVoltage != ''">#{adaptableVoltage},</if>
+            <if test="protectionLevel != null  and protectionLevel != ''">#{protectionLevel},</if>
+            <if test="qualityLevel != null  and qualityLevel != ''">#{qualityLevel},</if>
+            <if test="explosionLevel != null  and explosionLevel != ''">#{explosionLevel},</if>
+            <if test="price != null ">#{price},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="string1 != null  and string1 != ''">#{string1},</if>
+            <if test="string2 != null  and string2 != ''">#{string2},</if>
+            <if test="string3 != null  and string3 != ''">#{string3},</if>
+            <if test="string4 != null  and string4 != ''">#{string4},</if>
+            <if test="string5 != null  and string5 != ''">#{string5},</if>
+            <if test="string6 != null  and string6 != ''">#{string6},</if>
+            <if test="string7 != null  and string7 != ''">#{string7},</if>
+            <if test="string8 != null  and string8 != ''">#{string8},</if>
+            <if test="string9 != null  and string9 != ''">#{string9},</if>
+            <if test="string10 != null  and string10 != ''">#{string10},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBizActuator" parameterType="BizActuator">
+        update biz_actuator
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null  and name != ''">name = #{name},</if>
+            <if test="brand != null  and brand != ''">brand = #{brand},</if>
+            <if test="manufacturer != null  and manufacturer != ''">manufacturer = #{manufacturer},</if>
+            <if test="setupType != null  and setupType != ''">setup_type = #{setupType},</if>
+            <if test="outputTorque != null  and outputTorque != ''">output_torque = #{outputTorque},</if>
+            <if test="actionType != null  and actionType != ''">action_type = #{actionType},</if>
+            <if test="controlCircuit != null  and controlCircuit != ''">control_circuit = #{controlCircuit},</if>
+            <if test="adaptableVoltage != null  and adaptableVoltage != ''">adaptable_voltage = #{adaptableVoltage},</if>
+            <if test="protectionLevel != null  and protectionLevel != ''">protection_level = #{protectionLevel},</if>
+            <if test="qualityLevel != null  and qualityLevel != ''">quality_level = #{qualityLevel},</if>
+            <if test="explosionLevel != null  and explosionLevel != ''">explosion_level = #{explosionLevel},</if>
+            <if test="price != null ">price = #{price},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+            <if test="string1 != null  and string1 != ''">string1 = #{string1},</if>
+            <if test="string2 != null  and string2 != ''">string2 = #{string2},</if>
+            <if test="string3 != null  and string3 != ''">string3 = #{string3},</if>
+            <if test="string4 != null  and string4 != ''">string4 = #{string4},</if>
+            <if test="string5 != null  and string5 != ''">string5 = #{string5},</if>
+            <if test="string6 != null  and string6 != ''">string6 = #{string6},</if>
+            <if test="string7 != null  and string7 != ''">string7 = #{string7},</if>
+            <if test="string8 != null  and string8 != ''">string8 = #{string8},</if>
+            <if test="string9 != null  and string9 != ''">string9 = #{string9},</if>
+            <if test="string10 != null  and string10 != ''">string10 = #{string10},</if>
+            <if test="status != null  and status != ''">status = #{status},</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+        </trim>
+        where actuator_id = #{actuatorId}
+    </update>
+
+    <delete id="deleteBizActuatorById" parameterType="Long">
+        delete from biz_actuator where actuator_id = #{actuatorId}
+    </delete>
+
+    <delete id="deleteBizActuatorByIds" parameterType="String">
+        delete from biz_actuator where actuator_id in 
+        <foreach item="actuatorId" collection="array" open="(" separator="," close=")">
+            #{actuatorId}
+        </foreach>
+    </delete>
+    
+</mapper>
