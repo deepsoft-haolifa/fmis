@@ -14,6 +14,15 @@
                                 <p>名称：</p>
                                 <input type="text" name="name"/>
                             </li>
+
+                            <li>
+                                <p>属性：</p>
+                                <select name="type" class="form-control m-b" th:with="type=${@dict.getType('product_ref_type')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
                                 <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
@@ -33,9 +42,11 @@
                 <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="fmis:productRef:remove">
                     <i class="fa fa-remove"></i> 删除
                 </a>
+                <!--
                 <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="fmis:productRef:export">
                     <i class="fa fa-download"></i> 导出
                  </a>
+                 -->
             </div>
             <div class="col-sm-12 select-table table-striped">
                 <table id="bootstrap-table"></table>
@@ -47,7 +58,7 @@
         var editFlag = [[${@permission.hasPermi('fmis:productRef:edit')}]];
         var removeFlag = [[${@permission.hasPermi('fmis:productRef:remove')}]];
         var prefix = ctx + "fmis/productRef";
-
+        var productRefTypeData = [[${@dict.getType('product_ref_type')}]];
         $(function() {
             var options = {
                 url: prefix + "/list",
@@ -63,6 +74,13 @@
                     field : 'productRefId', 
                     title : 'ID',
                     visible: false
+                },
+                {
+                    field : 'type',
+                    title : '属性',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(productRefTypeData, value);
+                    }
                 },
                 {
                     field : 'name', 
@@ -93,8 +111,15 @@
                     title : '备注'
                 },
                 {
-                    field : 'suppliersId', 
+                    field : 'suppliersName',
                     title : '供应商'
+                },
+                {
+                    field : 'createTime',
+                    title : '创建时间'
+                },{
+                    field : 'updateTime',
+                    title : '修改时间'
                 },
                 {
                     title: '操作',

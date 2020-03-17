@@ -81,7 +81,10 @@ public class BizProductController extends BaseController {
      */
     @GetMapping("/add")
     public String add(ModelMap mmap) {
-        mmap.put("seriesSelect",bizDictService.selectBizDictByProductType(BizConstants.productTypeCode));
+
+        bizDictService.selectBizDictByProductType(BizConstants.specificationCode);
+
+        mmap.put("seriesSelect",bizDictService.selectBizDictByProductType(BizConstants.specificationCode));
         mmap.put("suppliers",bizSuppliersService.selectAllList());
         return prefix + "/add";
     }

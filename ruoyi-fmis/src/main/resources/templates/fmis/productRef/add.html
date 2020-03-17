@@ -2,6 +2,7 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" >
 <head>
     <th:block th:include="include :: header('新增产品关系')" />
+    <th:block th:include="include :: select2-css" />
 </head>
 <body class="white-bg">
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
@@ -13,12 +14,11 @@
                 </div>
             </div>
             <div class="form-group">    
-                <label class="col-sm-3 control-label">类型 1=法兰 2=螺栓：</label>
+                <label class="col-sm-3 control-label">属性：</label>
                 <div class="col-sm-8">
-                    <select name="type" class="form-control m-b">
-                        <option value="">所有</option>
+                    <select name="type" class="form-control m-b" th:with="type=${@dict.getType('product_ref_type')}">
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                     </select>
-                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
                 </div>
             </div>
             <div class="form-group">    
@@ -30,19 +30,26 @@
             <div class="form-group">    
                 <label class="col-sm-3 control-label">规格：</label>
                 <div class="col-sm-8">
-                    <input name="specifications" class="form-control" type="text">
+                    <select name="specifications" id="specifications" class="form-control select2-multiple" > <!--multiple-->
+                        <option>请选择</option>
+                        <option th:each="specification:${specifications}" th:value="${specification.dictId}" th:text="${specification.name} "></option>
+                    </select>
                 </div>
             </div>
             <div class="form-group">    
                 <label class="col-sm-3 control-label">材质：</label>
                 <div class="col-sm-8">
-                    <input name="valvebodyMaterial" class="form-control" type="text">
+                    <select name="valvebodyMaterial" id="valvebodyMaterial" class="form-control select2-multiple" > <!--multiple-->
+                        <option>请选择</option>
+                        <option th:each="valvebodyMaterial:${valvebodyMaterials}" th:value="${valvebodyMaterial.dictId}" th:text="${valvebodyMaterial.name} "></option>
+                    </select>
                 </div>
             </div>
             <div class="form-group">    
                 <label class="col-sm-3 control-label">材质要求：</label>
                 <div class="col-sm-8">
                     <input name="materialRequire" class="form-control" type="text">
+
                 </div>
             </div>
             <div class="form-group">    
@@ -54,88 +61,22 @@
             <div class="form-group">    
                 <label class="col-sm-3 control-label">供应商：</label>
                 <div class="col-sm-8">
-                    <input name="suppliersId" class="form-control" type="text">
+                    <select name="suppliersId" id="suppliersId" class="form-control select2-multiple" > <!--multiple-->
+                        <option>请选择</option>
+                        <option th:each="suppliers:${suppliers}" th:value="${suppliers.suppliersId}" th:text="${suppliers.name} "></option>
+                    </select>
                 </div>
             </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">备用1：</label>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">备注：</label>
                 <div class="col-sm-8">
-                    <input name="string1" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">备用2：</label>
-                <div class="col-sm-8">
-                    <input name="string2" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">备用3：</label>
-                <div class="col-sm-8">
-                    <input name="string3" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">备用4：</label>
-                <div class="col-sm-8">
-                    <input name="string4" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">备用5：</label>
-                <div class="col-sm-8">
-                    <input name="string5" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">备用6：</label>
-                <div class="col-sm-8">
-                    <input name="string6" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">备用7：</label>
-                <div class="col-sm-8">
-                    <input name="string7" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">备用8：</label>
-                <div class="col-sm-8">
-                    <input name="string8" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">备用9：</label>
-                <div class="col-sm-8">
-                    <input name="string9" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">备用10：</label>
-                <div class="col-sm-8">
-                    <input name="string10" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">状态：</label>
-                <div class="col-sm-8">
-                    <div class="radio-box">
-                        <input type="radio" name="status" value="">
-                        <label th:for="status" th:text="未知"></label>
-                    </div>
-                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">删除标志：</label>
-                <div class="col-sm-8">
-                    <input name="delFlag" class="form-control" type="text">
+                    <input name="remark" class="form-control" type="text">
                 </div>
             </div>
         </form>
     </div>
     <th:block th:include="include :: footer" />
+    <th:block th:include="include :: select2-js" />
     <script type="text/javascript">
         var prefix = ctx + "fmis/productRef"
         $("#form-productRef-add").validate({

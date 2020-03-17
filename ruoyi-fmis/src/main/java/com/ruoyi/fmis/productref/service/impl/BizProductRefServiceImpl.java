@@ -2,6 +2,7 @@ package com.ruoyi.fmis.productref.service.impl;
 
 import java.util.List;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.framework.util.ShiroUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.fmis.productref.mapper.BizProductRefMapper;
@@ -51,6 +52,7 @@ public class BizProductRefServiceImpl implements IBizProductRefService {
     @Override
     public int insertBizProductRef(BizProductRef bizProductRef) {
         bizProductRef.setCreateTime(DateUtils.getNowDate());
+        bizProductRef.setCreateBy(ShiroUtils.getUserId().toString());
         return bizProductRefMapper.insertBizProductRef(bizProductRef);
     }
 
@@ -63,6 +65,7 @@ public class BizProductRefServiceImpl implements IBizProductRefService {
     @Override
     public int updateBizProductRef(BizProductRef bizProductRef) {
         bizProductRef.setUpdateTime(DateUtils.getNowDate());
+        bizProductRef.setUpdateBy(ShiroUtils.getUserId().toString());
         return bizProductRefMapper.updateBizProductRef(bizProductRef);
     }
 

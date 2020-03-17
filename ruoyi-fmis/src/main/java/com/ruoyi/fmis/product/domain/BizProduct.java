@@ -5,6 +5,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 
+import java.beans.Transient;
+
 /**
  * 业务产品对象 biz_product
  *
@@ -88,6 +90,8 @@ public class BizProduct extends BaseEntity {
     public String getStructuralStyle() {
         return structuralStyle;
     }
+
+
 
 
     public void setProductId(Long productId) {

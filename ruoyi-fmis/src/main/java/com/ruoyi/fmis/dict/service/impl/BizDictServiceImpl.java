@@ -1,6 +1,9 @@
 package com.ruoyi.fmis.dict.service.impl;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.ruoyi.common.json.JSONObject;
 import com.ruoyi.common.utils.DateUtils;
@@ -115,6 +118,30 @@ public class BizDictServiceImpl implements IBizDictService {
         queryProductType.setParentId(bizDict.getDictId());
         return bizDictMapper.selectBizDictList(queryProductType);
     }
+
+    @Override
+    public List<BizDict> selectProductDictForParentType (String type,Long dictId) {
+        BizDict queryObject = new BizDict();
+        queryObject.setParentType(type);
+        List<BizDict> dictList = bizDictMapper.selectBizDictList(queryObject);
+
+        if (dictId > 0L) {
+            BizDict bizDict = bizDictMapper.selectBizDictById(dictId);
+            bizDict.setFlag(true);
+            dictList.add(0,bizDict);
+        }
+
+        Map<String,BizDict> bizDictMap = new LinkedHashMap<>();
+        for (BizDict bizDict : dictList) {
+            String name = bizDict.getName();
+            if (!bizDictMap.containsKey(name)) {
+                bizDictMap.put(name,bizDict);
+            }
+        }
+        return new ArrayList<BizDict>(bizDictMap.values());
+
+    }
+
 
     @Override
     public JSONObject selectProductTypeDict (Long dictId) {

@@ -37,8 +37,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select product_ref_id, name, type, model, specifications, valvebody_material, material_require, price, remark, suppliers_id, string1, string2, string3, string4, string5, string6, string7, string8, string9, string10, status, del_flag, create_by, create_time, update_by, update_time from biz_product_ref
     </sql>
 
+
+    <sql id="selectBizProductRefDictVo">
+      select pr.product_ref_id, pr.name, pr.type, pr.model, d1.name as specifications, d2.name as valvebody_material, pr.material_require, pr.price,
+	    pr.remark, pr.suppliers_id, pr.string1, pr.string2, pr.string3, pr.string4, pr.string5, pr.string6, pr.string7, pr.string8,
+	    pr.string9, pr.string10, pr.status, pr.del_flag, pr.create_by, pr.create_time, pr.update_by, pr.update_time,s.name as  suppliersName
+	 from biz_product_ref pr
+	 left join biz_dict d1 on d1.dict_id=pr.specifications
+	 left join biz_dict d2 on d2.dict_id=pr.valvebody_material
+	 left join biz_suppliers s on s.suppliers_id=pr.suppliers_id
+    </sql>
+
     <select id="selectBizProductRefList" parameterType="BizProductRef" resultMap="BizProductRefResult">
-        <include refid="selectBizProductRefVo"/>
+        <include refid="selectBizProductRefDictVo"/>
         <where>  
             <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
         </where>

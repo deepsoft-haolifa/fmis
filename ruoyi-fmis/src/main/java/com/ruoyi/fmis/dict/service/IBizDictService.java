@@ -78,4 +78,11 @@ public interface IBizDictService {
      * @return
      */
     public JSONObject selectProductTypeDict (Long dictId);
+
+    /**
+     * 根据类型获取字典 去重
+     * @param type
+     * @return
+     */
+    public List<BizDict> selectProductDictForParentType (String type,Long dictId);
 }
