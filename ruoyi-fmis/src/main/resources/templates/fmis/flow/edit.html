@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改流程记录')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-flow-edit" th:object="${bizFlow}">
+            <input name="flowId" th:field="*{flowId}" type="hidden">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">业务表名称：</label>
+                <div class="col-sm-8">
+                    <input name="bizTable" th:field="*{bizTable}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">业务ID：</label>
+                <div class="col-sm-8">
+                    <input name="bizId" th:field="*{bizId}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">审核人ID：</label>
+                <div class="col-sm-8">
+                    <input name="examineUserId" th:field="*{examineUserId}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">0=上报 1=同意 -1=不同意：</label>
+                <div class="col-sm-8">
+                    <div class="radio-box">
+                        <input type="radio" name="flowStatus" value="">
+                        <label th:for="flowStatus" th:text="未知"></label>
+                    </div>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">备用1：</label>
+                <div class="col-sm-8">
+                    <input name="string1" th:field="*{string1}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">备用2：</label>
+                <div class="col-sm-8">
+                    <input name="string2" th:field="*{string2}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">备用3：</label>
+                <div class="col-sm-8">
+                    <input name="string3" th:field="*{string3}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">备用4：</label>
+                <div class="col-sm-8">
+                    <input name="string4" th:field="*{string4}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">备用5：</label>
+                <div class="col-sm-8">
+                    <input name="string5" th:field="*{string5}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">状态：</label>
+                <div class="col-sm-8">
+                    <div class="radio-box">
+                        <input type="radio" name="status" value="">
+                        <label th:for="status" th:text="未知"></label>
+                    </div>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "fmis/flow";
+        $("#form-flow-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-flow-edit').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

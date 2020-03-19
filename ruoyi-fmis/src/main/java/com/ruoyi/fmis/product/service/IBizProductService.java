@@ -26,6 +26,8 @@ public interface IBizProductService {
      */
     public List<BizProduct> selectBizProductList(BizProduct bizProduct);
 
+    public List<BizProduct> selectBizProductListNoAuth(BizProduct bizProduct);
+
     /**
      * 新增业务产品
      *

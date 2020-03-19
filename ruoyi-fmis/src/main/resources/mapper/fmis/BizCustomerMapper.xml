@@ -36,6 +36,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <sql id="selectBizCustomerDictVo">
         select c.customer_id, c.record_date, c.company_code, c.area, c.record_code, u.user_name as owner_user_id, c.name, c.project_ame, c.contact_name, c.contact_position, c.contact_phone, c.contact_email, c.brand, c.info, c.product_info, c.remark, c.status, c.del_flag, c.create_by, c.create_time, c.update_by, c.update_time from biz_customer c
         join sys_user u on c.owner_user_id=u.user_id
+
+        left join sys_dept dt on u.dept_id=dt.dept_id
+
+        where c.del_flag = '0'
+        <!-- 数据范围过滤 -->
+        ${params.dataScope}
+
     </sql>
 
     <select id="selectBizCustomerList" parameterType="BizCustomer" resultMap="BizCustomerResult">

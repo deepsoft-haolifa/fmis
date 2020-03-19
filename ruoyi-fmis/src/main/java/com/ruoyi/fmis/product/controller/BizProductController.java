@@ -2,6 +2,7 @@ package com.ruoyi.fmis.product.controller;
 
 import java.util.List;
 
+import com.ruoyi.common.annotation.DataScope;
 import com.ruoyi.common.json.JSONObject;
 import com.ruoyi.fmis.common.BizConstants;
 import com.ruoyi.fmis.dict.domain.BizDict;
@@ -61,6 +62,14 @@ public class BizProductController extends BaseController {
     public TableDataInfo list(BizProduct bizProduct) {
         startPage();
         List<BizProduct> list = bizProductService.selectBizProductList(bizProduct);
+        return getDataTable(list);
+    }
+
+    @PostMapping("/listNoAuth")
+    @ResponseBody
+    public TableDataInfo listNoAuth(BizProduct bizProduct) {
+        startPage();
+        List<BizProduct> list = bizProductService.selectBizProductListNoAuth(bizProduct);
         return getDataTable(list);
     }
 

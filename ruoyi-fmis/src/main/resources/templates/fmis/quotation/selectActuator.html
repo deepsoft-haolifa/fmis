@@ -23,21 +23,6 @@
                 </form>
             </div>
 
-            <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="fmis:actuator:add">
-                    <i class="fa fa-plus"></i> 添加
-                </a>
-                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="fmis:actuator:edit">
-                    <i class="fa fa-edit"></i> 修改
-                </a>
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="fmis:actuator:remove">
-                    <i class="fa fa-remove"></i> 删除
-                </a>
-                <!--
-                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="fmis:actuator:export">
-                    <i class="fa fa-download"></i> 导出 -->
-                 </a>
-            </div>
             <div class="col-sm-12 select-table table-striped">
                 <table id="bootstrap-table"></table>
             </div>
@@ -49,9 +34,13 @@
         var removeFlag = [[${@permission.hasPermi('fmis:actuator:remove')}]];
         var prefix = ctx + "fmis/actuator";
         var setupTypeData = [[${@dict.getType('actuator_setup_type')}]];
+        var productId = parent.$('#form-quotation-add input[name=productId]').val();
+        if (productId == null || productId == "") {
+            productId = parent.$('#form-quotation-edit input[name=productId]').val();
+        }
         $(function() {
             var options = {
-                url: prefix + "/list",
+                url: prefix + "/listForProductId?productId=" + productId,
                 createUrl: prefix + "/add",
                 updateUrl: prefix + "/edit/{id}",
                 removeUrl: prefix + "/remove",
@@ -76,10 +65,6 @@
                 {
                     field : 'manufacturer', 
                     title : '生产厂家'
-                },
-                {
-                    field : 'string1',
-                    title : '型号'
                 },
                 {
                     field : 'setupType',
@@ -144,6 +129,28 @@
             };
             $.table.init(options);
         });
+
+        /* 添加用户-选择用户-提交 */
+        function submitHandler() {
+            var rows = $.table.selectFirstColumns();
+            if (rows.length == 0) {
+                $.modal.alertWarning("请选择一条记录");
+                return;
+            }
+            if (rows.length > 1) {
+                $.modal.alertWarning("请只选择一条记录");
+                return;
+            }
+            $.modal.confirm('确定要关联该执行器吗？',
+                function() {
+                    parent.$('#form-quotation-add input[name=actuatorId]').val($.table.selectColumns("actuatorId"));
+                    parent.$('#form-quotation-add input[name=actuatorName]').val($.table.selectColumns("name"));
+                    parent.$('#form-quotation-edit input[name=actuatorId]').val($.table.selectColumns("actuatorId"));
+                    parent.$('#form-quotation-edit input[name=actuatorName]').val($.table.selectColumns("name"));
+                    $.modal.close();
+                }
+            );
+        }
     </script>
 </body>
 </html>

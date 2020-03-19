@@ -57,4 +57,6 @@ public interface IBizActuatorService {
      * @return 结果
      */
     public int deleteBizActuatorById(Long actuatorId);
+
+    public List<BizActuator> selectBizActuatorForRefList(BizActuator bizActuator);
 }

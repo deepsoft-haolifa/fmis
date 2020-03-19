@@ -1,6 +1,8 @@
 package com.ruoyi.fmis.suppliers.service.impl;
 
 import java.util.List;
+
+import com.ruoyi.common.annotation.DataScope;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.framework.util.ShiroUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +41,7 @@ public class BizSuppliersServiceImpl implements IBizSuppliersService {
      * @return 供应商
      */
     @Override
+    @DataScope(deptAlias = "dt", userAlias = "u")
     public List<BizSuppliers> selectBizSuppliersList(BizSuppliers bizSuppliers) {
         return bizSuppliersMapper.selectBizSuppliersList(bizSuppliers);
     }

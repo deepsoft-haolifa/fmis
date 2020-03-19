@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('报价单列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>运费价格：</p>
+                                <input type="text" name="freight"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="fmis:quotation:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="fmis:quotation:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="fmis:quotation:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <!--
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="fmis:quotation:export">
+                    <i class="fa fa-download"></i> 导出
+                 </a>-->
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('fmis:quotation:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('fmis:quotation:remove')}]];
+        var prefix = ctx + "fmis/quotation";
+        var paymentMethodData = [[${@dict.getType('payment_method')}]];
+
+        var roleType = /*[[${roleType}]]*/;
+
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "报价单",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'quotationId', 
+                    title : 'ID',
+                    visible: false
+                },
+                {
+                    field : 'productName',
+                    title : '产品'
+                },
+                {
+                    field : 'productRef1Name',
+                    title : '产品配件法兰'
+                },
+                {
+                    field : 'productRef1Num', 
+                    title : '产品配件法兰数量'
+                },
+                {
+                    field : 'productRef2Name',
+                    title : '产品配件螺栓'
+                },
+                {
+                    field : 'productRef2Num', 
+                    title : '产品配件螺栓数量'
+                },
+                {
+                    field : 'actuatorName',
+                    title : '执行器'
+                },
+                {
+                    field : 'specialExpenses', 
+                    title : '特殊费用'
+                },
+                {
+                    field : 'paymentMethod', 
+                    title : '付款方式',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(paymentMethodData, value);
+                    }
+                },
+                {
+                    field : 'freight', 
+                    title : '运费价格'
+                },
+                {
+                    field : 'leadTime', 
+                    title : '供货周期'
+                },
+                {
+                    field : 'reportProject', 
+                    title : '报备项目 默认非项目'
+                },
+                {
+                    field : 'createBy',
+                    title : '申请人'
+                },
+                {
+                    field : 'remark', 
+                    title : '备注'
+                },
+                {
+                    field : 'flowStatus',
+                    title : '状态',
+                    formatter: function(value, row, index) {
+                        var actions = '';
+                        var flowStatus = row.flowStatus;
+                        if (flowStatus == "0") {
+                            actions = '未上报';
+                        } else if (flowStatus == "1") {
+                            actions = '销售员已上报';
+                        } else if (flowStatus == "2") {
+                            actions = '销售经理同意';
+                        } else if (flowStatus == "-2") {
+                            actions = '销售经理不同意';
+                        } else if (flowStatus == "3") {
+                            actions = '区域经理同意';
+                        } else if (flowStatus == "-3") {
+                            actions = '区域经理不同意';
+                        } else if (flowStatus == "4") {
+                            actions = '副总同意';
+                        } else if (flowStatus == "-4") {
+                            actions = '副总不同意';
+                        } else if (flowStatus == "5") {
+                            actions = '总经理同意';
+                        } else if (flowStatus == "-5") {
+                            actions = '总经理不同意';
+                        }
+                        console.log(actions + "---------")
+                        return actions;
+                    }
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        var flowStatus = row.flowStatus;
+                        var normalFlag = row.normalFlag;
+                        if (flowStatus < 1 && roleType == "1") {
+                            actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.quotationId + '\')"><i class="fa fa-edit"></i> 编辑</a> ');
+                            actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.quotationId + '\')"><i class="fa fa-remove"></i> 删除</a>');
+                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subReport(\'' + row.quotationId + '\')"><i class="fa fa-remove"></i> 上报</a>');
+                        } else if (roleType == "2" && flowStatus == "1") {
+                            //角色=销售经理  状态=销售员上报
+                            console.log("-1");
+                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subExamine(\'' + row.quotationId + '\')"><i class="fa fa-remove"></i> 审批</a>');
+                        }  else if (roleType == "3" && flowStatus == "2") {
+                            //角色=区域经理  状态=销售经理同意
+                            console.log("-2");
+                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subExamine(\'' + row.quotationId + '\')"><i class="fa fa-remove"></i> 审批</a>');
+                        }  else if (roleType == "4" && flowStatus == "3") {
+                            //角色=副总  状态=区域经理同意
+                            console.log("-3");
+                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subExamine(\'' + row.quotationId + '\')"><i class="fa fa-remove"></i> 审批</a>');
+                        } else if (roleType == "5" && flowStatus == "4" && normalFlag == "1") {
+                            //角色=老总  状态=区域经理同意
+                            console.log("-4");
+                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subExamine(\'' + row.quotationId + '\')"><i class="fa fa-remove"></i> 审批</a>');
+                        }
+                        //查看审批历史 待做
+                        //actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewExamine(\'' + row.quotationId + '\')"><i class="fa fa-remove"></i> 查看审批记录 </a>');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+
+        function subReport(quotationId) {
+            $.modal.confirm("确定上报该条信息吗？", function() {
+                console.log(quotationId + "--quotationId");
+                var url = prefix + "/report?quotationId=" + quotationId;
+                $.operate.saveModal(url,'',function(){
+                    $.table.refresh();
+                });
+            });
+        }
+        function subExamine(quotationId) {
+            var url = prefix + "/examineEdit?quotationId=" + quotationId;
+            $.modal.open("审批", url);
+        }
+
+        function viewExamine(quotationId) {
+            var url = prefix + "/viewExamine?quotationId=" + quotationId;
+            $.modal.open("查看", url);
+        }
+
+        $(document).ready(function(){
+            if (roleType != "1") {
+                $("#toolbar").html("");
+            }
+        });
+    </script>
+</body>
+</html>

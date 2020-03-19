@@ -36,6 +36,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <sql id="selectBizSuppliersDictVo">
         select s.suppliers_id, s.name, s.address, s.telphone, s.fax, s.email, s.site_url, u.user_name as owner_id, s.contact, s.manage_state, s.market_distribution, s.target_customer, s.human_capital_measure, s.taxpayer, s.remark, s.status, s.del_flag, s.create_by, s.create_time, s.update_by, s.update_time,s.nick_name from biz_suppliers s
         join sys_user u on s.owner_id=u.user_id
+        left join sys_dept dt on u.dept_id=dt.dept_id
+
+
     </sql>
 
     <select id="selectBizSuppliersList" parameterType="BizSuppliers" resultMap="BizSuppliersResult">

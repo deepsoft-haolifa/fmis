@@ -27,6 +27,14 @@ public interface BizActuatorMapper {
     public List<BizActuator> selectBizActuatorList(BizActuator bizActuator);
 
     /**
+     * 查询执行器列表 通过关系查询
+     *
+     * @param bizActuator 执行器
+     * @return 执行器集合
+     */
+    public List<BizActuator> selectBizActuatorForRefList(BizActuator bizActuator);
+
+    /**
      * 新增执行器
      *
      * @param bizActuator 执行器

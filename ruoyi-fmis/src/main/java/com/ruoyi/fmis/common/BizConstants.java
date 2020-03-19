@@ -36,4 +36,18 @@ public class BizConstants {
     //驱动方式
     public static final String driveMode = "drive_mode";
 
+
+    /**
+     * 报价单表名称
+     */
+    public static final String BIZ_QUOTATION_TABLE = "biz_quotation";
+
+    /**
+     * 流程上报状态
+     */
+    public static final String FLOW_STATUS_0 = "0";
+    /**
+     * 流程上报状态1
+     */
+    public static final String FLOW_STATUS_1 = "1";
 }

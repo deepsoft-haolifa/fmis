@@ -148,4 +148,11 @@ public interface ISysRoleService
      * @return 结果
      */
     public int insertAuthUsers(Long roleId, String userIds);
+    /**
+     * 根据角色权限字符获取角色身份
+     *  1=销售 2=销售经理 3=区域经理 4=副总 5=总经理
+     * @param
+     * @return
+     */
+    public int getRoleType(Long userId);
 }

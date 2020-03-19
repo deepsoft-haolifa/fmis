@@ -2,9 +2,13 @@ package com.ruoyi.fmis.productref.controller;
 
 import java.util.List;
 
+import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.fmis.common.BizConstants;
 import com.ruoyi.fmis.customer.service.IBizCustomerService;
+import com.ruoyi.fmis.dict.domain.BizDict;
 import com.ruoyi.fmis.dict.service.IBizDictService;
+import com.ruoyi.fmis.product.domain.BizProduct;
+import com.ruoyi.fmis.product.service.IBizProductService;
 import com.ruoyi.fmis.suppliers.domain.BizSuppliers;
 import com.ruoyi.fmis.suppliers.service.IBizSuppliersService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -42,6 +46,8 @@ public class BizProductRefController extends BaseController {
     @Autowired
     private IBizDictService bizDictService;
 
+    @Autowired
+    private IBizProductService bizProductService;
 
     @Autowired
     private IBizSuppliersService bizSuppliersService;
@@ -59,6 +65,38 @@ public class BizProductRefController extends BaseController {
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(BizProductRef bizProductRef) {
+        startPage();
+        List<BizProductRef> list = bizProductRefService.selectBizProductRefList(bizProductRef);
+        return getDataTable(list);
+    }
+
+    @PostMapping("/listForProductId")
+    @ResponseBody
+    public TableDataInfo listForProductId(BizProductRef bizProductRef) {
+
+        String productId = getRequest().getParameter("productId");
+        String refType = getRequest().getParameter("refType");
+
+        BizProduct bizProduct = bizProductService.selectBizProductById(Long.parseLong(productId));
+        if (bizProduct != null) {
+            String specifications = bizProduct.getSpecifications();
+            if (StringUtils.isNotEmpty(specifications)) {
+                BizDict bizDict = bizDictService.selectBizDictById(Long.parseLong(specifications));
+                if (bizDict != null) {
+                    bizProductRef.setSpecifications(bizDict.getName());
+                }
+            }
+
+            String valvebodyMaterial = bizProduct.getValvebodyMaterial();
+            if (StringUtils.isNotEmpty(valvebodyMaterial)) {
+                BizDict bizDict = bizDictService.selectBizDictById(Long.parseLong(valvebodyMaterial));
+                if (bizDict != null) {
+                    bizProductRef.setValvebodyMaterial(bizDict.getName());
+                }
+            }
+        }
+        bizProductRef.setType(refType);
+
         startPage();
         List<BizProductRef> list = bizProductRefService.selectBizProductRefList(bizProductRef);
         return getDataTable(list);

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改报价单')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-quotation-edit" th:object="${bizQuotation}">
+            <input name="quotationId" th:field="*{quotationId}" type="hidden">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">产品：</label>
+                <div class="col-sm-8">
+                    <input name="productId" id="productId" class="form-control" type="hidden" th:field="*{productId}">
+                    <input name="productName" class="form-control" type="text" th:field="*{productName}" readonly onclick="selectProduct()">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">产品配件法兰：</label>
+                <div class="col-sm-8">
+                    <input name="productRef1Id" id="productRef1Id" class="form-control" type="hidden" th:field="*{productRef1Id}">
+                    <input name="productRef1Name" class="form-control" type="text" th:field="*{productRef1Name}" readonly onclick="selectProductRef1()">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">产品配件法兰数量：</label>
+                <div class="col-sm-8">
+                    <input name="productRef1Num" th:field="*{productRef1Num}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">产品配件螺栓：</label>
+                <div class="col-sm-8">
+                    <input name="productRef2Id" id="productRef2Id" class="form-control" type="hidden" th:field="*{productRef2Id}">
+                    <input name="productRef2Name" class="form-control" type="text" th:field="*{productRef2Name}" readonly onclick="selectProductRef2()">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">产品配件螺栓数量：</label>
+                <div class="col-sm-8">
+                    <input name="productRef2Num" th:field="*{productRef2Num}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">执行器id：</label>
+                <div class="col-sm-8">
+                    <input name="actuatorId" id="actuatorId" class="form-control" type="hidden" th:field="*{actuatorId}">
+                    <input name="actuatorName" class="form-control" type="text" th:field="*{actuatorName}" readonly onclick="selectActuator()">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">特殊费用：</label>
+                <div class="col-sm-8">
+                    <input name="specialExpenses" th:field="*{specialExpenses}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">付款方式：</label>
+                <div class="col-sm-8">
+                    <input name="paymentMethod" th:field="*{paymentMethod}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">运费价格：</label>
+                <div class="col-sm-8">
+                    <input name="freight" th:field="*{freight}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">供货周期：</label>
+                <div class="col-sm-8">
+                    <input name="leadTime" th:field="*{leadTime}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">报备项目 默认非项目：</label>
+                <div class="col-sm-8">
+                    <input name="reportProject" th:field="*{reportProject}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">备注：</label>
+                <div class="col-sm-8">
+                    <input name="remark" th:field="*{remark}" class="form-control" type="text" >
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "fmis/quotation";
+        $("#form-quotation-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+
+                var dataObj = $('#form-quotation-edit').serializeArray();
+                //计算是否正常
+                //特殊费用
+                var specialExpenses = $("#specialExpenses").val();
+                if (specialExpenses != null && specialExpenses.length > 0) {
+                    dataObj.push({"normalFlag": "1"});
+                } else {
+                    dataObj.push({"normalFlag": "0"});
+                }
+                $.operate.save(prefix + "/edit", dataObj);
+            }
+        }
+
+
+        function selectProduct() {
+            var url = prefix + "/selectProduct";
+            $.modal.open("关联产品", url);
+        }
+
+        function selectActuator() {
+            var url = prefix + "/selectActuator";
+            $.modal.open("关联执行器", url);
+        }
+
+        function selectProductRef1() {
+            var productId = $("#productId").val();
+            if (productId == null || productId == "") {
+                $.modal.alertWarning('请选择产品');
+                return;
+            }
+            var url = prefix + "/selectProductRef1?productId=" + productId;
+            $.modal.open("关联产品配件法兰", url);
+        }
+        function selectProductRef2() {
+            var productId = $("#productId").val();
+            if (productId == null || productId == "") {
+                $.modal.alertWarning('请选择产品');
+                return;
+            }
+            var url = prefix + "/selectProductRef2?productId=" + productId;
+            $.modal.open("关联产品配件螺栓", url);
+        }
+    </script>
+</body>
+</html>

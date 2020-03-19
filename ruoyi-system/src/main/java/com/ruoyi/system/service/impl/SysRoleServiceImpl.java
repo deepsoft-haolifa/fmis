@@ -1,10 +1,7 @@
 package com.ruoyi.system.service.impl;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -102,6 +99,34 @@ public class SysRoleServiceImpl implements ISysRoleService
         }
         return roles;
     }
+    /**
+     * 根据角色权限字符获取角色身份
+     *  1=销售 2=销售经理 3=区域经理 4=副总 5=总经理
+     * @param
+     * @return
+     */
+    @Override
+    public int getRoleType(Long userId)
+    {
+        int roleType = 0;
+        Map<String,Integer> roleMap = new HashMap<>();
+        roleMap.put("process_lz",5);
+        roleMap.put("process_fz",4);
+        roleMap.put("process_qyjl",3);
+        roleMap.put("process_xsjl",2);
+        roleMap.put("process_ywy",1);
+        List<SysRole> userRoles = roleMapper.selectRolesByUserId(userId);
+        for (String key : roleMap.keySet()) {
+            for (SysRole sysRole : userRoles) {
+                String roleKey = sysRole.getRoleKey();
+                if (roleKey.contains((key))) {
+                    return roleMap.get(key);
+                }
+            }
+        }
+        return roleType;
+    }
+
 
     /**
      * 查询所有角色

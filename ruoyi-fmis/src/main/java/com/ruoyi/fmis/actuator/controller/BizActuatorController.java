@@ -1,6 +1,13 @@
 package com.ruoyi.fmis.web.controller.fmis;
 
 import java.util.List;
+
+import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.fmis.actuatorref.service.IBizActuatorRefService;
+import com.ruoyi.fmis.dict.domain.BizDict;
+import com.ruoyi.fmis.dict.service.IBizDictService;
+import com.ruoyi.fmis.product.domain.BizProduct;
+import com.ruoyi.fmis.product.service.IBizProductService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,12 +40,21 @@ public class BizActuatorController extends BaseController {
     @Autowired
     private IBizActuatorService bizActuatorService;
 
+    @Autowired
+    private IBizDictService bizDictService;
+
+    @Autowired
+    private IBizActuatorRefService bizActuatorRefService;
+
     @RequiresPermissions("fmis:actuator:view")
     @GetMapping()
     public String actuator() {
         return prefix + "/actuator";
     }
 
+
+    @Autowired
+    private IBizProductService bizProductService;
     /**
      * 查询执行器列表
      */
@@ -48,6 +64,39 @@ public class BizActuatorController extends BaseController {
     public TableDataInfo list(BizActuator bizActuator) {
         startPage();
         List<BizActuator> list = bizActuatorService.selectBizActuatorList(bizActuator);
+        return getDataTable(list);
+    }
+
+    @PostMapping("/listForProductId")
+    @ResponseBody
+    public TableDataInfo listForProductId(BizActuator bizActuator) {
+
+
+        String productId = getRequest().getParameter("productId");
+
+        BizProduct bizProduct = bizProductService.selectBizProductById(Long.parseLong(productId));
+
+        if (bizProduct != null) {
+            String specifications = bizProduct.getSpecifications();
+
+            if (StringUtils.isNotEmpty(specifications)) {
+                BizDict bizDict = bizDictService.selectBizDictById(Long.parseLong(specifications));
+                if (bizDict != null) {
+                    bizActuator.setString1(bizDict.getName());
+                }
+            }
+
+            String nominalPressure = bizProduct.getNominalPressure();
+            if (StringUtils.isNotEmpty(nominalPressure)) {
+                BizDict bizDict = bizDictService.selectBizDictById(Long.parseLong(nominalPressure));
+                if (bizDict != null) {
+                    bizActuator.setString2(bizDict.getName());
+                }
+            }
+        }
+
+        startPage();
+        List<BizActuator> list = bizActuatorService.selectBizActuatorForRefList(bizActuator);
         return getDataTable(list);
     }
 
