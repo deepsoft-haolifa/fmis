@@ -42,6 +42,12 @@ public class BizFlowServiceImpl implements IBizFlowService {
         return bizFlowMapper.selectBizFlowList(bizFlow);
     }
 
+    @Override
+    public List<BizFlow> selectBizFlowViewList(BizFlow bizFlow) {
+        return bizFlowMapper.selectBizFlowViewList(bizFlow);
+    }
+
+
     /**
      * 新增流程记录
      *

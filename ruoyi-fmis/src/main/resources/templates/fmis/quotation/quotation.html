@@ -184,7 +184,7 @@
                             actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subExamine(\'' + row.quotationId + '\')"><i class="fa fa-remove"></i> 审批</a>');
                         }
                         //查看审批历史 待做
-                        //actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewExamine(\'' + row.quotationId + '\')"><i class="fa fa-remove"></i> 查看审批记录 </a>');
+                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewExamine(\'' + row.quotationId + '\')"><i class="fa fa-remove"></i> 查看审批记录 </a>');
                         return actions.join('');
                     }
                 }]
@@ -208,7 +208,9 @@
 
         function viewExamine(quotationId) {
             var url = prefix + "/viewExamine?quotationId=" + quotationId;
-            $.modal.open("查看", url);
+            $.modal.openNoEnter("审批记录", url,'','',function(){
+                $.modal.closeAll();
+            });
         }
 
         $(document).ready(function(){

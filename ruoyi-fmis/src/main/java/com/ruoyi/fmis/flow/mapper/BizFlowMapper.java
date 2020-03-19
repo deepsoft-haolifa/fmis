@@ -27,6 +27,14 @@ public interface BizFlowMapper {
     public List<BizFlow> selectBizFlowList(BizFlow bizFlow);
 
     /**
+     * 查询流程记录列表
+     *
+     * @param bizFlow 流程记录
+     * @return 流程记录集合
+     */
+    public List<BizFlow> selectBizFlowViewList(BizFlow bizFlow);
+
+    /**
      * 新增流程记录
      *
      * @param bizFlow 流程记录

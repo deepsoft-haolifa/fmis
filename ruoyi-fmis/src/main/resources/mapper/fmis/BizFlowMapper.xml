@@ -33,7 +33,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <where>  
         </where>
     </select>
-    
+
+
+    <sql id="selectBizFlowViewVo">
+      select f.flow_id, f.biz_table, f.biz_id, f.examine_user_id,u.user_name as examineUserName, f.flow_status, f.remark, f.string1, f.string2, f.string3, f.string4, f.string5, f.status, f.del_flag, f.create_by, f.create_time, f.update_by, f.update_time
+      from biz_flow f
+      left join sys_user u on u.user_id=f.examine_user_id
+
+    </sql>
+
+    <select id="selectBizFlowViewList" parameterType="BizFlow" resultMap="BizFlowResult">
+        <include refid="selectBizFlowViewVo"/>
+        <where>
+            <if test="bizTable != null  and bizTable != ''"> and f.biz_table = #{bizTable}</if>
+            <if test="bizId != null"> and f.biz_id = #{bizId}</if>
+            order by f.create_time desc
+        </where>
+    </select>
+
+
     <select id="selectBizFlowById" parameterType="Long" resultMap="BizFlowResult">
         <include refid="selectBizFlowVo"/>
         where flow_id = #{flowId}

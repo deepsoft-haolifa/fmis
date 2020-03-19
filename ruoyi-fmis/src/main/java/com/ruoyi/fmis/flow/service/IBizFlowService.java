@@ -26,6 +26,7 @@ public interface IBizFlowService {
      */
     public List<BizFlow> selectBizFlowList(BizFlow bizFlow);
 
+    public List<BizFlow> selectBizFlowViewList(BizFlow bizFlow);
     /**
      * 新增流程记录
      *

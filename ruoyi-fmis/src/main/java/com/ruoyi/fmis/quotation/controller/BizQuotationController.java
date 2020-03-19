@@ -2,6 +2,7 @@ package com.ruoyi.fmis.quotation.controller;
 
 import java.util.List;
 
+import com.ruoyi.fmis.common.BizConstants;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.service.ISysRoleService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -188,6 +189,9 @@ public class BizQuotationController extends BaseController {
     @GetMapping("/viewExamine")
     public String viewExamine(ModelMap mmap) {
 
+        String quotationId = getRequest().getParameter("quotationId");
+        mmap.put("bizId", quotationId);
+        mmap.put("bizTable", BizConstants.BIZ_QUOTATION_TABLE);
         return prefix + "/viewExamine";
     }
 

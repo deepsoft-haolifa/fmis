@@ -60,6 +60,15 @@ public class BizFlow extends BaseEntity {
     /** 删除标志（0代表存在 2代表删除） */
     private String delFlag;
 
+    private String examineUserName;
+    public void setExamineUserName(String examineUserName) {
+        this.examineUserName = examineUserName;
+    }
+    public String getExamineUserName() {
+        return examineUserName;
+    }
+
+
     public void setFlowId(Long flowId) {
         this.flowId = flowId;
     }

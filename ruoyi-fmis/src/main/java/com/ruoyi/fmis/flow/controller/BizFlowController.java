@@ -51,6 +51,15 @@ public class BizFlowController extends BaseController {
         return getDataTable(list);
     }
 
+
+    @PostMapping("/listView")
+    @ResponseBody
+    public TableDataInfo listView(BizFlow bizFlow) {
+        //startPage();
+        List<BizFlow> list = bizFlowService.selectBizFlowViewList(bizFlow);
+        return getDataTable(list);
+    }
+
     /**
      * 导出流程记录列表
      */
