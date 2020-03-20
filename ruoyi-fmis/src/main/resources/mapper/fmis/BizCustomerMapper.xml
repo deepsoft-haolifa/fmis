@@ -40,14 +40,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         left join sys_dept dt on u.dept_id=dt.dept_id
 
         where c.del_flag = '0'
-        <!-- 数据范围过滤 -->
-        ${params.dataScope}
+        <!-- 数据范围过滤 ${params.dataScope}-->
+
 
     </sql>
 
     <select id="selectBizCustomerList" parameterType="BizCustomer" resultMap="BizCustomerResult">
         <include refid="selectBizCustomerDictVo"/>
-        <where>  
             <if test="recordDate != null "> and c.record_date = #{recordDate}</if>
             <if test="companyCode != null  and companyCode != ''"> and c.company_code = #{companyCode}</if>
             <if test="area != null  and area != ''"> and c.area = #{area}</if>
@@ -63,7 +62,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="info != null  and info != ''"> and c.info = #{info}</if>
             <if test="productInfo != null  and productInfo != ''"> and c.product_info = #{productInfo}</if>
             <if test="status != null  and status != ''"> and c.status = #{status}</if>
-        </where>
     </select>
     
     <select id="selectBizCustomerById" parameterType="Long" resultMap="BizCustomerResult">

@@ -10,6 +10,7 @@
                 <form id="formId">
                     <div class="select-list">
                         <ul>
+                            <!--
                             <li>
                                 <p>运费价格：</p>
                                 <input type="text" name="freight"/>
@@ -18,6 +19,7 @@
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
                                 <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
                             </li>
+                            -->
                         </ul>
                     </div>
                 </form>
@@ -127,33 +129,41 @@
                 {
                     field : 'flowStatus',
                     title : '状态',
+                    align: 'center',
                     formatter: function(value, row, index) {
                         var actions = '';
                         var flowStatus = row.flowStatus;
                         if (flowStatus == "0") {
                             actions = '未上报';
                         } else if (flowStatus == "1") {
-                            actions = '销售员已上报';
+                            actions = '<font color=#00bfff>销售员已上报</font>';
                         } else if (flowStatus == "2") {
-                            actions = '销售经理同意';
+                            actions = '<font color=green>销售经理同意</font>';
                         } else if (flowStatus == "-2") {
-                            actions = '销售经理不同意';
+                            actions = '<font color=red>销售经理不同意</font>';
                         } else if (flowStatus == "3") {
-                            actions = '区域经理同意';
+                            actions = '<font color=green>区域经理同意</font>';
                         } else if (flowStatus == "-3") {
-                            actions = '区域经理不同意';
+                            actions = '<font color=red>区域经理不同意</font>';
                         } else if (flowStatus == "4") {
-                            actions = '副总同意';
+                            actions = '<font color=green>副总同意</font>';
                         } else if (flowStatus == "-4") {
-                            actions = '副总不同意';
+                            actions = '<font color=red>副总不同意</font>';
                         } else if (flowStatus == "5") {
-                            actions = '总经理同意';
+                            actions = '<font color=green>总经理同意</font>';
                         } else if (flowStatus == "-5") {
-                            actions = '总经理不同意';
+                            actions = '<font color=red>总经理不同意</font>';
                         }
                         console.log(actions + "---------")
                         return actions;
                     }
+                },
+                {
+                    field : 'createTime',
+                    title : '创建时间'
+                },{
+                    field : 'updateTime',
+                    title : '修改时间'
                 },
                 {
                     title: '操作',
