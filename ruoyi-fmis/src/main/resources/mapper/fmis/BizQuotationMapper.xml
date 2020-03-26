@@ -58,7 +58,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
           q.special_expenses,q.payment_method,q.freight,q.lead_time,q.report_project,q.normal_flag,q.flow_status,q.remark,q.string1,
           q.string2,q.string3,q.string4,q.string5,q.string6,q.string7,q.string8,q.string9,q.string10,q.status,q.del_flag,u.user_name as create_by,
           q.create_time,q.update_by,q.update_time,
-          p.name as productName,pr1.name as productRef1Name,pr2.name as productRef2Name,ac.name as actuatorName
+          p.name as productName,pr1.name as productRef1Name,pr2.name as productRef2Name,ac.name as actuatorName,
+          ct.name as customerName
         from biz_quotation q
         left join biz_product p on q.product_id=p.product_id
         left join biz_product_ref pr1 on pr1.product_ref_id=q.product_ref1_id
@@ -66,6 +67,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         left join biz_actuator ac on ac.actuator_id=q.actuator_id
         left join sys_user u on q.create_by=u.user_id
         left join sys_dept dt on u.dept_id=dt.dept_id
+        left join biz_customer ct on ct.customer_id=q.string2
     </sql>
 <!-- 流程状态0=未上报  1=销售员上报  2=销售经理同意 -2=销售经理不同意 3=区域经理同意 -3=区域经理不同意 4=副总同意 -4=副总不同意 5=老总同意 -5=老总不同意 -->
     <select id="selectBizQuotationFlowList" parameterType="BizQuotation" resultMap="BizQuotationResult">
@@ -77,26 +79,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <!-- 销售经理 查看已上报的 -->
             <if test="string2 == 2 ">
                 <if test="string6 == 0 ">
-                    q.flow_status in ('1','2','-2','-3','-4','-5')
+                    q.flow_status in ('1','2','-2','3','-3','-4','-5')
                 </if>
                 <if test="string6 == 1 ">
                     q.flow_status in ('1')
                 </if>
                 <if test="string6 == 2 ">
-                    q.flow_status in ('2','-2','-3','-4','-5')
+                    q.flow_status in ('2','-2','3','-3','-4','-5')
                 </if>
                 ${params.dataScope}
             </if>
             <!-- 区域经理  查看 销售经理同意的  -->
             <if test="string2 == 3 ">
                 <if test="string6 == 0 ">
-                    q.flow_status in ('2','3','-3','-4','-5')
+                    q.flow_status in ('2','3','-3','4','-4','-5')
                 </if>
                 <if test="string6 == 1 ">
                     q.flow_status in ('2')
                 </if>
                 <if test="string6 == 2 ">
-                    q.flow_status in ('3','-3','-4','-5')
+                    q.flow_status in ('3','-3','4','-4','-5')
                 </if>
                 ${params.dataScope}
             </if>

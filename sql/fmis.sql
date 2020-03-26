@@ -408,6 +408,33 @@ create table biz_quotation (
 ) engine=innodb auto_increment=200 comment = '报价单表';
 
 
+drop table if exists biz_quotation_product;
+create table biz_quotation_product (
+  qp_id           bigint(20)      not null auto_increment    comment 'ID',
+  quotation_id         bigint(20)     default 0                 comment '报价表ID',
+  product_id         bigint(20)      default 0                 comment '产品ID',
+  product_ref1_id         bigint(20)      default 0                  comment '产品配件法兰id',
+  product_ref1_num         varchar(30)      default 0                  comment '产品配件法兰数量',
+  product_ref2_id         bigint(20)      default 0                  comment '产品配件螺栓id',
+  product_ref2_num         varchar(30)      default 0                  comment '产品配件螺栓数量',
+  actuator_id	bigint(20)      default 0                  comment '执行器id',
+  remark         varchar(30)          default ''                  comment '备注',
+  string1         varchar(30)          default ''                  comment '备用1',
+  string2         varchar(30)          default ''                  comment '备用2',
+  string3         varchar(30)          default ''                  comment '备用3',
+  string4         varchar(30)          default ''                  comment '备用4',
+  string5         varchar(30)          default ''                  comment '备用5',
+  status            char(1)         default '0'                comment '状态（0正常 1停用）',
+  del_flag          char(1)         default '0'                comment '删除标志（0代表存在 2代表删除）',
+  create_by         varchar(64)     default ''                 comment '创建者',
+  create_time 	    datetime                                   comment '创建时间',
+  update_by         varchar(64)     default ''                 comment '更新者',
+  update_time       datetime                                   comment '更新时间',
+  primary key (qp_id)
+) engine=innodb auto_increment=200 comment = '报价单产品表';
+
+
+
 
 drop table if exists biz_flow;
 create table biz_flow (
@@ -430,3 +457,53 @@ create table biz_flow (
   update_time       datetime                                   comment '更新时间',
   primary key (flow_id)
 ) engine=innodb auto_increment=200 comment = '流程记录';
+
+
+alter table biz_product add column new_supplier varchar(50);
+alter table biz_product modify column new_supplier varchar(50) comment '新供应商名称';
+
+
+alter table biz_quotation_product add column product_num varchar(50);
+alter table biz_quotation_product modify column product_num varchar(50) comment '产品数量';
+
+alter table biz_quotation_product add column product_coefficient varchar(50);
+alter table biz_quotation_product modify column product_coefficient varchar(50) comment '产品系数';
+
+alter table biz_quotation_product add column product_ref1_coefficient varchar(50);
+alter table biz_quotation_product modify column product_ref1_coefficient varchar(50) comment '法兰系数';
+
+alter table biz_quotation_product add column product_ref2_coefficient varchar(50);
+alter table biz_quotation_product modify column product_ref2_coefficient varchar(50) comment '螺栓系数';
+
+alter table biz_quotation_product add column actuator_num varchar(50);
+alter table biz_quotation_product modify column actuator_num varchar(50) comment '执行器数量';
+
+alter table biz_quotation_product add column actuator_coefficient varchar(50);
+alter table biz_quotation_product modify column actuator_coefficient varchar(50) comment '执行器系数';
+
+
+
+alter table biz_product add column medium varchar(30);
+alter table biz_product modify column medium varchar(30) comment '介质';
+
+alter table biz_product add column temperature varchar(30);
+alter table biz_product modify column temperature varchar(30) comment '温度';
+
+alter table biz_product add column other varchar(30);
+alter table biz_product modify column other varchar(30) comment '其他';
+
+
+alter table biz_product add column string1 varchar(30);
+alter table biz_product modify column string1 varchar(30) comment '备用string1';
+
+alter table biz_product add column string2 varchar(30);
+alter table biz_product modify column string2 varchar(30) comment '备用string2';
+
+alter table biz_product add column string3 varchar(30);
+alter table biz_product modify column string3 varchar(30) comment '备用string3';
+
+alter table biz_product add column string4 varchar(30);
+alter table biz_product modify column string4 varchar(30) comment '备用string4';
+
+alter table biz_product add column string5 varchar(30);
+alter table biz_product modify column string5 varchar(30) comment '备用string5';

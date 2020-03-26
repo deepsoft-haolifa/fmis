@@ -61,6 +61,14 @@ public class BizCustomerController extends BaseController {
         return getDataTable(list);
     }
 
+    @PostMapping("/listNoAuth")
+    @ResponseBody
+    public TableDataInfo listNoAuth(BizCustomer bizCustomer) {
+        startPage();
+        List<BizCustomer> list = bizCustomerService.selectBizCustomerList(bizCustomer);
+        return getDataTable(list);
+    }
+
     /**
      * 导出客户列表
      */

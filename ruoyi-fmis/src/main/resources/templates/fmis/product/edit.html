@@ -77,12 +77,16 @@
                     <select name="valvebodyMaterial" id="valvebodyMaterial" class="form-control select2-multiple" ><option>请选择</option></select>
                 </div>
             </div>
+
+            <!--
+
             <div class="form-group">
                 <label class="col-sm-3 control-label">阀板材质：</label>
                 <div class="col-sm-8">
                     <input id="valveMaterial" name="valveMaterial" class="form-control" th:field="*{valveMaterial}" type="text">
                 </div>
             </div>
+            -->
             <div class="form-group">
                 <label class="col-sm-3 control-label">密封材质：</label>
                 <div class="col-sm-8">
@@ -114,8 +118,34 @@
                         <option>请选择</option>
                         <option th:each="supplier:${suppliers}" th:value="${supplier.suppliersId}" th:text="${supplier.name}" th:selected="${supplier.flag}"></option>
                     </select>
+                    <input name="newSupplier" class="form-control" th:field="*{newSupplier}" type="text" placeholder="新供应商输入">
                 </div>
             </div>
+
+
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">介质：</label>
+                <div class="col-sm-8">
+                    <input name="medium" class="form-control" th:field="*{medium}" type="text">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">温度：</label>
+                <div class="col-sm-8">
+                    <input name="temperature" class="form-control" th:field="*{temperature}" type="text">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">其他：</label>
+                <div class="col-sm-8">
+                    <input name="other" class="form-control" th:field="*{other}" type="text">
+                </div>
+            </div>
+
+
             <div class="form-group">
                 <label class="col-sm-3 control-label">备注：</label>
                 <div class="col-sm-8">

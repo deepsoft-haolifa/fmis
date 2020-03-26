@@ -6,13 +6,41 @@
 <body class="white-bg">
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
         <form class="form-horizontal m" id="form-quotation-add">
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">产品：</label>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">报价单号：</label>
                 <div class="col-sm-8">
-                    <input name="productId" id="productId" class="form-control" type="hidden" >
-                    <input name="productName" class="form-control" type="text" readonly onclick="selectProduct()">
+                    <input name="string1" class="form-control" type="text">
                 </div>
             </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">客户名称：</label>
+                <div class="col-sm-8">
+                    <input name="customerName" id="customerName" class="form-control" type="text" readonly onclick="selectCustomer()">
+                    <input name="string2" id="string2" class="form-control" type="hidden" >
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">产品：</label>
+                <div class="col-sm-8">
+                    <input name="productIds" id="productIds" class="form-control" type="hidden" >
+                    <input name="productNames" id="productNames" class="form-control" type="text" readonly onclick="selectProduct()">
+                </div>
+            </div>
+
+
+
+            <div class="hr-line-dashed"></div>
+            <div class="form-horizontal" id="productDiv">
+
+
+
+            </div>
+            <div class="hr-line-dashed"></div>
+
+            <!--
             <div class="form-group">    
                 <label class="col-sm-3 control-label">产品配件法兰：</label>
                 <div class="col-sm-8">
@@ -47,6 +75,7 @@
                     <input name="actuatorName" class="form-control" type="text" readonly onclick="selectActuator()">
                 </div>
             </div>
+            -->
             <div class="form-group">    
                 <label class="col-sm-3 control-label">特殊费用：</label>
                 <div class="col-sm-8">
@@ -79,12 +108,15 @@
                     <input name="reportProject" class="form-control" type="text" value="非项目">
                 </div>
             </div>
+
+
             <div class="form-group">
                 <label class="col-sm-3 control-label">备注：</label>
                 <div class="col-sm-8">
                     <input name="remark" class="form-control" type="text" >
                 </div>
             </div>
+
         </form>
     </div>
     <th:block th:include="include :: footer" />
@@ -105,6 +137,29 @@
                 } else {
                     dataObj.push({"normalFlag": "0"});
                 }
+
+                var productIds = $("#productIds").val();
+                var productArray = new Array();
+                var productIdsStrs = productIds.split(",");
+                for (var i = 0; i < productIdsStrs.length; i++) {
+                    var productObj = new Object();
+                    var productId = productIdsStrs[i];
+                    productObj["productId"] = productId;
+                    productObj["productRef1Id"] = $("#productRef1Id_" + productId).val();
+                    productObj["productRef1Num"] = $("#productRef1Num_" + productId).val();
+                    productObj["productRef2Id"] = $("#productRef2Id_" + productId).val();
+                    productObj["productRef2Num"] = $("#productRef2Num_" + productId).val();
+                    productObj["actuatorId"] = $("#actuatorId_" + productId).val();
+
+                    productObj["productNum"] = $("#productNum_" + productId).val();
+                    productObj["productCoefficient"] = $("#productCoefficient_" + productId).val();
+                    productObj["productRef1Coefficient"] = $("#productRef1Coefficient_" + productId).val();
+                    productObj["productRef2Coefficient"] = $("#productRef2Coefficient_" + productId).val();
+                    productObj["actuatorNum"] = $("#actuatorNum_" + productId).val();
+                    productObj["actuatorCoefficient"] = $("#actuatorCoefficient_" + productId).val();
+                    productArray.push(productObj);
+                }
+                dataObj.push({"name": "string10", "value": JSON.stringify(productArray)});
                 $.operate.save(prefix + "/add", dataObj);
             }
         }
@@ -114,13 +169,17 @@
             $.modal.open("关联产品", url);
         }
 
-        function selectActuator() {
-            var url = prefix + "/selectActuator";
+        function selectCustomer() {
+            var url = prefix + "/selectCustomer";
+            $.modal.open("关联客户", url);
+        }
+
+        function selectActuator(productId) {
+            var url = prefix + "/selectActuator?productId=" + productId;
             $.modal.open("关联执行器", url);
         }
 
-        function selectProductRef1() {
-            var productId = $("#productId").val();
+        function selectProductRef1(productId) {
             if (productId == null || productId == "") {
                 $.modal.alertWarning('请选择产品');
                 return;
@@ -128,8 +187,7 @@
             var url = prefix + "/selectProductRef1?productId=" + productId;
             $.modal.open("关联产品配件法兰", url);
         }
-        function selectProductRef2() {
-            var productId = $("#productId").val();
+        function selectProductRef2(productId) {
             if (productId == null || productId == "") {
                 $.modal.alertWarning('请选择产品');
                 return;

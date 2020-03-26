@@ -73,6 +73,78 @@ public class BizProduct extends BaseEntity {
     @Excel(name = "供应商名称")
     private String supplier;
 
+    private String newSupplier;
+    public void setNewSupplier(String newSupplier) {
+        this.newSupplier = newSupplier;
+    }
+    public String getNewSupplier() {
+        return newSupplier;
+    }
+
+    private String medium;
+    public void setMedium(String medium) {
+        this.medium = medium;
+    }
+    public String getMedium() {
+        return medium;
+    }
+
+    private String temperature;
+    public void setTemperature(String temperature) {
+        this.temperature = temperature;
+    }
+    public String getTemperature() {
+        return temperature;
+    }
+
+    private String other;
+    public void setOther(String other) {
+        this.other = other;
+    }
+    public String getOther() {
+        return other;
+    }
+
+    private String string1;
+    public void setString1(String string1) {
+        this.string1 = string1;
+    }
+    public String getString1() {
+        return string1;
+    }
+
+    private String string2;
+    public void setString2(String string2) {
+        this.string2 = string2;
+    }
+    public String getString2() {
+        return string2;
+    }
+
+    private String string3;
+    public void setString3(String string3) {
+        this.string3 = string3;
+    }
+    public String getString3() {
+        return string3;
+    }
+
+    private String string4;
+    public void setString4(String string4) {
+        this.string4 = string4;
+    }
+    public String getString4() {
+        return string4;
+    }
+
+    private String string5;
+    public void setString5(String string5) {
+        this.string5 = string5;
+    }
+    public String getString5() {
+        return string5;
+    }
+
     /** 状态（0正常 1停用） */
     @Excel(name = "状态", readConverterExp = "0=正常,1=停用")
     private String status;

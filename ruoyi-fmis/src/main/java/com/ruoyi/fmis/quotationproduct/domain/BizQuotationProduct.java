@@ -1,23 +1,24 @@
-package com.ruoyi.fmis.quotation.domain;
+package com.ruoyi.fmis.quotationproduct.domain;
 
-import com.ruoyi.fmis.quotationproduct.domain.BizQuotationProduct;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 
-import java.util.List;
-
 /**
- * 报价单对象 biz_quotation
+ * 报价单产品对象 biz_quotation_product
  *
- * @author frank
- * @date 2020-03-18
+ * @author Xianlu Tech
+ * @date 2020-03-21
  */
-public class BizQuotation extends BaseEntity {
+public class BizQuotationProduct extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     /** ID */
+    private Long qpId;
+
+    /** 报价表ID */
+    @Excel(name = "报价表ID")
     private Long quotationId;
 
     /** 产品ID */
@@ -44,79 +45,34 @@ public class BizQuotation extends BaseEntity {
     @Excel(name = "执行器id")
     private Long actuatorId;
 
-    /** 特殊费用 */
-    @Excel(name = "特殊费用")
-    private String specialExpenses;
-
-    /** 付款方式 */
-    @Excel(name = "付款方式")
-    private String paymentMethod;
-
-    /** 运费价格 */
-    @Excel(name = "运费价格")
-    private Double freight;
-
-    /** 供货周期 */
-    @Excel(name = "供货周期")
-    private String leadTime;
-
-    /** 报备项目 默认非项目 */
-    @Excel(name = "报备项目 默认非项目")
-    private String reportProject;
-
-    /** 流程实例ID */
-    private String normalFlag;
-
-    /** 申请人 */
-    @Excel(name = "流程状态")
-    private String flowStatus;
-
-    /** 备用1 报价单号 */
+    /** 备用1 产品数量*/
+    @Excel(name = "备用1")
     private String string1;
 
-    /** 备用2 客户ID*/
+    /** 备用2 产品系数*/
+    @Excel(name = "备用2")
     private String string2;
 
-    /** 备用3 */
+    /** 备用3 系数*/
+    @Excel(name = "备用3")
     private String string3;
 
     /** 备用4 */
+    @Excel(name = "备用4")
     private String string4;
 
     /** 备用5 */
+    @Excel(name = "备用5")
     private String string5;
 
-    /** 备用6 */
-    private String string6;
-
-    /** 备用7 */
-    private String string7;
-
-    /** 备用8 */
-    private String string8;
-
-    /** 备用9 */
-    private String string9;
-
-    /** 备用10 */
-    private String string10;
-
     /** 状态（0正常 1停用） */
+    @Excel(name = "状态", readConverterExp = "0=正常,1=停用")
     private String status;
 
     /** 删除标志（0代表存在 2代表删除） */
     private String delFlag;
 
 
-    private List<BizQuotationProduct> quotationProductList;
-    public void setQuotationProductList(List<BizQuotationProduct> quotationProductList) {
-        this.quotationProductList = quotationProductList;
-    }
-    public List<BizQuotationProduct> getQuotationProductList() {
-        return quotationProductList;
-    }
-
-    //pr1.name as productRef1Name,pr2.name as productRef2Name,ac.name as actuatorName
     private String productName;
     public void setProductName(String productName) {
         this.productName = productName;
@@ -124,6 +80,7 @@ public class BizQuotation extends BaseEntity {
     public String getProductName() {
         return productName;
     }
+
 
     private String productRef1Name;
     public void setProductRef1Name(String productRef1Name) {
@@ -149,14 +106,66 @@ public class BizQuotation extends BaseEntity {
         return actuatorName;
     }
 
-    private String customerName;
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName;
+
+
+    private String productNum;
+    public void setProductNum(String productNum) {
+        this.productNum = productNum;
     }
-    public String getCustomerName() {
-        return customerName;
+    public String getProductNum() {
+        return productNum;
     }
 
+    private String productCoefficient;
+    public void setProductCoefficient(String productCoefficient) {
+        this.productCoefficient = productCoefficient;
+    }
+    public String getProductCoefficient() {
+        return productCoefficient;
+    }
+
+
+    private String productRef1Coefficient;
+    public void setProductRef1Coefficient(String productRef1Coefficient) {
+        this.productRef1Coefficient = productRef1Coefficient;
+    }
+    public String getProductRef1Coefficient() {
+        return productRef1Coefficient;
+    }
+
+    private String productRef2Coefficient;
+    public void setProductRef2Coefficient(String productRef2Coefficient) {
+        this.productRef2Coefficient = productRef2Coefficient;
+    }
+    public String getProductRef2Coefficient() {
+        return productRef2Coefficient;
+    }
+
+    private String actuatorNum;
+    public void setActuatorNum(String actuatorNum) {
+        this.actuatorNum = actuatorNum;
+    }
+    public String getActuatorNum() {
+        return actuatorNum;
+    }
+
+    private String actuatorCoefficient;
+    public void setActuatorCoefficient(String actuatorCoefficient) {
+        this.actuatorCoefficient = actuatorCoefficient;
+    }
+    public String getActuatorCoefficient() {
+        return actuatorCoefficient;
+    }
+
+
+
+    public void setQpId(Long qpId) {
+        this.qpId = qpId;
+    }
+
+    public Long getQpId() {
+        return qpId;
+    }
     public void setQuotationId(Long quotationId) {
         this.quotationId = quotationId;
     }
@@ -206,55 +215,6 @@ public class BizQuotation extends BaseEntity {
     public Long getActuatorId() {
         return actuatorId;
     }
-    public void setSpecialExpenses(String specialExpenses) {
-        this.specialExpenses = specialExpenses;
-    }
-
-    public String getSpecialExpenses() {
-        return specialExpenses;
-    }
-    public void setPaymentMethod(String paymentMethod) {
-        this.paymentMethod = paymentMethod;
-    }
-
-    public String getPaymentMethod() {
-        return paymentMethod;
-    }
-    public void setFreight(Double freight) {
-        this.freight = freight;
-    }
-
-    public Double getFreight() {
-        return freight;
-    }
-    public void setLeadTime(String leadTime) {
-        this.leadTime = leadTime;
-    }
-
-    public String getLeadTime() {
-        return leadTime;
-    }
-    public void setReportProject(String reportProject) {
-        this.reportProject = reportProject;
-    }
-
-    public String getReportProject() {
-        return reportProject;
-    }
-    public void setNormalFlag(String normalFlag) {
-        this.normalFlag = normalFlag;
-    }
-
-    public String getNormalFlag() {
-        return normalFlag;
-    }
-    public void setFlowStatus(String flowStatus) {
-        this.flowStatus = flowStatus;
-    }
-
-    public String getFlowStatus() {
-        return flowStatus;
-    }
     public void setString1(String string1) {
         this.string1 = string1;
     }
@@ -290,41 +250,6 @@ public class BizQuotation extends BaseEntity {
     public String getString5() {
         return string5;
     }
-    public void setString6(String string6) {
-        this.string6 = string6;
-    }
-
-    public String getString6() {
-        return string6;
-    }
-    public void setString7(String string7) {
-        this.string7 = string7;
-    }
-
-    public String getString7() {
-        return string7;
-    }
-    public void setString8(String string8) {
-        this.string8 = string8;
-    }
-
-    public String getString8() {
-        return string8;
-    }
-    public void setString9(String string9) {
-        this.string9 = string9;
-    }
-
-    public String getString9() {
-        return string9;
-    }
-    public void setString10(String string10) {
-        this.string10 = string10;
-    }
-
-    public String getString10() {
-        return string10;
-    }
     public void setStatus(String status) {
         this.status = status;
     }
@@ -343,6 +268,7 @@ public class BizQuotation extends BaseEntity {
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
+            .append("qpId", getQpId())
             .append("quotationId", getQuotationId())
             .append("productId", getProductId())
             .append("productRef1Id", getProductRef1Id())
@@ -350,24 +276,12 @@ public class BizQuotation extends BaseEntity {
             .append("productRef2Id", getProductRef2Id())
             .append("productRef2Num", getProductRef2Num())
             .append("actuatorId", getActuatorId())
-            .append("specialExpenses", getSpecialExpenses())
-            .append("paymentMethod", getPaymentMethod())
-            .append("freight", getFreight())
-            .append("leadTime", getLeadTime())
-            .append("reportProject", getReportProject())
-            .append("normalFlag", getNormalFlag())
-            .append("flowStatus", getFlowStatus())
             .append("remark", getRemark())
             .append("string1", getString1())
             .append("string2", getString2())
             .append("string3", getString3())
             .append("string4", getString4())
             .append("string5", getString5())
-            .append("string6", getString6())
-            .append("string7", getString7())
-            .append("string8", getString8())
-            .append("string9", getString9())
-            .append("string10", getString10())
             .append("status", getStatus())
             .append("delFlag", getDelFlag())
             .append("createBy", getCreateBy())

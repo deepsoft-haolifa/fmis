@@ -35,6 +35,73 @@
             </div>
         </div>
     </div>
+
+     <div style="display: none" id="prodictDiv">
+
+         <div class="ibox float-e-margins">
+             <h5>productHtml</h5>
+
+             <div class='form-group'>
+                 <label class='control-label col-sm-3'>产品：</label>
+                 <div class='col-sm-2'>
+                     <input name='productId' id="productId" class='form-control' type='hidden' >
+                     <input name='productName' id="productName" value="productShowText" class='form-control' type='text' readonly >
+
+                 </div>
+                 <div class='col-sm-2'>
+                     <input class='form-control' type='text' id="productNum" name='productNum' placeholder='数量' />
+                 </div>
+                 <div class='col-sm-2'>
+                     <input class='form-control' type='text' id="productCoefficient" name='productCoefficient' placeholder='系数' />
+                 </div>
+             </div>
+
+             <div class='form-group'>
+                 <label class='control-label col-sm-3'>产品配件法兰：</label>
+                 <div class='col-sm-2'>
+                     <input name='productRef1Id' id="productRef1Id" class='form-control' type='hidden' >
+                     <input name='productRef1Name' id="productRef1Name" class='form-control' type='text' readonly onclick='selectProductRef1(paramterProductId)'>
+                 </div>
+                 <div class='col-sm-2'>
+                     <input class='form-control' type='text' id="productRef1Num" name='productRef1Num' placeholder='数量' />
+                 </div>
+                 <div class='col-sm-2'>
+                     <input name='productRef1Coefficient' id="productRef1Coefficient" class='form-control' type='text' placeholder='系数'>
+                 </div>
+             </div>
+
+             <div class='form-group'>
+                 <label class='control-label col-sm-3'>产品配件螺栓：</label>
+                 <div class='col-sm-2'>
+                     <input name='productRef2Id' id="productRef2Id" class='form-control' type='hidden' >
+                     <input name='productRef2Name' id="productRef2Name" class='form-control' type='text' readonly onclick='selectProductRef2(paramterProductId)'>
+                 </div>
+                 <div class='col-sm-2'>
+                     <input class='form-control' type='text' id='productRef2Num' name='productRef2Num' placeholder='数量' />
+                 </div>
+                 <div class='col-sm-2'>
+                     <input name='productRef2Coefficient' id="productRef2Coefficient" class='form-control' type='text' placeholder='系数'>
+                 </div>
+             </div>
+
+             <div class='form-group'>
+                 <label class='control-label col-sm-3'>执行器：</label>
+                 <div class='col-sm-2'>
+                     <input name='actuatorId' id="actuatorId" class='form-control' type='hidden' >
+                     <input name='actuatorName' id="actuatorName" class='form-control' type='text' readonly onclick='selectActuator(paramterProductId)'>
+                 </div>
+                 <div class='col-sm-2'>
+                     <input class='form-control' type='text' id='actuatorNum' name='actuatorNum' placeholder='数量' />
+                 </div>
+                 <div class='col-sm-2'>
+                     <input name='actuatorCoefficient' id="actuatorCoefficient" class='form-control' type='text' placeholder='系数'>
+                 </div>
+             </div>
+
+         </div>
+         <div class="hr-line-dashed"></div>
+     </div>
+
     <th:block th:include="include :: footer" />
     <script th:inline="javascript">
         var editFlag = [[${@permission.hasPermi('fmis:product:edit')}]];
@@ -142,16 +209,70 @@
                 $.modal.alertWarning("请选择一条记录");
                 return;
             }
-            if (rows.length > 1) {
-                $.modal.alertWarning("请只选择一条记录");
-                return;
-            }
             $.modal.confirm('确定要关联该产品吗？',
                 function() {
-                    parent.$('#form-quotation-add input[name=productId]').val($.table.selectColumns("productId"));
-                    parent.$('#form-quotation-add input[name=productName]').val($.table.selectColumns("name"));
-                    parent.$('#form-quotation-edit input[name=productId]').val($.table.selectColumns("productId"));
-                    parent.$('#form-quotation-edit input[name=productName]').val($.table.selectColumns("name"));
+
+                    var productIds = $.table.selectColumns("productId");
+                    console.log("productIds=" + productIds);
+                    var names = $.table.selectColumns("name");
+
+                    var htmlStr = "";
+                    parent.$('#productDiv').append(htmlStr);
+                    var productIdsStr = "";
+                    var productNamesStr = "";
+                    for(var i = 0; i < productIds.length; i++) {
+                        var prodictDivHtml = $("#prodictDiv").html();
+                        var productId = productIds[i];
+                        var productName = names[i];
+                        console.log("productId=" + productId + " name=" + productName);
+
+                        prodictDivHtml = prodictDivHtml.replace(/productName/g,"productName_" + productId);
+                        prodictDivHtml = prodictDivHtml.replace(/productShowText/g,productName);
+
+                        prodictDivHtml = prodictDivHtml.replace(/string1/g,"string1_" + productId);
+
+                        prodictDivHtml = prodictDivHtml.replace(/string3/g,"string3_" + productId);
+
+                        prodictDivHtml = prodictDivHtml.replace(/productRef1Id/g,"productRef1Id_" + productId);
+                        prodictDivHtml = prodictDivHtml.replace(/productRef1Name/g,"productRef1Name_" + productId);
+                        prodictDivHtml = prodictDivHtml.replace(/productRef1Num/g,"productRef1Num_" + productId);
+
+                        prodictDivHtml = prodictDivHtml.replace(/productRef2Id/g,"productRef2Id_" + productId);
+                        prodictDivHtml = prodictDivHtml.replace(/productRef2Name/g,"productRef2Name_" + productId);
+                        prodictDivHtml = prodictDivHtml.replace(/productRef2Num/g,"productRef2Num_" + productId);
+                        prodictDivHtml = prodictDivHtml.replace(/paramterProductId/g,productId);
+
+                        prodictDivHtml = prodictDivHtml.replace(/actuatorId/g,"actuatorId_" + productId);
+                        prodictDivHtml = prodictDivHtml.replace(/actuatorName/g,"actuatorName_" + productId);
+                        prodictDivHtml = prodictDivHtml.replace(/string2/g,"string2_" + productId);
+
+
+                        prodictDivHtml = prodictDivHtml.replace(/string4/g,"string4_" + productId);
+                        prodictDivHtml = prodictDivHtml.replace(/string5/g,"string5_" + productId);
+                        prodictDivHtml = prodictDivHtml.replace(/string6/g,"string6_" + productId);
+
+                        prodictDivHtml = prodictDivHtml.replace(/productNum/g,"productNum_" + productId);
+                        prodictDivHtml = prodictDivHtml.replace(/productCoefficient/g,"productCoefficient_" + productId);
+                        prodictDivHtml = prodictDivHtml.replace(/productRef1Coefficient/g,"productRef1Coefficient_" + productId);
+                        prodictDivHtml = prodictDivHtml.replace(/productRef2Coefficient/g,"productRef2Coefficient_" + productId);
+                        prodictDivHtml = prodictDivHtml.replace(/actuatorNum/g,"actuatorNum_" + productId);
+                        prodictDivHtml = prodictDivHtml.replace(/actuatorCoefficient/g,"actuatorCoefficient_" + productId);
+
+                        prodictDivHtml = prodictDivHtml.replace(/productHtml/g,productName);
+
+                        htmlStr += prodictDivHtml;
+                        productIdsStr += productId + ",";
+                        productNamesStr += productName + ",";
+                        console.log(htmlStr);
+                    }
+                    productNamesStr = productNamesStr.substr(0,productNamesStr.length - 1);
+                    parent.$('#form-quotation-add input[name=productIds]').val(productIdsStr);
+                    parent.$('#form-quotation-add input[name=productNames]').val(productNamesStr);
+                    //parent.$('#form-quotation-edit input[name=productId]').val($.table.selectColumns("productId"));
+                    //parent.$('#form-quotation-edit input[name=productName]').val($.table.selectColumns("name"));
+
+
+                    parent.$('#productDiv').append(htmlStr);
                     $.modal.close();
                 }
             );

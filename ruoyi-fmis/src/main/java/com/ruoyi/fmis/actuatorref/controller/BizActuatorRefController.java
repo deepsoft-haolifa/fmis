@@ -2,6 +2,7 @@ package com.ruoyi.fmis.actuatorref.controller;
 
 import java.util.List;
 
+import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.fmis.common.BizConstants;
 import com.ruoyi.fmis.dict.service.IBizDictService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -41,7 +42,12 @@ public class BizActuatorRefController extends BaseController {
 
     @RequiresPermissions("fmis:actuatorRef:view")
     @GetMapping()
-    public String actuatorRef() {
+    public String actuatorRef(ModelMap mmap) {
+
+        mmap.put("specifications",bizDictService.selectProductDictForParentType(BizConstants.specificationCode,0L));
+        mmap.put("nominalPressures",bizDictService.selectProductDictForParentType(BizConstants.nominalPressure,0L));
+
+
         return prefix + "/actuatorRef";
     }
 
@@ -98,8 +104,18 @@ public class BizActuatorRefController extends BaseController {
     public String edit(@PathVariable("arId") Long arId, ModelMap mmap) {
         BizActuatorRef bizActuatorRef = bizActuatorRefService.selectBizActuatorRefById(arId);
 
-        mmap.put("specifications",bizDictService.selectProductDictForParentType(BizConstants.specificationCode,Long.parseLong(bizActuatorRef.getValveType())));
-        mmap.put("nominalPressures",bizDictService.selectProductDictForParentType(BizConstants.nominalPressure,Long.parseLong(bizActuatorRef.getPressure())));
+        Long valveType = 0L;
+        Long pressure = 0L;
+        if (StringUtils.isNotEmpty(bizActuatorRef.getValveType())) {
+            valveType = Long.parseLong(bizActuatorRef.getValveType());
+        }
+
+        if (StringUtils.isNotEmpty(bizActuatorRef.getPressure())) {
+            pressure = Long.parseLong(bizActuatorRef.getPressure());
+        }
+
+        mmap.put("specifications",bizDictService.selectProductDictForParentType(BizConstants.specificationCode,valveType));
+        mmap.put("nominalPressures",bizDictService.selectProductDictForParentType(BizConstants.nominalPressure,pressure));
 
 
         mmap.put("bizActuatorRef", bizActuatorRef);

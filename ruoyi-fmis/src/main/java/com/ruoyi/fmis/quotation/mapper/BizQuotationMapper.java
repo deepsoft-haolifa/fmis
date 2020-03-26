@@ -1,6 +1,8 @@
 package com.ruoyi.fmis.quotation.mapper;
 
 import com.ruoyi.fmis.quotation.domain.BizQuotation;
+import com.ruoyi.fmis.quotationproduct.domain.BizQuotationProduct;
+
 import java.util.List;
 
 /**
@@ -25,6 +27,8 @@ public interface BizQuotationMapper {
      * @return 报价单集合
      */
     public List<BizQuotation> selectBizQuotationList(BizQuotation bizQuotation);
+
+    public List<BizQuotationProduct> selectBizQuotationProductDictList(BizQuotationProduct bizQuotationProduct);
 
     /**
      * 新增报价单

@@ -5,27 +5,88 @@
 </head>
 <body class="gray-bg">
      <div class="container-div">
-        <div class="row">
-            <div class="col-sm-12 search-collapse">
-                <form id="formId">
-                    <div class="select-list">
-                        <ul>
-                            <li>
-                                <p>产品名称：</p>
-                                <input type="text" name="name"/>
-                            </li>
-                            <li>
-                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
-                            </li>
-                        </ul>
+        <div class="row full-height full-width">
+
+
+            <div class="col-sm-6 full-width full-height">
+                <div class="tabs-container full-width full-height">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a data-toggle="tab" href="#tab-1" aria-expanded="true"> 电动执行器</a>
+                        </li>
+                        <li class=""><a data-toggle="tab" href="#tab-2" aria-expanded="false">气动执行器</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+
+
+
+                        <div id="tab-1" class="tab-pane active">
+
+                            <div class="col-sm-12 search-collapse">
+                                <form id="formId">
+                                    <div class="select-list">
+                                        <ul>
+                                            <li>
+                                                <p>产品名称：</p>
+                                                <input type="text" name="name" id="name1"/>
+                                                <input type="hidden" name="string2" value="1"/>
+                                                <input type="hidden" name="productId" id="productId" th:value="${productId}"/>
+                                            </li>
+                                            <li>
+                                                <a class="btn btn-primary btn-rounded btn-sm" onclick="search1()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div class="col-sm-12 select-table table-striped">
+                                <table id="bootstrap-table"></table>
+                            </div>
+
+
+                        </div>
+
+
+
+
+
+                        <div id="tab-2" class="tab-pane">
+
+
+                            <div class="col-sm-12 search-collapse">
+                                <form id="formId1">
+                                    <div class="select-list">
+                                        <ul>
+                                            <li>
+                                                <p>产品名称：</p>
+                                                <input type="text" name="name" id="name2"/>
+                                                <input type="hidden" name="string2" value="2"/>
+                                                <input type="hidden" name="productId" id="productId" th:value="${productId}"/>
+                                            </li>
+                                            <li>
+                                                <a class="btn btn-primary btn-rounded btn-sm" onclick="search2()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div class="col-sm-12 select-table table-striped">
+                                <table id="bootstrap-table1"></table>
+                            </div>
+
+
+
+                        </div>
                     </div>
-                </form>
+
+
+                </div>
             </div>
 
-            <div class="col-sm-12 select-table table-striped">
-                <table id="bootstrap-table"></table>
-            </div>
+
+
         </div>
     </div>
     <th:block th:include="include :: footer" />
@@ -33,37 +94,50 @@
         var editFlag = [[${@permission.hasPermi('fmis:actuator:edit')}]];
         var removeFlag = [[${@permission.hasPermi('fmis:actuator:remove')}]];
         var prefix = ctx + "fmis/actuator";
+        var prefix1 = ctx + "fmis/airActuator";
         var setupTypeData = [[${@dict.getType('actuator_setup_type')}]];
-        var productId = parent.$('#form-quotation-add input[name=productId]').val();
-        if (productId == null || productId == "") {
-            productId = parent.$('#form-quotation-edit input[name=productId]').val();
+        var productId = $("#productId").val();
+
+
+        var table1;
+        var table2;
+
+        function search1 () {
+            var data = {"name":$("#name1").val(),"string2":"1"};
+            $.table.search('formId','bootstrap-table',data);
         }
-        $(function() {
-            var options = {
-                url: prefix + "/listForProductId?productId=" + productId,
-                createUrl: prefix + "/add",
-                updateUrl: prefix + "/edit/{id}",
-                removeUrl: prefix + "/remove",
-                exportUrl: prefix + "/export",
-                modalName: "执行器",
-                columns: [{
-                    checkbox: true
-                },
+        function search2 () {
+            var data = {"name":$("#name2").val(),"string2":"2"};
+            $.table.search('formId1','bootstrap-table1',data);
+        }
+
+        var options1 = {
+            id: "bootstrap-table",
+            queryParams:{"string2":"1"},
+            url: prefix + "/listForProductId?productId=" + productId,
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "电动执行器",
+            columns: [{
+                checkbox: true
+            },
                 {
-                    field : 'actuatorId', 
+                    field : 'actuatorId',
                     title : 'ID',
                     visible: false
                 },
                 {
-                    field : 'name', 
+                    field : 'name',
                     title : '产品名称'
                 },
                 {
-                    field : 'brand', 
+                    field : 'brand',
                     title : '执行器品牌'
                 },
                 {
-                    field : 'manufacturer', 
+                    field : 'manufacturer',
                     title : '生产厂家'
                 },
                 {
@@ -74,39 +148,39 @@
                     }
                 },
                 {
-                    field : 'outputTorque', 
+                    field : 'outputTorque',
                     title : '输出力距'
                 },
                 {
-                    field : 'actionType', 
+                    field : 'actionType',
                     title : '开启时间'
                 },
                 {
-                    field : 'controlCircuit', 
+                    field : 'controlCircuit',
                     title : '控制电路'
                 },
                 {
-                    field : 'adaptableVoltage', 
+                    field : 'adaptableVoltage',
                     title : '适用电压'
                 },
                 {
-                    field : 'protectionLevel', 
+                    field : 'protectionLevel',
                     title : '防护等级'
                 },
                 {
-                    field : 'qualityLevel', 
+                    field : 'qualityLevel',
                     title : '品质等级'
                 },
                 {
-                    field : 'explosionLevel', 
+                    field : 'explosionLevel',
                     title : '防爆等级'
                 },
                 {
-                    field : 'price', 
+                    field : 'price',
                     title : '价格'
                 },
                 {
-                    field : 'remark', 
+                    field : 'remark',
                     title : '备注'
                 },
                 {
@@ -115,38 +189,116 @@
                 },{
                     field : 'updateTime',
                     title : '修改时间'
+                }]
+        };
+
+        function initTable1 () {
+            table1 = $.table;
+            table1.init(options1);
+        }
+
+
+
+
+        var options2 = {
+            id: "bootstrap-table1",
+            queryParams:{"string2":"2"},
+            url: prefix + "/listForProductId?productId=" + productId,
+            modalName: "气动执行器",
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field : 'actuatorId',
+                    title : 'ID',
+                    visible: false
                 },
                 {
-                    title: '操作',
-                    align: 'center',
-                    formatter: function(value, row, index) {
-                        var actions = [];
-                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.actuatorId + '\')"><i class="fa fa-edit"></i> 编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.actuatorId + '\')"><i class="fa fa-remove"></i> 删除</a>');
-                        return actions.join('');
-                    }
+                    field : 'name',
+                    title : '产品名称'
+                },
+                {
+                    field : 'brand',
+                    title : '执行器品牌'
+                },
+                {
+                    field : 'manufacturer',
+                    title : '生产厂家'
+                },
+                {
+                    field : 'string1',
+                    title : '型号'
+                },
+                {
+                    field : 'string3',
+                    title : '类别'
+                },
+                {
+                    field : 'string4',
+                    title : '气缸形式'
+                },
+                {
+                    field : 'string5',
+                    title : '壳体材质'
+                },
+                {
+                    field : 'qualityLevel',
+                    title : '品质等级'
+                },
+                {
+                    field : 'price',
+                    title : '价格'
+                },
+                {
+                    field : 'remark',
+                    title : '备注'
+                },
+                {
+                    field : 'createTime',
+                    title : '创建时间'
+                },{
+                    field : 'updateTime',
+                    title : '修改时间'
                 }]
-            };
-            $.table.init(options);
+        };
+        function initTable2 () {
+            table2 = $.table;
+            table2.init(options2);
+        }
+
+        $(function() {
+            initTable1();
+            initTable2();
         });
 
         /* 添加用户-选择用户-提交 */
         function submitHandler() {
-            var rows = $.table.selectFirstColumns();
-            if (rows.length == 0) {
+            //row0[0].actuatorId
+            var rows1 = $("#bootstrap-table").bootstrapTable("getSelections");
+            var rows2 = $("#bootstrap-table1").bootstrapTable("getSelections");
+            if (rows1.length == 0 && rows2.length == 0) {
                 $.modal.alertWarning("请选择一条记录");
                 return;
             }
-            if (rows.length > 1) {
+            if ((rows1.length + rows2.length) > 1) {
                 $.modal.alertWarning("请只选择一条记录");
                 return;
             }
+            var selActuatorId;
+            var selName;
+            if (rows1.length == 1) {
+                selActuatorId = rows1[0].actuatorId;
+                selName = rows1[0].name;
+            } else {
+                selActuatorId = rows2[0].actuatorId;
+                selName = rows2[0].name;
+            }
             $.modal.confirm('确定要关联该执行器吗？',
                 function() {
-                    parent.$('#form-quotation-add input[name=actuatorId]').val($.table.selectColumns("actuatorId"));
-                    parent.$('#form-quotation-add input[name=actuatorName]').val($.table.selectColumns("name"));
-                    parent.$('#form-quotation-edit input[name=actuatorId]').val($.table.selectColumns("actuatorId"));
-                    parent.$('#form-quotation-edit input[name=actuatorName]').val($.table.selectColumns("name"));
+                    parent.$('#form-quotation-add input[name=actuatorId_' + productId + ']').val(selActuatorId);
+                    parent.$('#form-quotation-add input[name=actuatorName_' + productId + ']').val(selName);
+                    parent.$('#form-quotation-edit input[id=actuatorId_' + productId + ']').val(selActuatorId);
+                    parent.$('#form-quotation-edit input[id=actuatorName_' + productId + ']').val(selName);
                     $.modal.close();
                 }
             );

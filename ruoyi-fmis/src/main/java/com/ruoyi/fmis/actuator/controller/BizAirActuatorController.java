@@ -1,8 +1,14 @@
 package com.ruoyi.fmis.actuator.controller;
 
-import java.util.List;
-
+import com.ruoyi.common.annotation.Log;
+import com.ruoyi.common.core.controller.BaseController;
+import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.core.page.TableDataInfo;
+import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.fmis.actuator.domain.BizActuator;
+import com.ruoyi.fmis.actuator.service.IBizActuatorService;
 import com.ruoyi.fmis.actuatorref.service.IBizActuatorRefService;
 import com.ruoyi.fmis.dict.domain.BizDict;
 import com.ruoyi.fmis.dict.service.IBizDictService;
@@ -12,19 +18,9 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import com.ruoyi.common.annotation.Log;
-import com.ruoyi.common.enums.BusinessType;
-import com.ruoyi.fmis.actuator.domain.BizActuator;
-import com.ruoyi.fmis.actuator.service.IBizActuatorService;
-import com.ruoyi.common.core.controller.BaseController;
-import com.ruoyi.common.core.domain.AjaxResult;
-import com.ruoyi.common.utils.poi.ExcelUtil;
-import com.ruoyi.common.core.page.TableDataInfo;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 执行器Controller
@@ -33,9 +29,9 @@ import com.ruoyi.common.core.page.TableDataInfo;
  * @date 2020-03-17
  */
 @Controller
-@RequestMapping("/fmis/actuator")
-public class BizActuatorController extends BaseController {
-    private String prefix = "fmis/actuator";
+@RequestMapping("/fmis/airActuator")
+public class BizAirActuatorController extends BaseController {
+    private String prefix = "fmis/airActuator";
 
     @Autowired
     private IBizActuatorService bizActuatorService;
@@ -46,10 +42,10 @@ public class BizActuatorController extends BaseController {
     @Autowired
     private IBizActuatorRefService bizActuatorRefService;
 
-    @RequiresPermissions("fmis:actuator:view")
+    @RequiresPermissions("fmis:airActuator:view")
     @GetMapping()
     public String actuator() {
-        return prefix + "/actuator";
+        return prefix + "/airActuator";
     }
 
 
@@ -58,7 +54,7 @@ public class BizActuatorController extends BaseController {
     /**
      * 查询执行器列表
      */
-    @RequiresPermissions("fmis:actuator:list")
+    @RequiresPermissions("fmis:airActuator:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(BizActuator bizActuator) {
@@ -75,8 +71,6 @@ public class BizActuatorController extends BaseController {
         String productId = getRequest().getParameter("productId");
 
         BizProduct bizProduct = bizProductService.selectBizProductById(Long.parseLong(productId));
-
-        bizProduct = null;
 
         if (bizProduct != null) {
             String specifications = bizProduct.getSpecifications();
@@ -105,7 +99,7 @@ public class BizActuatorController extends BaseController {
     /**
      * 导出执行器列表
      */
-    @RequiresPermissions("fmis:actuator:export")
+    @RequiresPermissions("fmis:airActuator:export")
     @PostMapping("/export")
     @ResponseBody
     public AjaxResult export(BizActuator bizActuator) {
@@ -125,7 +119,7 @@ public class BizActuatorController extends BaseController {
     /**
      * 新增保存执行器
      */
-    @RequiresPermissions("fmis:actuator:add")
+    @RequiresPermissions("fmis:airActuator:add")
     @Log(title = "执行器", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
@@ -146,7 +140,7 @@ public class BizActuatorController extends BaseController {
     /**
      * 修改保存执行器
      */
-    @RequiresPermissions("fmis:actuator:edit")
+    @RequiresPermissions("fmis:airActuator:edit")
     @Log(title = "执行器", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
@@ -157,7 +151,7 @@ public class BizActuatorController extends BaseController {
     /**
      * 删除执行器
      */
-    @RequiresPermissions("fmis:actuator:remove")
+    @RequiresPermissions("fmis:airActuator:remove")
     @Log(title = "执行器", businessType = BusinessType.DELETE)
     @PostMapping( "/remove")
     @ResponseBody

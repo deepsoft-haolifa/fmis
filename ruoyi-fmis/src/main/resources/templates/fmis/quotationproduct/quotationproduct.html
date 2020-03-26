@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('报价单产品列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>报价表ID：</p>
+                                <input type="text" name="quotationId"/>
+                            </li>
+                            <li>
+                                <p>产品ID：</p>
+                                <input type="text" name="productId"/>
+                            </li>
+                            <li>
+                                <p>产品配件法兰id：</p>
+                                <input type="text" name="productRef1Id"/>
+                            </li>
+                            <li>
+                                <p>产品配件法兰数量：</p>
+                                <input type="text" name="productRef1Num"/>
+                            </li>
+                            <li>
+                                <p>产品配件螺栓id：</p>
+                                <input type="text" name="productRef2Id"/>
+                            </li>
+                            <li>
+                                <p>产品配件螺栓数量：</p>
+                                <input type="text" name="productRef2Num"/>
+                            </li>
+                            <li>
+                                <p>执行器id：</p>
+                                <input type="text" name="actuatorId"/>
+                            </li>
+                            <li>
+                                <p>备用1：</p>
+                                <input type="text" name="string1"/>
+                            </li>
+                            <li>
+                                <p>备用2：</p>
+                                <input type="text" name="string2"/>
+                            </li>
+                            <li>
+                                <p>备用3：</p>
+                                <input type="text" name="string3"/>
+                            </li>
+                            <li>
+                                <p>备用4：</p>
+                                <input type="text" name="string4"/>
+                            </li>
+                            <li>
+                                <p>备用5：</p>
+                                <input type="text" name="string5"/>
+                            </li>
+                            <li>
+                                <p>状态：</p>
+                                <select name="status">
+                                    <option value="">所有</option>
+                                </select>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="fmis:quotationproduct:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="fmis:quotationproduct:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="fmis:quotationproduct:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="fmis:quotationproduct:export">
+                    <i class="fa fa-download"></i> 导出
+                 </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('fmis:quotationproduct:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('fmis:quotationproduct:remove')}]];
+        var prefix = ctx + "fmis/quotationproduct";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "报价单产品",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'qpId', 
+                    title : 'ID',
+                    visible: false
+                },
+                {
+                    field : 'quotationId', 
+                    title : '报价表ID'
+                },
+                {
+                    field : 'productId', 
+                    title : '产品ID'
+                },
+                {
+                    field : 'productRef1Id', 
+                    title : '产品配件法兰id'
+                },
+                {
+                    field : 'productRef1Num', 
+                    title : '产品配件法兰数量'
+                },
+                {
+                    field : 'productRef2Id', 
+                    title : '产品配件螺栓id'
+                },
+                {
+                    field : 'productRef2Num', 
+                    title : '产品配件螺栓数量'
+                },
+                {
+                    field : 'actuatorId', 
+                    title : '执行器id'
+                },
+                {
+                    field : 'remark', 
+                    title : '备注'
+                },
+                {
+                    field : 'string1', 
+                    title : '备用1'
+                },
+                {
+                    field : 'string2', 
+                    title : '备用2'
+                },
+                {
+                    field : 'string3', 
+                    title : '备用3'
+                },
+                {
+                    field : 'string4', 
+                    title : '备用4'
+                },
+                {
+                    field : 'string5', 
+                    title : '备用5'
+                },
+                {
+                    field : 'status', 
+                    title : '状态'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.qpId + '\')"><i class="fa fa-edit"></i> 编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.qpId + '\')"><i class="fa fa-remove"></i> 删除</a>');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

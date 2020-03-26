@@ -35,7 +35,7 @@
 
 
                     <select name="valveType" id="valveType" class="form-control select2-multiple" > <!--multiple-->
-                        <option>请选择</option>
+                        <option value="">请选择</option>
                         <option th:each="specification:${specifications}" th:value="${specification.dictId}" th:text="${specification.name} "></option>
                     </select>
 
@@ -51,7 +51,7 @@
                 <label class="col-sm-3 control-label">压力：</label>
                 <div class="col-sm-8">
                     <select name="pressure" id="pressure" class="form-control select2-multiple" > <!--multiple-->
-                        <option>请选择</option>
+                        <option value="">请选择</option>
                         <option th:each="nominalPressure:${nominalPressures}" th:value="${nominalPressure.dictId}" th:text="${nominalPressure.name} "></option>
                     </select>
                 </div>
@@ -80,7 +80,14 @@
                     <input name="fitType" class="form-control" type="text">
                 </div>
             </div>
-
+            <div class="form-group">
+                <label class="col-sm-3 control-label">气缸类型：</label>
+                <div class="col-sm-8">
+                    <select name="string1" class="form-control m-b" th:with="type=${@dict.getType('cylinder_type')}">
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                    </select>
+                </div>
+            </div>
             <div class="form-group">
                 <label class="col-sm-3 control-label">备注：</label>
                 <div class="col-sm-8">

@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.fmis.quotationproduct.mapper.BizQuotationProductMapper">
+    
+    <resultMap type="BizQuotationProduct" id="BizQuotationProductResult">
+        <result property="qpId"    column="qp_id"    />
+        <result property="quotationId"    column="quotation_id"    />
+        <result property="productId"    column="product_id"    />
+        <result property="productRef1Id"    column="product_ref1_id"    />
+        <result property="productRef1Num"    column="product_ref1_num"    />
+        <result property="productRef2Id"    column="product_ref2_id"    />
+        <result property="productRef2Num"    column="product_ref2_num"    />
+        <result property="actuatorId"    column="actuator_id"    />
+
+        <result property="productNum"    column="product_num"    />
+        <result property="productCoefficient"    column="product_coefficient"    />
+        <result property="productRef1Coefficient"    column="product_ref1_coefficient"    />
+        <result property="productRef2Coefficient"    column="product_ref2_coefficient"    />
+        <result property="actuatorNum"    column="actuator_num"    />
+        <result property="actuatorCoefficient"    column="actuator_coefficient"    />
+
+
+        <result property="remark"    column="remark"    />
+        <result property="string1"    column="string1"    />
+        <result property="string2"    column="string2"    />
+        <result property="string3"    column="string3"    />
+        <result property="string4"    column="string4"    />
+        <result property="string5"    column="string5"    />
+        <result property="status"    column="status"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBizQuotationProductVo">
+        select qp_id, quotation_id, product_id, product_ref1_id, product_ref1_num, product_ref2_id, product_ref2_num, actuator_id, remark, string1, string2, string3, string4, string5, status, del_flag, create_by, create_time, update_by, update_time,
+         product_num,product_coefficient,product_ref1_coefficient,product_ref2_coefficient,actuator_num,actuator_coefficient from biz_quotation_product
+    </sql>
+
+    <select id="selectBizQuotationProductList" parameterType="BizQuotationProduct" resultMap="BizQuotationProductResult">
+        <include refid="selectBizQuotationProductVo"/>
+        <where>  
+            <if test="quotationId != null "> and quotation_id = #{quotationId}</if>
+            <if test="productId != null "> and product_id = #{productId}</if>
+            <if test="productRef1Id != null "> and product_ref1_id = #{productRef1Id}</if>
+            <if test="productRef1Num != null  and productRef1Num != ''"> and product_ref1_num = #{productRef1Num}</if>
+            <if test="productRef2Id != null "> and product_ref2_id = #{productRef2Id}</if>
+            <if test="productRef2Num != null  and productRef2Num != ''"> and product_ref2_num = #{productRef2Num}</if>
+            <if test="actuatorId != null "> and actuator_id = #{actuatorId}</if>
+            <if test="string1 != null  and string1 != ''"> and string1 = #{string1}</if>
+            <if test="string2 != null  and string2 != ''"> and string2 = #{string2}</if>
+            <if test="string3 != null  and string3 != ''"> and string3 = #{string3}</if>
+            <if test="string4 != null  and string4 != ''"> and string4 = #{string4}</if>
+            <if test="string5 != null  and string5 != ''"> and string5 = #{string5}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+
+
+    <sql id="selectBizQuotationProductDictVo">
+
+        select qp.qp_id,qp.quotation_id,qp.product_id,qp.product_ref1_id,qp.product_ref1_num,qp.product_ref2_id,
+          qp.product_ref2_num,qp.actuator_id,qp.remark,qp.string1,qp.string2,qp.string3,qp.string4,
+          qp.string5,qp.status,qp.del_flag,qp.create_by,qp.create_time,qp.update_by,qp.update_time,
+          p.name as productName,pr1.name as productRef1Name,pr2.name as productRef2Name,ac.name as actuatorName,
+          qp.product_num,qp.product_coefficient,qp.product_ref1_coefficient,qp.product_ref2_coefficient,qp.actuator_num,qp.actuator_coefficient
+        from biz_quotation_product qp
+        left join biz_product p on p.product_id=qp.product_id
+        left join biz_quotation q on q.quotation_id=qp.quotation_id
+        left join biz_product_ref pr1 on pr1.product_ref_id=qp.product_ref1_id
+        left join biz_product_ref pr2 on pr2.product_ref_id=qp.product_ref2_id
+        left join biz_actuator ac on ac.actuator_id=qp.actuator_id
+    </sql>
+
+    <select id="selectBizQuotationProductDictList" parameterType="BizQuotationProduct" resultMap="BizQuotationProductResult">
+        <include refid="selectBizQuotationProductDictVo"/>
+        <where>
+            <if test="quotationId != null "> and qp.quotation_id = #{quotationId}</if>
+            <if test="productId != null "> and qp.product_id = #{productId}</if>
+            <if test="productRef1Id != null "> and qp.product_ref1_id = #{productRef1Id}</if>
+            <if test="productRef1Num != null  and productRef1Num != ''"> and qp.product_ref1_num = #{productRef1Num}</if>
+            <if test="productRef2Id != null "> and qp.product_ref2_id = #{productRef2Id}</if>
+            <if test="productRef2Num != null  and productRef2Num != ''"> and qp.product_ref2_num = #{productRef2Num}</if>
+            <if test="actuatorId != null "> and qp.actuator_id = #{actuatorId}</if>
+            <if test="string1 != null  and string1 != ''"> and qp.string1 = #{string1}</if>
+            <if test="string2 != null  and string2 != ''"> and qp.string2 = #{string2}</if>
+            <if test="string3 != null  and string3 != ''"> and qp.string3 = #{string3}</if>
+            <if test="string4 != null  and string4 != ''"> and qp.string4 = #{string4}</if>
+            <if test="string5 != null  and string5 != ''"> and qp.string5 = #{string5}</if>
+            <if test="status != null  and status != ''"> and qp.status = #{status}</if>
+        </where>
+    </select>
+
+    <select id="selectBizQuotationProductById" parameterType="Long" resultMap="BizQuotationProductResult">
+        <include refid="selectBizQuotationProductVo"/>
+        where qp_id = #{qpId}
+    </select>
+        
+    <insert id="insertBizQuotationProduct" parameterType="BizQuotationProduct" useGeneratedKeys="true" keyProperty="qpId">
+        insert into biz_quotation_product
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="quotationId != null ">quotation_id,</if>
+            <if test="productId != null ">product_id,</if>
+            <if test="productRef1Id != null ">product_ref1_id,</if>
+            <if test="productRef1Num != null  and productRef1Num != ''">product_ref1_num,</if>
+            <if test="productRef2Id != null ">product_ref2_id,</if>
+            <if test="productRef2Num != null  and productRef2Num != ''">product_ref2_num,</if>
+            <if test="actuatorId != null ">actuator_id,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+            <if test="string1 != null  and string1 != ''">string1,</if>
+            <if test="string2 != null  and string2 != ''">string2,</if>
+            <if test="string3 != null  and string3 != ''">string3,</if>
+            <if test="string4 != null  and string4 != ''">string4,</if>
+            <if test="string5 != null  and string5 != ''">string5,</if>
+            <if test="status != null  and status != ''">status,</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+
+            <if test="productNum != null  and productNum != ''">product_num,</if>
+            <if test="productCoefficient != null  and productCoefficient != ''">product_coefficient,</if>
+            <if test="productRef1Coefficient != null  and productRef1Coefficient != ''">product_ref1_coefficient,</if>
+            <if test="productRef2Coefficient != null  and productRef2Coefficient != ''">product_ref2_coefficient,</if>
+            <if test="actuatorNum != null  and actuatorNum != ''">actuator_num,</if>
+            <if test="actuatorCoefficient != null  and actuatorCoefficient != ''">actuator_coefficient,</if>
+
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="quotationId != null ">#{quotationId},</if>
+            <if test="productId != null ">#{productId},</if>
+            <if test="productRef1Id != null ">#{productRef1Id},</if>
+            <if test="productRef1Num != null  and productRef1Num != ''">#{productRef1Num},</if>
+            <if test="productRef2Id != null ">#{productRef2Id},</if>
+            <if test="productRef2Num != null  and productRef2Num != ''">#{productRef2Num},</if>
+            <if test="actuatorId != null ">#{actuatorId},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="string1 != null  and string1 != ''">#{string1},</if>
+            <if test="string2 != null  and string2 != ''">#{string2},</if>
+            <if test="string3 != null  and string3 != ''">#{string3},</if>
+            <if test="string4 != null  and string4 != ''">#{string4},</if>
+            <if test="string5 != null  and string5 != ''">#{string5},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+
+            <if test="productNum != null  and productNum != ''">#{productNum},</if>
+            <if test="productCoefficient != null  and productCoefficient != ''">#{productCoefficient},</if>
+            <if test="productRef1Coefficient != null  and productRef1Coefficient != ''">#{productRef1Coefficient},</if>
+            <if test="productRef2Coefficient != null  and productRef2Coefficient != ''">#{productRef2Coefficient},</if>
+            <if test="actuatorNum != null  and actuatorNum != ''">#{actuatorNum},</if>
+            <if test="actuatorCoefficient != null  and actuatorCoefficient != ''">#{actuatorCoefficient},</if>
+
+         </trim>
+    </insert>
+
+    <update id="updateBizQuotationProduct" parameterType="BizQuotationProduct">
+        update biz_quotation_product
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="quotationId != null ">quotation_id = #{quotationId},</if>
+            <if test="productId != null ">product_id = #{productId},</if>
+            <if test="productRef1Id != null ">product_ref1_id = #{productRef1Id},</if>
+            <if test="productRef1Num != null  and productRef1Num != ''">product_ref1_num = #{productRef1Num},</if>
+            <if test="productRef2Id != null ">product_ref2_id = #{productRef2Id},</if>
+            <if test="productRef2Num != null  and productRef2Num != ''">product_ref2_num = #{productRef2Num},</if>
+            <if test="actuatorId != null ">actuator_id = #{actuatorId},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+            <if test="string1 != null  and string1 != ''">string1 = #{string1},</if>
+            <if test="string2 != null  and string2 != ''">string2 = #{string2},</if>
+            <if test="string3 != null  and string3 != ''">string3 = #{string3},</if>
+            <if test="string4 != null  and string4 != ''">string4 = #{string4},</if>
+            <if test="string5 != null  and string5 != ''">string5 = #{string5},</if>
+            <if test="status != null  and status != ''">status = #{status},</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+
+            <if test="productNum != null ">product_num = #{productNum},</if>
+            <if test="productCoefficient != null ">product_coefficient = #{productCoefficient},</if>
+            <if test="productRef1Coefficient != null ">product_ref1_coefficient = #{productRef1Coefficient},</if>
+            <if test="productRef2Coefficient != null ">product_ref2_coefficient = #{productRef2Coefficient},</if>
+            <if test="actuatorNum != null ">actuator_num = #{actuatorNum},</if>
+            <if test="actuatorCoefficient != null ">actuator_coefficient = #{actuatorCoefficient},</if>
+
+        </trim>
+        where qp_id = #{qpId}
+    </update>
+
+    <delete id="deleteBizQuotationProductById" parameterType="Long">
+        delete from biz_quotation_product where qp_id = #{qpId}
+    </delete>
+
+    <delete id="deleteBizQuotationProductByIds" parameterType="String">
+        delete from biz_quotation_product where qp_id in 
+        <foreach item="qpId" collection="array" open="(" separator="," close=")">
+            #{qpId}
+        </foreach>
+    </delete>
+    
+</mapper>

@@ -29,7 +29,7 @@ public class BizActuator extends BaseEntity {
     @Excel(name = "生产厂家")
     private String manufacturer;
 
-    /** 安装形式 */
+    /** 安装形式 气动：类别*/
     @Excel(name = "安装形式")
     private String setupType;
 
@@ -65,10 +65,10 @@ public class BizActuator extends BaseEntity {
     @Excel(name = "价格")
     private Double price;
 
-    /** 备用1 */
+    /** 备用1 型号*/
     private String string1;
 
-    /** 备用2 */
+    /** 备用2 类型 1=电动 2=气动*/
     private String string2;
 
     /** 备用3 */

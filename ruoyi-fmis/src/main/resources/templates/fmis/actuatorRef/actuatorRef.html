@@ -14,6 +14,23 @@
                                 <p>品牌名称：</p>
                                 <input type="text" name="brand"/>
                             </li>
+
+                            <li>
+                                <p>驱动类型：</p>
+                                <select name="driveType" class="form-control m-b" th:with="type=${@dict.getType('actuator_driver_type')}">
+                                    <option value="">全部</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+
+                            <li>
+                                <p>阀门规格：</p>
+                                <select name="valveType" id="valveType" class="form-control select2-multiple" > <!--multiple-->
+                                    <option value="">全部</option>
+                                    <option th:each="specification:${specifications}" th:value="${specification.dictId}" th:text="${specification.name} "></option>
+                                </select>
+                            </li>
+
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
                                 <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
@@ -50,6 +67,7 @@
 
         var driverTypeData = [[${@dict.getType('actuator_driver_type')}]];
         var mediumTypeData = [[${@dict.getType('actuator_medium_type')}]];
+        var cylinderTypeData = [[${@dict.getType('cylinder_type')}]];
 
         var prefix = ctx + "fmis/actuatorRef";
 
@@ -114,6 +132,13 @@
                 {
                     field : 'fitType', 
                     title : '适配系列'
+                },
+                {
+                    field : 'string1',
+                    title : '气缸类型',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(cylinderTypeData, value);
+                    }
                 },
                 {
                     field : 'remark', 

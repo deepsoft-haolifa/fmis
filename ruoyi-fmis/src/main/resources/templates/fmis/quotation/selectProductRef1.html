@@ -13,6 +13,7 @@
                             <li>
                                 <p>名称：</p>
                                 <input type="text" name="name"/>
+                                <input type="hidden" name="productId" id="productId" th:value="${productId}"/>
                             </li>
 
                             <li>
@@ -45,10 +46,8 @@
         var removeFlag = [[${@permission.hasPermi('fmis:productRef:remove')}]];
         var prefix = ctx + "fmis/productRef";
         var productRefTypeData = [[${@dict.getType('product_ref_type')}]];
-        var productId = parent.$('#form-quotation-add input[name=productId]').val();
-        if (productId == null || productId == "") {
-            productId = parent.$('#form-quotation-edit input[name=productId]').val();
-        }
+        var productId = $("#productId").val();
+
         var refType = $("#refType").val();
         console.log(productId + "--" + refType);
         $(function() {
@@ -140,10 +139,10 @@
             }
             $.modal.confirm('确定要关联该法兰吗？',
                 function() {
-                    parent.$('#form-quotation-add input[name=productRef1Id]').val($.table.selectColumns("productRefId"));
-                    parent.$('#form-quotation-add input[name=productRef1Name]').val($.table.selectColumns("name"));
-                    parent.$('#form-quotation-edit input[name=productRef1Id]').val($.table.selectColumns("productRefId"));
-                    parent.$('#form-quotation-edit input[name=productRef1Name]').val($.table.selectColumns("name"));
+                    parent.$('#form-quotation-add input[name=productRef1Id_' + productId + ']').val($.table.selectColumns("productRefId"));
+                    parent.$('#form-quotation-add input[name=productRef1Name_' + productId + ']').val($.table.selectColumns("name"));
+                    parent.$('#form-quotation-edit input[id=productRef1Id_' + productId + ']').val($.table.selectColumns("productRefId"));
+                    parent.$('#form-quotation-edit input[id=productRef1Name_' + productId + ']').val($.table.selectColumns("name"));
                     $.modal.close();
                 }
             );
