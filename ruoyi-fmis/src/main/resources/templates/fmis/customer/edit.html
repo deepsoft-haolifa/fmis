@@ -18,6 +18,14 @@
                     </div>
                 </div>
             </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">客户区域代码：</label>
+                <div class="col-sm-8">
+                    <input name="areaCode" class="form-control" type="text" th:field="*{areaCode}" readonly>
+                </div>
+            </div>
+
             <div class="form-group">    
                 <label class="col-sm-3 control-label">商务公司代码：</label>
                 <div class="col-sm-8">
@@ -65,6 +73,49 @@
                     <input name="name" th:field="*{name}" class="form-control" type="text">
                 </div>
             </div>
+
+            <!-- 新添加字段 start -->
+            <div class="form-group">
+                <label class="col-sm-3 control-label">客户来源：</label>
+                <div class="col-sm-8">
+                    <input name="source" th:field="*{source}"  class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">备案类别：</label>
+                <div class="col-sm-8">
+                    <select name="recordType" class="form-control m-b" th:with="type=${@dict.getType('customer_record_type')}">
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{recordType}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">备案号：</label>
+                <div class="col-sm-8">
+                    <input name="recordNum" th:field="*{recordNum}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">座机电话：</label>
+                <div class="col-sm-8">
+                    <input name="telephone" th:field="*{telephone}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">联系传真：</label>
+                <div class="col-sm-8">
+                    <input name="fax" th:field="*{fax}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">公司地址：</label>
+                <div class="col-sm-8">
+                    <input name="companyAddress" th:field="*{companyAddress}"  class="form-control" type="text">
+                </div>
+            </div>
+
+            <!-- 新添加字段 end -->
+
             <div class="form-group">    
                 <label class="col-sm-3 control-label">项目名称：</label>
                 <div class="col-sm-8">

@@ -1,5 +1,8 @@
 package com.ruoyi.fmis.quotationproduct.domain;
 
+import com.ruoyi.fmis.actuator.domain.BizActuator;
+import com.ruoyi.fmis.product.domain.BizProduct;
+import com.ruoyi.fmis.productref.domain.BizProductRef;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
@@ -71,6 +74,38 @@ public class BizQuotationProduct extends BaseEntity {
 
     /** 删除标志（0代表存在 2代表删除） */
     private String delFlag;
+
+    private BizProduct bizProduct;
+    public void setBizProduct(BizProduct bizProduct) {
+        this.bizProduct = bizProduct;
+    }
+    public BizProduct getBizProduct() {
+        return bizProduct;
+    }
+
+    private BizProductRef bizProductRef1;
+    public void setBizProductRef1(BizProductRef bizProductRef1) {
+        this.bizProductRef1 = bizProductRef1;
+    }
+    public BizProductRef getBizProductRef1() {
+        return bizProductRef1;
+    }
+
+    private BizProductRef bizProductRef2;
+    public void setBizProductRef2(BizProductRef bizProductRef2) {
+        this.bizProductRef2 = bizProductRef2;
+    }
+    public BizProductRef getBizProductRef2() {
+        return bizProductRef2;
+    }
+
+    private BizActuator bizActuator;
+    public void setBizActuator(BizActuator bizActuator) {
+        this.bizActuator = bizActuator;
+    }
+    public BizActuator getBizActuator() {
+        return bizActuator;
+    }
 
 
     private String productName;

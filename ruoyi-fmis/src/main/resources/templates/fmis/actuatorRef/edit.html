@@ -81,9 +81,11 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">气缸类型：</label>
                 <div class="col-sm-8">
+                    <input name="string1" th:field="*{string1}" class="form-control" type="text">
+                    <!--
                     <select name="string1" class="form-control m-b" th:with="type=${@dict.getType('cylinder_type')}">
                         <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{string1}"></option>
-                    </select>
+                    </select>-->
                 </div>
             </div>
 

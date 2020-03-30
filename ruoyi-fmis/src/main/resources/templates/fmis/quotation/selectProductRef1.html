@@ -111,16 +111,6 @@
                 },{
                     field : 'updateTime',
                     title : '修改时间'
-                },
-                {
-                    title: '操作',
-                    align: 'center',
-                    formatter: function(value, row, index) {
-                        var actions = [];
-                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.productRefId + '\')"><i class="fa fa-edit"></i> 编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.productRefId + '\')"><i class="fa fa-remove"></i> 删除</a>');
-                        return actions.join('');
-                    }
                 }]
             };
             $.table.init(options);
@@ -141,8 +131,19 @@
                 function() {
                     parent.$('#form-quotation-add input[name=productRef1Id_' + productId + ']').val($.table.selectColumns("productRefId"));
                     parent.$('#form-quotation-add input[name=productRef1Name_' + productId + ']').val($.table.selectColumns("name"));
+
+                    parent.$('#form-quotation-add input[name=productRef1Model_' + productId + ']').val($.table.selectColumns("model"));
+                    parent.$('#form-quotation-add input[name=productRef1Specifications_' + productId + ']').val($.table.selectColumns("specifications"));
+                    parent.$('#form-quotation-add input[name=productRef1ValvebodyMaterial_' + productId + ']').val($.table.selectColumns("valvebodyMaterial"));
+                    parent.$('#form-quotation-add input[name=productRef1Price_' + productId + ']').val($.table.selectColumns("price"));
+
                     parent.$('#form-quotation-edit input[id=productRef1Id_' + productId + ']').val($.table.selectColumns("productRefId"));
                     parent.$('#form-quotation-edit input[id=productRef1Name_' + productId + ']').val($.table.selectColumns("name"));
+
+                    parent.$('#form-quotation-edit input[name=productRef1Model_' + productId + ']').val($.table.selectColumns("model"));
+                    parent.$('#form-quotation-edit input[name=productRef1Specifications_' + productId + ']').val($.table.selectColumns("specifications"));
+                    parent.$('#form-quotation-edit input[name=productRef1ValvebodyMaterial_' + productId + ']').val($.table.selectColumns("valvebodyMaterial"));
+                    parent.$('#form-quotation-edit input[name=productRef1Price_' + productId + ']').val($.table.selectColumns("price"));
                     $.modal.close();
                 }
             );

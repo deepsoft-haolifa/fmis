@@ -141,6 +141,10 @@
                     title : '生产厂家'
                 },
                 {
+                    field : 'string1',
+                    title : '型号'
+                },
+                {
                     field : 'setupType',
                     title : '安装形式',
                     formatter: function(value, row, index) {
@@ -286,19 +290,34 @@
             }
             var selActuatorId;
             var selName;
+            var selRow;
+
             if (rows1.length == 1) {
                 selActuatorId = rows1[0].actuatorId;
                 selName = rows1[0].name;
+                selRow = rows1[0];
             } else {
                 selActuatorId = rows2[0].actuatorId;
                 selName = rows2[0].name;
+                selRow = rows2[0];
             }
             $.modal.confirm('确定要关联该执行器吗？',
                 function() {
                     parent.$('#form-quotation-add input[name=actuatorId_' + productId + ']').val(selActuatorId);
                     parent.$('#form-quotation-add input[name=actuatorName_' + productId + ']').val(selName);
+
+
+                    parent.$('#form-quotation-add input[name=brand_' + productId + ']').val(selRow.brand);
+                    parent.$('#form-quotation-add input[name=string1_' + productId + ']').val(selRow.string1);
+                    parent.$('#form-quotation-add input[name=actuatorPrice_' + productId + ']').val(selRow.price);
+
+
                     parent.$('#form-quotation-edit input[id=actuatorId_' + productId + ']').val(selActuatorId);
                     parent.$('#form-quotation-edit input[id=actuatorName_' + productId + ']').val(selName);
+
+                    parent.$('#form-quotation-edit input[name=brand_' + productId + ']').val(selRow[0].brand);
+                    parent.$('#form-quotation-edit input[name=string1_' + productId + ']').val(selRow[0].string1);
+                    parent.$('#form-quotation-edit input[name=actuatorPrice_' + productId + ']').val(selRow[0].price);
                     $.modal.close();
                 }
             );

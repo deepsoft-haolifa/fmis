@@ -5,16 +5,28 @@ import java.util.List;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.fmis.actuator.domain.BizActuator;
+import com.ruoyi.fmis.actuator.service.IBizActuatorService;
 import com.ruoyi.fmis.common.BizConstants;
+import com.ruoyi.fmis.dict.service.IBizDictService;
+import com.ruoyi.fmis.productref.domain.BizProductRef;
+import com.ruoyi.fmis.productref.service.IBizProductRefService;
 import com.ruoyi.fmis.quotationproduct.domain.BizQuotationProduct;
 import com.ruoyi.fmis.quotationproduct.service.IBizQuotationProductService;
+import com.ruoyi.fmis.suppliers.service.IBizSuppliersService;
 import com.ruoyi.framework.util.ShiroUtils;
+import com.ruoyi.system.domain.SysDept;
+import com.ruoyi.system.service.ISysDeptService;
 import com.ruoyi.system.service.ISysRoleService;
+import com.ruoyi.system.service.impl.SysDeptServiceImpl;
+import org.activiti.engine.impl.util.CollectionUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -49,12 +61,37 @@ public class BizQuotationController extends BaseController {
     @Autowired
     private IBizQuotationProductService bizQuotationProductService;
 
+    @Autowired
+    private IBizDictService bizDictService;
+
+    @Autowired
+    private IBizSuppliersService bizSuppliersService;
+
+    @Autowired
+    private IBizProductRefService bizProductRefService;
+
+    @Autowired
+    private IBizActuatorService bizActuatorService;
+
+    @Autowired
+    private ISysDeptService sysDeptService;
+
     @RequiresPermissions("fmis:quotation:view")
     @GetMapping()
     public String quotation(ModelMap mmap) {
         int roleType = sysRoleService.getRoleType(ShiroUtils.getUserId());
         mmap.put("roleType",roleType);
         return prefix + "/quotation";
+    }
+
+
+    public String getBh () {
+        Long deptId = ShiroUtils.getSysUser().getDeptId();
+        SysDept sysDept = sysDeptService.selectDeptById(deptId);
+        SysDept sysDept1 = sysDeptService.selectDeptById(sysDept.getParentId());
+        String areCode = sysDept1.getAreCode();
+        String bh = areCode + "-" + DateUtils.dateTimeNow();
+        return bh;
     }
 
     /**
@@ -64,8 +101,6 @@ public class BizQuotationController extends BaseController {
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(BizQuotation bizQuotation) {
-
-
 
         int roleType = sysRoleService.getRoleType(ShiroUtils.getUserId());
         bizQuotation.setString2(roleType + "");
@@ -87,11 +122,14 @@ public class BizQuotationController extends BaseController {
         return util.exportExcel(list, "quotation");
     }
 
+
+
     /**
      * 新增报价单
      */
     @GetMapping("/add")
-    public String add() {
+    public String add(ModelMap mmap) {
+        mmap.put("bh",getBh());
         return prefix + "/add";
     }
 
@@ -106,6 +144,7 @@ public class BizQuotationController extends BaseController {
 
         String productArrayStr = bizQuotation.getString10();
         bizQuotation.setString10("");
+        setNormalFlag(bizQuotation,productArrayStr);
         int insertReturn = bizQuotationService.insertBizQuotation(bizQuotation);
         Long quotationId = bizQuotation.getQuotationId();
         if (StringUtils.isNotEmpty(productArrayStr)) {
@@ -120,10 +159,61 @@ public class BizQuotationController extends BaseController {
 
             }
         }
-
-
         return toAjax(insertReturn);
     }
+
+
+    @PostMapping("/checkQuotationNo")
+    @ResponseBody
+    public String checkQuotationNo(BizQuotation bizQuotation)
+    {
+        String string3 = bizQuotation.getString3();
+        Long id = 0L;
+        if ("1".equals(string3)) {
+            id = new Long(bizQuotation.getQuotationId());
+            bizQuotation.setQuotationId(null);
+        }
+
+        List<BizQuotation> list = bizQuotationService.selectBizQuotationList(bizQuotation);
+        for (BizQuotation bizQuotation1 : list) {
+            if (bizQuotation1.getQuotationId().compareTo(id) == 0) {
+                list.remove(bizQuotation1);
+            }
+        }
+
+
+        if (CollectionUtil.isEmpty(list) || list.size() == 0) {
+            return BizConstants.VALIDATE_IS_NOT_EXIST;
+        }
+        return BizConstants.VALIDATE_IS_EXIST;
+    }
+
+
+    @PostMapping("/checkCustomer")
+    @ResponseBody
+    public String checkCustomer(BizQuotation bizQuotation)
+    {
+        String string3 = bizQuotation.getString3();
+        Long id = 0L;
+        if ("1".equals(string3)) {
+            id = new Long(bizQuotation.getQuotationId());
+            bizQuotation.setQuotationId(null);
+        }
+
+        List<BizQuotation> list = bizQuotationService.selectBizQuotationList(bizQuotation);
+        for (BizQuotation bizQuotation1 : list) {
+            if (bizQuotation1.getQuotationId().compareTo(id) == 0) {
+                list.remove(bizQuotation1);
+            }
+        }
+
+
+        if (CollectionUtil.isEmpty(list) || list.size() == 0) {
+            return BizConstants.VALIDATE_IS_NOT_EXIST;
+        }
+        return BizConstants.VALIDATE_IS_EXIST;
+    }
+
 
     @PostMapping("/report")
     @ResponseBody
@@ -154,6 +244,41 @@ public class BizQuotationController extends BaseController {
         for (BizQuotationProduct bizQuotationProduct1 : bizQuotationProducts) {
             productNames += bizQuotationProduct1.getProductName() + ",";
             productIds += bizQuotationProduct1.getProductId() + ",";
+
+
+            Long productRef1Id = bizQuotationProduct1.getProductRef1Id();
+            BizProductRef bizProductRef1 = new BizProductRef();
+            if (productRef1Id != null && productRef1Id > 0L) {
+                bizProductRef1.setProductRefId(productRef1Id);
+                List<BizProductRef> bizProductRefs = bizProductRefService.selectBizProductRefList(bizProductRef1);
+                if (!CollectionUtils.isEmpty(bizProductRefs)) {
+                    bizQuotationProduct1.setBizProductRef1(bizProductRefs.get(0));
+                }
+            } else {
+                bizQuotationProduct1.setBizProductRef1(bizProductRef1);
+            }
+            Long productRef2Id = bizQuotationProduct1.getProductRef2Id();
+            BizProductRef bizProductRef2 = new BizProductRef();
+            if (productRef2Id != null && productRef2Id > 0L) {
+                bizProductRef2.setProductRefId(productRef2Id);
+                List<BizProductRef> bizProductRefs = bizProductRefService.selectBizProductRefList(bizProductRef2);
+                if (!CollectionUtils.isEmpty(bizProductRefs)) {
+                    bizQuotationProduct1.setBizProductRef2(bizProductRefs.get(0));
+                }
+            } else {
+                bizQuotationProduct1.setBizProductRef2(bizProductRef1);
+            }
+            Long actuatorId = bizQuotationProduct1.getActuatorId();
+            BizActuator bizActuator = new BizActuator();
+            if (actuatorId != null && actuatorId > 0L) {
+                bizActuator.setActuatorId(actuatorId);
+                List<BizActuator> bizActuators = bizActuatorService.selectBizActuatorForRefList(bizActuator);
+                if (!CollectionUtils.isEmpty(bizActuators)) {
+                    bizQuotationProduct1.setBizActuator(bizActuators.get(0));
+                }
+            } else {
+                bizQuotationProduct1.setBizActuator(bizActuator);
+            }
         }
         mmap.put("productNames", productNames);
         mmap.put("productIds", productIds);
@@ -174,6 +299,7 @@ public class BizQuotationController extends BaseController {
 
         String productArrayStr = bizQuotation.getString10();
         bizQuotation.setString10("");
+        setNormalFlag(bizQuotation,productArrayStr);
         int updateReturn = bizQuotationService.updateBizQuotation(bizQuotation);
         Long quotationId = bizQuotation.getQuotationId();
 
@@ -200,6 +326,69 @@ public class BizQuotationController extends BaseController {
     }
 
     /**
+     *
+     * 2销售经理审批结束 3 区域经理审批结束 4副总审批结束 5 老总审批结束
+     * @param bizQuotation
+     * @return
+     */
+    public String setNormalFlag (BizQuotation bizQuotation,String productArrayStr) {
+        String normalFlag = "";
+        String totalPrice = bizQuotation.getString9();
+        if (Double.parseDouble(totalPrice) >= 500000) {
+            normalFlag = "5";
+        } else if (!"5".equals(bizQuotation.getPaymentMethod())) {
+            //到付
+            normalFlag = "5";
+        } else {
+
+            JSONArray productArray = JSONArray.parseArray(productArrayStr);
+            Double minCoefficient = new Double(10000000);
+            for (int i = 0; i < productArray.size(); i++) {
+                JSONObject json = productArray.getJSONObject(i);
+                BizQuotationProduct bizQuotationProduct = JSONObject.parseObject(json.toJSONString(), BizQuotationProduct.class);
+                if (bizQuotationProduct.getProductId() != null) {
+                    String actuatorCoefficient = bizQuotationProduct.getActuatorCoefficient();
+                    if (StringUtils.isNotEmpty(actuatorCoefficient) && Double.parseDouble(actuatorCoefficient) < minCoefficient) {
+                        minCoefficient = Double.parseDouble(actuatorCoefficient);
+                    }
+                    String productCoefficient = bizQuotationProduct.getProductCoefficient();
+                    if (StringUtils.isNotEmpty(productCoefficient) && Double.parseDouble(productCoefficient) < minCoefficient) {
+                        minCoefficient = Double.parseDouble(productCoefficient);
+                    }
+
+                    String productRef1Coefficient = bizQuotationProduct.getProductRef1Coefficient();
+                    if (StringUtils.isNotEmpty(productRef1Coefficient) && Double.parseDouble(productRef1Coefficient) < minCoefficient) {
+                        minCoefficient = Double.parseDouble(productRef1Coefficient);
+                    }
+
+                    String productRef2Coefficient = bizQuotationProduct.getProductRef2Coefficient();
+                    if (StringUtils.isNotEmpty(productRef2Coefficient) && Double.parseDouble(productRef2Coefficient) < minCoefficient) {
+                        minCoefficient = Double.parseDouble(productRef2Coefficient);
+                    }
+                }
+            }
+            /**
+             * 计算最低系数
+             * 如果系数（报价员录入的系数）底于0.9，由必须由销售副总审核、总经理审批，流程结束；
+             * 如果系数0.9--1.0，必须由销售副总审核，流程结束，
+             * 如果报价系数大于1.0--1.1则由区域经理审批完成后流程结束；
+             * 如果系数大于1.1，则由部门销售经理审核完成后流程结束
+             */
+            if (minCoefficient <= 0.9) {
+                normalFlag = "5";
+            } else if (minCoefficient >= 1.1) {
+                normalFlag = "2";
+            } else if (minCoefficient >= 0.9 && minCoefficient <= 1) {
+                normalFlag = "4";
+            }else if (minCoefficient >= 1 && minCoefficient <= 1.1) {
+                normalFlag = "3";
+            }
+        }
+        bizQuotation.setNormalFlag(normalFlag);
+        return normalFlag;
+    }
+
+    /**
      * 删除报价单
      */
     @RequiresPermissions("fmis:quotation:remove")
@@ -214,7 +403,11 @@ public class BizQuotationController extends BaseController {
      * 选择系统用户
      */
     @GetMapping("/selectProduct")
-    public String selectProduct() {
+    public String selectProduct(ModelMap mmap) {
+
+        mmap.put("seriesSelect",bizDictService.selectBizDictByProductType(BizConstants.productTypeCode));
+        mmap.put("suppliers",bizSuppliersService.selectAllList());
+
         return prefix + "/selectProduct";
     }
     /**
@@ -258,10 +451,71 @@ public class BizQuotationController extends BaseController {
     @GetMapping("/examineEdit")
     public String examineEdit(ModelMap mmap) {
         String quotationId = getRequest().getParameter("quotationId");
+        /*
         BizQuotation bizQuotationQuery = new BizQuotation();
         bizQuotationQuery.setQuotationId(Long.parseLong(quotationId));
         List<BizQuotation> bizQuotationList = bizQuotationService.selectBizQuotationFlowList(bizQuotationQuery);
-        mmap.put("bizQuotation", bizQuotationList.get(0));
+        mmap.put("bizQuotation", bizQuotationList.get(0));*/
+
+
+        //
+        BizQuotation bizQuotationQuery = new BizQuotation();
+        bizQuotationQuery.setQuotationId(Long.parseLong(quotationId));
+        List<BizQuotation> bizQuotationList = bizQuotationService.selectBizQuotationFlowList(bizQuotationQuery);
+
+        BizQuotation bizQuotation = bizQuotationList.get(0);
+
+        BizQuotationProduct bizQuotationProduct = new BizQuotationProduct();
+        bizQuotationProduct.setQuotationId(bizQuotation.getQuotationId());
+        List<BizQuotationProduct> bizQuotationProducts = bizQuotationProductService.selectBizQuotationProductDictList(bizQuotationProduct);
+        bizQuotation.setQuotationProductList(bizQuotationProducts);
+
+        String productNames = "";
+        String productIds = "";
+        for (BizQuotationProduct bizQuotationProduct1 : bizQuotationProducts) {
+            productNames += bizQuotationProduct1.getProductName() + ",";
+            productIds += bizQuotationProduct1.getProductId() + ",";
+
+
+            Long productRef1Id = bizQuotationProduct1.getProductRef1Id();
+            BizProductRef bizProductRef1 = new BizProductRef();
+            if (productRef1Id != null && productRef1Id > 0L) {
+                bizProductRef1.setProductRefId(productRef1Id);
+                List<BizProductRef> bizProductRefs = bizProductRefService.selectBizProductRefList(bizProductRef1);
+                if (!CollectionUtils.isEmpty(bizProductRefs)) {
+                    bizQuotationProduct1.setBizProductRef1(bizProductRefs.get(0));
+                }
+            } else {
+                bizQuotationProduct1.setBizProductRef1(bizProductRef1);
+            }
+            Long productRef2Id = bizQuotationProduct1.getProductRef2Id();
+            BizProductRef bizProductRef2 = new BizProductRef();
+            if (productRef2Id != null && productRef2Id > 0L) {
+                bizProductRef2.setProductRefId(productRef2Id);
+                List<BizProductRef> bizProductRefs = bizProductRefService.selectBizProductRefList(bizProductRef2);
+                if (!CollectionUtils.isEmpty(bizProductRefs)) {
+                    bizQuotationProduct1.setBizProductRef2(bizProductRefs.get(0));
+                }
+            } else {
+                bizQuotationProduct1.setBizProductRef2(bizProductRef1);
+            }
+            Long actuatorId = bizQuotationProduct1.getActuatorId();
+            BizActuator bizActuator = new BizActuator();
+            if (actuatorId != null && actuatorId > 0L) {
+                bizActuator.setActuatorId(actuatorId);
+                List<BizActuator> bizActuators = bizActuatorService.selectBizActuatorForRefList(bizActuator);
+                if (!CollectionUtils.isEmpty(bizActuators)) {
+                    bizQuotationProduct1.setBizActuator(bizActuators.get(0));
+                }
+            } else {
+                bizQuotationProduct1.setBizActuator(bizActuator);
+            }
+        }
+        mmap.put("productNames", productNames);
+        mmap.put("productIds", productIds);
+
+        mmap.put("bizQuotation", bizQuotation);
+
         return prefix + "/examineEdit";
     }
 

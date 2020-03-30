@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" >
 <head>
-    <th:block th:include="include :: header('新增产品关系')" />
+    <th:block th:include="include :: header('新增配件关系')" />
     <th:block th:include="include :: select2-css" />
 </head>
 <body class="white-bg">
@@ -31,7 +31,7 @@
                 <label class="col-sm-3 control-label">规格：</label>
                 <div class="col-sm-8">
                     <select name="specifications" id="specifications" class="form-control select2-multiple" > <!--multiple-->
-                        <option>请选择</option>
+                        <option value="">请选择</option>
                         <option th:each="specification:${specifications}" th:value="${specification.dictId}" th:text="${specification.name} "></option>
                     </select>
                 </div>
@@ -40,7 +40,7 @@
                 <label class="col-sm-3 control-label">材质：</label>
                 <div class="col-sm-8">
                     <select name="valvebodyMaterial" id="valvebodyMaterial" class="form-control select2-multiple" > <!--multiple-->
-                        <option>请选择</option>
+                        <option value="">请选择</option>
                         <option th:each="valvebodyMaterial:${valvebodyMaterials}" th:value="${valvebodyMaterial.dictId}" th:text="${valvebodyMaterial.name} "></option>
                     </select>
                 </div>
@@ -62,7 +62,7 @@
                 <label class="col-sm-3 control-label">供应商：</label>
                 <div class="col-sm-8">
                     <select name="suppliersId" id="suppliersId" class="form-control select2-multiple" > <!--multiple-->
-                        <option>请选择</option>
+                        <option value="">请选择</option>
                         <option th:each="suppliers:${suppliers}" th:value="${suppliers.suppliersId}" th:text="${suppliers.name} "></option>
                     </select>
                 </div>

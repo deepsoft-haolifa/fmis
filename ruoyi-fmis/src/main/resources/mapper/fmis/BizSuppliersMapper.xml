@@ -57,6 +57,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="status != null  and status != ''"> and s.status = #{status}</if>
             <if test="nickName != null  and nickName != ''"> and s.nick_name like concat('%', #{nickName}, '%')</if>
         </where>
+        order by s.create_time desc
     </select>
     
     <select id="selectBizSuppliersById" parameterType="Long" resultMap="BizSuppliersResult">

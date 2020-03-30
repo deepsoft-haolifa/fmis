@@ -50,12 +50,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectBizProductRefList" parameterType="BizProductRef" resultMap="BizProductRefResult">
         <include refid="selectBizProductRefDictVo"/>
-        <where>  
+        <where>
+            <if test="productRefId != null  and productRefId != ''"> and pr.product_ref_id = #{productRefId}</if>
             <if test="name != null  and name != ''"> and pr.name like concat('%', #{name}, '%')</if>
             <if test="type != null  and type != ''"> and pr.type = #{type}</if>
             <if test="specifications != null  and specifications != ''"> and d1.name like concat('%', #{specifications}, '%')</if>
             <if test="valvebodyMaterial != null  and valvebodyMaterial != ''"> and d2.name like concat('%', #{valvebodyMaterial}, '%')</if>
         </where>
+        order by pr.create_time desc
     </select>
     
     <select id="selectBizProductRefById" parameterType="Long" resultMap="BizProductRefResult">

@@ -47,6 +47,19 @@ public class SysDept extends BaseEntity
     /** 父部门名称 */
     private String parentName;
 
+    /** 区域代码 */
+    private String areCode;
+    public String getAreCode()
+    {
+        return areCode;
+    }
+
+    public void setAreCode(String areCode)
+    {
+        this.areCode = areCode;
+    }
+
+
     public Long getDeptId()
     {
         return deptId;

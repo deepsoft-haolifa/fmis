@@ -10,14 +10,14 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">报价单号：</label>
                 <div class="col-sm-8">
-                    <input name="string1" class="form-control" type="text">
+                    <input name="string1" id="string1" class="form-control" type="text" readonly th:value="${bh}" required>
                 </div>
             </div>
 
             <div class="form-group">
                 <label class="col-sm-3 control-label">客户名称：</label>
                 <div class="col-sm-8">
-                    <input name="customerName" id="customerName" class="form-control" type="text" readonly onclick="selectCustomer()">
+                    <input name="customerName" id="customerName" class="form-control" type="text" readonly onclick="selectCustomer()" required>
                     <input name="string2" id="string2" class="form-control" type="hidden" >
                 </div>
             </div>
@@ -40,46 +40,14 @@
             </div>
             <div class="hr-line-dashed"></div>
 
-            <!--
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">产品配件法兰：</label>
-                <div class="col-sm-8">
-                    <input name="productRef1Id" class="form-control" type="hidden" >
-                    <input name="productRef1Name" class="form-control" type="text" readonly onclick="selectProductRef1()">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">产品配件法兰数量：</label>
-                <div class="col-sm-8">
-                    <input name="productRef1Num" class="form-control" type="text">
 
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">产品配件螺栓：</label>
-                <div class="col-sm-8">
-                    <input name="productRef2Id" class="form-control" type="hidden" >
-                    <input name="productRef2Name" class="form-control" type="text" readonly onclick="selectProductRef2()">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">产品配件螺栓数量：</label>
-                <div class="col-sm-8">
-                    <input name="productRef2Num" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">执行器：</label>
-                <div class="col-sm-8">
-                    <input name="actuatorId" class="form-control" type="hidden" >
-                    <input name="actuatorName" class="form-control" type="text" readonly onclick="selectActuator()">
-                </div>
-            </div>
-            -->
             <div class="form-group">    
                 <label class="col-sm-3 control-label">特殊费用：</label>
-                <div class="col-sm-8">
-                    <input name="specialExpenses" class="form-control" type="text">
+                <div class="col-sm-2">
+                    <input name="specialExpenses" id="specialExpenses" onchange="totalSumPrice()" class="form-control" type="text">
+                </div>
+                <div class="col-sm-6">
+                    <input name="string4" id="string4" class="form-control" type="text" placeholder="特殊费用说明">
                 </div>
             </div>
             <div class="form-group">    
@@ -117,16 +85,83 @@
                 </div>
             </div>
 
+            <div class="form-group">
+                <label class="col-sm-3 control-label">产品合计金额：</label>
+                <div class="col-sm-2">
+                    <input name="productTotalPrice" id="productTotalPrice" class="form-control" type="text" readonly>
+                </div>
+                <label class="col-sm-3 control-label">总金额：</label>
+                <div class="col-sm-2">
+                    <input name="totalPrice" id="totalPrice" class="form-control" type="text" readonly>
+                </div>
+            </div>
+
         </form>
     </div>
     <th:block th:include="include :: footer" />
     <script type="text/javascript">
+
+
         var prefix = ctx + "fmis/quotation"
+
+        var icon = "<i class='fa fa-times-circle'></i> ";
         $("#form-quotation-add").validate({
-            focusCleanup: true
+            rules: {
+                string1: {
+                    required: true,
+                    minlength: 1,
+                    remote: {
+                        url: prefix + "/checkQuotationNo",
+                        type: "post",
+                        dataType: "json",
+                        data: {
+                            string1 : function() {
+                                return $.common.trim($("#string1").val());
+                            },
+                            string3 : 0
+                        },
+                        dataFilter: function(data, type) {
+                            return $.validate.unique(data);
+                        }
+                    }
+                },
+                customerName:{
+                    required: true,
+                    minlength: 1,
+                    remote: {
+                        url: prefix + "/checkCustomer",
+                        type: "post",
+                        dataType: "json",
+                        data: {
+                            string2 : function() {
+                                return $.common.trim($("#string2").val());
+                            },
+                            string3 : 0
+                        },
+                        dataFilter: function(data, type) {
+                            return $.validate.unique(data);
+                        }
+                    }
+                }
+
+            },
+            messages: {
+                string1: {
+                    required: icon + "请输入报价单号",
+                    minlength: icon + "请输入报价单号",
+                    remote: icon + "报价单号重复",
+                },
+                customerName: {
+                    required: icon + "请选择客户",
+                    minlength: icon + "请选择客户",
+                    remote: icon + "客户重复"
+                }
+            }
         });
 
         function submitHandler() {
+            var vali = $.validate.form();
+            console.log("vali==" + vali);
             if ($.validate.form()) {
                 var dataObj = $('#form-quotation-add').serializeArray();
                 //计算是否正常
@@ -160,23 +195,35 @@
                     productArray.push(productObj);
                 }
                 dataObj.push({"name": "string10", "value": JSON.stringify(productArray)});
+                var totalPrice = $("#totalPrice").val();
+                dataObj.push({"name": "string9", "value": totalPrice});
                 $.operate.save(prefix + "/add", dataObj);
             }
         }
 
+
+
         function selectProduct() {
             var url = prefix + "/selectProduct";
-            $.modal.open("关联产品", url);
+
+            var widthNum = this.innerWidth - 50;
+            var heigthNum = this.innerHeight - 50;
+
+            $.modal.open("关联产品", url,widthNum, heigthNum);
         }
 
         function selectCustomer() {
+            var widthNum = this.innerWidth - 50;
+            var heigthNum = this.innerHeight - 50;
             var url = prefix + "/selectCustomer";
-            $.modal.open("关联客户", url);
+            $.modal.open("关联客户", url,widthNum, heigthNum);
         }
 
         function selectActuator(productId) {
+            var widthNum = this.innerWidth - 50;
+            var heigthNum = this.innerHeight - 50;
             var url = prefix + "/selectActuator?productId=" + productId;
-            $.modal.open("关联执行器", url);
+            $.modal.open("关联执行器", url,widthNum, heigthNum);
         }
 
         function selectProductRef1(productId) {
@@ -184,17 +231,117 @@
                 $.modal.alertWarning('请选择产品');
                 return;
             }
+            var widthNum = this.innerWidth - 50;
+            var heigthNum = this.innerHeight - 50;
             var url = prefix + "/selectProductRef1?productId=" + productId;
-            $.modal.open("关联产品配件法兰", url);
+            $.modal.open("关联产品配件法兰", url,widthNum, heigthNum);
         }
         function selectProductRef2(productId) {
             if (productId == null || productId == "") {
                 $.modal.alertWarning('请选择产品');
                 return;
             }
+            var widthNum = this.innerWidth - 50;
+            var heigthNum = this.innerHeight - 50;
             var url = prefix + "/selectProductRef2?productId=" + productId;
-            $.modal.open("关联产品配件螺栓", url);
+            $.modal.open("关联产品配件螺栓", url,widthNum, heigthNum);
         }
+
+
+
+        function isEmpty(v) {
+            return $.common.isEmpty(v);
+        }
+
+
+
+        /**
+         * 计算总额
+         */
+        function sumPrice (productId) {
+            getProductSum(productId);
+            totalSumPrice();
+        }
+
+        function getProductSum (productId) {
+            //产品数量 产品系数 价格
+            var productNum = $("#productNum_" + productId).val();
+            productNum = isEmpty(productNum) == true ? 0 : parseFloat(productNum);
+            var productCoefficient = $("#productCoefficient_" + productId).val();
+            productCoefficient = isEmpty(productCoefficient) == true ? 0 : parseFloat(productCoefficient);
+
+            var productPrice = $("#productPrice_" + productId).val();
+            productPrice = isEmpty(productPrice) == true ? 0 : parseFloat(productPrice);
+
+            //法兰
+            var productRef1Num = $("#productRef1Num_" + productId).val();
+            productRef1Num = isEmpty(productRef1Num) == true ? 0 : parseFloat(productRef1Num);
+            var productRef1Coefficient = $("#productRef1Coefficient_" + productId).val();
+            productRef1Coefficient = isEmpty(productRef1Coefficient) == true ? 0 : parseFloat(productRef1Coefficient);
+            var productRef1Price = $("#productRef1Price_" + productId).val();
+            productRef1Price = isEmpty(productRef1Price) == true ? 0 : parseFloat(productRef1Price);
+
+            //螺栓
+            var productRef2Num = $("#productRef2Num_" + productId).val();
+            productRef2Num = isEmpty(productRef2Num) == true ? 0 : productRef2Num;
+            var productRef2Coefficient = $("#productRef2Coefficient_" + productId).val();
+            productRef2Coefficient = isEmpty(productRef2Coefficient) == true ? 0 : parseFloat(productRef2Coefficient);
+            var productRef2Price = $("#productRef2Price_" + productId).val();
+            productRef2Price = isEmpty(productRef2Price) == true ? 0 : parseFloat(productRef2Price);
+
+
+            //执行器
+            var actuatorNum = $("#actuatorNum_" + productId).val();
+            actuatorNum = isEmpty(actuatorNum) == true ? 0 : actuatorNum;
+            var actuatorCoefficient = $("#actuatorCoefficient_" + productId).val();
+            actuatorCoefficient = isEmpty(actuatorCoefficient) == true ? 0 : parseFloat(actuatorCoefficient);
+            var actuatorPrice = $("#actuatorPrice_" + productId).val();
+            actuatorPrice = isEmpty(actuatorPrice) == true ? 0 : parseFloat(actuatorPrice);
+
+            //合计单价 unitPrice
+            $("#unitPrice_" + productId).val(parseFloat(parseFloat(productPrice) + parseFloat(productRef1Price)  + parseFloat(productRef2Price) + parseFloat(actuatorPrice)).toFixed(4));
+            //合计总额 totalSum
+            var productSum = parseFloat(productNum * productPrice * productCoefficient).toFixed(4);
+            var productRef1Sum = parseFloat(productRef1Num * productRef1Price * productRef1Coefficient).toFixed(4);
+            var productRef2Sum = parseFloat(productRef2Num * productRef2Price * productRef2Coefficient).toFixed(4);
+            var actuatorSum = parseFloat(actuatorNum * actuatorCoefficient * actuatorPrice).toFixed(4);
+            var totalSum = parseFloat(parseFloat(productSum) + parseFloat(productRef1Sum) + parseFloat(productRef2Sum) + parseFloat(actuatorSum)).toFixed(4);
+            $("#totalSum_" + productId).val(totalSum);
+
+            return totalSum;
+        }
+
+        function FloatAdd(arg1,arg2){
+            var r1,r2,m;
+            try{r1=arg1.toString().split(".")[1].length}catch(e){r1=0}
+            try{r2=arg2.toString().split(".")[1].length}catch(e){r2=0}
+            m=Math.pow(10,Math.max(r1,r2));
+            return (arg1*m+arg2*m)/m;
+        }
+
+        function totalSumPrice () {
+            //产品合计金额
+            var productIds = $("#productIds").val();
+            var productIdsS = productIds.split(",");
+            var productTotalPrice = 0;
+            var totalPrice = 0;
+            for (var i = 0; i < productIdsS.length; i++) {
+                var productId = productIdsS[i];
+                if (isEmpty(productId)) {
+                    continue;
+                }
+                var totalSum = getProductSum(productId);
+                productTotalPrice = FloatAdd(productTotalPrice,totalSum).toFixed(4);
+            }
+            var specialExpenses = $("#specialExpenses").val();
+            if (isEmpty(specialExpenses)) {
+                specialExpenses = 0;
+            }
+            totalPrice = parseFloat(productTotalPrice) + parseFloat(specialExpenses);
+            $("#productTotalPrice").val(parseFloat(productTotalPrice).toFixed(4));
+            $("#totalPrice").val(parseFloat(totalPrice).toFixed(4));
+        }
+
     </script>
 </body>
 </html>

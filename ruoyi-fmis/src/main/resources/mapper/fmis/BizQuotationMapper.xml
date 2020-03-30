@@ -49,6 +49,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectBizQuotationVo"/>
         <where>  
             <if test="freight != null "> and freight = #{freight}</if>
+            <if test="string1 != null "> and string1 = #{string1}</if>
         </where>
     </select>
 
@@ -119,18 +120,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <!-- 总经理  查看 副总同意的  -->
             <if test="string2 == 5 ">
                 <if test="string6 == 0 ">
-                    q.flow_status in ('4','5','-5') and q.normal_flag='1'
+                    q.flow_status in ('4','5','-5')
                 </if>
                 <if test="string6 == 1 ">
-                    q.flow_status in ('4') and q.normal_flag='1'
+                    q.flow_status in ('4')
                 </if>
                 <if test="string6 == 2 ">
-                    q.flow_status in ('5','-5') and q.normal_flag='1'
+                    q.flow_status in ('5','-5')
                 </if>
 
                 ${params.dataScope}
+
             </if>
         </where>
+        order by q.create_time desc
     </select>
     
     <select id="selectBizQuotationById" parameterType="Long" resultMap="BizQuotationResult">

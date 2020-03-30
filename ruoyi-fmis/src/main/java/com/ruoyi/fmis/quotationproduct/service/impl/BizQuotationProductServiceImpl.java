@@ -2,12 +2,15 @@ package com.ruoyi.fmis.quotationproduct.service.impl;
 
 import java.util.List;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.fmis.product.domain.BizProduct;
+import com.ruoyi.fmis.product.mapper.BizProductMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.fmis.quotationproduct.mapper.BizQuotationProductMapper;
 import com.ruoyi.fmis.quotationproduct.domain.BizQuotationProduct;
 import com.ruoyi.fmis.quotationproduct.service.IBizQuotationProductService;
 import com.ruoyi.common.core.text.Convert;
+import org.springframework.util.CollectionUtils;
 
 /**
  * 报价单产品Service业务层处理
@@ -19,6 +22,9 @@ import com.ruoyi.common.core.text.Convert;
 public class BizQuotationProductServiceImpl implements IBizQuotationProductService {
     @Autowired
     private BizQuotationProductMapper bizQuotationProductMapper;
+
+    @Autowired
+    private BizProductMapper bizProductMapper;
 
     /**
      * 查询报价单产品
@@ -44,7 +50,18 @@ public class BizQuotationProductServiceImpl implements IBizQuotationProductServi
 
     @Override
     public List<BizQuotationProduct> selectBizQuotationProductDictList(BizQuotationProduct bizQuotationProduct) {
-        return bizQuotationProductMapper.selectBizQuotationProductDictList(bizQuotationProduct);
+        List<BizQuotationProduct> bizQuotationProducts = bizQuotationProductMapper.selectBizQuotationProductDictList(bizQuotationProduct);
+
+        for (BizQuotationProduct bizQuotationProduct1 : bizQuotationProducts) {
+            BizProduct bizProduct = new BizProduct();
+            bizProduct.setProductId(bizQuotationProduct1.getProductId());
+            List<BizProduct> bizProducts = bizProductMapper.selectBizProductList(bizProduct);
+            if (!CollectionUtils.isEmpty(bizProducts)) {
+                bizQuotationProduct1.setBizProduct(bizProducts.get(0));
+            }
+        }
+
+        return bizQuotationProducts;
     }
 
     /**

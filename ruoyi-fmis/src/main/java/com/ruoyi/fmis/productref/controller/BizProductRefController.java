@@ -97,6 +97,12 @@ public class BizProductRefController extends BaseController {
         }
         bizProductRef.setType(refType);
 
+        //如果是螺栓的话 搜索全部
+        if ("2".equals(refType)) {
+            bizProductRef = new BizProductRef();
+            bizProductRef.setType(refType);
+        }
+
         startPage();
         List<BizProductRef> list = bizProductRefService.selectBizProductRefList(bizProductRef);
         return getDataTable(list);

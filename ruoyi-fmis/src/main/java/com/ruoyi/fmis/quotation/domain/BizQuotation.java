@@ -64,7 +64,7 @@ public class BizQuotation extends BaseEntity {
     @Excel(name = "报备项目 默认非项目")
     private String reportProject;
 
-    /** 流程实例ID */
+    /** 2销售经理审批结束 3 区域经理审批结束 4副总审批结束 5 老总审批结束 */
     private String normalFlag;
 
     /** 申请人 */
@@ -80,7 +80,7 @@ public class BizQuotation extends BaseEntity {
     /** 备用3 */
     private String string3;
 
-    /** 备用4 */
+    /** 备用4 特殊费用说明*/
     private String string4;
 
     /** 备用5 */

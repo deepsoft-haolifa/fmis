@@ -2,8 +2,12 @@ package com.ruoyi.fmis.customer.controller;
 
 import java.util.List;
 
+import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.process.user.service.IActIdUserService;
+import com.ruoyi.system.domain.SysDept;
 import com.ruoyi.system.domain.SysUser;
+import com.ruoyi.system.service.ISysDeptService;
 import com.ruoyi.system.service.ISysUserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +47,9 @@ public class BizCustomerController extends BaseController {
     @Autowired
     private IBizCustomerService bizCustomerService;
 
+    @Autowired
+    private ISysDeptService sysDeptService;
+
     @RequiresPermissions("fmis:customer:view")
     @GetMapping()
     public String customer() {
@@ -69,6 +76,19 @@ public class BizCustomerController extends BaseController {
         return getDataTable(list);
     }
 
+    public String getBh () {
+        String areCode = "";
+        Long deptId = ShiroUtils.getSysUser().getDeptId();
+        SysDept sysDept = sysDeptService.selectDeptById(deptId);
+        if (sysDept != null) {
+            SysDept sysDept1 = sysDeptService.selectDeptById(sysDept.getParentId());
+            if (sysDept1 != null) {
+                areCode = sysDept1.getAreCode();
+            }
+        }
+        return areCode;
+    }
+
     /**
      * 导出客户列表
      */
@@ -87,6 +107,7 @@ public class BizCustomerController extends BaseController {
     @GetMapping("/add")
     public String add(ModelMap mmap) {
         mmap.put("users", userService.selectUserList(new SysUser()));
+        mmap.put("areaCode",getBh());
         return prefix + "/add";
     }
 

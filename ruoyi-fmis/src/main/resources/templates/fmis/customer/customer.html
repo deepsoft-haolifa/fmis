@@ -68,6 +68,7 @@
         var editFlag = [[${@permission.hasPermi('fmis:customer:edit')}]];
         var removeFlag = [[${@permission.hasPermi('fmis:customer:remove')}]];
         var areaDatas = [[${@dict.getType('customer_area')}]];
+        var recordTypeDatas = [[${@dict.getType('customer_record_type')}]];
         var prefix = ctx + "fmis/customer";
 
         $(function() {
@@ -89,6 +90,10 @@
                 {
                     field : 'recordDate', 
                     title : '备案日期'
+                },
+                {
+                    field : 'areaCode',
+                    title : '客户区域代码'
                 },
                 {
                     field : 'companyCode', 
@@ -114,8 +119,35 @@
                     title : '客户名称'
                 },
                 {
-                    field : 'projectAme', 
-                    title : '项目名称'
+                    field : 'source',
+                    title : '客户来源'
+                },
+                {
+                    field : 'recordType',
+                    title : '备案类别',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(recordTypeDatas, value);
+                    }
+                },
+                {
+                    field : 'recordNum',
+                    title : '备案号'
+                },
+                {
+                    field : 'telephone',
+                    title : '座机电话'
+                },
+                {
+                    field : 'fax',
+                    title : '联系传真'
+                },
+                {
+                    field : 'deptName',
+                    title : '隶属部门'
+                },
+                {
+                field : 'projectAme',
+                title : '项目名称'
                 },
                 {
                     field : 'contactName', 

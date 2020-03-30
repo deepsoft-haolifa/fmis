@@ -27,14 +27,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createTime"    column="create_time"    />
         <result property="updateBy"    column="update_by"    />
         <result property="updateTime"    column="update_time"    />
+
+        <result property="areaCode"    column="area_code"    />
+        <result property="source"    column="source"    />
+        <result property="recordType"    column="record_type"    />
+        <result property="recordNum"    column="record_num"    />
+        <result property="telephone"    column="telephone"    />
+        <result property="fax"    column="fax"    />
+        <result property="companyAddress"    column="company_address"    />
+        <result property="deptId"    column="dept_id"    />
     </resultMap>
 
     <sql id="selectBizCustomerVo">
-        select customer_id, record_date, company_code, area, record_code, owner_user_id, name, project_ame, contact_name, contact_position, contact_phone, contact_email, brand, info, product_info, remark, status, del_flag, create_by, create_time, update_by, update_time from biz_customer
+        select customer_id, record_date, company_code, area, record_code, owner_user_id, name, project_ame, contact_name, contact_position, contact_phone, contact_email, brand, info, product_info, remark, status, del_flag, create_by, create_time, update_by, update_time,area_code,source,record_type,record_num,telephone,fax,company_address,dept_id from biz_customer
     </sql>
 
     <sql id="selectBizCustomerDictVo">
-        select c.customer_id, c.record_date, c.company_code, c.area, c.record_code, u.user_name as owner_user_id, c.name, c.project_ame, c.contact_name, c.contact_position, c.contact_phone, c.contact_email, c.brand, c.info, c.product_info, c.remark, c.status, c.del_flag, c.create_by, c.create_time, c.update_by, c.update_time from biz_customer c
+        select c.customer_id, c.record_date, c.company_code, c.area, c.record_code, u.user_name as owner_user_id, c.name, c.project_ame, c.contact_name, c.contact_position, c.contact_phone, c.contact_email, c.brand, c.info, c.product_info, c.remark, c.status, c.del_flag, c.create_by, c.create_time, c.update_by, c.update_time,
+        c.area_code,c.source,c.record_type,c.record_num,c.telephone,c.fax,c.company_address,c.dept_id,dt.dept_name deptName
+        from biz_customer c
         join sys_user u on c.owner_user_id=u.user_id
 
         left join sys_dept dt on u.dept_id=dt.dept_id
@@ -62,6 +73,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="info != null  and info != ''"> and c.info = #{info}</if>
             <if test="productInfo != null  and productInfo != ''"> and c.product_info = #{productInfo}</if>
             <if test="status != null  and status != ''"> and c.status = #{status}</if>
+        order by c.create_time desc
     </select>
     
     <select id="selectBizCustomerById" parameterType="Long" resultMap="BizCustomerResult">
@@ -93,6 +105,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null ">create_time,</if>
             <if test="updateBy != null  and updateBy != ''">update_by,</if>
             <if test="updateTime != null ">update_time,</if>
+
+            <if test="areaCode != null ">area_code,</if>
+            <if test="source != null ">source,</if>
+            <if test="recordType != null ">record_type,</if>
+            <if test="recordNum != null ">record_num,</if>
+            <if test="telephone != null ">telephone,</if>
+            <if test="fax != null ">fax,</if>
+            <if test="companyAddress != null ">company_address,</if>
+            <if test="deptId != null ">dept_id,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="recordDate != null ">#{recordDate},</if>
@@ -116,6 +137,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null ">#{createTime},</if>
             <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
             <if test="updateTime != null ">#{updateTime},</if>
+
+            <if test="areaCode != null ">#{areaCode},</if>
+            <if test="source != null ">#{source},</if>
+            <if test="recordType != null ">#{recordType},</if>
+            <if test="recordNum != null ">#{recordNum},</if>
+            <if test="telephone != null ">#{telephone},</if>
+            <if test="fax != null ">#{fax},</if>
+            <if test="companyAddress != null ">#{companyAddress},</if>
+            <if test="deptId != null ">#{deptId},</if>
          </trim>
     </insert>
 
@@ -143,6 +173,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null ">create_time = #{createTime},</if>
             <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
             <if test="updateTime != null ">update_time = #{updateTime},</if>
+
+            <if test="areaCode != null ">area_code = #{areaCode},</if>
+            <if test="source != null ">source = #{source},</if>
+            <if test="recordType != null ">record_type = #{recordType},</if>
+            <if test="recordNum != null ">record_num = #{recordNum},</if>
+            <if test="telephone != null ">telephone = #{telephone},</if>
+            <if test="fax != null ">fax = #{fax},</if>
+            <if test="companyAddress != null ">company_address = #{companyAddress},</if>
+            <if test="deptId != null ">dept_id = #{deptId},</if>
         </trim>
         where customer_id = #{customerId}
     </update>

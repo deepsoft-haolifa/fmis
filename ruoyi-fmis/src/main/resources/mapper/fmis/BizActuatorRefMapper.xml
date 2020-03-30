@@ -53,6 +53,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="driveType != null  and driveType != ''"> and ar.drive_type = #{driveType} </if>
             <if test="valveType != null  and valveType != ''"> and ar.valve_type = #{valveType}</if>
         </where>
+        order by ar.create_time desc
     </select>
     
     <select id="selectBizActuatorRefById" parameterType="Long" resultMap="BizActuatorRefResult">

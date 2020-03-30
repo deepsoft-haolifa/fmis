@@ -50,4 +50,9 @@ public class BizConstants {
      * 流程上报状态1
      */
     public static final String FLOW_STATUS_1 = "1";
+
+    //验证 存在
+    public static final String VALIDATE_IS_EXIST = "1";
+    //验证不存在
+    public static final String VALIDATE_IS_NOT_EXIST = "0";
 }

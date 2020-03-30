@@ -16,7 +16,7 @@
                             </li>
 
                             <li>
-                                <p>系列：</p>
+                                <p>类别：</p>
                                 <select name="series" id="series" class="form-control select2-multiple" > <!--multiple-->
                                     <option value="">请选择</option>
                                     <option th:each="series:${seriesSelect}" th:value="${series.dictId}" th:text="${series.name} + ' ' + ${series.code}" ></option>
@@ -125,7 +125,7 @@
                 },
                 {
                     field : 'series', 
-                    title : '系列'
+                    title : '类别'
                 },
                 {
                     field : 'model', 

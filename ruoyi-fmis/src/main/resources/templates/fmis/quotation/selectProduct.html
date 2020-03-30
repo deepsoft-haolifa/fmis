@@ -14,6 +14,54 @@
                                 <p>产品名称：</p>
                                 <input type="text" name="name"/>
                             </li>
+
+                            <li>
+                                <p>类别：</p>
+                                <select name="series" id="series" class="form-control select2-multiple" > <!--multiple-->
+                                    <option value="">请选择</option>
+                                    <option th:each="series:${seriesSelect}" th:value="${series.dictId}" th:text="${series.name} + ' ' + ${series.code}" ></option>
+                                </select>
+                            </li>
+
+                            <li>
+                                <p>产品型号：</p>
+                                <input name="model"  class="form-control" type="text">
+                            </li>
+
+                            <li>
+                                <p>规格：</p>
+                                <select name="specifications" id="specifications" class="form-control select2-multiple" ><option value="">请选择</option></select>
+                            </li>
+
+                            <li>
+                                <p>公称压力：</p>
+                                <select name="nominalPressure" id="nominalPressure" class="form-control select2-multiple" ><option value="">请选择</option></select>
+                            </li>
+
+                            <li>
+                                <p>结构形式：</p>
+                                <select name="structuralStyle" id="structuralStyle" class="form-control select2-multiple" ><option value="">请选择</option></select>
+                            </li>
+
+                            <li>
+                                <p>阀体材质：</p>
+                                <select name="valvebodyMaterial" id="valvebodyMaterial" class="form-control select2-multiple" ><option value="">请选择</option></select>
+                            </li>
+
+                            <li>
+                                <p>密封材质：</p>
+                                <select name="sealingMaterial" id="sealingMaterial" class="form-control select2-multiple" ><option value="">请选择</option></select>
+                            </li>
+
+                            <li>
+                                <p>阀芯材质：</p>
+                                <select name="valveElement" id="valveElement" class="form-control select2-multiple" ><option value="">请选择</option></select>
+                            </li>
+
+                            <li>
+                                <p>驱动形式：</p>
+                                <select name="driveForm" id="driveForm" class="form-control select2-multiple" ><option value="">请选择</option></select>
+                            </li>
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
                                 <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
@@ -49,10 +97,18 @@
 
                  </div>
                  <div class='col-sm-2'>
-                     <input class='form-control' type='text' id="productNum" name='productNum' placeholder='数量' />
+                     <input class='form-control' type='text' id="productModel" name='productModel' value="productModelShowText" readonly placeholder='产品型号' />
                  </div>
                  <div class='col-sm-2'>
-                     <input class='form-control' type='text' id="productCoefficient" name='productCoefficient' placeholder='系数' />
+                     <input class='form-control' type='text' id="productNum" onchange="sumPrice(paramterProductId)" name='productNum' placeholder='数量' />
+                 </div>
+
+                 <div class='col-sm-1'>
+                     <input class='form-control' type='text' id="productPrice" name="productPrice" value="productValuePrice" placeholder='单价' readonly/>
+                 </div>
+
+                 <div class='col-sm-2'>
+                     <input class='form-control' type='text' id="productCoefficient" onchange="sumPrice(paramterProductId)" name='productCoefficient' placeholder='系数' />
                  </div>
              </div>
 
@@ -62,11 +118,28 @@
                      <input name='productRef1Id' id="productRef1Id" class='form-control' type='hidden' >
                      <input name='productRef1Name' id="productRef1Name" class='form-control' type='text' readonly onclick='selectProductRef1(paramterProductId)'>
                  </div>
-                 <div class='col-sm-2'>
-                     <input class='form-control' type='text' id="productRef1Num" name='productRef1Num' placeholder='数量' />
+
+                 <div class='col-sm-1'>
+                     <input class='form-control' type='text' id="productRef1Model" name='productRef1Model'  placeholder='型号' readonly/>
                  </div>
-                 <div class='col-sm-2'>
-                     <input name='productRef1Coefficient' id="productRef1Coefficient" class='form-control' type='text' placeholder='系数'>
+                 <div class='col-sm-1'>
+                     <input class='form-control' type='text' id="productRef1Specifications" name="productRef1Specifications"   placeholder='规格' readonly/>
+                 </div>
+                 <div class='col-sm-1'>
+                     <input class='form-control' type='text' id="productRef1ValvebodyMaterial" name="productRef1ValvebodyMaterial"  placeholder='材质' readonly/>
+                 </div>
+
+                 <div class='col-sm-1'>
+                     <input class='form-control' type='text' id="productRef1Num" onchange="sumPrice(paramterProductId)" name='productRef1Num' placeholder='数量' />
+                 </div>
+
+
+                 <div class='col-sm-1'>
+                     <input class='form-control' type='text' id="productRef1Price" name="productRef1Price"  placeholder='单价' readonly/>
+                 </div>
+
+                 <div class='col-sm-1'>
+                     <input name='productRef1Coefficient' id="productRef1Coefficient" onchange="sumPrice(paramterProductId)" class='form-control' type='text' placeholder='系数'>
                  </div>
              </div>
 
@@ -76,11 +149,22 @@
                      <input name='productRef2Id' id="productRef2Id" class='form-control' type='hidden' >
                      <input name='productRef2Name' id="productRef2Name" class='form-control' type='text' readonly onclick='selectProductRef2(paramterProductId)'>
                  </div>
-                 <div class='col-sm-2'>
-                     <input class='form-control' type='text' id='productRef2Num' name='productRef2Num' placeholder='数量' />
+                 <div class='col-sm-1'>
+                     <input class='form-control' type='text' id="productRef2Model" name='productRef2Model'  placeholder='型号' readonly/>
+                 </div>
+                 <div class='col-sm-1'>
+                     <input class='form-control' type='text' id="productRef2ValvebodyMaterial" name="productRef2ValvebodyMaterial"  placeholder='材质' readonly/>
                  </div>
                  <div class='col-sm-2'>
-                     <input name='productRef2Coefficient' id="productRef2Coefficient" class='form-control' type='text' placeholder='系数'>
+                     <input class='form-control' type='text' id='productRef2Num' onchange="sumPrice(paramterProductId)" name='productRef2Num' placeholder='数量' />
+                 </div>
+
+                 <div class='col-sm-1'>
+                     <input class='form-control' type='text' id="productRef2Price" name="productRef2Price"  placeholder='单价' readonly/>
+                 </div>
+
+                 <div class='col-sm-2'>
+                     <input name='productRef2Coefficient' id="productRef2Coefficient" onchange="sumPrice(paramterProductId)" class='form-control' type='text' placeholder='系数'>
                  </div>
              </div>
 
@@ -90,13 +174,43 @@
                      <input name='actuatorId' id="actuatorId" class='form-control' type='hidden' >
                      <input name='actuatorName' id="actuatorName" class='form-control' type='text' readonly onclick='selectActuator(paramterProductId)'>
                  </div>
-                 <div class='col-sm-2'>
-                     <input class='form-control' type='text' id='actuatorNum' name='actuatorNum' placeholder='数量' />
+
+                 <div class='col-sm-1'>
+                     <input class='form-control' type='text' id="brand" name='brand'  placeholder='品牌' readonly/>
                  </div>
+                 <div class='col-sm-1'>
+                     <input class='form-control' type='text' id="string1" name="string1"  placeholder='型号' readonly/>
+                 </div>
+
                  <div class='col-sm-2'>
-                     <input name='actuatorCoefficient' id="actuatorCoefficient" class='form-control' type='text' placeholder='系数'>
+                     <input class='form-control' type='text' id='actuatorNum' onchange="sumPrice(paramterProductId)" name='actuatorNum' placeholder='数量' />
+                 </div>
+
+                 <div class='col-sm-1'>
+                     <input class='form-control' type='text' id="actuatorPrice" name="actuatorPrice"  placeholder='单价' readonly/>
+                 </div>
+
+                 <div class='col-sm-2'>
+                     <input name='actuatorCoefficient' id="actuatorCoefficient" onchange="sumPrice(paramterProductId)" class='form-control' type='text' placeholder='系数'>
                  </div>
              </div>
+
+             <div class='form-group'>
+                 <label class='control-label col-sm-3'>合计单价：</label>
+
+
+                 <div class='col-sm-2'>
+                     <input class='form-control' type='text' id="unitPrice" name='unitPrice'  placeholder='合计单价' readonly/>
+                 </div>
+
+                 <label class='control-label col-sm-3'>合计总额：</label>
+
+                 <div class='col-sm-2'>
+                     <input class='form-control' type='text' id='totalSum' name='totalSum' placeholder='合计总额' readonly/>
+                 </div>
+
+             </div>
+
 
          </div>
          <div class="hr-line-dashed"></div>
@@ -130,7 +244,7 @@
                 },
                 {
                     field : 'series', 
-                    title : '系列'
+                    title : '类别'
                 },
                 {
                     field : 'model', 
@@ -186,16 +300,6 @@
                 },{
                     field : 'updateTime',
                     title : '修改时间'
-                },
-                {
-                    title: '操作',
-                    align: 'center',
-                    formatter: function(value, row, index) {
-                        var actions = [];
-                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.productId + '\')"><i class="fa fa-edit"></i> 编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.productId + '\')"><i class="fa fa-remove"></i> 删除</a>');
-                        return actions.join('');
-                    }
                 }]
             };
             $.table.init(options);
@@ -217,7 +321,7 @@
                     var names = $.table.selectColumns("name");
 
                     var htmlStr = "";
-                    parent.$('#productDiv').append(htmlStr);
+                    parent.$('#productDiv').html(htmlStr);
                     var productIdsStr = "";
                     var productNamesStr = "";
                     for(var i = 0; i < productIds.length; i++) {
@@ -226,10 +330,15 @@
                         var productName = names[i];
                         console.log("productId=" + productId + " name=" + productName);
 
+                        prodictDivHtml = prodictDivHtml.replace(/productPrice/g,"productPrice_" + productId);
+                        prodictDivHtml = prodictDivHtml.replace(/productValuePrice/g,$.table.selectColumns("price")[i]);
+
+
+
                         prodictDivHtml = prodictDivHtml.replace(/productName/g,"productName_" + productId);
                         prodictDivHtml = prodictDivHtml.replace(/productShowText/g,productName);
 
-                        prodictDivHtml = prodictDivHtml.replace(/string1/g,"string1_" + productId);
+
 
                         prodictDivHtml = prodictDivHtml.replace(/string3/g,"string3_" + productId);
 
@@ -258,6 +367,27 @@
                         prodictDivHtml = prodictDivHtml.replace(/actuatorNum/g,"actuatorNum_" + productId);
                         prodictDivHtml = prodictDivHtml.replace(/actuatorCoefficient/g,"actuatorCoefficient_" + productId);
 
+
+                        prodictDivHtml = prodictDivHtml.replace(/productModelShowText/g,$.table.selectColumns("model")[i]);
+
+                        prodictDivHtml = prodictDivHtml.replace(/productRef1Model/g,"productRef1Model_" + productId);
+                        prodictDivHtml = prodictDivHtml.replace(/productRef1Specifications/g,"productRef1Specifications_" + productId);
+                        prodictDivHtml = prodictDivHtml.replace(/productRef1ValvebodyMaterial/g,"productRef1ValvebodyMaterial_" + productId);
+                        prodictDivHtml = prodictDivHtml.replace(/productRef1Price/g,"productRef1Price_" + productId);
+
+                        prodictDivHtml = prodictDivHtml.replace(/productRef2Model/g,"productRef2Model_" + productId);
+                        prodictDivHtml = prodictDivHtml.replace(/productRef2ValvebodyMaterial/g,"productRef2ValvebodyMaterial_" + productId);
+                        prodictDivHtml = prodictDivHtml.replace(/productRef2Price/g,"productRef2Price_" + productId);
+
+                        prodictDivHtml = prodictDivHtml.replace(/brand/g,"brand_" + productId);
+                        prodictDivHtml = prodictDivHtml.replace(/string1/g,"string1_" + productId);
+                        prodictDivHtml = prodictDivHtml.replace(/actuatorPrice/g,"actuatorPrice_" + productId);
+
+                        prodictDivHtml = prodictDivHtml.replace(/unitPrice/g,"unitPrice_" + productId);
+                        prodictDivHtml = prodictDivHtml.replace(/totalSum/g,"totalSum_" + productId);
+
+
+
                         prodictDivHtml = prodictDivHtml.replace(/productHtml/g,productName);
 
                         htmlStr += prodictDivHtml;
@@ -278,6 +408,64 @@
             );
             // $.modal.close();
             // $.operate.save(prefix + "/selectAll", data);
+        }
+
+        $("#series").change(function (){
+            var series = $("#series").val();
+            console.log("series=" + series);
+            if (series == null || series == "请选择") {
+                $("#specifications").html("");
+                $("#nominalPressure").html("");
+                $("#connectionType").html("");
+                $("#sealingMaterial").html("");
+                $("#valveElement").html("");
+                $("#driveForm").html("");
+                $("#valvebodyMaterial").html("");
+                $("#structuralStyle").html("");
+                return;
+            }
+            var prefixProduct = ctx + "fmis/product";
+            $.ajax({
+                url:prefixProduct + "/findProductTypeDict",
+                type : "post",
+                data : {"dictId" : series},
+                success : function (data) {
+                    var specificationArray = data["specification"];
+                    setDataToOption(specificationArray,"specifications");
+                    //nominalPressure
+                    var nominalPressures = data["nominalPressure"];
+                    setDataToOption(nominalPressures,"nominalPressure");
+
+                    var linkTypes = data["linkType"];
+                    setDataToOption(linkTypes,"connectionType");
+
+                    var sealingMaterials = data["sealingMaterial"];
+                    setDataToOption(sealingMaterials,"sealingMaterial");
+
+                    var spoolMaterials = data["spoolMaterial"];//valveElement
+                    setDataToOption(spoolMaterials,"valveElement");
+
+                    var driveModes = data["driveMode"];
+                    setDataToOption(driveModes,"driveForm");
+
+                    //bodyMaterial
+                    var bodyMaterials = data["bodyMaterial"];
+                    setDataToOption(bodyMaterials,"valvebodyMaterial");
+
+                    var structuralStyles = data["structuralStyle"];
+                    setDataToOption(structuralStyles,"structuralStyle");
+
+                }
+            })
+        });
+
+        function setDataToOption(dataArray,selectId) {
+            $("#" + selectId).html("");
+            $("#" + selectId).append("<option value=''>请选择</option>")
+            for (var i = 0; i < dataArray.length; i++) {
+                var specificationObj = dataArray[i];
+                $("#" + selectId).append("<option value='" + specificationObj.dictId + "'>" + specificationObj.name + "</option>")
+            }
         }
     </script>
 </body>

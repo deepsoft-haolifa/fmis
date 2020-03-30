@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" >
 <head>
-    <th:block th:include="include :: header('修改产品关系')" />
+    <th:block th:include="include :: header('修改配件关系')" />
 </head>
 <body class="white-bg">
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
@@ -33,7 +33,7 @@
                 <label class="col-sm-3 control-label">规格：</label>
                 <div class="col-sm-8">
                     <select name="specifications" id="specifications" class="form-control select2-multiple" > <!--multiple-->
-                        <option>请选择</option>
+                        <option value="">请选择</option>
                         <option th:each="specification:${specifications}" th:value="${specification.dictId}" th:text="${specification.name}" th:selected="${specification.flag}"></option>
                     </select>
                 </div>
@@ -42,7 +42,7 @@
                 <label class="col-sm-3 control-label">材质：</label>
                 <div class="col-sm-8">
                     <select name="valvebodyMaterial" id="valvebodyMaterial" class="form-control select2-multiple" > <!--multiple-->
-                        <option>请选择</option>
+                        <option value="">请选择</option>
                         <option th:each="valvebodyMaterial:${valvebodyMaterials}" th:value="${valvebodyMaterial.dictId}" th:text="${valvebodyMaterial.name}" th:selected="${valvebodyMaterial.flag}"></option>
                     </select>
                 </div>
@@ -63,7 +63,7 @@
                 <label class="col-sm-3 control-label">供应商：</label>
                 <div class="col-sm-8">
                     <select name="suppliersId" id="suppliersId" class="form-control select2-multiple" > <!--multiple-->
-                        <option>请选择</option>
+                        <option value="">请选择</option>
                         <option th:each="suppliers:${suppliers}" th:value="${suppliers.suppliersId}" th:text="${suppliers.name} " th:selected="${suppliers.flag}"></option>
                     </select>
                 </div>

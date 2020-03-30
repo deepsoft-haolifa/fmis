@@ -1,5 +1,8 @@
 package com.ruoyi.fmis.customer.domain;
 
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
@@ -12,6 +15,7 @@ import java.util.Date;
  * @author frank
  * @date 2020-03-02
  */
+@Data
 public class BizCustomer extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
@@ -80,6 +84,43 @@ public class BizCustomer extends BaseEntity {
 
     /** 删除标志（0代表存在 2代表删除） */
     private String delFlag;
+
+    @Getter
+    @Setter
+    private String areaCode;
+
+    @Getter
+    @Setter
+    private String source;
+
+    @Getter
+    @Setter
+    private String recordType;
+
+    @Getter
+    @Setter
+    private String recordNum;
+
+    @Getter
+    @Setter
+    private String telephone;
+
+    @Getter
+    @Setter
+    private String fax;
+
+    @Getter
+    @Setter
+    private String companyAddress;
+
+    @Getter
+    @Setter
+    private Long deptId;
+
+    @Getter
+    @Setter
+    private String deptName;
+
 
     public void setCustomerId(Long customerId) {
         this.customerId = customerId;

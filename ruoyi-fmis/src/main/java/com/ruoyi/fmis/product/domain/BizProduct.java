@@ -163,6 +163,24 @@ public class BizProduct extends BaseEntity {
         return structuralStyle;
     }
 
+    @Excel(name = "采购价")
+    private Double procurementPrice;
+    public void setProcurementPrice(Double procurementPrice) {
+        this.procurementPrice = procurementPrice;
+    }
+    public Double getProcurementPrice() {
+        return procurementPrice;
+    }
+
+
+    @Excel(name = "成本价")
+    private Double costPrice;
+    public void setCostPrice(Double costPrice) {
+        this.costPrice = costPrice;
+    }
+    public Double getCostPrice() {
+        return costPrice;
+    }
 
 
 

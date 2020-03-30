@@ -28,10 +28,10 @@
             </div>
 
             <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="fmis:quotation:add">
+                <a class="btn btn-success" onclick="add()" shiro:hasPermission="fmis:quotation:add">
                     <i class="fa fa-plus"></i> 添加
                 </a>
-                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="fmis:quotation:edit">
+                <a class="btn btn-primary single disabled" onclick="edit()" shiro:hasPermission="fmis:quotation:edit">
                     <i class="fa fa-edit"></i> 修改
                 </a>
                 <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="fmis:quotation:remove">
@@ -127,20 +127,30 @@
                             actions = '<font color=#00bfff>销售员已上报</font>';
                         } else if (flowStatus == "2") {
                             actions = '<font color=green>销售经理同意</font>';
+                            if (flowStatus == normalFlag) {
+                                actions = '<font color=green>销售经理同意 已完成</font>';
+                            }
                         } else if (flowStatus == "-2") {
                             actions = '<font color=red>销售经理不同意</font>';
                         } else if (flowStatus == "3") {
                             actions = '<font color=green>区域经理同意</font>';
+                            if (flowStatus == normalFlag) {
+                                actions = '<font color=green>区域经理同意 已完成</font>';
+                            }
                         } else if (flowStatus == "-3") {
                             actions = '<font color=red>区域经理不同意</font>';
-                        } else if (flowStatus == "4" && normalFlag == "0") {
-                            actions = '<font color=green>副总同意 已完成</font>';
-                        }  else if (flowStatus == "4" && normalFlag == "1") {
+                        } else if (flowStatus == "4") {
                             actions = '<font color=green>副总同意</font>';
+                            if (flowStatus == normalFlag) {
+                                actions = '<font color=green>副总同意 已完成</font>';
+                            }
                         } else if (flowStatus == "-4") {
                             actions = '<font color=red>副总不同意</font>';
                         } else if (flowStatus == "5") {
-                            actions = '<font color=green>总经理同意 已完成</font>';
+                            actions = '<font color=green>总经理同意</font>';
+                            if (flowStatus == normalFlag) {
+                                actions = '<font color=green>总经理同意 已完成</font>';
+                            }
                         } else if (flowStatus == "-5") {
                             actions = '<font color=red>总经理不同意</font>';
                         }
@@ -164,22 +174,22 @@
                         var flowStatus = row.flowStatus;
                         var normalFlag = row.normalFlag;
                         if (flowStatus < 1 && roleType == "1") {
-                            actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.quotationId + '\')"><i class="fa fa-edit"></i> 编辑</a>');
+                            actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="edit(\'' + row.quotationId + '\')"><i class="fa fa-edit"></i> 编辑</a>');
                             actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.quotationId + '\')"><i class="fa fa-remove"></i> 删除</a>');
                             actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subReport(\'' + row.quotationId + '\')"><i class="fa fa-remove"></i> 上报</a>');
-                        } else if (roleType == "2" && flowStatus == "1") {
+                        } else if (roleType == "2" && flowStatus == "1" && normalFlag != flowStatus) {
                             //角色=销售经理  状态=销售员上报
                             console.log("-1");
                             actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subExamine(\'' + row.quotationId + '\')"><i class="fa fa-remove"></i> 审批</a>');
-                        }  else if (roleType == "3" && flowStatus == "2") {
+                        }  else if (roleType == "3" && flowStatus == "2"  && normalFlag != flowStatus) {
                             //角色=区域经理  状态=销售经理同意
                             console.log("-2");
                             actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subExamine(\'' + row.quotationId + '\')"><i class="fa fa-remove"></i> 审批</a>');
-                        }  else if (roleType == "4" && flowStatus == "3") {
+                        }  else if (roleType == "4" && flowStatus == "3"  && normalFlag != flowStatus) {
                             //角色=副总  状态=区域经理同意
                             console.log("-3");
                             actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subExamine(\'' + row.quotationId + '\')"><i class="fa fa-remove"></i> 审批</a>');
-                        } else if (roleType == "5" && flowStatus == "4" && normalFlag == "1") {
+                        } else if (roleType == "5" && flowStatus == "4" && normalFlag != flowStatus) {
                             //角色=老总  状态=区域经理同意
                             console.log("-4");
                             actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subExamine(\'' + row.quotationId + '\')"><i class="fa fa-remove"></i> 审批</a>');
@@ -193,6 +203,26 @@
             $.table.init(options);
         });
 
+        function add() {
+            var url = prefix + "/add";
+            $.modal.openFull("增加", url);
+        }
+
+
+        function edit(id) {
+            if($.common.isEmpty(id) && $.table._option.type == table_type.bootstrapTreeTable) {
+                var row = $.bttTable.bootstrapTreeTable('getSelections')[0];
+                if ($.common.isEmpty(row)) {
+                    $.modal.alertWarning("请至少选择一条记录");
+                    return;
+                }
+                var url = $.table._option.updateUrl.replace("{id}", row[$.table._option.uniqueId]);
+                $.modal.openFull("修改" + $.table._option.modalName, url);
+            } else {
+                $.modal.openFull("修改" + $.table._option.modalName, $.operate.editUrl(id));
+            }
+        }
+
         function subReport(quotationId) {
             $.modal.confirm("确定上报该条信息吗？", function() {
                 console.log(quotationId + "--quotationId");
@@ -204,7 +234,7 @@
         }
         function subExamine(quotationId) {
             var url = prefix + "/examineEdit?quotationId=" + quotationId;
-            $.modal.open("审批", url);
+            $.modal.openFull("审批", url);
         }
 
         function viewExamine(quotationId) {

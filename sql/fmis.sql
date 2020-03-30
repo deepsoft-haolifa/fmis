@@ -26,8 +26,15 @@ create table biz_product (
 ) engine=innodb auto_increment=200 comment = '业务产品表';
 
 
+alter table biz_product add column procurement_price decimal(10,5);
+alter table biz_product modify column procurement_price decimal(10,5) comment '采购价';
+
+alter table biz_product add column cost_price decimal(10,5);
+alter table biz_product modify column cost_price decimal(10,5) comment '成本价';
+
 alter table biz_product add column structural_style varchar(30);
 alter table biz_product modify column structural_style varchar(30) comment '结构形式';
+
 -- 菜单 SQL
 insert into sys_menu (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
 values('业务产品', '3', '1', '/fmis/product', 'C', '0', 'fmis:product:view', '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '业务产品菜单');
@@ -83,6 +90,31 @@ create table biz_customer (
   update_time       datetime                                   comment '更新时间',
   primary key (customer_id)
 ) engine=innodb auto_increment=200 comment = '客户表';
+
+
+alter table biz_customer add column area_code varchar(50);
+alter table biz_customer modify column area_code varchar(50) comment '客户区域代码';
+
+alter table biz_customer add column source varchar(50);
+alter table biz_customer modify column source varchar(50) comment '客户来源';
+
+alter table biz_customer add column record_type varchar(50);
+alter table biz_customer modify column record_type varchar(50) comment '备案类别';
+
+alter table biz_customer add column record_num varchar(50);
+alter table biz_customer modify column record_num varchar(50) comment '备案号';
+
+alter table biz_customer add column telephone varchar(50);
+alter table biz_customer modify column telephone varchar(50) comment '座机电话';
+
+alter table biz_customer add column fax varchar(50);
+alter table biz_customer modify column fax varchar(50) comment '联系传真';
+
+alter table biz_customer add column company_address varchar(50);
+alter table biz_customer modify column company_address varchar(50) comment '公司地址';
+
+alter table biz_customer add column dept_id bigint(20);
+alter table biz_customer modify column dept_id bigint(20) comment '机构ID，备用';
 
 -- 菜单 SQL
 insert into sys_menu (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
@@ -384,7 +416,7 @@ create table biz_quotation (
   lead_time         varchar(50)     default ''                 comment '供货周期',
   report_project        varchar(50)          default '非项目'	comment '报备项目 默认非项目',
 
-  normal_flag char(1)         default '0'                comment '是否正常 0=正常 1=非正常',
+  normal_flag char(1)         default '0'                comment '是否正常 0=正常 1=非正常 2销售经理审批结束 3 区域经理审批结束 4副总审批结束 5 老总审批结束',
   flow_status		varchar(2)         default '0' 	comment '流程状态0=未上报 1=销售员上报  2=销售经理同意 -2=销售经理不同意 3=区域经理同意 -3=区域经理不同意 4=副总同意 -4=副总不同意 5=老总同意 -5=老总不同意',
 
   remark         varchar(30)          default ''                  comment '备注',
