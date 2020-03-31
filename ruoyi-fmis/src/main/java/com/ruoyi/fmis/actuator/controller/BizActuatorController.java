@@ -97,7 +97,7 @@ public class BizActuatorController extends BaseController {
             }
         }
 
-        startPage();
+        //startPage();
         List<BizActuator> list = bizActuatorService.selectBizActuatorForRefList(bizActuator);
         return getDataTable(list);
     }

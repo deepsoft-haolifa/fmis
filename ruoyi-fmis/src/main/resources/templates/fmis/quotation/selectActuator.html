@@ -119,6 +119,7 @@
             updateUrl: prefix + "/edit/{id}",
             removeUrl: prefix + "/remove",
             exportUrl: prefix + "/export",
+            pagination:false,
             modalName: "电动执行器",
             columns: [{
                 checkbox: true
@@ -208,6 +209,7 @@
             id: "bootstrap-table1",
             queryParams:{"string2":"2"},
             url: prefix + "/listForProductId?productId=" + productId,
+            pagination:false,
             modalName: "气动执行器",
             columns: [{
                 checkbox: true

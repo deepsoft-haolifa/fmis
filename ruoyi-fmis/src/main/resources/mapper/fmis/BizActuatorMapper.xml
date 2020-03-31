@@ -54,10 +54,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <sql id="selectBizActuatorForRefVo">
 
-		select a.actuator_id, a.name, a.brand, a.manufacturer, a.setup_type, a.output_torque, a.action_type, a.control_circuit, a.adaptable_voltage, a.protection_level, a.quality_level, a.explosion_level, a.price, a.remark, a.string1, a.string2, a.string3, a.string4, a.string5, a.string6, a.string7, a.string8, a.string9, a.string10, a.status, a.del_flag, a.create_by, a.create_time, a.update_by, a.update_time from biz_actuator a
-		join biz_actuator_ref ar on ar.drive_mode=a.string1
+		select a.actuator_id, a.name, a.brand, a.manufacturer, a.setup_type, a.output_torque, a.action_type, a.control_circuit, a.adaptable_voltage, a.protection_level, a.quality_level, a.explosion_level, a.price, a.remark, a.string1, a.string2, a.string3, a.string4, a.string5, a.string6, a.string7, a.string8, a.string9, a.string10, a.status, a.del_flag, a.create_by, a.create_time, a.update_by, a.update_time
+		from biz_actuator a
+
+		<!--
+		 join biz_actuator_ref ar on ar.drive_mode=a.string1
         left join biz_dict d1 on d1.dict_id=ar.valve_type
         left join biz_dict d2 on d2.dict_id=ar.pressure
+		 -->
+
 
     </sql>
     <select id="selectBizActuatorForRefList" parameterType="BizActuator" resultMap="BizActuatorResult">

@@ -87,14 +87,14 @@ d6.dict_id,'valve_material',d8.dict_id,d7.dict_id,d9.dict_id,trim(t.销售底价
 case trim(t.采购价) when '' then 0 else trim(t.采购价) end, case trim(t.成本价) when '' then 0 else trim(t.成本价) end
  from temp_product t
  join biz_dict d1 on d1.parent_id='1' and d1.code=trim(t.系列)
-left join biz_dict d2 on d2.parent_type='specification' and d2.code=trim(t.规格) and d2.parent_id=d1.dict_id
-left join biz_dict d3 on d3.parent_type='nominal_pressure' and d3.code=trim(t.公称压力) and d3.parent_id=d1.dict_id
-left join biz_dict d4 on d4.parent_type='link_type' and d4.code=trim(t.连接方式) and d4.parent_id=d1.dict_id
-left join biz_dict d5 on d5.parent_type='structural_type' and d5.code=trim(t.结构形式) and d5.parent_id=d1.dict_id
-left join biz_dict d6 on d6.parent_type='body_material' and d6.code=trim(t.阀体材质) and d6.parent_id=d1.dict_id
-left join biz_dict d7 on d7.parent_type='spool_material' and d7.code=trim(t.阀芯材质) and d7.parent_id=d1.dict_id
-left join biz_dict d8 on d8.parent_type='sealing_material' and d8.code=trim(t.密封材质) and d8.parent_id=d1.dict_id
-left join biz_dict d9 on d9.parent_type='drive_mode' and d9.code=trim(t.驱动形式) and d9.parent_id=d1.dict_id
+left join biz_dict d2 on d2.parent_type='specification' and d2.name=trim(t.规格) and d2.parent_id=d1.dict_id
+left join biz_dict d3 on d3.parent_type='nominal_pressure' and d3.name=trim(t.公称压力) and d3.parent_id=d1.dict_id
+left join biz_dict d4 on d4.parent_type='link_type' and d4.name=trim(t.连接方式) and d4.parent_id=d1.dict_id
+left join biz_dict d5 on d5.parent_type='structural_type' and d5.name=trim(t.结构形式) and d5.parent_id=d1.dict_id
+left join biz_dict d6 on d6.parent_type='body_material' and d6.name=trim(t.阀体材质) and d6.parent_id=d1.dict_id
+left join biz_dict d7 on d7.parent_type='spool_material' and d7.name=trim(t.阀芯材质) and d7.parent_id=d1.dict_id
+left join biz_dict d8 on d8.parent_type='sealing_material' and d8.name=trim(t.密封材质) and d8.parent_id=d1.dict_id
+left join biz_dict d9 on d9.parent_type='drive_mode' and d9.name=trim(t.驱动形式) and d9.parent_id=d1.dict_id
 
 
 
@@ -172,3 +172,39 @@ insert into biz_product_ref(
 	(select dict_id from biz_dict where parent_type='specification' and name=trim(规格) limit 1),
 	(select dict_id from biz_dict where parent_type='body_material' and name=trim(材质) limit 1),
 	材质要求,trim(单价),'','209',0,0,'0' from temp_ls_product_ref;
+
+
+
+delete  from
+    biz_dict
+WHERE
+
+    (name,parent_id,parent_type) IN (
+
+	select * from (
+        SELECT
+            name,parent_id,parent_type
+        FROM
+            biz_dict
+        GROUP BY
+            name,parent_id,parent_type
+        HAVING
+            count(*) > 1
+			) as temp
+
+    )
+AND dict_id NOT IN (
+
+	select * from (
+
+    SELECT
+        min(dict_id)
+    FROM
+        biz_dict
+
+    GROUP BY
+        name,parent_id,parent_type
+    HAVING
+        count(*) > 1
+		) as temp1
+)

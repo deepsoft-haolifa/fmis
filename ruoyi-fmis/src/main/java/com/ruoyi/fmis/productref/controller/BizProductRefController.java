@@ -91,7 +91,8 @@ public class BizProductRefController extends BaseController {
             if (StringUtils.isNotEmpty(valvebodyMaterial)) {
                 BizDict bizDict = bizDictService.selectBizDictById(Long.parseLong(valvebodyMaterial));
                 if (bizDict != null) {
-                    bizProductRef.setValvebodyMaterial(bizDict.getName());
+                    //没有数据 暂时注释掉
+                    //bizProductRef.setValvebodyMaterial(bizDict.getName());
                 }
             }
         }

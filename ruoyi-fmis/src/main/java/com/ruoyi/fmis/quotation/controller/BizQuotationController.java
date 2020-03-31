@@ -629,7 +629,7 @@ public class BizQuotationController extends BaseController {
     @PostMapping("/doExamine")
     @ResponseBody
     public AjaxResult doExamine(BizQuotation bizQuotation) {
-        String examineStatus = bizQuotation.getString4();
+        String examineStatus = bizQuotation.getString6();
         String examineRemark = bizQuotation.getString5();
         String quotationId = bizQuotation.getQuotationId().toString();
         return toAjax(bizQuotationService.doExamine(quotationId,examineStatus,examineRemark));
