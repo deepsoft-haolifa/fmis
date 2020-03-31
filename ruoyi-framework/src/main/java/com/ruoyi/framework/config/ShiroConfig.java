@@ -243,6 +243,15 @@ public class ShiroConfig
         // 对静态资源设置匿名访问
         filterChainDefinitionMap.put("/favicon.ico**", "anon");
         filterChainDefinitionMap.put("/ruoyi.png**", "anon");
+        filterChainDefinitionMap.put("/images_2/**", "anon");
+
+        filterChainDefinitionMap.put("/login_webBg.jpg**", "anon");
+        filterChainDefinitionMap.put("/login_mainBg.png**", "anon");
+        filterChainDefinitionMap.put("/login_mainBg2.jpg**", "anon");
+        filterChainDefinitionMap.put("/login_banner.jpg**", "anon");
+        filterChainDefinitionMap.put("/long_form.png**", "anon");
+        filterChainDefinitionMap.put("/login_btn.png**", "anon");
+
         filterChainDefinitionMap.put("/css/**", "anon");
         filterChainDefinitionMap.put("/docs/**", "anon");
         filterChainDefinitionMap.put("/fonts/**", "anon");

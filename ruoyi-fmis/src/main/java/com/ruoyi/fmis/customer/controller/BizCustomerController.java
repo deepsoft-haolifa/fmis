@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.framework.util.ShiroUtils;
-import com.ruoyi.process.user.service.IActIdUserService;
 import com.ruoyi.system.domain.SysDept;
 import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.service.ISysDeptService;
@@ -41,8 +40,7 @@ public class BizCustomerController extends BaseController {
 
     @Autowired
     private ISysUserService userService;
-    @Autowired
-    private IActIdUserService actIdUserService;
+
 
     @Autowired
     private IBizCustomerService bizCustomerService;
@@ -128,7 +126,11 @@ public class BizCustomerController extends BaseController {
     @GetMapping("/edit/{customerId}")
     public String edit(@PathVariable("customerId") Long customerId, ModelMap mmap) {
         BizCustomer bizCustomer = bizCustomerService.selectBizCustomerById(customerId);
-        mmap.put("usersel", userService.selectUserById(Long.parseLong(bizCustomer.getOwnerUserId())));
+        SysUser selUser = userService.selectUserById(Long.parseLong(bizCustomer.getOwnerUserId()));
+        if (selUser == null) {
+            selUser = new SysUser();
+        }
+        mmap.put("usersel", selUser);
         mmap.put("users", userService.selectUserList(new SysUser()));
         mmap.put("bizCustomer", bizCustomer);
         return prefix + "/edit";

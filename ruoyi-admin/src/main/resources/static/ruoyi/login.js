@@ -8,6 +8,8 @@ $(function() {
 	});
 });
 
+console.log("---login---");
+
 $.validator.setDefaults({
     submitHandler: function() {
 		login();

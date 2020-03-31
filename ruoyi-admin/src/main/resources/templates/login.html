@@ -1,90 +1,86 @@
 <!DOCTYPE html>
 <html  lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8" />
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
-    <title>北京好利信息化管控平台 v[[${version}]]</title>
-    <meta name="description" content="北京好利信息化管控平台">
-    <link href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
-    <link href="../static/css/font-awesome.min.css" th:href="@{/css/font-awesome.min.css}" rel="stylesheet"/>
-    <link href="../static/css/style.css" th:href="@{/css/style.css}" rel="stylesheet"/>
-    <link href="../static/css/login.min.css" th:href="@{/css/login.min.css}" rel="stylesheet"/>
-    <link href="../static/ruoyi/css/ry-ui.css" th:href="@{/ruoyi/css/ry-ui.css?v=4.0.0}" rel="stylesheet"/>
-    <!--[if lt IE 9]>
-    <meta http-equiv="refresh" content="0;ie.html" />
-    <![endif]-->
-    <link rel="shortcut icon" href="../static/favicon.ico" th:href="@{favicon.ico}"/>
-    <style type="text/css">
-        label.error { position:inherit;  }
-        body { font-size: 16px; }
+    <title> 北京好利信息化管控平台</title>
+
+
+    <style>
+        * {margin:0;padding:0;}
+        ul,li{list-style:none;}
+        input,button{outline: none;font-family:微软雅黑,Verdana,宋体}
+        body{background: url(login_webBg.jpg);font-family:微软雅黑,Verdana,宋体}
+        #loginMain {background: url(login_mainBg2.jpg) no-repeat 50%;position: absolute;width: 1060px;height: 580px;left: 50%;top: 50%;margin: -290px 0 0 -530px;}
+        .loginBanner {background: url(login_banner.jpg) no-repeat;width: 1018px;height: 360px;margin: 128px 0 0 21px;}
+        .loginCopyrigt {line-height: 70px;text-align: center;color: #666;font-size: 14px;}
+        .loginForm {background: url(long_form.png) no-repeat 50% 0;position: absolute;top: 90px;right: 60px;width: 360px;height: 400px;}
+        .forms {width: 252px;margin: 100px auto 0;}
+        .forms .row:after {content: "";display: table;clear: both;}
+        .forms .row {margin-bottom: 20px;*zoom: 1;}
+        .forms .alt {float: left;line-height: 37px;
+            width: 76px;font-size: 16px;text-align: center;color: #666;margin-right: 14px;}
+        .forms .val {width: 155px;height: 30px;padding-top: 6px;float: left;}
+        .forms .inp {width: 100%;height: 90%; border: none;}
+        .forms .inp.code {width: 65px;margin-right: 20px;float: left;}
+        .forms .code + img {height: 35px;width: 70px;}
+        .forms .submitBtn {background: url(login_btn.png) no-repeat;width: 250px;height: 40px;border: none;font-size: 16px;cursor: pointer;}
+        .loginMsg {position: absolute;width: 100%;left: 0;top: 0;text-align: center;line-height: 30px;font-size: 14px;background-color: #f2dede;}
+         label.error { position:inherit;  }
     </style>
-    <script>
-        if(window.top!==window.self){window.top.location=window.location};
+    <script language=javascript>
+        function CheckData(){
+            if(form1.loginid.value==""){
+                alert("用户名不能为空！");
+                form1.loginid.focus();
+                return false
+            }
+            if(form1.pwd.value==""){
+                alert("密码不能为空！");
+                form1.pwd.focus();
+                return false
+            }
+            if(form1.code.value==""){
+                alert("请输入验证吗！");
+                form1.code.focus();
+                return false;
+            }
+            return true;
+        }
     </script>
 </head>
-
 <body class="signin">
-
-    <div class="signinpanel">
-        <div class="row">
-            <div class="col-sm-7">
-                <div class="signin-info">
-                    <div class="logopanel m-b">
-                        <h1><img alt="[ 北京好利 ]" src="../static/ruoyi.png" th:src="@{/ruoyi.png}"></h1>
-                    </div>
-                    <div class="m-b"></div>
-                    <h4>欢迎使用 <strong>北京好利信息化管控平台 v[[${version}]]</strong></h4>
-                    <ul class="m-b">
-                        <!--
-                        <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> Activiti 6.x</li>
-                        <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> SpringBoot 2.x</li>
-                        <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> Thymeleaf 3.x</li>
-                        <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> Bootstrap 3.x</li>
-                        -->
-                    </ul>
-                    <div style="color: black;">
-                        <!--
-                        <h4>流程用户和用户组 (密码均为 123456)：</h4>
-                        <ol>
-                            <li>普通员工：chengxy 程序猿</li>
-                            <li>部门领导：axianlu 一只闲鹿</li>
-                            <li>人事：    rensm  人事喵</li>
-                        </ol>
-                        <h4>p.s. 流程管理请使用 admin 账号维护</h4>
-                        -->
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-5">
-                <form id="signupForm">
-                    <h4 class="no-margins">登录：</h4>
-                    <p class="m-t-md">北京好利信息化管控平台</p>
-                    <input type="text"     name="username" class="form-control uname"     placeholder="用户名" value=""    />
-                    <input type="password" name="password" class="form-control pword"     placeholder="密码"   value="" />
-					<div class="row m-t" th:if="${captchaEnabled==true}">
-						<div class="col-xs-6">
-						    <input type="text" name="validateCode" class="form-control code" placeholder="验证码" maxlength="5" autocomplete="off">
-						</div>
-						<div class="col-xs-6">
-							<a href="javascript:void(0);" title="点击更换验证码">
-								<img th:src="@{captcha/captchaImage(type=${captchaType})}" class="imgcode" width="85%"/>
-							</a>
-						</div>
-					</div>
-                    <div class="checkbox-custom" th:classappend="${captchaEnabled==false} ? 'm-t'">
-				        <input type="checkbox" id="rememberme" name="rememberme"> <label for="rememberme">记住我</label>
-				    </div>
-                    <button class="btn btn-success btn-block" id="btnSubmit" data-loading="正在验证登录，请稍后...">登录</button>
-                </form>
-            </div>
-        </div>
-        <div class="signup-footer">
-            <div class="pull-left">
-                &copy; 2019 All Rights Reserved. SXHL, made with <a href="xxx" target="_blank">北京好利信息化管控平台</a>.<br>
-            </div>
+<div id="loginMain">
+    <div class="loginForm">
+        <div class="forms">
+            <form method="POST" name="signupForm" id="signupForm" >
+                <ul class="form">
+                    <li class="row">
+                        <label for="username" class="alt">用户名</label>
+                        <div class="val"><input type="text" name="username" id="username" class="inp" /></div>
+                    </li>
+                    <li class="row">
+                        <label for="password" class="alt">密　码</label>
+                        <div class="val"><input type="password" name="password" id="password" class="inp" /></div>
+                    </li>
+                    <li class="row" th:if="${captchaEnabled==true}">
+                        <label for="validateCode" class="alt">验证码</label>
+                        <div class="val"><input type="text" name="validateCode" id="validateCode" class="inp code" style="ime-mode:disabled" onKeyPress="if (event.keyCode < 48 || event.keyCode > 57) event.returnValue = false;" size="4" maxlength="4" onpaste="return false" />
+                            <img th:src="@{captcha/captchaImage(type=${captchaType})}" class="imgcode" width="85%" onclick="javascript:void(0);"/>
+                        </div>
+                    </li>
+                    <li class="row button"><button type="button" id="btnSubmit" onclick="login()" class="submitBtn btn btn-success btn-block">登 录</button></li>
+                </ul>
+            </form>
         </div>
     </div>
+    <div class="loginBanner"></div>
+    <div class="loginCopyrigt">Copyright &copy; 2020 Haoli, All Rights Reserved  北京好利信息化管控平台- 版权所有</div>
+</div>
+
 <script th:inline="javascript"> var ctx = [[@{/}]]; var captchaType = [[${captchaType}]]; </script>
 <!-- 全局js -->
 <script src="../static/js/jquery.min.js" th:src="@{/js/jquery.min.js}"></script>

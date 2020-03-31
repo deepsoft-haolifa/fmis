@@ -23,8 +23,8 @@ public class BizCustomer extends BaseEntity {
     private Long customerId;
 
     /** 备案日期 */
-    @Excel(name = "备案日期", width = 30, dateFormat = "yyyy-MM-dd")
-    private Date recordDate;
+    @Excel(name = "备案日期")
+    private String recordDate;
 
     /** 商务公司代码 */
     @Excel(name = "商务公司代码")
@@ -129,13 +129,7 @@ public class BizCustomer extends BaseEntity {
     public Long getCustomerId() {
         return customerId;
     }
-    public void setRecordDate(Date recordDate) {
-        this.recordDate = recordDate;
-    }
 
-    public Date getRecordDate() {
-        return recordDate;
-    }
     public void setCompanyCode(String companyCode) {
         this.companyCode = companyCode;
     }

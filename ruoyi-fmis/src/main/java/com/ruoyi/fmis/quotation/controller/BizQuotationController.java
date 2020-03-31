@@ -334,7 +334,7 @@ public class BizQuotationController extends BaseController {
     public String setNormalFlag (BizQuotation bizQuotation,String productArrayStr) {
         String normalFlag = "";
         String totalPrice = bizQuotation.getString9();
-        if (Double.parseDouble(totalPrice) >= 500000) {
+        if (StringUtils.isNotEmpty(totalPrice) && Double.parseDouble(totalPrice) >= 500000) {
             normalFlag = "5";
         } else if (!"5".equals(bizQuotation.getPaymentMethod())) {
             //到付

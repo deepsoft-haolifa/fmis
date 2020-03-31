@@ -95,7 +95,7 @@ public class BizQuotation extends BaseEntity {
     /** 备用8 */
     private String string8;
 
-    /** 备用9 */
+    /** 备用9 总金额 冗余字段*/
     private String string9;
 
     /** 备用10 */

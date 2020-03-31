@@ -136,3 +136,39 @@ AND dict_id NOT IN (
         count(*) > 1
 		) as temp1
 )
+
+
+
+insert into biz_customer(
+record_date, company_code, area, record_code, owner_user_id, name, project_ame, contact_name, contact_position, contact_phone, contact_email, brand, info, product_info, remark, status, del_flag, area_code, source, record_type, record_num, telephone, fax, company_address, dept_id,create_by
+)
+
+select 客户初次备案日期,商务公司代码,d1.dict_value,项目备案号,'',客户名称,项目名称,客户联系人,'',手机,email,'','','','',0,0,客户区域代码,客户来源,
+case trim(c.备案类别) when '客户名称' then '1' when '项目名称' then '2' else '' end,'',座机电话,联系传真,公司地址,'0','admin_1'
+ from temp_customer c
+left join sys_dict_data d1 on d1.dict_type='customer_area' and d1.dict_label=c.市场区域
+
+insert into biz_actuator(
+name, brand, manufacturer, setup_type, output_torque, action_type, control_circuit, adaptable_voltage, protection_level, quality_level, explosion_level, price, remark, string1, string2,status, del_flag, create_by
+)
+select 产品名称,执行器品牌,生产厂家,d1.dict_value,输出力距,开启时间,控制电路,适用电压,防护等级,品质等级,防爆等级,trim(价格),备注,型号,'1',0,0,'0' from temp_dd_actuator
+left join sys_dict_data d1 on d1.dict_label=trim(安装形式) and d1.dict_type='actuator_setup_type'
+
+insert into biz_product_ref(
+		name, type, model, specifications, valvebody_material, material_require, price, remark, suppliers_id,  status, del_flag, create_by
+	)
+	select  名称,'1',型号,
+	(select dict_id from biz_dict where parent_type='specification' and name=trim(规格) limit 1),
+	(select dict_id from biz_dict where parent_type='body_material' and name=trim(材质) limit 1),
+	材质要求,trim(单价),'','208',0,0,'0' from temp_fl_product_ref;
+
+
+
+
+insert into biz_product_ref(
+		name, type, model, specifications, valvebody_material, material_require, price, remark, suppliers_id,  status, del_flag, create_by
+	)
+	select  名称,'2',型号,
+	(select dict_id from biz_dict where parent_type='specification' and name=trim(规格) limit 1),
+	(select dict_id from biz_dict where parent_type='body_material' and name=trim(材质) limit 1),
+	材质要求,trim(单价),'','209',0,0,'0' from temp_ls_product_ref;
