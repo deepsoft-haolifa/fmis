@@ -1,18 +1,28 @@
 package com.ruoyi.fmis.quotation.controller;
 
-import java.util.List;
-
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+import com.ruoyi.common.annotation.Log;
+import com.ruoyi.common.core.controller.BaseController;
+import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.core.page.TableDataInfo;
+import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.common.utils.itextpdf.PdfUtil;
+import com.ruoyi.common.utils.itextpdf.TextWaterMarkPdfPageEvent;
 import com.ruoyi.fmis.actuator.domain.BizActuator;
 import com.ruoyi.fmis.actuator.service.IBizActuatorService;
 import com.ruoyi.fmis.common.BizConstants;
 import com.ruoyi.fmis.dict.service.IBizDictService;
 import com.ruoyi.fmis.productref.domain.BizProductRef;
 import com.ruoyi.fmis.productref.service.IBizProductRefService;
+import com.ruoyi.fmis.quotation.domain.BizQuotation;
+import com.ruoyi.fmis.quotation.service.IBizQuotationService;
 import com.ruoyi.fmis.quotationproduct.domain.BizQuotationProduct;
 import com.ruoyi.fmis.quotationproduct.service.IBizQuotationProductService;
 import com.ruoyi.fmis.suppliers.service.IBizSuppliersService;
@@ -20,26 +30,18 @@ import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysDept;
 import com.ruoyi.system.service.ISysDeptService;
 import com.ruoyi.system.service.ISysRoleService;
-import com.ruoyi.system.service.impl.SysDeptServiceImpl;
 import org.activiti.engine.impl.util.CollectionUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import com.ruoyi.common.annotation.Log;
-import com.ruoyi.common.enums.BusinessType;
-import com.ruoyi.fmis.quotation.domain.BizQuotation;
-import com.ruoyi.fmis.quotation.service.IBizQuotationService;
-import com.ruoyi.common.core.controller.BaseController;
-import com.ruoyi.common.core.domain.AjaxResult;
-import com.ruoyi.common.utils.poi.ExcelUtil;
-import com.ruoyi.common.core.page.TableDataInfo;
+import org.springframework.web.bind.annotation.*;
+
+import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
 /**
  * 报价单Controller
@@ -117,9 +119,105 @@ public class BizQuotationController extends BaseController {
     @PostMapping("/export")
     @ResponseBody
     public AjaxResult export(BizQuotation bizQuotation) {
-        List<BizQuotation> list = bizQuotationService.selectBizQuotationList(bizQuotation);
-        ExcelUtil<BizQuotation> util = new ExcelUtil<BizQuotation>(BizQuotation.class);
-        return util.exportExcel(list, "quotation");
+        //报价单
+        bizQuotation = bizQuotationService.selectBizQuotationById(275L);
+        //产品信息
+        BizQuotationProduct bizQuotationProduct = new BizQuotationProduct();
+        bizQuotationProduct.setQuotationId(bizQuotation.getQuotationId());
+        List<BizQuotationProduct> bizQuotationProducts = bizQuotationProductService.selectBizQuotationProductDictList(bizQuotationProduct);
+        try
+        {
+            String filename = PdfUtil.encodingFilename("报价单");
+            String filePath = PdfUtil.getAbsoluteFile(filename);
+            // step 1
+            Document document = new Document(PageSize.A4);
+            // step 2
+            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(filePath));
+            // 只读
+            writer.setEncryption(null, null, PdfWriter.ALLOW_PRINTING, PdfWriter.STANDARD_ENCRYPTION_128);
+            // 通过PDF页面事件模式添加文字水印功能
+            writer.setPageEvent(new TextWaterMarkPdfPageEvent("水印"));
+            //设置字体样式
+            //正常
+            Font textFont = PdfUtil.getPdfChineseFont(11,Font.NORMAL);
+            //加粗
+            Font boldFont = PdfUtil.getPdfChineseFont(11,Font.BOLD);
+            //二级标题
+            Font titleFont = PdfUtil.getPdfChineseFont(15,Font.BOLD);
+
+            Paragraph paragraph = new Paragraph("报 价 单", titleFont);
+            paragraph.setAlignment(Paragraph.ALIGN_CENTER);
+
+            //添加8列表格
+            PdfPTable table = new PdfPTable(8);
+            //table前间距
+            table.setSpacingBefore(10f);
+            // 设置各列列宽
+            table.setTotalWidth(500);
+            //锁定列宽
+            table.setLockedWidth(true);
+            table.setHorizontalAlignment(Element.ALIGN_CENTER);
+            // 第一行
+            table.addCell(PdfUtil.mergeCol("订单编号：" + bizQuotation.getString1(), 8));
+
+            table.addCell(PdfUtil.getPDFCell("客户名称"));
+            table.addCell(PdfUtil.mergeCol(bizQuotation.getCustomerName(), 7));
+            table.addCell(PdfUtil.getPDFCell("特殊费用"));
+            table.addCell(PdfUtil.mergeCol(bizQuotation.getCustomerName(), 3));
+            table.addCell(PdfUtil.getPDFCell("费用说明"));
+            table.addCell(PdfUtil.mergeCol(bizQuotation.getCustomerName(), 3));
+            table.addCell(PdfUtil.getPDFCell("付款方式"));
+            table.addCell(PdfUtil.mergeCol(bizQuotation.getCustomerName(), 7));
+            table.addCell(PdfUtil.getPDFCell("运费价格"));
+            table.addCell(PdfUtil.mergeCol(bizQuotation.getCustomerName(), 7));
+            table.addCell(PdfUtil.getPDFCell("供货周期"));
+            table.addCell(PdfUtil.mergeCol(bizQuotation.getCustomerName(), 7));
+            table.addCell(PdfUtil.getPDFCell("报备项目"));
+            table.addCell(PdfUtil.mergeCol(bizQuotation.getCustomerName(), 7));
+
+            table.addCell(PdfUtil.getPDFCell("产品合计金额"));
+            table.addCell(PdfUtil.mergeCol(bizQuotation.getString2(), 3));
+            table.addCell(PdfUtil.getPDFCell("总金额"));
+            table.addCell(PdfUtil.mergeCol(bizQuotation.getString9(), 3));
+
+
+            // step 3
+            document.open();
+            // step 4 写入内容
+            document.add(paragraph);
+            document.add(table);
+
+            // 特别提醒
+            Paragraph paragraphRemark = new Paragraph();
+            Font remarkFont = PdfUtil.getPdfChineseFont(10, Font.NORMAL);
+            Font fontMoney = PdfUtil.getPdfChineseFont(13, Font.NORMAL, BaseColor.RED);
+            Font blackFont = PdfUtil.getPdfChineseFont(12, Font.NORMAL, BaseColor.BLACK);
+            paragraphRemark.add(Chunk.NEWLINE);
+            paragraphRemark.add(Chunk.NEWLINE);
+            paragraphRemark.add(new Chunk("特别提醒:", blackFont));
+            paragraphRemark.add(Chunk.NEWLINE);
+            paragraphRemark.add(new Chunk("1.您的总金额为", remarkFont));
+            paragraphRemark.add(new Chunk(bizQuotation.getString9(), fontMoney));
+            paragraphRemark.add(new Chunk("。请确认。", remarkFont));
+            paragraphRemark.add(Chunk.NEWLINE);
+            paragraphRemark.add(Chunk.NEWLINE);
+            paragraphRemark.add(new Chunk("2.其他说明项。", remarkFont));
+            paragraphRemark.add(Chunk.NEWLINE);
+            document.add(paragraphRemark);
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            paragraph = new Paragraph("打印日期：" + sdf.format(new Date()), PdfUtil.getPdfChineseFont());
+            paragraph.setAlignment(Element.ALIGN_RIGHT);
+            paragraph.setSpacingBefore(20);
+            document.add(paragraph);
+            // step 5
+            document.close();
+            return AjaxResult.success(filename);
+        }
+        catch (Exception e)
+        {
+            throw new BusinessException("导出Excel失败，请联系网站管理员！");
+        }
     }
 
 
