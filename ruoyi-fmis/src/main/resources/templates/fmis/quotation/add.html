@@ -23,10 +23,17 @@
             </div>
 
             <div class="form-group">
-                <label class="col-sm-3 control-label">产品：</label>
-                <div class="col-sm-8">
+                <label class="col-sm-3 control-label">选择产品：</label>
+                <div class="col-sm-6">
                     <input name="productIds" id="productIds" class="form-control" type="hidden" >
-                    <input name="productNames" id="productNames" class="form-control" type="text" readonly onclick="selectProduct()">
+                    <input name="productNames" id="productNames" class="form-control" type="text" readonly onclick="selectProduct(0)" required>
+                </div>
+
+                <div class="col-sm-3">
+                    <a class="btn btn-success btn-sm" onclick="selectProduct(1)" >
+                        <i class="fa fa"></i> 追加
+                        <input type="hidden" id="productOperationType" name="productOperationType" value="0">
+                    </a>
                 </div>
             </div>
 
@@ -43,39 +50,41 @@
 
             <div class="form-group">    
                 <label class="col-sm-3 control-label">特殊费用：</label>
-                <div class="col-sm-2">
-                    <input name="specialExpenses" id="specialExpenses" onchange="totalSumPrice()" class="form-control" type="text">
+                <div class="col-sm-3">
+                    <input name="specialExpenses" id="specialExpenses" onblur="totalSumPrice()" onkeyup="AmountKeyUp(this)" class="form-control" type="text">
                 </div>
-                <div class="col-sm-6">
+                <label class="col-sm-1 control-label">费用说明：</label>
+                <div class="col-sm-4">
                     <input name="string4" id="string4" class="form-control" type="text" placeholder="特殊费用说明">
                 </div>
             </div>
             <div class="form-group">    
                 <label class="col-sm-3 control-label">付款方式：</label>
-                <div class="col-sm-8">
+                <div class="col-sm-3">
                     <select name="paymentMethod" class="form-control m-b" th:with="type=${@dict.getType('payment_method')}">
                         <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                     </select>
                 </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">运费价格：</label>
-                <div class="col-sm-8">
-                    <input name="freight" class="form-control" type="text">
+
+                <label class="col-sm-1 control-label">运费价格：</label>
+                <div class="col-sm-4 form-inline">
+                    <input name="freight" class="form-control full-width" type="text" onkeyup="AmountKeyUp(this)" placeholder="运费价格">
                 </div>
+
             </div>
+
             <div class="form-group">    
                 <label class="col-sm-3 control-label">供货周期：</label>
-                <div class="col-sm-8">
+                <div class="col-sm-3">
                     <input name="leadTime" class="form-control" type="text">
                 </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">报备项目：</label>
-                <div class="col-sm-8">
+                <label class="col-sm-1 control-label" >报备项目：</label>
+                <div class="col-sm-4">
                     <input name="reportProject" class="form-control" type="text" value="非项目">
                 </div>
+
             </div>
+
 
             <!--
             <div class="form-group">
@@ -86,18 +95,24 @@
             </div>-->
 
             <div class="form-group">
-                <label class="col-sm-3 control-label">备注：</label>
+                <label class="col-sm-3 control-label">报价备注：</label>
                 <div class="col-sm-8">
                     <input name="remark" class="form-control" type="text" >
                 </div>
             </div>
 
-            <div class="form-group">
-                <label class="col-sm-3 control-label">产品合计金额：</label>
+            <div class="form-group" >
+                <label class="col-sm-3 control-label">产品金额：</label>
                 <div class="col-sm-2">
                     <input name="productTotalPrice" id="productTotalPrice" class="form-control" type="text" readonly>
                 </div>
-                <label class="col-sm-3 control-label">总金额：</label>
+
+                <label class="col-sm-1 control-label">阀门数量：</label>
+                <div class="col-sm-2">
+                    <input name="productTotalNum" id="productTotalNum" class="form-control" type="text" readonly>
+                </div>
+
+                <label class="col-sm-1 control-label">金额：</label>
                 <div class="col-sm-2">
                     <input name="totalPrice" id="totalPrice" class="form-control" type="text" readonly>
                 </div>
@@ -113,32 +128,15 @@
 
         var icon = "<i class='fa fa-times-circle'></i> ";
         $("#form-quotation-add").validate({
+            onkeyup: false,
             rules: {
-                string1: {
-                    required: true,
-                    minlength: 1,
-                    remote: {
-                        url: prefix + "/checkQuotationNo",
-                        type: "post",
-                        dataType: "json",
-                        data: {
-                            string1 : function() {
-                                return $.common.trim($("#string1").val());
-                            },
-                            string3 : 0
-                        },
-                        dataFilter: function(data, type) {
-                            return $.validate.unique(data);
-                        }
-                    }
-                },
                 customerName:{
                     required: true,
-                    minlength: 1,
                     remote: {
                         url: prefix + "/checkCustomer",
                         type: "post",
                         dataType: "json",
+                        async: false,
                         data: {
                             string2 : function() {
                                 return $.common.trim($("#string2").val());
@@ -146,30 +144,27 @@
                             string3 : 0
                         },
                         dataFilter: function(data, type) {
-                            return $.validate.unique(data);
+                            var validateUnique = $.validate.unique(data);
+                            console.log("data=" + data);
+                            console.log("validateUnique=" + validateUnique);
+                            return validateUnique;
                         }
                     }
-                }
-
+                },
             },
             messages: {
-                string1: {
-                    required: icon + "请输入报价单号",
-                    minlength: icon + "请输入报价单号",
-                    remote: icon + "报价单号重复",
-                },
-                customerName: {
+                "customerName": {
                     required: icon + "请选择客户",
-                    minlength: icon + "请选择客户",
                     remote: icon + "客户重复"
                 }
-            }
+            },
+            focusCleanup: true
         });
 
         function submitHandler() {
             var vali = $.validate.form();
-            console.log("vali==" + vali);
-            if ($.validate.form()) {
+            console.log("vali=" + vali);
+            if (vali) {
                 var dataObj = $('#form-quotation-add').serializeArray();
                 //计算是否正常
                 //特殊费用
@@ -199,6 +194,7 @@
                     productObj["productRef2Coefficient"] = $("#productRef2Coefficient_" + productId).val();
                     productObj["actuatorNum"] = $("#actuatorNum_" + productId).val();
                     productObj["actuatorCoefficient"] = $("#actuatorCoefficient_" + productId).val();
+                    productObj["string4"] = $("#productRemark_" + productId).val();
                     productArray.push(productObj);
                 }
                 dataObj.push({"name": "string10", "value": JSON.stringify(productArray)});
@@ -210,9 +206,9 @@
 
 
 
-        function selectProduct() {
+        function selectProduct(type) {
             var url = prefix + "/selectProduct";
-
+            $("#productOperationType").val(type);
             var widthNum = this.innerWidth - 50;
             var heigthNum = this.innerHeight - 50;
 
@@ -274,6 +270,7 @@
             //产品数量 产品系数 价格
             var productNum = $("#productNum_" + productId).val();
             productNum = isEmpty(productNum) == true ? 0 : parseFloat(productNum);
+
             var productCoefficient = $("#productCoefficient_" + productId).val();
             productCoefficient = isEmpty(productCoefficient) == true ? 0 : parseFloat(productCoefficient);
 
@@ -315,7 +312,7 @@
             var totalSum = parseFloat(parseFloat(productSum) + parseFloat(productRef1Sum) + parseFloat(productRef2Sum) + parseFloat(actuatorSum)).toFixed(4);
             $("#totalSum_" + productId).val(totalSum);
 
-            return totalSum;
+            return totalSum + "#" + productNum;
         }
 
         function FloatAdd(arg1,arg2){
@@ -332,13 +329,17 @@
             var productIdsS = productIds.split(",");
             var productTotalPrice = 0;
             var totalPrice = 0;
+            var productTotalNumS = 0;
             for (var i = 0; i < productIdsS.length; i++) {
                 var productId = productIdsS[i];
                 if (isEmpty(productId)) {
                     continue;
                 }
-                var totalSum = getProductSum(productId);
+                var totalSumStr = getProductSum(productId,productTotalNum);
+                var totalSum = totalSumStr.split("#")[0];
+                var productTotalNum = totalSumStr.split("#")[1];
                 productTotalPrice = FloatAdd(productTotalPrice,totalSum).toFixed(4);
+                productTotalNumS = FloatAdd(productTotalNumS,productTotalNum).toFixed(0);
             }
             var specialExpenses = $("#specialExpenses").val();
             if (isEmpty(specialExpenses)) {
@@ -347,7 +348,34 @@
             totalPrice = parseFloat(productTotalPrice) + parseFloat(specialExpenses);
             $("#productTotalPrice").val(parseFloat(productTotalPrice).toFixed(4));
             $("#totalPrice").val(parseFloat(totalPrice).toFixed(4));
+            $("#productTotalNum").val(productTotalNumS);
         }
+
+        function removeProject (productId) {
+
+            $.modal.confirm("确定要删除该产品吗？", function() {
+                $("#productDiv_" + productId).remove();
+                var productIds = $("#productIds").val();
+                var productNames = $("#productNames").val();
+                var productIdsS = productIds.split(",");
+                var productNamesS = productNames.split(",");
+                for (var i = 0; i < productIdsS.length; i++) {
+                    if (productId == productIdsS[i]) {
+                        var productName = productNamesS[i];
+                        productNamesS.splice(i,1);
+                        productIdsS.splice(i,1);
+                    } else {
+                        sumPrice(productId);
+                    }
+                }
+                $("#productIds").val(productIdsS.toString());
+                $("#productNames").val(productNamesS.toString());
+            });
+
+
+        }
+
+
 
     </script>
 </body>

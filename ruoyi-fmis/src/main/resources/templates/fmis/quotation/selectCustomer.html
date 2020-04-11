@@ -178,6 +178,13 @@
                     parent.$('#form-quotation-edit input[name=string2]').val(customerId);
                     parent.$('#form-quotation-edit input[name=customerName]').val($.table.selectColumns("name"));
 
+                    //reportProject
+                    var reportProject = $.table.selectColumns("projectAme");
+                    if ($.common.isEmpty(reportProject)) {
+                        reportProject = "非项目";
+                    }
+                    parent.$('#form-quotation-add input[name=reportProject]').val(reportProject);
+                    parent.$('#form-quotation-edit input[name=reportProject]').val(reportProject);
                     $.modal.close();
                 }
             );

@@ -60,7 +60,7 @@ public class BizQuotationProduct extends BaseEntity {
     @Excel(name = "备用3")
     private String string3;
 
-    /** 备用4 */
+    /** 备用4 产品备注*/
     @Excel(name = "备用4")
     private String string4;
 

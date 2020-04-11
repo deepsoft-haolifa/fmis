@@ -30,11 +30,19 @@
                 <div class="col-sm-8">
                     <select name="series" id="series" class="form-control select2-multiple" > <!--multiple-->
                         <option>请选择</option>
-                        <option th:each="series:${seriesSelect}" th:value="${series.dictId}" th:text="${series.name} + ' ' + ${series.code}" ></option>
+                        <option th:each="series:${seriesSelect}" th:value="${series.dictId}" th:text="${series.name} + '_' + ${series.code}" ></option>
                     </select>
                 </div>
             </div>
-
+            <div class="form-group">
+                <label class="col-sm-3 control-label">系列：</label>
+                <div class="col-sm-8">
+                    <input type="hidden" id="string1Text" th:value="*{string1}">
+                    <select name="string1" id="string1" class="form-control select2-multiple"> <!--multiple-->
+                        <option value="">请选择</option>
+                    </select>
+                </div>
+            </div>
             <div class="form-group">    
                 <label class="col-sm-3 control-label">产品型号：</label>
                 <div class="col-sm-8">
@@ -45,14 +53,14 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">规格：</label>
                 <div class="col-sm-8">
-                    <select name="specifications" id="specifications" class="form-control select2-multiple" ><option>请选择</option></select>
+                    <select name="specifications" onchange="generateProductModel()" id="specifications" class="form-control select2-multiple" ><option>请选择</option></select>
                 </div>
             </div>
 
             <div class="form-group">
                 <label class="col-sm-3 control-label">公称压力：</label>
                 <div class="col-sm-8">
-                    <select name="nominalPressure" id="nominalPressure" class="form-control select2-multiple" ><option>请选择</option></select>
+                    <select name="nominalPressure" onchange="generateProductModel()" id="nominalPressure" class="form-control select2-multiple" ><option>请选择</option></select>
                 </div>
             </div>
 
@@ -60,21 +68,21 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">连接方式：</label>
                 <div class="col-sm-8">
-                    <select name="connectionType" id="connectionType" class="form-control select2-multiple" ><option>请选择</option></select>
+                    <select name="connectionType" onchange="generateProductModel()" id="connectionType" class="form-control select2-multiple" ><option>请选择</option></select>
                 </div>
             </div>
 
             <div class="form-group">
                 <label class="col-sm-3 control-label">结构形式：</label>
                 <div class="col-sm-8">
-                    <select name="structuralStyle" id="structuralStyle" class="form-control select2-multiple" ><option>请选择</option></select>
+                    <select name="structuralStyle" onchange="generateProductModel()" id="structuralStyle" class="form-control select2-multiple" ><option>请选择</option></select>
                 </div>
             </div>
 
             <div class="form-group">
                 <label class="col-sm-3 control-label">阀体材质：</label>
                 <div class="col-sm-8">
-                    <select name="valvebodyMaterial" id="valvebodyMaterial" class="form-control select2-multiple" ><option>请选择</option></select>
+                    <select name="valvebodyMaterial" onchange="generateProductModel()" id="valvebodyMaterial" class="form-control select2-multiple" ><option>请选择</option></select>
                 </div>
             </div>
 
@@ -90,25 +98,25 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">密封材质：</label>
                 <div class="col-sm-8">
-                    <select name="sealingMaterial" id="sealingMaterial" class="form-control select2-multiple" ><option>请选择</option></select>
+                    <select name="sealingMaterial" onchange="generateProductModel()" id="sealingMaterial" class="form-control select2-multiple" ><option>请选择</option></select>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 control-label">阀芯材质：</label>
                 <div class="col-sm-8">
-                    <select name="valveElement" id="valveElement" class="form-control select2-multiple" ><option>请选择</option></select>
+                    <select name="valveElement" onchange="generateProductModel()" id="valveElement" class="form-control select2-multiple" ><option>请选择</option></select>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 control-label">驱动形式：</label>
                 <div class="col-sm-8">
-                    <select name="driveForm" id="driveForm" class="form-control select2-multiple" ><option>请选择</option></select>
+                    <select name="driveForm" onchange="generateProductModel()" id="driveForm" class="form-control select2-multiple" ><option>请选择</option></select>
                 </div>
             </div>
             <div class="form-group">    
                 <label class="col-sm-3 control-label">产品单价：</label>
                 <div class="col-sm-8">
-                    <input name="price" th:field="*{price}" class="form-control" type="text">
+                    <input name="price" id="price" onkeyup="AmountKeyUp(this)" th:field="*{price}" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">
@@ -164,10 +172,122 @@
             focusCleanup: true
         });
 
+        function string1AddOptions(v){
+            var string1Value = $("#string1Text").val();
+            $("#string1").html("");
+            $("#string1").append("<option value=''>请选择</option>");
+            var string1Obj = $("#string1");
+            if (v == "D") {
+                string1Obj.append("<option value='D220'>D220</option>");
+                string1Obj.append("<option value='D240'>D240</option>");
+                string1Obj.append("<option value='D260'>D260</option>");
+                string1Obj.append("<option value='D261'>D261</option>");
+                string1Obj.append("<option value='D270'>D270</option>");
+                string1Obj.append("<option value='D271'>D271</option>");
+                string1Obj.append("<option value='D310'>D310</option>");
+                string1Obj.append("<option value='D370'>D370</option>");
+            } else {
+                string1Obj.append("<option value='" + v + "'>" + v + "</option>");
+            }
+            if (!$.common.isEmpty(string1Value)) {
+                $("#string1 option").each(function() {
+                    if($(this).val() == string1Value) {
+                        $(this).attr("selected","selected");
+                    }
+                })
+            }
+        }
+
+
+        var specificationArrayDict = null;
+        /**
+         * 生成产品型号ID
+         * @param obj
+         */
+        function generateProductModel () {
+            var modelId = "";
+            var string1 = $("#string1").val();
+            if ($.common.startWith(string1,"D")) {
+                string1 = "D";
+            }
+            modelId += string1;
+            if ($.common.isEmpty(string1)) {
+                return;
+            }
+            var driveForm = $("#driveForm").val();
+            if ($.common.isEmpty(driveForm)) {
+                return;
+            }
+            if (specificationArrayDict == null) {
+                return;
+            }
+            modelId += getDictCode("driveMode",driveForm);
+
+            var connectionType = $("#connectionType").val();
+            if ($.common.isEmpty(connectionType)) {
+                return;
+            }
+            modelId += getDictCode("linkType",connectionType);
+
+            var structuralStyle = $("#structuralStyle").val();
+            if ($.common.isEmpty(structuralStyle)) {
+                return;
+            }
+            modelId += getDictCode("structuralStyle",structuralStyle);
+
+            var sealingMaterial = $("#sealingMaterial").val();
+            if ($.common.isEmpty(sealingMaterial)) {
+                return;
+            }
+            modelId += getDictCode("sealingMaterial",sealingMaterial);
+
+            var valveElement = $("#valveElement").val();
+            if ($.common.isEmpty(valveElement)) {
+                return;
+            }
+            modelId += getDictCode("spoolMaterial",valveElement);
+
+
+            modelId += "-";
+
+            var nominalPressure = $("#nominalPressure").val();
+            if ($.common.isEmpty(nominalPressure)) {
+                return;
+            }
+            modelId += getDictCode("nominalPressure",nominalPressure);
+
+            var valvebodyMaterial = $("#valvebodyMaterial").val();
+            if ($.common.isEmpty(valvebodyMaterial)) {
+                return;
+            }
+            modelId += getDictCode("bodyMaterial",valvebodyMaterial);
+
+            modelId += "-";
+
+            var specifications = $("#specifications").val();
+            if ($.common.isEmpty(specifications)) {
+                return;
+            }
+            modelId += getDictCode("specification",specifications);
+
+            $("#model").val(modelId);
+        }
+        function getDictCode (dictType,dataId) {
+            var datas = specificationArrayDict[dictType];
+            for (var i = 0; i < datas.length; i++) {
+                var selObj = datas[i];
+                if (dataId == selObj.dictId) {
+                    return selObj.code;
+                }
+            }
+            return "";
+        }
+
         $("#series").change(function (){
             var series = $("#series").val();
             console.log("series=" + series);
-            if (series == null || series == "请选择") {
+            specificationArrayDict = null;
+            if (series == null || series == "请选择" || series == "") {
                 $("#specifications").html("");
                 $("#nominalPressure").html("");
                 $("#connectionType").html("");
@@ -176,13 +296,19 @@
                 $("#driveForm").html("");
                 $("#valvebodyMaterial").html("");
                 $("#structuralStyle").html("");
+                $("#string1").html("");
                 return;
             }
+            var string1All = $("#series").find("option:selected").text();
+            var string1 = string1All.split("_")[1];
+            string1AddOptions(string1);
+            generateProductModel();
             $.ajax({
                 url:prefix + "/findProductTypeDict",
                 type : "post",
                 data : {"dictId" : series},
                 success : function (data) {
+                    specificationArrayDict = data;
                     var specificationArray = data["specification"];
                     setDataToOption(specificationArray,"specifications");
 

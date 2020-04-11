@@ -105,6 +105,9 @@ public class BizProduct extends BaseEntity {
         return other;
     }
 
+    /**
+     * 系列
+     */
     private String string1;
     public void setString1(String string1) {
         this.string1 = string1;

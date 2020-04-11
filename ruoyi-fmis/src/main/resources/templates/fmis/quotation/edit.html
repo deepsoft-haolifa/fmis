@@ -19,28 +19,34 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">客户名称：</label>
                 <div class="col-sm-8">
-                    <input name="customerName" id="customerName" th:field="*{customerName}" class="form-control" type="text" readonly onclick="selectCustomer()">
+                    <input name="customerName" id="customerName" th:field="*{customerName}" class="form-control" type="text" readonly onclick="selectCustomer()" required>
                     <input name="string2" id="string2" class="form-control" type="hidden" th:field="*{string2}">
                 </div>
             </div>
 
 
             <div class="form-group">
-                <label class="col-sm-3 control-label">产品：</label>
-                <div class="col-sm-8">
+                <label class="col-sm-3 control-label">选择产品：</label>
+                <div class="col-sm-6">
                     <input name="productIds" id="productIds" th:value="${productIds}" class="form-control" type="hidden" >
-                    <input name="productNames" id="productNames" th:value="${productNames}" class="form-control" type="text" readonly onclick="selectProduct()">
+                    <input name="productNames" id="productNames" th:value="${productNames}" class="form-control" type="text" readonly onclick="selectProduct(0)" required>
+                </div>
+                <div class="col-sm-2">
+                    <a class="btn btn-success btn-sm" onclick="selectProduct(1)" >
+                        <i class="fa fa-plus"></i> 追加
+                        <input type="hidden" id="productOperationType" name="productOperationType" value="0">
+                    </a>
                 </div>
             </div>
 
             <div class="hr-line-dashed"></div>
             <div class="form-horizontal" id="productDiv" >
 
-                <div class="ibox float-e-margins" th:each="qp:${bizQuotation.quotationProductList}">
+                <div class="ibox float-e-margins" th:each="qp:${bizQuotation.quotationProductList}" th:id="'productDiv_' + ${qp.productId}" >
                     <h5 th:text="${qp.productName}" ></h5>
 
                     <div class='form-group' >
-                        <label class='control-label col-sm-3'>产品：</label>
+                        <label class='control-label col-sm-3'>产品类型：</label>
                         <div class='col-sm-2'>
                             <input th:id="'qpId_' + ${qp.qpId}" class='form-control' type='hidden' th:value="${qp.qpId}">
                             <input th:id="'productId_' + ${qp.productId}" class='form-control' type='hidden' th:value="${qp.productId}">
@@ -48,24 +54,24 @@
                         </div>
 
                         <div class='col-sm-2'>
-                            <input class='form-control' type='text' id="productModel" name='productModel' th:value="${qp.bizProduct.model}" readonly placeholder='产品型号' />
+                            <input class='form-control' type='text' th:id="'productModel_' + ${qp.productId}" name='productModel' th:value="${qp.bizProduct.model}" readonly placeholder='产品型号' />
                         </div>
 
                         <div class='col-sm-2'>
-                            <input class='form-control' type='text' th:id="'productNum_' + ${qp.productId}" th:value="${qp.productNum}" th:onchange="sumPrice([[${qp.productId}]]);"  placeholder='数量' />
+                            <input class='form-control' type='text' th:id="'productNum_' + ${qp.productId}" th:value="${qp.productNum}" th:onblur="sumPrice([[${qp.productId}]]);"  onkeyup="AmountKeyUp(this)" placeholder='数量' />
                         </div>
 
                         <div class='col-sm-1'>
                             <input class='form-control' type='text' th:id="'productPrice_' + ${qp.productId}"  name="productPrice" th:value="${qp.bizProduct.price}" placeholder='单价' readonly/>
                         </div>
 
-                        <div class='col-sm-2'>
-                            <input class='form-control' type='text' th:id="'productCoefficient_' + ${qp.productId}" th:onchange="sumPrice([[${qp.productId}]]);" th:value="${qp.productCoefficient}" placeholder='系数' />
+                        <div class='col-sm-1'>
+                            <input class='form-control' type='text' th:id="'productCoefficient_' + ${qp.productId}" th:onblur="sumPrice([[${qp.productId}]]);" onkeyup="AmountKeyUp(this)" th:value="${qp.productCoefficient}" placeholder='系数' />
                         </div>
                     </div>
 
                     <div class='form-group'>
-                        <label class='control-label col-sm-3'>产品配件法兰：</label>
+                        <label class='control-label col-sm-3'>法兰配件：</label>
                         <div class='col-sm-2'>
                             <input th:id="'productRef1Id_' + ${qp.productId}"  class='form-control' type='hidden' th:value="${qp.productRef1Id}">
                             <input th:id="'productRef1Name_' + ${qp.productId}" class='form-control' type='text' th:onclick="selectProductRef1([[${qp.productId}]]);" th:value="${qp.productRef1Name}" readonly>
@@ -73,79 +79,88 @@
 
 
                         <div class='col-sm-1'>
-                            <input class='form-control' type='text' id="productRef1Model" name='productRef1Model' th:value="${qp.bizProductRef1.model}" placeholder='型号' readonly/>
+                            <input class='form-control' type='text' th:id="'productRef1Model_' + ${qp.productId}" name='productRef1Model' th:value="${qp.bizProductRef1.model}" placeholder='型号' readonly/>
                         </div>
                         <div class='col-sm-1'>
-                            <input class='form-control' type='text' id="productRef1Specifications"  name="productRef1Specifications"  th:value="${qp.bizProductRef1.specifications}"  placeholder='规格' readonly/>
+                            <input class='form-control' type='text' th:id="'productRef1Specifications_' + ${qp.productId}"   name="productRef1Specifications"  th:value="${qp.bizProductRef1.specifications}"  placeholder='规格' readonly/>
                         </div>
                         <div class='col-sm-1'>
-                            <input class='form-control' type='text' id="productRef1ValvebodyMaterial" name="productRef1ValvebodyMaterial"  placeholder='材质' readonly/>
-                        </div>
-
-                        <div class='col-sm-1'>
-                            <input class='form-control' type='text' th:id="'productRef1Num_' + ${qp.productId}" th:onchange="sumPrice([[${qp.productId}]]);" th:value="${qp.productRef1Num}" placeholder='数量' />
+                            <input class='form-control' type='text' th:id="'productRef1ValvebodyMaterial_' + ${qp.productId}" th:value="${qp.bizProductRef1.valvebodyMaterial}"  name="productRef1ValvebodyMaterial"  placeholder='材质' readonly/>
                         </div>
 
                         <div class='col-sm-1'>
-                            <input class='form-control' type='text' th:id="'productRef1Price_' + ${qp.productId}" name="productRef1Price" th:value="${qp.bizProductRef1.price}" placeholder='单价' readonly/>
+                            <input class='form-control' type='text' th:id="'productRef1Num_' + ${qp.productId}" th:onblur="sumPrice([[${qp.productId}]]);" onkeyup="AmountKeyUp(this)" th:value="${qp.productRef1Num}" placeholder='数量' />
                         </div>
 
                         <div class='col-sm-1'>
-                            <input th:id="'productRef1Coefficient_' + ${qp.productId}" th:onchange="sumPrice([[${qp.productId}]]);" class='form-control' th:value="${qp.productRef1Coefficient}" type='text' placeholder='系数'>
+                            <input class='form-control' type='text' th:id="'productRef1Price_' + ${qp.productId}" name="productRef1Price"  th:value="${qp.bizProductRef1.price}" placeholder='单价' readonly/>
+                        </div>
+
+                        <div class='col-sm-1'>
+                            <input th:id="'productRef1Coefficient_' + ${qp.productId}" th:onblur="sumPrice([[${qp.productId}]]);" class='form-control'
+                                   onkeyup="AmountKeyUp(this)" th:value="${qp.productRef1Coefficient}" type='text' placeholder='系数'>
                         </div>
                     </div>
 
                     <div class='form-group'>
-                        <label class='control-label col-sm-3'>产品配件螺栓：</label>
+                        <label class='control-label col-sm-3'>螺栓配件：</label>
                         <div class='col-sm-2'>
                             <input th:id="'productRef2Id_' + ${qp.productId}" class='form-control' type='hidden' th:value="${qp.productRef2Id}">
                             <input th:id="'productRef2Name_' + ${qp.productId}" class='form-control' type='text' th:value="${qp.productRef2Name}" readonly th:onclick="selectProductRef2([[${qp.productId}]]);" >
                         </div>
 
                         <div class='col-sm-1'>
-                            <input class='form-control' type='text' id="productRef2Model" name='productRef2Model' th:value="${qp.bizProductRef2.model}"  placeholder='型号' readonly/>
+                            <input class='form-control' type='text' th:id="'productRef2Model_' + ${qp.productId}" name='productRef2Model' th:value="${qp.bizProductRef2.model}"  placeholder='型号' readonly/>
                         </div>
                         <div class='col-sm-1'>
-                            <input class='form-control' type='text' id="productRef2ValvebodyMaterial" th:value="${qp.bizProductRef2.valvebodyMaterial}" name="productRef2ValvebodyMaterial"  placeholder='材质' readonly/>
+                            <input class='form-control' type='text' th:id="'productRef2ValvebodyMaterial_' + ${qp.productId}"  th:value="${qp.bizProductRef2.valvebodyMaterial}" name="productRef2ValvebodyMaterial"  placeholder='材质' readonly/>
                         </div>
 
                         <div class='col-sm-2'>
-                            <input th:id="'productRef2Num_' + ${qp.productId}"  th:onchange="sumPrice([[${qp.productId}]]);" class='form-control' type='text' th:value="${qp.productRef2Num}" placeholder='数量' />
+                            <input th:id="'productRef2Num_' + ${qp.productId}"  th:onblur="sumPrice([[${qp.productId}]]);" class='form-control' onkeyup="AmountKeyUp(this)" type='text' th:value="${qp.productRef2Num}" placeholder='数量' />
                         </div>
 
                         <div class='col-sm-1'>
                             <input class='form-control' type='text' th:id="'productRef2Price_' + ${qp.productId}"  name="productRef2Price" th:value="${qp.bizProductRef2.price}"  placeholder='单价' readonly/>
                         </div>
 
-                        <div class='col-sm-2'>
-                            <input th:id="'productRef2Coefficient_' + ${qp.productId}" th:onchange="sumPrice([[${qp.productId}]]);" class='form-control' th:value="${qp.productRef2Coefficient}" type='text' placeholder='系数'>
+                        <div class='col-sm-1'>
+                            <input th:id="'productRef2Coefficient_' + ${qp.productId}" th:onblur="sumPrice([[${qp.productId}]]);" class='form-control' onkeyup="AmountKeyUp(this)" th:value="${qp.productRef2Coefficient}" type='text' placeholder='系数'>
                         </div>
                     </div>
 
                     <div class='form-group'>
-                        <label class='control-label col-sm-3'>执行器：</label>
+                        <label class='control-label col-sm-3'>执 行 器：</label>
                         <div class='col-sm-2'>
                             <input th:id="'actuatorId_' + ${qp.productId}" class='form-control' type='hidden' th:value="${qp.actuatorId}">
                             <input th:id="'actuatorName_' + ${qp.productId}"  class='form-control' th:value="${qp.actuatorName}" type='text' readonly th:onclick="selectActuator([[${qp.productId}]]);" >
                         </div>
 
                         <div class='col-sm-1'>
-                            <input class='form-control' type='text' id="brand" name='brand' th:value="${qp.bizActuator.brand}"  placeholder='品牌' readonly/>
+                            <input class='form-control' type='text' th:id="'brand_' + ${qp.productId}" name='brand' th:value="${qp.bizActuator.brand}"  placeholder='品牌' readonly/>
                         </div>
                         <div class='col-sm-1'>
                             <input class='form-control' type='text' th:id="'string1_' + ${qp.productId}" th:value="${qp.bizActuator.string1}" placeholder='型号' readonly/>
                         </div>
 
                         <div class='col-sm-2'>
-                            <input class='form-control' type='text' th:id="'actuatorNum_' + ${qp.productId}" th:onchange="sumPrice([[${qp.productId}]]);" th:value="${qp.actuatorNum}" placeholder='数量' />
+                            <input class='form-control' type='text' th:id="'actuatorNum_' + ${qp.productId}" th:onblur="sumPrice([[${qp.productId}]]);" onkeyup="AmountKeyUp(this)" th:value="${qp.actuatorNum}" placeholder='数量' />
                         </div>
 
                         <div class='col-sm-1'>
                             <input class='form-control' type='text' th:id="'actuatorPrice_' + ${qp.productId}" name="actuatorPrice" th:value="${qp.bizActuator.price}" placeholder='单价' readonly/>
                         </div>
 
-                        <div class='col-sm-2'>
-                            <input th:id="'actuatorCoefficient_' + ${qp.productId}"  class='form-control' th:onchange="sumPrice([[${qp.productId}]]);" th:value="${qp.actuatorCoefficient}" type='text' placeholder='系数'>
+                        <div class='col-sm-1'>
+                            <input th:id="'actuatorCoefficient_' + ${qp.productId}"  class='form-control'  th:onblur="sumPrice([[${qp.productId}]]);" onkeyup="AmountKeyUp(this)" th:value="${qp.actuatorCoefficient}" type='text' placeholder='系数'>
+                        </div>
+                    </div>
+
+                    <div class='form-group'>
+                        <label class='control-label col-sm-3'>产品备注：</label>
+
+                        <div class='col-sm-8'>
+                            <input th:id="'productRemark_' + ${qp.productId}" th:value="${qp.string4}"  class='form-control' type='text'>
                         </div>
                     </div>
 
@@ -158,6 +173,13 @@
                         <div class='col-sm-2'>
                             <input th:id="'totalSum_' + ${qp.productId}" name='totalSum' class='form-control'  type='text' readonly  >
                         </div>
+
+                        <div class='col-sm-2' >
+                            <a class="btn btn-danger btn-xs" th:onclick="removeProject([[${qp.productId}]]);" >
+                                <i class="fa fa-remove"></i> 删除
+                            </a>
+                        </div>
+
                     </div>
 
                 </div>
@@ -167,39 +189,43 @@
 
             <div class="form-group">    
                 <label class="col-sm-3 control-label">特殊费用：</label>
-                <div class="col-sm-2">
-                    <input name="specialExpenses" th:field="*{specialExpenses}" class="form-control" type="text">
+                <div class="col-sm-3">
+                    <input name="specialExpenses" th:field="*{specialExpenses}" onblur="totalSumPrice()" onkeyup="AmountKeyUp(this)" class="form-control" type="text">
                 </div>
-                <div class="col-sm-6">
-                    <input name="string4" id="string4" th:field="*{string4}" class="form-control" type="text" placeholder="特殊费用说明">
+                <label class="col-sm-1 control-label">费用说明：</label>
+                <div class="col-sm-4">
+                    <input name="string4" id="string4" th:field="*{string4}"  class="form-control" type="text" placeholder="特殊费用说明">
                 </div>
             </div>
-            <div class="form-group">    
+
+
+            <div class="form-group">
                 <label class="col-sm-3 control-label">付款方式：</label>
-                <div class="col-sm-8">
+                <div class="col-sm-3">
                     <select name="paymentMethod" class="form-control m-b" th:with="type=${@dict.getType('payment_method')}">
                         <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{paymentMethod}"></option>
                     </select>
                 </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">运费价格：</label>
-                <div class="col-sm-8">
-                    <input name="freight" th:field="*{freight}" class="form-control" type="text">
+
+                <label class="col-sm-1 control-label">运费价格：</label>
+                <div class="col-sm-4 ">
+                    <input name="freight" th:field="*{freight}" onkeyup="AmountKeyUp(this)" class="form-control" type="text">
                 </div>
+
             </div>
-            <div class="form-group">    
+
+            <div class="form-group">
                 <label class="col-sm-3 control-label">供货周期：</label>
-                <div class="col-sm-8">
+                <div class="col-sm-3">
                     <input name="leadTime" th:field="*{leadTime}" class="form-control" type="text">
                 </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">报备项目 默认非项目：</label>
-                <div class="col-sm-8">
+                <label class="col-sm-1 control-label">报备项目：</label>
+                <div class="col-sm-4">
                     <input name="reportProject" th:field="*{reportProject}" class="form-control" type="text">
                 </div>
+
             </div>
+
 
             <!--
             <div class="form-group">
@@ -218,11 +244,17 @@
             </div>
 
             <div class="form-group">
-                <label class="col-sm-3 control-label">产品合计金额：</label>
+                <label class="col-sm-3 control-label">产品金额：</label>
                 <div class="col-sm-2">
                     <input name="productTotalPrice" id="productTotalPrice" class="form-control" type="text" readonly>
                 </div>
-                <label class="col-sm-3 control-label">总金额：</label>
+
+                <label class="col-sm-1 control-label">阀门数量：</label>
+                <div class="col-sm-2">
+                    <input name="productTotalNum" id="productTotalNum" class="form-control" type="text" readonly>
+                </div>
+
+                <label class="col-sm-1 control-label">金额：</label>
                 <div class="col-sm-2">
                     <input name="totalPrice" id="totalPrice" class="form-control" type="text" readonly>
                 </div>
@@ -239,7 +271,8 @@
             rules: {
                 string1: {
                     required: true,
-                    minlength: 1,
+                    minlength: 1
+                    /*
                     remote: {
                         url: prefix + "/checkQuotationNo",
                         type: "post",
@@ -256,16 +289,39 @@
                         dataFilter: function(data, type) {
                             return $.validate.unique(data);
                         }
+                    }*/
+                },
+                customerName:{
+                    required: true,
+                    remote: {
+                        url: prefix + "/checkCustomer",
+                        type: "post",
+                        dataType: "json",
+                        async: false,
+                        data: {
+                            string2 : function() {
+                                return $.common.trim($("#string2").val());
+                            },
+                            string3 : 1,
+                            quotationId :  function() {
+                                return $.common.trim($("#quotationId").val());
+                            }
+                        },
+                        dataFilter: function(data, type) {
+                            var validateUnique = $.validate.unique(data);
+                            console.log("data=" + data);
+                            console.log("validateUnique=" + validateUnique);
+                            return validateUnique;
+                        }
                     }
-                }
+                },
             },
             messages: {
-                string1: {
-                    required: icon + "请输入报价单号",
-                    minlength: icon + "请输入报价单号",
-                    remote: icon + "报价单号重复",
+                "customerName": {
+                    required: icon + "请选择客户",
+                    remote: icon + "客户重复"
                 }
-            }
+            },
         });
         function submitHandler() {
             if ($.validate.form()) {
@@ -301,6 +357,8 @@
                     productObj["productRef2Coefficient"] = $("#productRef2Coefficient_" + productId).val();
                     productObj["actuatorNum"] = $("#actuatorNum_" + productId).val();
                     productObj["actuatorCoefficient"] = $("#actuatorCoefficient_" + productId).val();
+                    productObj["string4"] = $("#productRemark_" + productId).val();
+
 
                     productArray.push(productObj);
                 }
@@ -312,8 +370,9 @@
         }
 
 
-        function selectProduct() {
+        function selectProduct(type) {
             var url = prefix + "/selectProduct";
+            $("#productOperationType").val(type);
             var widthNum = this.innerWidth - 50;
             var heigthNum = this.innerHeight - 50;
             $.modal.open("关联产品", url,widthNum,heigthNum);
@@ -410,7 +469,7 @@
             var totalSum = parseFloat(parseFloat(productSum) + parseFloat(productRef1Sum) + parseFloat(productRef2Sum) + parseFloat(actuatorSum)).toFixed(4);
             $("#totalSum_" + productId).val(totalSum);
 
-            return totalSum;
+            return totalSum + "#" + productNum;
         }
 
         function FloatAdd(arg1,arg2){
@@ -427,13 +486,17 @@
             var productIdsS = productIds.split(",");
             var productTotalPrice = 0;
             var totalPrice = 0;
+            var productTotalNumS = 0;
             for (var i = 0; i < productIdsS.length; i++) {
                 var productId = productIdsS[i];
                 if (isEmpty(productId)) {
                     continue;
                 }
-                var totalSum = getProductSum(productId);
+                var totalSumStr = getProductSum(productId,productTotalNum);
+                var totalSum = totalSumStr.split("#")[0];
+                var productTotalNum = totalSumStr.split("#")[1];
                 productTotalPrice = FloatAdd(productTotalPrice,totalSum).toFixed(4);
+                productTotalNumS = FloatAdd(productTotalNumS,productTotalNum).toFixed(0);
             }
             var specialExpenses = $("#specialExpenses").val();
             if (isEmpty(specialExpenses)) {
@@ -442,6 +505,29 @@
             totalPrice = parseFloat(productTotalPrice) + parseFloat(specialExpenses);
             $("#productTotalPrice").val(parseFloat(productTotalPrice).toFixed(4));
             $("#totalPrice").val(parseFloat(totalPrice).toFixed(4));
+            $("#productTotalNum").val(productTotalNumS);
+        }
+
+        function removeProject (productId) {
+
+            $.modal.confirm("确定要删除该产品吗？", function() {
+                $("#productDiv_" + productId).remove();
+                var productIds = $("#productIds").val();
+                var productNames = $("#productNames").val();
+                var productIdsS = productIds.split(",");
+                var productNamesS = productNames.split(",");
+                for (var i = 0; i < productIdsS.length; i++) {
+                    if (productId == productIdsS[i]) {
+                        var productName = productNamesS[i];
+                        productNamesS.splice(i,1);
+                        productIdsS.splice(i,1);
+                    } else {
+                        sumPrice(productId);
+                    }
+                }
+                $("#productIds").val(productIdsS.toString());
+                $("#productNames").val(productNamesS.toString());
+            });
         }
 
 

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('报价单列表')" />
+    <th:block th:include="include :: header('待办报价单列表')" />
 </head>
 <body class="gray-bg">
      <div class="container-div">
@@ -14,26 +14,10 @@
                                 <p>状态：</p>
                                 <select name="string6" class="form-control m-b" >
                                     <option value="0">全部</option>
-                                    <option value="1">待办</option>
+                                    <option value="1" selected>待办</option>
                                     <option value="2">已办</option>
                                 </select>
                             </li>
-
-                            <li>
-                                <p>报价单号：</p>
-                                <input type="text" name="string1" id="string1"/>
-                            </li>
-
-                            <li>
-                                <p>客户名称：</p>
-                                <input type="text" name="customerName" id="customerName"/>
-                            </li>
-
-                            <li >
-                                <p>申请人：</p>
-                                <input type="text" name="createBy" id="createBy"/>
-                            </li>
-
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
                                 <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
@@ -53,10 +37,10 @@
                 <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="fmis:quotation:remove">
                     <i class="fa fa-remove"></i> 删除
                 </a>
-
-                <a class="btn btn-warning" onclick="exportPdf()" shiro:hasPermission="fmis:quotation:export">
-                    <i class="fa fa-download"></i> 生成报价单
-                 </a>
+                <!--
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="fmis:quotation:export">
+                    <i class="fa fa-download"></i> 导出
+                 </a>-->
             </div>
             <div class="col-sm-12 select-table table-striped">
                 <table id="bootstrap-table"></table>
@@ -217,7 +201,6 @@
                         //查看审批历史 待做
                         actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewExamine(\'' + row.quotationId + '\')"><i class="fa fa-remove"></i> 审批记录 </a>');
                         actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewExamineDetail(\'' + row.quotationId + '\')"><i class="fa fa-remove"></i> 详情 </a>');
-
                         return actions.join('');
                     }
                 }]
@@ -230,42 +213,6 @@
             $.modal.openFull("增加", url);
         }
 
-
-        function exportPdf(formId) {
-
-            var row = $('#bootstrap-table').bootstrapTable('getSelections')[0];
-            var rows = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
-            if ($.common.isEmpty(row) || rows.length != 1) {
-                $.modal.alertWarning("请选择一条记录");
-                return;
-            }
-
-
-            var flowStatus = row.flowStatus;
-            var normalFlag = row.normalFlag;
-            if (flowStatus == "0" || flowStatus != normalFlag) {
-                $.modal.alertWarning("请等待审批结束后生成报价单！");
-                return;
-            }
-
-            $.modal.confirm("确定生成报价单吗？", function() {
-                var currentId = $.common.isEmpty(formId) ? $('form').attr('id') : formId;
-                console.log("currentId=" + currentId);
-                $.modal.loading("正在导出数据，请稍后...");
-                var paramsJson = $("#" + currentId).serializeArray();
-                paramsJson.push({"name": "quotationId", "value": row.quotationId});
-                $.post($.table._option.exportUrl, paramsJson, function(result) {
-                    if (result.code == web_status.SUCCESS) {
-                        window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;
-                    } else if (result.code == web_status.WARNING) {
-                        $.modal.alertWarning(result.msg)
-                    } else {
-                        $.modal.alertError(result.msg);
-                    }
-                    $.modal.closeLoading();
-                });
-            });
-        }
 
         function edit(id) {
             if($.common.isEmpty(id) && $.table._option.type == table_type.bootstrapTreeTable) {
@@ -301,16 +248,12 @@
                 $.modal.closeAll();
             });
         }
-
         function viewExamineDetail(quotationId) {
             var url = prefix + "/viewDetail?quotationId=" + quotationId;
-
             $.modal.openNoEnter("详情", url,$(window).width(),$(window).height(),function(){
                 $.modal.closeAll();
             });
         }
-
-
         $(document).ready(function(){
             if (roleType != "1") {
                 $("#toolbar").html("");

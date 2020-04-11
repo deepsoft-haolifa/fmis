@@ -39,7 +39,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
     <sql id="selectBizProductRefDictVo">
-      select pr.product_ref_id, pr.name, pr.type, pr.model, d1.name as specifications, d2.name as valvebody_material, pr.material_require, pr.price,
+      select distinct pr.product_ref_id, pr.name, pr.type, pr.model, d1.name as specifications, d2.name as valvebody_material, pr.material_require, pr.price,
 	    pr.remark, pr.suppliers_id, pr.string1, pr.string2, pr.string3, pr.string4, pr.string5, pr.string6, pr.string7, pr.string8,
 	    pr.string9, pr.string10, pr.status, pr.del_flag, pr.create_by, pr.create_time, pr.update_by, pr.update_time,s.name as  suppliersName
 	 from biz_product_ref pr
@@ -54,8 +54,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="productRefId != null  and productRefId != ''"> and pr.product_ref_id = #{productRefId}</if>
             <if test="name != null  and name != ''"> and pr.name like concat('%', #{name}, '%')</if>
             <if test="type != null  and type != ''"> and pr.type = #{type}</if>
-            <if test="specifications != null  and specifications != ''"> and d1.name like concat('%', #{specifications}, '%')</if>
-            <if test="valvebodyMaterial != null  and valvebodyMaterial != ''"> and d2.name like concat('%', #{valvebodyMaterial}, '%')</if>
+            <if test="specifications != null  and specifications != ''"> and d1.name=#{specifications}</if>
+            <if test="valvebodyMaterial != null  and valvebodyMaterial != ''"> and d2.name=#{valvebodyMaterial}</if>
         </where>
         order by pr.create_time desc
     </select>

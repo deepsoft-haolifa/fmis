@@ -208,3 +208,9 @@ AND dict_id NOT IN (
         count(*) > 1
 		) as temp1
 )
+
+
+
+update biz_product p set p.string1=(select d.code from biz_dict d where d.parent_id=1 and p.series=d.dict_id);
+
+update biz_product set string1='D270' where string1='D';

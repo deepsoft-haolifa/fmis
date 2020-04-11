@@ -3,41 +3,121 @@
 <head>
     <th:block th:include="include :: header('审核报价单')" />
 </head>
-<body class="white-bg">
-<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+<body class="white-bg m">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content ">
     <form class="form-horizontal m" id="form-quotation-edit" th:object="${bizQuotation}">
         <input name="quotationId" id="quotationId" th:field="*{quotationId}" type="hidden">
 
 
         <div class="form-group">
-            <label class="col-sm-3 control-label">报价单号：</label>
-            <div class="col-sm-8">
+            <label class="col-sm-1 control-label ">报价单号：</label>
+            <div class="col-sm-10">
                 <input name="string1" id="string1" class="form-control" readonly type="text" th:field="*{string1}" required>
             </div>
         </div>
 
         <div class="form-group">
-            <label class="col-sm-3 control-label">客户名称：</label>
-            <div class="col-sm-8">
-                <input name="customerName" id="customerName" th:field="*{customerName}" class="form-control" type="text" readonly  required>
+            <label class="col-md-1 control-label">客户名称：</label>
+            <div class="col-md-10">
+                <input name="customerName" id="customerName" th:field="*{customerName}" class="form-control" type="text" readonly >
                 <input name="string2" id="string2" class="form-control" type="hidden" th:field="*{string2}">
             </div>
         </div>
 
 
-        <div class="form-group">
-            <label class="col-sm-3 control-label">选择产品：</label>
-            <div class="col-sm-6">
+        <div class="form-group" style="display: none">
+            <label class="col-sm-3 control-label">产品：</label>
+            <div class="col-sm-8">
                 <input name="productIds" id="productIds" th:value="${productIds}" class="form-control" type="hidden" >
-                <input name="productNames" id="productNames" th:value="${productNames}" class="form-control" type="text" readonly  required>
-            </div>
-            <div class="col-sm-2">
-
+                <input name="productNames" id="productNames" th:value="${productNames}" class="form-control" type="text" readonly >
             </div>
         </div>
 
-        <div class="hr-line-dashed"></div>
-        <div class="form-horizontal" id="productDiv" >
+
+        <div class="form-horizontal table-responsive" id="productDiv" >
+
+            <div class="col-sm-12 select-table table-responsive" style="overflow:scroll;">
+                <table id="bootstrap-table" class="table  table-responsive small m-t-md" style="min-width:1800px;">
+                    <thead>
+                        <tr>
+                            <td>序号</td>
+                            <td>名称</td>
+                            <td>型号</td>
+                            <td>规格</td>
+                            <td>压力</td>
+                            <td>阀体</td>
+                            <td>阀芯</td>
+                            <td>密封材质</td>
+                            <td>驱动形式</td>
+                            <td>连接方式</td>
+                            <td>数量</td>
+                            <td>单价</td>
+                            <td>系数</td>
+
+                            <td>备注</td>
+
+                            <td>法兰名称</td>
+                            <td>法兰价格</td>
+                            <td>法兰数量</td>
+                            <td>法兰系数</td>
+
+                            <td>螺栓名称</td>
+                            <td>螺栓价格</td>
+                            <td>螺栓数量</td>
+                            <td>螺栓系数</td>
+
+                            <td>执行器名称</td>
+                            <td>执行器价格</td>
+                            <td>执行器数量</td>
+                            <td>执行器系数</td>
+
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr th:each="qp:${bizQuotation.quotationProductList}">
+                        <td th:text="${qpStat.index+1}"></td>
+                        <td th:text="${qp.productName}"></td>
+                        <td th:text="${qp.bizProduct.model}"></td>
+                        <td th:text="${qp.bizProduct.specifications}"></td>
+                        <td th:text="${qp.bizProduct.nominalPressure}"></td>
+                        <td th:text="${qp.bizProduct.valvebodyMaterial}"></td>
+
+                        <td th:text="${qp.bizProduct.valveElement}"></td>
+
+                        <td th:text="${qp.bizProduct.sealingMaterial}"></td>
+                        <td th:text="${qp.bizProduct.driveForm}"></td>
+                        <td th:text="${qp.bizProduct.connectionType}"></td>
+                        <td th:text="${qp.productNum}"></td>
+                        <td th:text="${qp.bizProduct.price}"></td>
+                        <td th:text="${qp.productCoefficient}"></td>
+                        <td th:text="${qp.string4}"></td>
+
+                        <td th:text="${qp.bizProductRef1.name}"></td>
+                        <td th:text="${qp.bizProductRef1.price}"></td>
+                        <td th:text="${qp.productRef1Num}"></td>
+                        <td th:text="${qp.productRef1Coefficient}"></td>
+
+                        <td th:text="${qp.bizProductRef2.name}"></td>
+                        <td th:text="${qp.bizProductRef2.price}"></td>
+                        <td th:text="${qp.productRef2Num}"></td>
+                        <td th:text="${qp.productRef2Coefficient}"></td>
+
+                        <td th:text="${qp.bizActuator.name}"></td>
+                        <td th:text="${qp.bizActuator.price}"></td>
+                        <td th:text="${qp.actuatorNum}"></td>
+                        <td th:text="${qp.actuatorCoefficient}"></td>
+                    </tr>
+
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+        <div class="form-horizontal" id="productDiv" style="display: none">
 
             <div class="ibox float-e-margins" th:each="qp:${bizQuotation.quotationProductList}" th:id="'productDiv_' + ${qp.productId}" >
                 <h5 th:text="${qp.productName}" ></h5>
@@ -51,11 +131,11 @@
                     </div>
 
                     <div class='col-sm-2'>
-                        <input class='form-control' type='text' th:id="'productModel_' + ${qp.productId}" name='productModel' th:value="${qp.bizProduct.model}" readonly placeholder='产品型号' />
+                        <input class='form-control' type='text' id="productModel" name='productModel' th:value="${qp.bizProduct.model}" readonly placeholder='产品型号' />
                     </div>
 
                     <div class='col-sm-2'>
-                        <input class='form-control' type='text' th:id="'productNum_' + ${qp.productId}" th:value="${qp.productNum}"  readonly placeholder='数量' />
+                        <input class='form-control' type='text' th:id="'productNum_' + ${qp.productId}" th:value="${qp.productNum}" th:onblur="sumPrice([[${qp.productId}]]);"  onkeyup="AmountKeyUp(this)" placeholder='数量' />
                     </div>
 
                     <div class='col-sm-1'>
@@ -63,7 +143,7 @@
                     </div>
 
                     <div class='col-sm-1'>
-                        <input class='form-control' type='text' th:id="'productCoefficient_' + ${qp.productId}"  readonly th:value="${qp.productCoefficient}" placeholder='系数' />
+                        <input class='form-control' type='text' th:id="'productCoefficient_' + ${qp.productId}" th:onblur="sumPrice([[${qp.productId}]]);" onkeyup="AmountKeyUp(this)" th:value="${qp.productCoefficient}" placeholder='系数' />
                     </div>
                 </div>
 
@@ -71,22 +151,22 @@
                     <label class='control-label col-sm-3'>法兰配件：</label>
                     <div class='col-sm-2'>
                         <input th:id="'productRef1Id_' + ${qp.productId}"  class='form-control' type='hidden' th:value="${qp.productRef1Id}">
-                        <input th:id="'productRef1Name_' + ${qp.productId}" class='form-control' type='text'  th:value="${qp.productRef1Name}" readonly>
+                        <input th:id="'productRef1Name_' + ${qp.productId}" class='form-control' type='text' th:onclick="selectProductRef1([[${qp.productId}]]);" th:value="${qp.productRef1Name}" readonly>
                     </div>
 
 
                     <div class='col-sm-1'>
-                        <input class='form-control' type='text' th:id="'productRef1Model_' + ${qp.productId}" name='productRef1Model' th:value="${qp.bizProductRef1.model}" placeholder='型号' readonly/>
+                        <input class='form-control' type='text' id="productRef1Model" name='productRef1Model' th:value="${qp.bizProductRef1.model}" placeholder='型号' readonly/>
                     </div>
                     <div class='col-sm-1'>
-                        <input class='form-control' type='text' th:id="'productRef1Specifications_' + ${qp.productId}"   name="productRef1Specifications"  th:value="${qp.bizProductRef1.specifications}"  placeholder='规格' readonly/>
+                        <input class='form-control' type='text' id="productRef1Specifications"  name="productRef1Specifications"  th:value="${qp.bizProductRef1.specifications}"  placeholder='规格' readonly/>
                     </div>
                     <div class='col-sm-1'>
-                        <input class='form-control' type='text' th:id="'productRef1ValvebodyMaterial_' + ${qp.productId}" th:value="${qp.bizProductRef1.valvebodyMaterial}"  name="productRef1ValvebodyMaterial"  placeholder='材质' readonly/>
+                        <input class='form-control' type='text' id="productRef1ValvebodyMaterial" name="productRef1ValvebodyMaterial"  placeholder='材质' readonly/>
                     </div>
 
                     <div class='col-sm-1'>
-                        <input class='form-control' type='text' th:id="'productRef1Num_' + ${qp.productId}"  th:value="${qp.productRef1Num}" placeholder='数量' readonly/>
+                        <input class='form-control' type='text' th:id="'productRef1Num_' + ${qp.productId}" th:onblur="sumPrice([[${qp.productId}]]);" onkeyup="AmountKeyUp(this)" th:value="${qp.productRef1Num}" placeholder='数量' />
                     </div>
 
                     <div class='col-sm-1'>
@@ -94,8 +174,8 @@
                     </div>
 
                     <div class='col-sm-1'>
-                        <input th:id="'productRef1Coefficient_' + ${qp.productId}"  class='form-control'
-                                th:value="${qp.productRef1Coefficient}" type='text' placeholder='系数' readonly>
+                        <input th:id="'productRef1Coefficient_' + ${qp.productId}" th:onblur="sumPrice([[${qp.productId}]]);" class='form-control'
+                               onkeyup="AmountKeyUp(this)" th:value="${qp.productRef1Coefficient}" type='text' placeholder='系数'>
                     </div>
                 </div>
 
@@ -103,18 +183,18 @@
                     <label class='control-label col-sm-3'>螺栓配件：</label>
                     <div class='col-sm-2'>
                         <input th:id="'productRef2Id_' + ${qp.productId}" class='form-control' type='hidden' th:value="${qp.productRef2Id}">
-                        <input th:id="'productRef2Name_' + ${qp.productId}" class='form-control' type='text' th:value="${qp.productRef2Name}" readonly  >
+                        <input th:id="'productRef2Name_' + ${qp.productId}" class='form-control' type='text' th:value="${qp.productRef2Name}" readonly th:onclick="selectProductRef2([[${qp.productId}]]);" >
                     </div>
 
                     <div class='col-sm-1'>
-                        <input class='form-control' type='text' th:id="'productRef2Model_' + ${qp.productId}" name='productRef2Model' th:value="${qp.bizProductRef2.model}"  placeholder='型号' readonly/>
+                        <input class='form-control' type='text' id="productRef2Model" name='productRef2Model' th:value="${qp.bizProductRef2.model}"  placeholder='型号' readonly/>
                     </div>
                     <div class='col-sm-1'>
-                        <input class='form-control' type='text' th:id="'productRef2ValvebodyMaterial_' + ${qp.productId}"  th:value="${qp.bizProductRef2.valvebodyMaterial}" name="productRef2ValvebodyMaterial"  placeholder='材质' readonly/>
+                        <input class='form-control' type='text' id="productRef2ValvebodyMaterial" th:value="${qp.bizProductRef2.valvebodyMaterial}" name="productRef2ValvebodyMaterial"  placeholder='材质' readonly/>
                     </div>
 
                     <div class='col-sm-2'>
-                        <input th:id="'productRef2Num_' + ${qp.productId}"  t class='form-control'  type='text' th:value="${qp.productRef2Num}" placeholder='数量' readonly/>
+                        <input th:id="'productRef2Num_' + ${qp.productId}"  th:onblur="sumPrice([[${qp.productId}]]);" class='form-control' onkeyup="AmountKeyUp(this)" type='text' th:value="${qp.productRef2Num}" placeholder='数量' />
                     </div>
 
                     <div class='col-sm-1'>
@@ -122,7 +202,7 @@
                     </div>
 
                     <div class='col-sm-1'>
-                        <input th:id="'productRef2Coefficient_' + ${qp.productId}"  class='form-control'  th:value="${qp.productRef2Coefficient}" type='text' placeholder='系数' readonly>
+                        <input th:id="'productRef2Coefficient_' + ${qp.productId}" th:onblur="sumPrice([[${qp.productId}]]);" class='form-control' onkeyup="AmountKeyUp(this)" th:value="${qp.productRef2Coefficient}" type='text' placeholder='系数'>
                     </div>
                 </div>
 
@@ -130,18 +210,18 @@
                     <label class='control-label col-sm-3'>执 行 器：</label>
                     <div class='col-sm-2'>
                         <input th:id="'actuatorId_' + ${qp.productId}" class='form-control' type='hidden' th:value="${qp.actuatorId}">
-                        <input th:id="'actuatorName_' + ${qp.productId}"  class='form-control' th:value="${qp.actuatorName}" type='text' readonly  >
+                        <input th:id="'actuatorName_' + ${qp.productId}"  class='form-control' th:value="${qp.actuatorName}" type='text' readonly th:onclick="selectActuator([[${qp.productId}]]);" >
                     </div>
 
                     <div class='col-sm-1'>
-                        <input class='form-control' type='text' th:id="'brand_' + ${qp.productId}" name='brand' th:value="${qp.bizActuator.brand}"  placeholder='品牌' readonly/>
+                        <input class='form-control' type='text' id="brand" name='brand' th:value="${qp.bizActuator.brand}"  placeholder='品牌' readonly/>
                     </div>
                     <div class='col-sm-1'>
                         <input class='form-control' type='text' th:id="'string1_' + ${qp.productId}" th:value="${qp.bizActuator.string1}" placeholder='型号' readonly/>
                     </div>
 
                     <div class='col-sm-2'>
-                        <input class='form-control' type='text' th:id="'actuatorNum_' + ${qp.productId}" th:onblur="sumPrice([[${qp.productId}]]);"  th:value="${qp.actuatorNum}" placeholder='数量' readonly/>
+                        <input class='form-control' type='text' th:id="'actuatorNum_' + ${qp.productId}" th:onblur="sumPrice([[${qp.productId}]]);" onkeyup="AmountKeyUp(this)" th:value="${qp.actuatorNum}" placeholder='数量' />
                     </div>
 
                     <div class='col-sm-1'>
@@ -149,7 +229,7 @@
                     </div>
 
                     <div class='col-sm-1'>
-                        <input th:id="'actuatorCoefficient_' + ${qp.productId}"  class='form-control'   readonly th:value="${qp.actuatorCoefficient}" type='text' placeholder='系数'>
+                        <input th:id="'actuatorCoefficient_' + ${qp.productId}"  class='form-control'  th:onblur="sumPrice([[${qp.productId}]]);" onkeyup="AmountKeyUp(this)" th:value="${qp.actuatorCoefficient}" type='text' placeholder='系数'>
                     </div>
                 </div>
 
@@ -157,7 +237,7 @@
                     <label class='control-label col-sm-3'>产品备注：</label>
 
                     <div class='col-sm-8'>
-                        <input th:id="'productRemark_' + ${qp.productId}" th:value="${qp.string4}"  class='form-control' type='text' readonly>
+                        <input th:id="'productRemark_' + ${qp.productId}" th:value="${qp.string4}"  class='form-control' type='text'>
                     </div>
                 </div>
 
@@ -172,7 +252,9 @@
                     </div>
 
                     <div class='col-sm-2' >
-
+                        <a class="btn btn-danger btn-xs" th:onclick="removeProject([[${qp.productId}]]);" >
+                            <i class="fa fa-remove"></i> 删除
+                        </a>
                     </div>
 
                 </div>
@@ -180,22 +262,26 @@
             </div>
 
         </div>
-        <div class="hr-line-dashed"></div>
+
 
         <div class="form-group">
-            <label class="col-sm-3 control-label">特殊费用：</label>
+            <label class="col-sm-11 control-label"></label>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-1 control-label">特殊费用：</label>
             <div class="col-sm-3">
-                <input name="specialExpenses" th:field="*{specialExpenses}" readonly class="form-control" type="text">
+                <input name="specialExpenses" th:field="*{specialExpenses}" onblur="totalSumPrice()" onkeyup="AmountKeyUp(this)" readonly class="form-control" type="text">
             </div>
             <label class="col-sm-1 control-label">费用说明：</label>
-            <div class="col-sm-4">
+            <div class="col-sm-6">
                 <input name="string4" id="string4" th:field="*{string4}"  class="form-control" type="text" placeholder="特殊费用说明" readonly>
             </div>
         </div>
 
 
         <div class="form-group">
-            <label class="col-sm-3 control-label">付款方式：</label>
+            <label class="col-sm-1 control-label">付款方式：</label>
             <div class="col-sm-3">
                 <select name="paymentMethod" disabled="disabled" class="form-control m-b" th:with="type=${@dict.getType('payment_method')}">
                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{paymentMethod}"></option>
@@ -203,20 +289,20 @@
             </div>
 
             <label class="col-sm-1 control-label">运费价格：</label>
-            <div class="col-sm-4 ">
-                <input name="freight" th:field="*{freight}"  class="form-control" type="text" readonly>
+            <div class="col-sm-6 ">
+                <input name="freight" th:field="*{freight}" onkeyup="AmountKeyUp(this)" readonly class="form-control" type="text">
             </div>
 
         </div>
 
         <div class="form-group">
-            <label class="col-sm-3 control-label">供货周期：</label>
+            <label class="col-sm-1 control-label">供货周期：</label>
             <div class="col-sm-3">
-                <input name="leadTime" th:field="*{leadTime}" class="form-control" type="text" readonly>
+                <input name="leadTime" th:field="*{leadTime}" class="form-control" readonly type="text">
             </div>
             <label class="col-sm-1 control-label">报备项目：</label>
-            <div class="col-sm-4">
-                <input name="reportProject" th:field="*{reportProject}" class="form-control" type="text" readonly>
+            <div class="col-sm-6">
+                <input name="reportProject" th:field="*{reportProject}" class="form-control" readonly type="text">
             </div>
 
         </div>
@@ -230,16 +316,15 @@
             </div>
         </div>-->
 
-
         <div class="form-group">
-            <label class="col-sm-3 control-label">备注：</label>
-            <div class="col-sm-8">
-                <input name="remark" th:field="*{remark}" class="form-control" type="text" readonly>
+            <label class="col-sm-1 control-label">备注：</label>
+            <div class="col-sm-10">
+                <input name="remark" th:field="*{remark}" readonly class="form-control" type="text" >
             </div>
         </div>
 
         <div class="form-group">
-            <label class="col-sm-3 control-label">产品金额：</label>
+            <label class="col-sm-1 control-label">产品金额：</label>
             <div class="col-sm-2">
                 <input name="productTotalPrice" id="productTotalPrice" class="form-control" type="text" readonly>
             </div>
@@ -255,22 +340,6 @@
             </div>
         </div>
 
-        <div class="form-group has-success">
-            <label class="col-sm-3 control-label">审批意见：</label>
-            <div class="col-sm-8">
-                <select name="examineStatus" id="examineStatus" class="form-control m-b" th:with="type=${@dict.getType('examine_status')}">
-                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                </select>
-            </div>
-        </div>
-
-
-        <div class="form-group has-success">
-            <label class="col-sm-3 control-label" >审批备注：</label>
-            <div class="col-sm-8">
-                <textarea name="examineRemark" class="form-control" id="examineRemark"></textarea>
-            </div>
-        </div>
 
     </form>
 </div>
@@ -324,7 +393,6 @@
         var url = prefix + "/selectCustomer";
         $.modal.open("关联客户", url,widthNum,heigthNum);
     }
-
     function isEmpty(v) {
         return $.common.isEmpty(v);
     }
@@ -420,6 +488,7 @@
         $("#totalPrice").val(parseFloat(totalPrice).toFixed(4));
         $("#productTotalNum").val(productTotalNumS);
     }
+
 
     $(document).ready(function () {
         var productIds = $("#productIds").val();

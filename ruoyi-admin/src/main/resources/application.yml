@@ -10,6 +10,7 @@ ruoyi:
   demoEnabled: true
   # 文件路径 示例（ Windows配置D:/ruoyi/uploadPath，Linux配置 /home/ruoyi/uploadPath）
   # 因为我电脑只有 C 盘
+  #profile: /Users/a/IdeaProjects/fmis-process/uploadPath
   profile: /home/admin/uploadPath
   # 获取ip地址开关
   addressEnabled: true

@@ -15,11 +15,19 @@
                                 <input type="text" name="name"/>
                             </li>
 
+
                             <li>
                                 <p>类别：</p>
                                 <select name="series" id="series" class="form-control select2-multiple" > <!--multiple-->
                                     <option value="">请选择</option>
-                                    <option th:each="series:${seriesSelect}" th:value="${series.dictId}" th:text="${series.name} + ' ' + ${series.code}" ></option>
+                                    <option th:each="series:${seriesSelect}" th:value="${series.dictId}" th:text="${series.name} + '_' + ${series.code}" ></option>
+                                </select>
+                            </li>
+
+                            <li>
+                                <p>系列：</p>
+                                <select name="string1" id="string1" class="form-control select2-multiple" > <!--multiple-->
+                                    <option value="">请选择</option>
                                 </select>
                             </li>
 
@@ -128,6 +136,10 @@
                     title : '类别'
                 },
                 {
+                    field : 'string1',
+                    title : '系列'
+                },
+                {
                     field : 'model', 
                     title : '产品型号'
                 },
@@ -207,11 +219,27 @@
             };
             $.table.init(options);
         });
-
+        function string1AddOptions(v){
+            $("#string1").html("");
+            $("#string1").append("<option value=''>请选择</option>");
+            var string1Obj = $("#string1");
+            if (v == "D") {
+                string1Obj.append("<option value='D220'>D220</option>");
+                string1Obj.append("<option value='D240'>D240</option>");
+                string1Obj.append("<option value='D260'>D260</option>");
+                string1Obj.append("<option value='D261'>D261</option>");
+                string1Obj.append("<option value='D270'>D270</option>");
+                string1Obj.append("<option value='D271'>D271</option>");
+                string1Obj.append("<option value='D310'>D310</option>");
+                string1Obj.append("<option value='D370'>D370</option>");
+            } else {
+                string1Obj.append("<option value='" + v + "'>" + v + "</option>");
+            }
+        }
         $("#series").change(function (){
             var series = $("#series").val();
             console.log("series=" + series);
-            if (series == null || series == "请选择") {
+            if (series == null || series == "请选择" || series == "") {
                 $("#specifications").html("");
                 $("#nominalPressure").html("");
                 $("#connectionType").html("");
@@ -222,6 +250,11 @@
                 $("#structuralStyle").html("");
                 return;
             }
+
+            var string1All = $("#series").find("option:selected").text();
+            var string1 = string1All.split("_")[1];
+            string1AddOptions(string1);
+
             $.ajax({
                 url:prefix + "/findProductTypeDict",
                 type : "post",

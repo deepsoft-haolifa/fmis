@@ -2,6 +2,8 @@ package com.ruoyi.system.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.ruoyi.system.domain.SysUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +16,7 @@ import com.ruoyi.system.domain.SysDept;
 import com.ruoyi.system.domain.SysRole;
 import com.ruoyi.system.mapper.SysDeptMapper;
 import com.ruoyi.system.service.ISysDeptService;
+import org.springframework.util.CollectionUtils;
 
 /**
  * 部门管理 服务实现
@@ -268,4 +271,29 @@ public class SysDeptServiceImpl implements ISysDeptService
         }
         return UserConstants.DEPT_NAME_UNIQUE;
     }
+
+    /**
+     * 根据用户递归查找pdf备注
+     * @param sysUser
+     * @return
+     */
+    @Override
+    public String getDeptRemarkForUserPdf (SysUser sysUser) {
+        List<SysDept> sysDepts = new ArrayList<>();
+        getDeptRemarkForUserPdf(sysUser.getDeptId(),sysDepts);
+        if (!CollectionUtils.isEmpty(sysDepts) && sysDepts.size() > 0) {
+            return sysDepts.get(0).getRemark();
+        }
+        return "";
+    }
+
+    public void getDeptRemarkForUserPdf (Long deptId,List<SysDept> sysDepts) {
+        SysDept sysDept = this.selectDeptById(deptId);
+        if (sysDept != null && StringUtils.isNotEmpty(sysDept.getRemark())) {
+            sysDepts.add(sysDept);
+            return;
+        }
+        getDeptRemarkForUserPdf(sysDept.getParentId(),sysDepts);
+    }
+
 }

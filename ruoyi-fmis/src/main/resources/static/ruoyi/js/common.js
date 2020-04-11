@@ -239,6 +239,25 @@ var log = {
     }
 };
 
+
+function AmountKeyUp (obj) {
+    var t = obj.value.charAt(0);
+    //先把非数字的都替换掉，除了数字和.和-号
+    obj.value = obj.value.replace(/[^\d\.\-]/g,'');
+    //前两位不能是0加数字
+    obj.value = obj.value.replace(/^0\d[0-9]*/g,'');
+    //必须保证第一个为数字而不是.
+    obj.value = obj.value.replace(/^\./g,'');
+    //保证只有出现一个.而没有多个.
+    obj.value = obj.value.replace(/\.{2,}/g,'.');
+    //保证.只出现一次，而不能出现两次以上
+    obj.value = obj.value.replace('.','$#$').replace(/\./g,'').replace('$#$','.');
+    //如果第一位是负号，则允许添加
+    obj.value = obj.value.replace(/^(\-)*(\d+)\.(\d\d\d\d\d\d).*$/,'$1$2.$3');
+    if(t == '-'){ return; }
+}
+
+
 /** 设置全局ajax处理 */
 $.ajaxSetup({
     complete: function(XMLHttpRequest, textStatus) {

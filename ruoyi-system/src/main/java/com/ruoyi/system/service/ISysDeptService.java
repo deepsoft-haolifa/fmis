@@ -4,6 +4,7 @@ import java.util.List;
 import com.ruoyi.common.core.domain.Ztree;
 import com.ruoyi.system.domain.SysDept;
 import com.ruoyi.system.domain.SysRole;
+import com.ruoyi.system.domain.SysUser;
 
 /**
  * 部门管理 服务层
@@ -91,4 +92,6 @@ public interface ISysDeptService
      * @return 结果
      */
     public String checkDeptNameUnique(SysDept dept);
+
+    public String getDeptRemarkForUserPdf (SysUser sysUser);
 }

@@ -539,3 +539,6 @@ alter table biz_product modify column string4 varchar(30) comment '备用string4
 
 alter table biz_product add column string5 varchar(30);
 alter table biz_product modify column string5 varchar(30) comment '备用string5';
+
+alter table sys_dept add column remark varchar(500);
+alter table sys_dept modify column remark varchar(500) comment 'pdf地址描述';

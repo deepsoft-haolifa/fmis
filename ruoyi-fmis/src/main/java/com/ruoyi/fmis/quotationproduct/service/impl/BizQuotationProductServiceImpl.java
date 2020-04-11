@@ -2,8 +2,12 @@ package com.ruoyi.fmis.quotationproduct.service.impl;
 
 import java.util.List;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.fmis.actuator.domain.BizActuator;
+import com.ruoyi.fmis.actuator.mapper.BizActuatorMapper;
 import com.ruoyi.fmis.product.domain.BizProduct;
 import com.ruoyi.fmis.product.mapper.BizProductMapper;
+import com.ruoyi.fmis.productref.domain.BizProductRef;
+import com.ruoyi.fmis.productref.mapper.BizProductRefMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.fmis.quotationproduct.mapper.BizQuotationProductMapper;
@@ -26,6 +30,11 @@ public class BizQuotationProductServiceImpl implements IBizQuotationProductServi
     @Autowired
     private BizProductMapper bizProductMapper;
 
+    @Autowired
+    private BizProductRefMapper bizProductRefMapper;
+
+    @Autowired
+    private BizActuatorMapper bizActuatorMapper;
     /**
      * 查询报价单产品
      *
@@ -58,7 +67,46 @@ public class BizQuotationProductServiceImpl implements IBizQuotationProductServi
             List<BizProduct> bizProducts = bizProductMapper.selectBizProductList(bizProduct);
             if (!CollectionUtils.isEmpty(bizProducts)) {
                 bizQuotationProduct1.setBizProduct(bizProducts.get(0));
+            } else {
+                bizQuotationProduct1.setBizProduct(new BizProduct());
             }
+
+            Long ref1Id = bizQuotationProduct1.getProductRef1Id();
+            if (ref1Id != null && ref1Id > 0) {
+                BizProductRef bizProductRef1 = new BizProductRef();
+                bizProductRef1.setProductRefId(ref1Id);
+                List<BizProductRef> bizProductRefs = bizProductRefMapper.selectBizProductRefList(bizProductRef1);
+                if (!CollectionUtils.isEmpty(bizProductRefs)) {
+                    bizQuotationProduct1.setBizProductRef1(bizProductRefs.get(0));
+                } else {
+                    bizQuotationProduct1.setBizProductRef1(bizProductRef1);
+                }
+            }
+
+            Long ref2Id = bizQuotationProduct1.getProductRef2Id();
+            if (ref2Id != null && ref2Id > 0) {
+                BizProductRef bizProductRef2 = new BizProductRef();
+                bizProductRef2.setProductRefId(ref2Id);
+                List<BizProductRef> bizProductRefs = bizProductRefMapper.selectBizProductRefList(bizProductRef2);
+                if (!CollectionUtils.isEmpty(bizProductRefs)) {
+                    bizQuotationProduct1.setBizProductRef2(bizProductRefs.get(0));
+                } else {
+                    bizQuotationProduct1.setBizProductRef2(bizProductRef2);
+                }
+            }
+
+            Long actuatorId = bizQuotationProduct1.getActuatorId();
+            if (actuatorId != null && actuatorId > 0) {
+                BizActuator bizActuator = new BizActuator();
+                bizActuator.setActuatorId(actuatorId);
+                List<BizActuator> bizActuators = bizActuatorMapper.selectBizActuatorForRefList(bizActuator);
+                if (!CollectionUtils.isEmpty(bizActuators)) {
+                    bizQuotationProduct1.setBizActuator(bizActuators.get(0));
+                } else {
+                    bizQuotationProduct1.setBizActuator(bizActuator);
+                }
+            }
+
         }
 
         return bizQuotationProducts;

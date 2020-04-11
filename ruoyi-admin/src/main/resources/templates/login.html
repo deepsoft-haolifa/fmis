@@ -29,9 +29,10 @@
         .forms .code + img {height: 35px;width: 70px;}
         .forms .submitBtn {background: url(login_btn.png) no-repeat;width: 250px;height: 40px;border: none;font-size: 16px;cursor: pointer;}
         .loginMsg {position: absolute;width: 100%;left: 0;top: 0;text-align: center;line-height: 30px;font-size: 14px;background-color: #f2dede;}
-         label.error { position:inherit;  }
+        label.error { position:inherit;  }
     </style>
     <script language=javascript>
+        if(window.top!==window.self){window.top.location=window.location};
         function CheckData(){
             if(form1.loginid.value==""){
                 alert("用户名不能为空！");
@@ -72,7 +73,7 @@
                             <img th:src="@{captcha/captchaImage(type=${captchaType})}" class="imgcode" width="85%" onclick="javascript:void(0);"/>
                         </div>
                     </li>
-                    <li class="row button"><button type="button" id="btnSubmit" onclick="login()" class="submitBtn btn btn-success btn-block">登 录</button></li>
+                    <li class="row button"><button type="button" id="btnSubmit" onclick="login()" data-loading="正在验证登录，请稍后..." class="submitBtn btn btn-success btn-block">登 录</button></li>
                 </ul>
             </form>
         </div>

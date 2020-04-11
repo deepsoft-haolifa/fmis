@@ -149,7 +149,12 @@ public class BizProductRefController extends BaseController {
     @GetMapping("/edit/{productRefId}")
     public String edit(@PathVariable("productRefId") Long productRefId, ModelMap mmap) {
         BizProductRef bizProductRef = bizProductRefService.selectBizProductRefById(productRefId);
-
+        if (StringUtils.isEmpty(bizProductRef.getSpecifications())) {
+            bizProductRef.setSpecifications("0");
+        }
+        if (StringUtils.isEmpty(bizProductRef.getValvebodyMaterial())) {
+            bizProductRef.setValvebodyMaterial("0");
+        }
         mmap.put("specifications",bizDictService.selectProductDictForParentType(BizConstants.specificationCode,Long.parseLong(bizProductRef.getSpecifications())));
         mmap.put("valvebodyMaterials",bizDictService.selectProductDictForParentType(BizConstants.bodyMaterial,Long.parseLong(bizProductRef.getValvebodyMaterial())));
 

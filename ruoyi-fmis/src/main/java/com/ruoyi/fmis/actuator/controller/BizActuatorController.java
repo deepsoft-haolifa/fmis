@@ -76,7 +76,7 @@ public class BizActuatorController extends BaseController {
 
         BizProduct bizProduct = bizProductService.selectBizProductById(Long.parseLong(productId));
 
-        bizProduct = null;
+        //bizProduct = null;
 
         if (bizProduct != null) {
             String specifications = bizProduct.getSpecifications();
@@ -92,7 +92,7 @@ public class BizActuatorController extends BaseController {
             if (StringUtils.isNotEmpty(nominalPressure)) {
                 BizDict bizDict = bizDictService.selectBizDictById(Long.parseLong(nominalPressure));
                 if (bizDict != null) {
-                    bizActuator.setString2(bizDict.getName());
+                    bizActuator.setString3(bizDict.getName());
                 }
             }
         }

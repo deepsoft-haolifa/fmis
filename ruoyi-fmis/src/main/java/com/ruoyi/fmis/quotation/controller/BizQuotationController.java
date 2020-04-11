@@ -3,6 +3,7 @@ package com.ruoyi.fmis.quotation.controller;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.ruoyi.common.annotation.Log;
@@ -18,7 +19,10 @@ import com.ruoyi.common.utils.itextpdf.TextWaterMarkPdfPageEvent;
 import com.ruoyi.fmis.actuator.domain.BizActuator;
 import com.ruoyi.fmis.actuator.service.IBizActuatorService;
 import com.ruoyi.fmis.common.BizConstants;
+import com.ruoyi.fmis.customer.domain.BizCustomer;
+import com.ruoyi.fmis.customer.service.IBizCustomerService;
 import com.ruoyi.fmis.dict.service.IBizDictService;
+import com.ruoyi.fmis.product.domain.BizProduct;
 import com.ruoyi.fmis.productref.domain.BizProductRef;
 import com.ruoyi.fmis.productref.service.IBizProductRefService;
 import com.ruoyi.fmis.quotation.domain.BizQuotation;
@@ -28,9 +32,12 @@ import com.ruoyi.fmis.quotationproduct.service.IBizQuotationProductService;
 import com.ruoyi.fmis.suppliers.service.IBizSuppliersService;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysDept;
+import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.service.ISysDeptService;
 import com.ruoyi.system.service.ISysRoleService;
+import com.ruoyi.system.service.ISysUserService;
 import org.activiti.engine.impl.util.CollectionUtil;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -39,8 +46,10 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.FileOutputStream;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -61,6 +70,9 @@ public class BizQuotationController extends BaseController {
     private ISysRoleService sysRoleService;
 
     @Autowired
+    private ISysUserService sysUserService;
+
+    @Autowired
     private IBizQuotationProductService bizQuotationProductService;
 
     @Autowired
@@ -78,6 +90,9 @@ public class BizQuotationController extends BaseController {
     @Autowired
     private ISysDeptService sysDeptService;
 
+    @Autowired
+    private IBizCustomerService bizCustomerService;
+
     @RequiresPermissions("fmis:quotation:view")
     @GetMapping()
     public String quotation(ModelMap mmap) {
@@ -86,6 +101,12 @@ public class BizQuotationController extends BaseController {
         return prefix + "/quotation";
     }
 
+    @GetMapping("/todoQuotation")
+    public String todoQuotation(ModelMap mmap) {
+        int roleType = sysRoleService.getRoleType(ShiroUtils.getUserId());
+        mmap.put("roleType",roleType);
+        return prefix + "/todoQuotation";
+    }
 
     public String getBh () {
         Long deptId = ShiroUtils.getSysUser().getDeptId();
@@ -120,7 +141,7 @@ public class BizQuotationController extends BaseController {
     @ResponseBody
     public AjaxResult export(BizQuotation bizQuotation) {
         //报价单
-        bizQuotation = bizQuotationService.selectBizQuotationById(275L);
+        bizQuotation = bizQuotationService.selectBizQuotationById(bizQuotation.getQuotationId());
         //产品信息
         BizQuotationProduct bizQuotationProduct = new BizQuotationProduct();
         bizQuotationProduct.setQuotationId(bizQuotation.getQuotationId());
@@ -136,20 +157,44 @@ public class BizQuotationController extends BaseController {
             // 只读
             writer.setEncryption(null, null, PdfWriter.ALLOW_PRINTING, PdfWriter.STANDARD_ENCRYPTION_128);
             // 通过PDF页面事件模式添加文字水印功能
-            writer.setPageEvent(new TextWaterMarkPdfPageEvent("水印"));
+            writer.setPageEvent(new TextWaterMarkPdfPageEvent("北京好利"));
             //设置字体样式
             //正常
-            Font textFont = PdfUtil.getPdfChineseFont(11,Font.NORMAL);
+            Font textFont = PdfUtil.getPdfChineseFont(7,Font.NORMAL);
             //加粗
-            Font boldFont = PdfUtil.getPdfChineseFont(11,Font.BOLD);
+            //Font boldFont = PdfUtil.getPdfChineseFont(11,Font.BOLD);
             //二级标题
             Font titleFont = PdfUtil.getPdfChineseFont(15,Font.BOLD);
 
-            Paragraph paragraph = new Paragraph("报 价 单", titleFont);
+            Paragraph paragraph = new Paragraph("北京好利阀业集团有限公司", titleFont);
             paragraph.setAlignment(Paragraph.ALIGN_CENTER);
 
-            //添加8列表格
-            PdfPTable table = new PdfPTable(8);
+
+            //空行
+            Paragraph blankRow = new Paragraph(18f, " ");
+
+
+            //添加副标题
+            Font simheiMiddle = textFont;
+            PdfPTable tbSubtitle = new PdfPTable(1);
+            PdfPCell cellSubtitle = new PdfPCell();
+            Paragraph pSubtitle = new Paragraph("Beijing HAOLIFA Valve Group Co.,LTD", simheiMiddle);
+            pSubtitle.setAlignment(Paragraph.ALIGN_CENTER);
+            cellSubtitle.addElement(pSubtitle);
+            cellSubtitle.setPaddingBottom(5);
+            cellSubtitle.setBorderWidthTop(0);
+            cellSubtitle.setBorderWidthLeft(0);
+            cellSubtitle.setBorderWidthRight(0);
+            cellSubtitle.setBorderWidthBottom(2);
+            cellSubtitle.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+            tbSubtitle.addCell(cellSubtitle);
+            tbSubtitle.setHorizontalAlignment(Paragraph.ALIGN_CENTER);
+
+
+            //总列数
+            int totalColumn = 15;
+            PdfPTable table = new PdfPTable(totalColumn);
+
             //table前间距
             table.setSpacingBefore(10f);
             // 设置各列列宽
@@ -157,35 +202,168 @@ public class BizQuotationController extends BaseController {
             //锁定列宽
             table.setLockedWidth(true);
             table.setHorizontalAlignment(Element.ALIGN_CENTER);
+
+            String customerId = bizQuotation.getString2();
+            BizCustomer bizCustomer = new BizCustomer();
+            if (StringUtils.isNotEmpty(customerId)) {
+                bizCustomer = bizCustomerService.selectBizCustomerById(Long.parseLong(customerId));
+            }
+            SysUser sysUser = sysUserService.selectUserById(Long.parseLong(bizQuotation.getCreateBy()));
+
             // 第一行
-            table.addCell(PdfUtil.mergeCol("订单编号：" + bizQuotation.getString1(), 8));
+            table.addCell(PdfUtil.mergeCol("收件人：", 2,textFont));
+            table.addCell(PdfUtil.mergeCol("", 6,textFont));
 
-            table.addCell(PdfUtil.getPDFCell("客户名称"));
-            table.addCell(PdfUtil.mergeCol(bizQuotation.getCustomerName(), 7));
-            table.addCell(PdfUtil.getPDFCell("特殊费用"));
-            table.addCell(PdfUtil.mergeCol(bizQuotation.getCustomerName(), 3));
-            table.addCell(PdfUtil.getPDFCell("费用说明"));
-            table.addCell(PdfUtil.mergeCol(bizQuotation.getCustomerName(), 3));
-            table.addCell(PdfUtil.getPDFCell("付款方式"));
-            table.addCell(PdfUtil.mergeCol(bizQuotation.getCustomerName(), 7));
-            table.addCell(PdfUtil.getPDFCell("运费价格"));
-            table.addCell(PdfUtil.mergeCol(bizQuotation.getCustomerName(), 7));
-            table.addCell(PdfUtil.getPDFCell("供货周期"));
-            table.addCell(PdfUtil.mergeCol(bizQuotation.getCustomerName(), 7));
-            table.addCell(PdfUtil.getPDFCell("报备项目"));
-            table.addCell(PdfUtil.mergeCol(bizQuotation.getCustomerName(), 7));
+            table.addCell(PdfUtil.mergeCol("报价人：", 2,textFont));
+            table.addCell(PdfUtil.mergeCol(sysUser.getUserName(), 5,textFont));
+            //第二行
+            table.addCell(PdfUtil.mergeCol("公司：", 2,textFont));
+            table.addCell(PdfUtil.mergeCol(bizCustomer.getName(), 6,textFont));
+            table.addCell(PdfUtil.mergeCol("日期：", 2,textFont));
+            table.addCell(PdfUtil.mergeCol(DateUtils.dateTime(bizQuotation.getCreateTime()), 5,textFont));
+            //第三行
+            table.addCell(PdfUtil.mergeCol("电话号码：", 2,textFont));
+            table.addCell(PdfUtil.mergeCol(bizCustomer.getContactPhone(), 6,textFont));
+            table.addCell(PdfUtil.mergeCol("电话：", 2,textFont));
+            table.addCell(PdfUtil.mergeCol(sysUser.getPhonenumber(), 5,textFont));
+            //第四行
+            table.addCell(PdfUtil.mergeCol("传真/邮箱：", 2,textFont));
+            table.addCell(PdfUtil.mergeCol(bizCustomer.getContactEmail(), 6,textFont));
+            table.addCell(PdfUtil.mergeCol("传真/邮箱：", 2,textFont));
+            table.addCell(PdfUtil.mergeCol(sysUser.getEmail(), 5,textFont));
 
-            table.addCell(PdfUtil.getPDFCell("产品合计金额"));
-            table.addCell(PdfUtil.mergeCol(bizQuotation.getString2(), 3));
-            table.addCell(PdfUtil.getPDFCell("总金额"));
-            table.addCell(PdfUtil.mergeCol(bizQuotation.getString9(), 3));
+            //第五行
+            table.addCell(PdfUtil.mergeCol("单号：", 2,textFont));
+            table.addCell(PdfUtil.mergeCol(bizQuotation.getString1(), 6,textFont));
+            table.addCell(PdfUtil.mergeCol("制单：", 2,textFont));
+            table.addCell(PdfUtil.mergeCol("", 5,textFont));
+
+            //第六行
+            table.addCell(PdfUtil.mergeCol("项目名称：", 2,textFont));
+            table.addCell(PdfUtil.mergeCol(bizQuotation.getReportProject(), 13,textFont));
+            //联系人结束
 
 
-            // step 3
-            document.open();
-            // step 4 写入内容
-            document.add(paragraph);
-            document.add(table);
+
+            //第七行 产品数据开始 bizQuotationProducts
+            table.addCell(PdfUtil.mergeCol("序号", 1,textFont));
+            table.addCell(PdfUtil.mergeCol("名称", 1,textFont));
+            table.addCell(PdfUtil.mergeCol("型号", 2,textFont));
+            table.addCell(PdfUtil.mergeCol("规格", 1,textFont));
+            //table.addCell(PdfUtil.mergeCol("压力", 1));//不需要
+            table.addCell(PdfUtil.mergeCol("阀体材质", 1,textFont));
+            table.addCell(PdfUtil.mergeCol("阀芯材质", 1,textFont));
+            table.addCell(PdfUtil.mergeCol("密封材质", 1,textFont));
+            //table.addCell(PdfUtil.mergeCol("驱动形式", 1));//不需要
+            table.addCell(PdfUtil.mergeCol("连接方式", 1,textFont));
+            table.addCell(PdfUtil.mergeCol("数量", 1,textFont));
+            table.addCell(PdfUtil.mergeCol("单价", 1,textFont));
+            table.addCell(PdfUtil.mergeCol("合计", 1,textFont));
+            table.addCell(PdfUtil.mergeCol("备注", 3,textFont));
+
+            Double sumTotalNum = new Double(0);
+            Double sumTotalPrice = new Double(0);
+            Double sumTotalAmount = new Double(0);
+            DecimalFormat data = new DecimalFormat("#.0000");
+            for (int i = 0; i < bizQuotationProducts.size(); i++) {
+                BizQuotationProduct bizProduct = bizQuotationProducts.get(i);
+                BizProduct bizProductObj = bizProduct.getBizProduct();
+                if (bizProductObj == null) {
+                    continue;
+                }
+                table.addCell(PdfUtil.mergeCol("" + (i + 1), 1,textFont));
+                table.addCell(PdfUtil.mergeCol(bizProductObj.getName(), 1,textFont));
+                table.addCell(PdfUtil.mergeCol(bizProductObj.getModel(), 2,textFont));
+                table.addCell(PdfUtil.mergeCol(bizProductObj.getSpecifications(), 1,textFont));//规格
+                //table.addCell(PdfUtil.mergeCol(bizProductObj.getNominalPressure(), 1));//压力
+                table.addCell(PdfUtil.mergeCol(bizProductObj.getValvebodyMaterial(), 1,textFont));//阀体
+                table.addCell(PdfUtil.mergeCol(bizProductObj.getValveElement(), 1,textFont));//阀芯
+                //table.addCell(PdfUtil.mergeCol("", 1));//阀板
+                table.addCell(PdfUtil.mergeCol(bizProductObj.getSealingMaterial(), 1,textFont));//密封材质
+                //table.addCell(PdfUtil.mergeCol(bizProductObj.getDriveForm(), 1));//驱动形式
+                table.addCell(PdfUtil.mergeCol(bizProductObj.getConnectionType(), 1,textFont));//连接方式
+                table.addCell(PdfUtil.mergeCol(bizProduct.getProductNum(), 1,textFont));//数量
+
+                //总价计算
+                Double productPrice = bizProductObj.getPrice();
+                String productNum = bizProduct.getProductNum();
+
+                sumTotalNum = sumTotalNum + Double.parseDouble(productNum);
+
+                Double productTotal = new Double(0);
+                String productCoefficient = bizProduct.getProductCoefficient();
+                if (StringUtils.isNotEmpty(productNum) && productPrice > 0 && StringUtils.isNotEmpty(productCoefficient)) {
+                    productTotal = Double.parseDouble(productNum) * productPrice * Double.parseDouble(productCoefficient);
+                }
+                //法兰计算
+                BizProductRef bizProductRef1 = bizProduct.getBizProductRef1();
+                Double ref1Total = new Double(0);
+                if (bizProductRef1 != null ) {
+                    Double ref1Price = bizProductRef1.getPrice();
+                    String ref1Num = bizProduct.getProductRef1Num();
+                    String ref1Coefficient = bizProduct.getProductRef1Coefficient();
+                    if (StringUtils.isNotEmpty(ref1Num) && ref1Price > 0 && StringUtils.isNotEmpty(ref1Coefficient)) {
+                        ref1Total = Double.parseDouble(ref1Num) * ref1Price * Double.parseDouble(ref1Coefficient);
+                    }
+                }
+                //螺栓计算
+                BizProductRef bizProductRef2 = bizProduct.getBizProductRef2();
+                Double ref2Tota = new Double(0);
+                if (bizProductRef2 != null ) {
+                    Double ref2Price = bizProductRef2.getPrice();
+                    String ref2Num = bizProduct.getProductRef2Num();
+                    String ref2Coefficient = bizProduct.getProductRef2Coefficient();
+                    if (StringUtils.isNotEmpty(ref2Num) && ref2Price > 0 && StringUtils.isNotEmpty(ref2Coefficient)) {
+                        ref2Tota = Double.parseDouble(ref2Num) * ref2Price * Double.parseDouble(ref2Coefficient);
+                    }
+                }
+
+                //执行器计算
+                BizActuator bizActuator = bizProduct.getBizActuator();
+                Double actuatorTotal = new Double(0);
+                if (bizActuator != null) {
+                    Double actuatorPrice = bizActuator.getPrice();
+                    String actuatorNum = bizProduct.getActuatorNum();
+                    String actuatorCoefficient = bizProduct.getActuatorCoefficient();
+                    if (StringUtils.isNotEmpty(actuatorNum) && actuatorPrice > 0 && StringUtils.isNotEmpty(actuatorCoefficient)) {
+                        actuatorTotal = Double.parseDouble(actuatorNum) * actuatorPrice * Double.parseDouble(actuatorCoefficient);
+                    }
+                }
+
+                Double totalAmount = new Double(0);
+                totalAmount = productTotal + ref1Total + ref2Tota + actuatorTotal;
+
+                sumTotalAmount = sumTotalAmount + totalAmount;
+
+                //总单价
+                Double productTotalPrice = totalAmount / Double.parseDouble(productNum);
+                sumTotalPrice = sumTotalPrice + productTotalPrice;
+                table.addCell(PdfUtil.mergeCol(data.format(productTotalPrice), 1,textFont));//单价
+
+                table.addCell(PdfUtil.mergeCol(data.format(totalAmount), 1,textFont));//合计
+                table.addCell(PdfUtil.mergeCol(bizProduct.getString4(), 4,textFont));
+            }
+
+
+            //合计
+            table.addCell(PdfUtil.mergeCol("", 1,textFont));
+            table.addCell(PdfUtil.mergeCol("", 1,textFont));
+            table.addCell(PdfUtil.mergeCol("", 2,textFont));
+            table.addCell(PdfUtil.mergeCol("", 1,textFont));
+            //table.addCell(PdfUtil.mergeCol("压力", 1));//不需要
+            table.addCell(PdfUtil.mergeCol("", 1,textFont));
+            //table.addCell(PdfUtil.mergeCol("阀板", 1));//不需要
+            table.addCell(PdfUtil.mergeCol("", 1,textFont));
+            //table.addCell(PdfUtil.mergeCol("驱动形式", 1));//不需要
+            table.addCell(PdfUtil.mergeCol("", 1,textFont));
+            table.addCell(PdfUtil.mergeCol(sumTotalNum.toString(), 1,textFont));
+            table.addCell(PdfUtil.mergeCol(data.format(sumTotalPrice), 1,textFont));
+            table.addCell(PdfUtil.mergeCol(data.format(sumTotalAmount), 1,textFont));
+            table.addCell(PdfUtil.mergeCol("", 3,textFont));
+
+
+
+
 
             // 特别提醒
             Paragraph paragraphRemark = new Paragraph();
@@ -194,28 +372,74 @@ public class BizQuotationController extends BaseController {
             Font blackFont = PdfUtil.getPdfChineseFont(12, Font.NORMAL, BaseColor.BLACK);
             paragraphRemark.add(Chunk.NEWLINE);
             paragraphRemark.add(Chunk.NEWLINE);
-            paragraphRemark.add(new Chunk("特别提醒:", blackFont));
+            paragraphRemark.add(new Chunk("", blackFont));
             paragraphRemark.add(Chunk.NEWLINE);
-            paragraphRemark.add(new Chunk("1.您的总金额为", remarkFont));
-            paragraphRemark.add(new Chunk(bizQuotation.getString9(), fontMoney));
-            paragraphRemark.add(new Chunk("。请确认。", remarkFont));
+            paragraphRemark.add(new Chunk("        1、价格：以上价格为含税不含运费成交价格；", remarkFont));
             paragraphRemark.add(Chunk.NEWLINE);
+            paragraphRemark.add(new Chunk("        2、供货周期：  个工作日", remarkFont));
             paragraphRemark.add(Chunk.NEWLINE);
-            paragraphRemark.add(new Chunk("2.其他说明项。", remarkFont));
+            paragraphRemark.add(new Chunk("        3、供货方式：款到发货；", remarkFont));
             paragraphRemark.add(Chunk.NEWLINE);
-            document.add(paragraphRemark);
+            paragraphRemark.add(new Chunk("        4、价格有效期10天；", remarkFont));
+            paragraphRemark.add(Chunk.NEWLINE);
+
+
+            Paragraph paragraphRemark1 = new Paragraph();
+            Font remarkFont1 = PdfUtil.getPdfChineseFont(10, Font.NORMAL);
+
+
+            //sysUser 递归查询上级部门查找地址
+            String remark = sysDeptService.getDeptRemarkForUserPdf(sysUser);
+            String remark1 = "Add：北京市 东城区 广渠门内大街90号 新裕商务大厦506#  邮编：100062";
+            String remark2 = "北京好利集团商务管理中心";
+            String remark3 = "010-67110192";
+            String remark4 = "010-67171220";
+            if (StringUtils.isNotEmpty(remark)) {
+                String[] remarks = remark.split("###");
+                if (remarks.length == 4) {
+                    remark1 = remarks[0];
+                    remark2 = remarks[1];
+                    remark3 = remarks[2];
+                    remark4 = remarks[3];
+                }
+            }
+            paragraphRemark1.add(new Chunk(remark1, remarkFont1));
+            paragraphRemark1.add(Chunk.NEWLINE);
+            paragraphRemark1.add(new Chunk(remark2, remarkFont1));
+            paragraphRemark1.add(Chunk.NEWLINE);
+            paragraphRemark1.add(new Chunk(remark3, remarkFont1));
+            paragraphRemark1.add(Chunk.NEWLINE);
+            paragraphRemark1.add(new Chunk(remark4, remarkFont1));
+            paragraphRemark1.add(Chunk.NEWLINE);
+            paragraphRemark1.setAlignment(Paragraph.ALIGN_RIGHT);
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-            paragraph = new Paragraph("打印日期：" + sdf.format(new Date()), PdfUtil.getPdfChineseFont());
-            paragraph.setAlignment(Element.ALIGN_RIGHT);
-            paragraph.setSpacingBefore(20);
+            Paragraph datePar = new Paragraph("打印日期：" + sdf.format(new Date()), PdfUtil.getPdfChineseFont());
+            datePar.setAlignment(Element.ALIGN_RIGHT);
+            datePar.setSpacingBefore(20);
+
+
+
+            document.open();
             document.add(paragraph);
+            document.add(blankRow);
+            document.add(tbSubtitle);
+
+            // step 4 写入内容
+            document.add(table);
+            document.add(paragraphRemark);
+            document.add(paragraphRemark1);
+            document.add(datePar);
+
             // step 5
             document.close();
+            writer.close();
+
             return AjaxResult.success(filename);
         }
         catch (Exception e)
         {
+            e.printStackTrace();
             throw new BusinessException("导出Excel失败，请联系网站管理员！");
         }
     }
@@ -297,14 +521,20 @@ public class BizQuotationController extends BaseController {
             id = new Long(bizQuotation.getQuotationId());
             bizQuotation.setQuotationId(null);
         }
+        Long userId = ShiroUtils.getUserId();
+
+        bizQuotation.setNoLoginId(userId.toString());
 
         List<BizQuotation> list = bizQuotationService.selectBizQuotationList(bizQuotation);
-        for (BizQuotation bizQuotation1 : list) {
+        Iterator<BizQuotation> it = list.iterator();
+        while(it.hasNext()){
+            BizQuotation  bizQuotation1 = it.next();
             if (bizQuotation1.getQuotationId().compareTo(id) == 0) {
-                list.remove(bizQuotation1);
+                it.remove();
+            } else if ((!bizQuotation.getFlowStatus().equals("0")) && bizQuotation.getFlowStatus().equals(bizQuotation.getNormalFlag())) {
+                it.remove();
             }
         }
-
 
         if (CollectionUtil.isEmpty(list) || list.size() == 0) {
             return BizConstants.VALIDATE_IS_NOT_EXIST;
@@ -370,7 +600,7 @@ public class BizQuotationController extends BaseController {
             BizActuator bizActuator = new BizActuator();
             if (actuatorId != null && actuatorId > 0L) {
                 bizActuator.setActuatorId(actuatorId);
-                List<BizActuator> bizActuators = bizActuatorService.selectBizActuatorForRefList(bizActuator);
+                List<BizActuator> bizActuators = bizActuatorService.selectBizActuatorList(bizActuator);
                 if (!CollectionUtils.isEmpty(bizActuators)) {
                     bizQuotationProduct1.setBizActuator(bizActuators.get(0));
                 }
@@ -385,6 +615,8 @@ public class BizQuotationController extends BaseController {
         mmap.put("bizQuotation", bizQuotation);
         return prefix + "/edit";
     }
+
+
 
     /**
      * 修改保存报价单
@@ -434,9 +666,11 @@ public class BizQuotationController extends BaseController {
         String totalPrice = bizQuotation.getString9();
         if (StringUtils.isNotEmpty(totalPrice) && Double.parseDouble(totalPrice) >= 500000) {
             normalFlag = "5";
-        } else if (!"5".equals(bizQuotation.getPaymentMethod())) {
+        } else if ("1".equals(bizQuotation.getPaymentMethod()) || "6".equals(bizQuotation.getPaymentMethod())) {
             //到付
             normalFlag = "5";
+        } if (StringUtils.isNotEmpty(totalPrice) && Double.parseDouble(totalPrice) >= 100000) {
+            normalFlag = "3";
         } else {
 
             JSONArray productArray = JSONArray.parseArray(productArrayStr);
@@ -554,8 +788,6 @@ public class BizQuotationController extends BaseController {
         bizQuotationQuery.setQuotationId(Long.parseLong(quotationId));
         List<BizQuotation> bizQuotationList = bizQuotationService.selectBizQuotationFlowList(bizQuotationQuery);
         mmap.put("bizQuotation", bizQuotationList.get(0));*/
-
-
         //
         BizQuotation bizQuotationQuery = new BizQuotation();
         bizQuotationQuery.setQuotationId(Long.parseLong(quotationId));
@@ -616,6 +848,77 @@ public class BizQuotationController extends BaseController {
 
         return prefix + "/examineEdit";
     }
+
+    @GetMapping("/viewDetail")
+    public String viewDetail(ModelMap mmap) {
+        String quotationId = getRequest().getParameter("quotationId");
+        /*
+        BizQuotation bizQuotationQuery = new BizQuotation();
+        bizQuotationQuery.setQuotationId(Long.parseLong(quotationId));
+        List<BizQuotation> bizQuotationList = bizQuotationService.selectBizQuotationFlowList(bizQuotationQuery);
+        mmap.put("bizQuotation", bizQuotationList.get(0));*/
+        //
+        BizQuotation bizQuotationQuery = new BizQuotation();
+        bizQuotationQuery.setQuotationId(Long.parseLong(quotationId));
+        List<BizQuotation> bizQuotationList = bizQuotationService.selectBizQuotationFlowList(bizQuotationQuery);
+
+        BizQuotation bizQuotation = bizQuotationList.get(0);
+
+        BizQuotationProduct bizQuotationProduct = new BizQuotationProduct();
+        bizQuotationProduct.setQuotationId(bizQuotation.getQuotationId());
+        List<BizQuotationProduct> bizQuotationProducts = bizQuotationProductService.selectBizQuotationProductDictList(bizQuotationProduct);
+        bizQuotation.setQuotationProductList(bizQuotationProducts);
+
+        String productNames = "";
+        String productIds = "";
+        for (BizQuotationProduct bizQuotationProduct1 : bizQuotationProducts) {
+            productNames += bizQuotationProduct1.getProductName() + ",";
+            productIds += bizQuotationProduct1.getProductId() + ",";
+
+
+            Long productRef1Id = bizQuotationProduct1.getProductRef1Id();
+            BizProductRef bizProductRef1 = new BizProductRef();
+            if (productRef1Id != null && productRef1Id > 0L) {
+                bizProductRef1.setProductRefId(productRef1Id);
+                List<BizProductRef> bizProductRefs = bizProductRefService.selectBizProductRefList(bizProductRef1);
+                if (!CollectionUtils.isEmpty(bizProductRefs)) {
+                    bizQuotationProduct1.setBizProductRef1(bizProductRefs.get(0));
+                }
+            } else {
+                bizQuotationProduct1.setBizProductRef1(bizProductRef1);
+            }
+            Long productRef2Id = bizQuotationProduct1.getProductRef2Id();
+            BizProductRef bizProductRef2 = new BizProductRef();
+            if (productRef2Id != null && productRef2Id > 0L) {
+                bizProductRef2.setProductRefId(productRef2Id);
+                List<BizProductRef> bizProductRefs = bizProductRefService.selectBizProductRefList(bizProductRef2);
+                if (!CollectionUtils.isEmpty(bizProductRefs)) {
+                    bizQuotationProduct1.setBizProductRef2(bizProductRefs.get(0));
+                }
+            } else {
+                bizQuotationProduct1.setBizProductRef2(bizProductRef1);
+            }
+            Long actuatorId = bizQuotationProduct1.getActuatorId();
+            BizActuator bizActuator = new BizActuator();
+            if (actuatorId != null && actuatorId > 0L) {
+                bizActuator.setActuatorId(actuatorId);
+                List<BizActuator> bizActuators = bizActuatorService.selectBizActuatorForRefList(bizActuator);
+                if (!CollectionUtils.isEmpty(bizActuators)) {
+                    bizQuotationProduct1.setBizActuator(bizActuators.get(0));
+                }
+            } else {
+                bizQuotationProduct1.setBizActuator(bizActuator);
+            }
+        }
+        mmap.put("productNames", productNames);
+        mmap.put("productIds", productIds);
+
+        mmap.put("bizQuotation", bizQuotation);
+
+        return prefix + "/viewDetail";
+    }
+
+
 
     @GetMapping("/viewExamine")
     public String viewExamine(ModelMap mmap) {

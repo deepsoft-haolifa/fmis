@@ -317,9 +317,9 @@
                     parent.$('#form-quotation-edit input[id=actuatorId_' + productId + ']').val(selActuatorId);
                     parent.$('#form-quotation-edit input[id=actuatorName_' + productId + ']').val(selName);
 
-                    parent.$('#form-quotation-edit input[name=brand_' + productId + ']').val(selRow[0].brand);
-                    parent.$('#form-quotation-edit input[name=string1_' + productId + ']').val(selRow[0].string1);
-                    parent.$('#form-quotation-edit input[name=actuatorPrice_' + productId + ']').val(selRow[0].price);
+                    parent.$('#form-quotation-edit input[id=brand_' + productId + ']').val(selRow.brand);
+                    parent.$('#form-quotation-edit input[id=string1_' + productId + ']').val(selRow.string1);
+                    parent.$('#form-quotation-edit input[id=actuatorPrice_' + productId + ']').val(selRow.price);
                     $.modal.close();
                 }
             );

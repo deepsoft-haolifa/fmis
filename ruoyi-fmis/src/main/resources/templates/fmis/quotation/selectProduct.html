@@ -2,6 +2,7 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <th:block th:include="include :: header('关联产品')" />
+    <th:block th:include="include :: bootstrap-select-css" />
 </head>
 <body class="gray-bg">
      <div class="container-div">
@@ -19,10 +20,15 @@
                                 <p>类别：</p>
                                 <select name="series" id="series" class="form-control select2-multiple" > <!--multiple-->
                                     <option value="">请选择</option>
-                                    <option th:each="series:${seriesSelect}" th:value="${series.dictId}" th:text="${series.name} + ' ' + ${series.code}" ></option>
+                                    <option th:each="series:${seriesSelect}" th:value="${series.dictId}" th:text="${series.name} + '_' + ${series.code}" ></option>
                                 </select>
                             </li>
-
+                            <li>
+                                <p>系列：</p>
+                                <select name="string1" id="string1" class="form-control select2-multiple" > <!--multiple-->
+                                    <option value="">请选择</option>
+                                </select>
+                            </li>
                             <li>
                                 <p>产品型号：</p>
                                 <input name="model"  class="form-control" type="text">
@@ -30,7 +36,7 @@
 
                             <li>
                                 <p>规格：</p>
-                                <select name="specifications" id="specifications" class="form-control select2-multiple" ><option value="">请选择</option></select>
+                                <select name="specifications" id="specifications" class="form-control select2-multiple"><option value="">请选择</option></select>
                             </li>
 
                             <li>
@@ -86,11 +92,11 @@
 
      <div style="display: none" id="prodictDiv">
 
-         <div class="ibox float-e-margins">
+         <div class="ibox float-e-margins" id="productDiv_paramterProductId">
              <h5>productHtml</h5>
 
              <div class='form-group'>
-                 <label class='control-label col-sm-3'>产品：</label>
+                 <label class='control-label col-sm-3'>产品类型：</label>
                  <div class='col-sm-2'>
                      <input name='productId' id="productId" class='form-control' type='hidden' >
                      <input name='productName' id="productName" value="productShowText" class='form-control' type='text' readonly >
@@ -100,20 +106,20 @@
                      <input class='form-control' type='text' id="productModel" name='productModel' value="productModelShowText" readonly placeholder='产品型号' />
                  </div>
                  <div class='col-sm-2'>
-                     <input class='form-control' type='text' id="productNum" onchange="sumPrice(paramterProductId)" name='productNum' placeholder='数量' />
+                     <input class='form-control' type='text' id="productNum" onblur="sumPrice(paramterProductId)" name='productNum' placeholder='数量' onkeyup="AmountKeyUp(this)"/>
                  </div>
 
                  <div class='col-sm-1'>
                      <input class='form-control' type='text' id="productPrice" name="productPrice" value="productValuePrice" placeholder='单价' readonly/>
                  </div>
 
-                 <div class='col-sm-2'>
-                     <input class='form-control' type='text' id="productCoefficient" onchange="sumPrice(paramterProductId)" name='productCoefficient' placeholder='系数' />
+                 <div class='col-sm-1'>
+                     <input class='form-control' type='text' id="productCoefficient" onblur="sumPrice(paramterProductId)" name='productCoefficient' onkeyup="AmountKeyUp(this)" placeholder='系数' />
                  </div>
              </div>
 
              <div class='form-group'>
-                 <label class='control-label col-sm-3'>产品配件法兰：</label>
+                 <label class='control-label col-sm-3'>法兰配件：</label>
                  <div class='col-sm-2'>
                      <input name='productRef1Id' id="productRef1Id" class='form-control' type='hidden' >
                      <input name='productRef1Name' id="productRef1Name" class='form-control' type='text' readonly onclick='selectProductRef1(paramterProductId)'>
@@ -130,7 +136,7 @@
                  </div>
 
                  <div class='col-sm-1'>
-                     <input class='form-control' type='text' id="productRef1Num" onchange="sumPrice(paramterProductId)" name='productRef1Num' placeholder='数量' />
+                     <input class='form-control' type='text' id="productRef1Num" onblur="sumPrice(paramterProductId)" name='productRef1Num' onkeyup="AmountKeyUp(this)" placeholder='数量' />
                  </div>
 
 
@@ -139,12 +145,12 @@
                  </div>
 
                  <div class='col-sm-1'>
-                     <input name='productRef1Coefficient' id="productRef1Coefficient" onchange="sumPrice(paramterProductId)" class='form-control' type='text' placeholder='系数'>
+                     <input name='productRef1Coefficient' id="productRef1Coefficient" onblur="sumPrice(paramterProductId)" class='form-control' type='text' onkeyup="AmountKeyUp(this)" placeholder='系数'>
                  </div>
              </div>
 
              <div class='form-group'>
-                 <label class='control-label col-sm-3'>产品配件螺栓：</label>
+                 <label class='control-label col-sm-3'>螺栓配件：</label>
                  <div class='col-sm-2'>
                      <input name='productRef2Id' id="productRef2Id" class='form-control' type='hidden' >
                      <input name='productRef2Name' id="productRef2Name" class='form-control' type='text' readonly onclick='selectProductRef2(paramterProductId)'>
@@ -156,20 +162,20 @@
                      <input class='form-control' type='text' id="productRef2ValvebodyMaterial" name="productRef2ValvebodyMaterial"  placeholder='材质' readonly/>
                  </div>
                  <div class='col-sm-2'>
-                     <input class='form-control' type='text' id='productRef2Num' onchange="sumPrice(paramterProductId)" name='productRef2Num' placeholder='数量' />
+                     <input class='form-control' type='text' id='productRef2Num' onblur="sumPrice(paramterProductId)" onkeyup="AmountKeyUp(this)" name='productRef2Num' placeholder='数量' />
                  </div>
 
                  <div class='col-sm-1'>
                      <input class='form-control' type='text' id="productRef2Price" name="productRef2Price"  placeholder='单价' readonly/>
                  </div>
 
-                 <div class='col-sm-2'>
-                     <input name='productRef2Coefficient' id="productRef2Coefficient" onchange="sumPrice(paramterProductId)" class='form-control' type='text' placeholder='系数'>
+                 <div class='col-sm-1'>
+                     <input name='productRef2Coefficient' id="productRef2Coefficient" onblur="sumPrice(paramterProductId)" onkeyup="AmountKeyUp(this)" class='form-control' type='text' placeholder='系数'>
                  </div>
              </div>
 
              <div class='form-group'>
-                 <label class='control-label col-sm-3'>执行器：</label>
+                 <label class='control-label col-sm-3'>执 行 器：</label>
                  <div class='col-sm-2'>
                      <input name='actuatorId' id="actuatorId" class='form-control' type='hidden' >
                      <input name='actuatorName' id="actuatorName" class='form-control' type='text' readonly onclick='selectActuator(paramterProductId)'>
@@ -183,17 +189,26 @@
                  </div>
 
                  <div class='col-sm-2'>
-                     <input class='form-control' type='text' id='actuatorNum' onchange="sumPrice(paramterProductId)" name='actuatorNum' placeholder='数量' />
+                     <input class='form-control' type='text' id='actuatorNum' onblur="sumPrice(paramterProductId)" name='actuatorNum' onkeyup="AmountKeyUp(this)" placeholder='数量' />
                  </div>
 
                  <div class='col-sm-1'>
                      <input class='form-control' type='text' id="actuatorPrice" name="actuatorPrice"  placeholder='单价' readonly/>
                  </div>
 
-                 <div class='col-sm-2'>
-                     <input name='actuatorCoefficient' id="actuatorCoefficient" onchange="sumPrice(paramterProductId)" class='form-control' type='text' placeholder='系数'>
+                 <div class='col-sm-1'>
+                     <input name='actuatorCoefficient' id="actuatorCoefficient" onblur="sumPrice(paramterProductId)" class='form-control' onkeyup="AmountKeyUp(this)" type='text' placeholder='系数'>
                  </div>
              </div>
+
+             <div class='form-group'>
+                 <label class='control-label col-sm-3'>产品备注：</label>
+
+                 <div class='col-sm-8'>
+                     <input name='productRemark_paramterProductId' id="productRemark_paramterProductId" class='form-control' type='text'>
+                 </div>
+             </div>
+
 
              <div class='form-group'>
                  <label class='control-label col-sm-3'>合计单价：</label>
@@ -209,6 +224,12 @@
                      <input class='form-control' type='text' id='totalSum' name='totalSum' placeholder='合计总额' readonly/>
                  </div>
 
+                 <div class='col-sm-2'>
+                     <a class="btn btn-danger btn-sm" onclick="removeProject(paramterProductId)" >
+                         <i class="fa fa-remove"></i> 删除
+                     </a>
+                 </div>
+
              </div>
 
 
@@ -217,6 +238,7 @@
      </div>
 
     <th:block th:include="include :: footer" />
+     <th:block th:include="include :: bootstrap-select-js" />
     <script th:inline="javascript">
         var editFlag = [[${@permission.hasPermi('fmis:product:edit')}]];
         var removeFlag = [[${@permission.hasPermi('fmis:product:remove')}]];
@@ -245,6 +267,10 @@
                 {
                     field : 'series', 
                     title : '类别'
+                },
+                {
+                    field : 'string1',
+                    title : '系列'
                 },
                 {
                     field : 'model', 
@@ -315,19 +341,54 @@
             }
             $.modal.confirm('确定要关联该产品吗？',
                 function() {
-
+                    //0=覆盖 1=追加
+                    var productOperationType = parent.$('#form-quotation-add input[name=productOperationType]').val();
+                    if ($.common.isEmpty(productOperationType)) {
+                        productOperationType = parent.$('#form-quotation-edit input[name=productOperationType]').val();
+                    }
+                    var rowsSel = $('#bootstrap-table').bootstrapTable('getSelections');
                     var productIds = $.table.selectColumns("productId");
-                    console.log("productIds=" + productIds);
                     var names = $.table.selectColumns("name");
-
+                    console.log("productIds=" + productIds + "|" + names);
                     var htmlStr = "";
-                    parent.$('#productDiv').html(htmlStr);
+                    if (productOperationType == "1") {
+                        //htmlStr = parent.$('#productDiv').html();
+                    } else {
+                        parent.$('#productDiv').html(htmlStr);
+                    }
                     var productIdsStr = "";
                     var productNamesStr = "";
+                    var oldProductIds = parent.$('#form-quotation-add input[name=productIds]').val();
+                    var oldProductNames = parent.$('#form-quotation-add input[name=productNames]').val();
+
+                    if ($.common.isEmpty(oldProductIds)) {
+                        oldProductIds = parent.$('#form-quotation-edit input[name=productIds]').val();
+                        oldProductNames = parent.$('#form-quotation-edit input[name=productNames]').val();
+                    }
+                    if ($.common.isEmpty(oldProductIds)) {
+                        oldProductIds = "";
+                        oldProductNames = "";
+                    }
                     for(var i = 0; i < productIds.length; i++) {
                         var prodictDivHtml = $("#prodictDiv").html();
                         var productId = productIds[i];
-                        var productName = names[i];
+                        var productName = rowsSel[i].name;
+
+                        var productIdsS = oldProductIds.split(",");
+                        var productNamesS = oldProductNames.split(",");
+                        var isExist = false;
+                        if (productOperationType == "1") {
+                            for (var j = 0; j < productIdsS.length; j++) {
+                                if (productId == productIdsS[j]) {
+                                    isExist = true;
+                                    continue;
+                                }
+                            }
+                        }
+                        if (isExist) {
+                            continue;
+                        }
+
                         console.log("productId=" + productId + " name=" + productName);
 
                         prodictDivHtml = prodictDivHtml.replace(/productPrice/g,"productPrice_" + productId);
@@ -393,11 +454,36 @@
                         htmlStr += prodictDivHtml;
                         productIdsStr += productId + ",";
                         productNamesStr += productName + ",";
-                        console.log(htmlStr);
+                        //console.log(htmlStr);
                     }
                     productNamesStr = productNamesStr.substr(0,productNamesStr.length - 1);
-                    parent.$('#form-quotation-add input[name=productIds]').val(productIdsStr);
-                    parent.$('#form-quotation-add input[name=productNames]').val(productNamesStr);
+                    if (productOperationType == "0") {
+                        parent.$('#form-quotation-add input[name=productIds]').val(productIdsStr);
+                        parent.$('#form-quotation-add input[name=productNames]').val(productNamesStr);
+
+                        parent.$('#form-quotation-edit input[name=productIds]').val(productIdsStr);
+                        parent.$('#form-quotation-edit input[name=productNames]').val(productNamesStr);
+                    } else {
+                        //追加
+
+                        if ($.common.isEmpty(oldProductIds)) {
+                            oldProductIds = "";
+                            oldProductNames = "";
+                        } else {
+                            if (!$.common.endWith(oldProductIds,",")) {
+                                oldProductIds += ",";
+                            }
+                            if (!$.common.endWith(oldProductNames,",")) {
+                                oldProductNames += ",";
+                            }
+                            var newProductIds = oldProductIds + productIdsStr;
+                            var newProductNames = oldProductNames + productNamesStr;
+                        }
+                        parent.$('#form-quotation-add input[name=productIds]').val(newProductIds);
+                        parent.$('#form-quotation-add input[name=productNames]').val(newProductNames);
+                        parent.$('#form-quotation-edit input[name=productIds]').val(newProductIds);
+                        parent.$('#form-quotation-edit input[name=productNames]').val(newProductNames);
+                    }
                     //parent.$('#form-quotation-edit input[name=productId]').val($.table.selectColumns("productId"));
                     //parent.$('#form-quotation-edit input[name=productName]').val($.table.selectColumns("name"));
 
@@ -409,11 +495,27 @@
             // $.modal.close();
             // $.operate.save(prefix + "/selectAll", data);
         }
-
+        function string1AddOptions(v){
+            $("#string1").html("");
+            $("#string1").append("<option value=''>请选择</option>");
+            var string1Obj = $("#string1");
+            if (v == "D") {
+                string1Obj.append("<option value='D220'>D220</option>");
+                string1Obj.append("<option value='D240'>D240</option>");
+                string1Obj.append("<option value='D260'>D260</option>");
+                string1Obj.append("<option value='D261'>D261</option>");
+                string1Obj.append("<option value='D270'>D270</option>");
+                string1Obj.append("<option value='D271'>D271</option>");
+                string1Obj.append("<option value='D310'>D310</option>");
+                string1Obj.append("<option value='D370'>D370</option>");
+            } else {
+                string1Obj.append("<option value='" + v + "'>" + v + "</option>");
+            }
+        }
         $("#series").change(function (){
             var series = $("#series").val();
             console.log("series=" + series);
-            if (series == null || series == "请选择") {
+            if (series == null || series == "请选择" || series == "") {
                 $("#specifications").html("");
                 $("#nominalPressure").html("");
                 $("#connectionType").html("");
@@ -424,6 +526,11 @@
                 $("#structuralStyle").html("");
                 return;
             }
+
+            var string1All = $("#series").find("option:selected").text();
+            var string1 = string1All.split("_")[1];
+            string1AddOptions(string1);
+
             var prefixProduct = ctx + "fmis/product";
             $.ajax({
                 url:prefixProduct + "/findProductTypeDict",

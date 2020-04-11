@@ -51,7 +51,8 @@ public class SysCaptchaController extends BaseController
             String capStr = null;
             String code = null;
             BufferedImage bi = null;
-            if ("math".equals(type))
+
+            /*if ("math".equals(type))
             {
                 String capText = captchaProducerMath.createText();
                 capStr = capText.substring(0, capText.lastIndexOf("@"));
@@ -62,7 +63,9 @@ public class SysCaptchaController extends BaseController
             {
                 capStr = code = captchaProducer.createText();
                 bi = captchaProducer.createImage(capStr);
-            }
+            }*/
+            capStr = code = captchaProducer.createText();
+            bi = captchaProducer.createImage(capStr);
             session.setAttribute(Constants.KAPTCHA_SESSION_KEY, code);
             out = response.getOutputStream();
             ImageIO.write(bi, "jpg", out);

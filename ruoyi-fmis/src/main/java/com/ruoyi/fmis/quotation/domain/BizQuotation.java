@@ -1,6 +1,7 @@
 package com.ruoyi.fmis.quotation.domain;
 
 import com.ruoyi.fmis.quotationproduct.domain.BizQuotationProduct;
+import lombok.Data;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
@@ -14,6 +15,7 @@ import java.util.List;
  * @author frank
  * @date 2020-03-18
  */
+@Data
 public class BizQuotation extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
@@ -66,6 +68,9 @@ public class BizQuotation extends BaseEntity {
 
     /** 2销售经理审批结束 3 区域经理审批结束 4副总审批结束 5 老总审批结束 */
     private String normalFlag;
+
+    //过滤非本人
+    private String noLoginId;
 
     /** 申请人 */
     @Excel(name = "流程状态")
