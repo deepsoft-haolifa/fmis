@@ -194,9 +194,14 @@
                         var flowStatus = row.flowStatus;
                         var normalFlag = row.normalFlag;
                         if (flowStatus < 1 && roleType == "1") {
-                            actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="edit(\'' + row.quotationId + '\')"><i class="fa fa-edit"></i> 编辑</a>');
-                            actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.quotationId + '\')"><i class="fa fa-remove"></i> 删除</a>');
-                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subReport(\'' + row.quotationId + '\')"><i class="fa fa-remove"></i> 上报</a>');
+                            if (flowStatus != "0" && flowStatus == normalFlag) {
+                                //已完成
+                            } else {
+                                actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="edit(\'' + row.quotationId + '\')"><i class="fa fa-edit"></i> 编辑</a>');
+                                actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.quotationId + '\')"><i class="fa fa-remove"></i> 删除</a>');
+                                actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subReport(\'' + row.quotationId + '\')"><i class="fa fa-remove"></i> 上报</a>');
+                            }
+
                         } else if (roleType == "2" && flowStatus == "1" && normalFlag != flowStatus) {
                             //角色=销售经理  状态=销售员上报
                             console.log("-1");

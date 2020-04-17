@@ -242,6 +242,9 @@
     <script th:inline="javascript">
         var editFlag = [[${@permission.hasPermi('fmis:product:edit')}]];
         var removeFlag = [[${@permission.hasPermi('fmis:product:remove')}]];
+
+        var string2Datas = [[${@dict.getType('product_level')}]];
+
         var prefix = ctx + "fmis/product";
 
         $(function() {
@@ -307,6 +310,13 @@
                 {
                     field : 'driveForm', 
                     title : '驱动形式'
+                },
+                {
+                    field : 'string2',
+                    title : '产品等级',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(string2Datas, value);
+                    }
                 },
                 {
                     field : 'price', 

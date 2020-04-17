@@ -116,6 +116,9 @@ public class BizProduct extends BaseEntity {
         return string1;
     }
 
+    /**
+     * 产品等级
+     */
     private String string2;
     public void setString2(String string2) {
         this.string2 = string2;

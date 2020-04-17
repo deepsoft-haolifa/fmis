@@ -113,6 +113,17 @@
                     <select name="driveForm" onchange="generateProductModel()" id="driveForm" class="form-control select2-multiple" ><option>请选择</option></select>
                 </div>
             </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">产品等级：</label>
+                <div class="col-sm-8">
+                    <select name="string2" class="form-control m-b" th:with="type=${@dict.getType('product_level')}">
+                        <option value="">请选择</option>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{string2}"></option>
+                    </select>
+                </div>
+            </div>
+
             <div class="form-group">    
                 <label class="col-sm-3 control-label">产品单价：</label>
                 <div class="col-sm-8">

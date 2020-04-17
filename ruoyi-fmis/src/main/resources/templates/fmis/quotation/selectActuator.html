@@ -30,10 +30,12 @@
                                                 <p>产品名称：</p>
                                                 <input type="text" name="name" id="name1"/>
                                                 <input type="hidden" name="string2" value="1"/>
+                                                <input type="hidden" name="string61" id="string61" value="0"/>
                                                 <input type="hidden" name="productId" id="productId" th:value="${productId}"/>
                                             </li>
                                             <li>
                                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="search1()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                                <a class="btn btn-primary btn-rounded btn-sm" onclick="searchAll1()"><i class="fa fa-search"></i>&nbsp;搜索全部</a>
                                             </li>
                                         </ul>
                                     </div>
@@ -62,10 +64,12 @@
                                                 <p>产品名称：</p>
                                                 <input type="text" name="name" id="name2"/>
                                                 <input type="hidden" name="string2" value="2"/>
+                                                <input type="hidden" name="string62" id="string62" value="0"/>
                                                 <input type="hidden" name="productId" id="productId" th:value="${productId}"/>
                                             </li>
                                             <li>
                                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="search2()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                                <a class="btn btn-primary btn-rounded btn-sm" onclick="searchAll2()"><i class="fa fa-search"></i>&nbsp;搜索全部</a>
                                             </li>
                                         </ul>
                                     </div>
@@ -103,17 +107,29 @@
         var table2;
 
         function search1 () {
-            var data = {"name":$("#name1").val(),"string2":"1"};
+            $("#string61").val("0");
+            var data = {"name":$("#name1").val(),"string2":"1","string6":$("#string61").val()};
+            $.table.search('formId','bootstrap-table',data);
+        }
+        function searchAll1 () {
+            $("#string61").val("1");
+            var data = {"name":$("#name1").val(),"string2":"1","string6":$("#string61").val()};
             $.table.search('formId','bootstrap-table',data);
         }
         function search2 () {
-            var data = {"name":$("#name2").val(),"string2":"2"};
+            $("#string62").val("0");
+            var data = {"name":$("#name2").val(),"string2":"2","string6":$("#string61").val()};
+            $.table.search('formId1','bootstrap-table1',data);
+        }
+        function searchAll2 () {
+            $("#string62").val("1");
+            var data = {"name":$("#name2").val(),"string2":"2","string6":$("#string62").val()};
             $.table.search('formId1','bootstrap-table1',data);
         }
 
         var options1 = {
             id: "bootstrap-table",
-            queryParams:{"string2":"1"},
+            queryParams:{"string2":"1","string6":"0"},
             url: prefix + "/listForProductId?productId=" + productId,
             createUrl: prefix + "/add",
             updateUrl: prefix + "/edit/{id}",
@@ -207,7 +223,7 @@
 
         var options2 = {
             id: "bootstrap-table1",
-            queryParams:{"string2":"2"},
+            queryParams:{"string2":"2","string6":"0"},
             url: prefix + "/listForProductId?productId=" + productId,
             pagination:false,
             modalName: "气动执行器",

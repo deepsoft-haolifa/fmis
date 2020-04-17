@@ -68,9 +68,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectBizActuatorForRefList" parameterType="BizActuator" resultMap="BizActuatorResult">
         <include refid="selectBizActuatorForRefVo"/>
         <where>
-            <if test="string1 != null  and string1 != ''"> and d1.name=#{string1}</if>
 
-            <if test="string3 != null  and string3 != ''"> and d2.name=#{string3}</if>
+
+            <if test="string6 == 0">
+                <if test="string1 != null  and string1 != ''"> and d1.name=#{string1}</if>
+
+                <if test="string3 != null  and string3 != ''"> and d2.name=#{string3}</if>
+            </if>
+
 
             <if test="name != null  and name != ''"> and a.name like concat('%', #{name}, '%')</if>
             <if test="brand != null  and brand != ''"> and ar.brand like concat('%', #{brand}, '%')</if>
