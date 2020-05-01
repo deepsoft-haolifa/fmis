@@ -40,36 +40,36 @@
                 <table id="bootstrap-table" class="table  table-responsive small m-t-md" style="min-width:1800px;">
                     <thead>
                         <tr>
-                            <td>序号</td>
-                            <td>名称</td>
-                            <td>型号</td>
-                            <td>规格</td>
-                            <td>压力</td>
-                            <td>阀体</td>
-                            <td>阀芯</td>
-                            <td>密封材质</td>
-                            <td>驱动形式</td>
-                            <td>连接方式</td>
-                            <td>数量</td>
-                            <td>单价</td>
-                            <td>系数</td>
+                            <th data-field="a1">序号</th>
+                            <th data-field="a2">名称</th>
+                            <th>型号</th>
+                            <th>规格</th>
+                            <th>压力</th>
+                            <th>阀体</th>
+                            <th>阀芯</th>
+                            <th>密封材质</th>
+                            <th>驱动形式</th>
+                            <th>连接方式</th>
+                            <th>数量</th>
+                            <th>单价</th>
+                            <th>系数</th>
 
-                            <td>备注</td>
+                            <th>备注</th>
 
-                            <td>法兰名称</td>
-                            <td>法兰价格</td>
-                            <td>法兰数量</td>
-                            <td>法兰系数</td>
+                            <th data-field="ref1">法兰名称</th>
+                            <th>法兰价格</th>
+                            <th>法兰数量</th>
+                            <th>法兰系数</th>
 
-                            <td>螺栓名称</td>
-                            <td>螺栓价格</td>
-                            <td>螺栓数量</td>
-                            <td>螺栓系数</td>
+                            <th>螺栓名称</th>
+                            <th>螺栓价格</th>
+                            <th>螺栓数量</th>
+                            <th>螺栓系数</th>
 
-                            <td>执行器名称</td>
-                            <td>执行器价格</td>
-                            <td>执行器数量</td>
-                            <td>执行器系数</td>
+                            <th>执行器名称</th>
+                            <th>执行器价格</th>
+                            <th>执行器数量</th>
+                            <th>执行器系数</th>
 
                         </tr>
                     </thead>
@@ -349,6 +349,15 @@
     $("#form-quotation-edit").validate({
         focusCleanup: true
     });
+
+    $(document).ready(function(){
+
+        var allTableData = $('#bootstrap-table').bootstrapTable('getData');
+
+        //隐藏
+        console.log("ref1=" + $('#bootstrap-table').bootstrapTable('hideColumn', 'a2'));
+    });
+
 
 
 

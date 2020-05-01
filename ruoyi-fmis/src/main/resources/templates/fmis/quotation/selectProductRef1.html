@@ -127,8 +127,8 @@
                 $.modal.alertWarning("请只选择一条记录");
                 return;
             }
-            $.modal.confirm('确定要关联该法兰吗？',
-                function() {
+            //$.modal.confirm('确定要关联该法兰吗？',
+             //   function() {
                     parent.$('#form-quotation-add input[name=productRef1Id_' + productId + ']').val($.table.selectColumns("productRefId"));
                     parent.$('#form-quotation-add input[name=productRef1Name_' + productId + ']').val($.table.selectColumns("name"));
 
@@ -145,8 +145,8 @@
                     parent.$('#form-quotation-edit input[id=productRef1ValvebodyMaterial_' + productId + ']').val($.table.selectColumns("valvebodyMaterial"));
                     parent.$('#form-quotation-edit input[id=productRef1Price_' + productId + ']').val($.table.selectColumns("price"));
                     $.modal.close();
-                }
-            );
+            //    }
+            //);
         }
     </script>
 </body>

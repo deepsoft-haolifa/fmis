@@ -57,6 +57,10 @@
                 <a class="btn btn-warning" onclick="exportPdf()" shiro:hasPermission="fmis:quotation:export">
                     <i class="fa fa-download"></i> 生成报价单
                  </a>
+
+                <a class="btn btn-success" onclick="viewPdf()">
+                    <i class="fa fa-street-view"></i> 预览报价单
+                </a>
             </div>
             <div class="col-sm-12 select-table table-striped">
                 <table id="bootstrap-table"></table>
@@ -73,6 +77,7 @@
         var roleType = /*[[${roleType}]]*/;
 
 
+
         $(function() {
             var options = {
                 url: prefix + "/list",
@@ -81,6 +86,7 @@
                 removeUrl: prefix + "/remove",
                 exportUrl: prefix + "/export",
                 modalName: "报价单",
+                uniqueId: "quotationId",
                 columns: [{
                     checkbox: true
                 },
@@ -235,6 +241,49 @@
             $.modal.openFull("增加", url);
         }
 
+        function openPDF(){
+            var url="/getPdf";
+            //引入的pdf.js文件夹的路径下的web/viewer.html 参数：后台流文件URL+teacherName=?
+            //注意路径问题 %3D是“=”号的转义，
+            window.open("./pdfjs/web/viewer.html?file="+ url + "?teacherName%3D陈大大");
+        }
+        /**
+         * 预览报价单
+         * @param formId
+         */
+        function viewPdf(formId) {
+
+            var row = $('#bootstrap-table').bootstrapTable('getSelections')[0];
+            var rows = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
+            if ($.common.isEmpty(row) || rows.length != 1) {
+                $.modal.alertWarning("请选择一条记录");
+                return;
+            }
+
+
+            var currentId = $.common.isEmpty(formId) ? $('form').attr('id') : formId;
+            console.log("currentId=" + currentId);
+            $.modal.loading("正在导出数据，请稍后...");
+            var paramsJson = $("#" + currentId).serializeArray();
+            paramsJson.push({"name": "quotationId", "value": row.quotationId});
+            paramsJson.push({"name": "status", "value": "1"});
+            var viewUrl = prefix + "/viewPdf";
+            window.open("../pdfjs/web/viewer.html?file="+ viewUrl + "?id%3D" + row.quotationId);
+            $.modal.closeLoading();
+            /*
+            $.post($.table._option.exportUrl, paramsJson, function(result) {
+                if (result.code == web_status.SUCCESS) {
+                    var url = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + false;
+                    //window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + false;
+                    window.open("../pdfjs/web/viewer.html?file="+ url + "?teacherName%3D陈大大");
+                } else if (result.code == web_status.WARNING) {
+                    $.modal.alertWarning(result.msg)
+                } else {
+                    $.modal.alertError(result.msg);
+                }
+                $.modal.closeLoading();
+            });*/
+        }
 
         function exportPdf(formId) {
 
@@ -279,9 +328,26 @@
                     $.modal.alertWarning("请至少选择一条记录");
                     return;
                 }
+                var flowStatus = row.flowStatus;
+                if (flowStatus > 0) {
+                    $.modal.alertWarning("已上报数据不能修改");
+                    return;
+                }
+
                 var url = $.table._option.updateUrl.replace("{id}", row[$.table._option.uniqueId]);
                 $.modal.openFull("修改" + $.table._option.modalName, url);
             } else {
+                var row = $('#bootstrap-table').bootstrapTable("getRowByUniqueId",id);
+                if (row == null) {
+                    row = $('#bootstrap-table').bootstrapTable('getSelections')[0];
+                }
+                if (row != null) {
+                    var flowStatus = row.flowStatus;
+                    if (flowStatus > 0) {
+                        $.modal.alertWarning("已上报数据不能修改");
+                        return;
+                    }
+                }
                 $.modal.openFull("修改" + $.table._option.modalName, $.operate.editUrl(id));
             }
         }

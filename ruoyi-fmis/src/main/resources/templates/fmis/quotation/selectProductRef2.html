@@ -136,8 +136,8 @@
                 $.modal.alertWarning("请只选择一条记录");
                 return;
             }
-            $.modal.confirm('确定要关联该螺栓吗？',
-                function() {
+            //$.modal.confirm('确定要关联该螺栓吗？',
+            //    function() {
                     parent.$('#form-quotation-add input[name=productRef2Id_' + productId + ']').val($.table.selectColumns("productRefId"));
                     parent.$('#form-quotation-add input[name=productRef2Name_' + productId + ']').val($.table.selectColumns("name"));
 
@@ -156,8 +156,8 @@
                     parent.$('#form-quotation-edit input[id=productRef2Price_' + productId + ']').val($.table.selectColumns("price"));
 
                     $.modal.close();
-                }
-            );
+            //    }
+            //);
         }
     </script>
 </body>

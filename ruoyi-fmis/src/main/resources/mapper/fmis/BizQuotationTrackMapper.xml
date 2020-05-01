@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.fmis.quotationtrack.mapper.BizQuotationTrackMapper">
+    
+    <resultMap type="BizQuotationTrack" id="BizQuotationTrackResult">
+        <result property="trackId"    column="track_id"    />
+        <result property="quotationId"    column="quotation_id"    />
+        <result property="quotationState"    column="quotation_state"    />
+        <result property="serialNumber"    column="serial_number"    />
+        <result property="premiumRate"    column="premium_rate"    />
+        <result property="feedback"    column="feedback"    />
+        <result property="closedloopTime"    column="closedloop_time"    />
+        <result property="recordTime"    column="record_time"    />
+        <result property="limitation"    column="limitation"    />
+        <result property="email"    column="email"    />
+        <result property="contacts"    column="contacts"    />
+        <result property="contactPhone"    column="contact_phone"    />
+        <result property="fax"    column="fax"    />
+        <result property="remark"    column="remark"    />
+        <result property="string1"    column="string1"    />
+        <result property="string2"    column="string2"    />
+        <result property="string3"    column="string3"    />
+        <result property="string4"    column="string4"    />
+        <result property="string5"    column="string5"    />
+        <result property="string6"    column="string6"    />
+        <result property="string7"    column="string7"    />
+        <result property="string8"    column="string8"    />
+        <result property="string9"    column="string9"    />
+        <result property="string10"    column="string10"    />
+        <result property="status"    column="status"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBizQuotationTrackVo">
+        select t.track_id, t.quotation_id, t.quotation_state, t.serial_number, t.premium_rate, t.feedback, t.closedloop_time, t.record_time, t.limitation, t.email,
+        t.contacts, t.contact_phone, t.fax, t.remark, t.string1, t.string2, t.string3, t.string4, t.string5, t.string6, t.string7, t.string8, t.string9,
+        t.string10, t.status, t.del_flag, t.create_by, t.create_time, t.update_by, t.update_time,
+        q.create_time as qcreateTime,c.area_code as areaCode,c.new_status as newStatus,q.string1 as qorderno,c.code_name as codeName,c.area,c.name as customerName,c.project_ame as projectAme,
+        q.string9 as totalPrice,(select count(1) from biz_quotation_product p where p.quotation_id=q.quotation_id) as totalNum,u.user_name as qcreateName,c.company_code as companyCode
+        from biz_quotation_track t
+        join biz_quotation q on q.quotation_id=t.quotation_id
+        left join biz_customer c on c.customer_id=q.string2
+        left join sys_user u on q.create_by=u.user_id
+        left join sys_dept dt on u.dept_id=dt.dept_id
+    </sql>
+
+    <select id="selectBizQuotationTrackList" parameterType="BizQuotationTrack" resultMap="BizQuotationTrackResult">
+        <include refid="selectBizQuotationTrackVo"/>
+        <where>  
+            <if test="quotationId != null "> and quotation_id = #{quotationId}</if>
+            <if test="quotationState != null  and quotationState != ''"> and t.quotation_state = #{quotationState}</if>
+            <if test="serialNumber != null  and serialNumber != ''"> and t.serial_number like concat('%', #{serialNumber}, '%')</if>
+            <if test="email != null  and email != ''"> and t.email like concat('%', #{email}, '%')</if>
+            <if test="contacts != null  and contacts != ''"> and t.contacts like concat('%', #{contacts}, '%')</if>
+            <if test="contactPhone != null  and contactPhone != ''"> and t.contact_phone like concat('%', #{contactPhone}, '%')</if>
+            <if test="fax != null  and fax != ''"> and t.fax like concat('%', #{fax}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectBizQuotationTrackById" parameterType="Long" resultMap="BizQuotationTrackResult">
+        <include refid="selectBizQuotationTrackVo"/>
+        where track_id = #{trackId}
+    </select>
+        
+    <insert id="insertBizQuotationTrack" parameterType="BizQuotationTrack" useGeneratedKeys="true" keyProperty="trackId">
+        insert into biz_quotation_track
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="quotationId != null ">quotation_id,</if>
+            <if test="quotationState != null  and quotationState != ''">quotation_state,</if>
+            <if test="serialNumber != null  and serialNumber != ''">serial_number,</if>
+            <if test="premiumRate != null  and premiumRate != ''">premium_rate,</if>
+            <if test="feedback != null  and feedback != ''">feedback,</if>
+            <if test="closedloopTime != null ">closedloop_time,</if>
+            <if test="recordTime != null ">record_time,</if>
+            <if test="limitation != null  and limitation != ''">limitation,</if>
+            <if test="email != null  and email != ''">email,</if>
+            <if test="contacts != null  and contacts != ''">contacts,</if>
+            <if test="contactPhone != null  and contactPhone != ''">contact_phone,</if>
+            <if test="fax != null  and fax != ''">fax,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+            <if test="string1 != null  and string1 != ''">string1,</if>
+            <if test="string2 != null  and string2 != ''">string2,</if>
+            <if test="string3 != null  and string3 != ''">string3,</if>
+            <if test="string4 != null  and string4 != ''">string4,</if>
+            <if test="string5 != null  and string5 != ''">string5,</if>
+            <if test="string6 != null  and string6 != ''">string6,</if>
+            <if test="string7 != null  and string7 != ''">string7,</if>
+            <if test="string8 != null  and string8 != ''">string8,</if>
+            <if test="string9 != null  and string9 != ''">string9,</if>
+            <if test="string10 != null  and string10 != ''">string10,</if>
+            <if test="status != null  and status != ''">status,</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="quotationId != null ">#{quotationId},</if>
+            <if test="quotationState != null  and quotationState != ''">#{quotationState},</if>
+            <if test="serialNumber != null  and serialNumber != ''">#{serialNumber},</if>
+            <if test="premiumRate != null  and premiumRate != ''">#{premiumRate},</if>
+            <if test="feedback != null  and feedback != ''">#{feedback},</if>
+            <if test="closedloopTime != null ">#{closedloopTime},</if>
+            <if test="recordTime != null ">#{recordTime},</if>
+            <if test="limitation != null  and limitation != ''">#{limitation},</if>
+            <if test="email != null  and email != ''">#{email},</if>
+            <if test="contacts != null  and contacts != ''">#{contacts},</if>
+            <if test="contactPhone != null  and contactPhone != ''">#{contactPhone},</if>
+            <if test="fax != null  and fax != ''">#{fax},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="string1 != null  and string1 != ''">#{string1},</if>
+            <if test="string2 != null  and string2 != ''">#{string2},</if>
+            <if test="string3 != null  and string3 != ''">#{string3},</if>
+            <if test="string4 != null  and string4 != ''">#{string4},</if>
+            <if test="string5 != null  and string5 != ''">#{string5},</if>
+            <if test="string6 != null  and string6 != ''">#{string6},</if>
+            <if test="string7 != null  and string7 != ''">#{string7},</if>
+            <if test="string8 != null  and string8 != ''">#{string8},</if>
+            <if test="string9 != null  and string9 != ''">#{string9},</if>
+            <if test="string10 != null  and string10 != ''">#{string10},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBizQuotationTrack" parameterType="BizQuotationTrack">
+        update biz_quotation_track
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="quotationId != null ">quotation_id = #{quotationId},</if>
+            <if test="quotationState != null  and quotationState != ''">quotation_state = #{quotationState},</if>
+            <if test="serialNumber != null  and serialNumber != ''">serial_number = #{serialNumber},</if>
+            <if test="premiumRate != null  and premiumRate != ''">premium_rate = #{premiumRate},</if>
+            <if test="feedback != null  and feedback != ''">feedback = #{feedback},</if>
+            <if test="closedloopTime != null ">closedloop_time = #{closedloopTime},</if>
+            <if test="recordTime != null ">record_time = #{recordTime},</if>
+            <if test="limitation != null  and limitation != ''">limitation = #{limitation},</if>
+            <if test="email != null  and email != ''">email = #{email},</if>
+            <if test="contacts != null  and contacts != ''">contacts = #{contacts},</if>
+            <if test="contactPhone != null  and contactPhone != ''">contact_phone = #{contactPhone},</if>
+            <if test="fax != null  and fax != ''">fax = #{fax},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+            <if test="string1 != null  and string1 != ''">string1 = #{string1},</if>
+            <if test="string2 != null  and string2 != ''">string2 = #{string2},</if>
+            <if test="string3 != null  and string3 != ''">string3 = #{string3},</if>
+            <if test="string4 != null  and string4 != ''">string4 = #{string4},</if>
+            <if test="string5 != null  and string5 != ''">string5 = #{string5},</if>
+            <if test="string6 != null  and string6 != ''">string6 = #{string6},</if>
+            <if test="string7 != null  and string7 != ''">string7 = #{string7},</if>
+            <if test="string8 != null  and string8 != ''">string8 = #{string8},</if>
+            <if test="string9 != null  and string9 != ''">string9 = #{string9},</if>
+            <if test="string10 != null  and string10 != ''">string10 = #{string10},</if>
+            <if test="status != null  and status != ''">status = #{status},</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+        </trim>
+        where track_id = #{trackId}
+    </update>
+
+    <delete id="deleteBizQuotationTrackById" parameterType="Long">
+        delete from biz_quotation_track where track_id = #{trackId}
+    </delete>
+
+    <delete id="deleteBizQuotationTrackByIds" parameterType="String">
+        delete from biz_quotation_track where track_id in 
+        <foreach item="trackId" collection="array" open="(" separator="," close=")">
+            #{trackId}
+        </foreach>
+    </delete>
+    
+</mapper>

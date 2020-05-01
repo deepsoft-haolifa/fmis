@@ -36,23 +36,36 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="fax"    column="fax"    />
         <result property="companyAddress"    column="company_address"    />
         <result property="deptId"    column="dept_id"    />
+
+        <result property="customerLevel"    column="customer_level"    />
+        <result property="codeName"    column="code_name"    />
+        <result property="industryDivision"    column="industry_division"    />
+        <result property="allocationDate"    column="allocation_date"    />
+        <result property="assignNumber"    column="assign_number"    />
+        <result property="fileNumber"    column="file_number"    />
+        <result property="filePaths"    column="file_paths"    />
+
+        <result property="newStatus"    column="new_status"    />
     </resultMap>
 
     <sql id="selectBizCustomerVo">
-        select customer_id, record_date, company_code, area, record_code, owner_user_id, name, project_ame, contact_name, contact_position, contact_phone, contact_email, brand, info, product_info, remark, status, del_flag, create_by, create_time, update_by, update_time,area_code,source,record_type,record_num,telephone,fax,company_address,dept_id from biz_customer
+        select customer_id, record_date, company_code, area, record_code, owner_user_id, name, project_ame, contact_name, contact_position, contact_phone, contact_email, brand, info, product_info, remark, status, del_flag, create_by, create_time, update_by, update_time,area_code,source,record_type,record_num,telephone,fax,company_address,dept_id,
+         customer_level,code_name,industry_division,allocation_date,assign_number,file_number,file_paths,new_status
+         from biz_customer
     </sql>
 
     <sql id="selectBizCustomerDictVo">
         select c.customer_id, c.record_date, c.company_code, c.area, c.record_code, u.user_name as owner_user_id, c.name, c.project_ame, c.contact_name, c.contact_position, c.contact_phone, c.contact_email, c.brand, c.info, c.product_info, c.remark, c.status, c.del_flag, c.create_by, c.create_time, c.update_by, c.update_time,
-        c.area_code,c.source,c.record_type,c.record_num,c.telephone,c.fax,c.company_address,c.dept_id,dt.dept_name deptName
+        c.area_code,c.source,c.record_type,c.record_num,c.telephone,c.fax,c.company_address,c.dept_id,dt.dept_name deptName,
+        c.customer_level,c.code_name,c.industry_division,c.allocation_date,c.assign_number,c.file_number,c.file_paths,c.new_status
         from biz_customer c
         left join sys_user u on c.owner_user_id=u.user_id
 
         left join sys_dept dt on u.dept_id=dt.dept_id
 
         where c.del_flag = '0'
-        <!-- 数据范围过滤 ${params.dataScope}-->
-
+        <!-- 数据范围过滤 -->
+        ${params.dataScope}
 
     </sql>
 
@@ -114,6 +127,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="fax != null ">fax,</if>
             <if test="companyAddress != null ">company_address,</if>
             <if test="deptId != null ">dept_id,</if>
+
+            <if test="customerLevel != null ">customer_level,</if>
+            <if test="codeName != null ">code_name,</if>
+            <if test="industryDivision != null ">industry_division,</if>
+            <if test="allocationDate != null ">allocation_date,</if>
+            <if test="assignNumber != null ">assign_number,</if>
+            <if test="fileNumber != null ">file_number,</if>
+            <if test="filePaths != null ">file_paths,</if>
+            <if test="newStatus != null ">new_status,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="recordDate != null ">#{recordDate},</if>
@@ -146,6 +168,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="fax != null ">#{fax},</if>
             <if test="companyAddress != null ">#{companyAddress},</if>
             <if test="deptId != null ">#{deptId},</if>
+
+            <if test="customerLevel != null ">#{customerLevel},</if>
+            <if test="codeName != null ">#{codeName},</if>
+            <if test="industryDivision != null ">#{industryDivision},</if>
+            <if test="allocationDate != null ">#{allocationDate},</if>
+            <if test="assignNumber != null ">#{assignNumber},</if>
+            <if test="fileNumber != null ">#{fileNumber},</if>
+            <if test="filePaths != null ">#{filePaths},</if>
+            <if test="newStatus != null ">#{newStatus},</if>
          </trim>
     </insert>
 
@@ -182,6 +213,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="fax != null ">fax = #{fax},</if>
             <if test="companyAddress != null ">company_address = #{companyAddress},</if>
             <if test="deptId != null ">dept_id = #{deptId},</if>
+
+            <if test="customerLevel != null ">customer_level = #{customerLevel},</if>
+            <if test="codeName != null ">code_name = #{codeName},</if>
+            <if test="industryDivision != null ">industry_division = #{industryDivision},</if>
+            <if test="allocationDate != null ">allocation_date = #{allocationDate},</if>
+            <if test="assignNumber != null ">assign_number = #{assignNumber},</if>
+            <if test="fileNumber != null ">file_number = #{fileNumber},</if>
+            <if test="filePaths != null ">file_paths = #{filePaths},</if>
+            <if test="newStatus != null ">new_status = #{newStatus},</if>
         </trim>
         where customer_id = #{customerId}
     </update>

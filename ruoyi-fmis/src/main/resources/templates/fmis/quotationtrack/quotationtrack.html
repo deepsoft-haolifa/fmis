@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('报价追踪列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>状态：</p>
+                                <select name="quotationState" th:with="type=${@dict.getType('quotation_state')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <p>顺序号：</p>
+                                <input type="text" name="serialNumber"/>
+                            </li>
+                            <li>
+                                <p>email：</p>
+                                <input type="text" name="email"/>
+                            </li>
+                            <li>
+                                <p>联系人：</p>
+                                <input type="text" name="contacts"/>
+                            </li>
+                            <li>
+                                <p>电话：</p>
+                                <input type="text" name="contactPhone"/>
+                            </li>
+                            <li>
+                                <p>传真：</p>
+                                <input type="text" name="fax"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="fmis:quotationtrack:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="fmis:quotationtrack:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="fmis:quotationtrack:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="fmis:quotationtrack:export">
+                    <i class="fa fa-download"></i> 导出
+                 </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('fmis:quotationtrack:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('fmis:quotationtrack:remove')}]];
+        var quotationStateDatas = [[${@dict.getType('quotation_state')}]];
+        var areaDatas = [[${@dict.getType('customer_area')}]];
+        var prefix = ctx + "fmis/quotationtrack";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "报价追踪",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'trackId', 
+                    title : 'ID',
+                    visible: false
+                },
+                {
+                    field : 'qcreateTime',
+                    title : '报价日期'
+                },
+                {
+                    field : 'quotationState',
+                    title : '报价单状态',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(quotationStateDatas, value);
+                    }
+                },
+                {
+                    field : 'companyCode',
+                    title : '商务代码'
+                },
+                {
+                    field : 'newStatus',
+                    title : '新/老客户',
+                    formatter: function(value, row, index) {
+                        var v = "新";
+                        if (value == "1") {
+                            v = "老";
+                        }
+                        return v;
+                    }
+                },
+                {
+                    field : 'qorderno',
+                    title : '报价单号'
+                },
+                {
+                    field : 'codeName',
+                    title : '客户代号'
+                },
+                {
+                    field : 'serialNumber',
+                    title : '报价顺序号'
+                },
+                {
+                    field : 'areaCode',
+                    title : '市场区域',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(areaDatas, value);
+                    }
+                },
+                {
+                    field : 'customerName',
+                    title : '客户名称'
+                },
+                {
+                    field : 'projectAme',
+                    title : '项目名称'
+                },
+                {
+                    field : 'premiumRate',
+                    title : '溢价比例'
+                },
+                {
+                    field : 'totalPrice',
+                    title : '报价总价'
+                },
+                {
+                    field : 'totalNum',
+                    title : '报价数量'
+                },
+                {
+                    field : 'qcreateName',
+                    title : '业务负责人'
+                },
+                {
+                    field : 'feedback',
+                    title : '追踪反馈'
+                },
+                {
+                    field : 'closedloopTime',
+                    title : '闭环时间'
+                },
+                {
+                    field : 'recordTime',
+                    title : '报价备案时间'
+                },
+                {
+                    field : 'limitation',
+                    title : '报价时效'
+                },
+                {
+                    field : 'contacts',
+                    title : '联系人'
+                },
+                {
+                    field : 'contactPhone',
+                    title : '电话'
+                },
+                {
+                    field : 'fax',
+                    title : '传真'
+                },
+                {
+                    field : 'email',
+                    title : 'email'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.trackId + '\')"><i class="fa fa-edit"></i> 编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.trackId + '\')"><i class="fa fa-remove"></i> 删除</a>');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

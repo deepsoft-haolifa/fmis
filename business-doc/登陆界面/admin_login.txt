@@ -1,0 +1,118 @@
+﻿<!--#include file="conn.asp"-->
+<!--#include file="SystemFun.asp"-->
+<%
+if request("loginid")<>"" and request("pwd")<>"" then
+	loginid=Request("loginid")
+	pwd=Request("pwd")
+	code=Request("code")
+  if int(code)=Session("CheckCode") then
+	if isExistLoginUser(loginid,pwd) then
+		isSuccess=true
+		session.timeout=60
+		session("loginid")=loginid	
+		response.redirect "../manage.asp"
+		ShowMsg="<font color='#FF0000'>"  & "您已经成功登陆！" & "</font>"
+	else
+		isSuccess=false
+		ShowMsg="<font color='#FF0000'>"  & "您登陆失败！" & "</font>"	
+	end if
+  else
+     Response.write "<script>alert('验证码错误！');</script>"
+  end if
+end if
+%>
+<!DOCTYPE HTML>
+<script type="text/javascript">
+function document.onkeydown(){  
+var keyCode;    
+keyCode=window.event.keyCode;    
+if(keyCode==13){   
+form1.submit(); 
+ }
+} </script>
+
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="renderer" content="webkit" />
+<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+<title> 山西好利阀机械制造有限公司-生产流程管理系统</title>
+<style>
+* {margin:0;padding:0;}
+ul,li{list-style:none;}
+input,button{outline: none;font-family:微软雅黑,Verdana,宋体}
+body{background: url(images_2/login_webBg.jpg);font-family:微软雅黑,Verdana,宋体}
+#loginMain {background: url(images_2/login_mainBg.png) no-repeat 50%;position: absolute;width: 1060px;height: 580px;left: 50%;top: 50%;margin: -290px 0 0 -530px;}
+.loginBanner {background: url(images_2/login_banner.jpg) no-repeat;width: 1018px;height: 360px;margin: 128px 0 0 21px;}
+.loginCopyrigt {line-height: 70px;text-align: center;color: #666;font-size: 14px;}
+.loginForm {background: url(images_2/long_form.png) no-repeat 50% 0;position: absolute;top: 90px;right: 60px;width: 360px;height: 400px;}
+.forms {width: 252px;margin: 100px auto 0;}
+.forms .row:after {content: "";display: table;clear: both;}
+.forms .row {margin-bottom: 20px;*zoom: 1;}
+.forms .alt {float: left;line-height: 37px;
+width: 76px;font-size: 16px;text-align: center;color: #666;margin-right: 14px;}
+.forms .val {width: 155px;height: 30px;padding-top: 6px;float: left;}
+.forms .inp {width: 100%;height: 90%; border: none;}
+.forms .inp.code {width: 65px;margin-right: 20px;float: left;}
+.forms .code + img {height: 35px;width: 70px;}
+.forms .submitBtn {background: url(images_2/login_btn.png) no-repeat;width: 250px;height: 40px;border: none;font-size: 16px;cursor: pointer;}
+.loginMsg {position: absolute;width: 100%;left: 0;top: 0;text-align: center;line-height: 30px;font-size: 14px;background-color: #f2dede;}
+</style>
+<script language=javascript>
+ function CheckData(){
+	if(form1.loginid.value==""){
+		alert("用户名不能为空！");
+		form1.loginid.focus();
+		return false
+	}	
+	if(form1.pwd.value==""){
+		alert("密码不能为空！");
+		form1.pwd.focus();
+		return false
+	}
+	if(form1.code.value==""){
+	    alert("请输入验证吗！");
+		form1.code.focus();
+        return false;
+	}
+	return true;
+}
+</script>
+</head>
+<body>
+<%if isSuccess=true then
+	Response.Write "<div class='loginMsg'>"& ShowMsg &"</div>"
+	Response.End 
+else
+	Response.Write "<div class='loginMsg'>"& ShowMsg &"</div>"
+end if
+%>
+<div id="loginMain">
+	<div class="loginForm">
+		<div class="forms">
+			<form method="POST" name="form1" action="admin_login.asp">
+				<ul class="form">
+					<li class="row">
+						<label for="loginid" class="alt">用户名</label>
+						<div class="val"><input type="text" name="loginid" id="loginid" class="inp" /></div>
+					</li>
+					<li class="row">
+						<label for="pwd" class="alt">密　码</label>
+						<div class="val"><input type="password" name="pwd" id="pwd" class="inp" /></div>
+					</li>
+					<li class="row">
+						<label for="code" class="alt">验证码</label>
+						<div class="val"><input type="text" name="code" id="code" class="inp code" style="ime-mode:disabled" onKeyPress="if (event.keyCode < 48 || event.keyCode > 57) event.returnValue = false;" size="4" maxlength="4" onpaste="return false" /><img src="code/index.asp" width="40" height="10" /></div>
+					</li>
+					<li class="row button"><button type="submit" class="submitBtn">登 录</button></li>
+				</ul>
+			</form>
+		</div>
+	</div>
+	<div class="loginBanner"></div>
+	<div class="loginCopyrigt">Copyright &copy; 2018 Haoli, All Rights Reserved  山西好利阀机械制造有限公司- 版权所有</div>
+</div>
+
+<%session.Abandon()%>
+</body>
+</html>

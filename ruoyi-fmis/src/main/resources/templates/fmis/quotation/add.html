@@ -80,7 +80,7 @@
                 </div>
                 <label class="col-sm-1 control-label" >报备项目：</label>
                 <div class="col-sm-4">
-                    <input name="reportProject" class="form-control" type="text" value="非项目">
+                    <input name="reportProject" class="form-control" type="text" value="非项目" readonly>
                 </div>
 
             </div>
@@ -256,7 +256,23 @@
             return $.common.isEmpty(v);
         }
 
-
+        function showRefDiv (productId) {
+            var displayValue = $("#productRef1Div_" + productId).css('display');
+            if (displayValue == 'none') {
+                $("#productRef1Div_" + productId).css({'display': 'block'});
+                $("#productRef2Div_" + productId).css({'display': 'block'});
+                $("#productRef0Div_" + productId).css({'display': 'block'});
+                $("#productRef3Div_" + productId).css({'display': 'block'});
+                console.log("showRefDiv_=" + $("#showRefDiv_" + productId).text());
+                $("#showRefDiv_" + productId).text("隐藏");
+            } else {
+                $("#productRef1Div_" + productId).css({'display': 'none'});
+                $("#productRef2Div_" + productId).css({'display': 'none'});
+                $("#productRef0Div_" + productId).css({'display': 'none'});
+                $("#productRef3Div_" + productId).css({'display': 'none'});
+                $("#showRefDiv_" + productId).text("展开");
+            }
+        }
 
         /**
          * 计算总额

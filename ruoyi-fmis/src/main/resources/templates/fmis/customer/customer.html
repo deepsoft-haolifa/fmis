@@ -30,8 +30,76 @@
                             </li>
 
                             <li>
+                                <p>客户类别：</p>
+                                <select name="customerLevel" class="form-control m-b" th:with="type=${@dict.getType('customer_level')}">
+                                    <option value="">全部</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+
+                            <li>
+                                <p>客户代号：</p>
+                                <input name="codeName" class="form-control" type="text">
+                            </li>
+
+                            <li>
+                                <p>行业划分：</p>
+                                <select name="industryDivision" class="form-control m-b" th:with="type=${@dict.getType('industry_division')}">
+                                    <option value="">全部</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+
+                            <li>
+                                <p>分配次数：</p>
+                                <select name="assignNumber" class="form-control m-b" th:with="type=${@dict.getType('assign_number')}">
+                                    <option value="">全部</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+
+
+                            <li>
+                                <p>备案类别：</p>
+                                <select name="recordType" class="form-control m-b" th:with="type=${@dict.getType('customer_record_type')}">
+                                    <option value="">全部</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+
+                            <li>
+                                <p>档案编号：</p>
+                                <input name="fileNumber" class="form-control" type="text">
+                            </li>
+
+                            <li>
+                                <p>客户来源：</p>
+                                <input name="source" class="form-control" type="text">
+                            </li>
+
+                            <li>
                                 <p>项目名称：</p>
                                 <input name="projectAme" class="form-control" type="text">
+                            </li>
+
+                            <li>
+                                <p>品牌：</p>
+                                <input name="brand" class="form-control" type="text">
+                            </li>
+
+                            <li>
+                                <p>品牌：</p>
+                                <input name="brand" class="form-control" type="text">
+                            </li>
+
+                            <li>
+                                <p>主要产品：</p>
+                                <input name="productInfo" class="form-control" type="text">
+                            </li>
+
+                            <li>
+                                <p>客户联系人：</p>
+                                <input name="contactName" class="form-control" type="text">
                             </li>
 
                             <li>
@@ -68,6 +136,9 @@
         var editFlag = [[${@permission.hasPermi('fmis:customer:edit')}]];
         var removeFlag = [[${@permission.hasPermi('fmis:customer:remove')}]];
         var areaDatas = [[${@dict.getType('customer_area')}]];
+        var customerLevelDatas = [[${@dict.getType('customer_level')}]];
+        var industryDivisionDatas = [[${@dict.getType('industry_division')}]];
+        var assignNumberDatas = [[${@dict.getType('assign_number')}]];
         var recordTypeDatas = [[${@dict.getType('customer_record_type')}]];
         var prefix = ctx + "fmis/customer";
 
@@ -93,18 +164,51 @@
                 },
                 {
                     field : 'areaCode',
-                    title : '客户区域代码'
+                    title : '客户所属商务公司代码'
                 },
                 {
-                    field : 'companyCode', 
-                    title : '商务公司代码'
-                },
-                {
-                    field : 'area', 
+                    field : 'area',
                     title : '客户所属区域',
                     formatter: function(value, row, index) {
                        return $.table.selectDictLabel(areaDatas, value);
                     }
+                },
+                {
+                    field : 'customerLevel',
+                    title : '客户类别',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(customerLevelDatas, value);
+                    }
+                },
+                {
+                    field : 'codeName',
+                    title : '客户代号'
+                },
+                {
+                    field : 'industryDivision',
+                    title : '行业划分',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(industryDivisionDatas, value);
+                    }
+                },
+                {
+                    field : 'allocationDate',
+                    title : '分配日期'
+                },
+                {
+                    field : 'assignNumber',
+                    title : '分配次数',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(assignNumberDatas, value);
+                    }
+                },
+                {
+                    field : 'fileNumber',
+                    title : '档案编号'
+                },
+                {
+                    field : 'companyAddress',
+                    title : '公司地址'
                 },
                 {
                     field : 'recordCode', 
@@ -155,10 +259,6 @@
                     title : '联系人姓名'
                 },
                 {
-                    field : 'contactPosition', 
-                    title : '联系人职务'
-                },
-                {
                     field : 'contactPhone', 
                     title : '联系人电话'
                 },
@@ -171,12 +271,8 @@
                     title : '品牌'
                 },
                 {
-                    field : 'info', 
-                    title : '客户/信息'
-                },
-                {
                     field : 'productInfo', 
-                    title : '涉及产品'
+                    title : '主要产品'
                 },
                 {
                     field : 'remark', 

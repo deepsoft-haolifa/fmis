@@ -4,6 +4,7 @@
     <th:block th:include="include :: header('新增客户')" />
     <th:block th:include="include :: datetimepicker-css" />
     <th:block th:include="include :: select2-css" />
+    <th:block th:include="include :: bootstrap-fileinput-css" />
 </head>
 <body class="white-bg">
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
@@ -19,19 +20,14 @@
             </div>
 
             <div class="form-group">
-                <label class="col-sm-3 control-label">客户区域代码：</label>
+                <label class="col-sm-3 control-label">客户所属商务公司代码：</label>
                 <div class="col-sm-8">
                     <input name="areaCode" class="form-control" type="text" th:value="${areaCode}" readonly>
                 </div>
             </div>
 
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">商务公司代码：</label>
-                <div class="col-sm-8">
-                    <input name="companyCode" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
+
+            <div class="form-group">
                 <label class="col-sm-3 control-label">客户所属区域：</label>
                 <div class="col-sm-8">
                     <select name="area" class="form-control m-b" th:with="type=${@dict.getType('customer_area')}">
@@ -39,6 +35,56 @@
                     </select>
                 </div>
             </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">客户类别：</label>
+                <div class="col-sm-8">
+                    <select name="customerLevel" class="form-control m-b" th:with="type=${@dict.getType('customer_level')}">
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">客户代号：</label>
+                <div class="col-sm-8">
+                    <input name="codeName" class="form-control" type="text">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">行业划分：</label>
+                <div class="col-sm-8">
+                    <select name="industryDivision" class="form-control m-b" th:with="type=${@dict.getType('industry_division')}">
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">分配日期：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="allocationDate" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">分配次数：</label>
+                <div class="col-sm-8">
+                    <select name="assignNumber" class="form-control m-b" th:with="type=${@dict.getType('assign_number')}">
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">档案编号：</label>
+                <div class="col-sm-8">
+                    <input name="fileNumber" class="form-control" type="text">
+                </div>
+            </div>
+
+
+
             <div class="form-group">    
                 <label class="col-sm-3 control-label">项目备案号：</label>
                 <div class="col-sm-8">
@@ -66,7 +112,7 @@
             <div class="form-group">    
                 <label class="col-sm-3 control-label">客户名称：</label>
                 <div class="col-sm-8">
-                    <input name="name" class="form-control" type="text">
+                    <input name="name" class="form-control" type="text" id="name"  required>
                 </div>
             </div>
 
@@ -124,19 +170,14 @@
             <div class="form-group">    
                 <label class="col-sm-3 control-label">联系人姓名：</label>
                 <div class="col-sm-8">
-                    <input name="contactName" class="form-control" type="text">
+                    <input name="contactName" class="form-control" id="contactName" type="text" required>
                 </div>
             </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">联系人职务：</label>
-                <div class="col-sm-8">
-                    <input name="contactPosition" class="form-control" type="text">
-                </div>
-            </div>
+
             <div class="form-group">    
                 <label class="col-sm-3 control-label">联系人电话：</label>
                 <div class="col-sm-8">
-                    <input name="contactPhone" class="form-control" type="text">
+                    <input name="contactPhone" class="form-control" id="contactPhone" type="text" required>
                 </div>
             </div>
             <div class="form-group">    
@@ -151,31 +192,132 @@
                     <input name="brand" class="form-control" type="text">
                 </div>
             </div>
+
             <div class="form-group">    
-                <label class="col-sm-3 control-label">客户/信息：</label>
-                <div class="col-sm-8">
-                    <input name="info" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">涉及产品：</label>
+                <label class="col-sm-3 control-label">主要产品：</label>
                 <div class="col-sm-8">
                     <input name="productInfo" class="form-control" type="text">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <input id="filePaths" name="filePaths" type="hidden">
+                <label class="font-noraml">开票资料上传</label>
+                <div class="file-loading">
+                    <input id="file_paths_" type="file" name="file" class="imgFile form-control">
                 </div>
             </div>
         </form>
     </div>
     <th:block th:include="include :: footer" />
+    <th:block th:include="include :: bootstrap-fileinput-js" />
     <th:block th:include="include :: datetimepicker-js" />
     <th:block th:include="include :: select2-js" />
     <script type="text/javascript">
-        var prefix = ctx + "fmis/customer"
+        var prefix = ctx + "fmis/customer";
+        var icon = "<i class='fa fa-times-circle'></i> ";
+
+        $(document).ready(function () {
+            $("#file_paths_").fileinput({
+                'theme': 'fas',
+                'uploadUrl': ctx + 'fmis/file/upload',
+                dropZoneTitle: "请通过拖拽图片文件放到这里",
+                allowedFileExtensions: ['pdf', 'jpg','word'],
+                msgFilesTooMany: "选择上传的文件数量({n}) 超过允许的最大数值{m}！",
+                maxFileCount:1,
+                showUpload: false,
+                overwriteInitial: false,
+                initialPreviewAsData: true
+            }).on("filebatchselected", function(event, files) {
+                $(this).fileinput("upload");
+            }).on("fileuploaded", function(event, data) {
+                console.log("data.data=" + data.response.data);
+                $("#filePaths").val(data.response.data);
+            });
+        });
+
         $("#form-customer-add").validate({
+            onkeyup: false,
+            rules: {
+                name:{
+                    required: true,
+                    remote: {
+                        url: prefix + "/checkCustomerName",
+                        type: "post",
+                        dataType: "json",
+                        async: false,
+                        data: {
+                            name : function() {
+                                return $.common.trim($("#name").val());
+                            },
+                            status : 0,
+                            customerId : 0
+                        },
+                        dataFilter: function(data, type) {
+                            var validateUnique = $.validate.unique(data);
+                            return validateUnique;
+                        }
+                    }
+                },
+                contactName:{
+                    required: true,
+                    remote: {
+                        url: prefix + "/checkContactName",
+                        type: "post",
+                        dataType: "json",
+                        async: false,
+                        data: {
+                            contactName : function() {
+                                return $.common.trim($("#contactName").val());
+                            },
+                            status : 0,
+                            customerId : 0
+                        },
+                        dataFilter: function(data, type) {
+                            var validateUnique = $.validate.unique(data);
+                            return validateUnique;
+                        }
+                    }
+                },
+                contactPhone:{
+                    required: true,
+                    remote: {
+                        url: prefix + "/checkContactPhone",
+                        type: "post",
+                        dataType: "json",
+                        async: false,
+                        data: {
+                            contactPhone : function() {
+                                return $.common.trim($("#contactPhone").val());
+                            },
+                            status : 0,
+                            customerId : 0
+                        },
+                        dataFilter: function(data, type) {
+                            var validateUnique = $.validate.unique(data);
+                            return validateUnique;
+                        }
+                    }
+                },
+            },
+            messages: {
+                "name": {
+                    required: icon + "请填写客户",
+                    remote: icon + "客户名称重复"
+                },"contactName": {
+                    required: icon + "请填写联系人姓名",
+                    remote: icon + "联系人姓名重复"
+                },"contactPhone": {
+                    required: icon + "请填写联系人电话",
+                    remote: icon + "联系人电话重复"
+                }
+            },
             focusCleanup: true
         });
 
         function submitHandler() {
-            if ($.validate.form()) {
+            var vali = $.validate.form();
+            if (vali) {
                 var data = $('#form-customer-add').serializeArray();
                 var userIds = $.form.selectSelects("user");
                 data.push({"name": "ownerUserId", "value": userIds});
@@ -184,6 +326,11 @@
         }
 
         $("input[name='recordDate']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+        $("input[name='allocationDate']").datetimepicker({
             format: "yyyy-mm-dd",
             minView: "month",
             autoclose: true

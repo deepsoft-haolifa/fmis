@@ -183,7 +183,9 @@
                     <li><a title="开发文档" href="http://doc.ruoyi.vip" target="_blank"><i class="fa fa-question-circle"></i> 开发文档</a></li>-->
 	                <li><a title="全屏显示" href="javascript:void(0)" id="fullScreen"><i class="fa fa-arrows-alt"></i> 全屏显示</a></li>
 <!--									<li><a class="shake shake-slow menuItem" title="我的待办" th:href="@{/process/general/todoListView}" id="todoList"><i class="fa fa-tasks"></i><span style="color: yellow;"> 5 </span>待办</a></li>-->
-									<li><a class="menuItem" title="我的待办" th:href="@{/fmis/quotation/todoQuotation}" id="todoList"><i class="fa fa-tasks"></i> 我的待办</a></li>
+                    <li><a class="menuItem" title="我的待办" href="/system/main" id="todoList">
+                        <i class="fa fa-tasks"></i> 我的待办<font color="red" class="fa" id="todoListFlag"></font></a></li>
+                    <!-- <font color="red" class="fa">*</font> -->
                     <li class="dropdown user-menu">
 						<a href="javascript:void(0)" class="dropdown-toggle" data-hover="dropdown">
 <!--							<img th:src="(${user.avatar} == '') ? @{/img/profile.jpg} : @{${user.avatar}}" class="user-image">-->

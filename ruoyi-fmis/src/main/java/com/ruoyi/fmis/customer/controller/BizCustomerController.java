@@ -1,13 +1,18 @@
 package com.ruoyi.fmis.customer.controller;
 
+import java.util.Iterator;
 import java.util.List;
 
+import com.ruoyi.common.config.Global;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.fmis.common.BizConstants;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysDept;
 import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.service.ISysDeptService;
 import com.ruoyi.system.service.ISysUserService;
+import org.activiti.engine.impl.util.CollectionUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -117,7 +122,91 @@ public class BizCustomerController extends BaseController {
     @PostMapping("/add")
     @ResponseBody
     public AjaxResult addSave(BizCustomer bizCustomer) {
+
         return toAjax(bizCustomerService.insertBizCustomer(bizCustomer));
+    }
+
+    @PostMapping("/checkCustomerName")
+    @ResponseBody
+    public String checkCustomerName(BizCustomer bizCustomer)
+    {
+        String name = bizCustomer.getName();
+        //0=增加 1=编辑
+        String status = bizCustomer.getStatus();
+        Long id = bizCustomer.getCustomerId();
+
+        if (StringUtils.isEmpty(name)) {
+            return BizConstants.VALIDATE_IS_EXIST;
+        }
+        BizCustomer queryBizCustomer = new BizCustomer();
+        queryBizCustomer.setName(name);
+        List<BizCustomer> list = bizCustomerService.selectBizCustomerList(queryBizCustomer);
+        Iterator<BizCustomer> iterator = list.iterator();
+        while(iterator.hasNext()){
+            BizCustomer o = iterator.next();
+            if(o.getCustomerId().compareTo(id) == 0) {
+                iterator.remove();   //注意这个地方
+            }
+        }
+        if (CollectionUtil.isEmpty(list) || list.size() == 0) {
+            return BizConstants.VALIDATE_IS_NOT_EXIST;
+        }
+        return BizConstants.VALIDATE_IS_EXIST;
+    }
+
+
+    @PostMapping("/checkContactName")
+    @ResponseBody
+    public String checkContactName(BizCustomer bizCustomer)
+    {
+        String name = bizCustomer.getContactName();
+        //0=增加 1=编辑
+        String status = bizCustomer.getStatus();
+        Long id = bizCustomer.getCustomerId();
+        if (StringUtils.isEmpty(name)) {
+            return BizConstants.VALIDATE_IS_EXIST;
+        }
+        BizCustomer queryBizCustomer = new BizCustomer();
+        queryBizCustomer.setContactName(name);
+        List<BizCustomer> list = bizCustomerService.selectBizCustomerList(queryBizCustomer);
+        Iterator<BizCustomer> iterator = list.iterator();
+        while(iterator.hasNext()){
+            BizCustomer o = iterator.next();
+            if(o.getCustomerId().compareTo(id) == 0) {
+                iterator.remove();   //注意这个地方
+            }
+        }
+        if (CollectionUtil.isEmpty(list) || list.size() == 0) {
+            return BizConstants.VALIDATE_IS_NOT_EXIST;
+        }
+        return BizConstants.VALIDATE_IS_EXIST;
+    }
+
+    @PostMapping("/checkContactPhone")
+    @ResponseBody
+    public String checkContactPhone(BizCustomer bizCustomer)
+    {
+        String name = bizCustomer.getContactPhone();
+        //0=增加 1=编辑
+        String status = bizCustomer.getStatus();
+        Long id = bizCustomer.getCustomerId();
+        if (StringUtils.isEmpty(name)) {
+            return BizConstants.VALIDATE_IS_EXIST;
+        }
+        BizCustomer queryBizCustomer = new BizCustomer();
+        queryBizCustomer.setContactPhone(name);
+        List<BizCustomer> list = bizCustomerService.selectBizCustomerList(queryBizCustomer);
+        Iterator<BizCustomer> iterator = list.iterator();
+        while(iterator.hasNext()){
+            BizCustomer o = iterator.next();
+            if(o.getCustomerId().compareTo(id) == 0) {
+                iterator.remove();   //注意这个地方
+            }
+        }
+        if (CollectionUtil.isEmpty(list) || list.size() == 0) {
+            return BizConstants.VALIDATE_IS_NOT_EXIST;
+        }
+        return BizConstants.VALIDATE_IS_EXIST;
     }
 
     /**
@@ -133,6 +222,7 @@ public class BizCustomerController extends BaseController {
         mmap.put("usersel", selUser);
         mmap.put("users", userService.selectUserList(new SysUser()));
         mmap.put("bizCustomer", bizCustomer);
+        mmap.put("fileUrl", Global.getFileUrl());
         return prefix + "/edit";
     }
 

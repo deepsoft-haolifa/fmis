@@ -65,9 +65,7 @@ public class BizProduct extends BaseEntity {
 
 
 
-    /** 产品单价 */
-    @Excel(name = "产品单价")
-    private Double price;
+
 
     /** 供应商名称 */
     @Excel(name = "供应商名称")
@@ -168,6 +166,11 @@ public class BizProduct extends BaseEntity {
     public String getStructuralStyle() {
         return structuralStyle;
     }
+
+
+    /** 产品单价 */
+    @Excel(name = "产品单价 销售底价")
+    private Double price;
 
     @Excel(name = "采购价")
     private Double procurementPrice;

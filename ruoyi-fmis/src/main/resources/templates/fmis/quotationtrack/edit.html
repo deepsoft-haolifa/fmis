@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改报价追踪')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-quotationtrack-edit" th:object="${bizQuotationTrack}">
+            <input name="trackId" th:field="*{trackId}" type="hidden">
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">报价单：</label>
+                <div class="col-sm-8">
+                    <input name="quotationName" id="quotationName" class="form-control" type="text" readonly onclick="selectQuotation()" th:field="*{qOrderno}"  required>
+                    <input name="quotationId" id="quotationId" class="form-control" type="hidden" th:field="*{quotationId}">
+                </div>
+            </div>
+
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">报价单状态：</label>
+                <div class="col-sm-8">
+                    <select name="quotationState" class="form-control m-b" th:with="type=${@dict.getType('quotation_state')}">
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{quotationState}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">报价顺序号：</label>
+                <div class="col-sm-8">
+                    <input name="serialNumber" th:field="*{serialNumber}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">溢价比例：</label>
+                <div class="col-sm-8">
+                    <input name="premiumRate" th:field="*{premiumRate}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">追踪反馈：</label>
+                <div class="col-sm-8">
+                    <input name="feedback" th:field="*{feedback}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">闭环时间：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="closedloopTime" th:value="${#dates.format(bizQuotationTrack.closedloopTime, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">报价备案时间：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="recordTime" th:value="${#dates.format(bizQuotationTrack.recordTime, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">报价时效：</label>
+                <div class="col-sm-8">
+                    <input name="limitation" th:field="*{limitation}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">email：</label>
+                <div class="col-sm-8">
+                    <input name="email" th:field="*{email}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">联系人：</label>
+                <div class="col-sm-8">
+                    <input name="contacts" th:field="*{contacts}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">电话：</label>
+                <div class="col-sm-8">
+                    <input name="contactPhone" th:field="*{contactPhone}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">传真：</label>
+                <div class="col-sm-8">
+                    <input name="fax" th:field="*{fax}" class="form-control" type="text">
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script type="text/javascript">
+        var prefix = ctx + "fmis/quotationtrack";
+        $("#form-quotationtrack-edit").validate({
+            focusCleanup: true
+        });
+
+        function selectQuotation () {
+            var widthNum = this.innerWidth - 50;
+            var heigthNum = this.innerHeight - 50;
+            var url = prefix + "/selectQuotation";
+            $.modal.open("关联客户", url,widthNum, heigthNum);
+        }
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-quotationtrack-edit').serialize());
+            }
+        }
+
+        $("input[name='closedloopTime']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $("input[name='recordTime']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+    </script>
+</body>
+</html>

@@ -53,14 +53,14 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">规格：</label>
                 <div class="col-sm-8">
-                    <select name="specifications" onchange="generateProductModel()" id="specifications" class="form-control select2-multiple" ><option>请选择</option></select>
+                    <select name="specifications" onchange="generateProductModel()" id="specifications" class="form-control select2-multiple" ><option value="">请选择</option></select>
                 </div>
             </div>
 
             <div class="form-group">
                 <label class="col-sm-3 control-label">公称压力：</label>
                 <div class="col-sm-8">
-                    <select name="nominalPressure" onchange="generateProductModel()" id="nominalPressure" class="form-control select2-multiple" ><option>请选择</option></select>
+                    <select name="nominalPressure" onchange="generateProductModel()" id="nominalPressure" class="form-control select2-multiple" ><option value="">请选择</option></select>
                 </div>
             </div>
 
@@ -68,21 +68,21 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">连接方式：</label>
                 <div class="col-sm-8">
-                    <select name="connectionType" onchange="generateProductModel()" id="connectionType" class="form-control select2-multiple" ><option>请选择</option></select>
+                    <select name="connectionType" onchange="generateProductModel()" id="connectionType" class="form-control select2-multiple" ><option value="">请选择</option></select>
                 </div>
             </div>
 
             <div class="form-group">
                 <label class="col-sm-3 control-label">结构形式：</label>
                 <div class="col-sm-8">
-                    <select name="structuralStyle" onchange="generateProductModel()" id="structuralStyle" class="form-control select2-multiple" ><option>请选择</option></select>
+                    <select name="structuralStyle" onchange="generateProductModel()" id="structuralStyle" class="form-control select2-multiple" ><option value="">请选择</option></select>
                 </div>
             </div>
 
             <div class="form-group">
                 <label class="col-sm-3 control-label">阀体材质：</label>
                 <div class="col-sm-8">
-                    <select name="valvebodyMaterial" onchange="generateProductModel()" id="valvebodyMaterial" class="form-control select2-multiple" ><option>请选择</option></select>
+                    <select name="valvebodyMaterial" onchange="generateProductModel()" id="valvebodyMaterial" class="form-control select2-multiple" ><option value="">请选择</option></select>
                 </div>
             </div>
 
@@ -98,19 +98,19 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">密封材质：</label>
                 <div class="col-sm-8">
-                    <select name="sealingMaterial" onchange="generateProductModel()" id="sealingMaterial" class="form-control select2-multiple" ><option>请选择</option></select>
+                    <select name="sealingMaterial" onchange="generateProductModel()" id="sealingMaterial" class="form-control select2-multiple" ><option value="">请选择</option></select>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 control-label">阀芯材质：</label>
                 <div class="col-sm-8">
-                    <select name="valveElement" onchange="generateProductModel()" id="valveElement" class="form-control select2-multiple" ><option>请选择</option></select>
+                    <select name="valveElement" onchange="generateProductModel()" id="valveElement" class="form-control select2-multiple" ><option value="">请选择</option></select>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 control-label">驱动形式：</label>
                 <div class="col-sm-8">
-                    <select name="driveForm" onchange="generateProductModel()" id="driveForm" class="form-control select2-multiple" ><option>请选择</option></select>
+                    <select name="driveForm" onchange="generateProductModel()" id="driveForm" class="form-control select2-multiple" ><option value="">请选择</option></select>
                 </div>
             </div>
 
@@ -124,17 +124,36 @@
                 </div>
             </div>
 
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">产品采购价：</label>
+                <div class="col-sm-8">
+                    <input name="procurementPrice" id="procurementPrice" th:field="*{procurementPrice}" onblur="sumPrice()" onkeyup="AmountKeyUp(this)" class="form-control" type="text">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">产品成本价：</label>
+                <div class="col-sm-8">
+                    <input name="costPrice" id="costPrice" th:field="*{costPrice}" onkeyup="AmountKeyUp(this)" class="form-control" type="text">
+                </div>
+            </div>
+
             <div class="form-group">    
                 <label class="col-sm-3 control-label">产品单价：</label>
                 <div class="col-sm-8">
                     <input name="price" id="price" onkeyup="AmountKeyUp(this)" th:field="*{price}" class="form-control" type="text">
                 </div>
             </div>
+
+
+
+
             <div class="form-group">
                 <label class="col-sm-3 control-label">供应商名称：</label>
                 <div class="col-sm-8">
                     <select name="supplier" id="supplier" class="form-control select2-multiple" > <!--multiple-->
-                        <option>请选择</option>
+                        <option value="">请选择</option>
                         <option th:each="supplier:${suppliers}" th:value="${supplier.suppliersId}" th:text="${supplier.name}" th:selected="${supplier.flag}"></option>
                     </select>
                     <input name="newSupplier" class="form-control" th:field="*{newSupplier}" type="text" placeholder="新供应商输入">
@@ -208,7 +227,17 @@
                 })
             }
         }
+        //根据 采购价 计算 成本价 结算价 销售低价都四舍五入取整数
+        function sumPrice () {
+            var procurementPrice = $("#procurementPrice").val();
+            if (!$.common.isEmpty(procurementPrice)) {
+                var procurementPriceF = parseFloat(procurementPrice);
+                var procurementPriceF_ = parseFloat(procurementPriceF * 1.08).toFixed(0);
+                $("#costPrice").val(procurementPriceF_);
+                $("#price").val(parseFloat((procurementPriceF_ * 1.3) * 1.1).toFixed(0));
+            }
 
+        }
 
         var specificationArrayDict = null;
         /**
@@ -312,7 +341,7 @@
             }
             var string1All = $("#series").find("option:selected").text();
             var string1 = string1All.split("_")[1];
-            string1AddOptions(string1);
+            //string1AddOptions(string1);
             generateProductModel();
             $.ajax({
                 url:prefix + "/findProductTypeDict",
@@ -345,6 +374,9 @@
 
                     var structuralStyles = data["structuralStyle"];
                     setDataToOption(structuralStyles,"structuralStyle");
+
+                    var seriesTypes = data["seriesType"];
+                    setDataToOption(seriesTypes,"string1");
                 }
             })
         });
@@ -358,10 +390,11 @@
         var driveFormProduct = "[[${bizProduct.driveForm}]]";
 
         var structuralStyleProduct = "[[${bizProduct.structuralStyle}]]";
+        var seriesTypeProduct = "[[${bizProduct.string1}]]";
 
         function setDataToOption(dataArray,selectId) {
             $("#" + selectId).html("");
-            $("#" + selectId).append("<option>请选择</option>")
+            $("#" + selectId).append("<option value=''>请选择</option>")
             for (var i = 0; i < dataArray.length; i++) {
                 var specificationObj = dataArray[i];
                 var selectStr = "";
@@ -380,6 +413,8 @@
                 } else if (driveFormProduct.toString() == specificationObj.dictId.toString()) {
                     selectStr = "selected";
                 } else if (structuralStyleProduct.toString() == specificationObj.dictId.toString()) {
+                    selectStr = "selected";
+                }else if (seriesTypeProduct.toString() == specificationObj.dictId.toString()) {
                     selectStr = "selected";
                 }
                 $("#" + selectId).append("<option value='" + specificationObj.dictId + "' " + selectStr + ">" + specificationObj.name + "</option>")

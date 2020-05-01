@@ -1,5 +1,6 @@
 package com.ruoyi.fmis.customer.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -120,6 +121,40 @@ public class BizCustomer extends BaseEntity {
     @Getter
     @Setter
     private String deptName;
+
+    @Getter
+    @Setter
+    private String customerLevel;
+
+    @Getter
+    @Setter
+    private String codeName;
+
+    @Getter
+    @Setter
+    private String industryDivision;
+
+    @Getter
+    @Setter
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date allocationDate;
+
+    @Getter
+    @Setter
+    private String assignNumber;
+
+    @Getter
+    @Setter
+    private String fileNumber;
+
+    @Getter
+    @Setter
+    private String filePaths;
+
+    @Getter
+    @Setter
+    private String newStatus;
+
 
 
     public void setCustomerId(Long customerId) {

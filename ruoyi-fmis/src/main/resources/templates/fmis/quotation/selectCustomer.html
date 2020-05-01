@@ -30,8 +30,76 @@
                             </li>
 
                             <li>
+                                <p>客户类别：</p>
+                                <select name="customerLevel" class="form-control m-b" th:with="type=${@dict.getType('customer_level')}">
+                                    <option value="">全部</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+
+                            <li>
+                                <p>客户代号：</p>
+                                <input name="codeName" class="form-control" type="text">
+                            </li>
+
+                            <li>
+                                <p>行业划分：</p>
+                                <select name="industryDivision" class="form-control m-b" th:with="type=${@dict.getType('industry_division')}">
+                                    <option value="">全部</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+
+                            <li>
+                                <p>分配次数：</p>
+                                <select name="assignNumber" class="form-control m-b" th:with="type=${@dict.getType('assign_number')}">
+                                    <option value="">全部</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+
+
+                            <li>
+                                <p>备案类别：</p>
+                                <select name="recordType" class="form-control m-b" th:with="type=${@dict.getType('customer_record_type')}">
+                                    <option value="">全部</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+
+                            <li>
+                                <p>档案编号：</p>
+                                <input name="fileNumber" class="form-control" type="text">
+                            </li>
+
+                            <li>
+                                <p>客户来源：</p>
+                                <input name="source" class="form-control" type="text">
+                            </li>
+
+                            <li>
                                 <p>项目名称：</p>
                                 <input name="projectAme" class="form-control" type="text">
+                            </li>
+
+                            <li>
+                                <p>品牌：</p>
+                                <input name="brand" class="form-control" type="text">
+                            </li>
+
+                            <li>
+                                <p>品牌：</p>
+                                <input name="brand" class="form-control" type="text">
+                            </li>
+
+                            <li>
+                                <p>主要产品：</p>
+                                <input name="productInfo" class="form-control" type="text">
+                            </li>
+
+                            <li>
+                                <p>客户联系人：</p>
+                                <input name="contactName" class="form-control" type="text">
                             </li>
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
@@ -168,8 +236,8 @@
                 $.modal.alertWarning("请只选择一条记录");
                 return;
             }
-            $.modal.confirm('确定要关联该客户吗？',
-                function() {
+            //$.modal.confirm('确定要关联该客户吗？',
+            //    function() {
 
                     var customerId = $.table.selectColumns("customerId");
                     console.log("----" + customerId + "--" + $.table.selectColumns("name"));
@@ -186,8 +254,8 @@
                     parent.$('#form-quotation-add input[name=reportProject]').val(reportProject);
                     parent.$('#form-quotation-edit input[name=reportProject]').val(reportProject);
                     $.modal.close();
-                }
-            );
+             //   }
+            //);
         }
     </script>
 </body>

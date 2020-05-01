@@ -319,8 +319,8 @@
                 selName = rows2[0].name;
                 selRow = rows2[0];
             }
-            $.modal.confirm('确定要关联该执行器吗？',
-                function() {
+            //$.modal.confirm('确定要关联该执行器吗？',
+            //    function() {
                     parent.$('#form-quotation-add input[name=actuatorId_' + productId + ']').val(selActuatorId);
                     parent.$('#form-quotation-add input[name=actuatorName_' + productId + ']').val(selName);
 
@@ -337,8 +337,8 @@
                     parent.$('#form-quotation-edit input[id=string1_' + productId + ']').val(selRow.string1);
                     parent.$('#form-quotation-edit input[id=actuatorPrice_' + productId + ']').val(selRow.price);
                     $.modal.close();
-                }
-            );
+            //    }
+            //);
         }
     </script>
 </body>

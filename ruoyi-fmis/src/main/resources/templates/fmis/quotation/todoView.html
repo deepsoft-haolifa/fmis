@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('待办事项')" />
+</head>
+<body class="gray-bg">
+     <div class="row  border-bottom white-bg dashboard-header">
+        <div class="row">
+            <h4>欢迎访问 <strong> 北京好利信息化管控平台</strong></h4>
+            <ul class="m-b">
+                <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 报价单 <a th:text="*{quotationNum}" id="quotationNum" onclick="todoQuotation(1)"></a> </li>
+            </ul>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('fmis:quotation:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('fmis:quotation:remove')}]];
+        var prefix = ctx + "fmis/quotation";
+        var paymentMethodData = [[${@dict.getType('payment_method')}]];
+
+        var roleType = /*[[${roleType}]]*/;
+
+        function todoQuotation (type) {
+            if (type == 1) {
+                var url = ctx + "fmis/quotation/todoQuotation";
+                location.href = url;
+            }
+        }
+
+        var quotationNum = $("#quotationNum").text();
+        console.log("3333=" + quotationNum);
+        if (quotationNum > 0) {
+            console.log("3333");
+            //parent.$('#todoFLag]').val("*");
+        }
+    </script>
+</body>
+</html>

@@ -71,6 +71,11 @@
                                 <select name="driveForm" id="driveForm" class="form-control select2-multiple" ><option value="">请选择</option></select>
                             </li>
 
+                            <li>
+                                <p>连接方式：</p>
+                                <select name="connectionType" id="connectionType" class="form-control select2-multiple" ><option value="">请选择</option></select>
+                            </li>
+
 
 
                             <li>
@@ -258,9 +263,10 @@
                 return;
             }
 
+            /*
             var string1All = $("#series").find("option:selected").text();
             var string1 = string1All.split("_")[1];
-            string1AddOptions(string1);
+            string1AddOptions(string1);*/
 
             $.ajax({
                 url:prefix + "/findProductTypeDict",
@@ -291,6 +297,9 @@
 
                     var structuralStyles = data["structuralStyle"];
                     setDataToOption(structuralStyles,"structuralStyle");
+
+                    var seriesTypes = data["seriesType"];
+                    setDataToOption(seriesTypes,"string1");
 
                 }
             })

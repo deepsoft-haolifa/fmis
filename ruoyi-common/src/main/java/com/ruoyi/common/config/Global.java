@@ -116,6 +116,15 @@ public class Global
         return getConfig("ruoyi.profile");
     }
 
+    public static String getFilePath()
+    {
+        return getConfig("ruoyi.filePath");
+    }
+    public static String getFileUrl()
+    {
+        return getConfig("ruoyi.fileUrl");
+    }
+
     /**
      * 获取头像上传路径
      */

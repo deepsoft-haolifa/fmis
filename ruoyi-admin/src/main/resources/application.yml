@@ -15,6 +15,10 @@ ruoyi:
   # 获取ip地址开关
   addressEnabled: true
 
+  filePath: /home/img/images/
+  fileUrl: http://oa.haolifa.com/images/
+
+
 # 开发环境配置
 server:
   # 服务器的HTTP端口，默认为80

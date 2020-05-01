@@ -68,6 +68,12 @@
                                 <p>驱动形式：</p>
                                 <select name="driveForm" id="driveForm" class="form-control select2-multiple" ><option value="">请选择</option></select>
                             </li>
+
+                            <li>
+                                <p>连接方式：</p>
+                                <select name="connectionType" id="connectionType" class="form-control select2-multiple" ><option value="">请选择</option></select>
+                            </li>
+
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
                                 <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
@@ -118,7 +124,35 @@
                  </div>
              </div>
 
-             <div class='form-group'>
+
+             <div class='form-group' id="productRef0Div_paramterProductId" style="display: none">
+                 <label class='control-label col-sm-3'>执 行 器：</label>
+                 <div class='col-sm-2'>
+                     <input name='actuatorId' id="actuatorId" class='form-control' type='hidden' >
+                     <input name='actuatorName' id="actuatorName" class='form-control' type='text' readonly onclick='selectActuator(paramterProductId)'>
+                 </div>
+
+                 <div class='col-sm-1'>
+                     <input class='form-control' type='text' id="brand" name='brand'  placeholder='品牌' readonly/>
+                 </div>
+                 <div class='col-sm-1'>
+                     <input class='form-control' type='text' id="string1" name="string1"  placeholder='型号' readonly/>
+                 </div>
+
+                 <div class='col-sm-2'>
+                     <input class='form-control' type='text' id='actuatorNum' onblur="sumPrice(paramterProductId)" name='actuatorNum' onkeyup="AmountKeyUp(this)" placeholder='数量' />
+                 </div>
+
+                 <div class='col-sm-1'>
+                     <input class='form-control' type='text' id="actuatorPrice" name="actuatorPrice"  placeholder='单价' readonly/>
+                 </div>
+
+                 <div class='col-sm-1'>
+                     <input name='actuatorCoefficient' id="actuatorCoefficient" onblur="sumPrice(paramterProductId)" class='form-control' onkeyup="AmountKeyUp(this)" type='text' placeholder='系数'>
+                 </div>
+             </div>
+
+             <div class='form-group' id="productRef1Div_paramterProductId" style="display: none">
                  <label class='control-label col-sm-3'>法兰配件：</label>
                  <div class='col-sm-2'>
                      <input name='productRef1Id' id="productRef1Id" class='form-control' type='hidden' >
@@ -149,7 +183,7 @@
                  </div>
              </div>
 
-             <div class='form-group'>
+             <div class='form-group' id="productRef2Div_paramterProductId" style="display: none">
                  <label class='control-label col-sm-3'>螺栓配件：</label>
                  <div class='col-sm-2'>
                      <input name='productRef2Id' id="productRef2Id" class='form-control' type='hidden' >
@@ -174,34 +208,9 @@
                  </div>
              </div>
 
-             <div class='form-group'>
-                 <label class='control-label col-sm-3'>执 行 器：</label>
-                 <div class='col-sm-2'>
-                     <input name='actuatorId' id="actuatorId" class='form-control' type='hidden' >
-                     <input name='actuatorName' id="actuatorName" class='form-control' type='text' readonly onclick='selectActuator(paramterProductId)'>
-                 </div>
 
-                 <div class='col-sm-1'>
-                     <input class='form-control' type='text' id="brand" name='brand'  placeholder='品牌' readonly/>
-                 </div>
-                 <div class='col-sm-1'>
-                     <input class='form-control' type='text' id="string1" name="string1"  placeholder='型号' readonly/>
-                 </div>
 
-                 <div class='col-sm-2'>
-                     <input class='form-control' type='text' id='actuatorNum' onblur="sumPrice(paramterProductId)" name='actuatorNum' onkeyup="AmountKeyUp(this)" placeholder='数量' />
-                 </div>
-
-                 <div class='col-sm-1'>
-                     <input class='form-control' type='text' id="actuatorPrice" name="actuatorPrice"  placeholder='单价' readonly/>
-                 </div>
-
-                 <div class='col-sm-1'>
-                     <input name='actuatorCoefficient' id="actuatorCoefficient" onblur="sumPrice(paramterProductId)" class='form-control' onkeyup="AmountKeyUp(this)" type='text' placeholder='系数'>
-                 </div>
-             </div>
-
-             <div class='form-group'>
+             <div class='form-group' id="productRef3Div_paramterProductId" style="display: none">
                  <label class='control-label col-sm-3'>产品备注：</label>
 
                  <div class='col-sm-8'>
@@ -228,6 +237,8 @@
                      <a class="btn btn-danger btn-sm" onclick="removeProject(paramterProductId)" >
                          <i class="fa fa-remove"></i> 删除
                      </a>
+                     &nbsp;&nbsp;&nbsp;
+                     <a id="showRefDiv_paramterProductId" onclick="showRefDiv(paramterProductId);"  th:text="展开"></a>
                  </div>
 
              </div>
@@ -349,8 +360,8 @@
                 $.modal.alertWarning("请选择一条记录");
                 return;
             }
-            $.modal.confirm('确定要关联该产品吗？',
-                function() {
+            //$.modal.confirm('确定要关联该产品吗？',
+            //    function() {
                     //0=覆盖 1=追加
                     var productOperationType = parent.$('#form-quotation-add input[name=productOperationType]').val();
                     if ($.common.isEmpty(productOperationType)) {
@@ -500,8 +511,8 @@
 
                     parent.$('#productDiv').append(htmlStr);
                     $.modal.close();
-                }
-            );
+            //    }
+            //);
             // $.modal.close();
             // $.operate.save(prefix + "/selectAll", data);
         }
@@ -539,7 +550,7 @@
 
             var string1All = $("#series").find("option:selected").text();
             var string1 = string1All.split("_")[1];
-            string1AddOptions(string1);
+            //string1AddOptions(string1);
 
             var prefixProduct = ctx + "fmis/product";
             $.ajax({
@@ -571,6 +582,9 @@
 
                     var structuralStyles = data["structuralStyle"];
                     setDataToOption(structuralStyles,"structuralStyle");
+
+                    var seriesTypes = data["seriesType"];
+                    setDataToOption(seriesTypes,"string1");
 
                 }
             })

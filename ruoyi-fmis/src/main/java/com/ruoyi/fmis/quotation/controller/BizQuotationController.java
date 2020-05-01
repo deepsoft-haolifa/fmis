@@ -34,6 +34,7 @@ import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysDept;
 import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.service.ISysDeptService;
+import com.ruoyi.system.service.ISysDictDataService;
 import com.ruoyi.system.service.ISysRoleService;
 import com.ruoyi.system.service.ISysUserService;
 import org.activiti.engine.impl.util.CollectionUtil;
@@ -45,10 +46,13 @@ import org.springframework.ui.ModelMap;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.FileOutputStream;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -93,6 +97,9 @@ public class BizQuotationController extends BaseController {
     @Autowired
     private IBizCustomerService bizCustomerService;
 
+    @Autowired
+    private ISysDictDataService dictDataService;
+
     @RequiresPermissions("fmis:quotation:view")
     @GetMapping()
     public String quotation(ModelMap mmap) {
@@ -107,6 +114,19 @@ public class BizQuotationController extends BaseController {
         mmap.put("roleType",roleType);
         return prefix + "/todoQuotation";
     }
+
+    @ResponseBody
+    @PostMapping("/todoView")
+    public AjaxResult todoView() {
+        int roleType = sysRoleService.getRoleType(ShiroUtils.getUserId());
+        BizQuotation bizQuotation = new BizQuotation();
+        bizQuotation.setString2(roleType + "");
+        bizQuotation.setString6("1");
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("quotationNum", bizQuotationService.selectBizQuotationFlowList(bizQuotation).size());
+        return AjaxResult.success(result);
+    }
+
 
     public String getBh () {
         Long deptId = ShiroUtils.getSysUser().getDeptId();
@@ -133,6 +153,9 @@ public class BizQuotationController extends BaseController {
         return getDataTable(list);
     }
 
+
+
+
     /**
      * 导出报价单列表
      */
@@ -140,12 +163,27 @@ public class BizQuotationController extends BaseController {
     @PostMapping("/export")
     @ResponseBody
     public AjaxResult export(BizQuotation bizQuotation) {
+        return createPdf(null,null,bizQuotation);
+    }
+
+    public AjaxResult createPdf (HttpServletRequest request,HttpServletResponse response,BizQuotation bizQuotationParamter) {
+        String id = "";
+        if (bizQuotationParamter == null) {
+            id = request.getParameter("id");
+        } else {
+            id = bizQuotationParamter.getQuotationId().toString();
+        }
         //报价单
-        bizQuotation = bizQuotationService.selectBizQuotationById(bizQuotation.getQuotationId());
+        BizQuotation bizQuotation = bizQuotationService.selectBizQuotationById(Long.parseLong(id));
         //产品信息
         BizQuotationProduct bizQuotationProduct = new BizQuotationProduct();
         bizQuotationProduct.setQuotationId(bizQuotation.getQuotationId());
         List<BizQuotationProduct> bizQuotationProducts = bizQuotationProductService.selectBizQuotationProductDictList(bizQuotationProduct);
+
+        BizQuotation queryBizQuotation = new BizQuotation();
+        queryBizQuotation.setQuotationId(bizQuotation.getQuotationId());
+        List<BizQuotation> bizQuotationList = bizQuotationService.selectBizQuotationFlowList(queryBizQuotation);
+        BizQuotation bizQuotationDict = bizQuotationList.get(0);
         try
         {
             String filename = PdfUtil.encodingFilename("报价单");
@@ -153,23 +191,28 @@ public class BizQuotationController extends BaseController {
             // step 1
             Document document = new Document(PageSize.A4);
             // step 2
-            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(filePath));
+            //new FileOutputStream(filePath)
+            PdfWriter writer = null;
+            if (response != null) {
+                writer = PdfWriter.getInstance(document, response.getOutputStream());
+            } else {
+                writer = PdfWriter.getInstance(document, new FileOutputStream(filePath));
+            }
             // 只读
             writer.setEncryption(null, null, PdfWriter.ALLOW_PRINTING, PdfWriter.STANDARD_ENCRYPTION_128);
-            // 通过PDF页面事件模式添加文字水印功能
-            writer.setPageEvent(new TextWaterMarkPdfPageEvent("北京好利"));
             //设置字体样式
             //正常
             Font textFont = PdfUtil.getPdfChineseFont(7,Font.NORMAL);
             //加粗
-            //Font boldFont = PdfUtil.getPdfChineseFont(11,Font.BOLD);
+            Font boldFont = PdfUtil.getPdfChineseFont(11,Font.BOLD);
             //二级标题
             Font titleFont = PdfUtil.getPdfChineseFont(15,Font.BOLD);
 
             Paragraph paragraph = new Paragraph("北京好利阀业集团有限公司", titleFont);
             paragraph.setAlignment(Paragraph.ALIGN_CENTER);
-
-
+            if (bizQuotationParamter != null) {
+                writer.setPageEvent(new TextWaterMarkPdfPageEvent("北京好利"));
+            }
             //空行
             Paragraph blankRow = new Paragraph(18f, " ");
 
@@ -264,6 +307,9 @@ public class BizQuotationController extends BaseController {
             Double sumTotalNum = new Double(0);
             Double sumTotalPrice = new Double(0);
             Double sumTotalAmount = new Double(0);
+            Double sumTotalNumRef1 = new Double(0);
+            Double sumTotalNumRef2 = new Double(0);
+
             DecimalFormat data = new DecimalFormat("#.0000");
             for (int i = 0; i < bizQuotationProducts.size(); i++) {
                 BizQuotationProduct bizProduct = bizQuotationProducts.get(i);
@@ -304,6 +350,7 @@ public class BizQuotationController extends BaseController {
                     String ref1Coefficient = bizProduct.getProductRef1Coefficient();
                     if (StringUtils.isNotEmpty(ref1Num) && ref1Price > 0 && StringUtils.isNotEmpty(ref1Coefficient)) {
                         ref1Total = Double.parseDouble(ref1Num) * ref1Price * Double.parseDouble(ref1Coefficient);
+                        sumTotalNumRef1 = sumTotalNumRef1 + Double.parseDouble(ref1Num);
                     }
                 }
                 //螺栓计算
@@ -315,6 +362,7 @@ public class BizQuotationController extends BaseController {
                     String ref2Coefficient = bizProduct.getProductRef2Coefficient();
                     if (StringUtils.isNotEmpty(ref2Num) && ref2Price > 0 && StringUtils.isNotEmpty(ref2Coefficient)) {
                         ref2Tota = Double.parseDouble(ref2Num) * ref2Price * Double.parseDouble(ref2Coefficient);
+                        sumTotalNumRef2 = sumTotalNumRef2 + Double.parseDouble(ref2Num);
                     }
                 }
 
@@ -345,23 +393,9 @@ public class BizQuotationController extends BaseController {
             }
 
 
-            //合计
-            table.addCell(PdfUtil.mergeCol("", 1,textFont));
-            table.addCell(PdfUtil.mergeCol("", 1,textFont));
-            table.addCell(PdfUtil.mergeCol("", 2,textFont));
-            table.addCell(PdfUtil.mergeCol("", 1,textFont));
-            //table.addCell(PdfUtil.mergeCol("压力", 1));//不需要
-            table.addCell(PdfUtil.mergeCol("", 1,textFont));
-            //table.addCell(PdfUtil.mergeCol("阀板", 1));//不需要
-            table.addCell(PdfUtil.mergeCol("", 1,textFont));
-            //table.addCell(PdfUtil.mergeCol("驱动形式", 1));//不需要
-            table.addCell(PdfUtil.mergeCol("", 1,textFont));
-            table.addCell(PdfUtil.mergeCol(sumTotalNum.toString(), 1,textFont));
-            table.addCell(PdfUtil.mergeCol(data.format(sumTotalPrice), 1,textFont));
-            table.addCell(PdfUtil.mergeCol(data.format(sumTotalAmount), 1,textFont));
-            table.addCell(PdfUtil.mergeCol("", 3,textFont));
-
-
+            //金额合计
+            String totalRemark = "阀门：" + sumTotalNum + " 台   法兰合计：" + sumTotalNumRef1 + " 片   螺栓合计：" + sumTotalNumRef2 + " 条   总金额：" + sumTotalAmount;
+            table.addCell(PdfUtil.mergeCol(totalRemark, 15,boldFont));
 
 
 
@@ -376,12 +410,14 @@ public class BizQuotationController extends BaseController {
             paragraphRemark.add(Chunk.NEWLINE);
             paragraphRemark.add(new Chunk("        1、价格：以上价格为含税不含运费成交价格；", remarkFont));
             paragraphRemark.add(Chunk.NEWLINE);
-            paragraphRemark.add(new Chunk("        2、供货周期：  个工作日", remarkFont));
+            paragraphRemark.add(new Chunk("        2、供货周期： " + bizQuotationDict.getLeadTime() + "  个工作日", remarkFont));
             paragraphRemark.add(Chunk.NEWLINE);
-            paragraphRemark.add(new Chunk("        3、供货方式：款到发货；", remarkFont));
+            String payMethod = dictDataService.selectDictLabel("payment_method",bizQuotationDict.getPaymentMethod());
+            paragraphRemark.add(new Chunk("        3、供货方式： " + payMethod + " 款到发货；", remarkFont));
             paragraphRemark.add(Chunk.NEWLINE);
-            paragraphRemark.add(new Chunk("        4、价格有效期10天；", remarkFont));
+            paragraphRemark.add(new Chunk("        4、价格有效期     天；", remarkFont));
             paragraphRemark.add(Chunk.NEWLINE);
+
 
 
             Paragraph paragraphRemark1 = new Paragraph();
@@ -434,7 +470,6 @@ public class BizQuotationController extends BaseController {
             // step 5
             document.close();
             writer.close();
-
             return AjaxResult.success(filename);
         }
         catch (Exception e)
@@ -444,6 +479,10 @@ public class BizQuotationController extends BaseController {
         }
     }
 
+    @GetMapping("/viewPdf")
+    public void viewPdf(HttpServletRequest request,HttpServletResponse response) {
+        createPdf(request,response,null);
+    }
 
 
     /**
@@ -664,14 +703,22 @@ public class BizQuotationController extends BaseController {
     public String setNormalFlag (BizQuotation bizQuotation,String productArrayStr) {
         String normalFlag = "";
         String totalPrice = bizQuotation.getString9();
-        if (StringUtils.isNotEmpty(totalPrice) && Double.parseDouble(totalPrice) >= 500000) {
+        String specialExpenses = bizQuotation.getSpecialExpenses();
+        if (StringUtils.isNotEmpty(totalPrice) && Double.parseDouble(totalPrice) >= 1000000) {
             normalFlag = "5";
-        } else if ("1".equals(bizQuotation.getPaymentMethod()) || "6".equals(bizQuotation.getPaymentMethod())) {
+        }
+        /*else if ("1".equals(bizQuotation.getPaymentMethod()) || "6".equals(bizQuotation.getPaymentMethod())) {
             //到付
             normalFlag = "5";
-        } if (StringUtils.isNotEmpty(totalPrice) && Double.parseDouble(totalPrice) >= 100000) {
+        } */
+        else if (StringUtils.isNotEmpty(specialExpenses) && !"0".equals(specialExpenses)) {
+            //特殊费用
+            normalFlag = "5";
+        } else if (StringUtils.isNotEmpty(totalPrice) && Double.parseDouble(totalPrice) >= 500000) {
+            normalFlag = "4";
+        } else if (StringUtils.isNotEmpty(totalPrice) && Double.parseDouble(totalPrice) >= 200000) {
             normalFlag = "3";
-        } else {
+        }  else {
 
             JSONArray productArray = JSONArray.parseArray(productArrayStr);
             Double minCoefficient = new Double(10000000);
@@ -706,14 +753,14 @@ public class BizQuotationController extends BaseController {
              * 如果报价系数大于1.0--1.1则由区域经理审批完成后流程结束；
              * 如果系数大于1.1，则由部门销售经理审核完成后流程结束
              */
-            if (minCoefficient <= 0.9) {
+            if (minCoefficient < 0.88) {
                 normalFlag = "5";
-            } else if (minCoefficient >= 1.1) {
-                normalFlag = "2";
-            } else if (minCoefficient >= 0.9 && minCoefficient <= 1) {
+            }else if (minCoefficient >= 0.88 && minCoefficient < 0.95) {
                 normalFlag = "4";
-            }else if (minCoefficient >= 1 && minCoefficient <= 1.1) {
+            } else if (minCoefficient >= 0.95 && minCoefficient < 1) {
                 normalFlag = "3";
+            } else {
+                normalFlag = "2";
             }
         }
         bizQuotation.setNormalFlag(normalFlag);

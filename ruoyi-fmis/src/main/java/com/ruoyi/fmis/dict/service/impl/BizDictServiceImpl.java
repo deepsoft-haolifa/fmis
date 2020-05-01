@@ -190,6 +190,12 @@ public class BizDictServiceImpl implements IBizDictService {
         queryObject.setParentType(BizConstants.structuralType);
         json.put("structuralStyle",bizDictMapper.selectBizDictList(queryObject));
 
+        //系列类型
+        queryObject = new BizDict();
+        queryObject.setParentId(dictId);
+        queryObject.setParentType(BizConstants.seriesType);
+        json.put("seriesType",bizDictMapper.selectBizDictList(queryObject));
+
 
         return json;
     }

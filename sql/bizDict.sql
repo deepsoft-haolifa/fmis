@@ -55,6 +55,113 @@ values
 	(37,'规格','specification',-1,0,0),
 	(38,'品质等级','quality_level',-1,0,0);
 
+insert into biz_dict(dict_id,name,code,parent_id,status,del_flag)
+values
+	(39,'产品系列','series_type',-1,0,0);
+insert into biz_dict(name,code,parent_id,status,del_flag,parent_type)
+values
+  ('A41','A41',2,0,0,'series_type'),
+  ('A42','A42',2,0,0,'series_type');
+insert into biz_dict(name,code,parent_id,status,del_flag,parent_type)
+values
+  ('D220A','D220A',3,0,0,'series_type'),
+  ('D240A','D240A',3,0,0,'series_type'),
+  ('D260A','D260A',3,0,0,'series_type'),
+  ('D261A','D261A',3,0,0,'series_type'),
+  ('D270A','D270A',3,0,0,'series_type'),
+  ('D271A','D271A',3,0,0,'series_type'),
+  ('D310A','D310A',3,0,0,'series_type'),
+  ('D320A','D320A',3,0,0,'series_type'),
+  ('D370A','D370A',3,0,0,'series_type'),
+  ('D700A','D700A',3,0,0,'series_type'),
+  ('D720A','D720A',3,0,0,'series_type');
+insert into biz_dict(name,code,parent_id,status,del_flag,parent_type)
+values
+  ('G210A','G210A',4,0,0,'series_type'),
+  ('G210B','G210B',4,0,0,'series_type'),
+  ('G310A','G310A',4,0,0,'series_type'),
+  ('G410A','G410A',4,0,0,'series_type');
+
+insert into biz_dict(name,code,parent_id,status,del_flag,parent_type)
+values
+  ('H100B','H100B',5,0,0,'series_type'),
+  ('H120A','H120A',5,0,0,'series_type'),
+  ('H201A','H201A',5,0,0,'series_type'),
+  ('H300B','H300B',5,0,0,'series_type'),
+  ('H42','H42',5,0,0,'series_type'),
+  ('H500A','H500A',5,0,0,'series_type'),
+  ('H501A','H501A',5,0,0,'series_type'),
+  ('H510A','H510A',5,0,0,'series_type'),
+  ('H520A','H520A',5,0,0,'series_type'),
+  ('H530A','H530A',5,0,0,'series_type'),
+  ('H540A','H540A',5,0,0,'series_type'),
+  ('H670A','H670A',5,0,0,'series_type');
+insert into biz_dict(name,code,parent_id,status,del_flag,parent_type)
+values
+  ('J221A','J221A',6,0,0,'series_type'),
+  ('J221C','J221C',6,0,0,'series_type'),
+  ('J220A','J220A',6,0,0,'series_type');
+
+insert into biz_dict(name,code,parent_id,status,del_flag,parent_type)
+values
+  ('L','L',7,0,0,'series_type');
+insert into biz_dict(name,code,parent_id,status,del_flag,parent_type)
+values
+  ('U','U',8,0,0,'series_type');
+insert into biz_dict(name,code,parent_id,status,del_flag,parent_type)
+values
+  ('Z211A','Z211A',9,0,0,'series_type'),
+  ('Z330A','Z330A',9,0,0,'series_type'),
+  ('Z310A','Z310A',9,0,0,'series_type'),
+  ('Z210A','Z210A',9,0,0,'series_type');
+insert into biz_dict(name,code,parent_id,status,del_flag,parent_type)
+values
+  ('100X','100X',10,0,0,'series_type'),
+  ('200X','200X',10,0,0,'series_type'),
+  ('300X','300X',10,0,0,'series_type'),
+  ('400X','400X',10,0,0,'series_type'),
+  ('500X','500X',10,0,0,'series_type'),
+  ('600X','600X',10,0,0,'series_type'),
+  ('700X','700X',10,0,0,'series_type'),
+  ('800X','800X',10,0,0,'series_type'),
+  ('900X','900X',10,0,0,'series_type');
+insert into biz_dict(name,code,parent_id,status,del_flag,parent_type)
+values
+  ('Y','Y',11,0,0,'series_type');
+
+insert into biz_dict(name,code,parent_id,status,del_flag,parent_type)
+values
+  ('GL101A','GL101A',12,0,0,'series_type'),
+  ('GL100A','GL100A',12,0,0,'series_type');
+insert into biz_dict(name,code,parent_id,status,del_flag,parent_type)
+values
+  ('JGD','JGD',13,0,0,'series_type'),
+  ('JGDA','JGDA',13,0,0,'series_type'),
+  ('B2F','B2F',13,0,0,'series_type'),
+  ('CDR','CDR',13,0,0,'series_type');
+insert into biz_dict(name,code,parent_id,status,del_flag,parent_type)
+values
+  ('100X','100X',14,0,0,'series_type'),
+  ('200X','200X',14,0,0,'series_type'),
+  ('300X','300X',14,0,0,'series_type'),
+  ('400X','400X',14,0,0,'series_type'),
+  ('500X','500X',14,0,0,'series_type'),
+  ('600X','600X',14,0,0,'series_type'),
+  ('700X','700X',14,0,0,'series_type'),
+  ('800X','800X',14,0,0,'series_type'),
+  ('900X','900X',14,0,0,'series_type');
+insert into biz_dict(name,code,parent_id,status,del_flag,parent_type)
+values
+  ('PQ','PQ',15,0,0,'series_type');
+insert into biz_dict(name,code,parent_id,status,del_flag,parent_type)
+values
+  ('TJ','TJ',16,0,0,'series_type');
+insert into biz_dict(name,code,parent_id,status,del_flag,parent_type)
+values
+  ('S','S',17,0,0,'series_type');
+insert into biz_dict(name,code,parent_id,status,del_flag,parent_type)
+values
+  ('PH','PH',18,0,0,'series_type');
 
 
 insert into biz_dict(name,code,parent_id,status,del_flag,parent_type)

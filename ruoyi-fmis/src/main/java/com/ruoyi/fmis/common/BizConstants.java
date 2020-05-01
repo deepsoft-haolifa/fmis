@@ -36,6 +36,9 @@ public class BizConstants {
     //驱动方式
     public static final String driveMode = "drive_mode";
 
+    //系列类型
+    public static final String seriesType = "series_type";
+
 
     /**
      * 报价单表名称

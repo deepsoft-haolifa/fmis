@@ -67,6 +67,35 @@
                     </div>
                 </div>
 
+
+                <div class='form-group'>
+                    <label class='control-label col-sm-3'>执 行 器：</label>
+                    <div class='col-sm-2'>
+                        <input th:id="'actuatorId_' + ${qp.productId}" class='form-control' type='hidden' th:value="${qp.actuatorId}">
+                        <input th:id="'actuatorName_' + ${qp.productId}"  class='form-control' th:value="${qp.actuatorName}" type='text' readonly  >
+                    </div>
+
+                    <div class='col-sm-1'>
+                        <input class='form-control' type='text' th:id="'brand_' + ${qp.productId}" name='brand' th:value="${qp.bizActuator.brand}"  placeholder='品牌' readonly/>
+                    </div>
+                    <div class='col-sm-1'>
+                        <input class='form-control' type='text' th:id="'string1_' + ${qp.productId}" th:value="${qp.bizActuator.string1}" placeholder='型号' readonly/>
+                    </div>
+
+                    <div class='col-sm-2'>
+                        <input class='form-control' type='text' th:id="'actuatorNum_' + ${qp.productId}" th:onblur="sumPrice([[${qp.productId}]]);"  th:value="${qp.actuatorNum}" placeholder='数量' readonly/>
+                    </div>
+
+                    <div class='col-sm-1'>
+                        <input class='form-control' type='text' th:id="'actuatorPrice_' + ${qp.productId}" name="actuatorPrice" th:value="${qp.bizActuator.price}" placeholder='单价' readonly/>
+                    </div>
+
+                    <div class='col-sm-1'>
+                        <input th:id="'actuatorCoefficient_' + ${qp.productId}"  class='form-control'   readonly th:value="${qp.actuatorCoefficient}" type='text' placeholder='系数'>
+                    </div>
+                </div>
+
+
                 <div class='form-group'>
                     <label class='control-label col-sm-3'>法兰配件：</label>
                     <div class='col-sm-2'>
@@ -126,32 +155,7 @@
                     </div>
                 </div>
 
-                <div class='form-group'>
-                    <label class='control-label col-sm-3'>执 行 器：</label>
-                    <div class='col-sm-2'>
-                        <input th:id="'actuatorId_' + ${qp.productId}" class='form-control' type='hidden' th:value="${qp.actuatorId}">
-                        <input th:id="'actuatorName_' + ${qp.productId}"  class='form-control' th:value="${qp.actuatorName}" type='text' readonly  >
-                    </div>
 
-                    <div class='col-sm-1'>
-                        <input class='form-control' type='text' th:id="'brand_' + ${qp.productId}" name='brand' th:value="${qp.bizActuator.brand}"  placeholder='品牌' readonly/>
-                    </div>
-                    <div class='col-sm-1'>
-                        <input class='form-control' type='text' th:id="'string1_' + ${qp.productId}" th:value="${qp.bizActuator.string1}" placeholder='型号' readonly/>
-                    </div>
-
-                    <div class='col-sm-2'>
-                        <input class='form-control' type='text' th:id="'actuatorNum_' + ${qp.productId}" th:onblur="sumPrice([[${qp.productId}]]);"  th:value="${qp.actuatorNum}" placeholder='数量' readonly/>
-                    </div>
-
-                    <div class='col-sm-1'>
-                        <input class='form-control' type='text' th:id="'actuatorPrice_' + ${qp.productId}" name="actuatorPrice" th:value="${qp.bizActuator.price}" placeholder='单价' readonly/>
-                    </div>
-
-                    <div class='col-sm-1'>
-                        <input th:id="'actuatorCoefficient_' + ${qp.productId}"  class='form-control'   readonly th:value="${qp.actuatorCoefficient}" type='text' placeholder='系数'>
-                    </div>
-                </div>
 
                 <div class='form-group'>
                     <label class='control-label col-sm-3'>产品备注：</label>

@@ -1,6 +1,7 @@
 package com.ruoyi.common.utils.itextpdf;
 
 import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.BaseFont;
@@ -60,6 +61,7 @@ public class PdfUtil {
         Phrase phrase = new Phrase(text, font);
         cell.setPhrase(phrase);
         cell.setColspan(mergeCount);
+        cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
         return cell;
     }
 

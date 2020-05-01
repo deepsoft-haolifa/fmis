@@ -87,7 +87,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <!-- string2作为角色参数 1=销售 2=销售经理 3=区域经理 4=副总 5=老总-->
             <if test="string2 == 1 ">
                 <if test="string6 == 1 ">
-                    and q.flow_status in ('0','-2','3','-3','-4','-5')
+                    and q.flow_status in ('0','-2','-3','-4','-5')
                 </if>
                 <if test="string6 == 2 ">
                     and q.flow_status != '0'
@@ -104,7 +104,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                     and q.flow_status in ('1')
                 </if>
                 <if test="string6 == 2 ">
-                    and q.flow_status in ('2','-2','3','-3','-4','-5')
+                    and q.flow_status in ('2','-2','3','-3','-4','-5','4','5')
                 </if>
                 ${params.dataScope}
             </if>
@@ -117,7 +117,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                     and q.flow_status in ('2')
                 </if>
                 <if test="string6 == 2 ">
-                    and q.flow_status in ('3','-3','4','-4','-5')
+                    and q.flow_status in ('3','-3','4','-4','-5','5')
                 </if>
                 ${params.dataScope}
             </if>
@@ -130,7 +130,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                     and q.flow_status in ('3')
                 </if>
                 <if test="string6 == 2 ">
-                    and q.flow_status in ('4','-4','-5')
+                    and q.flow_status in ('4','-4','-5','5')
                 </if>
 
                 ${params.dataScope}

@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.fmis.customertrack.mapper.BizCustomerTrackMapper">
+    
+    <resultMap type="BizCustomerTrack" id="BizCustomerTrackResult">
+        <result property="trackId"    column="track_id"    />
+        <result property="customerId"    column="customer_id"    />
+        <result property="singleState"    column="single_state"    />
+        <result property="reportpriceState"    column="reportprice_state"    />
+        <result property="contractExecuted"    column="contract_executed"    />
+        <result property="offerTracked"    column="offer_tracked"    />
+        <result property="orderNumber"    column="order_number"    />
+        <result property="feedback"    column="feedback"    />
+        <result property="remark"    column="remark"    />
+        <result property="email"    column="email"    />
+        <result property="closedloopTime"    column="closedloop_time"    />
+        <result property="contacts"    column="contacts"    />
+        <result property="contactPhone"    column="contact_phone"    />
+        <result property="fax"    column="fax"    />
+        <result property="string1"    column="string1"    />
+        <result property="string2"    column="string2"    />
+        <result property="string3"    column="string3"    />
+        <result property="string4"    column="string4"    />
+        <result property="string5"    column="string5"    />
+        <result property="string6"    column="string6"    />
+        <result property="string7"    column="string7"    />
+        <result property="string8"    column="string8"    />
+        <result property="string9"    column="string9"    />
+        <result property="string10"    column="string10"    />
+        <result property="status"    column="status"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBizCustomerTrackVo">
+        select track_id, customer_id, single_state, reportprice_state, contract_executed, offer_tracked, order_number, feedback, remark, email, closedloop_time, contacts, contact_phone, fax, string1, string2, string3, string4, string5, string6, string7, string8, string9, string10, status, del_flag, create_by, create_time, update_by, update_time from biz_customer_track
+    </sql>
+
+    <select id="selectBizCustomerTrackList" parameterType="BizCustomerTrack" resultMap="BizCustomerTrackResult">
+        <include refid="selectBizCustomerTrackVo"/>
+        <where>  
+            <if test="customerId != null "> and customer_id = #{customerId}</if>
+            <if test="singleState != null  and singleState != ''"> and single_state = #{singleState}</if>
+            <if test="reportpriceState != null  and reportpriceState != ''"> and reportprice_state = #{reportpriceState}</if>
+            <if test="contractExecuted != null  and contractExecuted != ''"> and contract_executed = #{contractExecuted}</if>
+            <if test="offerTracked != null  and offerTracked != ''"> and offer_tracked = #{offerTracked}</if>
+            <if test="email != null  and email != ''"> and email = #{email}</if>
+            <if test="closedloopTime != null "> and closedloop_time = #{closedloopTime}</if>
+            <if test="contacts != null  and contacts != ''"> and contacts = #{contacts}</if>
+            <if test="contactPhone != null  and contactPhone != ''"> and contact_phone = #{contactPhone}</if>
+            <if test="fax != null  and fax != ''"> and fax = #{fax}</if>
+        </where>
+    </select>
+
+
+    <sql id="selectBizCustomerTrackVoAs">
+        select t.track_id, t.customer_id, t.single_state, t.reportprice_state, t.contract_executed, t.offer_tracked, t.order_number, t.feedback, t.remark, t.email, t.closedloop_time,
+         t.contacts, t.contact_phone, t.fax, t.string1, t.string2, t.string3, t.string4, t.string5, t.string6, t.string7, t.string8, t.string9, t.string10,
+         t.status, t.del_flag, t.create_by, t.create_time, t.update_by, t.update_time,
+         c.name as customerName,c.code_name as codeName
+         from biz_customer_track t
+         join biz_customer c on t.customer_id=c.customer_id
+    </sql>
+
+    <select id="selectBizCustomerTrackListAs" parameterType="BizCustomerTrack" resultMap="BizCustomerTrackResult">
+        <include refid="selectBizCustomerTrackVoAs"/>
+        <where>
+            <if test="trackId != null "> and t.track_id = #{trackId}</if>
+            <if test="customerId != null "> and t.customer_id = #{customerId}</if>
+            <if test="singleState != null  and singleState != ''"> and t.single_state = #{singleState}</if>
+            <if test="reportpriceState != null  and reportpriceState != ''"> and t.reportprice_state = #{reportpriceState}</if>
+            <if test="contractExecuted != null  and contractExecuted != ''"> and t.contract_executed = #{contractExecuted}</if>
+            <if test="offerTracked != null  and offerTracked != ''"> and t.offer_tracked = #{offerTracked}</if>
+            <if test="email != null  and email != ''"> and t.email like concat('%', #{email}, '%')</if>
+            <if test="closedloopTime != null "> and t.closedloop_time = #{closedloopTime}</if>
+            <if test="contacts != null  and contacts != ''"> and t.contacts like concat('%', #{contacts}, '%')</if>
+            <if test="contactPhone != null  and contactPhone != ''"> and t.contact_phone like concat('%', #{contactPhone}, '%')</if>
+            <if test="fax != null  and fax != ''"> and t.fax like concat('%', #{fax}, '%')</if>
+
+            <if test="customerName != null  and customerName != ''"> and c.name like concat('%', #{customerName}, '%')</if>
+            <if test="codeName != null  and codeName != ''"> and c.code_name like concat('%', #{codeName}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectBizCustomerTrackById" parameterType="Long" resultMap="BizCustomerTrackResult">
+        <include refid="selectBizCustomerTrackVo"/>
+        where track_id = #{trackId}
+    </select>
+        
+    <insert id="insertBizCustomerTrack" parameterType="BizCustomerTrack" useGeneratedKeys="true" keyProperty="trackId">
+        insert into biz_customer_track
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="customerId != null ">customer_id,</if>
+            <if test="singleState != null  and singleState != ''">single_state,</if>
+            <if test="reportpriceState != null  and reportpriceState != ''">reportprice_state,</if>
+            <if test="contractExecuted != null  and contractExecuted != ''">contract_executed,</if>
+            <if test="offerTracked != null  and offerTracked != ''">offer_tracked,</if>
+            <if test="orderNumber != null ">order_number,</if>
+            <if test="feedback != null  and feedback != ''">feedback,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+            <if test="email != null  and email != ''">email,</if>
+            <if test="closedloopTime != null ">closedloop_time,</if>
+            <if test="contacts != null  and contacts != ''">contacts,</if>
+            <if test="contactPhone != null  and contactPhone != ''">contact_phone,</if>
+            <if test="fax != null  and fax != ''">fax,</if>
+            <if test="string1 != null  and string1 != ''">string1,</if>
+            <if test="string2 != null  and string2 != ''">string2,</if>
+            <if test="string3 != null  and string3 != ''">string3,</if>
+            <if test="string4 != null  and string4 != ''">string4,</if>
+            <if test="string5 != null  and string5 != ''">string5,</if>
+            <if test="string6 != null  and string6 != ''">string6,</if>
+            <if test="string7 != null  and string7 != ''">string7,</if>
+            <if test="string8 != null  and string8 != ''">string8,</if>
+            <if test="string9 != null  and string9 != ''">string9,</if>
+            <if test="string10 != null  and string10 != ''">string10,</if>
+            <if test="status != null  and status != ''">status,</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="customerId != null ">#{customerId},</if>
+            <if test="singleState != null  and singleState != ''">#{singleState},</if>
+            <if test="reportpriceState != null  and reportpriceState != ''">#{reportpriceState},</if>
+            <if test="contractExecuted != null  and contractExecuted != ''">#{contractExecuted},</if>
+            <if test="offerTracked != null  and offerTracked != ''">#{offerTracked},</if>
+            <if test="orderNumber != null ">#{orderNumber},</if>
+            <if test="feedback != null  and feedback != ''">#{feedback},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="email != null  and email != ''">#{email},</if>
+            <if test="closedloopTime != null ">#{closedloopTime},</if>
+            <if test="contacts != null  and contacts != ''">#{contacts},</if>
+            <if test="contactPhone != null  and contactPhone != ''">#{contactPhone},</if>
+            <if test="fax != null  and fax != ''">#{fax},</if>
+            <if test="string1 != null  and string1 != ''">#{string1},</if>
+            <if test="string2 != null  and string2 != ''">#{string2},</if>
+            <if test="string3 != null  and string3 != ''">#{string3},</if>
+            <if test="string4 != null  and string4 != ''">#{string4},</if>
+            <if test="string5 != null  and string5 != ''">#{string5},</if>
+            <if test="string6 != null  and string6 != ''">#{string6},</if>
+            <if test="string7 != null  and string7 != ''">#{string7},</if>
+            <if test="string8 != null  and string8 != ''">#{string8},</if>
+            <if test="string9 != null  and string9 != ''">#{string9},</if>
+            <if test="string10 != null  and string10 != ''">#{string10},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBizCustomerTrack" parameterType="BizCustomerTrack">
+        update biz_customer_track
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="customerId != null ">customer_id = #{customerId},</if>
+            <if test="singleState != null  and singleState != ''">single_state = #{singleState},</if>
+            <if test="reportpriceState != null  and reportpriceState != ''">reportprice_state = #{reportpriceState},</if>
+            <if test="contractExecuted != null  and contractExecuted != ''">contract_executed = #{contractExecuted},</if>
+            <if test="offerTracked != null  and offerTracked != ''">offer_tracked = #{offerTracked},</if>
+            <if test="orderNumber != null ">order_number = #{orderNumber},</if>
+            <if test="feedback != null  and feedback != ''">feedback = #{feedback},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+            <if test="email != null  and email != ''">email = #{email},</if>
+            <if test="closedloopTime != null ">closedloop_time = #{closedloopTime},</if>
+            <if test="contacts != null  and contacts != ''">contacts = #{contacts},</if>
+            <if test="contactPhone != null  and contactPhone != ''">contact_phone = #{contactPhone},</if>
+            <if test="fax != null  and fax != ''">fax = #{fax},</if>
+            <if test="string1 != null  and string1 != ''">string1 = #{string1},</if>
+            <if test="string2 != null  and string2 != ''">string2 = #{string2},</if>
+            <if test="string3 != null  and string3 != ''">string3 = #{string3},</if>
+            <if test="string4 != null  and string4 != ''">string4 = #{string4},</if>
+            <if test="string5 != null  and string5 != ''">string5 = #{string5},</if>
+            <if test="string6 != null  and string6 != ''">string6 = #{string6},</if>
+            <if test="string7 != null  and string7 != ''">string7 = #{string7},</if>
+            <if test="string8 != null  and string8 != ''">string8 = #{string8},</if>
+            <if test="string9 != null  and string9 != ''">string9 = #{string9},</if>
+            <if test="string10 != null  and string10 != ''">string10 = #{string10},</if>
+            <if test="status != null  and status != ''">status = #{status},</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+        </trim>
+        where track_id = #{trackId}
+    </update>
+
+    <delete id="deleteBizCustomerTrackById" parameterType="Long">
+        delete from biz_customer_track where track_id = #{trackId}
+    </delete>
+
+    <delete id="deleteBizCustomerTrackByIds" parameterType="String">
+        delete from biz_customer_track where track_id in 
+        <foreach item="trackId" collection="array" open="(" separator="," close=")">
+            #{trackId}
+        </foreach>
+    </delete>
+    
+</mapper>
