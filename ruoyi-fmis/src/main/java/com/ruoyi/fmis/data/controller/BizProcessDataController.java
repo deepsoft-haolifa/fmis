@@ -3,6 +3,7 @@ package com.ruoyi.fmis.data.controller;
 import java.util.List;
 import java.util.Map;
 
+import com.ruoyi.fmis.common.BizConstants;
 import com.ruoyi.fmis.common.CommonUtils;
 import com.ruoyi.fmis.define.service.IBizProcessDefineService;
 import com.ruoyi.system.domain.SysRole;
@@ -128,7 +129,15 @@ public class BizProcessDataController extends BaseController {
         String dataId = bizProcessData.getDataId().toString();
         return toAjax(bizProcessDataService.doExamine(dataId,examineStatus,examineRemark,bizProcessData.getBizId()));
     }
+    @GetMapping("/viewExamineHistory")
+    public String viewExamine(ModelMap mmap) {
 
+        String dataId = getRequest().getParameter("dataId");
+        String bizId = getRequest().getParameter("bizId");
+        mmap.put("bizId", dataId);
+        mmap.put("bizTable", bizId);
+        return prefix + "/viewExamineHistory";
+    }
     /**
      * 导出合同管理列表
      */

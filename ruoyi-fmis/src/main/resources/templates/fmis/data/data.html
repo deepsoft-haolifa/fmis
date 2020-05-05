@@ -22,7 +22,7 @@
                             <li>
                                 <p>备用1：</p>
                                 <input type="text" name="string1"/>
-                                <input type="hidden" name="bizId" value="contract"/>
+                                <input type="hidden" name="bizId" id="bizId" value="contract"/>
                             </li>
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
@@ -246,7 +246,7 @@
                             //审批
                             actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subExamine(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 审批</a>');
                         }
-                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewExamine(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 审批记录 </a>');
+                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewExamineHistory(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 审批记录 </a>');
                         actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewExamineDetail(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 详情 </a>');
                         return actions.join('');
                     }
@@ -254,7 +254,13 @@
             };
             $.table.init(options);
         });
-
+        function viewExamineHistory(dataId) {
+            var bizId = $("#bizId").val();
+            var url = prefix + "/viewExamineHistory?dataId=" + dataId + "&&bizId=" + bizId;
+            $.modal.openNoEnter("审批记录", url,'','',function(){
+                $.modal.closeAll();
+            });
+        }
         function subExamine(dataId) {
             var url = prefix + "/examineEdit?dataId=" + dataId;
             $.modal.openFull("审批", url);
