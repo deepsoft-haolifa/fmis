@@ -1,4 +1,4 @@
-package com.ruoyi.fmis.data.controller;
+package com.ruoyi.fmis.delivery.controller;
 
 import java.util.List;
 import java.util.Map;
@@ -34,9 +34,9 @@ import com.ruoyi.common.core.page.TableDataInfo;
  * @date 2020-05-05
  */
 @Controller
-@RequestMapping("/fmis/data")
-public class BizProcessDataController extends BaseController {
-    private String prefix = "fmis/data";
+@RequestMapping("/fmis/delivery")
+public class BizProcessDataDeliveryController extends BaseController {
+    private String prefix = "fmis/delivery";
 
     @Autowired
     private IBizProcessDataService bizProcessDataService;
@@ -47,7 +47,7 @@ public class BizProcessDataController extends BaseController {
     @Autowired
     private IBizProcessDefineService bizProcessDefineService;
 
-    @RequiresPermissions("fmis:data:view")
+    @RequiresPermissions("fmis:delivery:view")
     @GetMapping()
     public String data() {
         return prefix + "/data";
@@ -56,17 +56,15 @@ public class BizProcessDataController extends BaseController {
     /**
      * 查询合同管理列表
      */
-    @RequiresPermissions("fmis:data:list")
+    @RequiresPermissions("fmis:delivery:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(BizProcessData bizProcessData) {
 
         String bizId = bizProcessData.getBizId();
 
-
-
         startPage();
-        List<BizProcessData> list = bizProcessDataService.selectBizProcessDataListRef(bizProcessData);
+        List<BizProcessData> list = bizProcessDataService.selectBizProcessDataListRefDelivery(bizProcessData);
 
         Map<String, SysRole> flowMap = bizProcessDefineService.getRoleFlowMap(bizId);
         Map<String, SysRole> flowAllMap = bizProcessDefineService.getFlowAllMap(bizId);
@@ -142,7 +140,7 @@ public class BizProcessDataController extends BaseController {
     /**
      * 导出合同管理列表
      */
-    @RequiresPermissions("fmis:data:export")
+    @RequiresPermissions("fmis:delivery:export")
     @PostMapping("/export")
     @ResponseBody
     public AjaxResult export(BizProcessData bizProcessData) {
@@ -162,7 +160,7 @@ public class BizProcessDataController extends BaseController {
     /**
      * 新增保存合同管理
      */
-    @RequiresPermissions("fmis:data:add")
+    @RequiresPermissions("fmis:delivery:add")
     @Log(title = "合同管理", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
@@ -193,7 +191,7 @@ public class BizProcessDataController extends BaseController {
     /**
      * 修改保存合同管理
      */
-    @RequiresPermissions("fmis:data:edit")
+    @RequiresPermissions("fmis:delivery:edit")
     @Log(title = "合同管理", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
@@ -204,7 +202,7 @@ public class BizProcessDataController extends BaseController {
     /**
      * 删除合同管理
      */
-    @RequiresPermissions("fmis:data:remove")
+    @RequiresPermissions("fmis:delivery:remove")
     @Log(title = "合同管理", businessType = BusinessType.DELETE)
     @PostMapping( "/remove")
     @ResponseBody
