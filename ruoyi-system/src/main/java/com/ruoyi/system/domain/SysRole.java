@@ -1,12 +1,14 @@
 package com.ruoyi.system.domain;
 
 import javax.validation.constraints.*;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.annotation.Excel.ColumnType;
 import com.ruoyi.common.core.domain.BaseEntity;
-
+import lombok.Getter;
+import lombok.Setter;
 /**
  * 角色表 sys_role
  * 
@@ -15,6 +17,8 @@ import com.ruoyi.common.core.domain.BaseEntity;
 public class SysRole extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
+
+    private String flowRoleKey;
 
     /** 角色ID */
     @Excel(name = "角色序号", cellType = ColumnType.NUMERIC)
@@ -51,6 +55,16 @@ public class SysRole extends BaseEntity
 
     /** 部门组（数据权限） */
     private Long[] deptIds;
+
+    public String getFlowRoleKey()
+    {
+        return flowRoleKey;
+    }
+    public void setFlowRoleKey(String flowRoleKey)
+    {
+        this.flowRoleKey = flowRoleKey;
+    }
+
 
     public Long getRoleId()
     {

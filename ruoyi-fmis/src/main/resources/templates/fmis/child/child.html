@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('流程数据字列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>数据ID：</p>
+                                <input type="text" name="dataId"/>
+                            </li>
+                            <li>
+                                <p>价格1：</p>
+                                <input type="text" name="price1"/>
+                            </li>
+                            <li>
+                                <p>价格2：</p>
+                                <input type="text" name="price2"/>
+                            </li>
+                            <li>
+                                <p>价格3：</p>
+                                <input type="text" name="price3"/>
+                            </li>
+                            <li>
+                                <p>价格4：</p>
+                                <input type="text" name="price4"/>
+                            </li>
+                            <li>
+                                <p>价格5：</p>
+                                <input type="text" name="price5"/>
+                            </li>
+                            <li>
+                                <p>价格6：</p>
+                                <input type="text" name="price6"/>
+                            </li>
+                            <li>
+                                <p>价格7：</p>
+                                <input type="text" name="price7"/>
+                            </li>
+                            <li>
+                                <p>价格8：</p>
+                                <input type="text" name="price8"/>
+                            </li>
+                            <li>
+                                <p>价格9：</p>
+                                <input type="text" name="price9"/>
+                            </li>
+                            <li>
+                                <p>价格10：</p>
+                                <input type="text" name="price10"/>
+                            </li>
+                            <li>
+                                <p>备用1：</p>
+                                <input type="text" name="string1"/>
+                            </li>
+                            <li>
+                                <p>备用2：</p>
+                                <input type="text" name="string2"/>
+                            </li>
+                            <li>
+                                <p>备用3：</p>
+                                <input type="text" name="string3"/>
+                            </li>
+                            <li>
+                                <p>备用4：</p>
+                                <input type="text" name="string4"/>
+                            </li>
+                            <li>
+                                <p>备用5：</p>
+                                <input type="text" name="string5"/>
+                            </li>
+                            <li>
+                                <p>备用6：</p>
+                                <input type="text" name="string6"/>
+                            </li>
+                            <li>
+                                <p>备用7：</p>
+                                <input type="text" name="string7"/>
+                            </li>
+                            <li>
+                                <p>备用8：</p>
+                                <input type="text" name="string8"/>
+                            </li>
+                            <li>
+                                <p>备用9：</p>
+                                <input type="text" name="string9"/>
+                            </li>
+                            <li>
+                                <p>备用10：</p>
+                                <input type="text" name="string10"/>
+                            </li>
+                            <li>
+                                <p>备用11：</p>
+                                <input type="text" name="string11"/>
+                            </li>
+                            <li>
+                                <p>备用12：</p>
+                                <input type="text" name="string12"/>
+                            </li>
+                            <li>
+                                <p>备用13：</p>
+                                <input type="text" name="string13"/>
+                            </li>
+                            <li>
+                                <p>备用14：</p>
+                                <input type="text" name="string14"/>
+                            </li>
+                            <li>
+                                <p>备用15：</p>
+                                <input type="text" name="string15"/>
+                            </li>
+                            <li>
+                                <p>备用16：</p>
+                                <input type="text" name="string16"/>
+                            </li>
+                            <li>
+                                <p>备用17：</p>
+                                <input type="text" name="string17"/>
+                            </li>
+                            <li>
+                                <p>备用18：</p>
+                                <input type="text" name="string18"/>
+                            </li>
+                            <li>
+                                <p>备用19：</p>
+                                <input type="text" name="string19"/>
+                            </li>
+                            <li>
+                                <p>备用20：</p>
+                                <input type="text" name="string20"/>
+                            </li>
+                            <li class="select-time">
+                                <p>时间1：</p>
+                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginDatetime1]"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endDatetime1]"/>
+                            </li>
+                            <li class="select-time">
+                                <p>时间2：</p>
+                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginDatetime2]"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endDatetime2]"/>
+                            </li>
+                            <li class="select-time">
+                                <p>时间3：</p>
+                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginDatetime3]"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endDatetime3]"/>
+                            </li>
+                            <li class="select-time">
+                                <p>时间4：</p>
+                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginDatetime4]"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endDatetime4]"/>
+                            </li>
+                            <li class="select-time">
+                                <p>时间5：</p>
+                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginDatetime5]"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endDatetime5]"/>
+                            </li>
+                            <li>
+                                <p>状态：</p>
+                                <select name="status">
+                                    <option value="">所有</option>
+                                </select>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="fmis:child:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="fmis:child:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="fmis:child:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="fmis:child:export">
+                    <i class="fa fa-download"></i> 导出
+                 </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('fmis:child:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('fmis:child:remove')}]];
+        var prefix = ctx + "fmis/child";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "流程数据字",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'childId', 
+                    title : 'ID',
+                    visible: false
+                },
+                {
+                    field : 'dataId', 
+                    title : '数据ID'
+                },
+                {
+                    field : 'remark', 
+                    title : '备注'
+                },
+                {
+                    field : 'price1', 
+                    title : '价格1'
+                },
+                {
+                    field : 'price2', 
+                    title : '价格2'
+                },
+                {
+                    field : 'price3', 
+                    title : '价格3'
+                },
+                {
+                    field : 'price4', 
+                    title : '价格4'
+                },
+                {
+                    field : 'price5', 
+                    title : '价格5'
+                },
+                {
+                    field : 'price6', 
+                    title : '价格6'
+                },
+                {
+                    field : 'price7', 
+                    title : '价格7'
+                },
+                {
+                    field : 'price8', 
+                    title : '价格8'
+                },
+                {
+                    field : 'price9', 
+                    title : '价格9'
+                },
+                {
+                    field : 'price10', 
+                    title : '价格10'
+                },
+                {
+                    field : 'string1', 
+                    title : '备用1'
+                },
+                {
+                    field : 'string2', 
+                    title : '备用2'
+                },
+                {
+                    field : 'string3', 
+                    title : '备用3'
+                },
+                {
+                    field : 'string4', 
+                    title : '备用4'
+                },
+                {
+                    field : 'string5', 
+                    title : '备用5'
+                },
+                {
+                    field : 'string6', 
+                    title : '备用6'
+                },
+                {
+                    field : 'string7', 
+                    title : '备用7'
+                },
+                {
+                    field : 'string8', 
+                    title : '备用8'
+                },
+                {
+                    field : 'string9', 
+                    title : '备用9'
+                },
+                {
+                    field : 'string10', 
+                    title : '备用10'
+                },
+                {
+                    field : 'string11', 
+                    title : '备用11'
+                },
+                {
+                    field : 'string12', 
+                    title : '备用12'
+                },
+                {
+                    field : 'string13', 
+                    title : '备用13'
+                },
+                {
+                    field : 'string14', 
+                    title : '备用14'
+                },
+                {
+                    field : 'string15', 
+                    title : '备用15'
+                },
+                {
+                    field : 'string16', 
+                    title : '备用16'
+                },
+                {
+                    field : 'string17', 
+                    title : '备用17'
+                },
+                {
+                    field : 'string18', 
+                    title : '备用18'
+                },
+                {
+                    field : 'string19', 
+                    title : '备用19'
+                },
+                {
+                    field : 'string20', 
+                    title : '备用20'
+                },
+                {
+                    field : 'datetime1', 
+                    title : '时间1'
+                },
+                {
+                    field : 'datetime2', 
+                    title : '时间2'
+                },
+                {
+                    field : 'datetime3', 
+                    title : '时间3'
+                },
+                {
+                    field : 'datetime4', 
+                    title : '时间4'
+                },
+                {
+                    field : 'datetime5', 
+                    title : '时间5'
+                },
+                {
+                    field : 'status', 
+                    title : '状态'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.childId + '\')"><i class="fa fa-edit"></i> 编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.childId + '\')"><i class="fa fa-remove"></i> 删除</a>');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

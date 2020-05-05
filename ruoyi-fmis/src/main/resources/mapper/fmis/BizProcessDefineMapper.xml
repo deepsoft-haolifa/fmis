@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.fmis.define.mapper.BizProcessDefineMapper">
+    
+    <resultMap type="BizProcessDefine" id="BizProcessDefineResult">
+        <result property="defineId"    column="define_id"    />
+        <result property="tbName"    column="tb_name"    />
+        <result property="defineFlow"    column="define_flow"    />
+        <result property="defineRole"    column="define_role"    />
+        <result property="remark"    column="remark"    />
+        <result property="status"    column="status"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBizProcessDefineVo">
+        select define_id, tb_name, define_flow, define_role, remark, status, del_flag, create_by, create_time, update_by, update_time from biz_process_define
+    </sql>
+
+    <select id="selectBizProcessDefineList" parameterType="BizProcessDefine" resultMap="BizProcessDefineResult">
+        <include refid="selectBizProcessDefineVo"/>
+        <where>  
+            <if test="tbName != null "> and tb_name like concat('%', #{tbName}, '%')</if>
+            <if test="defineFlow != null  and defineFlow != ''"> and define_flow = #{defineFlow}</if>
+            <if test="defineRole != null  and defineRole != ''"> and define_role = #{defineRole}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectBizProcessDefineById" parameterType="Long" resultMap="BizProcessDefineResult">
+        <include refid="selectBizProcessDefineVo"/>
+        where define_id = #{defineId}
+    </select>
+        
+    <insert id="insertBizProcessDefine" parameterType="BizProcessDefine" useGeneratedKeys="true" keyProperty="defineId">
+        insert into biz_process_define
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="tbName != null ">tb_name,</if>
+            <if test="defineFlow != null  and defineFlow != ''">define_flow,</if>
+            <if test="defineRole != null  and defineRole != ''">define_role,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+            <if test="status != null  and status != ''">status,</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="tbName != null ">#{tbName},</if>
+            <if test="defineFlow != null  and defineFlow != ''">#{defineFlow},</if>
+            <if test="defineRole != null  and defineRole != ''">#{defineRole},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBizProcessDefine" parameterType="BizProcessDefine">
+        update biz_process_define
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="tbName != null ">tb_name = #{tbName},</if>
+            <if test="defineFlow != null  and defineFlow != ''">define_flow = #{defineFlow},</if>
+            <if test="defineRole != null  and defineRole != ''">define_role = #{defineRole},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+            <if test="status != null  and status != ''">status = #{status},</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+        </trim>
+        where define_id = #{defineId}
+    </update>
+
+    <delete id="deleteBizProcessDefineById" parameterType="Long">
+        delete from biz_process_define where define_id = #{defineId}
+    </delete>
+
+    <delete id="deleteBizProcessDefineByIds" parameterType="String">
+        delete from biz_process_define where define_id in 
+        <foreach item="defineId" collection="array" open="(" separator="," close=")">
+            #{defineId}
+        </foreach>
+    </delete>
+    
+</mapper>

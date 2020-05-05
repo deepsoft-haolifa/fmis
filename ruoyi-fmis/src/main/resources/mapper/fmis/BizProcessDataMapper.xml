@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.fmis.data.mapper.BizProcessDataMapper">
+    
+    <resultMap type="BizProcessData" id="BizProcessDataResult">
+        <result property="dataId"    column="data_id"    />
+        <result property="bizDataId"    column="biz_data_id"    />
+        <result property="bizId"    column="biz_id"    />
+        <result property="normalFlag"    column="normal_flag"    />
+        <result property="flowStatus"    column="flow_status"    />
+        <result property="remark"    column="remark"    />
+        <result property="price1"    column="price1"    />
+        <result property="price2"    column="price2"    />
+        <result property="price3"    column="price3"    />
+        <result property="price4"    column="price4"    />
+        <result property="price5"    column="price5"    />
+        <result property="price6"    column="price6"    />
+        <result property="price7"    column="price7"    />
+        <result property="price8"    column="price8"    />
+        <result property="price9"    column="price9"    />
+        <result property="price10"    column="price10"    />
+        <result property="string1"    column="string1"    />
+        <result property="string2"    column="string2"    />
+        <result property="string3"    column="string3"    />
+        <result property="string4"    column="string4"    />
+        <result property="string5"    column="string5"    />
+        <result property="string6"    column="string6"    />
+        <result property="string7"    column="string7"    />
+        <result property="string8"    column="string8"    />
+        <result property="string9"    column="string9"    />
+        <result property="string10"    column="string10"    />
+        <result property="string11"    column="string11"    />
+        <result property="string12"    column="string12"    />
+        <result property="string13"    column="string13"    />
+        <result property="string14"    column="string14"    />
+        <result property="string15"    column="string15"    />
+        <result property="string16"    column="string16"    />
+        <result property="string17"    column="string17"    />
+        <result property="string18"    column="string18"    />
+        <result property="string19"    column="string19"    />
+        <result property="string20"    column="string20"    />
+        <result property="datetime1"    column="datetime1"    />
+        <result property="datetime2"    column="datetime2"    />
+        <result property="datetime3"    column="datetime3"    />
+        <result property="datetime4"    column="datetime4"    />
+        <result property="datetime5"    column="datetime5"    />
+        <result property="status"    column="status"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBizProcessDataVo">
+        select data_id, biz_data_id, biz_id, normal_flag, flow_status, remark, price1, price2, price3, price4, price5, price6, price7, price8, price9, price10, string1, string2, string3, string4, string5, string6, string7, string8, string9, string10, string11, string12, string13, string14, string15, string16, string17, string18, string19, string20, datetime1, datetime2, datetime3, datetime4, datetime5, status, del_flag, create_by, create_time, update_by, update_time from biz_process_data
+    </sql>
+
+    <select id="selectBizProcessDataList" parameterType="BizProcessData" resultMap="BizProcessDataResult">
+        <include refid="selectBizProcessDataVo"/>
+        <where>  
+            <if test="bizDataId != null "> and biz_data_id = #{bizDataId}</if>
+            <if test="bizId != null  and bizId != ''"> and biz_id = #{bizId}</if>
+            <if test="normalFlag != null  and normalFlag != ''"> and normal_flag = #{normalFlag}</if>
+            <if test="flowStatus != null  and flowStatus != ''"> and flow_status = #{flowStatus}</if>
+            <if test="price1 != null "> and price1 = #{price1}</if>
+            <if test="price2 != null "> and price2 = #{price2}</if>
+            <if test="price3 != null "> and price3 = #{price3}</if>
+            <if test="price4 != null "> and price4 = #{price4}</if>
+            <if test="price5 != null "> and price5 = #{price5}</if>
+            <if test="price6 != null "> and price6 = #{price6}</if>
+            <if test="price7 != null "> and price7 = #{price7}</if>
+            <if test="price8 != null "> and price8 = #{price8}</if>
+            <if test="price9 != null "> and price9 = #{price9}</if>
+            <if test="price10 != null "> and price10 = #{price10}</if>
+            <if test="string1 != null  and string1 != ''"> and string1 = #{string1}</if>
+            <if test="string2 != null  and string2 != ''"> and string2 = #{string2}</if>
+            <if test="string3 != null  and string3 != ''"> and string3 = #{string3}</if>
+            <if test="string4 != null  and string4 != ''"> and string4 = #{string4}</if>
+            <if test="string5 != null  and string5 != ''"> and string5 = #{string5}</if>
+            <if test="string6 != null  and string6 != ''"> and string6 = #{string6}</if>
+            <if test="string7 != null  and string7 != ''"> and string7 = #{string7}</if>
+            <if test="string8 != null  and string8 != ''"> and string8 = #{string8}</if>
+            <if test="string9 != null  and string9 != ''"> and string9 = #{string9}</if>
+            <if test="string10 != null  and string10 != ''"> and string10 = #{string10}</if>
+            <if test="string11 != null  and string11 != ''"> and string11 = #{string11}</if>
+            <if test="string12 != null  and string12 != ''"> and string12 = #{string12}</if>
+            <if test="string13 != null  and string13 != ''"> and string13 = #{string13}</if>
+            <if test="string14 != null  and string14 != ''"> and string14 = #{string14}</if>
+            <if test="string15 != null  and string15 != ''"> and string15 = #{string15}</if>
+            <if test="string16 != null  and string16 != ''"> and string16 = #{string16}</if>
+            <if test="string17 != null  and string17 != ''"> and string17 = #{string17}</if>
+            <if test="string18 != null  and string18 != ''"> and string18 = #{string18}</if>
+            <if test="string19 != null  and string19 != ''"> and string19 = #{string19}</if>
+            <if test="string20 != null  and string20 != ''"> and string20 = #{string20}</if>
+            <if test="datetime1 != null "> and datetime1 = #{datetime1}</if>
+            <if test="datetime2 != null "> and datetime2 = #{datetime2}</if>
+            <if test="datetime3 != null "> and datetime3 = #{datetime3}</if>
+            <if test="datetime4 != null "> and datetime4 = #{datetime4}</if>
+            <if test="datetime5 != null "> and datetime5 = #{datetime5}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+
+
+    <sql id="selectBizProcessDataVoRef">
+        select data_id, biz_data_id, biz_id, normal_flag, flow_status, remark, price1, price2, price3,
+        price4, price5, price6, price7, price8, price9, price10, string1, string2,
+        string3, string4, string5, string6, string7, string8, string9, string10, string11,
+        string12, string13, string14, string15, string16, string17, string18, string19, string20,
+        datetime1, datetime2, datetime3, datetime4, datetime5, status, del_flag, create_by,
+        create_time, update_by, update_time
+
+        from biz_process_data
+    </sql>
+
+    <select id="selectBizProcessDataListRef" parameterType="BizProcessData" resultMap="BizProcessDataResult">
+        <include refid="selectBizProcessDataVoRef"/>
+        <where>
+            <if test="bizDataId != null "> and biz_data_id = #{bizDataId}</if>
+            <if test="bizId != null  and bizId != ''"> and biz_id = #{bizId}</if>
+            <if test="normalFlag != null  and normalFlag != ''"> and normal_flag = #{normalFlag}</if>
+            <if test="flowStatus != null  and flowStatus != ''"> and flow_status = #{flowStatus}</if>
+            <if test="price1 != null "> and price1 = #{price1}</if>
+            <if test="price2 != null "> and price2 = #{price2}</if>
+            <if test="price3 != null "> and price3 = #{price3}</if>
+            <if test="price4 != null "> and price4 = #{price4}</if>
+            <if test="price5 != null "> and price5 = #{price5}</if>
+            <if test="price6 != null "> and price6 = #{price6}</if>
+            <if test="price7 != null "> and price7 = #{price7}</if>
+            <if test="price8 != null "> and price8 = #{price8}</if>
+            <if test="price9 != null "> and price9 = #{price9}</if>
+            <if test="price10 != null "> and price10 = #{price10}</if>
+            <if test="string1 != null  and string1 != ''"> and string1 = #{string1}</if>
+            <if test="string2 != null  and string2 != ''"> and string2 = #{string2}</if>
+            <if test="string3 != null  and string3 != ''"> and string3 = #{string3}</if>
+            <if test="string4 != null  and string4 != ''"> and string4 = #{string4}</if>
+            <if test="string5 != null  and string5 != ''"> and string5 = #{string5}</if>
+            <if test="string6 != null  and string6 != ''"> and string6 = #{string6}</if>
+            <if test="string7 != null  and string7 != ''"> and string7 = #{string7}</if>
+            <if test="string8 != null  and string8 != ''"> and string8 = #{string8}</if>
+            <if test="string9 != null  and string9 != ''"> and string9 = #{string9}</if>
+            <if test="string10 != null  and string10 != ''"> and string10 = #{string10}</if>
+            <if test="string11 != null  and string11 != ''"> and string11 = #{string11}</if>
+            <if test="string12 != null  and string12 != ''"> and string12 = #{string12}</if>
+            <if test="string13 != null  and string13 != ''"> and string13 = #{string13}</if>
+            <if test="string14 != null  and string14 != ''"> and string14 = #{string14}</if>
+            <if test="string15 != null  and string15 != ''"> and string15 = #{string15}</if>
+            <if test="string16 != null  and string16 != ''"> and string16 = #{string16}</if>
+            <if test="string17 != null  and string17 != ''"> and string17 = #{string17}</if>
+            <if test="string18 != null  and string18 != ''"> and string18 = #{string18}</if>
+            <if test="string19 != null  and string19 != ''"> and string19 = #{string19}</if>
+            <if test="string20 != null  and string20 != ''"> and string20 = #{string20}</if>
+            <if test="datetime1 != null "> and datetime1 = #{datetime1}</if>
+            <if test="datetime2 != null "> and datetime2 = #{datetime2}</if>
+            <if test="datetime3 != null "> and datetime3 = #{datetime3}</if>
+            <if test="datetime4 != null "> and datetime4 = #{datetime4}</if>
+            <if test="datetime5 != null "> and datetime5 = #{datetime5}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+
+    
+    <select id="selectBizProcessDataById" parameterType="Long" resultMap="BizProcessDataResult">
+        <include refid="selectBizProcessDataVo"/>
+        where data_id = #{dataId}
+    </select>
+        
+    <insert id="insertBizProcessData" parameterType="BizProcessData" useGeneratedKeys="true" keyProperty="dataId">
+        insert into biz_process_data
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="bizDataId != null ">biz_data_id,</if>
+            <if test="bizId != null  and bizId != ''">biz_id,</if>
+            <if test="normalFlag != null  and normalFlag != ''">normal_flag,</if>
+            <if test="flowStatus != null  and flowStatus != ''">flow_status,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+            <if test="price1 != null ">price1,</if>
+            <if test="price2 != null ">price2,</if>
+            <if test="price3 != null ">price3,</if>
+            <if test="price4 != null ">price4,</if>
+            <if test="price5 != null ">price5,</if>
+            <if test="price6 != null ">price6,</if>
+            <if test="price7 != null ">price7,</if>
+            <if test="price8 != null ">price8,</if>
+            <if test="price9 != null ">price9,</if>
+            <if test="price10 != null ">price10,</if>
+            <if test="string1 != null  and string1 != ''">string1,</if>
+            <if test="string2 != null  and string2 != ''">string2,</if>
+            <if test="string3 != null  and string3 != ''">string3,</if>
+            <if test="string4 != null  and string4 != ''">string4,</if>
+            <if test="string5 != null  and string5 != ''">string5,</if>
+            <if test="string6 != null  and string6 != ''">string6,</if>
+            <if test="string7 != null  and string7 != ''">string7,</if>
+            <if test="string8 != null  and string8 != ''">string8,</if>
+            <if test="string9 != null  and string9 != ''">string9,</if>
+            <if test="string10 != null  and string10 != ''">string10,</if>
+            <if test="string11 != null  and string11 != ''">string11,</if>
+            <if test="string12 != null  and string12 != ''">string12,</if>
+            <if test="string13 != null  and string13 != ''">string13,</if>
+            <if test="string14 != null  and string14 != ''">string14,</if>
+            <if test="string15 != null  and string15 != ''">string15,</if>
+            <if test="string16 != null  and string16 != ''">string16,</if>
+            <if test="string17 != null  and string17 != ''">string17,</if>
+            <if test="string18 != null  and string18 != ''">string18,</if>
+            <if test="string19 != null  and string19 != ''">string19,</if>
+            <if test="string20 != null  and string20 != ''">string20,</if>
+            <if test="datetime1 != null ">datetime1,</if>
+            <if test="datetime2 != null ">datetime2,</if>
+            <if test="datetime3 != null ">datetime3,</if>
+            <if test="datetime4 != null ">datetime4,</if>
+            <if test="datetime5 != null ">datetime5,</if>
+            <if test="status != null  and status != ''">status,</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="bizDataId != null ">#{bizDataId},</if>
+            <if test="bizId != null  and bizId != ''">#{bizId},</if>
+            <if test="normalFlag != null  and normalFlag != ''">#{normalFlag},</if>
+            <if test="flowStatus != null  and flowStatus != ''">#{flowStatus},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="price1 != null ">#{price1},</if>
+            <if test="price2 != null ">#{price2},</if>
+            <if test="price3 != null ">#{price3},</if>
+            <if test="price4 != null ">#{price4},</if>
+            <if test="price5 != null ">#{price5},</if>
+            <if test="price6 != null ">#{price6},</if>
+            <if test="price7 != null ">#{price7},</if>
+            <if test="price8 != null ">#{price8},</if>
+            <if test="price9 != null ">#{price9},</if>
+            <if test="price10 != null ">#{price10},</if>
+            <if test="string1 != null  and string1 != ''">#{string1},</if>
+            <if test="string2 != null  and string2 != ''">#{string2},</if>
+            <if test="string3 != null  and string3 != ''">#{string3},</if>
+            <if test="string4 != null  and string4 != ''">#{string4},</if>
+            <if test="string5 != null  and string5 != ''">#{string5},</if>
+            <if test="string6 != null  and string6 != ''">#{string6},</if>
+            <if test="string7 != null  and string7 != ''">#{string7},</if>
+            <if test="string8 != null  and string8 != ''">#{string8},</if>
+            <if test="string9 != null  and string9 != ''">#{string9},</if>
+            <if test="string10 != null  and string10 != ''">#{string10},</if>
+            <if test="string11 != null  and string11 != ''">#{string11},</if>
+            <if test="string12 != null  and string12 != ''">#{string12},</if>
+            <if test="string13 != null  and string13 != ''">#{string13},</if>
+            <if test="string14 != null  and string14 != ''">#{string14},</if>
+            <if test="string15 != null  and string15 != ''">#{string15},</if>
+            <if test="string16 != null  and string16 != ''">#{string16},</if>
+            <if test="string17 != null  and string17 != ''">#{string17},</if>
+            <if test="string18 != null  and string18 != ''">#{string18},</if>
+            <if test="string19 != null  and string19 != ''">#{string19},</if>
+            <if test="string20 != null  and string20 != ''">#{string20},</if>
+            <if test="datetime1 != null ">#{datetime1},</if>
+            <if test="datetime2 != null ">#{datetime2},</if>
+            <if test="datetime3 != null ">#{datetime3},</if>
+            <if test="datetime4 != null ">#{datetime4},</if>
+            <if test="datetime5 != null ">#{datetime5},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBizProcessData" parameterType="BizProcessData">
+        update biz_process_data
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="bizDataId != null ">biz_data_id = #{bizDataId},</if>
+            <if test="bizId != null  and bizId != ''">biz_id = #{bizId},</if>
+            <if test="normalFlag != null  and normalFlag != ''">normal_flag = #{normalFlag},</if>
+            <if test="flowStatus != null  and flowStatus != ''">flow_status = #{flowStatus},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+            <if test="price1 != null ">price1 = #{price1},</if>
+            <if test="price2 != null ">price2 = #{price2},</if>
+            <if test="price3 != null ">price3 = #{price3},</if>
+            <if test="price4 != null ">price4 = #{price4},</if>
+            <if test="price5 != null ">price5 = #{price5},</if>
+            <if test="price6 != null ">price6 = #{price6},</if>
+            <if test="price7 != null ">price7 = #{price7},</if>
+            <if test="price8 != null ">price8 = #{price8},</if>
+            <if test="price9 != null ">price9 = #{price9},</if>
+            <if test="price10 != null ">price10 = #{price10},</if>
+            <if test="string1 != null  and string1 != ''">string1 = #{string1},</if>
+            <if test="string2 != null  and string2 != ''">string2 = #{string2},</if>
+            <if test="string3 != null  and string3 != ''">string3 = #{string3},</if>
+            <if test="string4 != null  and string4 != ''">string4 = #{string4},</if>
+            <if test="string5 != null  and string5 != ''">string5 = #{string5},</if>
+            <if test="string6 != null  and string6 != ''">string6 = #{string6},</if>
+            <if test="string7 != null  and string7 != ''">string7 = #{string7},</if>
+            <if test="string8 != null  and string8 != ''">string8 = #{string8},</if>
+            <if test="string9 != null  and string9 != ''">string9 = #{string9},</if>
+            <if test="string10 != null  and string10 != ''">string10 = #{string10},</if>
+            <if test="string11 != null  and string11 != ''">string11 = #{string11},</if>
+            <if test="string12 != null  and string12 != ''">string12 = #{string12},</if>
+            <if test="string13 != null  and string13 != ''">string13 = #{string13},</if>
+            <if test="string14 != null  and string14 != ''">string14 = #{string14},</if>
+            <if test="string15 != null  and string15 != ''">string15 = #{string15},</if>
+            <if test="string16 != null  and string16 != ''">string16 = #{string16},</if>
+            <if test="string17 != null  and string17 != ''">string17 = #{string17},</if>
+            <if test="string18 != null  and string18 != ''">string18 = #{string18},</if>
+            <if test="string19 != null  and string19 != ''">string19 = #{string19},</if>
+            <if test="string20 != null  and string20 != ''">string20 = #{string20},</if>
+            <if test="datetime1 != null ">datetime1 = #{datetime1},</if>
+            <if test="datetime2 != null ">datetime2 = #{datetime2},</if>
+            <if test="datetime3 != null ">datetime3 = #{datetime3},</if>
+            <if test="datetime4 != null ">datetime4 = #{datetime4},</if>
+            <if test="datetime5 != null ">datetime5 = #{datetime5},</if>
+            <if test="status != null  and status != ''">status = #{status},</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+        </trim>
+        where data_id = #{dataId}
+    </update>
+
+    <delete id="deleteBizProcessDataById" parameterType="Long">
+        delete from biz_process_data where data_id = #{dataId}
+    </delete>
+
+    <delete id="deleteBizProcessDataByIds" parameterType="String">
+        delete from biz_process_data where data_id in 
+        <foreach item="dataId" collection="array" open="(" separator="," close=")">
+            #{dataId}
+        </foreach>
+    </delete>
+    
+</mapper>

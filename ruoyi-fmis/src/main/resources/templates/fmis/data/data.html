@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('合同管理列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+
+                            <li>
+                                <p>状态：</p>
+                                <select name="queryStatus" class="form-control m-b" >
+                                    <option value="0">全部</option>
+                                    <option value="1">待办</option>
+                                    <option value="2">已办</option>
+                                </select>
+                            </li>
+                            <li>
+                                <p>备用1：</p>
+                                <input type="text" name="string1"/>
+                                <input type="hidden" name="bizId" value="contract"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="fmis:data:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="fmis:data:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="fmis:data:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="fmis:data:export">
+                    <i class="fa fa-download"></i> 导出
+                 </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('fmis:data:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('fmis:data:remove')}]];
+        var prefix = ctx + "fmis/data";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "合同管理",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'dataId', 
+                    title : 'ID',
+                    visible: false
+                },
+
+                {
+                    field : 'remark', 
+                    title : '备注'
+                },
+                {
+                    field : 'price1', 
+                    title : '价格1'
+                },
+                {
+                    field : 'price2', 
+                    title : '价格2'
+                },
+                {
+                    field : 'price3', 
+                    title : '价格3'
+                },
+                {
+                    field : 'price4', 
+                    title : '价格4'
+                },
+                {
+                    field : 'price5', 
+                    title : '价格5'
+                },
+                {
+                    field : 'price6', 
+                    title : '价格6'
+                },
+                {
+                    field : 'price7', 
+                    title : '价格7'
+                },
+                {
+                    field : 'price8', 
+                    title : '价格8'
+                },
+                {
+                    field : 'price9', 
+                    title : '价格9'
+                },
+                {
+                    field : 'price10', 
+                    title : '价格10'
+                },
+                {
+                    field : 'string1', 
+                    title : '备用1'
+                },
+                {
+                    field : 'string2', 
+                    title : '备用2'
+                },
+                {
+                    field : 'string3', 
+                    title : '备用3'
+                },
+                {
+                    field : 'string4', 
+                    title : '备用4'
+                },
+                {
+                    field : 'string5', 
+                    title : '备用5'
+                },
+                {
+                    field : 'string6', 
+                    title : '备用6'
+                },
+                {
+                    field : 'string7', 
+                    title : '备用7'
+                },
+                {
+                    field : 'string8', 
+                    title : '备用8'
+                },
+                {
+                    field : 'string9', 
+                    title : '备用9'
+                },
+                {
+                    field : 'string10', 
+                    title : '备用10'
+                },
+                {
+                    field : 'string11', 
+                    title : '备用11'
+                },
+                {
+                    field : 'string12', 
+                    title : '备用12'
+                },
+                {
+                    field : 'string13', 
+                    title : '备用13'
+                },
+                {
+                    field : 'string14', 
+                    title : '备用14'
+                },
+                {
+                    field : 'string15', 
+                    title : '备用15'
+                },
+                {
+                    field : 'string16', 
+                    title : '备用16'
+                },
+                {
+                    field : 'string17', 
+                    title : '备用17'
+                },
+                {
+                    field : 'string18', 
+                    title : '备用18'
+                },
+                {
+                    field : 'string19', 
+                    title : '备用19'
+                },
+                {
+                    field : 'string20', 
+                    title : '备用20'
+                },
+                {
+                    field : 'datetime1', 
+                    title : '时间1'
+                },
+                {
+                    field : 'datetime2', 
+                    title : '时间2'
+                },
+                {
+                    field : 'datetime3', 
+                    title : '时间3'
+                },
+                {
+                    field : 'datetime4', 
+                    title : '时间4'
+                },
+                {
+                    field : 'datetime5', 
+                    title : '时间5'
+                },
+                {
+                    field : 'flowStatusRemark',
+                    title : '状态',
+                    align: 'center'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        var flowStatus = row.flowStatus;
+                        var normalFlag = row.normalFlag;
+                        var operationExamineStatus = row.operationExamineStatus;
+                        if (flowStatus < 1) {
+                            if (flowStatus == "0") {
+                                //已上报
+                            } else {
+                                actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.dataId + '\')"><i class="fa fa-edit"></i> 编辑</a> ');
+                                actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 删除</a>');
+                                actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subReport(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 上报</a>');
+                            }
+                        } else if (flowStatus == normalFlag) {
+                            //已完成
+                        } else if (operationExamineStatus == true || operationExamineStatus == "true") {
+                            //审批
+                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subExamine(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 审批</a>');
+                        }
+                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewExamine(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 审批记录 </a>');
+                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewExamineDetail(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 详情 </a>');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+
+        function subExamine(dataId) {
+            var url = prefix + "/examineEdit?dataId=" + dataId;
+            $.modal.openFull("审批", url);
+        }
+
+        function subReport(dataId) {
+            $.modal.confirm("确定上报该条信息吗？", function() {
+                console.log(dataId + "--dataId");
+                var url = prefix + "/report?dataId=" + dataId;
+                $.operate.saveModal(url,'',function(){
+                    $.table.refresh();
+                });
+            });
+        }
+    </script>
+</body>
+</html>

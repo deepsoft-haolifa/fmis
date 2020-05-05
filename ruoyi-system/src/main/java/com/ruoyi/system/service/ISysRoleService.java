@@ -43,6 +43,8 @@ public interface ISysRoleService
      */
     public List<SysRole> selectRoleAll();
 
+
+    public List<SysRole> selectRoleListNoAuth(SysRole role);
     /**
      * 通过角色ID查询角色
      * 

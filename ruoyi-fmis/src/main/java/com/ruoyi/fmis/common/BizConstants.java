@@ -44,6 +44,14 @@ public class BizConstants {
      * 报价单表名称
      */
     public static final String BIZ_QUOTATION_TABLE = "biz_quotation";
+    //合同
+    public static final String BIZ_contract = "contract";
+    //采购
+    public static final String BIZ_procurement = "procurement";
+    //delivery
+    public static final String BIZ_delivery = "delivery";
+    //invoice
+    public static final String BIZ_invoice = "invoice";
 
     /**
      * 流程上报状态
