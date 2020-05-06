@@ -1,5 +1,6 @@
 package com.ruoyi.fmis.data.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ruoyi.fmis.child.domain.BizProcessChild;
 import com.ruoyi.fmis.customer.domain.BizCustomer;
 import lombok.Getter;
@@ -204,6 +205,7 @@ public class BizProcessData extends BaseEntity {
 
     /** 时间1 */
     @Excel(name = "时间1", width = 30, dateFormat = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date datetime1;
 
     /** 时间2 */

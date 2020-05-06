@@ -104,7 +104,7 @@
                 <div class="col-sm-8">
                     <div class="input-group date">
                         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input name="datetime1" class="form-control" th:field="*{datetime1}" placeholder="yyyy-MM-dd" type="text">
+                        <input name="datetime1" class="form-control" th:value="${#dates.format(bizProcessData.datetime1, 'yyyy-MM-dd')}"  placeholder="yyyy-MM-dd" type="text">
                     </div>
                 </div>
             </div>
