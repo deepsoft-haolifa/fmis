@@ -36,6 +36,13 @@ public interface BizProcessDataMapper {
      */
     public List<BizProcessData> selectBizProcessDataListRefDelivery(BizProcessData bizProcessData);
 
+    /**
+     * 采购管理查询
+     * @param bizProcessData
+     * @return
+     */
+    public List<BizProcessData> selectBizProcessDataListRefProcurement(BizProcessData bizProcessData);
+
 
     /**
      * 新增合同管理

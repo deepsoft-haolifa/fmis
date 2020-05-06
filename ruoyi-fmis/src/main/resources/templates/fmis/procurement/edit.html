@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改采购管理')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-data-edit" th:object="${bizProcessData}">
+            <input name="dataId" th:field="*{dataId}" type="hidden">
+            <input type="hidden" name="bizId" value="procurement"/>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">结算单位：</label>
+                <div class="col-sm-8">
+                    <input name="string1" class="form-control" th:field="*{string1}" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">归属单位：</label>
+                <div class="col-sm-8">
+                    <input name="string2" class="form-control" th:field="*{string2}" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">订货日期：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="datetime1" class="form-control" placeholder="yyyy-MM-dd" th:value="${#dates.format(bizProcessData.datetime1, 'yyyy-MM-dd')}" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">生产单号：</label>
+                <div class="col-sm-8">
+                    <input name="string3" class="form-control" type="text" th:field="*{string3}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">客户：</label>
+                <div class="col-sm-8">
+                    <input name="string4" class="form-control" type="hidden" th:field="*{string4}" >
+                    <input name="customerName" id="customerName" class="form-control" th:field="*{customerName}" type="text" readonly onclick="selectCustomer()" required>
+                </div>
+            </div>
+
+
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">选择合同：</label>
+                <div class="col-sm-6">
+                    <input name="contractIds" id="contractIds" th:value="${contractIds}" class="form-control" type="hidden" >
+                    <input name="contractNames" id="contractNames" th:value="${contractNames}" class="form-control" type="text" readonly onclick="selectContract(0)" required>
+                </div>
+
+                <div class="col-sm-3">
+                    <a class="btn btn-success btn-sm" onclick="selectContract(1)" >
+                        <i class="fa fa"></i> 追加
+                        <input type="hidden" id="productOperationType" name="productOperationType" value="0">
+                    </a>
+                </div>
+            </div>
+
+
+            <div class="hr-line-dashed"></div>
+            <div class="form-horizontal" id="productDiv">
+
+
+                <div class="ibox float-e-margins" th:each="qp:${bizProcessData.bizProcessChildList}" th:id="'productDiv_' + ${qp.string1}" >
+                    <h5 th:text="${qp.bizProcessData.string1}" ></h5>
+
+                    <div class='form-group' >
+                        <label class='control-label col-sm-3'>合同编号：</label>
+                        <div class='col-sm-2'>
+                            <input th:id="'qpId_' + ${qp.dataId}" class='form-control' type='hidden' th:value="${qp.dataId}">
+                            <input th:id="'productId_' + ${qp.string1}" class='form-control' type='hidden' th:value="${qp.string1}">
+                            <input name='productName' id="productName" th:value="${qp.bizProcessData.string1}" value="productShowText" class='form-control' type='text' readonly >
+                        </div>
+
+                        <div class='col-sm-3'>
+                            <input class='form-control' type='text' th:id="'productNum_' + ${qp.string1}" th:value="${qp.price1}"  name='productNum' placeholder='数量' onkeyup="AmountKeyUp(this)"/>
+                        </div>
+
+                        <div class='col-sm-3'>
+                            <input class='form-control' type='text' th:id="'productPrice_' + ${qp.string1}"  name="productPrice" th:value="${qp.price2}"   placeholder='金额' onblur="sumPrice(paramterProductId)" onkeyup="AmountKeyUp(this)"/>
+                        </div>
+
+                    </div>
+
+
+
+                    <div class='form-group' th:id="'productRef3Div_' + ${qp.string1}">
+                        <label class='control-label col-sm-3'>备注：</label>
+
+                        <div class='col-sm-5'>
+                            <input th:id="'productRemark_' + ${qp.string1}" th:value="${qp.remark}"  class='form-control' type='text'>
+                        </div>
+
+                        <div class='col-sm-3' >
+                            <a class="btn btn-danger btn-xs" th:onclick="removeProject([[${qp.string1}]]);" >
+                                <i class="fa fa-remove"></i> 删除
+                            </a>
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+            </div>
+            <div class="hr-line-dashed"></div>
+
+
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">类别：</label>
+                <div class="col-sm-8">
+                    <input name="string5" class="form-control" type="text" th:field="*{string5}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">供应商：</label>
+                <div class="col-sm-8">
+                    <input name="price6" class="form-control" type="text" th:field="*{price6}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">供应商：</label>
+                <div class="col-sm-8">
+                    <input name="string6" class="form-control" type="text" th:field="*{string6}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">订货产品：</label>
+                <div class="col-sm-8">
+                    <input name="string7" class="form-control" type="text" th:field="*{string7}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">回传：</label>
+                <div class="col-sm-8">
+                    <input name="string8" class="form-control" type="text" th:field="*{string8}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">生产单要求交期：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="datetime2" class="form-control" placeholder="yyyy-MM-dd" th:value="${#dates.format(bizProcessData.datetime2, 'yyyy-MM-dd')}" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">供应商发货日期：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="datetime3" class="form-control" placeholder="yyyy-MM-dd" th:value="${#dates.format(bizProcessData.datetime3, 'yyyy-MM-dd')}" type="text">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">运输方式：</label>
+                <div class="col-sm-8">
+                    <input name="string9" class="form-control" type="text" th:field="*{string9}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">合计：</label>
+                <div class="col-sm-8">
+                    <input name="price1" class="form-control" type="text" th:field="*{price1}">
+                </div>
+            </div>
+
+
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script type="text/javascript">
+        var prefix = ctx + "fmis/procurement";
+        $("#form-data-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                var dataObj = $('#form-data-edit').serializeArray();
+                //计算是否正常
+                //特殊费用
+                var specialExpenses = $("#specialExpenses").val();
+                if (specialExpenses != null && specialExpenses.length > 0) {
+                    dataObj.push({"normalFlag": "1"});
+                } else {
+                    dataObj.push({"normalFlag": "0"});
+                }
+
+                var productIds = $("#contractIds").val();
+                var productArray = new Array();
+                var productIdsStrs = productIds.split(",");
+                for (var i = 0; i < productIdsStrs.length; i++) {
+                    var productObj = new Object();
+                    var productId = productIdsStrs[i];
+                    productObj["string1"] = productId;
+                    productObj["price1"] = $("#productNum_" + productId).val();
+                    productObj["price2"] = $("#productPrice_" + productId).val();
+                    productObj["remark"] = $("#productRemark_" + productId).val();
+                    productArray.push(productObj);
+                }
+                dataObj.push({"name": "productParmters", "value": JSON.stringify(productArray)});
+                $.operate.save(prefix + "/edit", dataObj);
+            }
+        }
+
+        $("input[name='datetime1']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $("input[name='datetime2']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $("input[name='datetime3']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+
+    </script>
+</body>
+</html>

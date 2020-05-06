@@ -31,6 +31,9 @@ public interface IBizProcessDataService {
 
     public List<BizProcessData> selectBizProcessDataListRefDelivery(BizProcessData bizProcessData);
 
+
+    public List<BizProcessData> selectBizProcessDataListRefProcurement(BizProcessData bizProcessData);
+
     public int doExamine(String dataId,String status,String remark,String bizId);
     /**
      * 新增合同管理

@@ -1,5 +1,6 @@
 package com.ruoyi.fmis.child.domain;
 
+import com.ruoyi.fmis.data.domain.BizProcessData;
 import com.ruoyi.fmis.product.domain.BizProduct;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,6 +21,10 @@ public class BizProcessChild extends BaseEntity {
 
     /** ID */
     private Long childId;
+
+    @Setter
+    @Getter
+    private BizProcessData bizProcessData;
 
     @Setter
     @Getter

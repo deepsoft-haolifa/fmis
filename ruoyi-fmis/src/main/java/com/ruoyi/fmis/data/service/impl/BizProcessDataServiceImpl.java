@@ -69,6 +69,11 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
     }
 
 
+    @Override
+    public List<BizProcessData> selectBizProcessDataListRefProcurement(BizProcessData bizProcessData) {
+        return bizProcessDataMapper.selectBizProcessDataListRefProcurement(bizProcessData);
+    }
+
     /**
      * 审批
      * @param dataId
