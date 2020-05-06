@@ -1,5 +1,7 @@
 package com.ruoyi.fmis.data.domain;
 
+import com.ruoyi.fmis.child.domain.BizProcessChild;
+import com.ruoyi.fmis.customer.domain.BizCustomer;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -7,6 +9,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 合同管理对象 biz_process_data
@@ -19,6 +22,23 @@ public class BizProcessData extends BaseEntity {
 
     /** ID */
     private Long dataId;
+
+
+    @Getter
+    @Setter
+    private BizCustomer bizCustomer;
+
+    @Setter
+    @Getter
+    private List<BizProcessChild> bizProcessChildList;
+
+    @Setter
+    @Getter
+    private String productParmters;
+
+    @Setter
+    @Getter
+    private String customerName;
 
     /**
      * 流程描述

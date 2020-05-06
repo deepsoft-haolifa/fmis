@@ -1,5 +1,8 @@
 package com.ruoyi.fmis.child.domain;
 
+import com.ruoyi.fmis.product.domain.BizProduct;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
@@ -17,6 +20,11 @@ public class BizProcessChild extends BaseEntity {
 
     /** ID */
     private Long childId;
+
+    @Setter
+    @Getter
+    private BizProduct bizProduct;
+
 
     /** 数据ID */
     @Excel(name = "数据ID")

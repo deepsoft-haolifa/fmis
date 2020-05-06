@@ -3,9 +3,20 @@ package com.ruoyi.fmis.data.controller;
 import java.util.List;
 import java.util.Map;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.fmis.child.domain.BizProcessChild;
+import com.ruoyi.fmis.child.service.IBizProcessChildService;
 import com.ruoyi.fmis.common.BizConstants;
 import com.ruoyi.fmis.common.CommonUtils;
+import com.ruoyi.fmis.customer.service.IBizCustomerService;
 import com.ruoyi.fmis.define.service.IBizProcessDefineService;
+import com.ruoyi.fmis.dict.service.IBizDictService;
+import com.ruoyi.fmis.product.domain.BizProduct;
+import com.ruoyi.fmis.product.service.IBizProductService;
+import com.ruoyi.fmis.quotationproduct.domain.BizQuotationProduct;
+import com.ruoyi.fmis.suppliers.service.IBizSuppliersService;
 import com.ruoyi.system.domain.SysRole;
 import com.ruoyi.system.service.ISysRoleService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -46,6 +57,21 @@ public class BizProcessDataController extends BaseController {
 
     @Autowired
     private IBizProcessDefineService bizProcessDefineService;
+
+    @Autowired
+    private IBizDictService bizDictService;
+
+    @Autowired
+    private IBizSuppliersService bizSuppliersService;
+
+    @Autowired
+    private IBizProcessChildService bizProcessChildService;
+
+    @Autowired
+    private IBizProductService bizProductService;
+
+    @Autowired
+    private IBizCustomerService bizCustomerService;
 
     @RequiresPermissions("fmis:data:view")
     @GetMapping()
@@ -168,16 +194,28 @@ public class BizProcessDataController extends BaseController {
     @ResponseBody
     public AjaxResult addSave(BizProcessData bizProcessData) {
         bizProcessData.setFlowStatus("-2");
-
         Map<String, SysRole> flowAllMap = bizProcessDefineService.getFlowAllMap(bizProcessData.getBizId());
-
         if (!CollectionUtils.isEmpty(flowAllMap)) {
             for (String key : flowAllMap.keySet()) {
                 bizProcessData.setNormalFlag(key);
             }
         }
+        String productArrayStr = bizProcessData.getProductParmters();
+        int insertReturn = bizProcessDataService.insertBizProcessData(bizProcessData);
+        Long dataId = bizProcessData.getDataId();
+        if (StringUtils.isNotEmpty(productArrayStr)) {
+            JSONArray productArray = JSONArray.parseArray(productArrayStr);
+            for (int i = 0; i < productArray.size(); i++) {
+                JSONObject json = productArray.getJSONObject(i);
+                BizProcessChild bizProcessChild = JSONObject.parseObject(json.toJSONString(), BizProcessChild.class);
+                if (StringUtils.isNotEmpty(bizProcessChild.getString1())) {
+                    bizProcessChild.setDataId(dataId);
+                    bizProcessChildService.insertBizProcessChild(bizProcessChild);
+                }
 
-        return toAjax(bizProcessDataService.insertBizProcessData(bizProcessData));
+            }
+        }
+        return toAjax(insertReturn);
     }
 
     /**
@@ -186,6 +224,29 @@ public class BizProcessDataController extends BaseController {
     @GetMapping("/edit/{dataId}")
     public String edit(@PathVariable("dataId") Long dataId, ModelMap mmap) {
         BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataById(dataId);
+
+        BizProcessChild queryBizProcessChild = new BizProcessChild();
+        queryBizProcessChild.setDataId(bizProcessData.getDataId());
+        List<BizProcessChild> bizProcessChildList = bizProcessChildService.selectBizProcessChildList(queryBizProcessChild);
+        String productNames = "";
+        String productIds = "";
+        if (!CollectionUtils.isEmpty(bizProcessChildList)) {
+            for (BizProcessChild bizProcessChild : bizProcessChildList) {
+                String productId = bizProcessChild.getString1();
+                BizProduct bizProduct = bizProductService.selectBizProductById(Long.parseLong(productId));
+                productNames += bizProduct.getName() + ",";
+                productIds += bizProduct.getProductId() + ",";
+                bizProcessChild.setBizProduct(bizProduct);
+            }
+            bizProcessData.setBizProcessChildList(bizProcessChildList);
+        }
+        String customerId = bizProcessData.getString2();
+        if (StringUtils.isNotEmpty(customerId)) {
+            bizProcessData.setBizCustomer(bizCustomerService.selectBizCustomerById(Long.parseLong(customerId)));
+        }
+
+        mmap.put("productNames", productNames);
+        mmap.put("productIds", productIds);
         mmap.put("bizProcessData", bizProcessData);
         return prefix + "/edit";
     }
@@ -198,7 +259,35 @@ public class BizProcessDataController extends BaseController {
     @PostMapping("/edit")
     @ResponseBody
     public AjaxResult editSave(BizProcessData bizProcessData) {
-        return toAjax(bizProcessDataService.updateBizProcessData(bizProcessData));
+
+        String productArrayStr = bizProcessData.getProductParmters();
+        int updateReturn = bizProcessDataService.updateBizProcessData(bizProcessData);
+
+        Long dataId = bizProcessData.getDataId();
+
+        BizProcessChild removeBizProcuessChild = new BizProcessChild();
+        removeBizProcuessChild.setDataId(dataId);
+        List<BizProcessChild> removeBizProcessChildList = bizProcessChildService.selectBizProcessChildList(removeBizProcuessChild);
+        if (!CollectionUtils.isEmpty(removeBizProcessChildList)) {
+            for (BizProcessChild bizProcessChild : removeBizProcessChildList) {
+                bizProcessChildService.deleteBizProcessChildById(bizProcessChild.getChildId());
+            }
+        }
+
+        if (StringUtils.isNotEmpty(productArrayStr)) {
+            JSONArray productArray = JSONArray.parseArray(productArrayStr);
+            for (int i = 0; i < productArray.size(); i++) {
+                JSONObject json = productArray.getJSONObject(i);
+                BizProcessChild bizProcessChild = JSONObject.parseObject(json.toJSONString(), BizProcessChild.class);
+                if (StringUtils.isNotEmpty(bizProcessChild.getString1())) {
+                    bizProcessChild.setDataId(dataId);
+                    bizProcessChildService.insertBizProcessChild(bizProcessChild);
+                }
+
+            }
+        }
+
+        return toAjax(updateReturn);
     }
 
     /**
@@ -218,5 +307,24 @@ public class BizProcessDataController extends BaseController {
         String dataId = getRequest().getParameter("dataId");
         BizProcessData bizQuotation = bizProcessDataService.selectBizProcessDataById(Long.parseLong(dataId));
         return toAjax(bizProcessDataService.subReportBizQuotation(bizQuotation));
+    }
+
+    /**
+     * 选择系统用户
+     */
+    @GetMapping("/selectProduct")
+    public String selectProduct(ModelMap mmap) {
+
+        mmap.put("seriesSelect",bizDictService.selectBizDictByProductType(BizConstants.productTypeCode));
+        mmap.put("suppliers",bizSuppliersService.selectAllList());
+
+        return prefix + "/selectProduct";
+    }
+    /**
+     * 选择客户
+     */
+    @GetMapping("/selectCustomer")
+    public String selectCustomer() {
+        return prefix + "/selectCustomer";
     }
 }
