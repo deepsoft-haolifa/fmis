@@ -20,7 +20,7 @@
                                 </select>
                             </li>
                             <li>
-                                <p>备用1：</p>
+                                <p>确认单号：</p>
                                 <input type="text" name="string1"/>
                                 <input type="hidden" name="bizId" id="bizId" value="delivery"/>
                             </li>
@@ -34,10 +34,10 @@
             </div>
 
             <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="fmis:delivery:add">
+                <a class="btn btn-success" onclick="$.operate.addFull()" shiro:hasPermission="fmis:delivery:add">
                     <i class="fa fa-plus"></i> 添加
                 </a>
-                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="fmis:delivery:edit">
+                <a class="btn btn-primary single disabled" onclick="$.operate.editFull()" shiro:hasPermission="fmis:delivery:edit">
                     <i class="fa fa-edit"></i> 修改
                 </a>
                 <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="fmis:delivery:remove">
@@ -56,6 +56,7 @@
     <script th:inline="javascript">
         var editFlag = [[${@permission.hasPermi('fmis:delivery:edit')}]];
         var removeFlag = [[${@permission.hasPermi('fmis:delivery:remove')}]];
+        var sysYesNo = [[${@dict.getType('sys_yes_no')}]];
         var prefix = ctx + "fmis/delivery";
 
         $(function() {
@@ -65,7 +66,7 @@
                 updateUrl: prefix + "/edit/{id}",
                 removeUrl: prefix + "/remove",
                 exportUrl: prefix + "/export",
-                modalName: "合同管理",
+                modalName: "发货管理",
                 columns: [{
                     checkbox: true
                 },
@@ -74,155 +75,72 @@
                     title : 'ID',
                     visible: false
                 },
-
                 {
-                    field : 'remark', 
-                    title : '备注'
-                },
-                {
-                    field : 'price1', 
-                    title : '价格1'
-                },
-                {
-                    field : 'price2', 
-                    title : '价格2'
-                },
-                {
-                    field : 'price3', 
-                    title : '价格3'
-                },
-                {
-                    field : 'price4', 
-                    title : '价格4'
-                },
-                {
-                    field : 'price5', 
-                    title : '价格5'
-                },
-                {
-                    field : 'price6', 
-                    title : '价格6'
-                },
-                {
-                    field : 'price7', 
-                    title : '价格7'
-                },
-                {
-                    field : 'price8', 
-                    title : '价格8'
-                },
-                {
-                    field : 'price9', 
-                    title : '价格9'
-                },
-                {
-                    field : 'price10', 
-                    title : '价格10'
+                    field : 'datetime1',
+                    title : '日期',
+                    formatter: function(value, row, index) {
+                        return value;
+                    }
                 },
                 {
                     field : 'string1', 
-                    title : '备用1'
+                    title : '确认单号'
                 },
                 {
-                    field : 'string2', 
-                    title : '备用2'
+                    field : 'customerName',
+                    title : '客户名称'
                 },
                 {
                     field : 'string3', 
-                    title : '备用3'
+                    title : '发往地'
                 },
                 {
                     field : 'string4', 
-                    title : '备用4'
+                    title : '收货人'
                 },
                 {
                     field : 'string5', 
-                    title : '备用5'
+                    title : '电话'
                 },
                 {
                     field : 'string6', 
-                    title : '备用6'
+                    title : '手机'
+                },
+                {
+                    field : 'price1',
+                    title : '总计'
                 },
                 {
                     field : 'string7', 
-                    title : '备用7'
+                    title : '运费付费方式'
                 },
                 {
                     field : 'string8', 
-                    title : '备用8'
+                    title : '运输方式'
                 },
                 {
                     field : 'string9', 
-                    title : '备用9'
+                    title : '是否送货',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(sysYesNo, value);
+                    }
                 },
                 {
-                    field : 'string10', 
-                    title : '备用10'
-                },
-                {
-                    field : 'string11', 
-                    title : '备用11'
-                },
-                {
-                    field : 'string12', 
-                    title : '备用12'
-                },
-                {
-                    field : 'string13', 
-                    title : '备用13'
-                },
-                {
-                    field : 'string14', 
-                    title : '备用14'
-                },
-                {
-                    field : 'string15', 
-                    title : '备用15'
-                },
-                {
-                    field : 'string16', 
-                    title : '备用16'
-                },
-                {
-                    field : 'string17', 
-                    title : '备用17'
-                },
-                {
-                    field : 'string18', 
-                    title : '备用18'
-                },
-                {
-                    field : 'string19', 
-                    title : '备用19'
-                },
-                {
-                    field : 'string20', 
-                    title : '备用20'
-                },
-                {
-                    field : 'datetime1', 
-                    title : '时间1'
+                    field : 'string10',
+                    title : '发货通知人'
                 },
                 {
                     field : 'datetime2', 
-                    title : '时间2'
-                },
-                {
-                    field : 'datetime3', 
-                    title : '时间3'
-                },
-                {
-                    field : 'datetime4', 
-                    title : '时间4'
-                },
-                {
-                    field : 'datetime5', 
-                    title : '时间5'
+                    title : '发货日期'
                 },
                 {
                     field : 'flowStatusRemark',
                     title : '状态',
                     align: 'center'
+                },
+                {
+                    field : 'remark',
+                    title : '备注'
                 },
                 {
                     title: '操作',
@@ -236,7 +154,7 @@
                             if (flowStatus == "0") {
                                 //已上报
                             } else {
-                                actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.dataId + '\')"><i class="fa fa-edit"></i> 编辑</a> ');
+                                actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.editFull(\'' + row.dataId + '\')"><i class="fa fa-edit"></i> 编辑</a> ');
                                 actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 删除</a>');
                                 actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subReport(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 上报</a>');
                             }
@@ -261,6 +179,7 @@
                 $.modal.closeAll();
             });
         }
+
         function subExamine(dataId) {
             var url = prefix + "/examineEdit?dataId=" + dataId;
             $.modal.openFull("审批", url);
