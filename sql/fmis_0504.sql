@@ -287,3 +287,100 @@ values('业务删除', @parentId, '4',  '#',  'F', '0', 'fmis:procurement:remove
 insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
 values('业务导出', @parentId, '5',  '#',  'F', '0', 'fmis:procurement:export',       '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
 
+
+
+-- 开票管理
+insert into sys_menu (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('开票管理', '2148', '1', '/fmis/invoice', 'C', '0', 'fmis:invoice:view', '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '业务菜单');
+
+-- 按钮父菜单ID
+SELECT @parentId := LAST_INSERT_ID();
+
+-- 按钮 SQL
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('业务查询', @parentId, '1',  '#',  'F', '0', 'fmis:invoice:list',         '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('业务新增', @parentId, '2',  '#',  'F', '0', 'fmis:invoice:add',          '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('业务修改', @parentId, '3',  '#',  'F', '0', 'fmis:invoice:edit',         '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('业务删除', @parentId, '4',  '#',  'F', '0', 'fmis:invoice:remove',       '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('业务导出', @parentId, '5',  '#',  'F', '0', 'fmis:invoice:export',       '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+
+
+
+alter table  biz_actuator modify column price decimal(19,5);
+alter table  biz_process_child modify column price1 decimal(19,5);
+alter table  biz_process_child modify column price2 decimal(19,5);
+alter table  biz_process_child modify column price3 decimal(19,5);
+alter table  biz_process_child modify column price4 decimal(19,5);
+alter table  biz_process_child modify column price5 decimal(19,5);
+alter table  biz_process_child modify column price6 decimal(19,5);
+alter table  biz_process_child modify column price7 decimal(19,5);
+alter table  biz_process_child modify column price8 decimal(19,5);
+alter table  biz_process_child modify column price9 decimal(19,5);
+alter table  biz_process_child modify column price10 decimal(19,5);
+alter table  biz_process_data modify column price1 decimal(19,5);
+alter table  biz_process_data modify column price2 decimal(19,5);
+alter table  biz_process_data modify column price3 decimal(19,5);
+alter table  biz_process_data modify column price4 decimal(19,5);
+alter table  biz_process_data modify column price5 decimal(19,5);
+alter table  biz_process_data modify column price6 decimal(19,5);
+alter table  biz_process_data modify column price7 decimal(19,5);
+alter table  biz_process_data modify column price8 decimal(19,5);
+alter table  biz_process_data modify column price9 decimal(19,5);
+alter table  biz_process_data modify column price10 decimal(19,5);
+alter table  biz_product modify column price decimal(19,5);
+alter table  biz_product modify column procurement_price decimal(19,5);
+alter table  biz_product modify column cost_price decimal(19,5);
+alter table  biz_product_ref modify column price decimal(19,5);
+alter table  biz_quotation modify column freight decimal(19,5);
+
+
+
+alter table  biz_process_child modify column string1 varchar(100);
+alter table  biz_process_child modify column string2 varchar(100);
+alter table  biz_process_child modify column string3 varchar(100);
+alter table  biz_process_child modify column string4 varchar(100);
+alter table  biz_process_child modify column string5 varchar(100);
+alter table  biz_process_child modify column string6 varchar(100);
+alter table  biz_process_child modify column string7 varchar(100);
+alter table  biz_process_child modify column string8 varchar(100);
+alter table  biz_process_child modify column string9 varchar(100);
+alter table  biz_process_child modify column string10 varchar(100);
+alter table  biz_process_child modify column string11 varchar(100);
+alter table  biz_process_child modify column string12 varchar(100);
+alter table  biz_process_child modify column string13 varchar(100);
+alter table  biz_process_child modify column string14 varchar(100);
+alter table  biz_process_child modify column string15 varchar(100);
+alter table  biz_process_child modify column string16 varchar(100);
+alter table  biz_process_child modify column string17 varchar(100);
+alter table  biz_process_child modify column string18 varchar(100);
+alter table  biz_process_child modify column string19 varchar(100);
+alter table  biz_process_child modify column string20 varchar(100);
+alter table  biz_process_data modify column string1 varchar(100);
+alter table  biz_process_data modify column string2 varchar(100);
+alter table  biz_process_data modify column string3 varchar(100);
+alter table  biz_process_data modify column string4 varchar(100);
+alter table  biz_process_data modify column string5 varchar(100);
+alter table  biz_process_data modify column string6 varchar(100);
+alter table  biz_process_data modify column string7 varchar(100);
+alter table  biz_process_data modify column string8 varchar(100);
+alter table  biz_process_data modify column string9 varchar(100);
+alter table  biz_process_data modify column string10 varchar(100);
+alter table  biz_process_data modify column string11 varchar(100);
+alter table  biz_process_data modify column string12 varchar(100);
+alter table  biz_process_data modify column string13 varchar(100);
+alter table  biz_process_data modify column string14 varchar(100);
+alter table  biz_process_data modify column string15 varchar(100);
+alter table  biz_process_data modify column string16 varchar(100);
+alter table  biz_process_data modify column string17 varchar(100);
+alter table  biz_process_data modify column string18 varchar(100);
+alter table  biz_process_data modify column string19 varchar(100);
+alter table  biz_process_data modify column string20 varchar(100);

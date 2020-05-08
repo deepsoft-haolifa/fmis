@@ -55,7 +55,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </sql>
 
     <sql id="selectBizCustomerDictVo">
-        select c.customer_id, c.record_date, c.company_code, c.area, c.record_code, u.user_name as owner_user_id, c.name, c.project_ame, c.contact_name, c.contact_position, c.contact_phone, c.contact_email, c.brand, c.info, c.product_info, c.remark, c.status, c.del_flag, c.create_by, c.create_time, c.update_by, c.update_time,
+        select c.customer_id, c.record_date, c.company_code, c.area, c.record_code, u.user_name as owner_user_id, c.name, c.project_ame, c.contact_name, c.contact_position, c.contact_phone, c.contact_email,
+        c.brand, c.info, c.product_info, c.remark, c.status, c.del_flag, c.create_by, c.create_time, c.update_by, c.update_time,
         c.area_code,c.source,c.record_type,c.record_num,c.telephone,c.fax,c.company_address,c.dept_id,dt.dept_name deptName,
         c.customer_level,c.code_name,c.industry_division,c.allocation_date,c.assign_number,c.file_number,c.file_paths,c.new_status
         from biz_customer c
@@ -71,11 +72,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectBizCustomerList" parameterType="BizCustomer" resultMap="BizCustomerResult">
         <include refid="selectBizCustomerDictVo"/>
-            <if test="recordDate != null "> and c.record_date = #{recordDate}</if>
+            <if test="recordDate != null and recordDate != ''"> and c.record_date = #{recordDate}</if>
             <if test="companyCode != null  and companyCode != ''"> and c.company_code like concat('%', #{companyCode}, '%')</if>
             <if test="area != null  and area != ''"> and c.area = #{area}</if>
-            <if test="recordCode != null  and recordCode != ''"> and c.record_code = #{recordCode}</if>
-            <if test="ownerUserId != null and ownerUserId != ''"> and c.owner_user_id = #{ownerUserId}</if>
+            <if test="recordCode != null  and recordCode != ''"> and c.record_code like concat('%', #{recordCode}, '%')</if>
+
             <if test="name != null  and name != ''"> and c.name like concat('%', #{name}, '%')</if>
             <if test="projectAme != null  and projectAme != ''"> and c.project_ame like concat('%', #{projectAme}, '%') </if>
             <if test="contactName != null  and contactName != ''"> and c.contact_name like concat('%', #{contactName}, '%')</if>
@@ -84,8 +85,27 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="contactEmail != null  and contactEmail != ''"> and c.contact_email = #{contactEmail}</if>
             <if test="brand != null  and brand != ''"> and c.brand = #{brand}</if>
             <if test="info != null  and info != ''"> and c.info = #{info}</if>
-            <if test="productInfo != null  and productInfo != ''"> and c.product_info = #{productInfo}</if>
+            <if test="productInfo != null  and productInfo != ''"> and c.product_info like concat('%', #{productInfo}, '%')</if>
             <if test="status != null  and status != ''"> and c.status = #{status}</if>
+
+            <if test="customerLevel != null  and customerLevel != ''"> and c.customer_level = #{customerLevel}</if>
+            <if test="codeName != null  and codeName != ''"> and c.code_name like concat('%', #{codeName}, '%')</if>
+            <if test="industryDivision != null  and industryDivision != ''"> and c.industry_division = #{industryDivision}</if>
+            <if test="source != null  and source != ''"> and c.source = #{source}</if>
+            <if test="areaCode != null  and areaCode != ''"> and c.area_code = #{areaCode}</if>
+            <if test="ownerUserId != null  and ownerUserId != ''"> and u.user_name like concat('%', #{ownerUserId}, '%')</if>
+        <if test="deptName != null  and deptName != ''"> and dt.dept_name like concat('%', #{deptName}, '%')</if>
+
+          <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+            AND date_format(c.allocation_date,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+          </if>
+          <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+            AND date_format(c.allocation_date,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+          </if>
+
+            <if test="assignNumber != null  and assignNumber != ''"> and c.assign_number = #{assignNumber}</if>
+            <if test="fileNumber != null  and fileNumber != ''"> and c.file_number like concat('%', #{fileNumber}, '%')</if>
+            <if test="recordType != null  and recordType != ''"> and c.record_type = #{recordType}</if>
         order by c.create_time desc
     </select>
     

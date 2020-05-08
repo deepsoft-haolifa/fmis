@@ -10,11 +10,11 @@
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
         <form class="form-horizontal m" id="form-customer-add">
             <div class="form-group">    
-                <label class="col-sm-3 control-label">备案日期：</label>
+                <label class="col-sm-3 control-label">初次备案日期：</label>
                 <div class="col-sm-8">
                     <div class="input-group date">
                         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input name="recordDate" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                        <input name="recordDate" class="form-control" placeholder="yyyy-MM" type="text">
                     </div>
                 </div>
             </div>
@@ -22,13 +22,15 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">客户所属商务公司代码：</label>
                 <div class="col-sm-8">
-                    <input name="areaCode" class="form-control" type="text" th:value="${areaCode}" readonly>
+                    <select name="areaCode" class="form-control m-b" th:with="type=${@dict.getType('customer_company_code')}">
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                    </select>
                 </div>
             </div>
 
 
             <div class="form-group">
-                <label class="col-sm-3 control-label">客户所属区域：</label>
+                <label class="col-sm-3 control-label">客户区域：</label>
                 <div class="col-sm-8">
                     <select name="area" class="form-control m-b" th:with="type=${@dict.getType('customer_area')}">
                         <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
@@ -120,7 +122,9 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">客户来源：</label>
                 <div class="col-sm-8">
-                    <input name="source" class="form-control" type="text">
+                    <select name="source" class="form-control m-b" th:with="type=${@dict.getType('customer_source')}">
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                    </select>
                 </div>
             </div>
             <div class="form-group">
@@ -189,7 +193,9 @@
             <div class="form-group">    
                 <label class="col-sm-3 control-label">品牌：</label>
                 <div class="col-sm-8">
-                    <input name="brand" class="form-control" type="text">
+                    <select name="brand" class="form-control m-b" th:with="type=${@dict.getType('customer_brand')}">
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                    </select>
                 </div>
             </div>
 
@@ -326,8 +332,9 @@
         }
 
         $("input[name='recordDate']").datetimepicker({
-            format: "yyyy-mm-dd",
-            minView: "month",
+            format: "yyyy-mm",
+            minView: "year",
+            startView: "year",
             autoclose: true
         });
         $("input[name='allocationDate']").datetimepicker({

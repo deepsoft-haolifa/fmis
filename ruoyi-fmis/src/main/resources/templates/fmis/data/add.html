@@ -8,22 +8,89 @@
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
     <form class="form-horizontal m" id="form-data-add">
         <input type="hidden" name="bizId" value="contract"/>
+
+
         <div class="form-group">
-            <label class="col-sm-3 control-label">合同编号：</label>
-            <div class="col-sm-8">
+            <label class="col-sm-1 control-label">合同编号：</label>
+            <div class="col-sm-2">
                 <input name="string1" class="form-control" type="text">
             </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label">客户：</label>
-            <div class="col-sm-8">
+
+            <label class="col-sm-1 control-label">客户：</label>
+            <div class="col-sm-2">
                 <input name="string2" class="form-control" type="hidden">
                 <input name="customerName" id="customerName" class="form-control" type="text" readonly onclick="selectCustomer()" required>
+            </div>
+
+            <label class="col-sm-1 control-label">签订日期：</label>
+            <div class="col-sm-2">
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input name="datetime1" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                </div>
+            </div>
+
+            <label class="col-sm-1 control-label">供方：</label>
+            <div class="col-sm-2">
+                <input name="string3" class="form-control" type="text">
+            </div>
+
+
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-1 control-label">签订地点：</label>
+            <div class="col-sm-2">
+                <input name="string4" class="form-control" type="text">
+            </div>
+            <label class="col-sm-1 control-label">含发票：</label>
+            <div class="col-sm-2">
+                <input name="string5" class="form-control" type="text">
+            </div>
+            <label class="col-sm-1 control-label">发货时间：</label>
+            <div class="col-sm-2">
+                <input name="string6" class="form-control" type="text">
+            </div>
+
+            <label class="col-sm-1 control-label">运输方式：</label>
+            <div class="col-sm-2">
+                <input name="string7" class="form-control" type="text">
             </div>
         </div>
 
         <div class="form-group">
-            <label class="col-sm-3 control-label">选择产品：</label>
+            <label class="col-sm-1 control-label">付款方式：</label>
+            <div class="col-sm-2">
+                <input name="string8" class="form-control" type="text">
+            </div>
+
+            <label class="col-sm-1 control-label">交货地点：</label>
+            <div class="col-sm-2">
+                <input name="string9" class="form-control" type="text">
+            </div>
+            <label class="col-sm-1 control-label">运费承担：</label>
+            <div class="col-sm-2">
+                <input name="string10" class="form-control" type="text">
+            </div>
+            <label class="col-sm-1 control-label">收货人：</label>
+            <div class="col-sm-2">
+                <input name="string11" class="form-control" type="text">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-1 control-label">收货电话：</label>
+            <div class="col-sm-2">
+                <input name="string12" class="form-control" type="text">
+            </div>
+            <label class="col-sm-1 control-label">总价：</label>
+            <div class="col-sm-2">
+                <input name="price1" id="price1" class="form-control" type="text" readonly>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-1 control-label">选择产品：</label>
             <div class="col-sm-6">
                 <input name="productIds" id="productIds" class="form-control" type="hidden" >
                 <input name="productNames" id="productNames" class="form-control" type="text" readonly onclick="selectProduct(0)" required>
@@ -46,81 +113,6 @@
         </div>
         <div class="hr-line-dashed"></div>
 
-        <div class="form-group">
-            <label class="col-sm-3 control-label">签订日期：</label>
-            <div class="col-sm-8">
-                <div class="input-group date">
-                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                    <input name="datetime1" class="form-control" placeholder="yyyy-MM-dd" type="text">
-                </div>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label">供方：</label>
-            <div class="col-sm-8">
-                <input name="string3" class="form-control" type="text">
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label">签订地点：</label>
-            <div class="col-sm-8">
-                <input name="string4" class="form-control" type="text">
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label">含发票：</label>
-            <div class="col-sm-8">
-                <input name="string5" class="form-control" type="text">
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label">发货时间：</label>
-            <div class="col-sm-8">
-                <input name="string6" class="form-control" type="text">
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label">运输方式：</label>
-            <div class="col-sm-8">
-                <input name="string7" class="form-control" type="text">
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label">付款方式：</label>
-            <div class="col-sm-8">
-                <input name="string8" class="form-control" type="text">
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label">交货地点：</label>
-            <div class="col-sm-8">
-                <input name="string9" class="form-control" type="text">
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label">运费承担：</label>
-            <div class="col-sm-8">
-                <input name="string10" class="form-control" type="text">
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label">收货人：</label>
-            <div class="col-sm-8">
-                <input name="string11" class="form-control" type="text">
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label">收货电话：</label>
-            <div class="col-sm-8">
-                <input name="string12" class="form-control" type="text">
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label">总价：</label>
-            <div class="col-sm-8">
-                <input name="price1" id="price1" class="form-control" type="text" readonly>
-            </div>
-        </div>
 
 
     </form>

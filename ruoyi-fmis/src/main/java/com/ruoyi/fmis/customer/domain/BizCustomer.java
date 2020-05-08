@@ -23,6 +23,13 @@ public class BizCustomer extends BaseEntity {
     /** 客户ID */
     private Long customerId;
 
+    @Setter
+    @Getter
+    private String allocationDatestartTime;
+    @Setter
+    @Getter
+    private String allocationDateendTime;
+
     /** 备案日期 */
     @Excel(name = "备案日期")
     private String recordDate;
