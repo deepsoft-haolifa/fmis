@@ -38,7 +38,22 @@
             </div>
 
 
+            <div class="form-group">
+                <label class="col-sm-3 control-label">系数设置：</label>
+                <div class='col-sm-2'>
+                    <input class='form-control' type='text' id="productCoefficientAll" onblur="setCoefficientAll(1)"  placeholder='产品系数' onkeyup="AmountKeyUp(this)"/>
+                </div>
+                <div class='col-sm-2'>
+                    <input class='form-control' type='text' id="actuatorCoefficientAll" onblur="setCoefficientAll(2)"  placeholder='执行器系数' onkeyup="AmountKeyUp(this)"/>
+                </div>
+                <div class='col-sm-2'>
+                    <input class='form-control' type='text' id="productRef1CoefficientAll" onblur="setCoefficientAll(3)"  placeholder='法兰系数' onkeyup="AmountKeyUp(this)"/>
+                </div>
+                <div class='col-sm-2'>
+                    <input class='form-control' type='text' id="productRef2CoefficientAll" onblur="setCoefficientAll(4)" placeholder='螺栓系数' onkeyup="AmountKeyUp(this)"/>
+                </div>
 
+            </div>
             <div class="hr-line-dashed"></div>
             <div class="form-horizontal" id="productDiv">
 
@@ -280,6 +295,51 @@
         function sumPrice (productId) {
             getProductSum(productId);
             totalSumPrice();
+        }
+
+
+        function setCoefficientAll (type) {
+            //type 1=产品 2=执行器 3=法兰 4=螺栓
+            var productIds = $("#productIds").val();
+            var productArray = new Array();
+            var productIdsStrs = productIds.split(",");
+            var productCoefficientAll = $("#productCoefficientAll").val();
+            var actuatorCoefficientAll = $("#actuatorCoefficientAll").val();
+            var productRef1CoefficientAll = $("#productRef1CoefficientAll").val();
+            var productRef2CoefficientAll = $("#productRef2CoefficientAll").val();
+            if (productIdsStrs.length > 0) {
+                if (type == 1 && !isEmpty(productCoefficientAll)) {
+                    for (var i = 0; i < productIdsStrs.length; i++) {
+                        var productId = productIdsStrs[i];
+                        if (!isEmpty(productId)) {
+                            $("#productCoefficient_" + productId).val(productCoefficientAll);
+                        }
+                    }
+                } else if (type == 2 && !isEmpty(actuatorCoefficientAll)) {
+                    for (var i = 0; i < productIdsStrs.length; i++) {
+                        var productId = productIdsStrs[i];
+                        if (!isEmpty(productId)) {
+                            $("#actuatorCoefficient_" + productId).val(actuatorCoefficientAll);
+                        }
+                    }
+                } else if (type == 3 && !isEmpty(productRef1CoefficientAll)) {
+                    for (var i = 0; i < productIdsStrs.length; i++) {
+                        var productId = productIdsStrs[i];
+                        if (!isEmpty(productId)) {
+                            $("#productRef1Coefficient_" + productId).val(productRef1CoefficientAll);
+                        }
+                    }
+                } else if (type == 4 && !isEmpty(productRef2CoefficientAll)) {
+                    for (var i = 0; i < productIdsStrs.length; i++) {
+                        var productId = productIdsStrs[i];
+                        if (!isEmpty(productId)) {
+                            $("#productRef2Coefficient_" + productId).val(productRef2CoefficientAll);
+                        }
+                    }
+                }
+            }
+
+
         }
 
         function getProductSum (productId) {
