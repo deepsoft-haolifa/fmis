@@ -31,7 +31,6 @@ create table biz_process_data (
   normal_flag char(1)         default '0'                comment '审批节点 到哪个节点结束',
   flow_status		varchar(2)         default '0' 	comment '流程状态-2=未上报 0=上报',
   remark         varchar(30)          default ''                  comment '备注',
-
   price1         decimal(10,5)          default 0               comment '价格1',
   price2         decimal(10,5)          default 0               comment '价格2',
   price3         decimal(10,5)          default 0               comment '价格3',
@@ -42,9 +41,6 @@ create table biz_process_data (
   price8         decimal(10,5)          default 0               comment '价格8',
   price9         decimal(10,5)          default 0               comment '价格9',
   price10         decimal(10,5)          default 0               comment '价格10',
-
-
-
   string1         varchar(30)          default ''                  comment '备用1',
   string2         varchar(30)          default ''                  comment '备用2',
   string3         varchar(30)          default ''                  comment '备用3',
@@ -65,13 +61,11 @@ create table biz_process_data (
   string18         varchar(30)          default ''                  comment '备用18',
   string19         varchar(30)          default ''                  comment '备用19',
   string20         varchar(30)          default ''                  comment '备用20',
-
   datetime1 datetime comment '时间1',
   datetime2 datetime comment '时间2',
   datetime3 datetime comment '时间3',
   datetime4 datetime comment '时间4',
   datetime5 datetime comment '时间5',
-
   status            char(1)         default '0'                comment '状态（0正常 1停用）',
   del_flag          char(1)         default '0'                comment '删除标志（0代表存在 2代表删除）',
   create_by         varchar(64)     default ''                 comment '创建者',
@@ -86,12 +80,7 @@ drop table if exists biz_process_child;
 create table biz_process_child (
   child_id           bigint(20)      not null auto_increment    comment 'ID',
   data_id         bigint(20)     default 0                 comment '数据ID',
-
-
   remark         varchar(30)          default ''                  comment '备注',
-
-
-
   price1         decimal(10,5)          default 0               comment '价格1',
   price2         decimal(10,5)          default 0               comment '价格2',
   price3         decimal(10,5)          default 0               comment '价格3',
@@ -102,9 +91,6 @@ create table biz_process_child (
   price8         decimal(10,5)          default 0               comment '价格8',
   price9         decimal(10,5)          default 0               comment '价格9',
   price10         decimal(10,5)          default 0               comment '价格10',
-
-
-
   string1         varchar(30)          default ''                  comment '备用1',
   string2         varchar(30)          default ''                  comment '备用2',
   string3         varchar(30)          default ''                  comment '备用3',
@@ -125,13 +111,11 @@ create table biz_process_child (
   string18         varchar(30)          default ''                  comment '备用18',
   string19         varchar(30)          default ''                  comment '备用19',
   string20         varchar(30)          default ''                  comment '备用20',
-
   datetime1 datetime comment '时间1',
   datetime2 datetime comment '时间2',
   datetime3 datetime comment '时间3',
   datetime4 datetime comment '时间4',
   datetime5 datetime comment '时间5',
-
   status            char(1)         default '0'                comment '状态（0正常 1停用）',
   del_flag          char(1)         default '0'                comment '删除标志（0代表存在 2代表删除）',
   create_by         varchar(64)     default ''                 comment '创建者',
@@ -384,3 +368,15 @@ alter table  biz_process_data modify column string17 varchar(100);
 alter table  biz_process_data modify column string18 varchar(100);
 alter table  biz_process_data modify column string19 varchar(100);
 alter table  biz_process_data modify column string20 varchar(100);
+
+
+-- 采购池
+insert into sys_menu (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('采购池', '2148', '1', '/fmis/procurementpool', 'C', '0', 'fmis:procurementpool:view', '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '业务菜单');
+
+-- 按钮父菜单ID
+SELECT @parentId := LAST_INSERT_ID();
+
+-- 按钮 SQL
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('业务查询', @parentId, '1',  '#',  'F', '0', 'fmis:procurementpool:list',         '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');

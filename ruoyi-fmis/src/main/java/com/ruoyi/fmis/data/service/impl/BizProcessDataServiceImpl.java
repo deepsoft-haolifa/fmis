@@ -3,6 +3,7 @@ package com.ruoyi.fmis.data.service.impl;
 import java.util.List;
 import java.util.Map;
 
+import com.ruoyi.common.annotation.DataScope;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.fmis.common.BizConstants;
 import com.ruoyi.fmis.define.service.IBizProcessDefineService;
@@ -59,6 +60,7 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
     }
 
     @Override
+    @DataScope(deptAlias = "dt", userAlias = "u")
     public List<BizProcessData> selectBizProcessDataListRef(BizProcessData bizProcessData) {
         return bizProcessDataMapper.selectBizProcessDataListRef(bizProcessData);
     }
@@ -130,6 +132,7 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
     @Override
     public int insertBizProcessData(BizProcessData bizProcessData) {
         bizProcessData.setCreateTime(DateUtils.getNowDate());
+        bizProcessData.setCreateBy(ShiroUtils.getUserId().toString());
         return bizProcessDataMapper.insertBizProcessData(bizProcessData);
     }
 

@@ -2,7 +2,6 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
 	<th:block th:include="include :: header('表格行内编辑')" />
-	<th:block th:include="include :: bootstrap-editable-css" />
 </head>
 <body class="gray-bg">
      <div class="container-div">
@@ -13,15 +12,20 @@
 	        <a class="btn btn-primary" onclick="getData()">
 	            <i class="fa fa-search"></i> 获取所有数据
 	        </a>
+			<a class="btn btn-success" onclick="insertRow()">
+				<i class="fa fa-plus"></i> 新增行
+			</a>
         </div>
 		<div class="row">
 			<div class="col-sm-12 select-table table-striped">
-				<table id="bootstrap-table"></table>
+				<table id="bootstrap-table" data-use-row-attr-func="true"
+					   data-reorderable-rows="true"></table>
 			</div>
 		</div>
 	</div>
-	
 	<th:block th:include="include :: footer" />
+	 <th:block th:include="include :: bootstrap-editable-css" />
+	 <th:block th:include="include :: bootstrap-table-reorder-js" />
 	<th:block th:include="include :: bootstrap-table-editable-js" />
 	
     <script th:inline="javascript">
@@ -33,10 +37,16 @@
                 url: prefix + "/list",
 		        showSearch: false,
 		        showRefresh: false,
-		        showToggle: false,
+                pagination: false,
 		        showColumns: false,
-		        showPageGo: true,
+                showToggle: false,
+                useRowAttrFunc: true,
+                sortName: "sort",
+                sortOrder: "desc",
+                uniqueId: "userId",
 		        onEditableSave: onEditableSave,
+                onClickCell: onClickCell,
+                onReorderRow: onReorderRow,
                 columns: [{
 		            checkbox: true
 		        },
@@ -109,15 +119,39 @@
         });
         
         function onEditableSave (field, row, oldValue, $el) {
-        	alert("字段名：" + field + "，当前值：" + row[field]  + "，旧值：" + oldValue);
+        	//alert("字段名：" + field + "，当前值：" + row[field]  + "，旧值：" + oldValue);
         }
-        
+        function onReorderRow(data) {
+            for (var i = 0; i < data.length; i++) {
+                //$("#columns_sort_" + data[i].columnId).val(i+1);
+            }
+        }
         /* 查询表格所有数据值 */
         function getData(){
         	var data = $.btTable.bootstrapTable('getData');
             alert(JSON.stringify(data))
         }
-        
+        function onClickCell(field, value, row, $element){
+            var index = $element.parent().data('index');
+            console.log("row.index=" + index + "--" + row.userId);
+            //alert("单击格name：" + field + " value：" + value);
+        }
+        /* 新增表格行 */
+        function insertRow(){
+
+            var randomId = 100 + ~~(Math.random() * 100);
+            var rowData = {
+                userId: randomId,
+                userCode: 2000000 + randomId,
+                userName: '测试' + randomId,
+                userPhone: '1588888888',
+                userEmail: 'ry1@qq.com',
+                userBalance: 10 + randomId,
+                status: 0
+            };
+            $.btTable.bootstrapTable('append', rowData);
+            console.log(randomId + "=randomId");
+        }
         /* 查询表格选择行数据值 */
         function getSelections(){
         	var data = $.btTable.bootstrapTable('getSelections');

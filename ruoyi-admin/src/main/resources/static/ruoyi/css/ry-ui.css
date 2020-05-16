@@ -994,3 +994,10 @@ label {
 	border-radius: 6px;
 	background-color: #999;
 }
+
+.col-sm-1-fmis{
+	position: relative;
+	min-height: 1px;
+	padding-left: 5px;
+	padding-right: 5px;
+}

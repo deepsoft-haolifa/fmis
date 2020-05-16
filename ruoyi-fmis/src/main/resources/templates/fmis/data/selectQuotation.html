@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('报价单列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <input type="hidden" name="string6" id="string6" value="3"/>
+                            <li>
+                                <p>报价单号：</p>
+                                <input type="text" name="string1" id="string1"/>
+                            </li>
+
+                            <li>
+                                <p>客户名称：</p>
+                                <input type="text" name="customerName" id="customerName"/>
+                            </li>
+
+                            <li >
+                                <p>申请人：</p>
+                                <input type="text" name="createBy" id="createBy"/>
+                            </li>
+
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+
+
+
+         <div style="display: none" id="prodictDiv">
+
+             <div class="ibox float-e-margins" id="productDiv_@paramterProductId@">
+                 <h5>@paramterQuotationNum@</h5>
+                 <div class='form-group'>
+                     <label class='control-label col-md-7' style="text-align: left;">@paramterProductName@,@paramterProductModel@,@paramterProductSpecifications@,@paramterProductNominalPressure@,@paramterProductConnectionType@,
+                         @paramterProductStructuralStyle@,@paramterProductValvebodyMaterial@,@paramterProductSealingMaterial@,@paramterProductValveElement@,@paramterProductDriveForm@
+                     </label>
+                     <div class='col-sm-1' style="text-align: left;">
+                         <input name='productId' id="productId" class='form-control' type='hidden' >
+                         <input class='form-control'  type='text'  onblur="sumPrice('@paramterProductId@')" value="@valueProductNum@" id='productNum_@paramterProductId@' placeholder='数量' onkeyup="AmountKeyUp(this)"/>
+                     </div>
+                     <div class='col-sm-1' style="text-align: left;">
+                         <input class='form-control' type='text'  onblur="sumPrice('@paramterProductId@')" value="@valueProductPrice@" readonly id='productPrice_@paramterProductId@' placeholder='价格' onkeyup="AmountKeyUp(this)"/>
+                     </div>
+                     <div class='col-sm-1' style="text-align: left;">
+                         <input class='form-control' type='text'  onblur="sumPrice('@paramterProductId@')" value="@valueProductCoefficient@" readonly id='productCoefficient_@paramterProductId@' placeholder='系数' onkeyup="AmountKeyUp(this)"/>
+                     </div>
+
+
+
+                 </div>
+                 <div class='form-group'>
+                     <div id="divActuator">
+                         <label class='control-label col-sm-1' style="text-align: left;">@paramterActuatorName@：</label>
+                         <div class='col-sm-1' style="text-align: left;">
+                             <input type='hidden'  value="@valueActuatorId@" id='actuatorId_@paramterProductId@'/>
+                             <input class='form-control' type='text'  onblur="sumPrice('@paramterProductId@')" value="@valueActuatorNum@" id='actuatorNum_@paramterProductId@' placeholder='数量' onkeyup="AmountKeyUp(this)"/>
+                         </div>
+                         <div class='col-sm-1' style="text-align: left;">
+                             <input class='form-control' type='text'  onblur="sumPrice('@paramterProductId@')" value="@valueActuatorPrice@" readonly id='actuatorPrice_@paramterProductId@' placeholder='价格' onkeyup="AmountKeyUp(this)"/>
+                         </div>
+                         <div class='col-sm-1' style="text-align: left;">
+                             <input class='form-control' type='text'  onblur="sumPrice('@paramterProductId@')" value="@valueActuatorCoefficient@" readonly id='actuatorCoefficient_@paramterProductId@' placeholder='系数' onkeyup="AmountKeyUp(this)"/>
+                         </div>
+                     </div>
+                     <div id="divRef1">
+                         <label class='control-label col-sm-1' style="text-align: left;">@paramterRef1Name@：</label>
+                         <div class='col-sm-1' style="text-align: left;">
+                             <input type='hidden'  value="@valueRef1Id@" id='ref1Id_@paramterProductId@'/>
+                             <input class='form-control' type='text'  onblur="sumPrice('@paramterProductId@')" value="@valueRef1Num@" id='ref1Num_@paramterProductId@' placeholder='数量' onkeyup="AmountKeyUp(this)"/>
+                         </div>
+                         <div class='col-sm-1' style="text-align: left;">
+                             <input class='form-control' type='text'  onblur="sumPrice('@paramterProductId@')" value="@valueRef1Price@" readonly id='ref1Price_@paramterProductId@' placeholder='价格' onkeyup="AmountKeyUp(this)"/>
+                         </div>
+                         <div class='col-sm-1' style="text-align: left;">
+                             <input class='form-control' type='text'  onblur="sumPrice('@paramterProductId@')" value="@valueRef1Coefficient@" readonly id='ref1Coefficient_@paramterProductId@' placeholder='系数' onkeyup="AmountKeyUp(this)"/>
+                         </div>
+                     </div>
+                     <div id="divRef2">
+                         <label class='control-label col-sm-1' style="text-align: left;">@paramterRef2Name@：</label>
+                         <div class='col-sm-1' style="text-align: left;">
+                             <input type='hidden'  value="@valueRef2Id@" id='ref2Id_@paramterProductId@'/>
+                             <input class='form-control' type='text'  onblur="sumPrice('@paramterProductId@')" value="@valueRef2Num@" id='ref2Num_@paramterProductId@' placeholder='数量' onkeyup="AmountKeyUp(this)"/>
+                         </div>
+                         <div class='col-sm-1' style="text-align: left;">
+                             <input class='form-control' type='text'  onblur="sumPrice('@paramterProductId@')" value="@valueRef2Price@" readonly id='ref2Price_@paramterProductId@' placeholder='价格' onkeyup="AmountKeyUp(this)"/>
+                         </div>
+                         <div class='col-sm-1' style="text-align: left;">
+                             <input class='form-control' type='text'  onblur="sumPrice('@paramterProductId@')" value="@valueRef2Coefficient@" readonly id='ref2Coefficient_@paramterProductId@' placeholder='系数' onkeyup="AmountKeyUp(this)"/>
+                         </div>
+                     </div>
+                     <div class='col-sm-11' style="text-align: right;">
+                         <a class="btn btn-danger btn-sm" onclick="removeProject('@paramterProductId@')" >
+                             <i class="fa fa-remove"></i> 删除
+                         </a>
+                     </div>
+                 </div>
+             </div>
+             <div class="hr-line-dashed"></div>
+         </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('fmis:quotation:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('fmis:quotation:remove')}]];
+        var prefix = ctx + "fmis/quotation";
+        var paymentMethodData = [[${@dict.getType('payment_method')}]];
+        var string2Datas = [[${@dict.getType('product_level')}]];
+        var roleType = /*[[${roleType}]]*/;
+
+
+
+        $(function() {
+            var options = {
+                url: prefix + "/listProduct",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "报价单",
+                uniqueId: "quotationProductId",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'quotationId',
+                    title : 'ID',
+                    visible: false
+                },
+                {
+                    field : 'quotationProductId',
+                    title : 'ID1',
+                    visible: false
+                },
+                {
+                    field : 'string1',
+                    title : '报价单号'
+                },
+                {
+                    field : 'customerName',
+                    title : '客户名称'
+                },
+                {
+                    field : 'paymentMethod', 
+                    title : '付款方式',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(paymentMethodData, value);
+                    }
+                },
+                {
+                    field : 'freight', 
+                    title : '运费价格'
+                },
+                {
+                    field : 'leadTime', 
+                    title : '供货周期'
+                },
+                {
+                    field : 'reportProject', 
+                    title : '报备项目 默认非项目'
+                },
+                {
+                    field : 'createBy',
+                    title : '申请人'
+                },
+                {
+                    field : 'string9',
+                    title : '总金额'
+                },
+                {
+                    field : 'remark', 
+                    title : '备注',
+                    visible: false
+                },
+                    {
+                        field : 'productId',
+                        title : '产品ID',
+                        visible: false
+                    },
+                    {
+                        field : 'productName',
+                        title : '产品名称',
+                        visible: true
+                    },
+                    //产品 start
+                    {
+                        field : 'series',
+                        title : '类别'
+                    },
+                    {
+                        field : 'string1',
+                        title : '系列'
+                    },
+                    {
+                        field : 'model',
+                        title : '产品型号'
+                    },
+                    {
+                        field : 'specifications',
+                        title : '规格'
+                    },
+                    {
+                        field : 'nominalPressure',
+                        title : '公称压力'
+                    },
+                    {
+                        field : 'connectionType',
+                        title : '连接方式'
+                    },
+                    {
+                        field : 'structuralStyle',
+                        title : '结构形式'
+                    },
+                    {
+                        field : 'valvebodyMaterial',
+                        title : '阀体材质'
+                    },
+                    {
+                        field : 'sealingMaterial',
+                        title : '密封材质'
+                    },
+                    {
+                        field : 'valveElement',
+                        title : '阀芯材质'
+                    },
+                    {
+                        field : 'driveForm',
+                        title : '驱动形式'
+                    },
+                    {
+                        field : 'string2',
+                        title : '产品等级',
+                        formatter: function(value, row, index) {
+                            return $.table.selectDictLabel(string2Datas, value);
+                        }
+                    },
+                    //产品 end
+                    {
+                        field : 'productPrice',
+                        title : '产品价格',
+                        visible: true
+                    },
+                    {
+                        field : 'productNum',
+                        title : '产品数量',
+                        visible: true
+                    },
+                    {
+                        field : 'productCoefficient',
+                        title : '产品系数',
+                        visible: true
+                    },
+                    {
+                        field : 'ref1Name',
+                        title : '法兰名称',
+                        visible: true
+                    },
+                    {
+                        field : 'productRef1Id',
+                        title : '法兰ID',
+                        visible: false
+                    },
+                    {
+                        field : 'ref1Price',
+                        title : '法兰价格',
+                        visible: true
+                    },
+                    {
+                        field : 'productRef1Num',
+                        title : '法兰数量',
+                        visible: true
+                    },
+                    {
+                        field : 'productRef1Coefficient',
+                        title : '法兰系数',
+                        visible: true
+                    },
+                    {
+                        field : 'ref2Name',
+                        title : '螺栓名称',
+                        visible: true
+                    },
+                    {
+                        field : 'productRef2Id',
+                        title : '螺栓ID',
+                        visible: false
+                    },
+                    {
+                        field : 'ref2Price',
+                        title : '螺栓价格',
+                        visible: true
+                    },
+                    {
+                        field : 'productRe2Num',
+                        title : '螺栓数量',
+                        visible: true
+                    },
+                    {
+                        field : 'productRef2Coefficient',
+                        title : '螺栓系数',
+                        visible: true
+                    },
+                    {
+                        field : 'actuatorName',
+                        title : '执行器名称',
+                        visible: true
+                    },
+                    {
+                        field : 'actuatorId',
+                        title : '执行器ID',
+                        visible: false
+                    },
+                    {
+                        field : 'actuatorPrice',
+                        title : '执行器价格',
+                        visible: true
+                    },
+                    {
+                        field : 'actuatorNum',
+                        title : '执行器数量',
+                        visible: true
+                    },
+                    {
+                        field : 'actuatorCoefficient',
+                        title : '执行器系数',
+                        visible: true
+                    },
+                {
+                    field : 'createTime',
+                    title : '创建时间'
+                },{
+                    field : 'updateTime',
+                    title : '修改时间'
+                }]
+            };
+            $.table.init(options);
+        });
+
+        $(document).ready(function(){
+            if (roleType != "1") {
+                $("#toolbar").html("");
+            }
+        });
+
+        function submitHandler() {
+            var rows = $.table.selectFirstColumns();
+            if (rows.length == 0) {
+                $.modal.alertWarning("请选择一条记录");
+                return;
+            }
+            var productOperationType = parent.$('#form-data-add input[name=productOperationType]').val();
+            if ($.common.isEmpty(productOperationType)) {
+                productOperationType = parent.$('#form-data-edit input[name=productOperationType]').val();
+            }
+            var rowsSel = $('#bootstrap-table').bootstrapTable('getSelections');
+
+            var ids = $.table.selectColumns("quotationProductId");
+            var names = $.table.selectColumns("string1");
+
+            console.log("ids=" + ids.toString());
+
+            var htmlStr = "";
+            if (productOperationType == "1") {
+            } else {
+                parent.$('#productDiv').html(htmlStr);
+            }
+            var productIdsStr = "";
+            var productNamesStr = "";
+            var oldProductIds = parent.$('#form-data-add input[name=quotationIds]').val();
+            var oldProductNames = parent.$('#form-data-add input[name=quotationNames]').val();
+            if ($.common.isEmpty(oldProductIds)) {
+                oldProductIds = parent.$('#form-data-edit input[name=quotationIds]').val();
+                oldProductNames = parent.$('#form-data-edit input[name=quotationNames]').val();
+            }
+            if ($.common.isEmpty(oldProductIds)) {
+                oldProductIds = "";
+                oldProductNames = "";
+            }
+            for(var i = 0; i < ids.length; i++) {
+
+                var productId = ids[i];
+                var productName = rowsSel[i].string1;
+
+                var productIdsS = oldProductIds.split(",");
+                var productNamesS = oldProductNames.split(",");
+                var isExist = false;
+                if (productOperationType == "1") {
+                    for (var j = 0; j < productIdsS.length; j++) {
+                        if (productId == productIdsS[j]) {
+                            isExist = true;
+                            continue;
+                        }
+                    }
+                }
+                if (isExist) {
+                    continue;
+                }
+                var ref1Id = rowsSel[i].productRef1Id;
+                if ($.common.isEmpty(ref1Id) || ref1Id == 0) {
+                    $("#divRef1").attr("style","display:none;");
+                }
+                var ref2Id = rowsSel[i].productRef2Id;
+                if ($.common.isEmpty(ref2Id)  || ref2Id == 0) {
+                    $("#divRef2").attr("style","display:none;");
+                }
+                var actuatorId = rowsSel[i].actuatorId;
+                if ($.common.isEmpty(actuatorId) || actuatorId == 0) {
+                    $("#divActuator").attr("style","display:none;");
+                }
+                var prodictDivHtml = $("#prodictDiv").html();
+                console.log("quotationId=" + productId + " quotationName=" + productName);
+                prodictDivHtml = prodictDivHtml.replace(/@paramterProductId@/g,productId);
+                console.log("string1=" + $.table.selectColumns("string1")[i]);
+                prodictDivHtml = prodictDivHtml.replace(/@paramterQuotationNum@/g,NullToZero(rowsSel[i].string1,0));
+                prodictDivHtml = prodictDivHtml.replace(/@paramterProductName@/g,NullToZero(rowsSel[i].productName,"1"));
+                prodictDivHtml = prodictDivHtml.replace(/@paramterRef1Name@/g,NullToZero(rowsSel[i].ref1Name,"1"));
+                prodictDivHtml = prodictDivHtml.replace(/@paramterRef2Name@/g,NullToZero(rowsSel[i].ref2Name,"1"));
+                prodictDivHtml = prodictDivHtml.replace(/@paramterActuatorName@/g,NullToZero(rowsSel[i].actuatorName,"1"));
+
+                prodictDivHtml = prodictDivHtml.replace(/@valueProductNum@/g,NullToZero(rowsSel[i].productNum,0));
+                prodictDivHtml = prodictDivHtml.replace(/@valueProductPrice@/g,NullToZero(rowsSel[i].productPrice,0));
+                prodictDivHtml = prodictDivHtml.replace(/@valueProductCoefficient@/g,NullToZero(rowsSel[i].productCoefficient,0));
+
+                prodictDivHtml = prodictDivHtml.replace(/@valueRef1Num@/g,NullToZero(rowsSel[i].productRef1Num,0));
+                prodictDivHtml = prodictDivHtml.replace(/@valueRef1Price@/g,NullToZero(rowsSel[i].ref1Price,0));
+                prodictDivHtml = prodictDivHtml.replace(/@valueRef1Coefficient@/g,NullToZero(rowsSel[i].productRef1Coefficient,0));
+                prodictDivHtml = prodictDivHtml.replace(/@valueRef1Id@/g,NullToZero(rowsSel[i].productRef1Id,0));
+
+                prodictDivHtml = prodictDivHtml.replace(/@valueRef2Num@/g,NullToZero(rowsSel[i].productRef2Num,0));
+                prodictDivHtml = prodictDivHtml.replace(/@valueRef2Price@/g,NullToZero(rowsSel[i].ref2Price,0));
+                prodictDivHtml = prodictDivHtml.replace(/@valueRef2Coefficient@/g,NullToZero(rowsSel[i].productRef2Coefficient,0));
+                prodictDivHtml = prodictDivHtml.replace(/@valueRef2Id@/g,NullToZero(rowsSel[i].productRef2Id,0));
+
+                prodictDivHtml = prodictDivHtml.replace(/@valueActuatorNum@/g,NullToZero(rowsSel[i].actuatorNum,0));
+                prodictDivHtml = prodictDivHtml.replace(/@valueActuatorPrice@/g,NullToZero(rowsSel[i].actuatorPrice,0));
+                prodictDivHtml = prodictDivHtml.replace(/@valueActuatorCoefficient@/g,NullToZero(rowsSel[i].actuatorCoefficient,0));
+                prodictDivHtml = prodictDivHtml.replace(/@valueActuatorId@/g,NullToZero(rowsSel[i].actuatorId,0));
+
+                prodictDivHtml = prodictDivHtml.replace(/@paramterProductModel@/g,NullToZero(rowsSel[i].model,"1"));
+                prodictDivHtml = prodictDivHtml.replace(/@paramterProductSpecifications@/g,NullToZero(rowsSel[i].specifications,"1"));
+                prodictDivHtml = prodictDivHtml.replace(/@paramterProductNominalPressure@/g,NullToZero(rowsSel[i].nominalPressure,"1"));
+                prodictDivHtml = prodictDivHtml.replace(/@paramterProductConnectionType@/g,NullToZero(rowsSel[i].connectionType,"1"));
+                prodictDivHtml = prodictDivHtml.replace(/@paramterProductStructuralStyle@/g,NullToZero(rowsSel[i].structuralStyle,"1"));
+                prodictDivHtml = prodictDivHtml.replace(/@paramterProductValvebodyMaterial@/g,NullToZero(rowsSel[i].valvebodyMaterial,"1"));
+                prodictDivHtml = prodictDivHtml.replace(/@paramterProductSealingMaterial@/g,NullToZero(rowsSel[i].sealingMaterial,"1"));
+                prodictDivHtml = prodictDivHtml.replace(/@paramterProductValveElement@/g,NullToZero(rowsSel[i].valveElement,"1"));
+                prodictDivHtml = prodictDivHtml.replace(/@paramterProductDriveForm@/g,NullToZero(rowsSel[i].driveForm,"1"));
+
+
+
+
+
+                htmlStr += prodictDivHtml;
+                productIdsStr += productId + ",";
+                productNamesStr += productName + ",";
+            }
+            productNamesStr = productNamesStr.substr(0,productNamesStr.length - 1);
+
+            if (productOperationType == "0") {
+                parent.$('#form-data-add input[name=quotationIds]').val(productIdsStr);
+                parent.$('#form-data-add input[name=quotationNames]').val(productNamesStr);
+
+                parent.$('#form-data-edit input[name=quotationIds]').val(productIdsStr);
+                parent.$('#form-data-edit input[name=quotationNames]').val(productNamesStr);
+            } else {
+                //追加
+                if ($.common.isEmpty(oldProductIds)) {
+                    oldProductIds = "";
+                    oldProductNames = "";
+                } else {
+                    if (!$.common.endWith(oldProductIds,",")) {
+                        oldProductIds += ",";
+                    }
+                    if (!$.common.endWith(oldProductNames,",")) {
+                        oldProductNames += ",";
+                    }
+                    var newProductIds = oldProductIds + productIdsStr;
+                    var newProductNames = oldProductNames + productNamesStr;
+                }
+                parent.$('#form-data-add input[name=quotationIds]').val(newProductIds);
+                parent.$('#form-data-add input[name=quotationNames]').val(newProductNames);
+                parent.$('#form-data-edit input[name=quotationIds]').val(newProductIds);
+                parent.$('#form-data-edit input[name=quotationNames]').val(newProductNames);
+            }
+            parent.$('#productDiv').append(htmlStr);
+            $.modal.close();
+        }
+
+        function NullToZero (v,t) {
+            if ($.common.isEmpty(v)) {
+                if (t == 0 || t == "0") {
+                    return 0;
+                } else {
+                    return "";
+                }
+            } else {
+                return v;
+            }
+        }
+
+    </script>
+</body>
+</html>

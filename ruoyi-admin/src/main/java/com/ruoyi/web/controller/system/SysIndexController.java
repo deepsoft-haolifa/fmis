@@ -41,6 +41,7 @@ public class SysIndexController extends BaseController
         mmap.put("copyrightYear", Global.getCopyrightYear());
         mmap.put("demoEnabled", Global.isDemoEnabled());
         mmap.put("version", version);
+        mmap.put("fileUrl", Global.getFileUrl());
         return "index";
     }
 
@@ -49,6 +50,7 @@ public class SysIndexController extends BaseController
     public String main(ModelMap mmap)
     {
         mmap.put("version", Global.getVersion());
+        mmap.put("fileUrl", Global.getFileUrl());
 //        return "main";
         return "main_v2";
     }

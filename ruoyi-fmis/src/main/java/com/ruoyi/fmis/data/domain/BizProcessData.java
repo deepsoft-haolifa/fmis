@@ -25,6 +25,13 @@ public class BizProcessData extends BaseEntity {
     private Long dataId;
 
 
+    /**
+     * 角色类型
+     */
+    @Getter
+    @Setter
+    private String roleType;
+
     @Getter
     @Setter
     private BizCustomer bizCustomer;
@@ -79,7 +86,7 @@ public class BizProcessData extends BaseEntity {
     @Excel(name = "审批节点 到哪个节点结束")
     private String normalFlag;
 
-    /** 流程状态-2=未上报 0=上报 */
+    /** 流程状态-9=未上报 0=上报 */
     @Excel(name = "流程状态-2=未上报 0=上报")
     private String flowStatus;
 

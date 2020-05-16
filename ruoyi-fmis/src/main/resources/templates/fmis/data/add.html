@@ -3,16 +3,18 @@
 <head>
     <th:block th:include="include :: header('新增合同')" />
     <th:block th:include="include :: datetimepicker-css" />
+    <style>
+
+    </style>
 </head>
 <body class="white-bg">
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
     <form class="form-horizontal m" id="form-data-add">
         <input type="hidden" name="bizId" value="contract"/>
 
-
         <div class="form-group">
             <label class="col-sm-1 control-label">合同编号：</label>
-            <div class="col-sm-2">
+            <div class="col-sm-2" >
                 <input name="string1" class="form-control" type="text">
             </div>
 
@@ -34,7 +36,6 @@
             <div class="col-sm-2">
                 <input name="string3" class="form-control" type="text">
             </div>
-
 
         </div>
 
@@ -59,9 +60,10 @@
         </div>
 
         <div class="form-group">
-            <label class="col-sm-1 control-label">付款方式：</label>
+
+            <label class="col-sm-1 control-label">收货电话：</label>
             <div class="col-sm-2">
-                <input name="string8" class="form-control" type="text">
+                <input name="string12" class="form-control" type="text">
             </div>
 
             <label class="col-sm-1 control-label">交货地点：</label>
@@ -79,25 +81,59 @@
         </div>
 
         <div class="form-group">
-            <label class="col-sm-1 control-label">收货电话：</label>
+
+            <label class="col-sm-1 control-label">付款方式：</label>
             <div class="col-sm-2">
-                <input name="string12" class="form-control" type="text">
+                <select name="string18" id="string18" class="form-control m-b" th:with="type=${@dict.getType('payment_type')}">
+                    <option value="0">请选择</option>
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                </select>
+            </div>
+
+            <div id="divString8" style="display: none">
+                <label class="col-sm-1 control-label">预付：</label>
+                <div class="col-sm-2">
+                    <select name="string8" id="string8" class="form-control m-b" th:with="type=${@dict.getType('payment_method')}">
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                    </select>
+                </div>
+            </div>
+            <div id="divString15" style="display: none">
+                <label class="col-sm-1 control-label">账期：</label>
+                <div class="col-sm-2">
+                    <select name="string15" id="string15" class="form-control m-b" th:with="type=${@dict.getType('payment_days')}">
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                    </select>
+                </div>
+            </div>
+            <div id="divString16" style="display: none">
+                <label class="col-sm-1 control-label">协议付款：</label>
+                <div class="col-sm-2">
+                    <select name="string16" id="string16" class="form-control m-b" th:with="type=${@dict.getType('payment_agreement')}">
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                    </select>
+                </div>
+            </div>
+
+            <label class="col-sm-1 control-label">特殊费用：</label>
+            <div class="col-sm-1">
+                <input name="string14" onkeyup="AmountKeyUp(this)" class="form-control" type="text">
             </div>
             <label class="col-sm-1 control-label">总价：</label>
-            <div class="col-sm-2">
+            <div class="col-sm-1">
                 <input name="price1" id="price1" class="form-control" type="text" readonly>
             </div>
         </div>
 
         <div class="form-group">
-            <label class="col-sm-1 control-label">选择产品：</label>
+            <label class="col-sm-1 control-label">报价产品：</label>
             <div class="col-sm-6">
-                <input name="productIds" id="productIds" class="form-control" type="hidden" >
-                <input name="productNames" id="productNames" class="form-control" type="text" readonly onclick="selectProduct(0)" required>
+                <input name="quotationIds" id="quotationIds" class="form-control" type="hidden" >
+                <input name="quotationNames" id="quotationNames" class="form-control" type="text" readonly onclick="selectQuotation(0)" required>
             </div>
 
             <div class="col-sm-3">
-                <a class="btn btn-success btn-sm" onclick="selectProduct(1)" >
+                <a class="btn btn-success btn-sm" onclick="selectQuotation(1)" >
                     <i class="fa fa"></i> 追加
                     <input type="hidden" id="productOperationType" name="productOperationType" value="0">
                 </a>
@@ -125,6 +161,21 @@
         focusCleanup: true
     });
 
+    $("#string18").change(function (){
+        var payType = $("#string18").val();
+        $("#divString8").css({'display': 'none'});
+        $("#divString15").css({'display': 'none'});
+        $("#divString16").css({'display': 'none'});
+        if (payType == 1 || payType == "1") {
+            $("#divString8").css({'display': 'block'});
+        } else if (payType == 2 || payType == "2") {
+            $("#divString15").css({'display': 'block'});
+        } else if (payType == 3 || payType == "3") {
+            $("#divString16").css({'display': 'block'});
+        }
+    });
+
+
     function submitHandler() {
         var vali = $.validate.form();
         console.log("vali=" + vali);
@@ -132,15 +183,37 @@
             var dataObj = $('#form-data-add').serializeArray();
             //计算是否正常
             //特殊费用
-            var productIds = $("#productIds").val();
+            var productIds = $("#quotationIds").val();
             var productArray = new Array();
             var productIdsStrs = productIds.split(",");
             for (var i = 0; i < productIdsStrs.length; i++) {
                 var productObj = new Object();
                 var productId = productIdsStrs[i];
-                productObj["string1"] = productId;
-                productObj["price1"] = $("#productNum_" + productId).val();
-                productObj["remark"] = $("#productRemark_" + productId).val();
+                productObj["string1"] = productId.split("-")[0];
+                productObj["string2"] = productId.split("-")[1];
+
+                productObj["string3"] = $("#productNum_" + productId).val();
+                productObj["price1"] = $("#productPrice_" + productId).val();
+                productObj["string4"] = $("#productCoefficient_" + productId).val();
+
+
+                //法兰
+                productObj["string5"] = $("#ref1Id_" + productId).val();
+                productObj["string6"] = $("#ref1Num_" + productId).val();
+                productObj["price2"] = $("#ref1Price_" + productId).val();
+                productObj["string7"] = $("#ref1Coefficient_" + productId).val();
+                //螺栓
+                productObj["string8"] = $("#ref2Id_" + productId).val();
+                productObj["string9"] = $("#ref2Num_" + productId).val();
+                productObj["price3"] = $("#ref2Price_" + productId).val();
+                productObj["string10"] = $("#ref2Coefficient_" + productId).val();
+                //执行器
+                productObj["string11"] = $("#actuatorId_" + productId).val();
+                productObj["string12"] = $("#actuatorNum_" + productId).val();
+                productObj["price4"] = $("#actuatorPrice_" + productId).val();
+                productObj["string13"] = $("#actuatorCoefficient_" + productId).val();
+
+                //productObj["remark"] = $("#productRemark_" + productId).val();
                 productArray.push(productObj);
             }
             dataObj.push({"name": "productParmters", "value": JSON.stringify(productArray)});
@@ -157,6 +230,19 @@
         $.modal.open("关联产品", url,widthNum, heigthNum);
     }
 
+    function selectQuotation(type) {
+        var url = prefix + "/selectQuotation";
+        $("#productOperationType").val(type);
+        var widthNum = this.innerWidth - 50;
+        var heigthNum = this.innerHeight - 50;
+
+        $.modal.open("选择报价单", url,widthNum, heigthNum,function (index, layero){
+            var iframeWin = layero.find('iframe')[0];
+            iframeWin.contentWindow.submitHandler(index, layero);
+            totalSumPrice();
+        });
+    }
+
     function selectCustomer() {
         var widthNum = this.innerWidth - 50;
         var heigthNum = this.innerHeight - 50;
@@ -171,11 +257,12 @@
     });
 
     function removeProject (productId) {
-
-        $.modal.confirm("确定要删除该产品吗？", function() {
+        $.modal.confirm("确定要删除该数据吗？", function() {
+            console.log("removeId=" + productId);
             $("#productDiv_" + productId).remove();
-            var productIds = $("#productIds").val();
-            var productNames = $("#productNames").val();
+
+            var productIds = $("#quotationIds").val();
+            var productNames = $("#quotationNames").val();
             var productIdsS = productIds.split(",");
             var productNamesS = productNames.split(",");
             for (var i = 0; i < productIdsS.length; i++) {
@@ -187,8 +274,8 @@
                     sumPrice(productId);
                 }
             }
-            $("#productIds").val(productIdsS.toString());
-            $("#productNames").val(productNamesS.toString());
+            $("#quotationIds").val(productIdsS.toString());
+            $("#quotationNames").val(productNamesS.toString());
         });
     }
     function isEmpty(v) {
@@ -207,18 +294,52 @@
         var productNum = $("#productNum_" + productId).val();
         productNum = isEmpty(productNum) == true ? 0 : parseFloat(productNum);
 
+        var productCoefficient = $("#productCoefficient_" + productId).val();
+        productCoefficient = isEmpty(productCoefficient) == true ? 0 : parseFloat(productCoefficient);
+
         var productPrice = $("#productPrice_" + productId).val();
         productPrice = isEmpty(productPrice) == true ? 0 : parseFloat(productPrice);
 
+        //法兰
+        var productRef1Num = $("#ref1Num_" + productId).val();
+        productRef1Num = isEmpty(productRef1Num) == true ? 0 : parseFloat(productRef1Num);
+        var productRef1Coefficient = $("#ref1Coefficient_" + productId).val();
+        productRef1Coefficient = isEmpty(productRef1Coefficient) == true ? 0 : parseFloat(productRef1Coefficient);
+        var productRef1Price = $("#ref1Price_" + productId).val();
+        productRef1Price = isEmpty(productRef1Price) == true ? 0 : parseFloat(productRef1Price);
+        //螺栓
+        var productRef2Num = $("#ref2Num_" + productId).val();
+        productRef2Num = isEmpty(productRef2Num) == true ? 0 : productRef2Num;
+        var productRef2Coefficient = $("#ref2Coefficient_" + productId).val();
+        productRef2Coefficient = isEmpty(productRef2Coefficient) == true ? 0 : parseFloat(productRef2Coefficient);
+        var productRef2Price = $("#ref2Price_" + productId).val();
+        productRef2Price = isEmpty(productRef2Price) == true ? 0 : parseFloat(productRef2Price);
+
+
+        //执行器
+        var actuatorNum = $("#actuatorNum_" + productId).val();
+        actuatorNum = isEmpty(actuatorNum) == true ? 0 : actuatorNum;
+        var actuatorCoefficient = $("#actuatorCoefficient_" + productId).val();
+        actuatorCoefficient = isEmpty(actuatorCoefficient) == true ? 0 : parseFloat(actuatorCoefficient);
+        var actuatorPrice = $("#actuatorPrice_" + productId).val();
+        actuatorPrice = isEmpty(actuatorPrice) == true ? 0 : parseFloat(actuatorPrice);
+
+        //合计单价 unitPrice
+        $("#unitPrice_" + productId).val(parseFloat(parseFloat(productPrice * productCoefficient) + parseFloat(actuatorPrice * actuatorCoefficient)).toFixed(4));
         //合计总额 totalSum
-        var productSum = parseFloat(productNum * productPrice).toFixed(4);
-        var totalSum = parseFloat(parseFloat(productSum)).toFixed(4);
-        $("#totalSum_" + productId).val(totalSum);
+        var productSum = parseFloat(productNum * productPrice * productCoefficient).toFixed(4);
+        var productRef1Sum = parseFloat(productRef1Num * productRef1Price * productRef1Coefficient).toFixed(4);
+        var productRef2Sum = parseFloat(productRef2Num * productRef2Price * productRef2Coefficient).toFixed(4);
+        var actuatorSum = parseFloat(actuatorNum * actuatorCoefficient * actuatorPrice).toFixed(4);
+        var totalSum = parseFloat(parseFloat(productSum) + parseFloat(productRef1Sum) + parseFloat(productRef2Sum) + parseFloat(actuatorSum)).toFixed(4);
+        console.log("totalSum=" + totalSum);
+        //$("#totalSum_" + productId).val(totalSum);
         return totalSum + "#" + productNum;
     }
 
     function FloatAdd(arg1,arg2){
         var r1,r2,m;
+        console.log("arg1=" + arg1 + ",arg2=" + arg2);
         try{r1=arg1.toString().split(".")[1].length}catch(e){r1=0}
         try{r2=arg2.toString().split(".")[1].length}catch(e){r2=0}
         m=Math.pow(10,Math.max(r1,r2));
@@ -227,7 +348,7 @@
 
     function totalSumPrice () {
         //产品合计金额
-        var productIds = $("#productIds").val();
+        var productIds = $("#quotationIds").val();
         var productIdsS = productIds.split(",");
         var productTotalPrice = 0;
         var totalPrice = 0;
@@ -248,9 +369,9 @@
             specialExpenses = 0;
         }
         totalPrice = parseFloat(productTotalPrice) + parseFloat(specialExpenses);
-        $("#productTotalPrice").val(parseFloat(productTotalPrice).toFixed(4));
+        //$("#productTotalPrice").val(parseFloat(productTotalPrice).toFixed(4));
         $("#price1").val(parseFloat(totalPrice).toFixed(4));
-        $("#productTotalNum").val(productTotalNumS);
+        //$("#productTotalNum").val(productTotalNumS);
     }
 
 

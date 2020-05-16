@@ -69,4 +69,11 @@ public interface BizQuotationMapper {
      * @return 报价单集合
      */
     public List<BizQuotation> selectBizQuotationFlowList(BizQuotation bizQuotation);
+
+    /**
+     * 报价单产品集合
+     * @param bizQuotation
+     * @return
+     */
+    public List<BizQuotation> selectBizQuotationProductList(BizQuotation bizQuotation);
 }

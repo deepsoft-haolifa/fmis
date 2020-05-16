@@ -39,6 +39,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createTime"    column="create_time"    />
         <result property="updateBy"    column="update_by"    />
         <result property="updateTime"    column="update_time"    />
+        <result property="specifications"    column="specifications"    />
+        <result property="nominalPressure"    column="nominal_pressure"    />
+        <result property="connectionType"    column="connection_type"    />
+        <result property="valvebodyMaterial"    column="valvebody_material"    />
+        <result property="valveMaterial"    column="valve_material"    />
+        <result property="sealingMaterial"    column="sealing_material"    />
+        <result property="valveElement"    column="valve_element"    />
+        <result property="driveForm"    column="drive_form"    />
+        <result property="price"    column="price"    />
+        <result property="supplier"    column="supplier"    />
+        <result property="newSupplier"    column="new_supplier"    />
+        <result property="structuralStyle"    column="structural_style"    />
+        <result property="medium"    column="medium"    />
+        <result property="temperature"    column="temperature"    />
+        <result property="procurementPrice"    column="procurement_price"    />
+        <result property="costPrice"    column="cost_price"    />
+        <result property="productString1"    column="productString1"    />
+        <result property="productString2"    column="productString2"    />
+
     </resultMap>
 
     <sql id="selectBizQuotationVo">
@@ -83,6 +102,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="customerName != null"> and ct.name like concat('%', #{customerName}, '%')</if>
             <if test="createBy != null"> and u.user_name like concat('%', #{createBy}, '%')</if>
 
+
+            <!-- 查找审核完成的 -->
+            <if test="string6 == 3">
+                and q.flow_status=q.normal_flag
+            </if>
 
             <!-- string2作为角色参数 1=销售 2=销售经理 3=区域经理 4=副总 5=老总-->
             <if test="string2 == 1 ">
@@ -153,7 +177,73 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
         order by q.create_time desc
     </select>
-    
+
+
+
+
+    <sql id="selectBizQuotationProductVo">
+        select q.quotation_id,
+          q.special_expenses,q.payment_method,q.freight,q.lead_time,q.report_project,q.normal_flag,q.flow_status,q.remark,q.string1,
+          q.string2,q.string3,q.string4,q.string5,q.string6,q.string7,q.string8,q.string9,q.string10,q.status,q.del_flag,u.user_name as create_by,
+          q.create_time,q.update_by,q.update_time,
+          ct.name as customerName,
+          qp.product_id,qp.product_ref1_id,qp.product_ref1_num,qp.product_ref2_id,qp.product_ref2_num,qp.actuator_id,
+          qp.product_num as productNum,qp.product_coefficient as productCoefficient,qp.product_ref1_coefficient as productRef1Coefficient,
+          qp.product_ref2_coefficient as productRef2Coefficient,qp.actuator_num as actuatorNum,qp.actuator_coefficient as actuatorCoefficient,
+          pr1.name as ref1Name,pr2.name as ref2Name,p.name as productName,ac.name as actuatorName,
+          p.price as productPrice,pr1.price as ref1Price,pr2.price as ref2Price,ac.price as actuatorPrice,concat(q.quotation_id,'-',qp.product_id) as quotationProductId,
+
+          d.name as series, p.model, d1.name as specifications, d2.name as nominal_pressure,
+          d3.name as connection_type, d6.name as valvebody_material, p.valve_material,
+          d4.name as sealing_material, d5.name as valve_element,
+          d7.name as drive_form,d8.name as structural_style,
+          s.name as supplier, p.new_supplier,
+          p.medium,p.temperature,p.other,d9.name as productString1,
+          p.string2 as productString2
+
+        from biz_quotation q
+         join biz_quotation_product qp on qp.quotation_id=q.quotation_id
+        left join biz_product p on qp.product_id=p.product_id
+        left join biz_product_ref pr1 on pr1.product_ref_id=qp.product_ref1_id
+        left join biz_product_ref pr2 on pr2.product_ref_id=qp.product_ref2_id
+        left join biz_actuator ac on ac.actuator_id=qp.actuator_id
+        left join sys_user u on q.create_by=u.user_id
+        left join sys_dept dt on u.dept_id=dt.dept_id
+        left join biz_customer ct on ct.customer_id=q.string2
+
+        left join biz_dict d on  d.parent_id=1 and p.series=d.dict_id
+        left join biz_dict d1 on d1.parent_type='specification' and d1.dict_id=p.specifications
+        left join biz_dict d2 on d2.parent_type='nominal_pressure' and d2.dict_id=p.nominal_pressure
+        left join biz_dict d3 on d3.parent_type='link_type' and d3.dict_id=p.connection_type
+        left join biz_dict d4 on d4.parent_type='sealing_material' and d4.dict_id=p.sealing_material
+        left join biz_dict d5 on d5.parent_type='spool_material' and d5.dict_id=p.valve_element
+        left join biz_dict d6 on d6.parent_type='body_material' and d6.dict_id=p.valvebody_material
+        left join biz_dict d7 on d7.parent_type='drive_mode' and d7.dict_id=p.drive_form
+        left join biz_dict d8 on d8.parent_type='structural_type' and d8.dict_id=p.structural_style
+        left join biz_dict d9 on d9.parent_type='series_type' and d9.dict_id=p.string1
+        left join biz_suppliers s on s.suppliers_id=p.supplier
+
+    </sql>
+    <!-- 流程状态0=未上报  1=销售员上报  2=销售经理同意 -2=销售经理不同意 3=区域经理同意 -3=区域经理不同意 4=副总同意 -4=副总不同意 5=老总同意 -5=老总不同意 -->
+    <select id="selectBizQuotationProductList" parameterType="BizQuotation" resultMap="BizQuotationResult">
+        <include refid="selectBizQuotationProductVo"/>
+        <where>
+            1=1
+            <if test="quotationId != null"> and q.quotation_id = #{quotationId}</if>
+
+            <if test="string1 != null"> and q.string1 like concat('%', #{string1}, '%')</if>
+            <if test="customerName != null"> and ct.name like concat('%', #{customerName}, '%')</if>
+            <if test="createBy != null"> and u.user_name like concat('%', #{createBy}, '%')</if>
+
+            <!-- 查找审核完成的
+            <if test="string6 == 3">
+                and q.flow_status=q.normal_flag
+            </if>-->
+
+        </where>
+        order by q.quotation_id,p.product_id,q.create_time desc
+    </select>
+
     <select id="selectBizQuotationById" parameterType="Long" resultMap="BizQuotationResult">
         <include refid="selectBizQuotationVo"/>
         where quotation_id = #{quotationId}

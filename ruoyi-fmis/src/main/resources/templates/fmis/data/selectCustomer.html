@@ -12,93 +12,105 @@
                         <ul>
 
                             <li>
-                                <p>公司代码：</p>
-                                <input type="text" name="companyCode"/>
-                            </li>
-
-                            <li>
-                                <p>所属区域：</p>
-                                <select name="area" class="form-control m-b" th:with="type=${@dict.getType('customer_area')}">
+                                <p>客户区域：</p>
+                                <select name="area" class="form-control" th:with="type=${@dict.getType('customer_area')}">
                                     <option value="">全部</option>
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                                 </select>
                             </li>
-
+                            <li>
+                                <p>客户类别：</p>
+                                <select name="customerLevel" class="form-control" th:with="type=${@dict.getType('customer_level')}">
+                                    <option value="">全部</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
                             <li>
                                 <p>客户名称：</p>
                                 <input name="name" class="form-control" type="text">
                             </li>
-
-                            <li>
-                                <p>客户类别：</p>
-                                <select name="customerLevel" class="form-control m-b" th:with="type=${@dict.getType('customer_level')}">
-                                    <option value="">全部</option>
-                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                                </select>
-                            </li>
-
                             <li>
                                 <p>客户代号：</p>
                                 <input name="codeName" class="form-control" type="text">
                             </li>
-
+                            <li>
+                                <p>备案日期：</p>
+                                <input name="recordDate" class="form-control" placeholder="yyyy-MM" type="text">
+                            </li>
                             <li>
                                 <p>行业划分：</p>
-                                <select name="industryDivision" class="form-control m-b" th:with="type=${@dict.getType('industry_division')}">
+                                <select name="industryDivision" class="form-control" th:with="type=${@dict.getType('industry_division')}">
                                     <option value="">全部</option>
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                                 </select>
                             </li>
-
+                            <li>
+                                <p>客户来源：</p>
+                                <select name="source" class="form-control" th:with="type=${@dict.getType('customer_source')}">
+                                    <option value="">全部</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <p>公司代码：</p>
+                                <select name="areaCode" class="form-control" th:with="type=${@dict.getType('customer_company_code')}">
+                                    <option value="">全部</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <p>隶属部门：</p>
+                                <input name="deptName" class="form-control" type="text">
+                            </li>
+                            <li>
+                                <p>负责人：</p>
+                                <input name="ownerUserId" class="form-control" type="text">
+                            </li>
+                            <li class="select-time">
+                                <p>分配日期：</p>
+                                <input type="text" class="time-input" style="width: 80px;" id="allocationDatestartTime" placeholder="开始时间" name="params[beginTime]"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" style="width: 80px;" id="allocationDateendTime" placeholder="结束时间" name="params[endTime]"/>
+                            </li>
                             <li>
                                 <p>分配次数：</p>
-                                <select name="assignNumber" class="form-control m-b" th:with="type=${@dict.getType('assign_number')}">
+                                <select name="assignNumber" class="form-control" th:with="type=${@dict.getType('assign_number')}">
                                     <option value="">全部</option>
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                                 </select>
                             </li>
-
-
-                            <li>
-                                <p>备案类别：</p>
-                                <select name="recordType" class="form-control m-b" th:with="type=${@dict.getType('customer_record_type')}">
-                                    <option value="">全部</option>
-                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                                </select>
-                            </li>
-
                             <li>
                                 <p>档案编号：</p>
                                 <input name="fileNumber" class="form-control" type="text">
                             </li>
-
                             <li>
-                                <p>客户来源：</p>
-                                <input name="source" class="form-control" type="text">
+                                <p>备案类别：</p>
+                                <select name="recordType" class="form-control" th:with="type=${@dict.getType('customer_record_type')}">
+                                    <option value="">全部</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
                             </li>
-
+                            <li>
+                                <p>备案号：</p>
+                                <input name="recordCode" class="form-control" type="text">
+                            </li>
                             <li>
                                 <p>项目名称：</p>
                                 <input name="projectAme" class="form-control" type="text">
                             </li>
-
                             <li>
                                 <p>品牌：</p>
-                                <input name="brand" class="form-control" type="text">
+                                <select name="brand" class="form-control" th:with="type=${@dict.getType('customer_brand')}">
+                                    <option value="">全部</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
                             </li>
-
-                            <li>
-                                <p>品牌：</p>
-                                <input name="brand" class="form-control" type="text">
-                            </li>
-
                             <li>
                                 <p>主要产品：</p>
                                 <input name="productInfo" class="form-control" type="text">
                             </li>
-
                             <li>
-                                <p>客户联系人：</p>
+                                <p>联系人：</p>
                                 <input name="contactName" class="form-control" type="text">
                             </li>
                             <li>
@@ -121,11 +133,20 @@
         var editFlag = [[${@permission.hasPermi('fmis:customer:edit')}]];
         var removeFlag = [[${@permission.hasPermi('fmis:customer:remove')}]];
         var areaDatas = [[${@dict.getType('customer_area')}]];
+        var customerLevelDatas = [[${@dict.getType('customer_level')}]];
+        var industryDivisionDatas = [[${@dict.getType('industry_division')}]];
+
+        var sourceDatas = [[${@dict.getType('customer_source')}]];
+        var companycodeDatas = [[${@dict.getType('customer_company_code')}]];
+        var brandDatas = [[${@dict.getType('customer_brand')}]];
+
+        var assignNumberDatas = [[${@dict.getType('assign_number')}]];
+        var recordTypeDatas = [[${@dict.getType('customer_record_type')}]];
         var prefix = ctx + "fmis/customer";
 
         $(function() {
             var options = {
-                url: prefix + "/listNoAuth",
+                url: prefix + "/list",
                 createUrl: prefix + "/add",
                 updateUrl: prefix + "/edit/{id}",
                 removeUrl: prefix + "/remove",
@@ -134,93 +155,156 @@
                 columns: [{
                     checkbox: true
                 },
+                    {
+                        field : 'customerId',
+                        title : '客户ID',
+                        visible: false
+                    },
+                    {
+                        field : 'area',
+                        title : '客户区域',
+                        formatter: function(value, row, index) {
+                            return $.table.selectDictLabel(areaDatas, value);
+                        }
+                    },
+                    {
+                        field : 'customerLevel',
+                        title : '客户类别',
+                        formatter: function(value, row, index) {
+                            return $.table.selectDictLabel(customerLevelDatas, value);
+                        }
+                    },
+                    {
+                        field : 'name',
+                        title : '客户名称'
+                    },
+                    {
+                        field : 'codeName',
+                        title : '客户代号'
+                    },
+                    {
+                        field : 'recordDate',
+                        title : '初次备案日期'
+                    },
+                    {
+                        field : 'industryDivision',
+                        title : '行业划分',
+                        formatter: function(value, row, index) {
+                            return $.table.selectDictLabel(industryDivisionDatas, value);
+                        }
+                    },
+                    {
+                        field : 'source',
+                        title : '客户来源',
+                        formatter: function(value, row, index) {
+                            return $.table.selectDictLabel(sourceDatas, value);
+                        }
+                    },
+                    {
+                        field : 'areaCode',
+                        title : '客户所属商务公司代码',
+                        formatter: function(value, row, index) {
+                            return $.table.selectDictLabel(companycodeDatas, value);
+                        }
+                    },
+                    {
+                        field : 'ownerUserId',
+                        title : '业务负责人'
+                    },
+                    {
+                        field : 'deptName',
+                        title : '隶属部门'
+                    },
+                    {
+                        field : 'allocationDate',
+                        title : '分配日期'
+                    },
+                    {
+                        field : 'assignNumber',
+                        title : '分配次数',
+                        formatter: function(value, row, index) {
+                            return $.table.selectDictLabel(assignNumberDatas, value);
+                        }
+                    },
+                    {
+                        field : 'fileNumber',
+                        title : '档案编号'
+                    },
+                    {
+                        field : 'recordType',
+                        title : '备案类别',
+                        formatter: function(value, row, index) {
+                            return $.table.selectDictLabel(recordTypeDatas, value);
+                        }
+                    },
+                    {
+                        field : 'recordCode',
+                        title : '项目备案号'
+                    },
+                    {
+                        field : 'projectAme',
+                        title : '项目名称'
+                    },
+                    {
+                        field : 'brand',
+                        title : '品牌',
+                        formatter: function(value, row, index) {
+                            return $.table.selectDictLabel(brandDatas, value);
+                        }
+                    },
+                    {
+                        field : 'productInfo',
+                        title : '主要产品'
+                    },
+                    {
+                        field : 'contactName',
+                        title : '客户联系人'
+                    },
+                    {
+                        field : 'telephone',
+                        title : '座机电话'
+                    },
+                    {
+                        field : 'fax',
+                        title : '联系传真'
+                    },
+                    {
+                        field : 'contactEmail',
+                        title : 'QQ/E-mail'
+                    },
+                    {
+                        field : 'contactPhone',
+                        title : '联系人手机'
+                    },
+                    {
+                        field : 'companyAddress',
+                        title : '公司地址'
+                    },
+                    {
+                        field : 'remark',
+                        title : '备注'
+                    },
+                    /*
                 {
-                    field : 'customerId', 
-                    title : '客户ID',
-                    visible: false
-                },
-                {
-                    field : 'recordDate', 
-                    title : '备案日期'
-                },
-                {
-                    field : 'companyCode', 
-                    title : '商务公司代码'
-                },
-                {
-                    field : 'area', 
-                    title : '客户所属区域',
-                    formatter: function(value, row, index) {
-                       return $.table.selectDictLabel(areaDatas, value);
-                    }
-                },
-                {
-                    field : 'recordCode', 
-                    title : '项目备案号'
-                },
-                {
-                    field : 'ownerUserId', 
-                    title : '业务负责人'
-                },
-                {
-                    field : 'name', 
-                    title : '客户名称'
-                },
-                {
-                    field : 'projectAme', 
-                    title : '项目名称'
-                },
-                {
-                    field : 'contactName', 
-                    title : '联系人姓名'
-                },
-                {
-                    field : 'contactPosition', 
-                    title : '联系人职务'
-                },
-                {
-                    field : 'contactPhone', 
-                    title : '联系人电话'
-                },
-                {
-                    field : 'contactEmail', 
-                    title : '联系人邮箱'
-                },
-                {
-                    field : 'brand', 
-                    title : '品牌'
-                },
-                {
-                    field : 'info', 
-                    title : '客户/信息'
-                },
-                {
-                    field : 'productInfo', 
-                    title : '涉及产品'
-                },
-                {
-                    field : 'remark', 
-                    title : '备注'
-                },
-                {
-                    field : 'createTime',
-                    title : '创建时间'
-                },{
-                    field : 'updateTime',
-                    title : '修改时间'
-                },
-                {
-                    title: '操作',
-                    align: 'center',
-                    formatter: function(value, row, index) {
-                        var actions = [];
-                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.customerId + '\')"><i class="fa fa-edit"></i> 编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.customerId + '\')"><i class="fa fa-remove"></i> 删除</a>');
-                        return actions.join('');
-                    }
-                }]
+                    field : 'recordNum',
+                    title : '备案号'
+                },*/
+                    {
+                        field : 'createTime',
+                        title : '创建时间'
+                    },{
+                        field : 'updateTime',
+                        title : '修改时间'
+                    }]
             };
             $.table.init(options);
+        });
+
+        $("input[name='recordDate']").datetimepicker({
+            format: "yyyy-mm",
+            minView: "year",
+            startView: "year",
+            autoclose: true
         });
 
 

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('采购列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <!--
+                            <li>
+                                <p>状态：</p>
+                                <select name="queryStatus" class="form-control m-b" >
+                                    <option value="0">全部</option>
+                                    <option value="1">待办</option>
+                                    <option value="2">已办</option>
+                                </select>
+                            </li>
+                            <li>
+                                <p>备用1：</p>
+                                <input type="text" name="string1"/>
+                                <input type="hidden" name="bizId" id="bizId" value="contract"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                            -->
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('fmis:data:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('fmis:data:remove')}]];
+        var prefix = ctx + "fmis/procurementpool";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "采购池",
+                uniqueId: "dataId",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'dataId', 
+                    title : 'ID',
+                    visible: false
+                },
+                {
+                    field : 'dataId',
+                    title : 'ID',
+                    visible: false
+                },
+
+                {
+                    field : 'string1',
+                    title : '合同编号'
+                },
+                {
+                    field : 'customerName',
+                    title : '客户'
+                },
+                {
+                    field : 'datetime1',
+                    title : '签订日期'
+                },
+                {
+                    field : 'string3',
+                    title : '供方'
+                },
+                {
+                    field : 'string4',
+                    title : '签订地点'
+                },
+                {
+                    field : 'string5',
+                    title : '含发票'
+                },
+                {
+                    field : 'string6',
+                    title : '发货时间'
+                },
+                {
+                    field : 'string7',
+                    title : '运输方式'
+                },
+                {
+                    field : 'string8',
+                    title : '付款方式'
+                },
+                {
+                    field : 'string9',
+                    title : '交货地点'
+                },
+                {
+                    field : 'string10',
+                    title : '运费承担'
+                },
+                {
+                    field : 'string11',
+                    title : '收货人'
+                },
+                {
+                    field : 'string12',
+                    title : '收货电话'
+                },
+                {
+                    field : 'price1',
+                    title : '总价'
+                }
+                ]
+            };
+            $.table.init(options);
+        });
+
+
+    </script>
+</body>
+</html>

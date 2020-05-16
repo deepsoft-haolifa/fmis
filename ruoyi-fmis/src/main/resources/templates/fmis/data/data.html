@@ -15,12 +15,12 @@
                                 <p>状态：</p>
                                 <select name="queryStatus" class="form-control m-b" >
                                     <option value="0">全部</option>
-                                    <option value="1">待办</option>
+                                    <option value="1" selected>待办</option>
                                     <option value="2">已办</option>
                                 </select>
                             </li>
                             <li>
-                                <p>备用1：</p>
+                                <p>合同编号：</p>
                                 <input type="text" name="string1"/>
                                 <input type="hidden" name="bizId" id="bizId" value="contract"/>
                             </li>
@@ -143,6 +143,33 @@
                     align: 'center'
                 },
                 {
+                    field : 'string17',
+                    title : '合同文件|流传采购池',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var flowStatus = row.flowStatus;
+                        var dataId = row.dataId;
+                        var normalFlag = row.normalFlag;
+                        var string17 = row.string17;//文件路径
+                        var string13 = row.string13;//1=进入采购池
+                        var actions = [];
+                        if (flowStatus == normalFlag) {
+                            if (!$.common.isEmpty(string17)) {
+                                string17 = fileUrlStart + string17;
+                                actions.push('<a class="btn btn-success btn-xs" target="_blank" href="' + string17 + '" ><i class="fa fa-edit"></i>查看</a>');
+                                actions.push('<a class="btn btn-success btn-xs"  href="#" onclick="goPool(' + dataId + ')" ><i class="fa fa-edit"></i>流转</a> ');
+                            } else {
+                                actions.push('<a class="btn btn-success btn-xs"  href="#" onclick="uploadFile(' + dataId + ')" ><i class="fa fa-edit"></i>上传合同</a> ');
+                            }
+                            if (!$.common.isEmpty(string13) && (string13 == "1" || string13 == 1)) {
+                                actions.push('<span class=\'default\'>已流转</span>');
+                            }
+                        }
+
+                        return actions.join('');
+                    }
+                },
+                {
                     title: '操作',
                     align: 'center',
                     formatter: function(value, row, index) {
@@ -151,13 +178,9 @@
                         var normalFlag = row.normalFlag;
                         var operationExamineStatus = row.operationExamineStatus;
                         if (flowStatus < 1) {
-                            if (flowStatus == "0") {
-                                //已上报
-                            } else {
-                                actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="edit(\'' + row.dataId + '\')"><i class="fa fa-edit"></i> 编辑</a> ');
-                                actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 删除</a>');
-                                actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subReport(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 上报</a>');
-                            }
+                            actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="edit(\'' + row.dataId + '\')"><i class="fa fa-edit"></i> 编辑</a> ');
+                            actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 删除</a>');
+                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subReport(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 上报</a>');
                         } else if (flowStatus == normalFlag) {
                             //已完成
                         } else if (operationExamineStatus == true || operationExamineStatus == "true") {
@@ -172,6 +195,14 @@
             };
             $.table.init(options);
         });
+
+        function uploadFile (dataId) {
+            var url = prefix + "/upload?dataId=" + dataId;
+            $.modal.openNoEnter("上传合同", url,$(window).width() - 50,$(window).height() - 50,function(){
+                $.modal.closeAll();
+                $.table.refresh();
+            });
+        }
 
         function add() {
             var url = prefix + "/add";
@@ -214,6 +245,15 @@
                 $.modal.closeAll();
             });
         }
+
+        function viewExamineDetail(dataId) {
+            var bizId = $("#bizId").val();
+            var url = prefix + "/viewDetail?dataId=" + dataId + "&&bizId=" + bizId;
+            $.modal.openNoEnter("详情", url,$(window).width(),$(window).height(),function(){
+                $.modal.closeAll();
+            });
+        }
+
         function subExamine(dataId) {
             var url = prefix + "/examineEdit?dataId=" + dataId;
             $.modal.openFull("审批", url);
@@ -223,6 +263,21 @@
             $.modal.confirm("确定上报该条信息吗？", function() {
                 console.log(dataId + "--dataId");
                 var url = prefix + "/report?dataId=" + dataId;
+                $.operate.saveModal(url,'',function(){
+                    $.table.refresh();
+                });
+            });
+        }
+        function goPool(dataId) {
+            var row = $('#bootstrap-table').bootstrapTable("getRowByUniqueId",dataId);
+            var string17 = row.string17;//文件路径
+            if ($.common.isEmpty(string17)) {
+                $.modal.alertWarning("合同未上传不能流转至采购池！");
+                return;
+            }
+            $.modal.confirm("确定流转该条信息吗？", function() {
+                console.log(dataId + "--dataId");
+                var url = prefix + "/goPool?dataId=" + dataId;
                 $.operate.saveModal(url,'',function(){
                     $.table.refresh();
                 });

@@ -20,6 +20,8 @@
   欢迎访问 北京好利信息化管控平台
   <ul class="m-b">
     <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 报价单 <a id="quotationNum" style="color: red;" onclick="todoQuotation(1)"></a> </li>
+    <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 合同 <a id="contractNum" style="color: red;" onclick="todoContract(1)"></a> </li>
+
   </ul>
 </div>
 
@@ -34,6 +36,13 @@
             var url = "/fmis/quotation/todoQuotation";
             location.href = url;
             //$.modal.openTab("待办列表", url);
+        }
+    }
+
+    function todoContract (type) {
+        if (type == 1) {
+            var url = "/fmis/data";
+            location.href = url;
         }
     }
 
@@ -52,9 +61,11 @@
             //请求成功
             success : function(result) {
                 var quotationNum = result.data.quotationNum;
+                var contractNum = result.data.contractNum;
                 $("#quotationNum").text(quotationNum);
+                $("#contractNum").text(contractNum);
                 console.log("result=" + result.data.quotationNum);
-                if (quotationNum > 0) {
+                if (quotationNum > 0 || contractNum > 0) {
                   parent.$('#todoListFlag').text("*");
                 }
             },

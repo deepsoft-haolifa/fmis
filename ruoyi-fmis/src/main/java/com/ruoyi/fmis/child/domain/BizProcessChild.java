@@ -1,7 +1,10 @@
 package com.ruoyi.fmis.child.domain;
 
+import com.ruoyi.fmis.actuator.domain.BizActuator;
 import com.ruoyi.fmis.data.domain.BizProcessData;
 import com.ruoyi.fmis.product.domain.BizProduct;
+import com.ruoyi.fmis.productref.domain.BizProductRef;
+import com.ruoyi.fmis.quotation.domain.BizQuotation;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -24,7 +27,28 @@ public class BizProcessChild extends BaseEntity {
 
     @Setter
     @Getter
+    private String paramterId;
+
+    @Setter
+    @Getter
     private BizProcessData bizProcessData;
+
+
+    @Setter
+    @Getter
+    private BizProductRef ref1;
+
+    @Setter
+    @Getter
+    private BizProductRef ref2;
+
+    @Setter
+    @Getter
+    private BizActuator bizActuator;
+
+    @Setter
+    @Getter
+    private BizQuotation bizQuotation;
 
     @Setter
     @Getter

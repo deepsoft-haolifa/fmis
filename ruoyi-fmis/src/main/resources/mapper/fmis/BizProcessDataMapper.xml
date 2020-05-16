@@ -106,19 +106,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
     <sql id="selectBizProcessDataVoRef">
-        select data_id, biz_data_id, biz_id, normal_flag, flow_status, remark, price1, price2, price3,
-        price4, price5, price6, price7, price8, price9, price10, string1, string2,
-        string3, string4, string5, string6, string7, string8, string9, string10, string11,
-        string12, string13, string14, string15, string16, string17, string18, string19, string20,
-        datetime1, datetime2, datetime3, datetime4, datetime5, status, del_flag, create_by,
-        create_time, update_by, update_time
-
-        from biz_process_data
+        select q.data_id, q.biz_data_id, q.biz_id, q.normal_flag, q.flow_status, q.remark, q.price1, q.price2, q.price3,
+        q.price4, q.price5, q.price6, q.price7, q.price8, q.price9, q.price10, q.string1, q.string2,
+        q.string3, q.string4, q.string5, q.string6, q.string7, q.string8, q.string9, q.string10, q.string11,
+        q.string12, q.string13, q.string14, q.string15, q.string16, q.string17, q.string18, q.string19, q.string20,
+        q.datetime1, q.datetime2, q.datetime3, q.datetime4, q.datetime5, q.status, q.del_flag, q.create_by,
+        q.create_time, q.update_by, q.update_time,ct.name as customerName
+        from biz_process_data q
+        left join sys_user u on q.create_by=u.user_id
+        left join sys_dept dt on u.dept_id=dt.dept_id
+        left join biz_customer ct on ct.customer_id=q.string2
     </sql>
 
     <select id="selectBizProcessDataListRef" parameterType="BizProcessData" resultMap="BizProcessDataResult">
         <include refid="selectBizProcessDataVoRef"/>
         <where>
+            1=1
             <if test="bizDataId != null "> and biz_data_id = #{bizDataId}</if>
             <if test="bizId != null  and bizId != ''"> and biz_id = #{bizId}</if>
             <if test="normalFlag != null  and normalFlag != ''"> and normal_flag = #{normalFlag}</if>
@@ -159,6 +162,74 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="datetime4 != null "> and datetime4 = #{datetime4}</if>
             <if test="datetime5 != null "> and datetime5 = #{datetime5}</if>
             <if test="status != null  and status != ''"> and status = #{status}</if>
+
+
+            <!-- string2作为角色参数 1=销售 2=销售经理 3=区域经理 4=副总 5=老总-->
+            <!--flow_status 0=待上报 1=已上报 2=销售经理同意 -2=不同意 3=区域经理同意 -3=不同意 4=副总同意 -4=不同意 5=老总同意 -5=不同意 -->
+            <if test="roleType == 1 ">
+                <if test="queryStatus == 1 ">
+                    and q.flow_status in ('0','-2','-3','-4','-5')
+                </if>
+                <if test="queryStatus == 2 ">
+                    and q.flow_status != '0'
+                </if>
+                ${params.dataScope}
+            </if>
+            <!-- 销售经理 查看已上报的 -->
+            <if test="roleType == 2 ">
+                <if test="queryStatus == 0 ">
+                    and q.flow_status in ('1','2','-2','3','-3','-4','-5')
+                </if>
+                <if test="queryStatus == 1 ">
+                    and q.flow_status in ('1')
+                </if>
+                <if test="queryStatus == 2 ">
+                    and q.flow_status in ('2','-2','3','-3','-4','-5','4','5')
+                </if>
+                ${params.dataScope}
+            </if>
+            <!-- 区域经理  查看 销售经理同意的  -->
+            <if test="roleType == 3 ">
+                <if test="queryStatus == 0 ">
+                    and q.flow_status in ('2','3','-3','4','-4','-5')
+                </if>
+                <if test="queryStatus == 1 ">
+                    and q.flow_status in ('2')
+                </if>
+                <if test="queryStatus == 2 ">
+                    and q.flow_status in ('3','-3','4','-4','-5','5')
+                </if>
+                ${params.dataScope}
+            </if>
+
+            <!-- 副总  查看 区域经理同意的  -->
+            <if test="roleType == 4 ">
+                <if test="queryStatus == 0 ">
+                    and q.flow_status in ('3','4','-4','-5')
+                </if>
+                <if test="queryStatus == 1 ">
+                    and q.flow_status in ('3')
+                </if>
+                <if test="queryStatus == 2 ">
+                    and q.flow_status in ('4','-4','-5','5')
+                </if>
+
+                ${params.dataScope}
+            </if>
+            <!-- 总经理  查看 副总同意的  -->
+            <if test="roleType == 5 ">
+                <if test="queryStatus == 0 ">
+                    and q.flow_status in ('4','5','-5')
+                </if>
+                <if test="queryStatus == 1 ">
+                    and q.flow_status in ('4')
+                </if>
+                <if test="queryStatus == 2 ">
+                    and q.flow_status in ('5','-5')
+                </if>
+
+                ${params.dataScope}
+            </if>
         </where>
     </select>
 

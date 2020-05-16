@@ -21,6 +21,9 @@ import com.ruoyi.fmis.actuator.service.IBizActuatorService;
 import com.ruoyi.fmis.common.BizConstants;
 import com.ruoyi.fmis.customer.domain.BizCustomer;
 import com.ruoyi.fmis.customer.service.IBizCustomerService;
+import com.ruoyi.fmis.data.domain.BizProcessData;
+import com.ruoyi.fmis.data.service.IBizProcessDataService;
+import com.ruoyi.fmis.define.service.IBizProcessDefineService;
 import com.ruoyi.fmis.dict.service.IBizDictService;
 import com.ruoyi.fmis.product.domain.BizProduct;
 import com.ruoyi.fmis.productref.domain.BizProductRef;
@@ -32,6 +35,7 @@ import com.ruoyi.fmis.quotationproduct.service.IBizQuotationProductService;
 import com.ruoyi.fmis.suppliers.service.IBizSuppliersService;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysDept;
+import com.ruoyi.system.domain.SysRole;
 import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.service.ISysDeptService;
 import com.ruoyi.system.service.ISysDictDataService;
@@ -51,9 +55,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.FileOutputStream;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.*;
 import java.util.List;
 
 /**
@@ -100,6 +102,12 @@ public class BizQuotationController extends BaseController {
     @Autowired
     private ISysDictDataService dictDataService;
 
+    @Autowired
+    private IBizProcessDataService bizProcessDataService;
+
+    @Autowired
+    private IBizProcessDefineService bizProcessDefineService;
+
     @RequiresPermissions("fmis:quotation:view")
     @GetMapping()
     public String quotation(ModelMap mmap) {
@@ -124,6 +132,19 @@ public class BizQuotationController extends BaseController {
         bizQuotation.setString6("1");
         HashMap<String, Object> result = new HashMap<>();
         result.put("quotationNum", bizQuotationService.selectBizQuotationFlowList(bizQuotation).size());
+
+        //合同待办
+        BizProcessData bizProcessData = new BizProcessData();
+        Map<String, SysRole> flowMap = bizProcessDefineService.getRoleFlowMap(BizConstants.BIZ_contract);
+        String userFlowStatus = "";
+        if (!CollectionUtils.isEmpty(flowMap)) {
+            userFlowStatus = flowMap.keySet().iterator().next();
+            bizProcessData.setRoleType(userFlowStatus);
+        }
+        bizProcessData.setQueryStatus("1");
+        List<BizProcessData> list = bizProcessDataService.selectBizProcessDataListRef(bizProcessData);
+        result.put("contractNum", list.size());
+
         return AjaxResult.success(result);
     }
 
@@ -145,11 +166,33 @@ public class BizQuotationController extends BaseController {
     @ResponseBody
     public TableDataInfo list(BizQuotation bizQuotation) {
 
-        int roleType = sysRoleService.getRoleType(ShiroUtils.getUserId());
-        bizQuotation.setString2(roleType + "");
+
+        String string6 = bizQuotation.getString6();
+        if ("3".equals(string6)) {
+            bizQuotation.setString2("-1");
+        } else {
+            int roleType = sysRoleService.getRoleType(ShiroUtils.getUserId());
+            bizQuotation.setString2(roleType + "");
+        }
+
 
         startPage();
         List<BizQuotation> list = bizQuotationService.selectBizQuotationFlowList(bizQuotation);
+        return getDataTable(list);
+    }
+
+    /**
+     * 查询报价单产品
+     * @param bizQuotation
+     * @return
+     */
+    @PostMapping("/listProduct")
+    @ResponseBody
+    public TableDataInfo listProduct(BizQuotation bizQuotation) {
+
+
+        startPage();
+        List<BizQuotation> list = bizQuotationService.selectBizQuotationProductList(bizQuotation);
         return getDataTable(list);
     }
 

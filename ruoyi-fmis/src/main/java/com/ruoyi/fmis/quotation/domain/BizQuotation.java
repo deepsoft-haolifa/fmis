@@ -2,6 +2,8 @@ package com.ruoyi.fmis.quotation.domain;
 
 import com.ruoyi.fmis.quotationproduct.domain.BizQuotationProduct;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
@@ -21,6 +23,120 @@ public class BizQuotation extends BaseEntity {
 
     /** ID */
     private Long quotationId;
+
+    //产品 start
+    @Getter
+    @Setter
+    private String series;
+    @Getter
+    @Setter
+    private String model;
+    @Getter
+    @Setter
+    private String specifications;
+    @Getter
+    @Setter
+    private String nominalPressure;
+    @Getter
+    @Setter
+    private String connectionType;
+    @Getter
+    @Setter
+    private String valvebodyMaterial;
+    @Getter
+    @Setter
+    private String valveMaterial;
+    @Getter
+    @Setter
+    private String sealingMaterial;
+    @Getter
+    @Setter
+    private String valveElement;
+    @Getter
+    @Setter
+    private String driveForm;
+    @Getter
+    @Setter
+    private String structuralStyle;
+    @Getter
+    @Setter
+    private String supplier;
+    @Getter
+    @Setter
+    private String newSupplier;
+    @Getter
+    @Setter
+    private String medium;
+    @Getter
+    @Setter
+    private String temperature;
+    @Getter
+    @Setter
+    private String other;
+    @Getter
+    @Setter
+    private String productString1;
+    @Getter
+    @Setter
+    private String productString2;
+
+
+    //产品 end
+
+
+
+    @Getter
+    @Setter
+    private String quotationProductId;
+
+    @Getter
+    @Setter
+    private Double productPrice;
+    @Getter
+    @Setter
+    private Double ref1Price;
+    @Getter
+    @Setter
+    private Double ref2Price;
+    @Getter
+    @Setter
+    private Double actuatorPrice;
+
+    @Getter
+    @Setter
+    private String productNum;
+
+    @Getter
+    @Setter
+    private String productCoefficient;
+
+    @Getter
+    @Setter
+    private String productRef1Coefficient;
+
+    @Getter
+    @Setter
+    private String productRef2Coefficient;
+
+    @Getter
+    @Setter
+    private String actuatorNum;
+
+    @Getter
+    @Setter
+    private String actuatorCoefficient;
+
+    @Getter
+    @Setter
+    private String ref1Name;
+
+    @Getter
+    @Setter
+    private String ref2Name;
+
+    @Getter
+    @Setter
+    private String productName;
 
     /** 产品ID */
     @Excel(name = "产品ID")
@@ -122,13 +238,6 @@ public class BizQuotation extends BaseEntity {
     }
 
     //pr1.name as productRef1Name,pr2.name as productRef2Name,ac.name as actuatorName
-    private String productName;
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
-    public String getProductName() {
-        return productName;
-    }
 
     private String productRef1Name;
     public void setProductRef1Name(String productRef1Name) {

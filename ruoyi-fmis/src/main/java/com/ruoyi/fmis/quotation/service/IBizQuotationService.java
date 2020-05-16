@@ -26,6 +26,13 @@ public interface IBizQuotationService {
      */
     public List<BizQuotation> selectBizQuotationList(BizQuotation bizQuotation);
     public List<BizQuotation> selectBizQuotationFlowList(BizQuotation bizQuotation);
+
+    /**
+     * 报价单产品集合
+     * @param bizQuotation
+     * @return
+     */
+    public List<BizQuotation> selectBizQuotationProductList(BizQuotation bizQuotation);
     /**
      * 新增报价单
      *

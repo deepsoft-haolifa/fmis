@@ -62,6 +62,12 @@ public class BizQuotationServiceImpl implements IBizQuotationService {
         return bizQuotationMapper.selectBizQuotationFlowList(bizQuotation);
     }
 
+    @Override
+    public List<BizQuotation> selectBizQuotationProductList(BizQuotation bizQuotation) {
+        return bizQuotationMapper.selectBizQuotationProductList(bizQuotation);
+    }
+
+
     /**
      * 新增报价单
      *
