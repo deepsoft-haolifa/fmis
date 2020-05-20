@@ -136,28 +136,17 @@
                 $.modal.alertWarning("请只选择一条记录");
                 return;
             }
-            //$.modal.confirm('确定要关联该螺栓吗？',
-            //    function() {
-                    parent.$('#form-quotation-add input[name=productRef2Id_' + productId + ']').val($.table.selectColumns("productRefId"));
-                    parent.$('#form-quotation-add input[name=productRef2Name_' + productId + ']').val($.table.selectColumns("name"));
-
-                    //productRe21Model_207
-                    parent.$('#form-quotation-add input[name=productRef2Model_' + productId + ']').val($.table.selectColumns("model"));
-                    parent.$('#form-quotation-add input[name=productRef2Specifications_' + productId + ']').val($.table.selectColumns("specifications"));
-                    parent.$('#form-quotation-add input[name=productRef2ValvebodyMaterial_' + productId + ']').val($.table.selectColumns("valvebodyMaterial"));
-                    parent.$('#form-quotation-add input[name=productRef2Price_' + productId + ']').val($.table.selectColumns("price"));
-
-                    parent.$('#form-quotation-edit input[id=productRef2Id_' + productId + ']').val($.table.selectColumns("productRefId"));
-                    parent.$('#form-quotation-edit input[id=productRef2Name_' + productId + ']').val($.table.selectColumns("name"));
-
-                    parent.$('#form-quotation-edit input[id=productRef2Model_' + productId + ']').val($.table.selectColumns("model"));
-                    parent.$('#form-quotation-edit input[id=productRef2Specifications_' + productId + ']').val($.table.selectColumns("specifications"));
-                    parent.$('#form-quotation-edit input[id=productRef2ValvebodyMaterial_' + productId + ']').val($.table.selectColumns("valvebodyMaterial"));
-                    parent.$('#form-quotation-edit input[id=productRef2Price_' + productId + ']').val($.table.selectColumns("price"));
-
-                    $.modal.close();
-            //    }
-            //);
+            var productRefId = $.table.selectColumns("productRefId");
+            var rowData = {
+                productRef2Id : productRefId[0],
+                ref2Name:$.table.selectColumns("name"),
+                ref2Price:$.table.selectColumns("price"),
+                productRef2Num:"0",
+                productRef2Coefficient:"0",
+            };
+            parent.$('#form-quotation-add input[id=ref2JsonParamter]').val(JSON.stringify(rowData));
+            parent.$('#form-quotation-edit input[id=ref2JsonParamter]').val(JSON.stringify(rowData));
+            $.modal.close();
         }
     </script>
 </body>

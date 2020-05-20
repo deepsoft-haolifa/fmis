@@ -96,158 +96,6 @@
         </div>
     </div>
 
-     <div style="display: none" id="prodictDiv">
-
-         <div class="ibox float-e-margins" id="productDiv_paramterProductId">
-             <h5>productHtml</h5>
-
-             <div class='form-group'>
-                 <label class='control-label col-sm-3'>产品类型：</label>
-                 <div class='col-sm-2'>
-                     <input name='productId' id="productId" class='form-control' type='hidden' >
-                     <input name='productName' id="productName" value="productShowText" class='form-control' type='text' readonly >
-
-                 </div>
-                 <div class='col-sm-2'>
-                     <input class='form-control' type='text' id="productModel" name='productModel' value="productModelShowText" readonly placeholder='产品型号' />
-                 </div>
-                 <div class='col-sm-2'>
-                     <input class='form-control' type='text' id="productNum" onblur="sumPrice(paramterProductId)" name='productNum' placeholder='数量' onkeyup="AmountKeyUp(this)"/>
-                 </div>
-
-                 <div class='col-sm-1'>
-                     <input class='form-control' type='text' id="productPrice" name="productPrice" value="productValuePrice" placeholder='单价' readonly/>
-                 </div>
-
-                 <div class='col-sm-1'>
-                     <input class='form-control' type='text' id="productCoefficient" onblur="sumPrice(paramterProductId)" name='productCoefficient' onkeyup="AmountKeyUp(this)" placeholder='系数' />
-                 </div>
-             </div>
-
-
-             <div class='form-group' id="productRef0Div_paramterProductId" style="display: none">
-                 <label class='control-label col-sm-3'>执 行 器：</label>
-                 <div class='col-sm-2'>
-                     <input name='actuatorId' id="actuatorId" class='form-control' type='hidden' >
-                     <input name='actuatorName' id="actuatorName" class='form-control' type='text' readonly onclick='selectActuator(paramterProductId)'>
-                 </div>
-
-                 <div class='col-sm-1'>
-                     <input class='form-control' type='text' id="brand" name='brand'  placeholder='品牌' readonly/>
-                 </div>
-                 <div class='col-sm-1'>
-                     <input class='form-control' type='text' id="string1" name="string1"  placeholder='型号' readonly/>
-                 </div>
-
-                 <div class='col-sm-2'>
-                     <input class='form-control' type='text' id='actuatorNum' onblur="sumPrice(paramterProductId)" name='actuatorNum' onkeyup="AmountKeyUp(this)" placeholder='数量' />
-                 </div>
-
-                 <div class='col-sm-1'>
-                     <input class='form-control' type='text' id="actuatorPrice" name="actuatorPrice"  placeholder='单价' readonly/>
-                 </div>
-
-                 <div class='col-sm-1'>
-                     <input name='actuatorCoefficient' id="actuatorCoefficient" onblur="sumPrice(paramterProductId)" class='form-control' onkeyup="AmountKeyUp(this)" type='text' placeholder='系数'>
-                 </div>
-             </div>
-
-             <div class='form-group' id="productRef1Div_paramterProductId" style="display: none">
-                 <label class='control-label col-sm-3'>法兰配件：</label>
-                 <div class='col-sm-2'>
-                     <input name='productRef1Id' id="productRef1Id" class='form-control' type='hidden' >
-                     <input name='productRef1Name' id="productRef1Name" class='form-control' type='text' readonly onclick='selectProductRef1(paramterProductId)'>
-                 </div>
-
-                 <div class='col-sm-1'>
-                     <input class='form-control' type='text' id="productRef1Model" name='productRef1Model'  placeholder='型号' readonly/>
-                 </div>
-                 <div class='col-sm-1'>
-                     <input class='form-control' type='text' id="productRef1Specifications" name="productRef1Specifications"   placeholder='规格' readonly/>
-                 </div>
-                 <div class='col-sm-1'>
-                     <input class='form-control' type='text' id="productRef1ValvebodyMaterial" name="productRef1ValvebodyMaterial"  placeholder='材质' readonly/>
-                 </div>
-
-                 <div class='col-sm-1'>
-                     <input class='form-control' type='text' id="productRef1Num" onblur="sumPrice(paramterProductId)" name='productRef1Num' onkeyup="AmountKeyUp(this)" placeholder='数量' />
-                 </div>
-
-
-                 <div class='col-sm-1'>
-                     <input class='form-control' type='text' id="productRef1Price" name="productRef1Price"  placeholder='单价' readonly/>
-                 </div>
-
-                 <div class='col-sm-1'>
-                     <input name='productRef1Coefficient' id="productRef1Coefficient" onblur="sumPrice(paramterProductId)" class='form-control' type='text' onkeyup="AmountKeyUp(this)" placeholder='系数'>
-                 </div>
-             </div>
-
-             <div class='form-group' id="productRef2Div_paramterProductId" style="display: none">
-                 <label class='control-label col-sm-3'>螺栓配件：</label>
-                 <div class='col-sm-2'>
-                     <input name='productRef2Id' id="productRef2Id" class='form-control' type='hidden' >
-                     <input name='productRef2Name' id="productRef2Name" class='form-control' type='text' readonly onclick='selectProductRef2(paramterProductId)'>
-                 </div>
-                 <div class='col-sm-1'>
-                     <input class='form-control' type='text' id="productRef2Model" name='productRef2Model'  placeholder='型号' readonly/>
-                 </div>
-                 <div class='col-sm-1'>
-                     <input class='form-control' type='text' id="productRef2ValvebodyMaterial" name="productRef2ValvebodyMaterial"  placeholder='材质' readonly/>
-                 </div>
-                 <div class='col-sm-2'>
-                     <input class='form-control' type='text' id='productRef2Num' onblur="sumPrice(paramterProductId)" onkeyup="AmountKeyUp(this)" name='productRef2Num' placeholder='数量' />
-                 </div>
-
-                 <div class='col-sm-1'>
-                     <input class='form-control' type='text' id="productRef2Price" name="productRef2Price"  placeholder='单价' readonly/>
-                 </div>
-
-                 <div class='col-sm-1'>
-                     <input name='productRef2Coefficient' id="productRef2Coefficient" onblur="sumPrice(paramterProductId)" onkeyup="AmountKeyUp(this)" class='form-control' type='text' placeholder='系数'>
-                 </div>
-             </div>
-
-
-
-             <div class='form-group' id="productRef3Div_paramterProductId" style="display: none">
-                 <label class='control-label col-sm-3'>产品备注：</label>
-
-                 <div class='col-sm-8'>
-                     <input name='productRemark_paramterProductId' id="productRemark_paramterProductId" class='form-control' type='text'>
-                 </div>
-             </div>
-
-
-             <div class='form-group'>
-                 <label class='control-label col-sm-3'>合计单价：</label>
-
-
-                 <div class='col-sm-2'>
-                     <input class='form-control' type='text' id="unitPrice" name='unitPrice'  placeholder='合计单价' readonly/>
-                 </div>
-
-                 <label class='control-label col-sm-3'>合计总额：</label>
-
-                 <div class='col-sm-2'>
-                     <input class='form-control' type='text' id='totalSum' name='totalSum' placeholder='合计总额' readonly/>
-                 </div>
-
-                 <div class='col-sm-2'>
-                     <a class="btn btn-danger btn-sm" onclick="removeProject(paramterProductId)" >
-                         <i class="fa fa-remove"></i> 删除
-                     </a>
-                     &nbsp;&nbsp;&nbsp;
-                     <a id="showRefDiv_paramterProductId" onclick="showRefDiv(paramterProductId);"  th:text="展开"></a>
-                 </div>
-
-             </div>
-
-
-         </div>
-         <div class="hr-line-dashed"></div>
-     </div>
-
     <th:block th:include="include :: footer" />
      <th:block th:include="include :: bootstrap-select-js" />
     <script th:inline="javascript">
@@ -265,6 +113,7 @@
                 updateUrl: prefix + "/edit/{id}",
                 removeUrl: prefix + "/remove",
                 exportUrl: prefix + "/export",
+                uniqueId: "productId",
                 modalName: "业务产品",
                 columns: [{
                     checkbox: true
@@ -353,169 +202,6 @@
         });
 
 
-        /* 添加用户-选择用户-提交 */
-        function submitHandler() {
-            var rows = $.table.selectFirstColumns();
-            if (rows.length == 0) {
-                $.modal.alertWarning("请选择一条记录");
-                return;
-            }
-            //$.modal.confirm('确定要关联该产品吗？',
-            //    function() {
-                    //0=覆盖 1=追加
-                    var productOperationType = parent.$('#form-quotation-add input[name=productOperationType]').val();
-                    if ($.common.isEmpty(productOperationType)) {
-                        productOperationType = parent.$('#form-quotation-edit input[name=productOperationType]').val();
-                    }
-                    var rowsSel = $('#bootstrap-table').bootstrapTable('getSelections');
-                    var productIds = $.table.selectColumns("productId");
-                    var names = $.table.selectColumns("name");
-                    console.log("productIds=" + productIds + "|" + names);
-                    var htmlStr = "";
-                    if (productOperationType == "1") {
-                        //htmlStr = parent.$('#productDiv').html();
-                    } else {
-                        parent.$('#productDiv').html(htmlStr);
-                    }
-                    var productIdsStr = "";
-                    var productNamesStr = "";
-                    var oldProductIds = parent.$('#form-quotation-add input[name=productIds]').val();
-                    var oldProductNames = parent.$('#form-quotation-add input[name=productNames]').val();
-
-                    if ($.common.isEmpty(oldProductIds)) {
-                        oldProductIds = parent.$('#form-quotation-edit input[name=productIds]').val();
-                        oldProductNames = parent.$('#form-quotation-edit input[name=productNames]').val();
-                    }
-                    if ($.common.isEmpty(oldProductIds)) {
-                        oldProductIds = "";
-                        oldProductNames = "";
-                    }
-                    for(var i = 0; i < productIds.length; i++) {
-                        var prodictDivHtml = $("#prodictDiv").html();
-                        var productId = productIds[i];
-                        var productName = rowsSel[i].name;
-
-                        var productIdsS = oldProductIds.split(",");
-                        var productNamesS = oldProductNames.split(",");
-                        var isExist = false;
-                        if (productOperationType == "1") {
-                            for (var j = 0; j < productIdsS.length; j++) {
-                                if (productId == productIdsS[j]) {
-                                    isExist = true;
-                                    continue;
-                                }
-                            }
-                        }
-                        if (isExist) {
-                            continue;
-                        }
-
-                        console.log("productId=" + productId + " name=" + productName);
-
-                        prodictDivHtml = prodictDivHtml.replace(/productPrice/g,"productPrice_" + productId);
-                        prodictDivHtml = prodictDivHtml.replace(/productValuePrice/g,$.table.selectColumns("price")[i]);
-
-
-
-                        prodictDivHtml = prodictDivHtml.replace(/productName/g,"productName_" + productId);
-                        prodictDivHtml = prodictDivHtml.replace(/productShowText/g,productName);
-
-
-
-                        prodictDivHtml = prodictDivHtml.replace(/string3/g,"string3_" + productId);
-
-                        prodictDivHtml = prodictDivHtml.replace(/productRef1Id/g,"productRef1Id_" + productId);
-                        prodictDivHtml = prodictDivHtml.replace(/productRef1Name/g,"productRef1Name_" + productId);
-                        prodictDivHtml = prodictDivHtml.replace(/productRef1Num/g,"productRef1Num_" + productId);
-
-                        prodictDivHtml = prodictDivHtml.replace(/productRef2Id/g,"productRef2Id_" + productId);
-                        prodictDivHtml = prodictDivHtml.replace(/productRef2Name/g,"productRef2Name_" + productId);
-                        prodictDivHtml = prodictDivHtml.replace(/productRef2Num/g,"productRef2Num_" + productId);
-                        prodictDivHtml = prodictDivHtml.replace(/paramterProductId/g,productId);
-
-                        prodictDivHtml = prodictDivHtml.replace(/actuatorId/g,"actuatorId_" + productId);
-                        prodictDivHtml = prodictDivHtml.replace(/actuatorName/g,"actuatorName_" + productId);
-                        prodictDivHtml = prodictDivHtml.replace(/string2/g,"string2_" + productId);
-
-
-                        prodictDivHtml = prodictDivHtml.replace(/string4/g,"string4_" + productId);
-                        prodictDivHtml = prodictDivHtml.replace(/string5/g,"string5_" + productId);
-                        prodictDivHtml = prodictDivHtml.replace(/string6/g,"string6_" + productId);
-
-                        prodictDivHtml = prodictDivHtml.replace(/productNum/g,"productNum_" + productId);
-                        prodictDivHtml = prodictDivHtml.replace(/productCoefficient/g,"productCoefficient_" + productId);
-                        prodictDivHtml = prodictDivHtml.replace(/productRef1Coefficient/g,"productRef1Coefficient_" + productId);
-                        prodictDivHtml = prodictDivHtml.replace(/productRef2Coefficient/g,"productRef2Coefficient_" + productId);
-                        prodictDivHtml = prodictDivHtml.replace(/actuatorNum/g,"actuatorNum_" + productId);
-                        prodictDivHtml = prodictDivHtml.replace(/actuatorCoefficient/g,"actuatorCoefficient_" + productId);
-
-
-                        prodictDivHtml = prodictDivHtml.replace(/productModelShowText/g,$.table.selectColumns("model")[i]);
-
-                        prodictDivHtml = prodictDivHtml.replace(/productRef1Model/g,"productRef1Model_" + productId);
-                        prodictDivHtml = prodictDivHtml.replace(/productRef1Specifications/g,"productRef1Specifications_" + productId);
-                        prodictDivHtml = prodictDivHtml.replace(/productRef1ValvebodyMaterial/g,"productRef1ValvebodyMaterial_" + productId);
-                        prodictDivHtml = prodictDivHtml.replace(/productRef1Price/g,"productRef1Price_" + productId);
-
-                        prodictDivHtml = prodictDivHtml.replace(/productRef2Model/g,"productRef2Model_" + productId);
-                        prodictDivHtml = prodictDivHtml.replace(/productRef2ValvebodyMaterial/g,"productRef2ValvebodyMaterial_" + productId);
-                        prodictDivHtml = prodictDivHtml.replace(/productRef2Price/g,"productRef2Price_" + productId);
-
-                        prodictDivHtml = prodictDivHtml.replace(/brand/g,"brand_" + productId);
-                        prodictDivHtml = prodictDivHtml.replace(/string1/g,"string1_" + productId);
-                        prodictDivHtml = prodictDivHtml.replace(/actuatorPrice/g,"actuatorPrice_" + productId);
-
-                        prodictDivHtml = prodictDivHtml.replace(/unitPrice/g,"unitPrice_" + productId);
-                        prodictDivHtml = prodictDivHtml.replace(/totalSum/g,"totalSum_" + productId);
-
-
-
-                        prodictDivHtml = prodictDivHtml.replace(/productHtml/g,productName);
-
-                        htmlStr += prodictDivHtml;
-                        productIdsStr += productId + ",";
-                        productNamesStr += productName + ",";
-                        //console.log(htmlStr);
-                    }
-                    productNamesStr = productNamesStr.substr(0,productNamesStr.length - 1);
-                    if (productOperationType == "0") {
-                        parent.$('#form-quotation-add input[name=productIds]').val(productIdsStr);
-                        parent.$('#form-quotation-add input[name=productNames]').val(productNamesStr);
-
-                        parent.$('#form-quotation-edit input[name=productIds]').val(productIdsStr);
-                        parent.$('#form-quotation-edit input[name=productNames]').val(productNamesStr);
-                    } else {
-                        //追加
-
-                        if ($.common.isEmpty(oldProductIds)) {
-                            oldProductIds = "";
-                            oldProductNames = "";
-                        } else {
-                            if (!$.common.endWith(oldProductIds,",")) {
-                                oldProductIds += ",";
-                            }
-                            if (!$.common.endWith(oldProductNames,",")) {
-                                oldProductNames += ",";
-                            }
-                            var newProductIds = oldProductIds + productIdsStr;
-                            var newProductNames = oldProductNames + productNamesStr;
-                        }
-                        parent.$('#form-quotation-add input[name=productIds]').val(newProductIds);
-                        parent.$('#form-quotation-add input[name=productNames]').val(newProductNames);
-                        parent.$('#form-quotation-edit input[name=productIds]').val(newProductIds);
-                        parent.$('#form-quotation-edit input[name=productNames]').val(newProductNames);
-                    }
-                    //parent.$('#form-quotation-edit input[name=productId]').val($.table.selectColumns("productId"));
-                    //parent.$('#form-quotation-edit input[name=productName]').val($.table.selectColumns("name"));
-
-
-                    parent.$('#productDiv').append(htmlStr);
-                    $.modal.close();
-            //    }
-            //);
-            // $.modal.close();
-            // $.operate.save(prefix + "/selectAll", data);
-        }
         function string1AddOptions(v){
             $("#string1").html("");
             $("#string1").append("<option value=''>请选择</option>");
@@ -597,6 +283,57 @@
                 var specificationObj = dataArray[i];
                 $("#" + selectId).append("<option value='" + specificationObj.dictId + "'>" + specificationObj.name + "</option>")
             }
+        }
+
+        function submitHandler() {
+            console.log("start...");
+            var rows = $.table.selectFirstColumns();
+            if (rows.length == 0) {
+                $.modal.alertWarning("请选择一条记录");
+                return;
+            }
+            var productJsonArray = [];
+            var selectRows = $.btTable.bootstrapTable('getSelections');
+            for (var i = 0; i < selectRows.length; i++) {
+                var price = selectRows[i].price;
+                var name = selectRows[i].name;
+                var rowData = {
+                    productId: selectRows[i].productId,
+                    productName: name,
+                    model: selectRows[i].model,
+                    specifications:selectRows[i].specifications,
+                    nominalPressure:selectRows[i].nominalPressure,
+                    valvebodyMaterial:selectRows[i].valvebodyMaterial,
+                    valveElement:selectRows[i].valveElement,
+                    sealingMaterial:selectRows[i].sealingMaterial,
+                    driveForm:selectRows[i].driveForm,
+                    connectionType:selectRows[i].connectionType,
+                    productNum:"0",
+                    productPrice:selectRows[i].price,
+                    productCoefficient:"1",
+                    productRef1Id:"",
+                    ref1Name:"请选择",
+                    ref1Price:"0",
+                    productRef1Num:"0",
+                    productRef1Coefficient:"0",
+                    productRef2Id:"",
+                    ref2Name:"请选择",
+                    ref2Price:"0",
+                    productRef2Num:"0",
+                    productRef2Coefficient:"0",
+                    actuatorId:"",
+                    actuatorName:"请选择",
+                    actuatorPrice: "0",
+                    actuatorNum: "0",
+                    actuatorCoefficient:"0",
+                    productRemark:""
+                };
+                console.log("==" + JSON.stringify(rowData));
+                productJsonArray.push(rowData);
+            }
+            parent.$('#form-quotation-add input[id=productsJsonParamter]').val(JSON.stringify(productJsonArray));
+            parent.$('#form-quotation-edit input[id=productsJsonParamter]').val(JSON.stringify(productJsonArray));
+            $.modal.close();
         }
     </script>
 </body>

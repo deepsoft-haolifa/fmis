@@ -7,6 +7,7 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.ruoyi.common.annotation.Log;
+import com.ruoyi.common.config.Global;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
@@ -14,11 +15,14 @@ import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.common.utils.file.FileUtils;
 import com.ruoyi.common.utils.itextpdf.PdfUtil;
 import com.ruoyi.common.utils.itextpdf.TextWaterMarkPdfPageEvent;
+import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.fmis.actuator.domain.BizActuator;
 import com.ruoyi.fmis.actuator.service.IBizActuatorService;
 import com.ruoyi.fmis.common.BizConstants;
+import com.ruoyi.fmis.common.BizProductExcel;
 import com.ruoyi.fmis.customer.domain.BizCustomer;
 import com.ruoyi.fmis.customer.service.IBizCustomerService;
 import com.ruoyi.fmis.data.domain.BizProcessData;
@@ -26,6 +30,7 @@ import com.ruoyi.fmis.data.service.IBizProcessDataService;
 import com.ruoyi.fmis.define.service.IBizProcessDefineService;
 import com.ruoyi.fmis.dict.service.IBizDictService;
 import com.ruoyi.fmis.product.domain.BizProduct;
+import com.ruoyi.fmis.product.service.IBizProductService;
 import com.ruoyi.fmis.productref.domain.BizProductRef;
 import com.ruoyi.fmis.productref.service.IBizProductRefService;
 import com.ruoyi.fmis.quotation.domain.BizQuotation;
@@ -52,6 +57,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -107,6 +113,9 @@ public class BizQuotationController extends BaseController {
 
     @Autowired
     private IBizProcessDefineService bizProcessDefineService;
+
+    @Autowired
+    private IBizProductService bizProductService;
 
     @RequiresPermissions("fmis:quotation:view")
     @GetMapping()
@@ -195,7 +204,17 @@ public class BizQuotationController extends BaseController {
         List<BizQuotation> list = bizQuotationService.selectBizQuotationProductList(bizQuotation);
         return getDataTable(list);
     }
-
+    /**
+     * 查询报价单产品
+     * @param bizQuotation
+     * @return
+     */
+    @PostMapping("/listProductNoPage")
+    @ResponseBody
+    public TableDataInfo listProductNoPage(BizQuotation bizQuotation) {
+        List<BizQuotation> list = bizQuotationService.selectBizQuotationProductList(bizQuotation);
+        return getDataTable(list);
+    }
 
 
 
@@ -518,9 +537,13 @@ public class BizQuotationController extends BaseController {
         catch (Exception e)
         {
             e.printStackTrace();
-            throw new BusinessException("导出Excel失败，请联系网站管理员！");
+            throw new BusinessException("导出失败，请联系网站管理员！");
         }
     }
+
+
+
+
 
     @GetMapping("/viewPdf")
     public void viewPdf(HttpServletRequest request,HttpServletResponse response) {
@@ -613,9 +636,9 @@ public class BizQuotationController extends BaseController {
             BizQuotation  bizQuotation1 = it.next();
             if (bizQuotation1.getQuotationId().compareTo(id) == 0) {
                 it.remove();
-            } else if ((!bizQuotation.getFlowStatus().equals("0")) && bizQuotation.getFlowStatus().equals(bizQuotation.getNormalFlag())) {
+            }/* else if ((!bizQuotation.getFlowStatus().equals("0")) && bizQuotation.getFlowStatus().equals(bizQuotation.getNormalFlag())) {
                 it.remove();
-            }
+            }*/
         }
 
         if (CollectionUtil.isEmpty(list) || list.size() == 0) {
@@ -1026,5 +1049,133 @@ public class BizQuotationController extends BaseController {
         String examineRemark = bizQuotation.getString5();
         String quotationId = bizQuotation.getQuotationId().toString();
         return toAjax(bizQuotationService.doExamine(quotationId,examineStatus,examineRemark));
+    }
+
+    @GetMapping("/upload")
+    public String upload(ModelMap mmap) {
+        return prefix + "/upload";
+    }
+
+    @PostMapping("/excelData")
+    @ResponseBody
+    public JSONObject excelData(){
+        JSONObject retJson = new JSONObject();
+        JSONArray dataArray = new JSONArray();
+        JSONArray errorArray = new JSONArray();
+        String url = getRequest().getParameter("url");
+        String realPath = Global.getFilePath() + url;
+        List<BizProductExcel> list = new ArrayList<>();
+        try {
+            ExcelUtil<BizProductExcel> excelUtil = new ExcelUtil(BizProductExcel.class);
+            list = excelUtil.importExcel("工作表1",realPath);
+
+            if (CollectionUtils.isEmpty(list)) {
+                JSONObject json = new JSONObject();
+                json.put("msg","格式错误，请按照标准格式增加！");
+                errorArray.add(json);
+            }
+            Map<Long,Long> map = new HashMap<>();
+
+            int i = 1;
+            for (BizProductExcel product : list) {
+                JSONObject jsonData = new JSONObject();
+                String model = product.getModel();
+                if (StringUtils.isEmpty(model)) {
+                    JSONObject json = new JSONObject();
+                    json.put("msg","第" + (i + 1) + "行产品型号不能为空！");
+                    errorArray.add(json);
+                    i++;
+                    continue;
+                } else {
+                    model = model.trim();
+                }
+                String level = product.getLevel().trim();
+                if (StringUtils.isNotEmpty(level)) {
+                    level = level.trim();
+                }
+                String num = product.getNum();
+                if (StringUtils.isNotEmpty(num)) {
+                    num = num.trim();
+                }
+                if (!StringUtils.isNumeric(num)) {
+                    JSONObject json = new JSONObject();
+                    json.put("msg","第" + (i + 1) + "行数量格式错误！");
+                    errorArray.add(json);
+                    i++;
+                    continue;
+                }
+
+                BizProduct queryBizProduct = new BizProduct();
+                queryBizProduct.setModelEq(model);
+                if (StringUtils.isNotEmpty(level)) {
+                    queryBizProduct.setString2(level);
+                }
+                List<BizProduct> bizProductList = bizProductService.selectBizProductList(queryBizProduct);
+                if (!CollectionUtils.isEmpty(bizProductList)) {
+                    if (bizProductList.size() > 1) {
+                        JSONObject json = new JSONObject();
+                        json.put("msg","第" + (i + 1) + "行 查询出多条数据！");
+                        errorArray.add(json);
+                        i++;
+                        continue;
+                    }
+
+                    BizProduct bizProduct = bizProductList.get(0);
+                    Long productId = bizProduct.getProductId();
+                    jsonData.put("productId",productId);
+                    jsonData.put("name",bizProduct.getName());
+                    jsonData.put("model",bizProduct.getModel());
+                    jsonData.put("specifications",bizProduct.getSpecifications());
+                    jsonData.put("nominalPressure",bizProduct.getNominalPressure());
+                    jsonData.put("valvebodyMaterial",bizProduct.getValvebodyMaterial());
+                    jsonData.put("valveElement",bizProduct.getValveElement());
+                    jsonData.put("sealingMaterial",bizProduct.getSealingMaterial());
+                    jsonData.put("driveForm",bizProduct.getDriveForm());
+                    jsonData.put("connectionType",bizProduct.getConnectionType());
+                    jsonData.put("productNum",0);
+                    jsonData.put("price",bizProduct.getPrice());
+                    jsonData.put("productCoefficient","1");
+                    jsonData.put("ref1Id","");
+                    jsonData.put("ref1Name","请选择");
+
+                    jsonData.put("ref1Price","0");
+                    jsonData.put("ref1Num","0");
+                    jsonData.put("ref1Coefficient","0");
+                    jsonData.put("ref2Id","");
+                    jsonData.put("ref2Name","请选择");
+                    jsonData.put("ref2Price","0");
+                    jsonData.put("ref2Num","0");
+                    jsonData.put("ref2Coefficient","0");
+                    jsonData.put("actuatorId","");
+                    jsonData.put("actuatorName","请选择");
+                    jsonData.put("actuatorPrice","0");
+                    jsonData.put("actuatorNum","0");
+                    jsonData.put("actuatorCoefficient","0");
+                    jsonData.put("string4","");
+                    if (!map.containsKey(productId)) {
+                        dataArray.add(jsonData);
+                        map.put(productId,productId);
+                    } else {
+                        JSONObject json = new JSONObject();
+                        json.put("msg","第" + (i + 1) + "行数据重复！");
+                        errorArray.add(json);
+                    }
+                } else {
+                    JSONObject json = new JSONObject();
+                    json.put("msg","第" + (i + 1) + "行数据不存在！");
+                    errorArray.add(json);
+                }
+                i++;
+            }
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+            throw new BusinessException("导出失败，请联系网站管理员！");
+        }
+        retJson.put("data",dataArray);
+        if (errorArray.size() > 0) {
+            retJson.put("error",errorArray);
+        }
+        return retJson;
     }
 }

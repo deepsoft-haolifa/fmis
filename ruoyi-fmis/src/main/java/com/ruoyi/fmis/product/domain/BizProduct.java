@@ -1,5 +1,7 @@
 package com.ruoyi.fmis.product.domain;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
@@ -30,6 +32,10 @@ public class BizProduct extends BaseEntity {
     /** 产品型号 */
     @Excel(name = "产品型号")
     private String model;
+
+    @Setter
+    @Getter
+    private String modelEq;
 
     /** 规格 */
     @Excel(name = "规格")

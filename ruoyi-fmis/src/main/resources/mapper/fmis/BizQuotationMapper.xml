@@ -199,7 +199,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
           d7.name as drive_form,d8.name as structural_style,
           s.name as supplier, p.new_supplier,
           p.medium,p.temperature,p.other,d9.name as productString1,
-          p.string2 as productString2
+          p.string2 as productString2,qp.string4 as productRemark
 
         from biz_quotation q
          join biz_quotation_product qp on qp.quotation_id=q.quotation_id
@@ -241,7 +241,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             </if>-->
 
         </where>
-        order by q.quotation_id,p.product_id,q.create_time desc
+        order by qp.qp_id
     </select>
 
     <select id="selectBizQuotationById" parameterType="Long" resultMap="BizQuotationResult">

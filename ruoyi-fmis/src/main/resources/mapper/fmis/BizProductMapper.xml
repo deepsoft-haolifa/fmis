@@ -84,6 +84,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="productId != null  and productId != ''"> and p.product_id = #{productId}</if>
             <if test="name != null  and name != ''"> and p.name like concat('%', #{name}, '%')</if>
             <if test="series != null  and series != ''"> and p.series = #{series}</if>
+            <if test="modelEq != null  and modelEq != ''"> and p.model=#{modelEq}</if>
             <if test="model != null  and model != ''"> and p.model like concat('%', #{model}, '%')</if>
             <if test="specifications != null  and specifications != ''"> and p.specifications = #{specifications}</if>
             <if test="nominalPressure != null  and nominalPressure != ''"> and p.nominal_pressure = #{nominalPressure}</if>

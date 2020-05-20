@@ -127,26 +127,17 @@
                 $.modal.alertWarning("请只选择一条记录");
                 return;
             }
-            //$.modal.confirm('确定要关联该法兰吗？',
-             //   function() {
-                    parent.$('#form-quotation-add input[name=productRef1Id_' + productId + ']').val($.table.selectColumns("productRefId"));
-                    parent.$('#form-quotation-add input[name=productRef1Name_' + productId + ']').val($.table.selectColumns("name"));
-
-                    parent.$('#form-quotation-add input[name=productRef1Model_' + productId + ']').val($.table.selectColumns("model"));
-                    parent.$('#form-quotation-add input[name=productRef1Specifications_' + productId + ']').val($.table.selectColumns("specifications"));
-                    parent.$('#form-quotation-add input[name=productRef1ValvebodyMaterial_' + productId + ']').val($.table.selectColumns("valvebodyMaterial"));
-                    parent.$('#form-quotation-add input[name=productRef1Price_' + productId + ']').val($.table.selectColumns("price"));
-
-                    parent.$('#form-quotation-edit input[id=productRef1Id_' + productId + ']').val($.table.selectColumns("productRefId"));
-                    parent.$('#form-quotation-edit input[id=productRef1Name_' + productId + ']').val($.table.selectColumns("name"));
-
-                    parent.$('#form-quotation-edit input[id=productRef1Model_' + productId + ']').val($.table.selectColumns("model"));
-                    parent.$('#form-quotation-edit input[id=productRef1Specifications_' + productId + ']').val($.table.selectColumns("specifications"));
-                    parent.$('#form-quotation-edit input[id=productRef1ValvebodyMaterial_' + productId + ']').val($.table.selectColumns("valvebodyMaterial"));
-                    parent.$('#form-quotation-edit input[id=productRef1Price_' + productId + ']').val($.table.selectColumns("price"));
-                    $.modal.close();
-            //    }
-            //);
+            var productRefId = $.table.selectColumns("productRefId");
+            var rowData = {
+                productRef1Id : productRefId[0],
+                ref1Name:$.table.selectColumns("name"),
+                ref1Price:$.table.selectColumns("price"),
+                productRef1Num:"0",
+                productRef1Coefficient:"0",
+            };
+            parent.$('#form-quotation-add input[id=ref1JsonParamter]').val(JSON.stringify(rowData));
+            parent.$('#form-quotation-edit input[id=ref1JsonParamter]').val(JSON.stringify(rowData));
+            $.modal.close();
         }
     </script>
 </body>

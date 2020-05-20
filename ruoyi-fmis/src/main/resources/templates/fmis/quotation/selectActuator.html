@@ -319,26 +319,17 @@
                 selName = rows2[0].name;
                 selRow = rows2[0];
             }
-            //$.modal.confirm('确定要关联该执行器吗？',
-            //    function() {
-                    parent.$('#form-quotation-add input[name=actuatorId_' + productId + ']').val(selActuatorId);
-                    parent.$('#form-quotation-add input[name=actuatorName_' + productId + ']').val(selName);
 
-
-                    parent.$('#form-quotation-add input[name=brand_' + productId + ']').val(selRow.brand);
-                    parent.$('#form-quotation-add input[name=string1_' + productId + ']').val(selRow.string1);
-                    parent.$('#form-quotation-add input[name=actuatorPrice_' + productId + ']').val(selRow.price);
-
-
-                    parent.$('#form-quotation-edit input[id=actuatorId_' + productId + ']').val(selActuatorId);
-                    parent.$('#form-quotation-edit input[id=actuatorName_' + productId + ']').val(selName);
-
-                    parent.$('#form-quotation-edit input[id=brand_' + productId + ']').val(selRow.brand);
-                    parent.$('#form-quotation-edit input[id=string1_' + productId + ']').val(selRow.string1);
-                    parent.$('#form-quotation-edit input[id=actuatorPrice_' + productId + ']').val(selRow.price);
-                    $.modal.close();
-            //    }
-            //);
+            var rowData = {
+                actuatorId : selActuatorId,
+                actuatorName:selName,
+                actuatorPrice:selRow.price,
+                actuatorNum:"0",
+                actuatorCoefficient:"0",
+            };
+            parent.$('#form-quotation-add input[id=actuatorJsonParamter]').val(JSON.stringify(rowData));
+            parent.$('#form-quotation-edit input[id=actuatorJsonParamter]').val(JSON.stringify(rowData));
+            $.modal.close();
         }
     </script>
 </body>

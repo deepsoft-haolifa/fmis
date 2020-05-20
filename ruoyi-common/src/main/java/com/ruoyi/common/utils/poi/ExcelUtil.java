@@ -1,10 +1,6 @@
 package com.ruoyi.common.utils.poi;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
@@ -16,6 +12,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
+import com.ruoyi.common.utils.file.FileUtils;
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
@@ -133,7 +131,12 @@ public class ExcelUtil<T>
     {
         return importExcel(StringUtils.EMPTY, is);
     }
-
+    public List<T> importExcel(String sheetName, String filePath) throws Exception {
+        InputStream is = new FileInputStream(new File(filePath));
+        List<T> list = importExcel(sheetName,is);
+        is.close();
+        return list;
+    }
     /**
      * 对excel表单指定表格索引名转换成list
      * 

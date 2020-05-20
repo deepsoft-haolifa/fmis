@@ -24,6 +24,11 @@ public class BizQuotation extends BaseEntity {
     /** ID */
     private Long quotationId;
 
+
+    @Getter
+    @Setter
+    private String productRemark;
+
     //产品 start
     @Getter
     @Setter
