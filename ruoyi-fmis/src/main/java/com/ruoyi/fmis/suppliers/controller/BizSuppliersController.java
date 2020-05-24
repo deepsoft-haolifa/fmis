@@ -1,9 +1,22 @@
 package com.ruoyi.fmis.suppliers.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.ruoyi.common.config.Global;
+import com.ruoyi.common.exception.BusinessException;
+import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.common.utils.poi.ExcelProduct;
+import com.ruoyi.fmis.common.BizProductImport;
+import com.ruoyi.fmis.common.BizSuppliersImport;
+import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.service.ISysUserService;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -121,5 +134,79 @@ public class BizSuppliersController extends BaseController {
     @ResponseBody
     public AjaxResult remove(String ids) {
         return toAjax(bizSuppliersService.deleteBizSuppliersByIds(ids));
+    }
+
+
+    @GetMapping("/upload")
+    public String upload(ModelMap mmap) {
+        return prefix + "/upload";
+    }
+    @PostMapping("/importExcel")
+    @ResponseBody
+    public com.alibaba.fastjson.JSONObject importExcel(){
+        com.alibaba.fastjson.JSONObject retJson = new com.alibaba.fastjson.JSONObject();
+        JSONArray dataArray = new JSONArray();
+        JSONArray errorArray = new JSONArray();
+        String url = getRequest().getParameter("url");
+        String realPath = Global.getFilePath() + url;
+        List<BizSuppliersImport> list = new ArrayList<>();
+        try {
+            ExcelUtil<BizSuppliersImport> excelUtil = new ExcelUtil(BizSuppliersImport.class);
+            int rows = excelUtil.getRowLength("",realPath);
+            if (rows > 50000) {
+                JSONObject json = new JSONObject();
+                json.put("msg","一次不能超过50000条数据");
+                errorArray.add(json);
+                retJson.put("error",errorArray);
+            } else {
+                list = excelUtil.importExcel("",realPath);
+                logger.info("list size=" + list.size());
+                int insertCount = 0;
+                int updateCount = 0;
+                List<BizSuppliers> bizSuppliersList = bizSuppliersService.selectAllList();
+                Map<String,BizSuppliers> bizSuppliersMap = new HashMap<>();
+                if (CollectionUtils.isNotEmpty(bizSuppliersList)) {
+                    for (BizSuppliers bizSuppliers : bizSuppliersList) {
+                        bizSuppliersMap.put(bizSuppliers.getNickName(),bizSuppliers);
+                    }
+                }
+                for (int i = 0; i < list.size(); i++) {
+                    BizSuppliersImport suppliersImport = list.get(i);
+                    String nickName = suppliersImport.getCode();
+                    String name = suppliersImport.getName();
+                    if (StringUtils.isEmpty(nickName) || StringUtils.isEmpty(name)) {
+                        JSONObject json = new JSONObject();
+                        json.put("msg","第" + (i + 2) + "行  名称或者代码不能为空！");
+                        errorArray.add(json);
+                        retJson.put("error",errorArray);
+                        break;
+                    }
+                    if (bizSuppliersMap.containsKey(nickName)) {
+                        bizSuppliersService.deleteBizSuppliersById(bizSuppliersMap.get(nickName).getSuppliersId());
+                        updateCount++;
+                    } else {
+                        insertCount++;
+                    }
+                    BizSuppliers bizSuppliers = new BizSuppliers();
+                    bizSuppliers.setName(name);
+                    bizSuppliers.setNickName(nickName);
+                    bizSuppliers.setCreateBy(ShiroUtils.getUserId().toString());
+                    bizSuppliers.setStatus("0");
+                    bizSuppliers.setDelFlag("0");
+                    bizSuppliers.setOwnerId(ShiroUtils.getUserId().toString());
+                    bizSuppliersService.insertBizSuppliers(bizSuppliers);
+                }
+                JSONObject json = new JSONObject();
+                json.put("msg","成功导入 添加 " + insertCount + "条数据，覆盖 " + updateCount + "条数据！");
+                dataArray.add(json);
+                retJson.put("data",dataArray);
+            }
+
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+            throw new BusinessException("导出失败，请联系网站管理员！");
+        }
+        return retJson;
     }
 }

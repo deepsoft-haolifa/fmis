@@ -1,14 +1,23 @@
 package com.ruoyi.fmis.customer.controller;
 
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.ruoyi.common.config.Global;
+import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.common.utils.poi.ExcelProduct;
 import com.ruoyi.fmis.common.BizConstants;
+import com.ruoyi.fmis.common.BizCustomerImport;
+import com.ruoyi.fmis.common.BizProductImport;
+import com.ruoyi.fmis.dict.domain.BizDict;
+import com.ruoyi.fmis.product.domain.BizProduct;
+import com.ruoyi.fmis.suppliers.domain.BizSuppliers;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysDept;
+import com.ruoyi.system.domain.SysDictData;
 import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.service.ISysDeptService;
 import com.ruoyi.system.service.ISysUserService;
@@ -17,6 +26,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -246,5 +256,55 @@ public class BizCustomerController extends BaseController {
     @ResponseBody
     public AjaxResult remove(String ids) {
         return toAjax(bizCustomerService.deleteBizCustomerByIds(ids));
+    }
+
+    @GetMapping("/upload")
+    public String upload(ModelMap mmap) {
+        return prefix + "/upload";
+    }
+
+    @PostMapping("/importExcel")
+    @ResponseBody
+    public com.alibaba.fastjson.JSONObject importExcel(){
+        com.alibaba.fastjson.JSONObject retJson = new com.alibaba.fastjson.JSONObject();
+        JSONArray dataArray = new JSONArray();
+        JSONArray errorArray = new JSONArray();
+        String url = getRequest().getParameter("url");
+        String realPath = Global.getFilePath() + url;
+        List<BizCustomerImport> list = new ArrayList<>();
+        Date now = new Date();
+        try {
+            ExcelUtil<BizCustomerImport> excelUtil = new ExcelUtil(BizCustomerImport.class);
+            int rows = excelUtil.getRowLength("",realPath);
+            if (rows > 50000) {
+                JSONObject json = new JSONObject();
+                json.put("msg","一次不能超过50000条数据！");
+                errorArray.add(json);
+                retJson.put("error",errorArray);
+            } else {
+                list = excelUtil.importExcel("",realPath);
+
+                logger.info("list size=" + list.size());
+                String delFlag = "0";
+                for (int i = 0; i < list.size(); i++) {
+                    BizCustomerImport customer = list.get(i);
+
+
+
+
+                }
+                JSONObject json = new JSONObject();
+                json.put("msg","成功导入" + list.size() + "条数据！");
+                dataArray.add(json);
+                retJson.put("data",dataArray);
+            }
+
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+            throw new BusinessException("导出失败，请联系网站管理员！");
+        }
+
+        return retJson;
     }
 }

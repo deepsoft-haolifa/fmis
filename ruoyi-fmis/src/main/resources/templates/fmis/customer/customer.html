@@ -137,6 +137,9 @@
                 <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="fmis:customer:export">
                     <i class="fa fa-download"></i> 导出
                  </a> -->
+                <a class="btn btn-success" onclick="openImportExcel()" >
+                    <i class="fa fa-remove"></i> 导入
+                </a>
             </div>
             <div class="col-sm-12 select-table table-striped">
                 <table id="bootstrap-table"></table>
@@ -332,6 +335,18 @@
             startView: "year",
             autoclose: true
         });
+
+        function openImportExcel () {
+            var url = prefix + "/upload";
+            var widthNum = this.innerWidth - 50;
+            var heigthNum = this.innerHeight - 50;
+            $.modal.open("关联产品", url,widthNum, heigthNum,function (index, layero) {
+                var iframeWin = layero.find('iframe')[0];
+                iframeWin.contentWindow.submitHandler(index, layero);
+                appendTable();
+                calculateTotalPrice();
+            });
+        }
     </script>
 </body>
 </html>

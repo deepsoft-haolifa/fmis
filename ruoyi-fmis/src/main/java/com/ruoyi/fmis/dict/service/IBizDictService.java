@@ -1,6 +1,6 @@
 package com.ruoyi.fmis.dict.service;
 
-import com.ruoyi.common.json.JSONObject;
+import com.alibaba.fastjson.JSONObject;
 import com.ruoyi.fmis.dict.domain.BizDict;
 import java.util.List;
 

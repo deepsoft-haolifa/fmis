@@ -100,6 +100,10 @@
                 <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="fmis:product:remove">
                     <i class="fa fa-remove"></i> 删除
                 </a>
+
+                <a class="btn btn-success" onclick="openImportExcel()" >
+                    <i class="fa fa-remove"></i> 导入
+                </a>
                 <!--
                 <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="fmis:product:export">
                     <i class="fa fa-download"></i> 导出
@@ -312,6 +316,18 @@
                 var specificationObj = dataArray[i];
                 $("#" + selectId).append("<option value='" + specificationObj.dictId + "'>" + specificationObj.name + "</option>")
             }
+        }
+
+        function openImportExcel () {
+            var url = prefix + "/upload";
+            var widthNum = this.innerWidth - 50;
+            var heigthNum = this.innerHeight - 50;
+            $.modal.open("关联产品", url,widthNum, heigthNum,function (index, layero) {
+                var iframeWin = layero.find('iframe')[0];
+                iframeWin.contentWindow.submitHandler(index, layero);
+                appendTable();
+                calculateTotalPrice();
+            });
         }
     </script>
 </body>

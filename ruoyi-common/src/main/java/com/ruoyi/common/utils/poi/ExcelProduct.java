@@ -1,42 +1,5 @@
 package com.ruoyi.common.utils.poi;
 
-import java.io.*;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
-import com.ruoyi.common.utils.file.FileUtils;
-import org.apache.poi.hssf.usermodel.HSSFDateUtil;
-import org.apache.poi.ss.usermodel.BorderStyle;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.CellType;
-import org.apache.poi.ss.usermodel.DataValidation;
-import org.apache.poi.ss.usermodel.DataValidationConstraint;
-import org.apache.poi.ss.usermodel.DataValidationHelper;
-import org.apache.poi.ss.usermodel.DateUtil;
-import org.apache.poi.ss.usermodel.FillPatternType;
-import org.apache.poi.ss.usermodel.Font;
-import org.apache.poi.ss.usermodel.HorizontalAlignment;
-import org.apache.poi.ss.usermodel.IndexedColors;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.VerticalAlignment;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.apache.poi.ss.util.CellRangeAddressList;
-import org.apache.poi.xssf.streaming.SXSSFWorkbook;
-import org.apache.poi.xssf.usermodel.XSSFDataValidation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.annotation.Excel.ColumnType;
 import com.ruoyi.common.annotation.Excel.Type;
@@ -48,15 +11,29 @@ import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.reflect.ReflectUtils;
+import org.apache.poi.hssf.usermodel.HSSFDateUtil;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellRangeAddressList;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFDataValidation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.*;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.util.*;
 
 /**
  * Excel相关处理
  * 
  * @author ruoyi
  */
-public class ExcelUtil<T>
+public class ExcelProduct<T>
 {
-    private static final Logger log = LoggerFactory.getLogger(ExcelUtil.class);
+    private static final Logger log = LoggerFactory.getLogger(ExcelProduct.class);
 
     /**
      * Excel sheet最大行数，默认65536
@@ -103,7 +80,7 @@ public class ExcelUtil<T>
      */
     public Class<T> clazz;
 
-    public ExcelUtil(Class<T> clazz)
+    public ExcelProduct(Class<T> clazz)
     {
         this.clazz = clazz;
     }
@@ -142,6 +119,34 @@ public class ExcelUtil<T>
         is.close();
         return list;
     }
+
+    public int getRowLength (String sheetName, String filePath) throws Exception{
+        InputStream is = new FileInputStream(new File(filePath));
+        this.type = Type.IMPORT;
+        this.wb = WorkbookFactory.create(is);
+        List<T> list = new ArrayList<T>();
+        Sheet sheet = null;
+        if (StringUtils.isNotEmpty(sheetName))
+        {
+            // 如果指定sheet名,则取指定sheet中的内容.
+            sheet = wb.getSheet(sheetName);
+        }
+        else
+        {
+            // 如果传入的sheet名不存在则默认指向第1个sheet.
+            sheet = wb.getSheetAt(0);
+        }
+        if (sheet == null)
+        {
+            throw new IOException("文件sheet不存在");
+        }
+
+        int rows = sheet.getPhysicalNumberOfRows();
+        is.close();
+
+        return rows;
+    }
+
     /**
      * 对excel表单指定表格索引名转换成list
      * 
@@ -215,6 +220,10 @@ public class ExcelUtil<T>
                 T entity = null;
                 for (Map.Entry<Integer, Field> entry : fieldsMap.entrySet())
                 {
+                    if (entry == null) {
+                        i++;
+                        continue;
+                    }
                     Object val = this.getCellValue(row, entry.getKey());
 
                     // 如果不存在实例则新建.
@@ -878,32 +887,5 @@ public class ExcelUtil<T>
             return val;
         }
         return val;
-    }
-
-    public int getRowLength (String sheetName, String filePath) throws Exception{
-        InputStream is = new FileInputStream(new File(filePath));
-        this.type = Type.IMPORT;
-        this.wb = WorkbookFactory.create(is);
-        List<T> list = new ArrayList<T>();
-        Sheet sheet = null;
-        if (StringUtils.isNotEmpty(sheetName))
-        {
-            // 如果指定sheet名,则取指定sheet中的内容.
-            sheet = wb.getSheet(sheetName);
-        }
-        else
-        {
-            // 如果传入的sheet名不存在则默认指向第1个sheet.
-            sheet = wb.getSheetAt(0);
-        }
-        if (sheet == null)
-        {
-            throw new IOException("文件sheet不存在");
-        }
-
-        int rows = sheet.getPhysicalNumberOfRows();
-        is.close();
-
-        return rows;
     }
 }

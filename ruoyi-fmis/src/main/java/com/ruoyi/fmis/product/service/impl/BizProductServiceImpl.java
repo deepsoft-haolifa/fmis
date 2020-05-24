@@ -46,6 +46,8 @@ public class BizProductServiceImpl implements IBizProductService {
         return bizProductMapper.selectBizProductList(bizProduct);
     }
 
+
+
     @Override
     public List<BizProduct> selectBizProductListNoAuth(BizProduct bizProduct) {
         return bizProductMapper.selectBizProductList(bizProduct);

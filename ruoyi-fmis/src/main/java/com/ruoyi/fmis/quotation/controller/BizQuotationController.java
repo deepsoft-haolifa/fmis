@@ -1123,7 +1123,7 @@ public class BizQuotationController extends BaseController {
                     BizProduct bizProduct = bizProductList.get(0);
                     Long productId = bizProduct.getProductId();
                     jsonData.put("productId",productId);
-                    jsonData.put("name",bizProduct.getName());
+                    jsonData.put("productName",bizProduct.getName());
                     jsonData.put("model",bizProduct.getModel());
                     jsonData.put("specifications",bizProduct.getSpecifications());
                     jsonData.put("nominalPressure",bizProduct.getNominalPressure());
@@ -1132,26 +1132,26 @@ public class BizQuotationController extends BaseController {
                     jsonData.put("sealingMaterial",bizProduct.getSealingMaterial());
                     jsonData.put("driveForm",bizProduct.getDriveForm());
                     jsonData.put("connectionType",bizProduct.getConnectionType());
-                    jsonData.put("productNum",0);
-                    jsonData.put("price",bizProduct.getPrice());
+                    jsonData.put("productNum",num);
+                    jsonData.put("productPrice",bizProduct.getPrice());
                     jsonData.put("productCoefficient","1");
-                    jsonData.put("ref1Id","");
+                    jsonData.put("productRef1Id","");
                     jsonData.put("ref1Name","请选择");
 
                     jsonData.put("ref1Price","0");
-                    jsonData.put("ref1Num","0");
-                    jsonData.put("ref1Coefficient","0");
-                    jsonData.put("ref2Id","");
+                    jsonData.put("productRef1Num","0");
+                    jsonData.put("productRef1Coefficient","0");
+                    jsonData.put("productRef2Id","");
                     jsonData.put("ref2Name","请选择");
                     jsonData.put("ref2Price","0");
-                    jsonData.put("ref2Num","0");
-                    jsonData.put("ref2Coefficient","0");
+                    jsonData.put("productRef2Num","0");
+                    jsonData.put("productRef2Coefficient","0");
                     jsonData.put("actuatorId","");
                     jsonData.put("actuatorName","请选择");
                     jsonData.put("actuatorPrice","0");
                     jsonData.put("actuatorNum","0");
                     jsonData.put("actuatorCoefficient","0");
-                    jsonData.put("string4","");
+                    jsonData.put("productRemark","");
                     if (!map.containsKey(productId)) {
                         dataArray.add(jsonData);
                         map.put(productId,productId);
