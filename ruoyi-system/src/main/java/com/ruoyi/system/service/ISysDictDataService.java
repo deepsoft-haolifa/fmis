@@ -1,6 +1,8 @@
 package com.ruoyi.system.service;
 
 import java.util.List;
+import java.util.Map;
+
 import com.ruoyi.system.domain.SysDictData;
 
 /**
@@ -74,4 +76,8 @@ public interface ISysDictDataService
      * @return 结果
      */
     public int updateDictData(SysDictData dictData);
+
+    public String saveDictData (String type, String label, Map<String,SysDictData> dictDataMap, String createByName);
+
+    public Map<String,SysDictData> getDictDataMapByCode (String code);
 }

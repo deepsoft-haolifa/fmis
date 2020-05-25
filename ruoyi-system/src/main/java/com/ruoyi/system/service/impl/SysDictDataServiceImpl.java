@@ -1,12 +1,18 @@
 package com.ruoyi.system.service.impl;
 
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import com.ruoyi.common.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.system.domain.SysDictData;
 import com.ruoyi.system.mapper.SysDictDataMapper;
 import com.ruoyi.system.service.ISysDictDataService;
+import org.springframework.util.CollectionUtils;
 
 /**
  * 字典 业务层处理
@@ -114,5 +120,51 @@ public class SysDictDataServiceImpl implements ISysDictDataService
     public int updateDictData(SysDictData dictData)
     {
         return dictDataMapper.updateDictData(dictData);
+    }
+
+    /**
+     * 检测数据字典，如果不存在新建一个
+     * @param type
+     * @param label
+     * @param dictDataMap
+     * @param createByName
+     * @return
+     */
+    @Override
+    public String saveDictData (String type, String label, Map<String,SysDictData> dictDataMap,String createByName) {
+        SysDictData dictData = null;
+        if (StringUtils.isNotEmpty(label)) {
+            if (dictDataMap.containsKey(label)) {
+                dictData = dictDataMap.get(label);
+            } else {
+                dictData = new SysDictData();
+                dictData.setDictSort(new Long(dictDataMap.size() + 1));
+                dictData.setDictCode(new Long(dictDataMap.size() + 1));
+                dictData.setDictValue(String.valueOf((dictDataMap.size() + 1)));
+                dictData.setDictLabel(label);
+                dictData.setDictType(type);
+                dictData.setStatus("0");
+                dictData.setCreateBy(createByName);
+                dictData.setCreateTime(new Date());
+                this.insertDictData(dictData);
+                //dictDataMap = getDictDataMapByCode(type);
+                dictDataMap.put(label,dictData);
+            }
+        } else {
+            return "";
+        }
+        return dictData.getDictValue();
+    }
+
+    @Override
+    public Map<String,SysDictData> getDictDataMapByCode (String code) {
+        Map<String,SysDictData> map = new HashMap<>();
+        List<SysDictData> dictDataList = this.selectDictDataByType(code);
+        if (!CollectionUtils.isEmpty(dictDataList)) {
+            for (SysDictData sysDictData : dictDataList) {
+                map.put(sysDictData.getDictLabel(),sysDictData);
+            }
+        }
+        return map;
     }
 }

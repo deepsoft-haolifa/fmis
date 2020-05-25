@@ -136,7 +136,10 @@ public class BizAirActuatorController extends BaseController {
         mmap.put("bizActuator", bizActuator);
         return prefix + "/edit";
     }
-
+    @GetMapping("/upload")
+    public String upload(ModelMap mmap) {
+        return prefix + "/upload";
+    }
     /**
      * 修改保存执行器
      */

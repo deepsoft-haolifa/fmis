@@ -17,6 +17,7 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils
     /** 下划线 */
     private static final char SEPARATOR = '_';
 
+
     /**
      * 获取参数不为空值
      * 
@@ -155,6 +156,19 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils
     public static String trim(String str)
     {
         return (str == null ? "" : str.trim());
+    }
+    /**
+     * 去空格
+     */
+    public static Double toDouble(String str)
+    {
+        String s = (str == null ? "" : str.trim());
+        try {
+            return Double.parseDouble(s);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return new Double(0);
     }
 
     /**

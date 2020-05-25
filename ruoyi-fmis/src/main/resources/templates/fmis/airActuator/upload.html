@@ -1,26 +1,24 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('供应商导入')" />
+    <th:block th:include="include :: header('导入')" />
     <th:block th:include="include :: bootstrap-fileinput-css" />
 </head>
 <body class="gray-bg">
-
 <div class="modal fade" id="loadingModal">
     <div style="width: 200px;height:20px; z-index: 20000; position: absolute; text-align: center; left: 50%; top: 50%;margin-left:-100px;margin-top:-10px">
         <div class="progress progress-striped active" style="margin-bottom: 0;">
             <div class="progress-bar" style="width: 100%;"></div>
         </div>
-        <h5>正在导入...</h5>
+        <h5 id="processBarDiv">正在导入...</h5>
     </div>
 </div>
-
 <div class="wrapper wrapper-content animated fadeInRight">
     <div class="row">
         <div class="col-sm-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5>供应商上传 </h5>
+                    <h5>气动执行器上传 </h5>
                 </div>
                 <div class="ibox-content">
                     <ul  id="errorMsgDiv" class="text-danger">
@@ -30,7 +28,7 @@
                 </div>
                 <div class="ibox-content">
                     <div class="form-group">
-                        <label class="font-noraml">供应商上传</label>
+                        <label class="font-noraml">气动执行器上传</label>
                         <input id="file_paths_" type="file" name="file" multiple data-min-file-count="1" data-theme="fas" class="imgFile form-control">
                         <input id="filePaths" name="filePaths" type="hidden">
                     </div>
@@ -42,6 +40,27 @@
 <th:block th:include="include :: footer" />
 <th:block th:include="include :: bootstrap-fileinput-js" />
 <script type="text/javascript">
+
+
+    function process () {
+        $.ajax({
+            url: ctx + "fmis/product/processBar", //请求的url地址
+            dataType:"json", //返回格式为json
+            async:true,//请求是否异步，默认为异步，这也是ajax重要特性
+            type:"POST", //请求方式
+            success:function(retData){
+                //请求成功时处理
+                var processTotal = retData.processTotal;
+                var processNum = retData.processNum;
+                if (processTotal == 0 || processTotal == "0") {
+                    $("#processBarDiv").html("");
+                } else {
+                    $("#processBarDiv").html(processNum + "/" + processTotal);
+                }
+            }
+        });
+    }
+
 
     $(document).ready(function () {
         $("#file_paths_").fileinput({
@@ -58,13 +77,14 @@
             $(this).fileinput("upload");
         }).on("fileuploaded", function(event, data) {
             $("#loadingModal").modal('show');
+            setInterval("process()",5000);
             console.log("data.data=" + data.response.data);
             $("#filePaths").val(data.response.data);
             $.ajax({
-                url: ctx + "fmis/suppliers/importExcel", //请求的url地址
+                url: ctx + "fmis/actuator/importExcel", //请求的url地址
                 dataType:"json", //返回格式为json
                 async:true,//请求是否异步，默认为异步，这也是ajax重要特性
-                data:{"url": data.response.data}, //参数值
+                data:{"url": data.response.data,"type":"2"}, //参数值
                 type:"POST", //请求方式
                 success:function(retData){
                     //请求成功时处理
@@ -90,6 +110,10 @@
                         }
                         $("#successMsgDiv").html(successMsgDiv);
                     }
+                    $("#loadingModal").modal('hide');
+                },
+                error: function () {
+                    alert("服务器错误！");
                     $("#loadingModal").modal('hide');
                 }
             });

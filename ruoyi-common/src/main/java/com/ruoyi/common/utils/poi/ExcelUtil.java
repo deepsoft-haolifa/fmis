@@ -215,7 +215,15 @@ public class ExcelUtil<T>
                 T entity = null;
                 for (Map.Entry<Integer, Field> entry : fieldsMap.entrySet())
                 {
-                    Object val = this.getCellValue(row, entry.getKey());
+                    if (entry == null) {
+                        break;
+                    }
+                    Object val = "";
+                    try {
+                        val = this.getCellValue(row, entry.getKey());
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
 
                     // 如果不存在实例则新建.
                     entity = (entity == null ? clazz.newInstance() : entity);

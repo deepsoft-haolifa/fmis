@@ -221,8 +221,7 @@ public class ExcelProduct<T>
                 for (Map.Entry<Integer, Field> entry : fieldsMap.entrySet())
                 {
                     if (entry == null) {
-                        i++;
-                        continue;
+                        break;
                     }
                     Object val = this.getCellValue(row, entry.getKey());
 

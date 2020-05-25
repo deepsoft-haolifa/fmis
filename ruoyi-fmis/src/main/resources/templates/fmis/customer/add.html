@@ -14,7 +14,7 @@
                 <div class="col-sm-8">
                     <div class="input-group date">
                         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input name="recordDate" class="form-control" placeholder="yyyy-MM" type="text">
+                        <input name="recordDate" id="recordDate" class="form-control" placeholder="yyyy-MM" type="text">
                     </div>
                 </div>
             </div>
@@ -337,6 +337,13 @@
             startView: "year",
             autoclose: true
         });
+
+        var d = new Date();
+        var month = (d.getMonth()+1).toString().padStart(2,'0');
+        var day = d.getDate();
+        var year = d.getFullYear();
+        $("#recordDate").val(year + "-" + month);
+
         $("input[name='allocationDate']").datetimepicker({
             format: "yyyy-mm-dd",
             minView: "month",

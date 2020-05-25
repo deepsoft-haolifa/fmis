@@ -20,8 +20,10 @@ import com.ruoyi.system.domain.SysDept;
 import com.ruoyi.system.domain.SysDictData;
 import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.service.ISysDeptService;
+import com.ruoyi.system.service.ISysDictDataService;
 import com.ruoyi.system.service.ISysUserService;
 import org.activiti.engine.impl.util.CollectionUtil;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -62,6 +64,12 @@ public class BizCustomerController extends BaseController {
 
     @Autowired
     private ISysDeptService sysDeptService;
+
+    @Autowired
+    private ISysDictDataService sysDictDataService;
+
+    @Autowired
+    private ISysUserService sysUserService;
 
     @RequiresPermissions("fmis:customer:view")
     @GetMapping()
@@ -263,6 +271,41 @@ public class BizCustomerController extends BaseController {
         return prefix + "/upload";
     }
 
+
+    public Map<String,SysDictData> getDictDataMapByCode (String code) {
+        Map<String,SysDictData> map = new HashMap<>();
+        List<SysDictData> dictDataList = sysDictDataService.selectDictDataByType(code);
+        if (!CollectionUtils.isEmpty(dictDataList)) {
+            for (SysDictData sysDictData : dictDataList) {
+                map.put(sysDictData.getDictLabel(),sysDictData);
+            }
+        }
+        return map;
+    }
+    public String saveDictData (String type,String label,Map<String,SysDictData> dictDataMap) {
+        SysDictData dictData = null;
+        if (StringUtils.isNotEmpty(label)) {
+            if (dictDataMap.containsKey(label)) {
+                dictData = dictDataMap.get(label);
+            } else {
+                dictData = new SysDictData();
+                dictData.setDictSort(new Long(dictDataMap.size() + 1));
+                dictData.setDictCode(new Long(dictDataMap.size() + 1));
+                dictData.setDictValue(String.valueOf((dictDataMap.size() + 1)));
+                dictData.setDictLabel(label);
+                dictData.setDictType(type);
+                dictData.setStatus("0");
+                dictData.setCreateBy(ShiroUtils.getLoginName());
+                dictData.setCreateTime(new Date());
+                sysDictDataService.insertDictData(dictData);
+                //dictDataMap = getDictDataMapByCode(type);
+                dictDataMap.put(label,dictData);
+            }
+        } else {
+            return "";
+        }
+        return dictData.getDictValue();
+    }
     @PostMapping("/importExcel")
     @ResponseBody
     public com.alibaba.fastjson.JSONObject importExcel(){
@@ -283,15 +326,97 @@ public class BizCustomerController extends BaseController {
                 retJson.put("error",errorArray);
             } else {
                 list = excelUtil.importExcel("",realPath);
-
+                //客户区域
+                Map<String,SysDictData> customerAreaMap = getDictDataMapByCode("customer_area");//area
+                Map<String,SysDictData> customerLevelMap = getDictDataMapByCode("customer_level");//customerLevel
+                Map<String,SysDictData> industryDivisionMap = getDictDataMapByCode("industry_division");//industryDivision
+                Map<String,SysDictData> customerSourceMap = getDictDataMapByCode("customer_source");//source
+                Map<String,SysDictData> customerCompanyCodeMap = getDictDataMapByCode("customer_company_code");//areaCode
+                Map<String,SysDictData> assignNumberMap = getDictDataMapByCode("assign_number");//assignNumber
+                Map<String,SysDictData> customerRecordTypeMap = getDictDataMapByCode("customer_record_type");//recordType
+                Map<String,SysDictData> customerBrandMap = getDictDataMapByCode("customer_brand");//brand
+                List<BizCustomer> customers = bizCustomerService.selectBizCustomerList(new BizCustomer());
+                Map<String,BizCustomer> customerMap = new HashMap<>();
+                if (!CollectionUtils.isEmpty(customers)) {
+                    for (BizCustomer bizCustomer : customers) {
+                        String code = bizCustomer.getCodeName();
+                        customerMap.put(code,bizCustomer);
+                    }
+                }
                 logger.info("list size=" + list.size());
                 String delFlag = "0";
                 for (int i = 0; i < list.size(); i++) {
+                    logger.info("import num=" + i);
                     BizCustomerImport customer = list.get(i);
 
+                    String areaName = customer.getArea();
+                    String area = saveDictData("customer_area",areaName,customerAreaMap);
+
+                    String customerLevelName = customer.getCustomerLevel();
+                    String customerLevel = saveDictData("customer_level",customerLevelName,customerLevelMap);
+
+                    String industryDivisionName = customer.getIndustryDivision();
+                    String industryDivision = saveDictData("industry_division",industryDivisionName,industryDivisionMap);
+
+                    String sourceName = customer.getSource();
+                    String source = saveDictData("customer_source",sourceName,customerSourceMap);
+
+                    String areaCodeName = customer.getAreaCode();
+                    String areaCode = saveDictData("customer_company_code",areaCodeName,customerCompanyCodeMap);
 
 
+                    String assignNumberName = customer.getAssignNumber();
+                    String assignNumber = saveDictData("assign_number",assignNumberName,assignNumberMap);
 
+                    String recordTypeName = customer.getRecordType();
+                    String recordType = saveDictData("customer_record_type",recordTypeName,customerRecordTypeMap);
+
+                    String brandName = customer.getBrand();
+                    String brand = saveDictData("customer_brand",brandName,customerBrandMap);
+
+                    String codeName = customer.getCodeName();
+                    BizCustomer importCustomer = new BizCustomer();
+                    if (customerMap.containsKey(codeName)) {
+                        importCustomer = customerMap.get(codeName);
+                    }
+                    importCustomer.setArea(area);
+                    importCustomer.setCustomerLevel(customerLevel);
+                    importCustomer.setIndustryDivision(industryDivision);
+                    importCustomer.setSource(source);
+                    importCustomer.setAreaCode(areaCode);
+                    importCustomer.setAssignNumber(assignNumber);
+                    importCustomer.setRecordType(recordType);
+                    importCustomer.setBrand(brand);
+
+                    importCustomer.setName(customer.getName().trim());
+                    Date recordDate = customer.getRecordDate();
+                    if (recordDate != null) {
+                        importCustomer.setRecordDate(DateUtils.parseDateToStr("yyyy-MM-dd",recordDate));
+                    }
+
+                    importCustomer.setCodeName(customer.getCodeName().trim());
+                    Date allocationDate = customer.getAllocationDate();
+                    if (allocationDate != null) {
+                        importCustomer.setAllocationDate(allocationDate);
+                    }
+                    importCustomer.setFileNumber(customer.getFileNumber());
+                    importCustomer.setRecordNum(customer.getRecordNum());
+
+                    importCustomer.setProjectAme(customer.getProjectAme());
+                    importCustomer.setProductInfo(customer.getProductInfo());
+
+                    importCustomer.setContactName(customer.getContactName());
+                    importCustomer.setTelephone(customer.getTelephone());
+                    importCustomer.setFax(customer.getFax());
+                    importCustomer.setContactEmail(customer.getContactEmail());
+                    importCustomer.setContactPhone(customer.getContactPhone());
+                    importCustomer.setCompanyAddress(customer.getCompanyAddress());
+                    importCustomer.setRemark(customer.getRemark());
+                    if (customerMap.containsKey(codeName)) {
+                        bizCustomerService.updateBizCustomer(importCustomer);
+                    } else {
+                        bizCustomerService.insertBizCustomer(importCustomer);
+                    }
                 }
                 JSONObject json = new JSONObject();
                 json.put("msg","成功导入" + list.size() + "条数据！");

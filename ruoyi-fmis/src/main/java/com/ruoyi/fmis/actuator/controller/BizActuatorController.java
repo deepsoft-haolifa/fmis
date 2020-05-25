@@ -1,13 +1,22 @@
 package com.ruoyi.fmis.actuator.controller;
 
-import java.util.List;
+import java.util.*;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.ruoyi.common.config.Global;
+import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.fmis.actuatorref.service.IBizActuatorRefService;
+import com.ruoyi.fmis.common.BizActuatorImport;
 import com.ruoyi.fmis.dict.domain.BizDict;
 import com.ruoyi.fmis.dict.service.IBizDictService;
 import com.ruoyi.fmis.product.domain.BizProduct;
 import com.ruoyi.fmis.product.service.IBizProductService;
+import com.ruoyi.framework.util.ShiroUtils;
+import com.ruoyi.system.domain.SysDictData;
+import com.ruoyi.system.service.ISysDictDataService;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -52,6 +61,8 @@ public class BizActuatorController extends BaseController {
         return prefix + "/actuator";
     }
 
+    @Autowired
+    private ISysDictDataService sysDictDataService;
 
     @Autowired
     private IBizProductService bizProductService;
@@ -163,5 +174,142 @@ public class BizActuatorController extends BaseController {
     @ResponseBody
     public AjaxResult remove(String ids) {
         return toAjax(bizActuatorService.deleteBizActuatorByIds(ids));
+    }
+
+    @GetMapping("/upload")
+    public String upload(ModelMap mmap) {
+        return prefix + "/upload";
+    }
+
+    public static Long processTotal = 0L;
+    public static Long processNum = 0L;
+    @PostMapping("/processBar")
+    @ResponseBody
+    public com.alibaba.fastjson.JSONObject processBar(){
+        com.alibaba.fastjson.JSONObject retJson = new com.alibaba.fastjson.JSONObject();
+        retJson.put("processTotal",processTotal.toString());
+        retJson.put("processNum",processNum.toString());
+        return retJson;
+    }
+
+    @PostMapping("/importExcel")
+    @ResponseBody
+    public com.alibaba.fastjson.JSONObject importExcel(){
+        processTotal = 0L;
+        processNum = 0L;
+        com.alibaba.fastjson.JSONObject retJson = new com.alibaba.fastjson.JSONObject();
+        JSONArray dataArray = new JSONArray();
+        JSONArray errorArray = new JSONArray();
+        String url = getRequest().getParameter("url");
+        String typeParamter = getRequest().getParameter("type");
+        String realPath = Global.getFilePath() + url;
+        List<BizActuatorImport> list = new ArrayList<>();
+        String type = "1";
+        if (StringUtils.isNotEmpty(typeParamter)) {
+            type = typeParamter;
+        }
+        Date now = new Date();
+        try {
+            ExcelUtil<BizActuatorImport> excelUtil = new ExcelUtil(BizActuatorImport.class);
+            int rows = excelUtil.getRowLength("",realPath);
+            if (rows > 50000) {
+                JSONObject json = new JSONObject();
+                json.put("msg","一次不能超过50000条数据！");
+                errorArray.add(json);
+                retJson.put("error",errorArray);
+            } else {
+                Map<String,SysDictData> setupTypeMap = sysDictDataService.getDictDataMapByCode("actuator_setup_type");//setupType
+                BizActuator queryBizActuator = new BizActuator();
+                queryBizActuator.setString2(type);
+                List<BizActuator> actuators = bizActuatorService.selectBizActuatorList(queryBizActuator);
+                Map<String,BizActuator> actuatorMap = new HashMap<>();
+                if (!CollectionUtils.isEmpty(actuators)) {
+                    for (BizActuator bizActuator : actuators) {
+                        String code = bizActuator.getString1();
+                        actuatorMap.put(code,bizActuator);
+                    }
+                }
+                list = excelUtil.importExcel("",realPath);
+                processTotal = new Long(list.size());
+                for (int i = 0; i < list.size(); i++) {
+                    BizActuatorImport actuatorImport = list.get(i);
+                    logger.info("actuator import num=" + i);
+                    processNum = new Long(i + 2);
+
+                    String setupTypeName = StringUtils.trim(actuatorImport.getSetupType());
+                    String setupType = sysDictDataService.saveDictData("actuator_setup_type",setupTypeName,setupTypeMap,ShiroUtils.getLoginName());
+
+                    String string1 = StringUtils.trim(actuatorImport.getString1());
+                    if ("2".equals(type)) {
+                        string1 = StringUtils.trim(actuatorImport.getAreaString1());
+                    }
+                    BizActuator newBizActuator = new BizActuator();
+                    if (actuatorMap.containsKey(string1)) {
+                        newBizActuator = actuatorMap.get(string1);
+                    }
+                    newBizActuator.setString1(string1);
+                    //areaString1
+
+
+                    newBizActuator.setSetupType(setupType);
+                    newBizActuator.setString2(type);
+                    newBizActuator.setName(StringUtils.trim(actuatorImport.getName()));
+                    newBizActuator.setQualityLevel(StringUtils.trim(actuatorImport.getQualityLevel()));
+                    newBizActuator.setBrand(StringUtils.trim(actuatorImport.getBrand()));
+                    newBizActuator.setOutputTorque(StringUtils.trim(actuatorImport.getOutputTorque()));
+                    newBizActuator.setActionType(StringUtils.trim(actuatorImport.getActionType()));
+                    newBizActuator.setControlCircuit(StringUtils.trim(actuatorImport.getControlCircuit()));
+                    newBizActuator.setAdaptableVoltage(StringUtils.trim(actuatorImport.getAdaptableVoltage()));
+                    newBizActuator.setProtectionLevel(StringUtils.trim(actuatorImport.getProtectionLevel()));
+                    newBizActuator.setExplosionLevel(StringUtils.trim(actuatorImport.getExplosionLevel()));
+                    newBizActuator.setManufacturer(StringUtils.trim(actuatorImport.getManufacturer()));
+                    newBizActuator.setPrice(StringUtils.toDouble(actuatorImport.getPrice()));
+                    newBizActuator.setRemark(StringUtils.trim(actuatorImport.getRemark()));
+
+                    newBizActuator.setString3(StringUtils.trim(actuatorImport.getString3()));
+                    newBizActuator.setString4(StringUtils.trim(actuatorImport.getString4()));
+
+
+                    if ("2".equals(type)) {
+                        newBizActuator.setQualityLevel(StringUtils.trim(actuatorImport.getAreaQualityLevel()));
+                        newBizActuator.setString3(StringUtils.trim(actuatorImport.getAreaString3()));
+                        newBizActuator.setString4(StringUtils.trim(actuatorImport.getString4()));
+                        newBizActuator.setString5(StringUtils.trim(actuatorImport.getString5()));
+                        newBizActuator.setPrice(StringUtils.toDouble(actuatorImport.getAreaPrice()));
+
+                        //newBizActuator.setString6(StringUtils.trim(actuatorImport.getString6()));
+                        newBizActuator.setString8(StringUtils.trim(actuatorImport.getString8()));
+                        //特殊
+                        newBizActuator.setString7(StringUtils.trim(actuatorImport.getString3()));
+
+                    }
+
+
+
+                    if (actuatorMap.containsKey(string1)) {
+                        bizActuatorService.updateBizActuator(newBizActuator);
+                    } else {
+                        newBizActuator.setCreateBy(ShiroUtils.getUserId().toString());
+                        newBizActuator.setCreateTime(now);
+                        bizActuatorService.insertBizActuator(newBizActuator);
+                    }
+                }
+                JSONObject json = new JSONObject();
+                json.put("msg","成功导入" + list.size() + "条数据！");
+                dataArray.add(json);
+                retJson.put("data",dataArray);
+                processTotal = 0L;
+                processNum = 0L;
+            }
+
+        } catch (Exception e)
+        {
+            processTotal = 0L;
+            processNum = 0L;
+            e.printStackTrace();
+            throw new BusinessException("导出失败，请联系网站管理员！");
+        }
+
+        return retJson;
     }
 }

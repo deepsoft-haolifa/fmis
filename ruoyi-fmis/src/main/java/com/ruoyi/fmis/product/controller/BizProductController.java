@@ -189,9 +189,22 @@ public class BizProductController extends BaseController {
         return prefix + "/upload";
     }
 
+    public static Long processTotal = 0L;
+    public static Long processNum = 0L;
+    @PostMapping("/processBar")
+    @ResponseBody
+    public com.alibaba.fastjson.JSONObject processBar(){
+        com.alibaba.fastjson.JSONObject retJson = new com.alibaba.fastjson.JSONObject();
+        retJson.put("processTotal",processTotal.toString());
+        retJson.put("processNum",processNum.toString());
+        return retJson;
+    }
+
     @PostMapping("/importExcel")
     @ResponseBody
     public com.alibaba.fastjson.JSONObject importExcel(){
+        processTotal = 0L;
+        processNum = 0L;
         com.alibaba.fastjson.JSONObject retJson = new com.alibaba.fastjson.JSONObject();
         JSONArray dataArray = new JSONArray();
         JSONArray errorArray = new JSONArray();
@@ -209,6 +222,7 @@ public class BizProductController extends BaseController {
                 retJson.put("error",errorArray);
             } else {
                 list = excelUtil.importExcel("",realPath);
+                processTotal = new Long(list.size());
 
                 List<BizSuppliers> suppliersList = bizSuppliersService.selectAllList();
                 Map<String,BizSuppliers> suppliersMap = new HashMap<>();
@@ -270,8 +284,8 @@ public class BizProductController extends BaseController {
                 String delFlag = "9";
                 for (int i = 0; i < list.size(); i++) {
                     BizProductImport product = list.get(i);
-
-
+                    logger.info("product import num=" + i);
+                    processNum = new Long(i + 2);
                     //供应商
                     String supplier = product.getSupplier();
                     String supplierCode = product.getSupplierCode();
@@ -659,10 +673,14 @@ public class BizProductController extends BaseController {
                 json.put("msg","成功导入" + list.size() + "条数据！");
                 dataArray.add(json);
                 retJson.put("data",dataArray);
+                processTotal = 0L;
+                processNum = 0L;
             }
 
         } catch (Exception e)
         {
+            processTotal = 0L;
+            processNum = 0L;
             e.printStackTrace();
             throw new BusinessException("导出失败，请联系网站管理员！");
         }
