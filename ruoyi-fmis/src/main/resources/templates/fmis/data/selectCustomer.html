@@ -90,10 +90,11 @@
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                                 </select>
                             </li>
+                            <!--
                             <li>
                                 <p>备案号：</p>
                                 <input name="recordCode" class="form-control" type="text">
-                            </li>
+                            </li>-->
                             <li>
                                 <p>项目名称：</p>
                                 <input name="projectAme" class="form-control" type="text">
@@ -237,10 +238,11 @@
                             return $.table.selectDictLabel(recordTypeDatas, value);
                         }
                     },
+                    /*
                     {
                         field : 'recordCode',
                         title : '项目备案号'
-                    },
+                    },*/
                     {
                         field : 'projectAme',
                         title : '项目名称'

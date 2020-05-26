@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改客户分配记录')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-chistory-edit" th:object="${bizCustomerHistory}">
+            <input name="historyId" th:field="*{historyId}" type="hidden">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">老用户ID：</label>
+                <div class="col-sm-8">
+                    <input name="oldId" th:field="*{oldId}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">新用户ID：</label>
+                <div class="col-sm-8">
+                    <input name="newId" th:field="*{newId}" class="form-control" type="text">
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "fmis/chistory";
+        $("#form-chistory-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-chistory-edit').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

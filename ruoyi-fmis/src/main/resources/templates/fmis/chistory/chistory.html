@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('客户分配记录列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>客户名称：</p>
+                                <input type="text" name="customerName"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('fmis:chistory:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('fmis:chistory:remove')}]];
+        var prefix = ctx + "fmis/chistory";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "客户分配记录",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'historyId', 
+                    title : 'ID',
+                    visible: false
+                },
+                    {
+                        field : 'customerName',
+                        title : '客户'
+                    },
+                {
+                    field : 'oldName',
+                    title : '历史负责人'
+                },
+                {
+                    field : 'newName',
+                    title : '当前负责人'
+                },
+                {
+                    field : 'userName',
+                    title : '操作人'
+                },
+                {
+                    field : 'createTime',
+                    title : '操作时间'
+                }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

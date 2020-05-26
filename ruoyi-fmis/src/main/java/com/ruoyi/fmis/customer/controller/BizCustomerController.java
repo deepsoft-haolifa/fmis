@@ -9,6 +9,8 @@ import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.poi.ExcelProduct;
+import com.ruoyi.fmis.chistory.domain.BizCustomerHistory;
+import com.ruoyi.fmis.chistory.service.IBizCustomerHistoryService;
 import com.ruoyi.fmis.common.BizConstants;
 import com.ruoyi.fmis.common.BizCustomerImport;
 import com.ruoyi.fmis.common.BizProductImport;
@@ -70,6 +72,9 @@ public class BizCustomerController extends BaseController {
 
     @Autowired
     private ISysUserService sysUserService;
+
+    @Autowired
+    private IBizCustomerHistoryService bizCustomerHistoryService;
 
     @RequiresPermissions("fmis:customer:view")
     @GetMapping()
@@ -233,7 +238,11 @@ public class BizCustomerController extends BaseController {
     @GetMapping("/edit/{customerId}")
     public String edit(@PathVariable("customerId") Long customerId, ModelMap mmap) {
         BizCustomer bizCustomer = bizCustomerService.selectBizCustomerById(customerId);
-        SysUser selUser = userService.selectUserById(Long.parseLong(bizCustomer.getOwnerUserId()));
+        String ownerId = bizCustomer.getOwnerUserId();
+        if (StringUtils.isEmpty(ownerId)) {
+            ownerId = "0";
+        }
+        SysUser selUser = userService.selectUserById(Long.parseLong(ownerId));
         if (selUser == null) {
             selUser = new SysUser();
         }
@@ -252,6 +261,24 @@ public class BizCustomerController extends BaseController {
     @PostMapping("/edit")
     @ResponseBody
     public AjaxResult editSave(BizCustomer bizCustomer) {
+
+        BizCustomer oldCustomer = bizCustomerService.selectBizCustomerById(bizCustomer.getCustomerId());
+        String oldOwnerId = StringUtils.trim(oldCustomer.getOwnerUserId());
+        String newOldOwnerId = StringUtils.trim(bizCustomer.getOwnerUserId());
+        if (!oldOwnerId.equals(newOldOwnerId)) {
+            //分配记录
+            BizCustomerHistory bizCustomerHistory = new BizCustomerHistory();
+            bizCustomerHistory.setCustomerId(bizCustomer.getCustomerId());
+            bizCustomerHistory.setDelFlag("0");
+            bizCustomerHistory.setStatus("0");
+            bizCustomerHistory.setOldId(StringUtils.toLong(oldOwnerId));
+            bizCustomerHistory.setNewId(StringUtils.toLong(newOldOwnerId));
+            bizCustomerHistory.setCreateBy(ShiroUtils.getUserId().toString());
+            bizCustomerHistory.setCreateTime(new Date());
+
+            bizCustomerHistoryService.insertBizCustomerHistory(bizCustomerHistory);
+        }
+
         return toAjax(bizCustomerService.updateBizCustomer(bizCustomer));
     }
 

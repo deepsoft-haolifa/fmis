@@ -170,6 +170,16 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils
         }
         return new Double(0);
     }
+    public static Long toLong(String str)
+    {
+        String s = (str == null ? "0" : str.trim());
+        try {
+            return Long.parseLong(s);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return 0L;
+    }
 
     /**
      * 截取字符串

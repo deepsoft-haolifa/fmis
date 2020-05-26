@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.fmis.chistory.mapper.BizCustomerHistoryMapper">
+    
+    <resultMap type="BizCustomerHistory" id="BizCustomerHistoryResult">
+        <result property="historyId"    column="history_id"    />
+        <result property="customerId"    column="customer_id"    />
+        <result property="oldId"    column="old_id"    />
+        <result property="newId"    column="new_id"    />
+        <result property="string1"    column="string1"    />
+        <result property="string2"    column="string2"    />
+        <result property="string3"    column="string3"    />
+        <result property="string4"    column="string4"    />
+        <result property="string5"    column="string5"    />
+        <result property="string6"    column="string6"    />
+        <result property="string7"    column="string7"    />
+        <result property="string8"    column="string8"    />
+        <result property="string9"    column="string9"    />
+        <result property="string10"    column="string10"    />
+        <result property="remark"    column="remark"    />
+        <result property="status"    column="status"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBizCustomerHistoryVo">
+        select ch.history_id, ch.customer_id, ch.old_id, ch.new_id, ch.string1, ch.string2, ch.string3,
+        ch.string4, ch.string5, ch.string6, ch.string7, ch.string8, ch.string9,
+        ch.string10, ch.remark, ch.status, ch.del_flag, ch.create_by, ch.create_time, ch.update_by, ch.update_time,
+        u.user_name as userName,u1.user_name as newName,u2.user_name as oldName,c.name as customerName
+        from biz_customer_history ch
+        join biz_customer c on c.customer_id=ch.customer_id
+        left join sys_user u on ch.create_by=u.user_id
+        left join sys_user u1 on ch.new_id=u1.user_id
+        left join sys_user u2 on ch.old_id=u2.user_id
+
+    </sql>
+
+    <select id="selectBizCustomerHistoryList" parameterType="BizCustomerHistory" resultMap="BizCustomerHistoryResult">
+        <include refid="selectBizCustomerHistoryVo"/>
+        <where>  
+            <if test="customerId != null "> and ch.customer_id = #{customerId}</if>
+            <if test="customerName != null  and customerName != ''"> and c.name like concat('%', #{customerName}, '%')</if>
+        </where>
+        order by ch.customer_id, c.create_time desc
+    </select>
+    
+    <select id="selectBizCustomerHistoryById" parameterType="Long" resultMap="BizCustomerHistoryResult">
+        <include refid="selectBizCustomerHistoryVo"/>
+        where history_id = #{historyId}
+    </select>
+        
+    <insert id="insertBizCustomerHistory" parameterType="BizCustomerHistory" useGeneratedKeys="true" keyProperty="historyId">
+        insert into biz_customer_history
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="customerId != null ">customer_id,</if>
+            <if test="oldId != null ">old_id,</if>
+            <if test="newId != null ">new_id,</if>
+            <if test="string1 != null  and string1 != ''">string1,</if>
+            <if test="string2 != null  and string2 != ''">string2,</if>
+            <if test="string3 != null  and string3 != ''">string3,</if>
+            <if test="string4 != null  and string4 != ''">string4,</if>
+            <if test="string5 != null  and string5 != ''">string5,</if>
+            <if test="string6 != null  and string6 != ''">string6,</if>
+            <if test="string7 != null  and string7 != ''">string7,</if>
+            <if test="string8 != null  and string8 != ''">string8,</if>
+            <if test="string9 != null  and string9 != ''">string9,</if>
+            <if test="string10 != null  and string10 != ''">string10,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+            <if test="status != null  and status != ''">status,</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="customerId != null ">#{customerId},</if>
+            <if test="oldId != null ">#{oldId},</if>
+            <if test="newId != null ">#{newId},</if>
+            <if test="string1 != null  and string1 != ''">#{string1},</if>
+            <if test="string2 != null  and string2 != ''">#{string2},</if>
+            <if test="string3 != null  and string3 != ''">#{string3},</if>
+            <if test="string4 != null  and string4 != ''">#{string4},</if>
+            <if test="string5 != null  and string5 != ''">#{string5},</if>
+            <if test="string6 != null  and string6 != ''">#{string6},</if>
+            <if test="string7 != null  and string7 != ''">#{string7},</if>
+            <if test="string8 != null  and string8 != ''">#{string8},</if>
+            <if test="string9 != null  and string9 != ''">#{string9},</if>
+            <if test="string10 != null  and string10 != ''">#{string10},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBizCustomerHistory" parameterType="BizCustomerHistory">
+        update biz_customer_history
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="customerId != null ">customer_id = #{customerId},</if>
+            <if test="oldId != null ">old_id = #{oldId},</if>
+            <if test="newId != null ">new_id = #{newId},</if>
+            <if test="string1 != null  and string1 != ''">string1 = #{string1},</if>
+            <if test="string2 != null  and string2 != ''">string2 = #{string2},</if>
+            <if test="string3 != null  and string3 != ''">string3 = #{string3},</if>
+            <if test="string4 != null  and string4 != ''">string4 = #{string4},</if>
+            <if test="string5 != null  and string5 != ''">string5 = #{string5},</if>
+            <if test="string6 != null  and string6 != ''">string6 = #{string6},</if>
+            <if test="string7 != null  and string7 != ''">string7 = #{string7},</if>
+            <if test="string8 != null  and string8 != ''">string8 = #{string8},</if>
+            <if test="string9 != null  and string9 != ''">string9 = #{string9},</if>
+            <if test="string10 != null  and string10 != ''">string10 = #{string10},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+            <if test="status != null  and status != ''">status = #{status},</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+        </trim>
+        where history_id = #{historyId}
+    </update>
+
+    <delete id="deleteBizCustomerHistoryById" parameterType="Long">
+        delete from biz_customer_history where history_id = #{historyId}
+    </delete>
+
+    <delete id="deleteBizCustomerHistoryByIds" parameterType="String">
+        delete from biz_customer_history where history_id in 
+        <foreach item="historyId" collection="array" open="(" separator="," close=")">
+            #{historyId}
+        </foreach>
+    </delete>
+    
+</mapper>
