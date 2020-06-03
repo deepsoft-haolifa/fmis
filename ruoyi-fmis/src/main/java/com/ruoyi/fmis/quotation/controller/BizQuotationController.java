@@ -448,17 +448,20 @@ public class BizQuotationController extends BaseController {
                 //总单价
                 Double productTotalPrice = totalAmount / Double.parseDouble(productNum);
                 sumTotalPrice = sumTotalPrice + productTotalPrice;
-                table.addCell(PdfUtil.mergeCol(data.format(productTotalPrice), 1,textFont));//单价
+                table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString(productTotalPrice), 1,textFont));//单价
 
-                table.addCell(PdfUtil.mergeCol(data.format(totalAmount), 1,textFont));//合计
+                table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString(totalAmount), 1,textFont));//合计
                 table.addCell(PdfUtil.mergeCol(bizProduct.getString4(), 4,textFont));
             }
 
 
             //金额合计
             String totalRemark = "阀门：" + sumTotalNum + " 台   法兰合计：" + sumTotalNumRef1 + " 片   螺栓合计：" + sumTotalNumRef2 + " 条   总金额：" + sumTotalAmount;
-            table.addCell(PdfUtil.mergeCol(totalRemark, 15,boldFont));
-
+            table.addCell(PdfUtil.mergeCol("", 9,boldFont));
+            table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString(sumTotalNum), 1,textFont));//总数量
+            table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString(sumTotalPrice), 1,textFont));//单价
+            table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString(sumTotalAmount), 1,textFont));//合计
+            table.addCell(PdfUtil.mergeCol("", 3,textFont));//备注
 
 
             // 特别提醒
@@ -793,21 +796,25 @@ public class BizQuotationController extends BaseController {
                 BizQuotationProduct bizQuotationProduct = JSONObject.parseObject(json.toJSONString(), BizQuotationProduct.class);
                 if (bizQuotationProduct.getProductId() != null) {
                     String actuatorCoefficient = bizQuotationProduct.getActuatorCoefficient();
-                    if (StringUtils.isNotEmpty(actuatorCoefficient) && Double.parseDouble(actuatorCoefficient) < minCoefficient) {
+                    if (StringUtils.isNotEmpty(actuatorCoefficient) && Double.parseDouble(actuatorCoefficient) < minCoefficient
+                            && Double.parseDouble(actuatorCoefficient) > 0) {
                         minCoefficient = Double.parseDouble(actuatorCoefficient);
                     }
                     String productCoefficient = bizQuotationProduct.getProductCoefficient();
-                    if (StringUtils.isNotEmpty(productCoefficient) && Double.parseDouble(productCoefficient) < minCoefficient) {
+                    if (StringUtils.isNotEmpty(productCoefficient) && Double.parseDouble(productCoefficient) < minCoefficient
+                            && Double.parseDouble(productCoefficient) > 0) {
                         minCoefficient = Double.parseDouble(productCoefficient);
                     }
 
                     String productRef1Coefficient = bizQuotationProduct.getProductRef1Coefficient();
-                    if (StringUtils.isNotEmpty(productRef1Coefficient) && Double.parseDouble(productRef1Coefficient) < minCoefficient) {
+                    if (StringUtils.isNotEmpty(productRef1Coefficient) && Double.parseDouble(productRef1Coefficient) < minCoefficient
+                            && Double.parseDouble(productRef1Coefficient) > 0) {
                         minCoefficient = Double.parseDouble(productRef1Coefficient);
                     }
 
                     String productRef2Coefficient = bizQuotationProduct.getProductRef2Coefficient();
-                    if (StringUtils.isNotEmpty(productRef2Coefficient) && Double.parseDouble(productRef2Coefficient) < minCoefficient) {
+                    if (StringUtils.isNotEmpty(productRef2Coefficient) && Double.parseDouble(productRef2Coefficient) < minCoefficient
+                            && Double.parseDouble(productRef2Coefficient) > 0) {
                         minCoefficient = Double.parseDouble(productRef2Coefficient);
                     }
                 }
@@ -1045,8 +1052,10 @@ public class BizQuotationController extends BaseController {
     @PostMapping("/doExamine")
     @ResponseBody
     public AjaxResult doExamine(BizQuotation bizQuotation) {
-        String examineStatus = bizQuotation.getString6();
-        String examineRemark = bizQuotation.getString5();
+        //String examineStatus = bizQuotation.getString6();
+        //String examineRemark = bizQuotation.getString5();
+        String examineStatus = bizQuotation.getExamineStatus();
+        String examineRemark = bizQuotation.getExamineRemark();
         String quotationId = bizQuotation.getQuotationId().toString();
         return toAjax(bizQuotationService.doExamine(quotationId,examineStatus,examineRemark));
     }

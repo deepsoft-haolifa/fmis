@@ -1,5 +1,6 @@
 package com.ruoyi.common.utils;
 
+import java.text.DecimalFormat;
 import java.util.Collection;
 import java.util.Map;
 import com.ruoyi.common.core.text.StrFormatter;
@@ -418,5 +419,21 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils
             }
         }
         return sb.toString();
+    }
+
+    /*
+     * 如果是小数，保留两位，非小数，保留整数
+     * @param number
+     */
+    public static String getDoubleString(double number) {
+        String numberStr;
+        if (((int) number * 1000) == (int) (number * 1000)) {
+            //如果是一个整数
+            numberStr = String.valueOf((int) number);
+        } else {
+            DecimalFormat df = new DecimalFormat("######0.00");
+            numberStr = df.format(number);
+        }
+        return numberStr;
     }
 }

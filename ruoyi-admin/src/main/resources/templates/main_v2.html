@@ -12,6 +12,7 @@
   <link href="../static/css/main/style.min862f.css" th:href="@{/css/main/style.min862f.css}" rel="stylesheet"/>
   <script th:src="@{/js/jquery.min.js}"></script>
   <script th:src="@{/ruoyi/js/ry-ui.js?v=4.0.0}"></script>
+
 </head>
 
 <body class="gray-bg">
@@ -41,8 +42,11 @@
 
     function todoContract (type) {
         if (type == 1) {
-            var url = "/fmis/data";
+            var url = "/fmis/data?todo=1";
             location.href = url;
+            //parent.modal.open("aaa", url);
+            //$.modal.open("aaa", url);
+            //$.modal.alertError("1111");
         }
     }
 

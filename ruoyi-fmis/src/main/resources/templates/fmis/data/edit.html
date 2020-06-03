@@ -30,10 +30,13 @@
                     </div>
                 </div>
 
+
                 <label class="col-sm-1 control-label">供方：</label>
                 <div class="col-sm-2">
-                    <input name="string3" class="form-control" th:field="*{string3}" type="text">
+                    <input name="string3" id="string3" class="form-control" type="hidden" th:field="*{string3}">
+                    <input name="suppliersName" id="suppliersName" th:field="*{bizSuppliers.name}" class="form-control" type="text" readonly onclick="selectSuppliers()">
                 </div>
+
 
             </div>
 
@@ -104,124 +107,67 @@
                     </div>
                 </div>
                 <div id="divString16" style="display: none">
-                    <label class="col-sm-1 control-label">协议付款：</label>
-                    <div class="col-sm-2">
-                        <select name="string16" id="string16" class="form-control m-b" th:with="type=${@dict.getType('payment_agreement')}">
-                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{string16}"></option>
-                        </select>
+                    <div class="col-sm-7 form-inline">
+                        预付<input name="price5" id="price5" onkeyup="AmountKeyUp(this)" th:field="*{price5}" class="form-control" style="width: 40px">%，
+                        发货前付款 <input name="price6" id="price6" onkeyup="AmountKeyUp(this)" th:field="*{price6}"  class="form-control" style="width: 40px">%，
+                        货到<input name="price7" id="price7" onkeyup="AmountKeyUp(this)" th:field="*{price7}"  class="form-control" style="width: 40px">天付
+                        <input name="price8" id="price8" onkeyup="AmountKeyUp(this)" th:field="*{price8}"  class="form-control" style="width: 40px">%，
+                        安装调试<input name="price9" id="price9" onkeyup="AmountKeyUp(this)" th:field="*{price9}"  class="form-control" style="width: 40px">天，
+                        付<input name="price10" id="price10" onkeyup="AmountKeyUp(this)" class="form-control" th:field="*{price10}"  style="width: 40px">%质保金
+
                     </div>
                 </div>
 
+            </div>
+
+            <div class="form-group">
                 <label class="col-sm-1 control-label">特殊费用：</label>
-                <div class="col-sm-1">
-                    <input name="string14" onkeyup="AmountKeyUp(this)" th:field="*{string14}" class="form-control" type="text">
+                <div class="col-sm-2">
+                    <input name="string14" id="string14" onblur="calculateTotalPrice()" onkeyup="AmountKeyUp(this)" th:field="*{string14}" class="form-control" type="text">
                 </div>
                 <label class="col-sm-1 control-label">总价：</label>
-                <div class="col-sm-1">
+                <div class="col-sm-3">
                     <input name="price1" id="price1" class="form-control" type="text" th:field="*{price1}" readonly>
                 </div>
             </div>
 
-            <div class="form-group">
-                <label class="col-sm-3 control-label">选择产品：</label>
-                <div class="col-sm-6">
-                    <input name="quotationIds" id="quotationIds" class="form-control" th:value="${quotationIds}" type="hidden" >
-                    <input name="quotationNames" id="quotationNames" class="form-control" th:value="${quotationNames}" type="text" readonly onclick="selectQuotation(0)" required>
-                </div>
-
-                <div class="col-sm-3">
-                    <a class="btn btn-success btn-sm" onclick="selectQuotation(1)" >
-                        <i class="fa fa"></i> 追加
-                        <input type="hidden" id="productOperationType" name="productOperationType" value="0">
-                    </a>
-                </div>
-            </div>
 
 
-            <div class="hr-line-dashed"></div>
-            <div class="form-horizontal" id="productDiv">
-
-                <div class="ibox float-e-margins" th:each="qp:${bizProcessData.bizProcessChildList}" th:id="'productDiv_' + ${qp.paramterId}" >
-                    <h5 th:text="${qp.bizQuotation.string1}" ></h5>
-
-
-
-                    <div class='form-group'>
-                        <label class='control-label col-sm-7' style="text-align: left;" th:text="|${qp.bizProduct?.name},${qp.bizProduct?.model},${qp.bizProduct?.specifications},${qp.bizProduct?.nominalPressure},${qp.bizProduct?.connectionType},${qp.bizProduct?.structuralStyle},${qp.bizProduct?.valvebodyMaterial},${qp.bizProduct?.sealingMaterial},${qp.bizProduct?.valveElement},${qp.bizProduct?.driveForm}|"></label>
-                        <div class='col-sm-1' style="text-align: left;">
-                            <input name='productId'  class='form-control' type='hidden' th:value="${qp.bizProduct.productId}">
-                            <input class='form-control' type='text'  th:onblur="sumPrice([[${qp.paramterId}]])" th:value="${qp.string3}" th:id="'productNum_'+ ${qp.paramterId}" placeholder='数量' onkeyup="AmountKeyUp(this)"/>
-                        </div>
-                        <div class='col-sm-1' style="text-align: left;">
-                            <input class='form-control' type='text'  th:onblur="sumPrice([[${qp.paramterId}]])" th:value="${qp.price1}" readonly th:id="'productPrice_'+ ${qp.paramterId}" placeholder='价格' onkeyup="AmountKeyUp(this)"/>
-                        </div>
-                        <div class='col-sm-1' style="text-align: left;">
-                            <input class='form-control' type='text'  th:onblur="sumPrice([[${qp.paramterId}]])" th:value="${qp.string4}" readonly th:id="'productCoefficient_'+ ${qp.paramterId}" placeholder='系数' onkeyup="AmountKeyUp(this)"/>
-                        </div>
-
-
-                    </div>
-                    <div class='form-group'>
-
-                        <div th:if="${qp.bizActuator != null}">
-                            <label class='control-label col-sm-1' th:text="${qp.bizActuator?.name}"></label>
-                            <div class='col-sm-1'>
-                                <input type='hidden'  th:value="${qp.string11}" th:id="'actuatorId_' + ${qp.paramterId}"/>
-                                <input class='form-control' type='text'  th:onblur="sumPrice([[${qp.paramterId}]])" th:value="${qp.string12}" th:id="'actuatorNum_'+ ${qp.paramterId}" placeholder='数量' onkeyup="AmountKeyUp(this)"/>
-                            </div>
-                            <div class='col-sm-1'>
-                                <input class='form-control' type='text'  th:onblur="sumPrice([[${qp.paramterId}]])" th:value="${qp.price4}" readonly th:id="'actuatorPrice_'+ ${qp.paramterId}"placeholder='价格' onkeyup="AmountKeyUp(this)"/>
-                            </div>
-                            <div class='col-sm-1'>
-                                <input class='form-control' type='text'  th:onblur="sumPrice([[${qp.paramterId}]])" th:value="${qp.string13}" readonly th:id="'actuatorCoefficient_'+ ${qp.paramterId}" placeholder='系数' onkeyup="AmountKeyUp(this)"/>
-                            </div>
-                        </div>
-
-
-                        <div th:if="${qp.ref1 != null}">
-                            <label class='control-label col-sm-1' th:text="${qp.ref1?.name}"></label>
-                            <div class='col-sm-1'>
-                                <input type='hidden'  th:value="${qp.string5}" th:id="'ref1Id_' + ${qp.paramterId}"/>
-                                <input class='form-control' type='text'  th:onblur="sumPrice([[${qp.paramterId}]])" th:value="${qp.string6}" th:id="'ref1Num_'+ ${qp.paramterId}" placeholder='数量' onkeyup="AmountKeyUp(this)"/>
-                            </div>
-                            <div class='col-sm-1'>
-                                <input class='form-control' type='text'  th:onblur="sumPrice([[${qp.paramterId}]])" th:value="${qp.price2}" readonly th:id="'ref1Price_'+ ${qp.paramterId}" placeholder='价格' onkeyup="AmountKeyUp(this)"/>
-                            </div>
-                            <div class='col-sm-1'>
-                                <input class='form-control' type='text'  th:onblur="sumPrice([[${qp.paramterId}]])" th:value="${qp.string7}" readonly th:id="'ref1Coefficient_'+ ${qp.paramterId}" placeholder='系数' onkeyup="AmountKeyUp(this)"/>
-                            </div>
-                        </div>
-                        <div th:if="${qp.ref2 != null}">
-                            <label class='control-label col-sm-1' th:text="${qp.ref2?.name}"></label>
-                            <div class='col-sm-1'>
-                                <input type='hidden'  th:value="${qp.string8}" th:id="'ref2Id_' + ${qp.paramterId}"/>
-                                <input class='form-control' type='text'  th:onblur="sumPrice([[${qp.paramterId}]])" th:value="${qp.string9}" th:id="'ref2Num_'+ ${qp.paramterId}" placeholder='数量' onkeyup="AmountKeyUp(this)"/>
-                            </div>
-                            <div class='col-sm-1'>
-                                <input class='form-control' type='text'  th:onblur="sumPrice([[${qp.paramterId}]])" th:value="${qp.price3}" readonly th:id="'ref2Price_'+ ${qp.paramterId}" placeholder='价格' onkeyup="AmountKeyUp(this)"/>
-                            </div>
-                            <div class='col-sm-1'>
-                                <input class='form-control' type='text'  th:onblur="sumPrice([[${qp.paramterId}]])" th:value="${qp.string10}" readonly th:id="'ref2Coefficient_'+ ${qp.paramterId}" placeholder='系数' onkeyup="AmountKeyUp(this)"/>
-                            </div>
-                        </div>
-
-                        <div class='col-sm-11' style="text-align: right;">
-                            <a class="btn btn-danger btn-sm" th:onclick="removeProject([[${qp.paramterId}]])" >
-                                <i class="fa fa-remove"></i> 删除
-                            </a>
-                        </div>
-                    </div>
-
-                </div>
-
-            </div>
-            <div class="hr-line-dashed"></div>
-
-
+            <input type="hidden" id="productOperationType" name="productOperationType" value="0">
+            <!-- 选择产品传参 -->
+            <input type="hidden" id="productsJsonParamter" value=""/>
+            <!-- 选择法兰传参 -->
+            <input type="hidden" id="ref1JsonParamter" value=""/>
+            <!-- 选择螺栓传参 -->
+            <input type="hidden" id="ref2JsonParamter" value=""/>
+            <!-- 选择执行器传参 -->
+            <input type="hidden" id="actuatorJsonParamter" value=""/>
         </form>
+
+        <div class="form-horizontal m form-group">
+            <div class='col-sm-2'>
+                <a class="btn btn-success btn-sm" onclick="insertRow()">
+                    <i class="fa fa-plus"></i> 新增
+                </a>
+            </div>
+
+        </div>
+
+        <div class="form-horizontal" id="productDiv">
+            <div class="row">
+                <div class="col-sm-12 select-table table-striped">
+                    <table id="bootstrap-table" data-use-row-attr-func="true"
+                           data-reorderable-rows="true"></table>
+                </div>
+            </div>
+        </div>
+
     </div>
     <th:block th:include="include :: footer" />
     <th:block th:include="include :: datetimepicker-js" />
+    <th:block th:include="include :: bootstrap-editable-css" />
+    <th:block th:include="include :: bootstrap-table-reorder-js" />
+    <th:block th:include="include :: bootstrap-table-editable-js" />
     <script type="text/javascript">
         var prefix = ctx + "fmis/data";
         $("#form-data-edit").validate({
@@ -233,40 +179,41 @@
                 var dataObj = $('#form-data-edit').serializeArray();
                 //计算是否正常
                 //特殊费用
-                var specialExpenses = $("#specialExpenses").val();
-                if (specialExpenses != null && specialExpenses.length > 0) {
-                    dataObj.push({"normalFlag": "1"});
-                } else {
-                    dataObj.push({"normalFlag": "0"});
-                }
-
-                var productIds = $("#quotationIds").val();
+                //var productIds = $("#quotationIds").val();
                 var productArray = new Array();
-                var productIdsStrs = productIds.split(",");
-                for (var i = 0; i < productIdsStrs.length; i++) {
+                //var productIdsStrs = productIds.split(",");
+
+                var data = $.btTable.bootstrapTable('getData');
+
+                for (var i = 0; i < data.length; i++) {
+                    var rowData = data[i];
                     var productObj = new Object();
-                    var productId = productIdsStrs[i];
-                    productObj["string1"] = productId.split("-")[0];
-                    productObj["string2"] = productId.split("-")[1];
-                    productObj["string3"] = $("#productNum_" + productId).val();
-                    productObj["price1"] = $("#productPrice_" + productId).val();
-                    productObj["string4"] = $("#productCoefficient_" + productId).val();
+                    //var productId = productIdsStrs[i];
+                    productObj["string1"] = rowData["quotationId"];
+                    productObj["string2"] = rowData["productId"];
+
+                    productObj["string3"] = rowData["productNum"];
+                    productObj["price1"] = rowData["productPrice"];
+                    productObj["string4"] = rowData["productCoefficient"];
+
 
                     //法兰
-                    productObj["string5"] = $("#ref1Id_" + productId).val();
-                    productObj["string6"] = $("#ref1Num_" + productId).val();
-                    productObj["price2"] = $("#ref1Price_" + productId).val();
-                    productObj["string7"] = $("#ref1Coefficient_" + productId).val();
+                    productObj["string5"] = rowData["productRef1Id"];
+                    productObj["string6"] = rowData["productRef1Num"];
+                    productObj["price2"] = rowData["ref1Price"];
+                    productObj["string7"] = rowData["productRef1Coefficient"];
                     //螺栓
-                    productObj["string8"] = $("#ref2Id_" + productId).val();
-                    productObj["string9"] = $("#ref2Num_" + productId).val();
-                    productObj["price3"] = $("#ref2Price_" + productId).val();
-                    productObj["string10"] = $("#ref2Coefficient_" + productId).val();
+                    productObj["string8"] = rowData["productRef2Id"];
+                    productObj["string9"] = rowData["productRef2Num"];
+                    productObj["price3"] = rowData["ref2Price"];
+                    productObj["string10"] = rowData["productRef2Coefficient"];
                     //执行器
-                    productObj["string11"] = $("#actuatorId_" + productId).val();
-                    productObj["string12"] = $("#actuatorNum_" + productId).val();
-                    productObj["price4"] = $("#actuatorPrice_" + productId).val();
-                    productObj["string13"] = $("#actuatorCoefficient_" + productId).val();
+                    productObj["string11"] = rowData["actuatorId"];
+                    productObj["string12"] = rowData["actuatorNum"];
+                    productObj["price4"] = rowData["actuatorPrice"];
+                    productObj["string13"] = rowData["actuatorCoefficient"];
+
+                    //productObj["remark"] = $("#productRemark_" + productId).val();
                     productArray.push(productObj);
                 }
                 dataObj.push({"name": "productParmters", "value": JSON.stringify(productArray)});
@@ -281,6 +228,7 @@
         });
 
 
+
         function selectProduct(type) {
             var url = prefix + "/selectProduct";
             $("#productOperationType").val(type);
@@ -290,11 +238,32 @@
             $.modal.open("关联产品", url,widthNum, heigthNum);
         }
 
+        function selectQuotation(type) {
+            var url = prefix + "/selectQuotation";
+            $("#productOperationType").val(type);
+            var widthNum = this.innerWidth - 50;
+            var heigthNum = this.innerHeight - 50;
+
+            $.modal.open("选择报价单", url,widthNum, heigthNum,function (index, layero){
+                var iframeWin = layero.find('iframe')[0];
+                iframeWin.contentWindow.submitHandler(index, layero);
+                totalSumPrice();
+            });
+        }
+
         function selectCustomer() {
             var widthNum = this.innerWidth - 50;
             var heigthNum = this.innerHeight - 50;
             var url = prefix + "/selectCustomer";
             $.modal.open("关联客户", url,widthNum, heigthNum);
+        }
+
+        //suppliersName
+        function selectSuppliers() {
+            var widthNum = this.innerWidth - 50;
+            var heigthNum = this.innerHeight - 50;
+            var url = prefix + "/selectSuppliers";
+            $.modal.open("关联供应商", url,widthNum, heigthNum);
         }
 
         $("input[name='datetime1']").datetimepicker({
@@ -305,7 +274,9 @@
 
         function removeProject (productId) {
             $.modal.confirm("确定要删除该数据吗？", function() {
+                console.log("removeId=" + productId);
                 $("#productDiv_" + productId).remove();
+
                 var productIds = $("#quotationIds").val();
                 var productNames = $("#quotationNames").val();
                 var productIdsS = productIds.split(",");
@@ -384,6 +355,7 @@
 
         function FloatAdd(arg1,arg2){
             var r1,r2,m;
+            console.log("arg1=" + arg1 + ",arg2=" + arg2);
             try{r1=arg1.toString().split(".")[1].length}catch(e){r1=0}
             try{r2=arg2.toString().split(".")[1].length}catch(e){r2=0}
             m=Math.pow(10,Math.max(r1,r2));
@@ -417,6 +389,249 @@
             $("#price1").val(parseFloat(totalPrice).toFixed(4));
             //$("#productTotalNum").val(productTotalNumS);
         }
+
+        $(function() {
+            var options = {
+                showSearch: false,
+                showRefresh: false,
+                pagination: false,
+                showColumns: false,
+                showToggle: false,
+                useRowAttrFunc: true,
+                uniqueId: "productId",
+                onLoadSuccess: loadSuccess,
+                async: true,
+                url: prefix + "/listProductNoPage",
+                onEditableSave: onEditableSave,
+                onClickCell: onClickCell,
+                onReorderRow: onReorderRow,
+                columns: [{
+                    checkbox: true
+                },
+                    {field : 'rowId',title : '序号',visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
+
+                    {field : 'quotationId',title : 'quotationId',visible: false},
+                    {field : 'quotationName',title : '报价单号',editable: false},
+                    {field : 'productId',title : '产品ID',visible: false},
+                    {field : 'productName',title : '产品名称',editable: false},
+                    {field : 'model',title : '型号',editable: false},
+                    {field : 'specifications',title : '规格',editable: false},
+                    {field : 'nominalPressure',title : '压力',editable: false},
+                    {field : 'valvebodyMaterial',title : '阀体',editable: false},
+                    {field : 'valveElement',title : '阀芯',editable: false},
+                    {field : 'sealingMaterial',title : '密封材质',editable: false},
+                    {field : 'driveForm',title : '驱动形式',editable: false},
+                    {field : 'connectionType',title : '连接方式',editable: false},
+                    {field : 'productNum',title : '数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
+                    {field : 'productPrice',title : '单价',editable: false},
+                    {field : 'productCoefficient',title : '系数',editable: false},
+
+
+                    {field : 'actuatorId',title : 'actuatorId',visible: false},
+                    {field : 'actuatorName',title : '执行器名称',editable: false},
+                    {field : 'actuatorPrice',title : '执行器价格',editable: false},
+                    {field : 'actuatorNum',title : '执行器数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
+                    {field : 'actuatorCoefficient',title : '执行器系数',editable: false},
+
+                    {field : 'productRef1Id',title : 'ref1Id',visible: false},
+                    {field : 'ref1Name',title : '法兰名称',editable: false},
+
+                    {field : 'ref1Price',title : '法兰价格',editable: false},
+                    {field : 'productRef1Num',title : '法兰数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
+                    {field : 'productRef1Coefficient',title : '法兰系数',editable: false},
+
+                    {field : 'productRef2Id',title : 'ref2Id',visible: false},
+                    {field : 'ref2Name',title : '螺栓名称',editable: {type: 'text',emptytext: '空',disabled: true}},
+                    {field : 'ref2Price',title : '螺栓价格',editable: false},
+                    {field : 'productRef2Num',title : '螺栓数量',editable: {type: 'text',emptytext: '0',validate: function(v){ return numberValidate(v)}}},
+                    {field : 'productRef2Coefficient',title : '螺栓系数',editable: false},
+                    {field : 'totalPrice',title : '总价',editable: false},
+                    {
+                        title: '操作',
+                        align: 'center',
+                        formatter: function(value, row, index) {
+                            var actions = [];
+                            var productId = row["productId"]
+                            actions.push('<a class="btn btn-danger btn-xs" href="#" onclick="removeProduct(' + productId + ')"><i class="fa fa-remove"></i>删除</a>');
+                            return actions.join('');
+                        }
+                    }]
+            };
+            $.table.init(options);
+
+        });
+        function numberValidate(value) {
+            if (isNaN(value)) {
+                return "必须是数字！";
+            }
+        }
+        function removeProduct(uid) {
+            $.btTable.bootstrapTable('removeByUniqueId', uid);
+            calculateTotalPrice();
+        }
+        function onEditableSave (field, row, oldValue, $el) {
+            //alert("字段名：" + field + "，当前值：" + row[field]  + "，旧值：" + oldValue);
+            if (field == "productNum"  || field == "productRef1Num"
+                || field == "productRef2Num" || field == "actuatorNum" ) {
+                calculateTotalPrice();
+            }
+        }
+        function onReorderRow(data) {
+            for (var i = 0; i < data.length; i++) {
+                //$("#columns_sort_" + data[i].columnId).val(i+1);
+            }
+        }
+
+        function onClickCell(field, value, row, $element){
+            var idx = $element.parent().data('index');
+            console.log("row.index=" + idx + "--" + row.productId);
+            var productId = row.productId;
+            /*if (field == "ref1Name") {
+                //选择法兰
+                var widthNum = $("#form-quotation-add").width() - 50;
+                var heigthNum = $("#form-quotation-add").height() + 250;
+                var url = prefix + "/selectProductRef1?productId=" + productId;
+                console.log("widthNum=" + widthNum + "---" + this.innerWidth);
+                $.modal.open("关联产品配件法兰", url,widthNum, heigthNum,function (index, layero) {
+                    var iframeWin = layero.find('iframe')[0];
+                    iframeWin.contentWindow.submitHandler(index, layero);
+                    //ref1JsonParamter
+                    var ref1JsonParamter = $("#ref1JsonParamter").val();
+                    setTableValueById(ref1JsonParamter,productId,idx);
+                });
+            } else if (field == "ref2Name") {
+                //选择法兰
+                var widthNum = $("#form-quotation-add").width() - 50;
+                var heigthNum = $("#form-quotation-add").height() + 250;
+                var url = prefix + "/selectProductRef2?productId=" + productId;
+                console.log("widthNum=" + widthNum + "---" + this.innerWidth);
+                $.modal.open("关联产品配件螺栓", url,widthNum, heigthNum,function (index, layero) {
+                    var iframeWin = layero.find('iframe')[0];
+                    iframeWin.contentWindow.submitHandler(index, layero);
+                    var ref2JsonParamter = $("#ref2JsonParamter").val();
+                    setTableValueById(ref2JsonParamter,productId,idx);
+                });
+            } else if (field == "actuatorName") {
+                var widthNum = $("#form-quotation-add").width() - 50;
+                var heigthNum = $("#form-quotation-add").height() + 250;
+                var url = prefix + "/selectActuator?productId=" + productId;
+                console.log("widthNum=" + widthNum + "---" + this.innerWidth);
+                $.modal.open("关联执行器", url,widthNum, heigthNum,function (index, layero) {
+                    var iframeWin = layero.find('iframe')[0];
+                    iframeWin.contentWindow.submitHandler(index, layero);
+                    var actuatorJsonParamter = $("#actuatorJsonParamter").val();
+                    setTableValueById(actuatorJsonParamter,productId,idx);
+                });
+            }*/
+        }
+        function setTableValueById (jsonValue,id,idx) {
+            var jsonObj = JSON.parse(jsonValue);
+            for (key in jsonObj) {
+                var updateObj = {
+                    index : idx,
+                    field : key,
+                    value : jsonObj[key]
+                };
+                $.btTable.bootstrapTable("updateCell",updateObj);
+            }
+        }
+        function insertRow(){
+            var url = prefix + "/selectQuotation";
+            var widthNum = this.innerWidth - 50;
+            var heigthNum = this.innerHeight - 50;
+
+            $.modal.open("选择报价单", url,widthNum, heigthNum,function (index, layero){
+                var iframeWin = layero.find('iframe')[0];
+                iframeWin.contentWindow.submitHandler(index, layero);
+                appendTable();
+            });
+        }
+        function appendTable () {
+            var productsJsonParamter = $("#productsJsonParamter").val();
+            console.log("productsJsonParamter=" + productsJsonParamter);
+            var productsJsonArray = JSON.parse(productsJsonParamter);
+            var tableData = $.btTable.bootstrapTable('getData');
+            var tableMap = new Map();
+            if (tableData != null) {
+                for (var i = 0; i < tableData.length; i++) {
+                    var rowData = tableData[i];
+                    tableMap.set(rowData["productId"],rowData["productId"]);
+                }
+            }
+            for (var i = 0; i < productsJsonArray.length; i++) {
+                var productJson = productsJsonArray[i];
+                if (!tableMap.has(productJson["productId"])) {
+                    $.btTable.bootstrapTable('append', productJson);
+                }
+            }
+            calculateTotalPrice();
+        }
+
+        function calculateTotalPrice () {
+            var data = $.btTable.bootstrapTable('getData');
+            var productTotalPrice = 0;
+            for (var i = 0; i < data.length; i++) {
+                var rowData = data[i];
+                var price = calculatePrice(rowData);
+                productTotalPrice = FloatAdd(productTotalPrice,price).toFixed(4);
+            }
+            var specialExpenses = $("#string14").val();
+            if (isEmpty(specialExpenses)) {
+                specialExpenses = 0;
+            }
+            $("#productTotalPrice").val(parseFloat(productTotalPrice).toFixed(4));
+            var totalPrice = parseFloat(productTotalPrice) + parseFloat(specialExpenses);
+            $("#price1").val(parseFloat(totalPrice).toFixed(4));
+        }
+        function calculatePrice (row) {
+            var productNum = row["productNum"];
+            productNum = isEmpty(productNum) == true ? 0 : parseFloat(productNum);
+
+            var productCoefficient = row["productCoefficient"];
+            productCoefficient = isEmpty(productCoefficient) == true ? 0 : parseFloat(productCoefficient);
+
+            var productPrice = row["productPrice"];
+            productPrice = isEmpty(productPrice) == true ? 0 : parseFloat(productPrice);
+
+            //法兰
+            var productRef1Num = row["productRef1Num"];
+            productRef1Num = isEmpty(productRef1Num) == true ? 0 : parseFloat(productRef1Num);
+            var productRef1Coefficient = row["productRef1Coefficient"];
+            productRef1Coefficient = isEmpty(productRef1Coefficient) == true ? 0 : parseFloat(productRef1Coefficient);
+            var productRef1Price = row["ref1Price"];
+            productRef1Price = isEmpty(productRef1Price) == true ? 0 : parseFloat(productRef1Price);
+
+            //螺栓
+            var productRef2Num = row["productRef2Num"];
+            productRef2Num = isEmpty(productRef2Num) == true ? 0 : productRef2Num;
+            var productRef2Coefficient = row["productRef2Coefficient"];
+            productRef2Coefficient = isEmpty(productRef2Coefficient) == true ? 0 : parseFloat(productRef2Coefficient);
+            var productRef2Price = row["ref2Price"];
+            productRef2Price = isEmpty(productRef2Price) == true ? 0 : parseFloat(productRef2Price);
+            //执行器
+            var actuatorNum = row["actuatorNum"];
+            actuatorNum = isEmpty(actuatorNum) == true ? 0 : actuatorNum;
+            var actuatorCoefficient = row["actuatorCoefficient"];
+            actuatorCoefficient = isEmpty(actuatorCoefficient) == true ? 0 : parseFloat(actuatorCoefficient);
+            var actuatorPrice = row["actuatorPrice"];
+            actuatorPrice = isEmpty(actuatorPrice) == true ? 0 : parseFloat(actuatorPrice);
+            var productSum = parseFloat(productNum * productPrice * productCoefficient).toFixed(4);
+            var productRef1Sum = parseFloat(productRef1Num * productRef1Price * productRef1Coefficient).toFixed(4);
+            var productRef2Sum = parseFloat(productRef2Num * productRef2Price * productRef2Coefficient).toFixed(4);
+            var actuatorSum = parseFloat(actuatorNum * actuatorCoefficient * actuatorPrice).toFixed(4);
+            var totalSum = parseFloat(parseFloat(productSum) + parseFloat(productRef1Sum) + parseFloat(productRef2Sum) + parseFloat(actuatorSum)).toFixed(4);
+            var updateObj = {
+                index : row.rowId,
+                field : "totalPrice",
+                value : totalSum
+            };
+            console.log("totalSum=" + totalSum);
+            $.btTable.bootstrapTable("updateCell",updateObj);
+            //$("#totalSum_" + productId).val(totalSum);
+            return totalSum;
+        }
+
+
         $("#string18").change(function (){
             payTypeChange();
         });
@@ -435,18 +650,12 @@
                 $("#divString16").css({'display': 'block'});
             }
         }
-
-        $(document).ready(function () {
-            var productIds = $("#quotationIds").val();
-            var productIdsS = productIds.split(",");
-            for (var i = 0; i < productIdsS.length; i++) {
-                var productId = productIdsS[i];
-                sumPrice(productId);
-            }
+        function loadSuccess() {
+            calculateTotalPrice();
 
             payTypeChange();
+        }
 
-        });
 
     </script>
 </body>

@@ -3,6 +3,7 @@ package com.ruoyi.fmis.data.domain;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ruoyi.fmis.child.domain.BizProcessChild;
 import com.ruoyi.fmis.customer.domain.BizCustomer;
+import com.ruoyi.fmis.suppliers.domain.BizSuppliers;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -34,7 +35,15 @@ public class BizProcessData extends BaseEntity {
 
     @Getter
     @Setter
+    private String suppliersName;
+
+    @Getter
+    @Setter
     private BizCustomer bizCustomer;
+
+    @Getter
+    @Setter
+    private BizSuppliers bizSuppliers;
 
     @Setter
     @Getter

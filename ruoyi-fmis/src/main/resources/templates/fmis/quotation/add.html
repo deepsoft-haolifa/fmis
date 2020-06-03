@@ -87,14 +87,16 @@
             </div>
             <div class="form-group">    
                 <label class="col-sm-3 control-label">付款方式：</label>
-                <div class="col-sm-3">
-                    <select name="paymentMethod" class="form-control m-b" th:with="type=${@dict.getType('payment_method')}">
-                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                <div class="col-sm-2">
+                    <select name="paymentMethod" id="paymentMethod" class="form-control"  th:with="type=${@dict.getType('payment_method')}">
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}"  th:value="${dict.dictValue}"></option>
                     </select>
                 </div>
-
+                <div class="col-sm-2 form-inline" id="string6Div" >
+                    <input name="string6" id="string6" class="form-control" type="text" placeholder="付款备注">
+                </div>
                 <label class="col-sm-1 control-label">运费价格：</label>
-                <div class="col-sm-4 form-inline">
+                <div class="col-sm-2 form-inline">
                     <input name="freight" class="form-control full-width" type="text" onkeyup="AmountKeyUp(this)" placeholder="运费价格">
                 </div>
 
@@ -154,7 +156,6 @@
     <th:block th:include="include :: bootstrap-table-reorder-js" />
     <th:block th:include="include :: bootstrap-table-editable-js" />
     <script type="text/javascript">
-
 
         var prefix = ctx + "fmis/quotation"
 
@@ -335,6 +336,14 @@
                     {field : 'productNum',title : '数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
                     {field : 'productPrice',title : '单价',editable: false},
                     {field : 'productCoefficient',title : '系数',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
+
+
+                    {field : 'actuatorId',title : 'actuatorId',visible: false},
+                    {field : 'actuatorName',title : '执行器名称',editable: true},
+                    {field : 'actuatorPrice',title : '执行器价格',editable: false},
+                    {field : 'actuatorNum',title : '执行器数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
+                    {field : 'actuatorCoefficient',title : '执行器系数',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
+
                     {field : 'productRef1Id',title : 'ref1Id',visible: false},
                     {field : 'ref1Name',title : '法兰名称',editable: false},
 
@@ -348,11 +357,7 @@
                     {field : 'productRef2Num',title : '螺栓数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
                     {field : 'productRef2Coefficient',title : '螺栓系数',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
 
-                    {field : 'actuatorId',title : 'actuatorId',visible: false},
-                    {field : 'actuatorName',title : '执行器名称',editable: true},
-                    {field : 'actuatorPrice',title : '执行器价格',editable: false},
-                    {field : 'actuatorNum',title : '执行器数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
-                    {field : 'actuatorCoefficient',title : '执行器系数',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
+
                     {field : 'productRemark',title : '备注',editable: {type: 'text',emptytext: '空'}},
                     {field : 'totalPrice',title : '总价',editable: false},
                     {
@@ -367,9 +372,14 @@
                     }]
             };
             $.table.init(options);
+
+
+            //paymentMethod 付款方式中，选择“其它”付款方式时，没有内容输入框。
+
         });
         function removeProduct(uid) {
             $.btTable.bootstrapTable('removeByUniqueId', uid);
+            calculateTotalPrice();
         }
         function onEditableSave (field, row, oldValue, $el) {
             //alert("字段名：" + field + "，当前值：" + row[field]  + "，旧值：" + oldValue);
@@ -554,6 +564,8 @@
                     $.btTable.bootstrapTable('append', productJson);
                 }
             }
+
+            calculateTotalPrice();
         }
 
         function uploadFile () {
@@ -567,6 +579,8 @@
                 calculateTotalPrice();
             });
         }
+
+
 
     </script>
 </body>

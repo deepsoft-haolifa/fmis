@@ -27,6 +27,14 @@ public class BizQuotation extends BaseEntity {
 
     @Getter
     @Setter
+    private String examineStatus;
+
+    @Getter
+    @Setter
+    private String examineRemark;
+
+    @Getter
+    @Setter
     private String productRemark;
 
     //产品 start

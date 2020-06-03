@@ -13,9 +13,9 @@
 
                             <li>
                                 <p>状态：</p>
-                                <select name="queryStatus" class="form-control m-b" >
+                                <select name="queryStatus" id="queryStatus" class="form-control m-b" >
                                     <option value="0">全部</option>
-                                    <option value="1" selected>待办</option>
+                                    <option value="1">待办</option>
                                     <option value="2">已办</option>
                                 </select>
                             </li>
@@ -57,7 +57,11 @@
         var editFlag = [[${@permission.hasPermi('fmis:data:edit')}]];
         var removeFlag = [[${@permission.hasPermi('fmis:data:remove')}]];
         var prefix = ctx + "fmis/data";
-
+        var dotoType = [[${todo}]];
+        if (dotoType == "1") {
+            console.log("dotoType=" + dotoType);
+            $("#queryStatus").val("1");
+        }
         $(function() {
             var options = {
                 url: prefix + "/list",

@@ -105,17 +105,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
 
+
+
+
     <sql id="selectBizProcessDataVoRef">
         select q.data_id, q.biz_data_id, q.biz_id, q.normal_flag, q.flow_status, q.remark, q.price1, q.price2, q.price3,
         q.price4, q.price5, q.price6, q.price7, q.price8, q.price9, q.price10, q.string1, q.string2,
         q.string3, q.string4, q.string5, q.string6, q.string7, q.string8, q.string9, q.string10, q.string11,
         q.string12, q.string13, q.string14, q.string15, q.string16, q.string17, q.string18, q.string19, q.string20,
         q.datetime1, q.datetime2, q.datetime3, q.datetime4, q.datetime5, q.status, q.del_flag, q.create_by,
-        q.create_time, q.update_by, q.update_time,ct.name as customerName
+        q.create_time, q.update_by, q.update_time,ct.name as customerName,bs.name as suppliersName
         from biz_process_data q
         left join sys_user u on q.create_by=u.user_id
         left join sys_dept dt on u.dept_id=dt.dept_id
         left join biz_customer ct on ct.customer_id=q.string2
+        left join biz_suppliers bs on bs.suppliers_id=q.string3
     </sql>
 
     <select id="selectBizProcessDataListRef" parameterType="BizProcessData" resultMap="BizProcessDataResult">
@@ -229,6 +233,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 </if>
 
                 ${params.dataScope}
+            </if>
+            <!-- 查询全部 已经完成的 -->
+            <if test="roleType == 0 ">
+                and q.flow_status=q.normal_flag
             </if>
         </where>
     </select>

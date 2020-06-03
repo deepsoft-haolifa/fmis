@@ -26,6 +26,8 @@ public interface IBizProcessChildService {
      */
     public List<BizProcessChild> selectBizProcessChildList(BizProcessChild bizProcessChild);
 
+
+    public List<BizProcessChild> selectBizQuotationProductList(BizProcessChild bizProcessChild);
     /**
      * 新增流程数据字
      *

@@ -8,7 +8,6 @@ spring:
             master:
                 # nullCatalogMeansCurrent=true 解决 mysql-connector-mysql 8.0 (spring-boot-starter-parent 管理的版本) + Activiti 6.x 自动建表失败
                 url: jdbc:mysql://118.190.89.223:3306/fmis?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
-                #url: jdbc:mysql://127.0.0.1:3306/fmisp?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
                 #url: jdbc:mysql://localhost:3306/fmis?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
                 username: root
                 #password: Haoli!@#098123

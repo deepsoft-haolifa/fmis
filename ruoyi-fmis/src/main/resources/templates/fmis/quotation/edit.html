@@ -64,14 +64,16 @@
 
             <div class="form-group">
                 <label class="col-sm-3 control-label">付款方式：</label>
-                <div class="col-sm-3">
+                <div class="col-sm-2">
                     <select name="paymentMethod" class="form-control m-b" th:with="type=${@dict.getType('payment_method')}">
                         <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{paymentMethod}"></option>
                     </select>
                 </div>
-
+                <div class="col-sm-2 form-inline" id="string6Div" >
+                    <input name="string6" id="string6" class="form-control"  th:field="*{string6}" type="text" placeholder="付款备注">
+                </div>
                 <label class="col-sm-1 control-label">运费价格：</label>
-                <div class="col-sm-4 ">
+                <div class="col-sm-2 ">
                     <input name="freight" th:field="*{freight}" onkeyup="AmountKeyUp(this)" class="form-control" type="text">
                 </div>
 
@@ -337,6 +339,13 @@
                     {field : 'productNum',title : '数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
                     {field : 'productPrice',title : '单价',editable: false},
                     {field : 'productCoefficient',title : '系数',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
+
+                    {field : 'actuatorId',title : 'actuatorId',visible: false},
+                    {field : 'actuatorName',title : '执行器名称',editable: {type: 'text',emptytext: '请选择'}},
+                    {field : 'actuatorPrice',title : '执行器价格',editable: false},
+                    {field : 'actuatorNum',title : '执行器数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
+                    {field : 'actuatorCoefficient',title : '执行器系数',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
+
                     {field : 'productRef1Id',title : 'ref1Id',visible: false},
                     {field : 'ref1Name',title : '法兰名称',editable: {type: 'text',emptytext: '请选择'}},
 
@@ -350,11 +359,7 @@
                     {field : 'productRef2Num',title : '螺栓数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
                     {field : 'productRef2Coefficient',title : '螺栓系数',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
 
-                    {field : 'actuatorId',title : 'actuatorId',visible: false},
-                    {field : 'actuatorName',title : '执行器名称',editable: {type: 'text',emptytext: '请选择'}},
-                    {field : 'actuatorPrice',title : '执行器价格',editable: false},
-                    {field : 'actuatorNum',title : '执行器数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
-                    {field : 'actuatorCoefficient',title : '执行器系数',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
+
                     {field : 'productRemark',title : '备注',editable: {type: 'text',emptytext: '空'}},
                     {field : 'totalPrice',title : '总价',editable: false},
                     {

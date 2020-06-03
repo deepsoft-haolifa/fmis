@@ -357,7 +357,7 @@
                 $("#toolbar").html("");
             }
         });
-
+/*
         function submitHandler() {
             var rows = $.table.selectFirstColumns();
             if (rows.length == 0) {
@@ -501,7 +501,7 @@
             parent.$('#productDiv').append(htmlStr);
             $.modal.close();
         }
-
+*/
         function NullToZero (v,t) {
             if ($.common.isEmpty(v)) {
                 if (t == 0 || t == "0") {
@@ -513,7 +513,57 @@
                 return v;
             }
         }
-
+        function submitHandler() {
+            console.log("start...");
+            var rows = $.table.selectFirstColumns();
+            if (rows.length == 0) {
+                $.modal.alertWarning("请选择一条记录");
+                return;
+            }
+            var productJsonArray = [];
+            var selectRows = $.btTable.bootstrapTable('getSelections');
+            for (var i = 0; i < selectRows.length; i++) {
+                var price = selectRows[i].price;
+                var name = selectRows[i].name;
+                var rowData = {
+                    quotationId: selectRows[i].quotationId,
+                    quotationName: selectRows[i].string1,
+                    productId: selectRows[i].productId,
+                    productName: selectRows[i].productName,
+                    model: selectRows[i].model,
+                    specifications:selectRows[i].specifications,
+                    nominalPressure:selectRows[i].nominalPressure,
+                    valvebodyMaterial:selectRows[i].valvebodyMaterial,
+                    valveElement:selectRows[i].valveElement,
+                    sealingMaterial:selectRows[i].sealingMaterial,
+                    driveForm:selectRows[i].driveForm,
+                    connectionType:selectRows[i].connectionType,
+                    productNum:selectRows[i].productNum,
+                    productPrice:selectRows[i].productPrice,
+                    productCoefficient:selectRows[i].productCoefficient,
+                    productRef1Id:selectRows[i].productRef1Id,
+                    ref1Name:selectRows[i].ref1Name,
+                    ref1Price:selectRows[i].ref1Price,
+                    productRef1Num:selectRows[i].productRef1Num,
+                    productRef1Coefficient:selectRows[i].productRef1Coefficient,
+                    productRef2Id:selectRows[i].productRef2Id,
+                    ref2Name:selectRows[i].ref2Name,
+                    ref2Price:selectRows[i].ref2Price,
+                    productRef2Num:selectRows[i].productRef2Num,
+                    productRef2Coefficient:selectRows[i].productRef2Coefficient,
+                    actuatorId:selectRows[i].actuatorId,
+                    actuatorName:selectRows[i].actuatorName,
+                    actuatorPrice: selectRows[i].actuatorPrice,
+                    actuatorNum: selectRows[i].actuatorNum,
+                    actuatorCoefficient:selectRows[i].actuatorCoefficient
+                };
+                //console.log("==" + JSON.stringify(rowData));
+                productJsonArray.push(rowData);
+            }
+            parent.$('#form-data-add input[id=productsJsonParamter]').val(JSON.stringify(productJsonArray));
+            parent.$('#form-data-edit input[id=productsJsonParamter]').val(JSON.stringify(productJsonArray));
+            $.modal.close();
+        }
     </script>
 </body>
 </html>

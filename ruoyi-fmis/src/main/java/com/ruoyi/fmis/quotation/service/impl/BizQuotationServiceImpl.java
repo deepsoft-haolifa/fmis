@@ -1,10 +1,14 @@
 package com.ruoyi.fmis.quotation.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import com.ruoyi.common.annotation.DataScope;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.fmis.common.BizConstants;
+import com.ruoyi.fmis.customer.domain.BizCustomer;
+import com.ruoyi.fmis.customer.mapper.BizCustomerMapper;
 import com.ruoyi.fmis.flow.domain.BizFlow;
 import com.ruoyi.fmis.flow.mapper.BizFlowMapper;
 import com.ruoyi.framework.util.ShiroUtils;
@@ -32,6 +36,9 @@ public class BizQuotationServiceImpl implements IBizQuotationService {
 
     @Autowired
     private ISysRoleService roleService;
+
+    @Autowired
+    private BizCustomerMapper bizCustomerMapper;
 
     /**
      * 查询报价单
@@ -154,6 +161,31 @@ public class BizQuotationServiceImpl implements IBizQuotationService {
         bizFlow.setRemark(remark);
         bizFlow.setFlowStatus(status);
         bizFlowMapper.insertBizFlow(bizFlow);
+
+        //修改客户类别状态
+        String customerId = bizQuotation.getString2();
+        if (StringUtils.isNotEmpty(customerId)) {
+            BizCustomer bizCustomer = bizCustomerMapper.selectBizCustomerById(StringUtils.toLong(customerId));
+            if (bizCustomer != null) {
+                String recordDate = bizCustomer.getRecordDate();
+                if (StringUtils.isNotEmpty(recordDate)) {
+                    String customerLevel = bizCustomer.getCustomerLevel();
+                    //成单客户（新）	=1        成单客户（老）=2
+                    Date recordDateD = DateUtils.parseDate(recordDate);
+                    if (recordDateD != null) {
+                        //如果是  未报价未成单
+                        if ("3".equals(customerLevel)) {
+                            bizCustomer.setCustomerLevel("4");
+                            if (DateUtils.getDatePoorDay(new Date(),recordDateD) >= 365) {
+                                bizCustomer.setCustomerLevel("2");
+                            }
+                            bizCustomerMapper.updateBizCustomer(bizCustomer);
+                        }
+                    }
+                }
+            }
+        }
+
 
         return updateCount;
     }

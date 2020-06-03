@@ -57,4 +57,9 @@ public interface IBizCustomerService {
      * @return 结果
      */
     public int deleteBizCustomerById(Long customerId);
+
+    /**
+     * 更新客户类别任务
+     */
+    public void updateCustomerLeverJob ();
 }

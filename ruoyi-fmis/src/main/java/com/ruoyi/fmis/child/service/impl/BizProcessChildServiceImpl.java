@@ -42,6 +42,11 @@ public class BizProcessChildServiceImpl implements IBizProcessChildService {
         return bizProcessChildMapper.selectBizProcessChildList(bizProcessChild);
     }
 
+    @Override
+    public List<BizProcessChild> selectBizQuotationProductList(BizProcessChild bizProcessChild) {
+        return bizProcessChildMapper.selectBizQuotationProductList(bizProcessChild);
+    }
+
     /**
      * 新增流程数据字
      *

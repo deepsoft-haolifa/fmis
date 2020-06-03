@@ -57,4 +57,7 @@ public interface BizCustomerMapper {
      * @return 结果
      */
     public int deleteBizCustomerByIds(String[] customerIds);
+
+
+    public Long selectCustomerFileNumber();
 }

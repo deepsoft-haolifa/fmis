@@ -23,6 +23,55 @@ public class BizCustomer extends BaseEntity {
     /** 客户ID */
     private Long customerId;
 
+
+
+    @Setter
+    @Getter
+    private String string1;
+
+    @Setter
+    @Getter
+    private String string2;
+
+    @Setter
+    @Getter
+    private String string3;
+
+    @Setter
+    @Getter
+    private String string4;
+
+    @Setter
+    @Getter
+    private String string5;
+
+    @Setter
+    @Getter
+    private String string6;
+
+    @Setter
+    @Getter
+    private String string7;
+
+    @Setter
+    @Getter
+    private String string8;
+
+    @Setter
+    @Getter
+    private String string9;
+
+    @Setter
+    @Getter
+    private String string10;
+
+    /**
+     * 区域代码
+     */
+    @Setter
+    @Getter
+    private String areaCodeName;
+
     @Setter
     @Getter
     private String allocationDatestartTime;

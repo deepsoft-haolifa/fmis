@@ -34,6 +34,12 @@
             <groupId>com.ruoyi</groupId>
             <artifactId>ruoyi-common</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.ruoyi.fmis</groupId>
+            <artifactId>ruoyi-fmis</artifactId>
+            <version>4.0.0</version>
+            <scope>compile</scope>
+        </dependency>
 
     </dependencies>
 	

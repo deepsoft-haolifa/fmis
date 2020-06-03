@@ -80,6 +80,7 @@ public class BizProcessDataController extends BaseController {
     @Autowired
     private IBizCustomerService bizCustomerService;
 
+
     @Autowired
     private IBizProductRefService bizProductRefService;
 
@@ -91,7 +92,11 @@ public class BizProcessDataController extends BaseController {
 
     @RequiresPermissions("fmis:data:view")
     @GetMapping()
-    public String data() {
+    public String data(ModelMap mmap) {
+        String toDo = getRequest().getParameter("todo");
+        if ("1".equals(toDo)) {
+            mmap.put("todo","1");
+        }
         return prefix + "/data";
     }
 
@@ -375,6 +380,19 @@ public class BizProcessDataController extends BaseController {
     }
 
     /**
+     * 查询报价单产品
+     * @return
+     */
+    @PostMapping("/listProductNoPage")
+    @ResponseBody
+    public TableDataInfo listProductNoPage(BizProcessData bizProcessData) {
+        BizProcessChild queryBizProcessChild = new BizProcessChild();
+        queryBizProcessChild.setDataId(bizProcessData.getDataId());
+        List<BizProcessChild> bizProcessChildList = bizProcessChildService.selectBizQuotationProductList(queryBizProcessChild);
+        return getDataTable(bizProcessChildList);
+    }
+
+    /**
      * 修改合同管理
      */
     @GetMapping("/edit/{dataId}")
@@ -428,6 +446,12 @@ public class BizProcessDataController extends BaseController {
         if (StringUtils.isNotEmpty(customerId)) {
             bizProcessData.setBizCustomer(bizCustomerService.selectBizCustomerById(Long.parseLong(customerId)));
         }
+        String suppliersId = bizProcessData.getString3();
+        if (StringUtils.isNotEmpty(suppliersId)) {
+            bizProcessData.setBizSuppliers(bizSuppliersService.selectBizSuppliersById(Long.parseLong(suppliersId)));
+        }
+
+
         mmap.put("quotationNames", productNames);
         mmap.put("quotationIds", productIds);
         mmap.put("bizProcessData", bizProcessData);
@@ -590,5 +614,13 @@ public class BizProcessDataController extends BaseController {
     @GetMapping("/selectCustomer")
     public String selectCustomer() {
         return prefix + "/selectCustomer";
+    }
+
+    /**
+     * 选择客户
+     */
+    @GetMapping("/selectSuppliers")
+    public String selectSuppliers() {
+        return prefix + "/selectSuppliers";
     }
 }

@@ -46,11 +46,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="filePaths"    column="file_paths"    />
 
         <result property="newStatus"    column="new_status"    />
+
+        <result property="string1"    column="string1"    />
+        <result property="string2"    column="string2"    />
+        <result property="string3"    column="string3"    />
+        <result property="string4"    column="string4"    />
+        <result property="string5"    column="string5"    />
+        <result property="string6"    column="string6"    />
+        <result property="string7"    column="string7"    />
+        <result property="string8"    column="string8"    />
+        <result property="string9"    column="string9"    />
+        <result property="string10"    column="string10"    />
     </resultMap>
 
     <sql id="selectBizCustomerVo">
         select customer_id, record_date, company_code, area, record_code, owner_user_id, name, project_ame, contact_name, contact_position, contact_phone, contact_email, brand, info, product_info, remark, status, del_flag, create_by, create_time, update_by, update_time,area_code,source,record_type,record_num,telephone,fax,company_address,dept_id,
-         customer_level,code_name,industry_division,allocation_date,assign_number,file_number,file_paths,new_status
+         customer_level,code_name,industry_division,allocation_date,assign_number,file_number,file_paths,new_status,
+         string1,string2,string3,string4,string5,string6,string7,string8,string9,string10
          from biz_customer
     </sql>
 
@@ -58,11 +70,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select c.customer_id, c.record_date, c.company_code, c.area, c.record_code, u.user_name as owner_user_id, c.name, c.project_ame, c.contact_name, c.contact_position, c.contact_phone, c.contact_email,
         c.brand, c.info, c.product_info, c.remark, c.status, c.del_flag, c.create_by, c.create_time, c.update_by, c.update_time,
         c.area_code,c.source,c.record_type,c.record_num,c.telephone,c.fax,c.company_address,c.dept_id,dt.dept_name deptName,
-        c.customer_level,c.code_name,c.industry_division,c.allocation_date,c.assign_number,c.file_number,c.file_paths,c.new_status
+        c.customer_level,c.code_name,c.industry_division,c.allocation_date,c.assign_number,c.file_number,c.file_paths,c.new_status,
+        ad.code_name as areaCodeName,c.string1,c.string2,c.string3,c.string4,c.string5,c.string6,c.string7,c.string8,c.string9,c.string10
         from biz_customer c
         left join sys_user u on c.owner_user_id=u.user_id
 
         left join sys_dept dt on u.dept_id=dt.dept_id
+
+        left join sys_dict_data dd on dd.dict_type='customer_area' and dd.dict_value=c.area
+
+        left join biz_area_dict ad on ad.area=dd.dict_label
 
         where c.del_flag = '0'
         <!-- 数据范围过滤 -->
@@ -156,6 +173,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="fileNumber != null ">file_number,</if>
             <if test="filePaths != null ">file_paths,</if>
             <if test="newStatus != null ">new_status,</if>
+
+            <if test="string1 != null  and string1 != ''">string1,</if>
+            <if test="string2 != null  and string2 != ''">string2,</if>
+            <if test="string3 != null  and string3 != ''">string3,</if>
+            <if test="string4 != null  and string4 != ''">string4,</if>
+            <if test="string5 != null  and string5 != ''">string5,</if>
+            <if test="string6 != null  and string6 != ''">string6,</if>
+            <if test="string7 != null  and string7 != ''">string7,</if>
+            <if test="string8 != null  and string8 != ''">string8,</if>
+            <if test="string9 != null  and string9 != ''">string9,</if>
+            <if test="string10 != null  and string10 != ''">string10,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="recordDate != null ">#{recordDate},</if>
@@ -197,6 +225,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="fileNumber != null ">#{fileNumber},</if>
             <if test="filePaths != null ">#{filePaths},</if>
             <if test="newStatus != null ">#{newStatus},</if>
+
+            <if test="string1 != null  and string1 != ''">#{string1},</if>
+            <if test="string2 != null  and string2 != ''">#{string2},</if>
+            <if test="string3 != null  and string3 != ''">#{string3},</if>
+            <if test="string4 != null  and string4 != ''">#{string4},</if>
+            <if test="string5 != null  and string5 != ''">#{string5},</if>
+            <if test="string6 != null  and string6 != ''">#{string6},</if>
+            <if test="string7 != null  and string7 != ''">#{string7},</if>
+            <if test="string8 != null  and string8 != ''">#{string8},</if>
+            <if test="string9 != null  and string9 != ''">#{string9},</if>
+            <if test="string10 != null  and string10 != ''">#{string10},</if>
          </trim>
     </insert>
 
@@ -242,6 +281,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="fileNumber != null ">file_number = #{fileNumber},</if>
             <if test="filePaths != null ">file_paths = #{filePaths},</if>
             <if test="newStatus != null ">new_status = #{newStatus},</if>
+
+            <if test="string1 != null  and string1 != ''">string1 = #{string1},</if>
+            <if test="string2 != null  and string2 != ''">string2 = #{string2},</if>
+            <if test="string3 != null  and string3 != ''">string3 = #{string3},</if>
+            <if test="string4 != null  and string4 != ''">string4 = #{string4},</if>
+            <if test="string5 != null  and string5 != ''">string5 = #{string5},</if>
+            <if test="string6 != null  and string6 != ''">string6 = #{string6},</if>
+            <if test="string7 != null  and string7 != ''">string7 = #{string7},</if>
+            <if test="string8 != null  and string8 != ''">string8 = #{string8},</if>
+            <if test="string9 != null  and string9 != ''">string9 = #{string9},</if>
+            <if test="string10 != null  and string10 != ''">string10 = #{string10},</if>
+
         </trim>
         where customer_id = #{customerId}
     </update>
@@ -256,5 +307,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{customerId}
         </foreach>
     </delete>
-    
+
+
+    <select id="selectCustomerFileNumber"  resultType="Long">
+        select (max(CONVERT(right(file_number,4),UNSIGNED INTEGER)) + 1) as fileNumber from biz_customer where
+        file_number is not null and file_number like concat('HL-',YEAR(NOW()),'-%') and length(file_number)=12
+    </select>
+
 </mapper>
