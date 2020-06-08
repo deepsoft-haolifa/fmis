@@ -21,6 +21,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="price8"    column="price8"    />
         <result property="price9"    column="price9"    />
         <result property="price10"    column="price10"    />
+
+
+
+        <result property="price11"    column="price11"    />
+        <result property="price12"    column="price12"    />
+        <result property="price13"    column="price13"    />
+        <result property="price14"    column="price14"    />
+        <result property="price15"    column="price15"    />
+        <result property="price16"    column="price16"    />
+        <result property="price17"    column="price17"    />
+        <result property="price18"    column="price18"    />
+        <result property="price19"    column="price19"    />
+        <result property="price20"    column="price20"    />
+
         <result property="string1"    column="string1"    />
         <result property="string2"    column="string2"    />
         <result property="string3"    column="string3"    />
@@ -41,6 +55,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="string18"    column="string18"    />
         <result property="string19"    column="string19"    />
         <result property="string20"    column="string20"    />
+
+        <result property="string21"    column="string21"    />
+        <result property="string22"    column="string22"    />
+        <result property="string23"    column="string23"    />
+        <result property="string24"    column="string24"    />
+        <result property="string25"    column="string25"    />
+        <result property="string26"    column="string26"    />
+        <result property="string27"    column="string27"    />
+        <result property="string28"    column="string28"    />
+        <result property="string29"    column="string29"    />
+        <result property="string30"    column="string30"    />
+
+
         <result property="datetime1"    column="datetime1"    />
         <result property="datetime2"    column="datetime2"    />
         <result property="datetime3"    column="datetime3"    />
@@ -55,7 +82,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectBizProcessDataVo">
-        select data_id, biz_data_id, biz_id, normal_flag, flow_status, remark, price1, price2, price3, price4, price5, price6, price7, price8, price9, price10, string1, string2, string3, string4, string5, string6, string7, string8, string9, string10, string11, string12, string13, string14, string15, string16, string17, string18, string19, string20, datetime1, datetime2, datetime3, datetime4, datetime5, status, del_flag, create_by, create_time, update_by, update_time from biz_process_data
+        select data_id, biz_data_id, biz_id, normal_flag, flow_status, remark, price1, price2, price3, price4, price5, price6, price7, price8, price9, price10, string1, string2, string3, string4, string5, string6, string7, string8, string9, string10, string11, string12, string13, string14, string15, string16, string17, string18, string19, string20,
+        string21,string22,string23,string24,string25,string26,string27,string28,string29,string30,
+        price11, price12, price13, price14, price15, price16, price17, price18, price19, price20,
+        datetime1, datetime2, datetime3, datetime4, datetime5, status, del_flag, create_by, create_time, update_by, update_time from biz_process_data
     </sql>
 
     <select id="selectBizProcessDataList" parameterType="BizProcessData" resultMap="BizProcessDataResult">
@@ -114,7 +144,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         q.string3, q.string4, q.string5, q.string6, q.string7, q.string8, q.string9, q.string10, q.string11,
         q.string12, q.string13, q.string14, q.string15, q.string16, q.string17, q.string18, q.string19, q.string20,
         q.datetime1, q.datetime2, q.datetime3, q.datetime4, q.datetime5, q.status, q.del_flag, q.create_by,
-        q.create_time, q.update_by, q.update_time,ct.name as customerName,bs.name as suppliersName
+        q.create_time, q.update_by, q.update_time,ct.name as customerName,bs.name as suppliersName,
+        q.string21,q.string22,q.string23,q.string24,q.string25,q.string26,q.string27,q.string28,q.string29,q.string30,
+        q.price11, q.price12, q.price13, q.price14, q.price15, q.price16, q.price17, q.price18, q.price19, q.price20
         from biz_process_data q
         left join sys_user u on q.create_by=u.user_id
         left join sys_dept dt on u.dept_id=dt.dept_id
@@ -307,7 +339,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         string3, string4, string5, string6, string7, string8, string9, string10, string11,
         string12, string13, string14, string15, string16, string17, string18, string19, string20,
         datetime1, datetime2, datetime3, datetime4, datetime5, status, del_flag, create_by,
-        create_time, update_by, update_time
+        create_time, update_by, update_time,
+        string21,string22,string23,string24,string25,string26,string27,string28,string29,string30,
+        price11, price12, price13, price14, price15, price16, price17, price18, price19, price20
 
         from biz_process_data
     </sql>
@@ -382,6 +416,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="price8 != null ">price8,</if>
             <if test="price9 != null ">price9,</if>
             <if test="price10 != null ">price10,</if>
+
+            <if test="price11 != null ">price11,</if>
+            <if test="price12 != null ">price12,</if>
+            <if test="price13 != null ">price13,</if>
+            <if test="price14 != null ">price14,</if>
+            <if test="price15 != null ">price15,</if>
+            <if test="price16 != null ">price16,</if>
+            <if test="price17 != null ">price17,</if>
+            <if test="price18 != null ">price18,</if>
+            <if test="price19 != null ">price19,</if>
+            <if test="price20 != null ">price20,</if>
+
             <if test="string1 != null  and string1 != ''">string1,</if>
             <if test="string2 != null  and string2 != ''">string2,</if>
             <if test="string3 != null  and string3 != ''">string3,</if>
@@ -402,6 +448,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="string18 != null  and string18 != ''">string18,</if>
             <if test="string19 != null  and string19 != ''">string19,</if>
             <if test="string20 != null  and string20 != ''">string20,</if>
+
+
+            <if test="string21 != null  and string21 != ''">string21,</if>
+            <if test="string22 != null  and string22 != ''">string22,</if>
+            <if test="string23 != null  and string23 != ''">string23,</if>
+            <if test="string24 != null  and string24 != ''">string24,</if>
+            <if test="string25 != null  and string25 != ''">string25,</if>
+            <if test="string26 != null  and string26 != ''">string26,</if>
+            <if test="string27 != null  and string27 != ''">string27,</if>
+            <if test="string28 != null  and string28 != ''">string28,</if>
+            <if test="string29 != null  and string29 != ''">string29,</if>
+            <if test="string30 != null  and string30 != ''">string30,</if>
+
             <if test="datetime1 != null ">datetime1,</if>
             <if test="datetime2 != null ">datetime2,</if>
             <if test="datetime3 != null ">datetime3,</if>
@@ -450,6 +509,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="string18 != null  and string18 != ''">#{string18},</if>
             <if test="string19 != null  and string19 != ''">#{string19},</if>
             <if test="string20 != null  and string20 != ''">#{string20},</if>
+
+            <if test="string21 != null  and string21 != ''">#{string21},</if>
+            <if test="string22 != null  and string22 != ''">#{string22},</if>
+            <if test="string23 != null  and string23 != ''">#{string23},</if>
+            <if test="string24 != null  and string24 != ''">#{string24},</if>
+            <if test="string25 != null  and string25 != ''">#{string25},</if>
+            <if test="string26 != null  and string26 != ''">#{string26},</if>
+            <if test="string27 != null  and string27 != ''">#{string27},</if>
+            <if test="string28 != null  and string28 != ''">#{string28},</if>
+            <if test="string29 != null  and string29 != ''">#{string29},</if>
+            <if test="string30 != null  and string30 != ''">#{string30},</if>
+
             <if test="datetime1 != null ">#{datetime1},</if>
             <if test="datetime2 != null ">#{datetime2},</if>
             <if test="datetime3 != null ">#{datetime3},</if>
@@ -482,6 +553,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="price8 != null ">price8 = #{price8},</if>
             <if test="price9 != null ">price9 = #{price9},</if>
             <if test="price10 != null ">price10 = #{price10},</if>
+
+            <if test="price11 != null ">price11 = #{price11},</if>
+            <if test="price12 != null ">price12 = #{price12},</if>
+            <if test="price13 != null ">price13 = #{price13},</if>
+            <if test="price14 != null ">price14 = #{price14},</if>
+            <if test="price15 != null ">price15 = #{price15},</if>
+            <if test="price16 != null ">price16 = #{price16},</if>
+            <if test="price17 != null ">price17 = #{price17},</if>
+            <if test="price18 != null ">price18 = #{price18},</if>
+            <if test="price19 != null ">price19 = #{price19},</if>
+            <if test="price20 != null ">price20 = #{price20},</if>
+
             <if test="string1 != null  and string1 != ''">string1 = #{string1},</if>
             <if test="string2 != null  and string2 != ''">string2 = #{string2},</if>
             <if test="string3 != null  and string3 != ''">string3 = #{string3},</if>
@@ -502,6 +585,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="string18 != null  and string18 != ''">string18 = #{string18},</if>
             <if test="string19 != null  and string19 != ''">string19 = #{string19},</if>
             <if test="string20 != null  and string20 != ''">string20 = #{string20},</if>
+
+            <if test="string21 != null  and string21 != ''">string21 = #{string21},</if>
+            <if test="string22 != null  and string22 != ''">string22 = #{string22},</if>
+            <if test="string23 != null  and string23 != ''">string23 = #{string23},</if>
+            <if test="string24 != null  and string24 != ''">string24 = #{string24},</if>
+            <if test="string25 != null  and string25 != ''">string25 = #{string25},</if>
+            <if test="string26 != null  and string26 != ''">string26 = #{string26},</if>
+            <if test="string27 != null  and string27 != ''">string27 = #{string27},</if>
+            <if test="string28 != null  and string28 != ''">string28 = #{string28},</if>
+            <if test="string29 != null  and string29 != ''">string29 = #{string29},</if>
+            <if test="string30 != null  and string30 != ''">string30 = #{string30},</if>
+
             <if test="datetime1 != null ">datetime1 = #{datetime1},</if>
             <if test="datetime2 != null ">datetime2 = #{datetime2},</if>
             <if test="datetime3 != null ">datetime3 = #{datetime3},</if>

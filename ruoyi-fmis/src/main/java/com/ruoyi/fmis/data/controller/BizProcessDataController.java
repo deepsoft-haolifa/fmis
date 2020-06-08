@@ -114,6 +114,7 @@ public class BizProcessDataController extends BaseController {
         }
 
 
+
         String bizId = bizProcessData.getBizId();
         Map<String, SysRole> flowMap = bizProcessDefineService.getRoleFlowMap(bizId);
         String userFlowStatus = "";
@@ -152,6 +153,7 @@ public class BizProcessDataController extends BaseController {
                     }
                 }
                 data.setFlowStatusRemark(flowStatusRemark);
+                data.setLoginUserId(ShiroUtils.getUserId().toString());
                 //计算是否可以审批
                 int flowStatusInt = Integer.parseInt(flowStatus);
                 data.setOperationExamineStatus(false);
@@ -322,6 +324,8 @@ public class BizProcessDataController extends BaseController {
 
     @GetMapping("/selectQuotation")
     public String selectQuotation(ModelMap mmap) {
+        String customerId = getRequest().getParameter("customerId");
+        mmap.put("customerId",customerId);
         return prefix + "/selectQuotation";
     }
 

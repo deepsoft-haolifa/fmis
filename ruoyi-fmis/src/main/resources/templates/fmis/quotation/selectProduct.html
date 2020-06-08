@@ -35,6 +35,11 @@
                             </li>
 
                             <li>
+                                <p>好利型号：</p>
+                                <input name="string4"  class="form-control" type="text">
+                            </li>
+
+                            <li>
                                 <p>规格：</p>
                                 <select name="specifications" id="specifications" class="form-control select2-multiple"><option value="">请选择</option></select>
                             </li>
@@ -62,6 +67,14 @@
                             <li>
                                 <p>阀芯材质：</p>
                                 <select name="valveElement" id="valveElement" class="form-control select2-multiple" ><option value="">请选择</option></select>
+                            </li>
+
+                            <li>
+                                <p>阀轴：</p>
+                                <select name="string3" class="form-control m-b" th:with="type=${@dict.getType('valve_shaft')}">
+                                    <option value="">请选择</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
                             </li>
 
                             <li>
@@ -103,6 +116,8 @@
         var removeFlag = [[${@permission.hasPermi('fmis:product:remove')}]];
 
         var string2Datas = [[${@dict.getType('product_level')}]];
+
+        var string3Datas = [[${@dict.getType('valve_shaft')}]];
 
         var prefix = ctx + "fmis/product";
 
@@ -167,6 +182,13 @@
                     field : 'valveElement', 
                     title : '阀芯材质'
                 },
+                    {
+                        field : 'string3',
+                        title : '阀轴',
+                        formatter: function(value, row, index) {
+                            return $.table.selectDictLabel(string3Datas, value);
+                        }
+                    },
                 {
                     field : 'driveForm', 
                     title : '驱动形式'
@@ -184,7 +206,7 @@
                 },
                 {
                     field : 'supplier', 
-                    title : '供应商名称'
+                    title : '供应商代号'
                 },
                 {
                     field : 'remark', 

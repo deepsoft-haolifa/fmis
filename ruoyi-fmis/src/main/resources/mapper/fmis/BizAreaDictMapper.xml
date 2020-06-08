@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.fmis.careadict.mapper.BizAreaDictMapper">
+    
+    <resultMap type="BizAreaDict" id="BizAreaDictResult">
+        <result property="areas"    column="areas"    />
+        <result property="codeName"    column="code_name"    />
+        <result property="area"    column="area"    />
+    </resultMap>
+
+    <sql id="selectBizAreaDictVo">
+        select areas, code_name, area from biz_area_dict
+    </sql>
+
+    <select id="selectBizAreaDictList" parameterType="BizAreaDict" resultMap="BizAreaDictResult">
+        <include refid="selectBizAreaDictVo"/>
+        <where>  
+            <if test="areas != null  and areas != ''"> and areas = #{areas}</if>
+            <if test="codeName != null  and codeName != ''"> and code_name like concat('%', #{codeName}, '%')</if>
+            <if test="area != null  and area != ''"> and area = #{area}</if>
+        </where>
+    </select>
+    
+    <select id="selectBizAreaDictById" parameterType="String" resultMap="BizAreaDictResult">
+        <include refid="selectBizAreaDictVo"/>
+        where areas = #{areas}
+    </select>
+        
+    <insert id="insertBizAreaDict" parameterType="BizAreaDict">
+        insert into biz_area_dict
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="areas != null  and areas != ''">areas,</if>
+            <if test="codeName != null  and codeName != ''">code_name,</if>
+            <if test="area != null  and area != ''">area,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="areas != null  and areas != ''">#{areas},</if>
+            <if test="codeName != null  and codeName != ''">#{codeName},</if>
+            <if test="area != null  and area != ''">#{area},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBizAreaDict" parameterType="BizAreaDict">
+        update biz_area_dict
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="codeName != null  and codeName != ''">code_name = #{codeName},</if>
+            <if test="area != null  and area != ''">area = #{area},</if>
+        </trim>
+        where areas = #{areas}
+    </update>
+
+    <delete id="deleteBizAreaDictById" parameterType="String">
+        delete from biz_area_dict where areas = #{areas}
+    </delete>
+
+    <delete id="deleteBizAreaDictByIds" parameterType="String">
+        delete from biz_area_dict where areas in 
+        <foreach item="areas" collection="array" open="(" separator="," close=")">
+            #{areas}
+        </foreach>
+    </delete>
+    
+</mapper>

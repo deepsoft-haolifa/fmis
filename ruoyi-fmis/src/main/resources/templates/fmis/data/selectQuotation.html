@@ -19,6 +19,7 @@
                             <li>
                                 <p>客户名称：</p>
                                 <input type="text" name="customerName" id="customerName"/>
+                                <input type="hidden" name="customerId" id="customerId" th:value="${customerId}"/>
                             </li>
 
                             <li >
@@ -123,7 +124,6 @@
         var paymentMethodData = [[${@dict.getType('payment_method')}]];
         var string2Datas = [[${@dict.getType('product_level')}]];
         var roleType = /*[[${roleType}]]*/;
-
 
 
         $(function() {

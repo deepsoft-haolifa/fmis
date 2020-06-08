@@ -20,7 +20,7 @@
 
             <label class="col-sm-1 control-label">客户：</label>
             <div class="col-sm-2">
-                <input name="string2" class="form-control" type="hidden">
+                <input name="string2" id="string2" class="form-control" type="hidden">
                 <input name="customerName" id="customerName" class="form-control" type="text" readonly onclick="selectCustomer()" required>
             </div>
 
@@ -34,8 +34,12 @@
 
             <label class="col-sm-1 control-label">供方：</label>
             <div class="col-sm-2">
-                <input name="string3" class="form-control" type="hidden">
-                <input name="suppliersName" id="suppliersName" class="form-control" type="text" readonly onclick="selectSuppliers()" required>
+                <select name="string3" id="string3" class="form-control m-b" th:with="type=${@dict.getType('supplier_type')}">
+                    <option value="0">请选择</option>
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                </select>
+                <!--
+                <input name="suppliersName" id="suppliersName" class="form-control" type="text" readonly onclick="selectSuppliers()" required>-->
             </div>
 
         </div>
@@ -51,7 +55,10 @@
             </div>
             <label class="col-sm-1 control-label">发货时间：</label>
             <div class="col-sm-2">
-                <input name="string6" class="form-control" type="text">
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input name="string6" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                </div>
             </div>
 
             <label class="col-sm-1 control-label">运输方式：</label>
@@ -114,14 +121,15 @@
             <div id="divString16" style="display: none">
                 <!--
                 <label class="col-sm-1 control-label">协议付款：</label> -->
-                <div class="col-sm-7 form-inline">
+                <div class="col-sm-8 form-inline">
 
                     预付<input name="price5" id="price5" onkeyup="AmountKeyUp(this)" class="form-control" style="width: 45px">%，
                     发货前付款 <input name="price6" id="price6" onkeyup="AmountKeyUp(this)" class="form-control" style="width: 45px">%，
                     货到<input name="price7" id="price7" onkeyup="AmountKeyUp(this)" class="form-control" style="width: 45px">天付
                     <input name="price8" id="price8" onkeyup="AmountKeyUp(this)" class="form-control" style="width: 45px">%，
-                    安装调试<input name="price9" id="price9" onkeyup="AmountKeyUp(this)" class="form-control" style="width: 45px">天，
-                    付<input name="price10" id="price10" onkeyup="AmountKeyUp(this)" class="form-control" style="width: 45px">%质保金
+                    安装调试<input name="price9" id="price9" onkeyup="AmountKeyUp(this)" class="form-control" style="width: 45px">天
+                    付<input name="price10" id="price10" onkeyup="AmountKeyUp(this)" class="form-control" style="width: 45px">%，质保金
+                    <input name="price11" id="price11" onkeyup="AmountKeyUp(this)" class="form-control" style="width: 45px">%
 
                     <!--
                     <select name="string16" id="string16" class="form-control m-b" th:with="type=${@dict.getType('payment_agreement')}">
@@ -137,6 +145,13 @@
             <label class="col-sm-1 control-label">产品标识：</label>
             <div class="col-sm-2">
                 <select name="string19" id="string19" class="form-control m-b" th:with="type=${@dict.getType('product_logo')}">
+                    <option value="0">请选择</option>
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                </select>
+            </div>
+            <label class="col-sm-1 control-label">送货方式：</label>
+            <div class="col-sm-2">
+                <select name="string21" id="string21" class="form-control m-b" th:with="type=${@dict.getType('shipping_method')}">
                     <option value="0">请选择</option>
                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                 </select>
@@ -322,6 +337,12 @@
         autoclose: true
     });
 
+    $("input[name='string6']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+
     function removeProject (productId) {
         $.modal.confirm("确定要删除该数据吗？", function() {
             console.log("removeId=" + productId);
@@ -472,6 +493,7 @@
                 {field : 'productNum',title : '数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
                 {field : 'productPrice',title : '单价',editable: false},
                 {field : 'productCoefficient',title : '系数',editable: false},
+                {field : 'test111',title : '优惠',editable: true},
 
 
                 {field : 'actuatorId',title : 'actuatorId',visible: false},
@@ -583,7 +605,15 @@
         }
     }
     function insertRow(){
-        var url = prefix + "/selectQuotation";
+
+        var customerId = $("#string2").val();
+        if ($.common.isEmpty(customerId)) {
+            $.modal.alertWarning("请选择客户！");
+            return;
+        }
+
+
+        var url = prefix + "/selectQuotation?customerId=" + customerId;
         var widthNum = this.innerWidth - 50;
         var heigthNum = this.innerHeight - 50;
 

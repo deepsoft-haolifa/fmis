@@ -47,7 +47,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <sql id="selectBizProductNameVo">
         select p.product_id, p.name, d.name as series, p.model, d1.name as specifications, d2.name as nominal_pressure, d3.name as connection_type, d6.name as valvebody_material, p.valve_material, d4.name as sealing_material, d5.name as valve_element, d7.name as drive_form,d8.name as structural_style,
-          p.price, s.name as supplier, p.remark, p.status, p.del_flag, p.create_by, p.create_time,
+          p.price, s.nick_name as supplier, p.remark, p.status, p.del_flag, p.create_by, p.create_time,
           p.update_by, p.update_time,p.new_supplier,
           p.medium,p.temperature,p.other,p.string2,p.string3,p.string4,p.string5,p.procurement_price,p.cost_price,d9.name as string1,p.string2,p.string3,p.string4,p.string5
 
@@ -104,7 +104,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="other != null  and other != ''"> and p.other = #{other}</if>
 
             <if test="string1 != null  and string1 != ''"> and p.string1 = #{string1}</if>
-        order by p.create_time desc
+            <if test="string3 != null  and string3 != ''"> and p.string3 = #{string3}</if>
+
+            <if test="string4 != null  and string4 != ''"> and p.string4 like concat('%', #{string4}, '%')</if>
+
+        order by d.name,cast(REPLACE(d1.name,'DN','') as signed)
     </select>
     
     <select id="selectBizProductById" parameterType="Long" resultMap="BizProductResult">

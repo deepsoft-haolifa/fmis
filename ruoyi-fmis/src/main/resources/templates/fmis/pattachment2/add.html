@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增回信器数')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-pattachment-add">
+            <input type="hidden" name="type" value="3"/>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">商品编号：</label>
+                <div class="col-sm-8">
+                    <input name="bh" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">中文品名：</label>
+                <div class="col-sm-8">
+                    <input name="chineseName" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">中文规格：</label>
+                <div class="col-sm-8">
+                    <input name="chineseSpecifications" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">英文品名：</label>
+                <div class="col-sm-8">
+                    <input name="englishName" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">英文规格：</label>
+                <div class="col-sm-8">
+                    <input name="englishSpecifications" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">中文包装：</label>
+                <div class="col-sm-8">
+                    <input name="chinesePackaging" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">英文包装：</label>
+                <div class="col-sm-8">
+                    <input name="englishPackaging" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">中文单位：</label>
+                <div class="col-sm-8">
+                    <input name="chineseUnit" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">英文单位：</label>
+                <div class="col-sm-8">
+                    <input name="englishUnit" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">压力：</label>
+                <div class="col-sm-8">
+                    <input name="pressure" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">材质：</label>
+                <div class="col-sm-8">
+                    <input name="material" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">条形码：</label>
+                <div class="col-sm-8">
+                    <input name="barCode" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">海关编码：</label>
+                <div class="col-sm-8">
+                    <input name="customsBh" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">操作费：</label>
+                <div class="col-sm-8">
+                    <input name="handlingFee" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">颜色：</label>
+                <div class="col-sm-8">
+                    <input name="color" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">开发人员：</label>
+                <div class="col-sm-8">
+                    <input name="developer" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">商品分类：</label>
+                <div class="col-sm-8">
+                    <input name="goodsCategory" class="form-control" type="text">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">供应商：</label>
+                <div class="col-sm-8">
+                    <select name="supplier" id="supplier" class="form-control select2-multiple" > <!--multiple-->
+                        <option value="">请选择</option>
+                        <option th:each="supplier:${suppliers}" th:value="${supplier.suppliersId}" th:text="${supplier.name}"></option>
+                    </select>
+                </div>
+            </div>
+
+
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">箱率：</label>
+                <div class="col-sm-8">
+                    <input name="box" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">内盒数量：</label>
+                <div class="col-sm-8">
+                    <input name="innerboxCount" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">体积：</label>
+                <div class="col-sm-8">
+                    <input name="bulk" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">长：</label>
+                <div class="col-sm-8">
+                    <input name="l" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">宽：</label>
+                <div class="col-sm-8">
+                    <input name="w" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">高：</label>
+                <div class="col-sm-8">
+                    <input name="h" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">毛重：</label>
+                <div class="col-sm-8">
+                    <input name="grossWeight" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">净重：</label>
+                <div class="col-sm-8">
+                    <input name="netWeight" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">成本价：</label>
+                <div class="col-sm-8">
+                    <input name="costPrice" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">结算价：</label>
+                <div class="col-sm-8">
+                    <input name="settlementPrice" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">销售底价：</label>
+                <div class="col-sm-8">
+                    <input name="basePrice" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">销售价：</label>
+                <div class="col-sm-8">
+                    <input name="price" class="form-control" type="text">
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "fmis/pattachment2"
+        $("#form-pattachment-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/add", $('#form-pattachment-add').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.fmis.pattachment.mapper.BizProductAttachmentMapper">
+    
+    <resultMap type="BizProductAttachment" id="BizProductAttachmentResult">
+        <result property="attachmentId"    column="attachment_id"    />
+        <result property="type"    column="type"    />
+        <result property="bh"    column="bh"    />
+        <result property="chineseName"    column="chinese_name"    />
+        <result property="chineseSpecifications"    column="chinese_specifications"    />
+        <result property="englishName"    column="english_name"    />
+        <result property="englishSpecifications"    column="english_specifications"    />
+        <result property="chinesePackaging"    column="chinese_packaging"    />
+        <result property="englishPackaging"    column="english_packaging"    />
+        <result property="chineseUnit"    column="chinese_unit"    />
+        <result property="englishUnit"    column="english_unit"    />
+        <result property="pressure"    column="pressure"    />
+        <result property="material"    column="material"    />
+        <result property="barCode"    column="bar_code"    />
+        <result property="customsBh"    column="customs_bh"    />
+        <result property="handlingFee"    column="handling_fee"    />
+        <result property="color"    column="color"    />
+        <result property="developer"    column="developer"    />
+        <result property="goodsCategory"    column="goods_category"    />
+        <result property="supplier"    column="supplier"    />
+        <result property="box"    column="box"    />
+        <result property="innerboxCount"    column="innerbox_count"    />
+        <result property="bulk"    column="bulk"    />
+        <result property="l"    column="l"    />
+        <result property="w"    column="w"    />
+        <result property="h"    column="h"    />
+        <result property="grossWeight"    column="gross_weight"    />
+        <result property="netWeight"    column="net_weight"    />
+        <result property="costPrice"    column="cost_price"    />
+        <result property="settlementPrice"    column="settlement_price"    />
+        <result property="basePrice"    column="base_price"    />
+        <result property="price"    column="price"    />
+        <result property="string1"    column="string1"    />
+        <result property="string2"    column="string2"    />
+        <result property="string3"    column="string3"    />
+        <result property="string4"    column="string4"    />
+        <result property="string5"    column="string5"    />
+        <result property="string6"    column="string6"    />
+        <result property="string7"    column="string7"    />
+        <result property="string8"    column="string8"    />
+        <result property="string9"    column="string9"    />
+        <result property="string10"    column="string10"    />
+        <result property="remark"    column="remark"    />
+        <result property="status"    column="status"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBizProductAttachmentVo">
+        select attachment_id, type, bh, chinese_name, chinese_specifications, english_name, english_specifications, chinese_packaging, english_packaging, chinese_unit, english_unit, pressure, material, bar_code, customs_bh, handling_fee, color, developer, goods_category, supplier, box, innerbox_count, bulk, l, w, h, gross_weight, net_weight, cost_price, settlement_price, base_price, price, string1, string2, string3, string4, string5, string6, string7, string8, string9, string10, remark, status, del_flag, create_by, create_time, update_by, update_time from biz_product_attachment
+    </sql>
+
+
+    <sql id="selectBizProductAttachmentRefVo">
+        select pa.attachment_id, pa.type, pa.bh, pa.chinese_name, pa.chinese_specifications, pa.english_name,
+        pa.english_specifications, pa.chinese_packaging, pa.english_packaging,
+        pa.chinese_unit, pa.english_unit, pa.pressure, pa.material, pa.bar_code, pa.customs_bh,
+         pa.handling_fee, pa.color, pa.developer, pa.goods_category, pa.supplier, pa.box,
+         pa.innerbox_count, pa.bulk, pa.l, pa.w, pa.h, pa.gross_weight, pa.net_weight, pa.cost_price,
+         pa.settlement_price, pa.base_price, pa.price, pa.string1, pa.string2, pa.string3, pa.string4,
+          pa.string5, pa.string6, pa.string7, pa.string8, pa.string9, pa.string10, pa.remark,
+          pa.status, pa.del_flag, pa.create_by, pa.create_time, pa.update_by, pa.update_time,
+          s.nick_name as supplierName
+        from biz_product_attachment pa
+        left join biz_suppliers s on s.suppliers_id=pa.supplier
+    </sql>
+
+    <select id="selectBizProductAttachmentList" parameterType="BizProductAttachment" resultMap="BizProductAttachmentResult">
+        <include refid="selectBizProductAttachmentRefVo"/>
+        <where>
+            <if test="type != null  and type != ''"> and pa.type = #{type}</if>
+            <if test="bh != null  and bh != ''"> and pa.bh like concat('%', #{bh}, '%')</if>
+
+            <if test="chineseName != null  and chineseName != ''"> and chinese_name like concat('%', #{chineseName}, '%')</if>
+            <if test="chineseSpecifications != null  and chineseSpecifications != ''"> and chinese_specifications = #{chineseSpecifications}</if>
+            <if test="englishName != null  and englishName != ''"> and english_name like concat('%', #{englishName}, '%')</if>
+            <if test="englishSpecifications != null  and englishSpecifications != ''"> and english_specifications = #{englishSpecifications}</if>
+            <if test="chinesePackaging != null  and chinesePackaging != ''"> and chinese_packaging = #{chinesePackaging}</if>
+            <if test="englishPackaging != null  and englishPackaging != ''"> and english_packaging = #{englishPackaging}</if>
+            <if test="chineseUnit != null  and chineseUnit != ''"> and chinese_unit = #{chineseUnit}</if>
+            <if test="englishUnit != null  and englishUnit != ''"> and english_unit = #{englishUnit}</if>
+            <if test="pressure != null  and pressure != ''"> and pressure = #{pressure}</if>
+            <if test="material != null  and material != ''"> and material = #{material}</if>
+            <if test="barCode != null  and barCode != ''"> and bar_code = #{barCode}</if>
+            <if test="customsBh != null  and customsBh != ''"> and customs_bh = #{customsBh}</if>
+            <if test="handlingFee != null  and handlingFee != ''"> and handling_fee = #{handlingFee}</if>
+            <if test="color != null  and color != ''"> and color = #{color}</if>
+            <if test="developer != null  and developer != ''"> and developer = #{developer}</if>
+            <if test="goodsCategory != null  and goodsCategory != ''"> and goods_category = #{goodsCategory}</if>
+            <if test="supplier != null  and supplier != ''"> and supplier = #{supplier}</if>
+            <if test="box != null  and box != ''"> and box = #{box}</if>
+            <if test="innerboxCount != null  and innerboxCount != ''"> and innerbox_count = #{innerboxCount}</if>
+            <if test="bulk != null  and bulk != ''"> and bulk = #{bulk}</if>
+            <if test="l != null  and l != ''"> and l = #{l}</if>
+            <if test="w != null  and w != ''"> and w = #{w}</if>
+            <if test="h != null  and h != ''"> and h = #{h}</if>
+            <if test="grossWeight != null  and grossWeight != ''"> and gross_weight = #{grossWeight}</if>
+            <if test="netWeight != null  and netWeight != ''"> and net_weight = #{netWeight}</if>
+            <if test="costPrice != null "> and cost_price = #{costPrice}</if>
+            <if test="settlementPrice != null "> and settlement_price = #{settlementPrice}</if>
+            <if test="basePrice != null "> and base_price = #{basePrice}</if>
+            <if test="price != null "> and price = #{price}</if>
+            <if test="string1 != null  and string1 != ''"> and string1 = #{string1}</if>
+            <if test="string2 != null  and string2 != ''"> and string2 = #{string2}</if>
+            <if test="string3 != null  and string3 != ''"> and string3 = #{string3}</if>
+            <if test="string4 != null  and string4 != ''"> and string4 = #{string4}</if>
+            <if test="string5 != null  and string5 != ''"> and string5 = #{string5}</if>
+            <if test="string6 != null  and string6 != ''"> and string6 = #{string6}</if>
+            <if test="string7 != null  and string7 != ''"> and string7 = #{string7}</if>
+            <if test="string8 != null  and string8 != ''"> and string8 = #{string8}</if>
+            <if test="string9 != null  and string9 != ''"> and string9 = #{string9}</if>
+            <if test="string10 != null  and string10 != ''"> and string10 = #{string10}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectBizProductAttachmentById" parameterType="Long" resultMap="BizProductAttachmentResult">
+        <include refid="selectBizProductAttachmentVo"/>
+        where attachment_id = #{attachmentId}
+    </select>
+        
+    <insert id="insertBizProductAttachment" parameterType="BizProductAttachment" useGeneratedKeys="true" keyProperty="attachmentId">
+        insert into biz_product_attachment
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="type != null  and type != ''">type,</if>
+            <if test="bh != null  and bh != ''">bh,</if>
+            <if test="chineseName != null  and chineseName != ''">chinese_name,</if>
+            <if test="chineseSpecifications != null  and chineseSpecifications != ''">chinese_specifications,</if>
+            <if test="englishName != null  and englishName != ''">english_name,</if>
+            <if test="englishSpecifications != null  and englishSpecifications != ''">english_specifications,</if>
+            <if test="chinesePackaging != null  and chinesePackaging != ''">chinese_packaging,</if>
+            <if test="englishPackaging != null  and englishPackaging != ''">english_packaging,</if>
+            <if test="chineseUnit != null  and chineseUnit != ''">chinese_unit,</if>
+            <if test="englishUnit != null  and englishUnit != ''">english_unit,</if>
+            <if test="pressure != null  and pressure != ''">pressure,</if>
+            <if test="material != null  and material != ''">material,</if>
+            <if test="barCode != null  and barCode != ''">bar_code,</if>
+            <if test="customsBh != null  and customsBh != ''">customs_bh,</if>
+            <if test="handlingFee != null  and handlingFee != ''">handling_fee,</if>
+            <if test="color != null  and color != ''">color,</if>
+            <if test="developer != null  and developer != ''">developer,</if>
+            <if test="goodsCategory != null  and goodsCategory != ''">goods_category,</if>
+            <if test="supplier != null  and supplier != ''">supplier,</if>
+            <if test="box != null  and box != ''">box,</if>
+            <if test="innerboxCount != null  and innerboxCount != ''">innerbox_count,</if>
+            <if test="bulk != null  and bulk != ''">bulk,</if>
+            <if test="l != null  and l != ''">l,</if>
+            <if test="w != null  and w != ''">w,</if>
+            <if test="h != null  and h != ''">h,</if>
+            <if test="grossWeight != null  and grossWeight != ''">gross_weight,</if>
+            <if test="netWeight != null  and netWeight != ''">net_weight,</if>
+            <if test="costPrice != null ">cost_price,</if>
+            <if test="settlementPrice != null ">settlement_price,</if>
+            <if test="basePrice != null ">base_price,</if>
+            <if test="price != null ">price,</if>
+            <if test="string1 != null  and string1 != ''">string1,</if>
+            <if test="string2 != null  and string2 != ''">string2,</if>
+            <if test="string3 != null  and string3 != ''">string3,</if>
+            <if test="string4 != null  and string4 != ''">string4,</if>
+            <if test="string5 != null  and string5 != ''">string5,</if>
+            <if test="string6 != null  and string6 != ''">string6,</if>
+            <if test="string7 != null  and string7 != ''">string7,</if>
+            <if test="string8 != null  and string8 != ''">string8,</if>
+            <if test="string9 != null  and string9 != ''">string9,</if>
+            <if test="string10 != null  and string10 != ''">string10,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+            <if test="status != null  and status != ''">status,</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="type != null  and type != ''">#{type},</if>
+            <if test="bh != null  and bh != ''">#{bh},</if>
+            <if test="chineseName != null  and chineseName != ''">#{chineseName},</if>
+            <if test="chineseSpecifications != null  and chineseSpecifications != ''">#{chineseSpecifications},</if>
+            <if test="englishName != null  and englishName != ''">#{englishName},</if>
+            <if test="englishSpecifications != null  and englishSpecifications != ''">#{englishSpecifications},</if>
+            <if test="chinesePackaging != null  and chinesePackaging != ''">#{chinesePackaging},</if>
+            <if test="englishPackaging != null  and englishPackaging != ''">#{englishPackaging},</if>
+            <if test="chineseUnit != null  and chineseUnit != ''">#{chineseUnit},</if>
+            <if test="englishUnit != null  and englishUnit != ''">#{englishUnit},</if>
+            <if test="pressure != null  and pressure != ''">#{pressure},</if>
+            <if test="material != null  and material != ''">#{material},</if>
+            <if test="barCode != null  and barCode != ''">#{barCode},</if>
+            <if test="customsBh != null  and customsBh != ''">#{customsBh},</if>
+            <if test="handlingFee != null  and handlingFee != ''">#{handlingFee},</if>
+            <if test="color != null  and color != ''">#{color},</if>
+            <if test="developer != null  and developer != ''">#{developer},</if>
+            <if test="goodsCategory != null  and goodsCategory != ''">#{goodsCategory},</if>
+            <if test="supplier != null  and supplier != ''">#{supplier},</if>
+            <if test="box != null  and box != ''">#{box},</if>
+            <if test="innerboxCount != null  and innerboxCount != ''">#{innerboxCount},</if>
+            <if test="bulk != null  and bulk != ''">#{bulk},</if>
+            <if test="l != null  and l != ''">#{l},</if>
+            <if test="w != null  and w != ''">#{w},</if>
+            <if test="h != null  and h != ''">#{h},</if>
+            <if test="grossWeight != null  and grossWeight != ''">#{grossWeight},</if>
+            <if test="netWeight != null  and netWeight != ''">#{netWeight},</if>
+            <if test="costPrice != null ">#{costPrice},</if>
+            <if test="settlementPrice != null ">#{settlementPrice},</if>
+            <if test="basePrice != null ">#{basePrice},</if>
+            <if test="price != null ">#{price},</if>
+            <if test="string1 != null  and string1 != ''">#{string1},</if>
+            <if test="string2 != null  and string2 != ''">#{string2},</if>
+            <if test="string3 != null  and string3 != ''">#{string3},</if>
+            <if test="string4 != null  and string4 != ''">#{string4},</if>
+            <if test="string5 != null  and string5 != ''">#{string5},</if>
+            <if test="string6 != null  and string6 != ''">#{string6},</if>
+            <if test="string7 != null  and string7 != ''">#{string7},</if>
+            <if test="string8 != null  and string8 != ''">#{string8},</if>
+            <if test="string9 != null  and string9 != ''">#{string9},</if>
+            <if test="string10 != null  and string10 != ''">#{string10},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBizProductAttachment" parameterType="BizProductAttachment">
+        update biz_product_attachment
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="type != null  and type != ''">type = #{type},</if>
+            <if test="bh != null  and bh != ''">bh = #{bh},</if>
+            <if test="chineseName != null  and chineseName != ''">chinese_name = #{chineseName},</if>
+            <if test="chineseSpecifications != null  and chineseSpecifications != ''">chinese_specifications = #{chineseSpecifications},</if>
+            <if test="englishName != null  and englishName != ''">english_name = #{englishName},</if>
+            <if test="englishSpecifications != null  and englishSpecifications != ''">english_specifications = #{englishSpecifications},</if>
+            <if test="chinesePackaging != null  and chinesePackaging != ''">chinese_packaging = #{chinesePackaging},</if>
+            <if test="englishPackaging != null  and englishPackaging != ''">english_packaging = #{englishPackaging},</if>
+            <if test="chineseUnit != null  and chineseUnit != ''">chinese_unit = #{chineseUnit},</if>
+            <if test="englishUnit != null  and englishUnit != ''">english_unit = #{englishUnit},</if>
+            <if test="pressure != null  and pressure != ''">pressure = #{pressure},</if>
+            <if test="material != null  and material != ''">material = #{material},</if>
+            <if test="barCode != null  and barCode != ''">bar_code = #{barCode},</if>
+            <if test="customsBh != null  and customsBh != ''">customs_bh = #{customsBh},</if>
+            <if test="handlingFee != null  and handlingFee != ''">handling_fee = #{handlingFee},</if>
+            <if test="color != null  and color != ''">color = #{color},</if>
+            <if test="developer != null  and developer != ''">developer = #{developer},</if>
+            <if test="goodsCategory != null  and goodsCategory != ''">goods_category = #{goodsCategory},</if>
+            <if test="supplier != null  and supplier != ''">supplier = #{supplier},</if>
+            <if test="box != null  and box != ''">box = #{box},</if>
+            <if test="innerboxCount != null  and innerboxCount != ''">innerbox_count = #{innerboxCount},</if>
+            <if test="bulk != null  and bulk != ''">bulk = #{bulk},</if>
+            <if test="l != null  and l != ''">l = #{l},</if>
+            <if test="w != null  and w != ''">w = #{w},</if>
+            <if test="h != null  and h != ''">h = #{h},</if>
+            <if test="grossWeight != null  and grossWeight != ''">gross_weight = #{grossWeight},</if>
+            <if test="netWeight != null  and netWeight != ''">net_weight = #{netWeight},</if>
+            <if test="costPrice != null ">cost_price = #{costPrice},</if>
+            <if test="settlementPrice != null ">settlement_price = #{settlementPrice},</if>
+            <if test="basePrice != null ">base_price = #{basePrice},</if>
+            <if test="price != null ">price = #{price},</if>
+            <if test="string1 != null  and string1 != ''">string1 = #{string1},</if>
+            <if test="string2 != null  and string2 != ''">string2 = #{string2},</if>
+            <if test="string3 != null  and string3 != ''">string3 = #{string3},</if>
+            <if test="string4 != null  and string4 != ''">string4 = #{string4},</if>
+            <if test="string5 != null  and string5 != ''">string5 = #{string5},</if>
+            <if test="string6 != null  and string6 != ''">string6 = #{string6},</if>
+            <if test="string7 != null  and string7 != ''">string7 = #{string7},</if>
+            <if test="string8 != null  and string8 != ''">string8 = #{string8},</if>
+            <if test="string9 != null  and string9 != ''">string9 = #{string9},</if>
+            <if test="string10 != null  and string10 != ''">string10 = #{string10},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+            <if test="status != null  and status != ''">status = #{status},</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+        </trim>
+        where attachment_id = #{attachmentId}
+    </update>
+
+    <delete id="deleteBizProductAttachmentById" parameterType="Long">
+        delete from biz_product_attachment where attachment_id = #{attachmentId}
+    </delete>
+
+    <delete id="deleteBizProductAttachmentByIds" parameterType="String">
+        delete from biz_product_attachment where attachment_id in 
+        <foreach item="attachmentId" collection="array" open="(" separator="," close=")">
+            #{attachmentId}
+        </foreach>
+    </delete>
+    
+</mapper>

@@ -31,6 +31,10 @@ public class BizQuotation extends BaseEntity {
 
     @Getter
     @Setter
+    private String customerId;
+
+    @Getter
+    @Setter
     private String examineRemark;
 
     @Getter
@@ -95,6 +99,39 @@ public class BizQuotation extends BaseEntity {
 
 
     //产品 end
+
+
+    @Getter
+    @Setter
+    private String string11;
+    @Getter
+    @Setter
+    private String string12;
+    @Getter
+    @Setter
+    private String string13;
+    @Getter
+    @Setter
+    private String string14;
+    @Getter
+    @Setter
+    private String string15;
+    @Getter
+    @Setter
+    private String string16;
+    @Getter
+    @Setter
+    private String string17;
+    @Getter
+    @Setter
+    private String string18;
+    @Getter
+    @Setter
+    private String string19;
+    @Getter
+    @Setter
+    private String string20;
+
 
 
 
@@ -185,7 +222,7 @@ public class BizQuotation extends BaseEntity {
 
     /** 运费价格 */
     @Excel(name = "运费价格")
-    private Double freight;
+    private String freight;
 
     /** 供货周期 */
     @Excel(name = "供货周期")
@@ -347,11 +384,11 @@ public class BizQuotation extends BaseEntity {
     public String getPaymentMethod() {
         return paymentMethod;
     }
-    public void setFreight(Double freight) {
+    public void setFreight(String freight) {
         this.freight = freight;
     }
 
-    public Double getFreight() {
+    public String getFreight() {
         return freight;
     }
     public void setLeadTime(String leadTime) {

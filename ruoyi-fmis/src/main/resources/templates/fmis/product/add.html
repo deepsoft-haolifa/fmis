@@ -42,6 +42,12 @@
                 </div>
             </div>
 
+            <div class="form-group">
+                <label class="col-sm-3 control-label">好利型号：</label>
+                <div class="col-sm-8">
+                    <input name="string4" id="string4" class="form-control"  type="text">
+                </div>
+            </div>
 
 
             <div class="form-group">    
@@ -99,12 +105,26 @@
                     <select name="valveElement" onchange="generateProductModel()" id="valveElement" class="form-control select2-multiple" ><option value="">请选择</option></select>
                 </div>
             </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">阀轴：</label>
+                <div class="col-sm-8">
+                    <select name="string3" class="form-control m-b" th:with="type=${@dict.getType('valve_shaft')}">
+                        <option value="">请选择</option>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                    </select>
+                </div>
+            </div>
+
             <div class="form-group">    
                 <label class="col-sm-3 control-label">驱动形式：</label>
                 <div class="col-sm-8">
                     <select name="driveForm" onchange="generateProductModel()" id="driveForm" class="form-control select2-multiple" ><option value="">请选择</option></select>
                 </div>
             </div>
+
+
+
 
             <!-- 产品等级 -->
 
@@ -254,7 +274,7 @@
                 return;
             }
             modelId += getDictCode("linkType",connectionType);
-
+            //结构形式 可以空着
             var structuralStyle = $("#structuralStyle").val();
             if ($.common.isEmpty(structuralStyle)) {
                 return;
@@ -290,11 +310,11 @@
 
             modelId += "-";
 
-            var specifications = $("#specifications").val();
+            /*var specifications = $("#specifications").val();
             if ($.common.isEmpty(specifications)) {
                 return;
             }
-            modelId += getDictCode("specification",specifications);
+            modelId += getDictCode("specification",specifications);*/
 
             $("#model").val(modelId);
         }

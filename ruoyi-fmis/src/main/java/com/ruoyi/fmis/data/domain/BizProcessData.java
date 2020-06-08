@@ -25,6 +25,71 @@ public class BizProcessData extends BaseEntity {
     /** ID */
     private Long dataId;
 
+    @Getter
+    @Setter
+    private String loginUserId;
+
+    @Getter
+    @Setter
+    private String string21;
+    @Getter
+    @Setter
+    private String string22;
+    @Getter
+    @Setter
+    private String string23;
+    @Getter
+    @Setter
+    private String string24;
+    @Getter
+    @Setter
+    private String string25;
+    @Getter
+    @Setter
+    private String string26;
+    @Getter
+    @Setter
+    private String string27;
+    @Getter
+    @Setter
+    private String string28;
+    @Getter
+    @Setter
+    private String string29;
+    @Getter
+    @Setter
+    private String string30;
+
+    @Getter
+    @Setter
+    private Double price11;
+    @Getter
+    @Setter
+    private Double price12;
+    @Getter
+    @Setter
+    private Double price13;
+    @Getter
+    @Setter
+    private Double price14;
+    @Getter
+    @Setter
+    private Double price15;
+    @Getter
+    @Setter
+    private Double price16;
+    @Getter
+    @Setter
+    private Double price17;
+    @Getter
+    @Setter
+    private Double price18;
+    @Getter
+    @Setter
+    private Double price19;
+    @Getter
+    @Setter
+    private Double price20;
 
     /**
      * 角色类型

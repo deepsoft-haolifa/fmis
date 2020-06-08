@@ -62,6 +62,7 @@
             console.log("dotoType=" + dotoType);
             $("#queryStatus").val("1");
         }
+        $.sh
         $(function() {
             var options = {
                 url: prefix + "/list",
@@ -156,12 +157,17 @@
                         var normalFlag = row.normalFlag;
                         var string17 = row.string17;//文件路径
                         var string13 = row.string13;//1=进入采购池
+                        var createBy = row.createBy;
+                        var loginUserId = row.loginUserId;
                         var actions = [];
                         if (flowStatus == normalFlag) {
                             if (!$.common.isEmpty(string17)) {
                                 string17 = fileUrlStart + string17;
                                 actions.push('<a class="btn btn-success btn-xs" target="_blank" href="' + string17 + '" ><i class="fa fa-edit"></i>查看</a>');
-                                actions.push('<a class="btn btn-success btn-xs"  href="#" onclick="goPool(' + dataId + ')" ><i class="fa fa-edit"></i>流转</a> ');
+                                console.log("createBy=" + createBy + "---loginUserId=" + loginUserId)
+                                if (createBy == loginUserId) {
+                                    actions.push('<a class="btn btn-success btn-xs"  href="#" onclick="goPool(' + dataId + ')" ><i class="fa fa-edit"></i>流转</a> ');
+                                }
                             } else {
                                 actions.push('<a class="btn btn-success btn-xs"  href="#" onclick="uploadFile(' + dataId + ')" ><i class="fa fa-edit"></i>上传合同</a> ');
                             }
