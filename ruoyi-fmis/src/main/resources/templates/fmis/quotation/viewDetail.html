@@ -57,15 +57,27 @@
         </div>
 
         <div class="form-group">
-            <label class="col-sm-3 control-label">供货周期：</label>
-            <div class="col-sm-3">
-                <input name="leadTime" th:field="*{leadTime}" readonly class="form-control" type="text">
+            <label class="col-sm-2 control-label"></label>
+            <div class="col-sm-2 form-inline">
+                &nbsp;供货周期 <input name="leadTime" readonly th:field="*{leadTime}" style="width: 50px;" class="form-control" type="text"> 天
             </div>
             <label class="col-sm-1 control-label">报备项目：</label>
-            <div class="col-sm-4">
+            <div class="col-sm-2">
                 <input name="reportProject" th:field="*{reportProject}" readonly class="form-control" type="text" >
             </div>
 
+
+            <label class="col-sm-1 control-label">含税运费：</label>
+            <div class="col-sm-2">
+                <select name="string11" id="string11" class="form-control" disabled  th:with="type=${@dict.getType('included_freight')}">
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:field="*{string11}"  th:value="${dict.dictValue}"></option>
+                </select>
+            </div>
+
+
+            <div class="col-sm-2 form-inline">
+                &nbsp;价格有效期 <input name="string12" style="width: 50px;" readonly th:field="*{string12}"  class="form-control" type="text"> 天
+            </div>
         </div>
 
 
@@ -218,6 +230,7 @@
                 {field : 'connectionType',title : '连接方式',editable: false},
                 {field : 'productNum',title : '数量',editable: false},
                 {field : 'productPrice',title : '单价',editable: false},
+                {field : 'totalPrice',title : '总价',editable: false},
                 {field : 'productCoefficient',title : '系数',editable: false},
 
                 {field : 'actuatorId',title : 'actuatorId',visible: false},
@@ -240,8 +253,39 @@
                 {field : 'productRef2Coefficient',title : '螺栓系数',editable: false},
 
 
-                {field : 'productRemark',title : '备注',editable: false},
-                {field : 'totalPrice',title : '总价',editable: false}]
+
+                //定位器，电磁阀，回信器数，气源三连件，可离合减速器
+                {field : 'pattachmentId',title : 'pattachmentId',visible: false},
+                {field : 'pattachmentName',title : '定位器',editable: false},
+                {field : 'pattachmentPrice',title : '定位器价格',editable: false},
+                {field : 'pattachmentCount',title : '定位器数量',editable: false},
+                {field : 'pattachmentCoefficient',title : '定位器系数',editable: false},
+
+                {field : 'pattachment1Id',title : 'pattachment1Id',visible: false},
+                {field : 'pattachment1Name',title : '电磁阀',editable: false},
+                {field : 'pattachment1Price',title : '电磁阀价格',editable: false},
+                {field : 'pattachment1Count',title : '电磁阀数量',editable: false},
+                {field : 'pattachment1Coefficient',title : '电磁阀系数',editable: false},
+
+                {field : 'pattachment2Id',title : 'pattachment2Id',visible: false},
+                {field : 'pattachment2Name',title : '回信器数',editable: false},
+                {field : 'pattachment2Price',title : '回信器数价格',editable: false},
+                {field : 'pattachment2Count',title : '回信器数数量',editable: false},
+                {field : 'pattachment2Coefficient',title : '回信器数系数',editable: false},
+
+                {field : 'pattachment3Id',title : 'pattachment3Id',visible: false},
+                {field : 'pattachment3Name',title : '气源三连件',editable: false},
+                {field : 'pattachment3Price',title : '气源三连件价格',editable: false},
+                {field : 'pattachment3Count',title : '气源三连件数量',editable: false},
+                {field : 'pattachment3Coefficient',title : '气源三连件系数',editable: false},
+
+                {field : 'pattachment4Id',title : 'pattachment4Id',visible: false},
+                {field : 'pattachment4Name',title : '可离合减速器',editable: false},
+                {field : 'pattachment4Price',title : '可离合减速器价格',editable: false},
+                {field : 'pattachment4Count',title : '可离合减速器数量',editable: false},
+                {field : 'pattachment4Coefficient',title : '可离合减速器系数',editable: false},
+
+                {field : 'productRemark',title : '备注',editable: false}]
         };
         $.table.init(options);
     });

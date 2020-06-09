@@ -80,13 +80,28 @@
             </div>
 
             <div class="form-group">
-                <label class="col-sm-3 control-label">供货周期：</label>
-                <div class="col-sm-3">
-                    <input name="leadTime" th:field="*{leadTime}" class="form-control" type="text">
+
+                <label class="col-sm-2 control-label"></label>
+                <div class="col-sm-2 form-inline">
+                    &nbsp;供货周期 <input name="leadTime" th:field="*{leadTime}" style="width: 50px;" class="form-control" type="text"> 天
                 </div>
+
                 <label class="col-sm-1 control-label">报备项目：</label>
-                <div class="col-sm-4">
+                <div class="col-sm-2">
                     <input name="reportProject" th:field="*{reportProject}" class="form-control" type="text" >
+                </div>
+
+
+                <label class="col-sm-1 control-label">含税运费：</label>
+                <div class="col-sm-2">
+                    <select name="string11" id="string11" class="form-control"  th:with="type=${@dict.getType('included_freight')}">
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:field="*{string11}"  th:value="${dict.dictValue}"></option>
+                    </select>
+                </div>
+
+
+                <div class="col-sm-2 form-inline">
+                    &nbsp;价格有效期 <input name="string12" style="width: 50px;" th:field="*{string12}"  class="form-control" type="text"> 天
                 </div>
 
             </div>
@@ -127,6 +142,8 @@
             <input type="hidden" id="ref2JsonParamter" value=""/>
             <!-- 选择执行器传参 -->
             <input type="hidden" id="actuatorJsonParamter" value=""/>
+
+            <input type="hidden" id="pattachmentJsonParamter" value=""/>
         </form>
     </div>
     <th:block th:include="include :: footer" />
@@ -228,6 +245,33 @@
                     productObj["actuatorNum"] = rowData["actuatorNum"];
                     productObj["actuatorCoefficient"] = rowData["actuatorCoefficient"];
                     productObj["string4"] = rowData["productRemark"];
+
+
+                    productObj["pattachmentId"] = rowData["pattachmentId"];
+                    productObj["pattachmentPrice"] = rowData["pattachmentPrice"];
+                    productObj["pattachmentCount"] = rowData["pattachmentCount"];
+                    productObj["pattachmentCoefficient"] = rowData["pattachmentCoefficient"];
+
+                    productObj["pattachment1Id"] = rowData["pattachment1Id"];
+                    productObj["pattachment1Price"] = rowData["pattachment1Price"];
+                    productObj["pattachment1Count"] = rowData["pattachment1Count"];
+                    productObj["pattachment1Coefficient"] = rowData["pattachment1Coefficient"];
+
+                    productObj["pattachment2Id"] = rowData["pattachment2Id"];
+                    productObj["pattachment2Price"] = rowData["pattachment2Price"];
+                    productObj["pattachment2Count"] = rowData["pattachment2Count"];
+                    productObj["pattachment2Coefficient"] = rowData["pattachment2Coefficient"];
+
+                    productObj["pattachment3Id"] = rowData["pattachment3Id"];
+                    productObj["pattachment3Price"] = rowData["pattachment3Price"];
+                    productObj["pattachment3Count"] = rowData["pattachment3Count"];
+                    productObj["pattachment3Coefficient"] = rowData["pattachmentCoefficient"];
+
+                    productObj["pattachment4Id"] = rowData["pattachment4Id"];
+                    productObj["pattachment4Price"] = rowData["pattachment4Price"];
+                    productObj["pattachment4Count"] = rowData["pattachment4Count"];
+                    productObj["pattachment4Coefficient"] = rowData["pattachment4Coefficient"];
+
                     productArray.push(productObj);
                 }
                 dataObj.push({"name": "string10", "value": JSON.stringify(productArray)});
@@ -338,7 +382,9 @@
                     {field : 'connectionType',title : '连接方式',editable: false},
                     {field : 'productNum',title : '数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
                     {field : 'productPrice',title : '单价',editable: false},
+                    {field : 'totalPrice',title : '总价',editable: false},
                     {field : 'productCoefficient',title : '系数',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
+
 
                     {field : 'actuatorId',title : 'actuatorId',visible: false},
                     {field : 'actuatorName',title : '执行器名称',editable: {type: 'text',emptytext: '请选择'}},
@@ -360,8 +406,41 @@
                     {field : 'productRef2Coefficient',title : '螺栓系数',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
 
 
+
+                    //定位器，电磁阀，回信器数，气源三连件，可离合减速器
+                    {field : 'pattachmentId',title : 'pattachmentId',visible: false},
+                    {field : 'pattachmentName',title : '定位器',editable: {type: 'text',emptytext: '请选择'}},
+                    {field : 'pattachmentPrice',title : '定位器价格',editable: false},
+                    {field : 'pattachmentCount',title : '定位器数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
+                    {field : 'pattachmentCoefficient',title : '定位器系数',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
+
+                    {field : 'pattachment1Id',title : 'pattachment1Id',visible: false},
+                    {field : 'pattachment1Name',title : '电磁阀',editable: {type: 'text',emptytext: '请选择'}},
+                    {field : 'pattachment1Price',title : '电磁阀价格',editable: false},
+                    {field : 'pattachment1Count',title : '电磁阀数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
+                    {field : 'pattachment1Coefficient',title : '电磁阀系数',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
+
+                    {field : 'pattachment2Id',title : 'pattachment2Id',visible: false},
+                    {field : 'pattachment2Name',title : '回信器数',editable: {type: 'text',emptytext: '请选择'}},
+                    {field : 'pattachment2Price',title : '回信器数价格',editable: false},
+                    {field : 'pattachment2Count',title : '回信器数数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
+                    {field : 'pattachment2Coefficient',title : '回信器数系数',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
+
+                    {field : 'pattachment3Id',title : 'pattachment3Id',visible: false},
+                    {field : 'pattachment3Name',title : '气源三连件',editable: {type: 'text',emptytext: '请选择'}},
+                    {field : 'pattachment3Price',title : '气源三连件价格',editable: false},
+                    {field : 'pattachment3Count',title : '气源三连件数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
+                    {field : 'pattachment3Coefficient',title : '气源三连件系数',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
+
+                    {field : 'pattachment4Id',title : 'pattachment4Id',visible: false},
+                    {field : 'pattachment4Name',title : '可离合减速器',editable: {type: 'text',emptytext: '请选择'}},
+                    {field : 'pattachment4Price',title : '可离合减速器价格',editable: false},
+                    {field : 'pattachment4Count',title : '可离合减速器数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
+                    {field : 'pattachment4Coefficient',title : '可离合减速器系数',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
+
+
                     {field : 'productRemark',title : '备注',editable: {type: 'text',emptytext: '空'}},
-                    {field : 'totalPrice',title : '总价',editable: false},
+
                     {
                         title: '操作',
                         align: 'center',
@@ -381,7 +460,11 @@
         function onEditableSave (field, row, oldValue, $el) {
             //alert("字段名：" + field + "，当前值：" + row[field]  + "，旧值：" + oldValue);
             if (field == "productNum" || field == "productCoefficient" || field == "productRef1Num"|| field == "productRef1Coefficient"
-                || field == "productRef2Num"|| field == "productRef2Coefficient" || field == "actuatorNum" || field == "actuatorCoefficient") {
+                || field == "productRef2Num"|| field == "productRef2Coefficient" || field == "actuatorNum" || field == "actuatorCoefficient"
+                || field == "pattachmentPrice" || field == "pattachment1Price" || field == "pattachment2Price" || field == "pattachment3Price" || field == "pattachment4Price"
+                || field == "pattachmentCount" || field == "pattachment1Count" || field == "pattachment2Count" || field == "pattachment3Count" || field == "pattachment4Count"
+                || field == "pattachmentCoefficient" || field == "pattachment1Coefficient" || field == "pattachment2Coefficient" || field == "pattachment3Coefficient"
+                || field == "pattachment4Coefficient") {
                 calculateTotalPrice();
             }
         }
@@ -418,11 +501,58 @@
             actuatorCoefficient = isEmpty(actuatorCoefficient) == true ? 0 : parseFloat(actuatorCoefficient);
             var actuatorPrice = row["actuatorPrice"];
             actuatorPrice = isEmpty(actuatorPrice) == true ? 0 : parseFloat(actuatorPrice);
+
+            //附件
+            var pattachmentCount = row["pattachmentCount"];
+            pattachmentCount = isEmpty(pattachmentCount) == true ? 0 : pattachmentCount;
+            var pattachmentCoefficient = row["pattachmentCoefficient"];
+            pattachmentCoefficient = isEmpty(pattachmentCoefficient) == true ? 0 : parseFloat(pattachmentCoefficient);
+            var pattachmentPrice = row["pattachmentPrice"];
+            pattachmentPrice = isEmpty(pattachmentPrice) == true ? 0 : parseFloat(pattachmentPrice);
+            var pattachmentSum = parseFloat(pattachmentCount * pattachmentPrice * pattachmentCoefficient).toFixed(4);
+
+            //附件1
+            var pattachment1Count = row["pattachment1Count"];
+            pattachment1Count = isEmpty(pattachment1Count) == true ? 0 : pattachment1Count;
+            var pattachment1Coefficient = row["pattachment1Coefficient"];
+            pattachment1Coefficient = isEmpty(pattachment1Coefficient) == true ? 0 : parseFloat(pattachment1Coefficient);
+            var pattachment1Price = row["pattachment1Price"];
+            pattachment1Price = isEmpty(pattachment1Price) == true ? 0 : parseFloat(pattachment1Price);
+            var pattachment1Sum = parseFloat(pattachment1Count * pattachment1Price * pattachment1Coefficient).toFixed(4);
+
+            //附件2
+            var pattachment2Count = row["pattachment2Count"];
+            pattachment2Count = isEmpty(pattachment2Count) == true ? 0 : pattachment2Count;
+            var pattachment2Coefficient = row["pattachment2Coefficient"];
+            pattachment2Coefficient = isEmpty(pattachment2Coefficient) == true ? 0 : parseFloat(pattachment2Coefficient);
+            var pattachment2Price = row["pattachment2Price"];
+            pattachment2Price = isEmpty(pattachment2Price) == true ? 0 : parseFloat(pattachment2Price);
+            var pattachment2Sum = parseFloat(pattachment2Count * pattachment2Price * pattachment2Coefficient).toFixed(4);
+
+            //附件3
+            var pattachment3Count = row["pattachment3Count"];
+            pattachment3Count = isEmpty(pattachment3Count) == true ? 0 : pattachment3Count;
+            var pattachment3Coefficient = row["pattachment3Coefficient"];
+            pattachment3Coefficient = isEmpty(pattachment3Coefficient) == true ? 0 : parseFloat(pattachment3Coefficient);
+            var pattachment3Price = row["pattachment3Price"];
+            pattachment3Price = isEmpty(pattachment3Price) == true ? 0 : parseFloat(pattachment3Price);
+            var pattachment3Sum = parseFloat(pattachment3Count * pattachment3Price * pattachment3Coefficient).toFixed(4);
+
+            //附件4
+            var pattachment4Count = row["pattachment4Count"];
+            pattachment4Count = isEmpty(pattachment4Count) == true ? 0 : pattachment4Count;
+            var pattachment4Coefficient = row["pattachment4Coefficient"];
+            pattachment4Coefficient = isEmpty(pattachment4Coefficient) == true ? 0 : parseFloat(pattachment4Coefficient);
+            var pattachment4Price = row["pattachment4Price"];
+            pattachment4Price = isEmpty(pattachment4Price) == true ? 0 : parseFloat(pattachment4Price);
+            var pattachment4Sum = parseFloat(pattachment4Count * pattachment4Price * pattachment4Coefficient).toFixed(4);
+
             var productSum = parseFloat(productNum * productPrice * productCoefficient).toFixed(4);
             var productRef1Sum = parseFloat(productRef1Num * productRef1Price * productRef1Coefficient).toFixed(4);
             var productRef2Sum = parseFloat(productRef2Num * productRef2Price * productRef2Coefficient).toFixed(4);
             var actuatorSum = parseFloat(actuatorNum * actuatorCoefficient * actuatorPrice).toFixed(4);
-            var totalSum = parseFloat(parseFloat(productSum) + parseFloat(productRef1Sum) + parseFloat(productRef2Sum) + parseFloat(actuatorSum)).toFixed(4);
+            var totalSum = parseFloat(parseFloat(productSum) + parseFloat(productRef1Sum) + parseFloat(productRef2Sum) + parseFloat(actuatorSum)
+                + parseFloat(pattachmentSum)+ parseFloat(pattachment1Sum)+ parseFloat(pattachment2Sum)+ parseFloat(pattachment3Sum)+ parseFloat(pattachment4Sum)).toFixed(4);
             var updateObj = {
                 index : row.rowId,
                 field : "totalPrice",
@@ -506,6 +636,33 @@
                     iframeWin.contentWindow.submitHandler(index, layero);
                     var actuatorJsonParamter = $("#actuatorJsonParamter").val();
                     setTableValueById(actuatorJsonParamter,productId,idx);
+                });
+            } else if (field == "pattachmentName" || field == "pattachment1Name" || field == "pattachment2Name"
+                || field == "pattachment3Name" || field == "pattachment4Name") {
+                var widthNum = $("#form-quotation-edit").width() - 50;
+                var heigthNum = $("#form-quotation-edit").height() + 250;
+
+                var busName = "定位器";
+                var busType = "1";
+                if (field == "pattachment1Name") {
+                    busName = "电磁阀";
+                    busType = "2";
+                } else if (field == "pattachment2Name") {
+                    busName = "回信器数";
+                    busType = "3";
+                } else if (field == "pattachment3Name") {
+                    busName = "气源三连件";
+                    busType = "4";
+                } else if (field == "pattachment4Name") {
+                    busName = "可离合减速器";
+                    busType = "5";
+                }
+                var url = prefix + "/selectPattachment?productId=" + productId + "&type=" + busType;
+                $.modal.open("关联" + busName, url,widthNum, heigthNum,function (index, layero) {
+                    var iframeWin = layero.find('iframe')[0];
+                    iframeWin.contentWindow.submitHandler(index, layero);
+                    var pattachmentJsonParamter = $("#pattachmentJsonParamter").val();
+                    setTableValueById(pattachmentJsonParamter,productId,idx);
                 });
             }
         }

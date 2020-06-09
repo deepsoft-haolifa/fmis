@@ -41,6 +41,10 @@ public class BizProduct extends BaseEntity {
     @Excel(name = "规格")
     private String specifications;
 
+    @Getter
+    @Setter
+    private String specificationsName;
+
     /** 公称压力 */
     @Excel(name = "公称压力")
     private String nominalPressure;

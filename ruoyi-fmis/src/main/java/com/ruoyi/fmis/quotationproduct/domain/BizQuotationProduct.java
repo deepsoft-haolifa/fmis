@@ -3,6 +3,8 @@ package com.ruoyi.fmis.quotationproduct.domain;
 import com.ruoyi.fmis.actuator.domain.BizActuator;
 import com.ruoyi.fmis.product.domain.BizProduct;
 import com.ruoyi.fmis.productref.domain.BizProductRef;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
@@ -16,6 +18,101 @@ import com.ruoyi.common.core.domain.BaseEntity;
  */
 public class BizQuotationProduct extends BaseEntity {
     private static final long serialVersionUID = 1L;
+
+    @Getter
+    @Setter
+    private String string6;
+    @Getter
+    @Setter
+    private String string7;
+    @Getter
+    @Setter
+    private String string8;
+    @Getter
+    @Setter
+    private String string9;
+    @Getter
+    @Setter
+    private String string10;
+    @Getter
+    @Setter
+    private String string11;
+    @Getter
+    @Setter
+    private String string12;
+    @Getter
+    @Setter
+    private String string13;
+    @Getter
+    @Setter
+    private String string14;
+    @Getter
+    @Setter
+    private String string15;
+
+    @Getter
+    @Setter
+    private Long pattachmentId;
+    @Getter
+    @Setter
+    private Long pattachment1Id;
+    @Getter
+    @Setter
+    private Long pattachment2Id;
+    @Getter
+    @Setter
+    private Long pattachment3Id;
+    @Getter
+    @Setter
+    private Long pattachment4Id;
+
+    @Getter
+    @Setter
+    private Double pattachmentCount;
+    @Getter
+    @Setter
+    private Double pattachment1Count;
+    @Getter
+    @Setter
+    private Double pattachment2Count;
+    @Getter
+    @Setter
+    private Double pattachment3Count;
+    @Getter
+    @Setter
+    private Double pattachment4Count;
+
+    @Getter
+    @Setter
+    private Double pattachmentPrice;
+    @Getter
+    @Setter
+    private Double pattachment1Price;
+    @Getter
+    @Setter
+    private Double pattachment2Price;
+    @Getter
+    @Setter
+    private Double pattachment3Price;
+    @Getter
+    @Setter
+    private Double pattachment4Price;
+
+    @Getter
+    @Setter
+    private Double pattachmentCoefficient;
+    @Getter
+    @Setter
+    private Double pattachment1Coefficient;
+    @Getter
+    @Setter
+    private Double pattachment2Coefficient;
+    @Getter
+    @Setter
+    private Double pattachment3Coefficient;
+    @Getter
+    @Setter
+    private Double pattachment4Coefficient;
 
     /** ID */
     private Long qpId;

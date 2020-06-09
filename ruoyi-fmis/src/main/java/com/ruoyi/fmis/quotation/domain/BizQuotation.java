@@ -132,7 +132,86 @@ public class BizQuotation extends BaseEntity {
     @Setter
     private String string20;
 
+    @Getter
+    @Setter
+    private String pattachmentName;
+    @Getter
+    @Setter
+    private String pattachment1Name;
+    @Getter
+    @Setter
+    private String pattachment2Name;
+    @Getter
+    @Setter
+    private String pattachment3Name;
+    @Getter
+    @Setter
+    private String pattachment4Name;
 
+
+    @Getter
+    @Setter
+    private Long pattachmentId;
+    @Getter
+    @Setter
+    private Long pattachment1Id;
+    @Getter
+    @Setter
+    private Long pattachment2Id;
+    @Getter
+    @Setter
+    private Long pattachment3Id;
+    @Getter
+    @Setter
+    private Long pattachment4Id;
+
+    @Getter
+    @Setter
+    private Double pattachmentCount;
+    @Getter
+    @Setter
+    private Double pattachment1Count;
+    @Getter
+    @Setter
+    private Double pattachment2Count;
+    @Getter
+    @Setter
+    private Double pattachment3Count;
+    @Getter
+    @Setter
+    private Double pattachment4Count;
+
+    @Getter
+    @Setter
+    private Double pattachmentPrice;
+    @Getter
+    @Setter
+    private Double pattachment1Price;
+    @Getter
+    @Setter
+    private Double pattachment2Price;
+    @Getter
+    @Setter
+    private Double pattachment3Price;
+    @Getter
+    @Setter
+    private Double pattachment4Price;
+
+    @Getter
+    @Setter
+    private Double pattachmentCoefficient;
+    @Getter
+    @Setter
+    private Double pattachment1Coefficient;
+    @Getter
+    @Setter
+    private Double pattachment2Coefficient;
+    @Getter
+    @Setter
+    private Double pattachment3Coefficient;
+    @Getter
+    @Setter
+    private Double pattachment4Coefficient;
 
 
     @Getter
@@ -187,6 +266,10 @@ public class BizQuotation extends BaseEntity {
     @Getter
     @Setter
     private String productName;
+
+    @Getter
+    @Setter
+    private String createById;
 
     /** 产品ID */
     @Excel(name = "产品ID")

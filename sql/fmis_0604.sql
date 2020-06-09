@@ -3,7 +3,8 @@ transport_type
 supplier_type
 shipping_method
 valve_shaft
-
+-- 含税不含运费
+included_freight
 
 alter table biz_process_data add column string21 varchar(100);
 alter table biz_process_data add column string22 varchar(100);
@@ -729,5 +730,46 @@ values('删除', @parentId, '4',  '#',  'F', '0', 'fmis:pattachment4:remove',   
 
 insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
 values('导出', @parentId, '5',  '#',  'F', '0', 'fmis:pattachment4:export',       '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+
+
+
+alter table biz_quotation_product add column pattachment_id bigint(20);
+alter table biz_quotation_product add column pattachment_count decimal(19,5);
+alter table biz_quotation_product add column pattachment_price decimal(19,5);
+alter table biz_quotation_product add column pattachment_coefficient decimal(19,5);
+
+alter table biz_quotation_product add column pattachment1_id bigint(20);
+alter table biz_quotation_product add column pattachment1_count decimal(19,5);
+alter table biz_quotation_product add column pattachment1_price decimal(19,5);
+alter table biz_quotation_product add column pattachment1_coefficient decimal(19,5);
+
+alter table biz_quotation_product add column pattachment2_id bigint(20);
+alter table biz_quotation_product add column pattachment2_count decimal(19,5);
+alter table biz_quotation_product add column pattachment2_price decimal(19,5);
+alter table biz_quotation_product add column pattachment2_coefficient decimal(19,5);
+
+alter table biz_quotation_product add column pattachment3_id bigint(20);
+alter table biz_quotation_product add column pattachment3_count decimal(19,5);
+alter table biz_quotation_product add column pattachment3_price decimal(19,5);
+alter table biz_quotation_product add column pattachment3_coefficient decimal(19,5);
+
+alter table biz_quotation_product add column pattachment4_id bigint(20);
+alter table biz_quotation_product add column pattachment4_count decimal(19,5);
+alter table biz_quotation_product add column pattachment4_price decimal(19,5);
+alter table biz_quotation_product add column pattachment4_coefficient decimal(19,5);
+
+
+alter table biz_quotation_product add column string6 varchar(100);
+alter table biz_quotation_product add column string7 varchar(100);
+alter table biz_quotation_product add column string8 varchar(100);
+alter table biz_quotation_product add column string9 varchar(100);
+alter table biz_quotation_product add column string10 varchar(100);
+alter table biz_quotation_product add column string11 varchar(100);
+alter table biz_quotation_product add column string12 varchar(100);
+alter table biz_quotation_product add column string13 varchar(100);
+alter table biz_quotation_product add column string14 varchar(100);
+alter table biz_quotation_product add column string15 varchar(100);
+
 
 

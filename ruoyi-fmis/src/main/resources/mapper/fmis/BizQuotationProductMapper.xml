@@ -67,13 +67,28 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
           qp.product_ref2_num,qp.actuator_id,qp.remark,qp.string1,qp.string2,qp.string3,qp.string4,
           qp.string5,qp.status,qp.del_flag,qp.create_by,qp.create_time,qp.update_by,qp.update_time,
           p.name as productName,pr1.name as productRef1Name,pr2.name as productRef2Name,ac.name as actuatorName,
-          qp.product_num,qp.product_coefficient,qp.product_ref1_coefficient,qp.product_ref2_coefficient,qp.actuator_num,qp.actuator_coefficient
+          qp.product_num,qp.product_coefficient,qp.product_ref1_coefficient,qp.product_ref2_coefficient,qp.actuator_num,qp.actuator_coefficient,
+
+          qp.pattachment_id,qp.pattachment1_id,qp.pattachment2_id,qp.pattachment3_id,qp.pattachment4_id,
+          qp.pattachment_count,qp.pattachment1_count,qp.pattachment2_count,qp.pattachment3_count,qp.pattachment4_count,
+          qp.pattachment_price,qp.pattachment1_price,qp.pattachment2_price,qp.pattachment3_price,qp.pattachment4_price,
+          qp.pattachment_coefficient,qp.pattachment1_coefficient,qp.pattachment2_coefficient,qp.pattachment3_coefficient,qp.pattachment4_coefficient,
+          qp.string6,qp.string7,qp.string8,qp.string9,qp.string10,qp.string11,qp.string12,qp.string13,qp.string14,qp.string15,
+          pa.bh as pattachmentName,pa1.bh as pattachment1Name,pa2.bh as pattachment2Name,pa3.bh as pattachment3Name,pa4.bh as pattachment4Name
+
         from biz_quotation_product qp
         left join biz_product p on p.product_id=qp.product_id
         left join biz_quotation q on q.quotation_id=qp.quotation_id
         left join biz_product_ref pr1 on pr1.product_ref_id=qp.product_ref1_id
         left join biz_product_ref pr2 on pr2.product_ref_id=qp.product_ref2_id
         left join biz_actuator ac on ac.actuator_id=qp.actuator_id
+
+        left join biz_product_attachment pa on pa.attachment_id=qp.pattachment_id
+        left join biz_product_attachment pa1 on pa1.attachment_id=qp.pattachment1_id
+        left join biz_product_attachment pa2 on pa2.attachment_id=qp.pattachment2_id
+        left join biz_product_attachment pa3 on pa3.attachment_id=qp.pattachment3_id
+        left join biz_product_attachment pa4 on pa4.attachment_id=qp.pattachment4_id
+
     </sql>
 
     <select id="selectBizQuotationProductDictList" parameterType="BizQuotationProduct" resultMap="BizQuotationProductResult">
@@ -116,6 +131,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="string3 != null  and string3 != ''">string3,</if>
             <if test="string4 != null  and string4 != ''">string4,</if>
             <if test="string5 != null  and string5 != ''">string5,</if>
+
+
+
             <if test="status != null  and status != ''">status,</if>
             <if test="delFlag != null  and delFlag != ''">del_flag,</if>
             <if test="createBy != null  and createBy != ''">create_by,</if>
@@ -130,6 +148,40 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="actuatorNum != null  and actuatorNum != ''">actuator_num,</if>
             <if test="actuatorCoefficient != null  and actuatorCoefficient != ''">actuator_coefficient,</if>
 
+            <if test="string6 != null  and string6 != ''">string6,</if>
+            <if test="string7 != null  and string7 != ''">string7,</if>
+            <if test="string8 != null  and string8 != ''">string8,</if>
+            <if test="string9 != null  and string9 != ''">string9,</if>
+            <if test="string10 != null  and string10 != ''">string10,</if>
+            <if test="string11 != null  and string11 != ''">string11,</if>
+            <if test="string12 != null  and string12 != ''">string12,</if>
+            <if test="string13 != null  and string13 != ''">string13,</if>
+            <if test="string14 != null  and string14 != ''">string14,</if>
+            <if test="string15 != null  and string15 != ''">string15,</if>
+
+            <if test="pattachmentId != null  and pattachmentId != ''">pattachment_id,</if>
+            <if test="pattachment1Id != null  and pattachment1Id != ''">pattachment1_id,</if>
+            <if test="pattachment2Id != null  and pattachment2Id != ''">pattachment2_id,</if>
+            <if test="pattachment3Id != null  and pattachment3Id != ''">pattachment3_id,</if>
+            <if test="pattachment4Id != null  and pattachment4Id != ''">pattachment4_id,</if>
+
+            <if test="pattachmentCount != null  and pattachmentCount != ''">pattachment_count,</if>
+            <if test="pattachment1Count != null  and pattachment1Count != ''">pattachment1_count,</if>
+            <if test="pattachment2Count != null  and pattachment2Count != ''">pattachment2_count,</if>
+            <if test="pattachment3Count != null  and pattachment3Count != ''">pattachment3_count,</if>
+            <if test="pattachment4Count != null  and pattachment4Count != ''">pattachment4_count,</if>
+
+            <if test="pattachmentPrice != null  and pattachmentPrice != ''">pattachment_price,</if>
+            <if test="pattachment1Price != null  and pattachment1Price != ''">pattachment1_price,</if>
+            <if test="pattachment2Price != null  and pattachment2Price != ''">pattachment2_price,</if>
+            <if test="pattachment3Price != null  and pattachment3Price != ''">pattachment3_price,</if>
+            <if test="pattachment4Price != null  and pattachment4Price != ''">pattachment4_price,</if>
+
+            <if test="pattachmentCoefficient != null  and pattachmentCoefficient != ''">pattachment_coefficient,</if>
+            <if test="pattachment1Coefficient != null  and pattachment1Coefficient != ''">pattachment1_coefficient,</if>
+            <if test="pattachment2Coefficient != null  and pattachment2Coefficient != ''">pattachment2_coefficient,</if>
+            <if test="pattachment3Coefficient != null  and pattachment3Coefficient != ''">pattachment3_coefficient,</if>
+            <if test="pattachment4Coefficient != null  and pattachment4Coefficient != ''">pattachment4_coefficient,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="quotationId != null ">#{quotationId},</if>
@@ -158,6 +210,42 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="productRef2Coefficient != null  and productRef2Coefficient != ''">#{productRef2Coefficient},</if>
             <if test="actuatorNum != null  and actuatorNum != ''">#{actuatorNum},</if>
             <if test="actuatorCoefficient != null  and actuatorCoefficient != ''">#{actuatorCoefficient},</if>
+
+
+            <if test="string6 != null  and string6 != ''">#{string6},</if>
+            <if test="string7 != null  and string7 != ''">#{string7},</if>
+            <if test="string8 != null  and string8 != ''">#{string8},</if>
+            <if test="string9 != null  and string9 != ''">#{string9},</if>
+            <if test="string10 != null  and string10 != ''">#{string10},</if>
+            <if test="string11 != null  and string11 != ''">#{string11},</if>
+            <if test="string12 != null  and string12 != ''">#{string12},</if>
+            <if test="string13 != null  and string13 != ''">#{string13},</if>
+            <if test="string14 != null  and string14 != ''">#{string14},</if>
+            <if test="string15 != null  and string15 != ''">#{string15},</if>
+
+            <if test="pattachmentId != null  and pattachmentId != ''">#{pattachmentId},</if>
+            <if test="pattachment1Id != null  and pattachment1Id != ''">#{pattachment1Id},</if>
+            <if test="pattachment2Id != null  and pattachment2Id != ''">#{pattachment2Id},</if>
+            <if test="pattachment3Id != null  and pattachment3Id != ''">#{pattachment3Id},</if>
+            <if test="pattachment4Id != null  and pattachment4Id != ''">#{pattachment4Id},</if>
+
+            <if test="pattachmentCount != null  and pattachmentCount != ''">#{pattachmentCount},</if>
+            <if test="pattachment1Count != null  and pattachment1Count != ''">#{pattachment1Count},</if>
+            <if test="pattachment2Count != null  and pattachment2Count != ''">#{pattachment2Count},</if>
+            <if test="pattachment3Count != null  and pattachment3Count != ''">#{pattachment3Count},</if>
+            <if test="pattachment4Count != null  and pattachment4Count != ''">#{pattachment4Count},</if>
+
+            <if test="pattachmentPrice != null  and pattachmentPrice != ''">#{pattachmentPrice},</if>
+            <if test="pattachment1Price != null  and pattachment1Price != ''">#{pattachment1Price},</if>
+            <if test="pattachment2Price != null  and pattachment2Price != ''">#{pattachment2Price},</if>
+            <if test="pattachment3Price != null  and pattachment3Price != ''">#{pattachment3Price},</if>
+            <if test="pattachment4Price != null  and pattachment4Price != ''">#{pattachment4Price},</if>
+
+            <if test="pattachmentCoefficient != null  and pattachmentCoefficient != ''">#{pattachmentCoefficient},</if>
+            <if test="pattachment1Coefficient != null  and pattachment1Coefficient != ''">#{pattachment1Coefficient},</if>
+            <if test="pattachment2Coefficient != null  and pattachment2Coefficient != ''">#{pattachment2Coefficient},</if>
+            <if test="pattachment3Coefficient != null  and pattachment3Coefficient != ''">#{pattachment3Coefficient},</if>
+            <if test="pattachment4Coefficient != null  and pattachment4Coefficient != ''">#{pattachment4Coefficient},</if>
 
          </trim>
     </insert>
@@ -192,6 +280,41 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="actuatorNum != null ">actuator_num = #{actuatorNum},</if>
             <if test="actuatorCoefficient != null ">actuator_coefficient = #{actuatorCoefficient},</if>
 
+
+            <if test="string6 != null  and string6 != ''">string6 = #{string6},</if>
+            <if test="string7 != null  and string7 != ''">string7 = #{string7},</if>
+            <if test="string8 != null  and string8 != ''">string8 = #{string8},</if>
+            <if test="string9 != null  and string9 != ''">string9 = #{string9},</if>
+            <if test="string10 != null  and string10 != ''">string10 = #{string10},</if>
+            <if test="string11 != null  and string11 != ''">string11 = #{string11},</if>
+            <if test="string12 != null  and string12 != ''">string12 = #{string12},</if>
+            <if test="string13 != null  and string13 != ''">string13 = #{string13},</if>
+            <if test="string14 != null  and string14 != ''">string14 = #{string14},</if>
+            <if test="string15 != null  and string15 != ''">string15 = #{string15},</if>
+
+            <if test="pattachmentId != null ">pattachment_id = #{pattachmentId},</if>
+            <if test="pattachment1Id != null ">pattachment1_id = #{pattachment1Id},</if>
+            <if test="pattachment2Id != null ">pattachment2_id = #{pattachment2Id},</if>
+            <if test="pattachment3Id != null ">pattachment3_id = #{pattachment3Id},</if>
+            <if test="pattachment4Id != null ">pattachment4_id = #{pattachment4Id},</if>
+
+            <if test="pattachmentCount != null ">pattachment_count = #{pattachmentCount},</if>
+            <if test="pattachment1Count != null ">pattachment1_count = #{pattachment1Count},</if>
+            <if test="pattachment2Count != null ">pattachment2_count = #{pattachment2Count},</if>
+            <if test="pattachment3Count != null ">pattachment3_count = #{pattachment3Count},</if>
+            <if test="pattachment4Count != null ">pattachment4_count = #{pattachment4Count},</if>
+
+            <if test="pattachmentPrice != null ">pattachment_price = #{pattachmentPrice},</if>
+            <if test="pattachment1Price != null ">pattachment1_price = #{pattachment1Price},</if>
+            <if test="pattachment2Price != null ">pattachment2_price = #{pattachment2Price},</if>
+            <if test="pattachment3Price != null ">pattachment3_price = #{pattachment3Price},</if>
+            <if test="pattachment4Price != null ">pattachment4_price = #{pattachment4Price},</if>
+
+            <if test="pattachmentCoefficient != null ">pattachment_coefficient = #{pattachmentCoefficient},</if>
+            <if test="pattachment1Coefficient != null ">pattachment1_coefficient = #{pattachment1Coefficient},</if>
+            <if test="pattachment2Coefficient != null ">pattachment2_coefficient = #{pattachment2Coefficient},</if>
+            <if test="pattachment3Coefficient != null ">pattachment3_coefficient = #{pattachment3Coefficient},</if>
+            <if test="pattachment4Coefficient != null ">pattachment4_coefficient = #{pattachment4Coefficient},</if>
         </trim>
         where qp_id = #{qpId}
     </update>

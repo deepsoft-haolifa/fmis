@@ -50,7 +50,7 @@
                 <a class="btn btn-primary single disabled" onclick="edit()" shiro:hasPermission="fmis:quotation:edit">
                     <i class="fa fa-edit"></i> 修改
                 </a>
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="fmis:quotation:remove">
+                <a class="btn btn-danger multiple disabled" onclick="remove()" shiro:hasPermission="fmis:quotation:remove">
                     <i class="fa fa-remove"></i> 删除
                 </a>
 
@@ -75,7 +75,7 @@
         var paymentMethodData = [[${@dict.getType('payment_method')}]];
 
         var roleType = /*[[${roleType}]]*/;
-
+        var loginId = /*[[${loginId}]]*/;
 
 
         $(function() {
@@ -147,6 +147,8 @@
                         var actions = '';
                         var flowStatus = row.flowStatus;
                         var normalFlag = row.normalFlag;
+                        var createBy = row.createById;
+
                         if (flowStatus == "0") {
                             actions = '未上报';
                         } else if (flowStatus == "1") {
@@ -181,7 +183,11 @@
                             actions = '<font color=red>总经理不同意</font>';
                         }
 
-                        console.log(actions + "---------")
+                        if (flowStatus == normalFlag && loginId == createBy && flowStatus > 1) {
+                            actions = '<font color=green>已通过</font>';
+                        }
+
+                        console.log(actions + "---------" + createBy + "--" + loginId);
                         return actions;
                     }
                 },
@@ -199,12 +205,23 @@
                         var actions = [];
                         var flowStatus = row.flowStatus;
                         var normalFlag = row.normalFlag;
+                        var createBy = row.createById;
+                        if (flowStatus == normalFlag && loginId == createBy && flowStatus > 1) {
+                            actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="edit(\'' + row.quotationId + '\')"><i class="fa fa-edit"></i> 编辑</a>');
+                            actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="remove(\'' + row.quotationId + '\')"><i class="fa fa-remove"></i> 删除</a>');
+                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewExamine(\'' + row.quotationId + '\')"><i class="fa fa-remove"></i> 审批记录 </a>');
+                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewExamineDetail(\'' + row.quotationId + '\')"><i class="fa fa-remove"></i> 详情 </a>');
+
+                            return actions.join('');
+                        }
+
                         if (flowStatus < 1 && roleType == "1") {
+
                             if (flowStatus != "0" && flowStatus == normalFlag) {
                                 //已完成
                             } else {
                                 actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="edit(\'' + row.quotationId + '\')"><i class="fa fa-edit"></i> 编辑</a>');
-                                actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.quotationId + '\')"><i class="fa fa-remove"></i> 删除</a>');
+                                actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="remove(\'' + row.quotationId + '\')"><i class="fa fa-remove"></i> 删除</a>');
                                 actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subReport(\'' + row.quotationId + '\')"><i class="fa fa-remove"></i> 上报</a>');
                             }
 
@@ -321,6 +338,56 @@
             });
         }
 
+        function remove(id) {
+            console.log("1=" + $.table._option.type);
+            console.log("2=" + table_type.bootstrapTreeTable);
+            if($.common.isEmpty(id)) {
+                var row = $('#bootstrap-table').bootstrapTable('getSelections')[0];
+                if ($.common.isEmpty(row)) {
+                    $.modal.alertWarning("请至少选择一条记录");
+                    return;
+                }
+
+                var rowss = $('#bootstrap-table').bootstrapTable('getSelections');
+                for (var i = 0; i < rowss.length; i++) {
+                    row = rowss[i];
+                    var flowStatus = row.flowStatus;
+                    if (flowStatus > 0) {
+                        $.modal.alertWarning("已上报数据不能删除");
+                        return;
+                    }
+                }
+                var rows = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
+                $.modal.confirm("确认要删除选中的" + rows.length + "条数据吗?", function() {
+                    var url = $.table._option.removeUrl;
+                    var data = { "ids": rows.join() };
+                    $.operate.submit(url, "post", "json", data);
+                });
+            } else {
+                var row = $('#bootstrap-table').bootstrapTable("getRowByUniqueId",id);
+                if (row == null) {
+                    row = $('#bootstrap-table').bootstrapTable('getSelections')[0];
+                }
+                if (row != null) {
+                    var flowStatus = row.flowStatus;
+                    if (flowStatus > 0) {
+                        $.modal.alertWarning("已上报数据不能删除");
+                        return;
+                    }
+                }
+                $.modal.confirm("确定删除该条" + $.table._option.modalName + "信息吗？", function() {
+                    var url = $.common.isEmpty(id) ? $.table._option.removeUrl : $.table._option.removeUrl.replace("{id}", id);
+                    if($.table._option.type == table_type.bootstrapTreeTable) {
+                        $.operate.get(url);
+                    } else {
+                        var data = { "ids": id };
+                        $.operate.submit(url, "post", "json", data);
+                    }
+                });
+            }
+        }
+
+
         function edit(id) {
             if($.common.isEmpty(id) && $.table._option.type == table_type.bootstrapTreeTable) {
                 var row = $.bttTable.bootstrapTreeTable('getSelections')[0];
@@ -383,7 +450,7 @@
 
 
         $(document).ready(function(){
-            if (roleType != "1") {
+            if (roleType != "1" && roleType != "2" && roleType != "3" && roleType != "4" && roleType != "5") {
                 $("#toolbar").html("");
             }
         });

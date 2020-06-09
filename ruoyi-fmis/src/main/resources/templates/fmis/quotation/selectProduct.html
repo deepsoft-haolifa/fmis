@@ -348,6 +348,32 @@
                     actuatorPrice: "0",
                     actuatorNum: "0",
                     actuatorCoefficient:"0",
+
+                    pattachmentName:"请选择",
+                    pattachmentPrice:"0",
+                    pattachmentCount:"0",
+                    pattachmentCoefficient:"0",
+
+                    pattachment1Name:"请选择",
+                    pattachment1Price:"0",
+                    pattachment1Count:"0",
+                    pattachment1Coefficient:"0",
+
+                    pattachment2Name:"请选择",
+                    pattachment2Price:"0",
+                    pattachment2Count:"0",
+                    pattachment2Coefficient:"0",
+
+                    pattachment3Name:"请选择",
+                    pattachment3Price:"0",
+                    pattachment3Count:"0",
+                    pattachment3Coefficient:"0",
+
+                    pattachment4Name:"请选择",
+                    pattachment4Price:"0",
+                    pattachment4Count:"0",
+                    pattachment4Coefficient:"0",
+
                     productRemark:""
                 };
                 console.log("==" + JSON.stringify(rowData));
@@ -355,7 +381,12 @@
             }
             parent.$('#form-quotation-add input[id=productsJsonParamter]').val(JSON.stringify(productJsonArray));
             parent.$('#form-quotation-edit input[id=productsJsonParamter]').val(JSON.stringify(productJsonArray));
-            $.modal.close();
+            $.modal.confirm('添加成功，确定要离开吗？',
+                function() {
+                    $.modal.close();
+                }
+            );
+
         }
     </script>
 </body>

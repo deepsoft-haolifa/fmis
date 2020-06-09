@@ -82,7 +82,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
           q.create_time,q.update_by,q.update_time,
           p.name as productName,pr1.name as productRef1Name,pr2.name as productRef2Name,ac.name as actuatorName,
           ct.name as customerName,
-          q.string11,q.string12,q.string13,q.string14,q.string15,q.string16,q.string17,q.string18,q.string19,q.string20
+          q.string11,q.string12,q.string13,q.string14,q.string15,q.string16,q.string17,q.string18,q.string19,q.string20,q.create_by as createById
         from biz_quotation q
         left join biz_product p on q.product_id=p.product_id
         left join biz_product_ref pr1 on pr1.product_ref_id=q.product_ref1_id
@@ -200,10 +200,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
           d7.name as drive_form,d8.name as structural_style,
           s.name as supplier, p.new_supplier,
           p.medium,p.temperature,p.other,d9.name as productString1,
-          p.string2 as productString2,qp.string4 as productRemark
+          p.string2 as productString2,qp.string4 as productRemark,
+
+          pa.attachment_id as pattachmentId,pa.bh as pattachmentName,qp.pattachment_price as pattachmentPrice,qp.pattachment_count as pattachmentCount,qp.pattachment_coefficient as pattachmentCoefficient,
+          pa1.attachment_id as pattachment1Id,pa1.bh as pattachment1Name,qp.pattachment1_price as pattachment1Price,qp.pattachment1_count as pattachment1Count,qp.pattachment1_coefficient as pattachment1Coefficient,
+          pa2.attachment_id as pattachment2Id,pa2.bh as pattachment2Name,qp.pattachment2_price as pattachment2Price,qp.pattachment2_count as pattachment2Count,qp.pattachment2_coefficient as pattachment2Coefficient,
+          pa3.attachment_id as pattachment3Id,pa3.bh as pattachment3Name,qp.pattachment3_price as pattachment3Price,qp.pattachment3_count as pattachment3Count,qp.pattachment3_coefficient as pattachment3Coefficient,
+          pa4.attachment_id as pattachment4Id,pa4.bh as pattachment4Name,qp.pattachment4_price as pattachment4Price,qp.pattachment4_count as pattachment4Count,qp.pattachment4_coefficient as pattachment4Coefficient
+
 
         from biz_quotation q
          join biz_quotation_product qp on qp.quotation_id=q.quotation_id
+
+         left join biz_product_attachment pa on pa.attachment_id=qp.pattachment_id
+         left join biz_product_attachment pa1 on pa1.attachment_id=qp.pattachment1_id
+         left join biz_product_attachment pa2 on pa2.attachment_id=qp.pattachment2_id
+         left join biz_product_attachment pa3 on pa3.attachment_id=qp.pattachment3_id
+         left join biz_product_attachment pa4 on pa4.attachment_id=qp.pattachment4_id
+
         left join biz_product p on qp.product_id=p.product_id
         left join biz_product_ref pr1 on pr1.product_ref_id=qp.product_ref1_id
         left join biz_product_ref pr2 on pr2.product_ref_id=qp.product_ref2_id

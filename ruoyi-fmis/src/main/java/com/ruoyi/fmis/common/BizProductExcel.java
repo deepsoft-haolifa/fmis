@@ -12,6 +12,8 @@ public class BizProductExcel {
     private String level;
     @Excel(name = "数量")
     private String num;
+    @Excel(name = "规格")
+    private String specifications;
     /*
     private String series;
     @Excel(name = "系列")

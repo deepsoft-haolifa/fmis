@@ -122,6 +122,7 @@ public class BizQuotationController extends BaseController {
     public String quotation(ModelMap mmap) {
         int roleType = sysRoleService.getRoleType(ShiroUtils.getUserId());
         mmap.put("roleType",roleType);
+        mmap.put("loginId",ShiroUtils.getUserId());
         return prefix + "/quotation";
     }
 
@@ -275,6 +276,8 @@ public class BizQuotationController extends BaseController {
             if (bizQuotationParamter != null) {
                 writer.setPageEvent(new TextWaterMarkPdfPageEvent("北京好利"));
             }
+            Paragraph paragraph1 = new Paragraph("报价单", textFont);
+            paragraph1.setAlignment(Paragraph.ALIGN_CENTER);
             //空行
             Paragraph blankRow = new Paragraph(18f, " ");
 
@@ -316,14 +319,16 @@ public class BizQuotationController extends BaseController {
             SysUser sysUser = sysUserService.selectUserById(Long.parseLong(bizQuotation.getCreateBy()));
 
             // 第一行
-            table.addCell(PdfUtil.mergeCol("收件人：", 2,textFont));
-            table.addCell(PdfUtil.mergeCol("", 6,textFont));
+            table.addCell(PdfUtil.mergeCol("公司：", 2,textFont));
+            table.addCell(PdfUtil.mergeCol(bizCustomer.getName(), 6,textFont));
+
 
             table.addCell(PdfUtil.mergeCol("报价人：", 2,textFont));
             table.addCell(PdfUtil.mergeCol(sysUser.getUserName(), 5,textFont));
             //第二行
-            table.addCell(PdfUtil.mergeCol("公司：", 2,textFont));
-            table.addCell(PdfUtil.mergeCol(bizCustomer.getName(), 6,textFont));
+            table.addCell(PdfUtil.mergeCol("收件人：", 2,textFont));
+            table.addCell(PdfUtil.mergeCol("", 6,textFont));
+
             table.addCell(PdfUtil.mergeCol("日期：", 2,textFont));
             table.addCell(PdfUtil.mergeCol(DateUtils.dateTime(bizQuotation.getCreateTime()), 5,textFont));
             //第三行
@@ -353,8 +358,8 @@ public class BizQuotationController extends BaseController {
             //第七行 产品数据开始 bizQuotationProducts
             table.addCell(PdfUtil.mergeCol("序号", 1,textFont));
             table.addCell(PdfUtil.mergeCol("名称", 1,textFont));
-            table.addCell(PdfUtil.mergeCol("型号", 2,textFont));
-            table.addCell(PdfUtil.mergeCol("规格", 1,textFont));
+            table.addCell(PdfUtil.mergeCol("型号", 3,textFont));
+            //table.addCell(PdfUtil.mergeCol("规格", 1,textFont));
             //table.addCell(PdfUtil.mergeCol("压力", 1));//不需要
             table.addCell(PdfUtil.mergeCol("阀体材质", 1,textFont));
             table.addCell(PdfUtil.mergeCol("阀芯材质", 1,textFont));
@@ -372,17 +377,52 @@ public class BizQuotationController extends BaseController {
             Double sumTotalNumRef1 = new Double(0);
             Double sumTotalNumRef2 = new Double(0);
 
-            DecimalFormat data = new DecimalFormat("#.0000");
+            DecimalFormat data = new DecimalFormat("#");
             for (int i = 0; i < bizQuotationProducts.size(); i++) {
+
+                String remark = "含";
+
                 BizQuotationProduct bizProduct = bizQuotationProducts.get(i);
                 BizProduct bizProductObj = bizProduct.getBizProduct();
                 if (bizProductObj == null) {
                     continue;
                 }
                 table.addCell(PdfUtil.mergeCol("" + (i + 1), 1,textFont));
-                table.addCell(PdfUtil.mergeCol(bizProductObj.getName(), 1,textFont));
-                table.addCell(PdfUtil.mergeCol(bizProductObj.getModel(), 2,textFont));
-                table.addCell(PdfUtil.mergeCol(bizProductObj.getSpecifications(), 1,textFont));//规格
+
+
+                String productName = bizProductObj.getName();
+                String model = bizProductObj.getModel();
+                //执行器计算
+                BizActuator bizActuator = bizProduct.getBizActuator();
+                Double actuatorTotal = new Double(0);
+                if (bizActuator != null) {
+                    Double actuatorPrice = bizActuator.getPrice();
+                    String actuatorNum = bizProduct.getActuatorNum();
+                    String actuatorCoefficient = bizProduct.getActuatorCoefficient();
+                    if (StringUtils.isNotEmpty(actuatorNum) && actuatorPrice > 0 && StringUtils.isNotEmpty(actuatorCoefficient)) {
+                        actuatorTotal = Double.parseDouble(actuatorNum) * actuatorPrice * Double.parseDouble(actuatorCoefficient);
+
+                        String type = bizActuator.getString2();
+                        String repStr = "气动";
+                        String appendStr = "6";
+                        if ("1".equals(type)) {
+                            repStr = "电动";
+                            appendStr = "9";
+                        }
+                        productName = productName.replaceAll("无头",repStr);
+
+                        if (model.startsWith("D")) {
+                            model = model.substring(1,model.length());
+                            model = "D" + appendStr + model;
+                        }
+
+                    }
+                }
+                table.addCell(PdfUtil.mergeCol(productName, 1,textFont));
+
+
+                table.addCell(PdfUtil.mergeCol(model, 3,textFont));
+                //table.addCell(PdfUtil.mergeCol(bizProductObj.getSpecifications(), 1,textFont));//规格
                 //table.addCell(PdfUtil.mergeCol(bizProductObj.getNominalPressure(), 1));//压力
                 table.addCell(PdfUtil.mergeCol(bizProductObj.getValvebodyMaterial(), 1,textFont));//阀体
                 table.addCell(PdfUtil.mergeCol(bizProductObj.getValveElement(), 1,textFont));//阀芯
@@ -413,6 +453,7 @@ public class BizQuotationController extends BaseController {
                     if (StringUtils.isNotEmpty(ref1Num) && ref1Price > 0 && StringUtils.isNotEmpty(ref1Coefficient)) {
                         ref1Total = Double.parseDouble(ref1Num) * ref1Price * Double.parseDouble(ref1Coefficient);
                         sumTotalNumRef1 = sumTotalNumRef1 + Double.parseDouble(ref1Num);
+                        remark += "法兰";
                     }
                 }
                 //螺栓计算
@@ -425,20 +466,11 @@ public class BizQuotationController extends BaseController {
                     if (StringUtils.isNotEmpty(ref2Num) && ref2Price > 0 && StringUtils.isNotEmpty(ref2Coefficient)) {
                         ref2Tota = Double.parseDouble(ref2Num) * ref2Price * Double.parseDouble(ref2Coefficient);
                         sumTotalNumRef2 = sumTotalNumRef2 + Double.parseDouble(ref2Num);
+                        remark += "螺栓";
                     }
                 }
 
-                //执行器计算
-                BizActuator bizActuator = bizProduct.getBizActuator();
-                Double actuatorTotal = new Double(0);
-                if (bizActuator != null) {
-                    Double actuatorPrice = bizActuator.getPrice();
-                    String actuatorNum = bizProduct.getActuatorNum();
-                    String actuatorCoefficient = bizProduct.getActuatorCoefficient();
-                    if (StringUtils.isNotEmpty(actuatorNum) && actuatorPrice > 0 && StringUtils.isNotEmpty(actuatorCoefficient)) {
-                        actuatorTotal = Double.parseDouble(actuatorNum) * actuatorPrice * Double.parseDouble(actuatorCoefficient);
-                    }
-                }
+
 
                 Double totalAmount = new Double(0);
                 totalAmount = productTotal + ref1Total + ref2Tota + actuatorTotal;
@@ -446,23 +478,32 @@ public class BizQuotationController extends BaseController {
                 sumTotalAmount = sumTotalAmount + totalAmount;
 
                 //总单价
-                Double productTotalPrice = totalAmount / Double.parseDouble(productNum);
+                Double productTotalPrice = Double.valueOf(totalAmount / Double.parseDouble(productNum));
                 sumTotalPrice = sumTotalPrice + productTotalPrice;
-                table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString(productTotalPrice), 1,textFont));//单价
+                table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(productTotalPrice), 1,textFont));//单价
 
-                table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString(totalAmount), 1,textFont));//合计
-                table.addCell(PdfUtil.mergeCol(bizProduct.getString4(), 4,textFont));
+                table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(totalAmount), 1,textFont));//合计
+
+                if (remark.length() == 1) {
+                    remark = "";
+                }
+
+                table.addCell(PdfUtil.mergeCol(remark, 4,textFont));
             }
 
 
             //金额合计
             String totalRemark = "阀门：" + sumTotalNum + " 台   法兰合计：" + sumTotalNumRef1 + " 片   螺栓合计：" + sumTotalNumRef2 + " 条   总金额：" + sumTotalAmount;
-            table.addCell(PdfUtil.mergeCol("", 9,boldFont));
-            table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString(sumTotalNum), 1,textFont));//总数量
-            table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString(sumTotalPrice), 1,textFont));//单价
-            table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString(sumTotalAmount), 1,textFont));//合计
+            table.addCell(PdfUtil.mergeColRight("合计", 9,textFont));
+            table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(sumTotalNum), 1,textFont));//总数量
+            table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(sumTotalPrice), 1,textFont));//单价
+            table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(sumTotalAmount), 1,textFont));//合计
             table.addCell(PdfUtil.mergeCol("", 3,textFont));//备注
 
+
+            table.addCell(PdfUtil.mergeColRight("大写人民币合计", 9,textFont));
+            table.addCell(PdfUtil.mergeCol(StringUtils.convert(sumTotalAmount), 3,textFont));//合计
+            table.addCell(PdfUtil.mergeCol("", 3,textFont));//备注
 
             // 特别提醒
             Paragraph paragraphRemark = new Paragraph();
@@ -523,7 +564,9 @@ public class BizQuotationController extends BaseController {
 
             document.open();
             document.add(paragraph);
-            document.add(blankRow);
+            //document.add(blankRow);
+            document.add(paragraph1);
+            //document.add(blankRow);
             document.add(tbSubtitle);
 
             // step 4 写入内容
@@ -773,6 +816,7 @@ public class BizQuotationController extends BaseController {
         String normalFlag = "";
         String totalPrice = bizQuotation.getString9();
         String specialExpenses = bizQuotation.getSpecialExpenses();
+
         if (StringUtils.isNotEmpty(totalPrice) && Double.parseDouble(totalPrice) >= 1000000) {
             normalFlag = "5";
         }
@@ -837,6 +881,19 @@ public class BizQuotationController extends BaseController {
             }
         }
         bizQuotation.setNormalFlag(normalFlag);
+
+        /**
+         * normalFlag 先把除报价员的权限范围做了
+         *
+         * 1=销售 2=销售经理 3=区域经理 4=副总 5=总经理
+         */
+        int roleType = sysRoleService.getRoleType(ShiroUtils.getUserId());
+        if (roleType > 1) {
+            if (normalFlag.equals(roleType + "")) {
+                bizQuotation.setNormalFlag(normalFlag);
+                bizQuotation.setFlowStatus(normalFlag);
+            }
+        }
         return normalFlag;
     }
 
@@ -888,6 +945,16 @@ public class BizQuotationController extends BaseController {
         String productId = getRequest().getParameter("productId");
         mmap.put("productId", productId);
         return prefix + "/selectProductRef1";
+    }
+
+
+    @GetMapping("/selectPattachment")
+    public String selectPattachment(ModelMap mmap) {
+        String productId = getRequest().getParameter("productId");
+        String type = getRequest().getParameter("type");
+        mmap.put("productId", productId);
+        mmap.put("type", type);
+        return prefix + "/selectPattachment";
     }
 
     /**
@@ -1076,7 +1143,7 @@ public class BizQuotationController extends BaseController {
         List<BizProductExcel> list = new ArrayList<>();
         try {
             ExcelUtil<BizProductExcel> excelUtil = new ExcelUtil(BizProductExcel.class);
-            list = excelUtil.importExcel("工作表1",realPath);
+            list = excelUtil.importExcel("",realPath);
 
             if (CollectionUtils.isEmpty(list)) {
                 JSONObject json = new JSONObject();
@@ -1116,6 +1183,11 @@ public class BizQuotationController extends BaseController {
 
                 BizProduct queryBizProduct = new BizProduct();
                 queryBizProduct.setModelEq(model);
+
+                String specifications = product.getSpecifications();
+                if (StringUtils.isNotEmpty(specifications)) {
+                    queryBizProduct.setSpecificationsName(specifications);
+                }
                 if (StringUtils.isNotEmpty(level)) {
                     queryBizProduct.setString2(level);
                 }
@@ -1142,6 +1214,10 @@ public class BizQuotationController extends BaseController {
                     jsonData.put("driveForm",bizProduct.getDriveForm());
                     jsonData.put("connectionType",bizProduct.getConnectionType());
                     jsonData.put("productNum",num);
+
+                    //执行器*1 法兰*2
+
+
                     jsonData.put("productPrice",bizProduct.getPrice());
                     jsonData.put("productCoefficient","1");
                     jsonData.put("productRef1Id","");

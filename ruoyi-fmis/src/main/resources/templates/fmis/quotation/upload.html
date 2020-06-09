@@ -5,13 +5,18 @@
     <th:block th:include="include :: bootstrap-fileinput-css" />
 </head>
 <body class="gray-bg">
+<div class="modal fade" id="loadingModal">
+    <div style="width: 200px;height:20px; z-index: 20000; position: absolute; text-align: center; left: 50%; top: 50%;margin-left:-100px;margin-top:-10px">
+        <div class="progress progress-striped active" style="margin-bottom: 0;">
+            <div class="progress-bar" style="width: 100%;"></div>
+        </div>
+        <h5 id="processBarDiv">正在导入...</h5>
+    </div>
+</div>
 <div class="wrapper wrapper-content animated fadeInRight">
     <div class="row">
         <div class="col-sm-12">
             <div class="ibox float-e-margins">
-                <div class="ibox-title">
-                    <h5>报价产品上传 </h5>
-                </div>
                 <div class="ibox-content">
                     <ul  id="errorMsgDiv" class="text-danger">
                     </ul>
@@ -45,6 +50,7 @@
         }).on("filebatchselected", function(event, files) {
             $(this).fileinput("upload");
         }).on("fileuploaded", function(event, data) {
+            $("#loadingModal").modal('show');
             console.log("data.data=" + data.response.data);
             $("#filePaths").val(data.response.data);
             $.ajax({
@@ -71,6 +77,7 @@
                         parent.$('#form-quotation-add input[id=productsJsonParamter]').val(JSON.stringify(retSuccessData));
                         parent.$('#form-quotation-edit input[id=productsJsonParamter]').val(JSON.stringify(retSuccessData));
                     }
+                    $("#loadingModal").modal('hide');
                 }
             });
         });
