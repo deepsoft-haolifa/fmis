@@ -59,6 +59,7 @@
         var removeFlag = [[${@permission.hasPermi('fmis:productRef:remove')}]];
         var prefix = ctx + "fmis/productRef";
         var productRefTypeData = [[${@dict.getType('product_ref_type')}]];
+        var string2Datas = [[${@dict.getType('product_level')}]];
         $(function() {
             var options = {
                 url: prefix + "/list",
@@ -114,6 +115,13 @@
                     field : 'suppliersName',
                     title : '供应商'
                 },
+                    {
+                        field : 'string1',
+                        title : '产品等级',
+                        formatter: function(value, row, index) {
+                            return $.table.selectDictLabel(string2Datas, value);
+                        }
+                    },
                 {
                     field : 'createTime',
                     title : '创建时间'

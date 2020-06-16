@@ -62,7 +62,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <sql id="selectBizCustomerVo">
         select customer_id, record_date, company_code, area, record_code, owner_user_id, name, project_ame, contact_name, contact_position, contact_phone, contact_email, brand, info, product_info, remark, status, del_flag, create_by, create_time, update_by, update_time,area_code,source,record_type,record_num,telephone,fax,company_address,dept_id,
          customer_level,code_name,industry_division,allocation_date,assign_number,file_number,file_paths,new_status,
-         string1,string2,string3,string4,string5,string6,string7,string8,string9,string10
+         string1,string2,string3,string4,string5,string6,string7,string8,string9,string10,
+         string11,string12,string13,string14,string15,string16,string17,string18,string19,string20
          from biz_customer
     </sql>
 
@@ -71,7 +72,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         c.brand, c.info, c.product_info, c.remark, c.status, c.del_flag, c.create_by, c.create_time, c.update_by, c.update_time,
         c.area_code,c.source,c.record_type,c.record_num,c.telephone,c.fax,c.company_address,c.dept_id,dt.dept_name deptName,
         c.customer_level,c.code_name,c.industry_division,c.allocation_date,c.assign_number,c.file_number,c.file_paths,c.new_status,
-        ad.code_name as areaCodeName,c.string1,c.string2,c.string3,c.string4,c.string5,c.string6,c.string7,c.string8,c.string9,c.string10
+        ad.code_name as areaCodeName,c.string1,c.string2,c.string3,c.string4,c.string5,c.string6,c.string7,c.string8,c.string9,c.string10,
+        c.string11,c.string12,c.string13,c.string14,c.string15,c.string16,c.string17,c.string18,c.string19,c.string20
+
         from biz_customer c
         left join sys_user u on c.owner_user_id=u.user_id
 
@@ -80,6 +83,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         left join sys_dict_data dd on dd.dict_type='customer_area' and dd.dict_value=c.area
 
         left join biz_area_dict ad on ad.area=dd.dict_label
+
 
         where c.del_flag = '0'
         <!-- 数据范围过滤 -->
@@ -184,6 +188,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="string8 != null  and string8 != ''">string8,</if>
             <if test="string9 != null  and string9 != ''">string9,</if>
             <if test="string10 != null  and string10 != ''">string10,</if>
+
+            <if test="string11 != null  and string11 != ''">string11,</if>
+            <if test="string12 != null  and string12 != ''">string12,</if>
+            <if test="string13 != null  and string13 != ''">string13,</if>
+            <if test="string14 != null  and string14 != ''">string14,</if>
+            <if test="string15 != null  and string15 != ''">string15,</if>
+            <if test="string16 != null  and string16 != ''">string16,</if>
+            <if test="string17 != null  and string17 != ''">string17,</if>
+            <if test="string18 != null  and string18 != ''">string18,</if>
+            <if test="string19 != null  and string19 != ''">string19,</if>
+            <if test="string20 != null  and string20 != ''">string20,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="recordDate != null ">#{recordDate},</if>
@@ -236,6 +251,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="string8 != null  and string8 != ''">#{string8},</if>
             <if test="string9 != null  and string9 != ''">#{string9},</if>
             <if test="string10 != null  and string10 != ''">#{string10},</if>
+
+            <if test="string11 != null  and string11 != ''">#{string11},</if>
+            <if test="string12 != null  and string12 != ''">#{string12},</if>
+            <if test="string13 != null  and string13 != ''">#{string13},</if>
+            <if test="string14 != null  and string14 != ''">#{string14},</if>
+            <if test="string15 != null  and string15 != ''">#{string15},</if>
+            <if test="string16 != null  and string16 != ''">#{string16},</if>
+            <if test="string17 != null  and string17 != ''">#{string17},</if>
+            <if test="string18 != null  and string18 != ''">#{string18},</if>
+            <if test="string19 != null  and string19 != ''">#{string19},</if>
+            <if test="string20 != null  and string20 != ''">#{string20},</if>
          </trim>
     </insert>
 
@@ -292,6 +318,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="string8 != null  and string8 != ''">string8 = #{string8},</if>
             <if test="string9 != null  and string9 != ''">string9 = #{string9},</if>
             <if test="string10 != null  and string10 != ''">string10 = #{string10},</if>
+
+            <if test="string11 != null  and string11 != ''">string11 = #{string11},</if>
+            <if test="string12 != null  and string12 != ''">string12 = #{string12},</if>
+            <if test="string13 != null  and string13 != ''">string13 = #{string13},</if>
+            <if test="string14 != null  and string14 != ''">string14 = #{string14},</if>
+            <if test="string15 != null  and string15 != ''">string15 = #{string15},</if>
+            <if test="string16 != null  and string16 != ''">string16 = #{string16},</if>
+            <if test="string17 != null  and string17 != ''">string17 = #{string17},</if>
+            <if test="string18 != null  and string18 != ''">string18 = #{string18},</if>
+            <if test="string19 != null  and string19 != ''">string19 = #{string19},</if>
+            <if test="string20 != null  and string20 != ''">string20 = #{string20},</if>
 
         </trim>
         where customer_id = #{customerId}

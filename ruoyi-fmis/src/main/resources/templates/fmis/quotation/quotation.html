@@ -339,8 +339,6 @@
         }
 
         function remove(id) {
-            console.log("1=" + $.table._option.type);
-            console.log("2=" + table_type.bootstrapTreeTable);
             if($.common.isEmpty(id)) {
                 var row = $('#bootstrap-table').bootstrapTable('getSelections')[0];
                 if ($.common.isEmpty(row)) {
@@ -450,7 +448,8 @@
 
 
         $(document).ready(function(){
-            if (roleType != "1" && roleType != "2" && roleType != "3" && roleType != "4" && roleType != "5") {
+            //&& roleType != "2" && roleType != "3" && roleType != "4" && roleType != "5"
+            if (roleType != "1" ) {
                 $("#toolbar").html("");
             }
         });

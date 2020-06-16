@@ -106,13 +106,14 @@
                         </select>
                     </div>
                 </div>
-                <div id="divString15" style="display: none">
+                <div id="divString15" class="form-inline" style="display: none">
                     <label class="col-sm-1 control-label">账期：</label>
                     <div class="col-sm-2">
                         <select name="string15" id="string15" class="form-control m-b" th:with="type=${@dict.getType('payment_days')}">
                             <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{string15}"></option>
                         </select>
                     </div>
+                    <input name="string17" id="string17" onkeyup="AmountKeyUp(this)" th:field="*{string17}" class="form-control" style="width: 45px">天
                 </div>
                 <div id="divString16" style="display: none">
                     <div class="col-sm-8 form-inline">
@@ -151,7 +152,7 @@
                     <input name="string14" id="string14" onblur="calculateTotalPrice()" onkeyup="AmountKeyUp(this)" th:field="*{string14}" class="form-control" type="text">
                 </div>
                 <label class="col-sm-1 control-label">总价：</label>
-                <div class="col-sm-3">
+                <div class="col-sm-2">
                     <input name="price1" id="price1" class="form-control" type="text" th:field="*{price1}" readonly>
                 </div>
             </div>
@@ -170,9 +171,12 @@
         </form>
 
         <div class="form-horizontal m form-group">
-            <div class='col-sm-2'>
-                <a class="btn btn-success btn-sm" onclick="insertRow()">
-                    <i class="fa fa-plus"></i> 新增
+            <div class='col-sm-3 form-inline'>
+                <a class="btn btn-success btn-sm" onclick="insertRowQ()">
+                    <i class="fa fa-plus"></i> 报价单新增
+                </a>
+                <a class="btn btn-success btn-sm" onclick="insertRowP()">
+                    <i class="fa fa-plus"></i> 产品新增
                 </a>
             </div>
 
@@ -238,6 +242,40 @@
                     productObj["price4"] = rowData["actuatorPrice"];
                     productObj["string13"] = rowData["actuatorCoefficient"];
 
+
+
+
+
+                    productObj["pattachmentId"] = rowData["pattachmentId"];
+                    productObj["pattachmentPrice"] = rowData["pattachmentPrice"];
+                    productObj["pattachmentCount"] = rowData["pattachmentCount"];
+                    productObj["pattachmentCoefficient"] = rowData["pattachmentCoefficient"];
+
+                    productObj["pattachment1Id"] = rowData["pattachment1Id"];
+                    productObj["pattachment1Price"] = rowData["pattachment1Price"];
+                    productObj["pattachment1Count"] = rowData["pattachment1Count"];
+                    productObj["pattachment1Coefficient"] = rowData["pattachment1Coefficient"];
+
+                    productObj["pattachment2Id"] = rowData["pattachment2Id"];
+
+
+                    productObj["pattachment2Price"] = rowData["pattachment2Price"];
+                    productObj["pattachment2Count"] = rowData["pattachment2Count"];
+                    productObj["pattachment2Coefficient"] = rowData["pattachment2Coefficient"];
+
+                    productObj["pattachment3Id"] = rowData["pattachment3Id"];
+                    productObj["pattachment3Price"] = rowData["pattachment3Price"];
+                    productObj["pattachment3Count"] = rowData["pattachment3Count"];
+                    productObj["pattachment3Coefficient"] = rowData["pattachmentCoefficient"];
+
+                    productObj["pattachment4Id"] = rowData["pattachment4Id"];
+                    productObj["pattachment4Price"] = rowData["pattachment4Price"];
+                    productObj["pattachment4Count"] = rowData["pattachment4Count"];
+                    productObj["pattachment4Coefficient"] = rowData["pattachment4Coefficient"];
+
+                    productObj["string14"] = rowData["string14"];
+                    productObj["string15"] = rowData["string15"];
+
                     //productObj["remark"] = $("#productRemark_" + productId).val();
                     productArray.push(productObj);
                 }
@@ -297,85 +335,9 @@
             autoclose: true
         });
 
-        function removeProject (productId) {
-            $.modal.confirm("确定要删除该数据吗？", function() {
-                console.log("removeId=" + productId);
-                $("#productDiv_" + productId).remove();
 
-                var productIds = $("#quotationIds").val();
-                var productNames = $("#quotationNames").val();
-                var productIdsS = productIds.split(",");
-                var productNamesS = productNames.split(",");
-                for (var i = 0; i < productIdsS.length; i++) {
-                    if (productId == productIdsS[i]) {
-                        var productName = productNamesS[i];
-                        productNamesS.splice(i,1);
-                        productIdsS.splice(i,1);
-                    } else {
-                        sumPrice(productId);
-                    }
-                }
-                $("#quotationIds").val(productIdsS.toString());
-                $("#quotationNames").val(productNamesS.toString());
-            });
-        }
         function isEmpty(v) {
             return $.common.isEmpty(v);
-        }
-        /**
-         * 计算总额
-         */
-        function sumPrice (productId) {
-            getProductSum(productId);
-            totalSumPrice();
-        }
-
-        function getProductSum (productId) {
-            //产品数量 产品系数 价格
-            var productNum = $("#productNum_" + productId).val();
-            productNum = isEmpty(productNum) == true ? 0 : parseFloat(productNum);
-
-            var productCoefficient = $("#productCoefficient_" + productId).val();
-            productCoefficient = isEmpty(productCoefficient) == true ? 0 : parseFloat(productCoefficient);
-
-            var productPrice = $("#productPrice_" + productId).val();
-            productPrice = isEmpty(productPrice) == true ? 0 : parseFloat(productPrice);
-
-            //法兰
-            var productRef1Num = $("#ref1Num_" + productId).val();
-            productRef1Num = isEmpty(productRef1Num) == true ? 0 : parseFloat(productRef1Num);
-            var productRef1Coefficient = $("#ref1Coefficient_" + productId).val();
-            productRef1Coefficient = isEmpty(productRef1Coefficient) == true ? 0 : parseFloat(productRef1Coefficient);
-            var productRef1Price = $("#ref1Price_" + productId).val();
-            productRef1Price = isEmpty(productRef1Price) == true ? 0 : parseFloat(productRef1Price);
-            //螺栓
-            var productRef2Num = $("#ref2Num_" + productId).val();
-            productRef2Num = isEmpty(productRef2Num) == true ? 0 : productRef2Num;
-            var productRef2Coefficient = $("#ref2Coefficient_" + productId).val();
-            productRef2Coefficient = isEmpty(productRef2Coefficient) == true ? 0 : parseFloat(productRef2Coefficient);
-            var productRef2Price = $("#ref2Price_" + productId).val();
-            productRef2Price = isEmpty(productRef2Price) == true ? 0 : parseFloat(productRef2Price);
-
-
-            //执行器
-            var actuatorNum = $("#actuatorNum_" + productId).val();
-            actuatorNum = isEmpty(actuatorNum) == true ? 0 : actuatorNum;
-            var actuatorCoefficient = $("#actuatorCoefficient_" + productId).val();
-            actuatorCoefficient = isEmpty(actuatorCoefficient) == true ? 0 : parseFloat(actuatorCoefficient);
-            var actuatorPrice = $("#actuatorPrice_" + productId).val();
-            actuatorPrice = isEmpty(actuatorPrice) == true ? 0 : parseFloat(actuatorPrice);
-
-            //合计单价 unitPrice
-            $("#unitPrice_" + productId).val(parseFloat(parseFloat(productPrice * productCoefficient) + parseFloat(actuatorPrice * actuatorCoefficient)).toFixed(4));
-            //合计总额 totalSum
-            var productSum = parseFloat(productNum * productPrice * productCoefficient).toFixed(4);
-            var productRef1Sum = parseFloat(productRef1Num * productRef1Price * productRef1Coefficient).toFixed(4);
-            var productRef2Sum = parseFloat(productRef2Num * productRef2Price * productRef2Coefficient).toFixed(4);
-            var actuatorSum = parseFloat(actuatorNum * actuatorCoefficient * actuatorPrice).toFixed(4);
-            var totalSum = parseFloat(parseFloat(productSum) + parseFloat(productRef1Sum) + parseFloat(productRef2Sum) + parseFloat(actuatorSum)).toFixed(4);
-            console.log("totalSum=" + totalSum);
-            //$("#totalSum_" + productId).val(totalSum);
-            return totalSum + "#" + productNum;
         }
 
         function FloatAdd(arg1,arg2){
@@ -430,6 +392,7 @@
                 onEditableSave: onEditableSave,
                 onClickCell: onClickCell,
                 onReorderRow: onReorderRow,
+                rowStyle: tableRowStyle,
                 columns: [{
                     checkbox: true
                 },
@@ -449,9 +412,9 @@
                     {field : 'connectionType',title : '连接方式',editable: false},
                     {field : 'productNum',title : '数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
                     {field : 'productPrice',title : '单价',editable: false},
+                    {field : 'totalPrice',title : '总价',editable: false},
+                    {field : 'string14',title : '优惠',editable: {type: 'text',emptytext: '0',validate: function(v){ return numberValidate(v)}}},
                     {field : 'productCoefficient',title : '系数',editable: false},
-
-
                     {field : 'actuatorId',title : 'actuatorId',visible: false},
                     {field : 'actuatorName',title : '执行器名称',editable: false},
                     {field : 'actuatorPrice',title : '执行器价格',editable: false},
@@ -470,7 +433,39 @@
                     {field : 'ref2Price',title : '螺栓价格',editable: false},
                     {field : 'productRef2Num',title : '螺栓数量',editable: {type: 'text',emptytext: '0',validate: function(v){ return numberValidate(v)}}},
                     {field : 'productRef2Coefficient',title : '螺栓系数',editable: false},
-                    {field : 'totalPrice',title : '总价',editable: false},
+
+
+                    //定位器，电磁阀，回信器数，气源三连件，可离合减速器
+                    {field : 'pattachmentId',title : 'pattachmentId',visible: false},
+                    {field : 'pattachmentName',title : '定位器',editable: true},
+                    {field : 'pattachmentPrice',title : '定位器价格',editable: false},
+                    {field : 'pattachmentCount',title : '定位器数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
+                    {field : 'pattachmentCoefficient',title : '定位器系数',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
+
+                    {field : 'pattachment1Id',title : 'pattachment1Id',visible: false},
+                    {field : 'pattachment1Name',title : '电磁阀',editable: true},
+                    {field : 'pattachment1Price',title : '电磁阀价格',editable: false},
+                    {field : 'pattachment1Count',title : '电磁阀数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
+                    {field : 'pattachment1Coefficient',title : '电磁阀系数',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
+
+                    {field : 'pattachment2Id',title : 'pattachment2Id',visible: false},
+                    {field : 'pattachment2Name',title : '回信器数',editable: true},
+                    {field : 'pattachment2Price',title : '回信器数价格',editable: false},
+                    {field : 'pattachment2Count',title : '回信器数数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
+                    {field : 'pattachment2Coefficient',title : '回信器数系数',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
+
+                    {field : 'pattachment3Id',title : 'pattachment3Id',visible: false},
+                    {field : 'pattachment3Name',title : '气源三连件',editable: true},
+                    {field : 'pattachment3Price',title : '气源三连件价格',editable: false},
+                    {field : 'pattachment3Count',title : '气源三连件数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
+                    {field : 'pattachment3Coefficient',title : '气源三连件系数',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
+
+                    {field : 'pattachment4Id',title : 'pattachment4Id',visible: false},
+                    {field : 'pattachment4Name',title : '可离合减速器',editable: true},
+                    {field : 'pattachment4Price',title : '可离合减速器价格',editable: false},
+                    {field : 'pattachment4Count',title : '可离合减速器数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
+                    {field : 'pattachment4Coefficient',title : '可离合减速器系数',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
+                    {field : 'string15',title : '颜色',editable: true},
                     {
                         title: '操作',
                         align: 'center',
@@ -497,7 +492,10 @@
         function onEditableSave (field, row, oldValue, $el) {
             //alert("字段名：" + field + "，当前值：" + row[field]  + "，旧值：" + oldValue);
             if (field == "productNum"  || field == "productRef1Num"
-                || field == "productRef2Num" || field == "actuatorNum" ) {
+                || field == "productRef2Num" || field == "actuatorNum" || field == "pattachmentPrice" || field == "pattachment1Price" || field == "pattachment2Price" || field == "pattachment3Price" || field == "pattachment4Price"
+                || field == "pattachmentCount" || field == "pattachment1Count" || field == "pattachment2Count" || field == "pattachment3Count" || field == "pattachment4Count"
+                || field == "pattachmentCoefficient" || field == "pattachment1Coefficient" || field == "pattachment2Coefficient" || field == "pattachment3Coefficient"
+                || field == "pattachment4Coefficient" || field == "string14") {
                 calculateTotalPrice();
             }
         }
@@ -511,43 +509,34 @@
             var idx = $element.parent().data('index');
             console.log("row.index=" + idx + "--" + row.productId);
             var productId = row.productId;
-            /*if (field == "ref1Name") {
-                //选择法兰
-                var widthNum = $("#form-quotation-add").width() - 50;
-                var heigthNum = $("#form-quotation-add").height() + 250;
-                var url = prefix + "/selectProductRef1?productId=" + productId;
-                console.log("widthNum=" + widthNum + "---" + this.innerWidth);
-                $.modal.open("关联产品配件法兰", url,widthNum, heigthNum,function (index, layero) {
+            if (field == "pattachmentName" || field == "pattachment1Name" || field == "pattachment2Name"
+                || field == "pattachment3Name" || field == "pattachment4Name") {
+                var widthNum = $("#form-data-edit").width() - 50;
+                var heigthNum = $("#form-data-edit").height() + 250;
+
+                var busName = "定位器";
+                var busType = "1";
+                if (field == "pattachment1Name") {
+                    busName = "电磁阀";
+                    busType = "2";
+                } else if (field == "pattachment2Name") {
+                    busName = "回信器数";
+                    busType = "3";
+                } else if (field == "pattachment3Name") {
+                    busName = "气源三连件";
+                    busType = "4";
+                } else if (field == "pattachment4Name") {
+                    busName = "可离合减速器";
+                    busType = "5";
+                }
+                var url = prefix + "/selectPattachment?productId=" + productId + "&type=" + busType;
+                $.modal.open("关联" + busName, url, widthNum, heigthNum, function (index, layero) {
                     var iframeWin = layero.find('iframe')[0];
                     iframeWin.contentWindow.submitHandler(index, layero);
-                    //ref1JsonParamter
-                    var ref1JsonParamter = $("#ref1JsonParamter").val();
-                    setTableValueById(ref1JsonParamter,productId,idx);
+                    var pattachmentJsonParamter = $("#pattachmentJsonParamter").val();
+                    setTableValueById(pattachmentJsonParamter, productId, idx);
                 });
-            } else if (field == "ref2Name") {
-                //选择法兰
-                var widthNum = $("#form-quotation-add").width() - 50;
-                var heigthNum = $("#form-quotation-add").height() + 250;
-                var url = prefix + "/selectProductRef2?productId=" + productId;
-                console.log("widthNum=" + widthNum + "---" + this.innerWidth);
-                $.modal.open("关联产品配件螺栓", url,widthNum, heigthNum,function (index, layero) {
-                    var iframeWin = layero.find('iframe')[0];
-                    iframeWin.contentWindow.submitHandler(index, layero);
-                    var ref2JsonParamter = $("#ref2JsonParamter").val();
-                    setTableValueById(ref2JsonParamter,productId,idx);
-                });
-            } else if (field == "actuatorName") {
-                var widthNum = $("#form-quotation-add").width() - 50;
-                var heigthNum = $("#form-quotation-add").height() + 250;
-                var url = prefix + "/selectActuator?productId=" + productId;
-                console.log("widthNum=" + widthNum + "---" + this.innerWidth);
-                $.modal.open("关联执行器", url,widthNum, heigthNum,function (index, layero) {
-                    var iframeWin = layero.find('iframe')[0];
-                    iframeWin.contentWindow.submitHandler(index, layero);
-                    var actuatorJsonParamter = $("#actuatorJsonParamter").val();
-                    setTableValueById(actuatorJsonParamter,productId,idx);
-                });
-            }*/
+            }
         }
         function setTableValueById (jsonValue,id,idx) {
             var jsonObj = JSON.parse(jsonValue);
@@ -560,24 +549,42 @@
                 $.btTable.bootstrapTable("updateCell",updateObj);
             }
         }
-        function insertRow(){
+        function insertRowP() {
 
             var customerId = $("#string2").val();
             if ($.common.isEmpty(customerId)) {
                 $.modal.alertWarning("请选择客户！");
                 return;
             }
-
-            var url = prefix + "/selectQuotation";
+            var url = prefix + "/selectNewProduct?customerId=" + customerId;
             var widthNum = this.innerWidth - 50;
             var heigthNum = this.innerHeight - 50;
 
-            $.modal.open("选择报价单", url,widthNum, heigthNum,function (index, layero){
+            $.modal.open("选择产品", url, widthNum, heigthNum, function (index, layero) {
                 var iframeWin = layero.find('iframe')[0];
                 iframeWin.contentWindow.submitHandler(index, layero);
                 appendTable();
             });
         }
+
+        function insertRowQ() {
+
+            var customerId = $("#string2").val();
+            if ($.common.isEmpty(customerId)) {
+                $.modal.alertWarning("请选择客户！");
+                return;
+            }
+            var url = prefix + "/selectNewQuotation?customerId=" + customerId;
+            var widthNum = this.innerWidth - 50;
+            var heigthNum = this.innerHeight - 50;
+
+            $.modal.open("选择报价单", url, widthNum, heigthNum, function (index, layero) {
+                var iframeWin = layero.find('iframe')[0];
+                iframeWin.contentWindow.submitHandler(index, layero);
+                appendTable();
+            });
+        }
+
         function appendTable () {
             var productsJsonParamter = $("#productsJsonParamter").val();
             console.log("productsJsonParamter=" + productsJsonParamter);
@@ -605,15 +612,15 @@
             for (var i = 0; i < data.length; i++) {
                 var rowData = data[i];
                 var price = calculatePrice(rowData);
-                productTotalPrice = FloatAdd(productTotalPrice,price).toFixed(4);
+                productTotalPrice = FloatAdd(productTotalPrice,price).toFixed(0);
             }
             var specialExpenses = $("#string14").val();
             if (isEmpty(specialExpenses)) {
                 specialExpenses = 0;
             }
-            $("#productTotalPrice").val(parseFloat(productTotalPrice).toFixed(4));
+            $("#productTotalPrice").val(parseFloat(productTotalPrice).toFixed(0));
             var totalPrice = parseFloat(productTotalPrice) + parseFloat(specialExpenses);
-            $("#price1").val(parseFloat(totalPrice).toFixed(4));
+            $("#price1").val(parseFloat(totalPrice).toFixed(0));
         }
         function calculatePrice (row) {
             var productNum = row["productNum"];
@@ -647,11 +654,83 @@
             actuatorCoefficient = isEmpty(actuatorCoefficient) == true ? 0 : parseFloat(actuatorCoefficient);
             var actuatorPrice = row["actuatorPrice"];
             actuatorPrice = isEmpty(actuatorPrice) == true ? 0 : parseFloat(actuatorPrice);
+
+            //附件
+            var pattachmentCount = row["pattachmentCount"];
+            pattachmentCount = isEmpty(pattachmentCount) == true ? 0 : pattachmentCount;
+            var pattachmentCoefficient = row["pattachmentCoefficient"];
+            pattachmentCoefficient = isEmpty(pattachmentCoefficient) == true ? 0 : parseFloat(pattachmentCoefficient);
+            var pattachmentPrice = row["pattachmentPrice"];
+            pattachmentPrice = isEmpty(pattachmentPrice) == true ? 0 : parseFloat(pattachmentPrice);
+            var pattachmentSum = parseFloat(pattachmentCount * pattachmentPrice * pattachmentCoefficient).toFixed(4);
+
+            //附件1
+            var pattachment1Count = row["pattachment1Count"];
+            pattachment1Count = isEmpty(pattachment1Count) == true ? 0 : pattachment1Count;
+            var pattachment1Coefficient = row["pattachment1Coefficient"];
+            pattachment1Coefficient = isEmpty(pattachment1Coefficient) == true ? 0 : parseFloat(pattachment1Coefficient);
+            var pattachment1Price = row["pattachment1Price"];
+            pattachment1Price = isEmpty(pattachment1Price) == true ? 0 : parseFloat(pattachment1Price);
+            var pattachment1Sum = parseFloat(pattachment1Count * pattachment1Price * pattachment1Coefficient).toFixed(4);
+
+            //附件2
+            var pattachment2Count = row["pattachment2Count"];
+            pattachment2Count = isEmpty(pattachment2Count) == true ? 0 : pattachment2Count;
+            var pattachment2Coefficient = row["pattachment2Coefficient"];
+            pattachment2Coefficient = isEmpty(pattachment2Coefficient) == true ? 0 : parseFloat(pattachment2Coefficient);
+            var pattachment2Price = row["pattachment2Price"];
+            pattachment2Price = isEmpty(pattachment2Price) == true ? 0 : parseFloat(pattachment2Price);
+            var pattachment2Sum = parseFloat(pattachment2Count * pattachment2Price * pattachment2Coefficient).toFixed(4);
+
+            //附件3
+            var pattachment3Count = row["pattachment3Count"];
+            pattachment3Count = isEmpty(pattachment3Count) == true ? 0 : pattachment3Count;
+            var pattachment3Coefficient = row["pattachment3Coefficient"];
+            pattachment3Coefficient = isEmpty(pattachment3Coefficient) == true ? 0 : parseFloat(pattachment3Coefficient);
+            var pattachment3Price = row["pattachment3Price"];
+            pattachment3Price = isEmpty(pattachment3Price) == true ? 0 : parseFloat(pattachment3Price);
+            var pattachment3Sum = parseFloat(pattachment3Count * pattachment3Price * pattachment3Coefficient).toFixed(4);
+
+            //附件4
+            var pattachment4Count = row["pattachment4Count"];
+            pattachment4Count = isEmpty(pattachment4Count) == true ? 0 : pattachment4Count;
+            var pattachment4Coefficient = row["pattachment4Coefficient"];
+            pattachment4Coefficient = isEmpty(pattachment4Coefficient) == true ? 0 : parseFloat(pattachment4Coefficient);
+            var pattachment4Price = row["pattachment4Price"];
+            pattachment4Price = isEmpty(pattachment4Price) == true ? 0 : parseFloat(pattachment4Price);
+            var pattachment4Sum = parseFloat(pattachment4Count * pattachment4Price * pattachment4Coefficient).toFixed(4);
+
             var productSum = parseFloat(productNum * productPrice * productCoefficient).toFixed(4);
             var productRef1Sum = parseFloat(productRef1Num * productRef1Price * productRef1Coefficient).toFixed(4);
             var productRef2Sum = parseFloat(productRef2Num * productRef2Price * productRef2Coefficient).toFixed(4);
             var actuatorSum = parseFloat(actuatorNum * actuatorCoefficient * actuatorPrice).toFixed(4);
-            var totalSum = parseFloat(parseFloat(productSum) + parseFloat(productRef1Sum) + parseFloat(productRef2Sum) + parseFloat(actuatorSum)).toFixed(4);
+            var string14 = row["string14"];
+            string14 = isEmpty(string14) == true ? 0 : parseFloat(string14);
+
+            var totalSum = parseFloat(parseFloat(productSum) + parseFloat(productRef1Sum) + parseFloat(productRef2Sum) + parseFloat(actuatorSum)
+                + parseFloat(pattachmentSum) + parseFloat(pattachment1Sum) + parseFloat(pattachment2Sum) + parseFloat(pattachment3Sum) + parseFloat(pattachment4Sum)
+                - parseFloat(string14)).toFixed(0);
+
+            var costProce = parseFloat(productNum * productPrice).toFixed(4) +
+                parseFloat(productRef1Num * productRef1Price).toFixed(4) +
+                parseFloat(productRef2Num * productRef2Price).toFixed(4) +
+                parseFloat(actuatorNum * actuatorPrice).toFixed(4) +
+                parseFloat(pattachmentCount * pattachmentPrice).toFixed(4) +
+                parseFloat(pattachment1Count * pattachment1Price).toFixed(4) +
+                parseFloat(pattachment2Count * pattachment2Price).toFixed(4) +
+                parseFloat(pattachment3Count * pattachment2Price).toFixed(4) +
+                parseFloat(pattachment4Count * pattachment2Price).toFixed(4);
+            costProce = parseFloat(costProce).toFixed(0);
+
+            console.log("totalSum=" + totalSum + " costProce=" + costProce);
+
+            //判断低于销售底价
+            if (totalSum < costProce) {
+                row.error = "1";
+            } else {
+                row.error = "";
+            }
+
             var updateObj = {
                 index : row.rowId,
                 field : "totalPrice",
@@ -661,6 +740,14 @@
             $.btTable.bootstrapTable("updateCell",updateObj);
             //$("#totalSum_" + productId).val(totalSum);
             return totalSum;
+        }
+        // 设置 BootStrap Table 行样式
+        function tableRowStyle(row, index) {
+            if (!isEmpty(row.error)){
+                //style={css:{'color':'#ed5565'}};
+                return {classes:'danger'};
+            }
+            return {css:{}};
         }
 
 

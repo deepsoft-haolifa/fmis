@@ -22,6 +22,147 @@ import java.util.Date;
 public class BizProcessChild extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
+    @Getter
+    @Setter
+    private String actuatorBrand;
+    @Getter
+    @Setter
+    private String actuatorManufacturer;
+    @Getter
+    @Setter
+    private String actuatorString4;
+    @Getter
+    @Setter
+    private String actuatorString1;
+    @Getter
+    @Setter
+    private String actuatorSetupType;
+    @Getter
+    @Setter
+    private String actuatorOutputTorque;
+    @Getter
+    @Setter
+    private String actuatorString3;
+    @Getter
+    @Setter
+    private String actuatorActionType;
+    @Getter
+    @Setter
+    private String actuatorControlCircuit;
+    @Getter
+    @Setter
+    private String actuatorAdaptableVoltage;
+    @Getter
+    @Setter
+    private String actuatorProtectionLevel;
+    @Getter
+    @Setter
+    private String actuatorQualityLevel;
+    @Getter
+    @Setter
+    private String actuatorExplosionLevel;
+    @Getter
+    @Setter
+    private String actuatorString5;
+
+
+
+    @Getter
+    @Setter
+    private Double productProcurementPrice;
+
+    @Getter
+    @Setter
+    private String levelAB;
+
+    @Getter
+    @Setter
+    private String levelLabel;
+
+    @Getter
+    @Setter
+    private String pattachmentName;
+    @Getter
+    @Setter
+    private String pattachment1Name;
+    @Getter
+    @Setter
+    private String pattachment2Name;
+    @Getter
+    @Setter
+    private String pattachment3Name;
+    @Getter
+    @Setter
+    private String pattachment4Name;
+
+    @Getter
+    @Setter
+    private Long pattachmentId;
+    @Getter
+    @Setter
+    private Long pattachment1Id;
+    @Getter
+    @Setter
+    private Long pattachment2Id;
+    @Getter
+    @Setter
+    private Long pattachment3Id;
+    @Getter
+    @Setter
+    private Long pattachment4Id;
+
+    @Getter
+    @Setter
+    private Double pattachmentCount;
+    @Getter
+    @Setter
+    private Double pattachment1Count;
+    @Getter
+    @Setter
+    private Double pattachment2Count;
+    @Getter
+    @Setter
+    private Double pattachment3Count;
+    @Getter
+    @Setter
+    private Double pattachment4Count;
+
+    @Getter
+    @Setter
+    private Double pattachmentPrice;
+    @Getter
+    @Setter
+    private Double pattachment1Price;
+    @Getter
+    @Setter
+    private Double pattachment2Price;
+    @Getter
+    @Setter
+    private Double pattachment3Price;
+    @Getter
+    @Setter
+    private Double pattachment4Price;
+
+
+    @Getter
+    @Setter
+    private BizActuator bizActuator;
+
+    @Getter
+    @Setter
+    private Double pattachmentCoefficient;
+    @Getter
+    @Setter
+    private Double pattachment1Coefficient;
+    @Getter
+    @Setter
+    private Double pattachment2Coefficient;
+    @Getter
+    @Setter
+    private Double pattachment3Coefficient;
+    @Getter
+    @Setter
+    private Double pattachment4Coefficient;
 
     @Getter
     @Setter
@@ -176,10 +317,6 @@ public class BizProcessChild extends BaseEntity {
     @Setter
     @Getter
     private BizProductRef ref2;
-
-    @Setter
-    @Getter
-    private BizActuator bizActuator;
 
     @Setter
     @Getter

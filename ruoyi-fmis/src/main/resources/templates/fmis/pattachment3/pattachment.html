@@ -47,7 +47,7 @@
         var editFlag = [[${@permission.hasPermi('fmis:pattachment:edit')}]];
         var removeFlag = [[${@permission.hasPermi('fmis:pattachment:remove')}]];
         var prefix = ctx + "fmis/pattachment3";
-
+        var string2Datas = [[${@dict.getType('product_level')}]];
         $(function() {
             var options = {
                 url: prefix + "/list",
@@ -136,38 +136,13 @@
                     field : 'supplierName',
                     title : '供应商'
                 },
-                {
-                    field : 'box', 
-                    title : '箱率'
-                },
-                {
-                    field : 'innerboxCount', 
-                    title : '内盒数量'
-                },
-                {
-                    field : 'bulk', 
-                    title : '体积'
-                },
-                {
-                    field : 'l', 
-                    title : '长'
-                },
-                {
-                    field : 'w', 
-                    title : '宽'
-                },
-                {
-                    field : 'h', 
-                    title : '高'
-                },
-                {
-                    field : 'grossWeight', 
-                    title : '毛重'
-                },
-                {
-                    field : 'netWeight', 
-                    title : '净重'
-                },
+                    {
+                        field : 'string1',
+                        title : '等级',
+                        formatter: function(value, row, index) {
+                            return $.table.selectDictLabel(string2Datas, value);
+                        }
+                    },
                 {
                     field : 'costPrice', 
                     title : '成本价'

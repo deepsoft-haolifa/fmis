@@ -120,55 +120,16 @@
                 </div>
             </div>
 
+            <div class="form-group">
+                <label class="col-sm-3 control-label">等级：</label>
+                <div class="col-sm-8">
+                    <select name="string1" class="form-control m-b" th:with="type=${@dict.getType('product_level')}">
+                        <option value="">请选择</option>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                    </select>
+                </div>
+            </div>
 
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">箱率：</label>
-                <div class="col-sm-8">
-                    <input name="box" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">内盒数量：</label>
-                <div class="col-sm-8">
-                    <input name="innerboxCount" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">体积：</label>
-                <div class="col-sm-8">
-                    <input name="bulk" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">长：</label>
-                <div class="col-sm-8">
-                    <input name="l" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">宽：</label>
-                <div class="col-sm-8">
-                    <input name="w" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">高：</label>
-                <div class="col-sm-8">
-                    <input name="h" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">毛重：</label>
-                <div class="col-sm-8">
-                    <input name="grossWeight" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">净重：</label>
-                <div class="col-sm-8">
-                    <input name="netWeight" class="form-control" type="text">
-                </div>
-            </div>
             <div class="form-group">    
                 <label class="col-sm-3 control-label">成本价：</label>
                 <div class="col-sm-8">

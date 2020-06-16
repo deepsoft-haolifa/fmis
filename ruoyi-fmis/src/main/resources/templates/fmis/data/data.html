@@ -40,12 +40,16 @@
                 <a class="btn btn-primary single disabled" onclick="edit()" shiro:hasPermission="fmis:data:edit">
                     <i class="fa fa-edit"></i> 修改
                 </a>
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="fmis:data:remove">
+                <a class="btn btn-danger multiple disabled" onclick="remove()" shiro:hasPermission="fmis:data:remove">
                     <i class="fa fa-remove"></i> 删除
                 </a>
-                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="fmis:data:export">
-                    <i class="fa fa-download"></i> 导出
-                 </a>
+                <a class="btn btn-warning" onclick="exportPdf()" shiro:hasPermission="fmis:quotation:export">
+                    <i class="fa fa-download"></i> 生成合同
+                </a>
+
+                <a class="btn btn-success" onclick="viewPdf()">
+                    <i class="fa fa-street-view"></i> 预览合同
+                </a>
             </div>
             <div class="col-sm-12 select-table table-striped">
                 <table id="bootstrap-table"></table>
@@ -189,7 +193,7 @@
                         var operationExamineStatus = row.operationExamineStatus;
                         if (flowStatus < 1) {
                             actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="edit(\'' + row.dataId + '\')"><i class="fa fa-edit"></i> 编辑</a> ');
-                            actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 删除</a>');
+                            actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="remove(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 删除</a>');
                             actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subReport(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 上报</a>');
                         } else if (flowStatus == normalFlag) {
                             //已完成
@@ -213,7 +217,52 @@
                 $.table.refresh();
             });
         }
+        function remove(id) {
+            if($.common.isEmpty(id)) {
+                var row = $('#bootstrap-table').bootstrapTable('getSelections')[0];
+                if ($.common.isEmpty(row)) {
+                    $.modal.alertWarning("请至少选择一条记录");
+                    return;
+                }
 
+                var rowss = $('#bootstrap-table').bootstrapTable('getSelections');
+                for (var i = 0; i < rowss.length; i++) {
+                    row = rowss[i];
+                    var flowStatus = row.flowStatus;
+                    if (flowStatus > 0) {
+                        $.modal.alertWarning("已上报数据不能删除");
+                        return;
+                    }
+                }
+                var rows = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
+                $.modal.confirm("确认要删除选中的" + rows.length + "条数据吗?", function() {
+                    var url = $.table._option.removeUrl;
+                    var data = { "ids": rows.join() };
+                    $.operate.submit(url, "post", "json", data);
+                });
+            } else {
+                var row = $('#bootstrap-table').bootstrapTable("getRowByUniqueId",id);
+                if (row == null) {
+                    row = $('#bootstrap-table').bootstrapTable('getSelections')[0];
+                }
+                if (row != null) {
+                    var flowStatus = row.flowStatus;
+                    if (flowStatus > 0) {
+                        $.modal.alertWarning("已上报数据不能删除");
+                        return;
+                    }
+                }
+                $.modal.confirm("确定删除该条" + $.table._option.modalName + "信息吗？", function() {
+                    var url = $.common.isEmpty(id) ? $.table._option.removeUrl : $.table._option.removeUrl.replace("{id}", id);
+                    if($.table._option.type == table_type.bootstrapTreeTable) {
+                        $.operate.get(url);
+                    } else {
+                        var data = { "ids": id };
+                        $.operate.submit(url, "post", "json", data);
+                    }
+                });
+            }
+        }
         function add() {
             var url = prefix + "/add";
             $.modal.openFull("增加", url);
@@ -293,6 +342,65 @@
                 });
             });
         }
+
+        function exportPdf(formId) {
+
+            var row = $('#bootstrap-table').bootstrapTable('getSelections')[0];
+            var rows = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
+            if ($.common.isEmpty(row) || rows.length != 1) {
+                $.modal.alertWarning("请选择一条记录");
+                return;
+            }
+            var flowStatus = row.flowStatus;
+            var normalFlag = row.normalFlag;
+            /*if (flowStatus == "0" || flowStatus != normalFlag) {
+                $.modal.alertWarning("请等待审批结束后生成！");
+                return;
+            }*/
+            $.modal.confirm("确定生成合同吗？", function() {
+                var currentId = $.common.isEmpty(formId) ? $('form').attr('id') : formId;
+                console.log("currentId=" + currentId);
+                $.modal.loading("正在导出数据，请稍后...");
+                var paramsJson = $("#" + currentId).serializeArray();
+                paramsJson.push({"name": "dataId", "value": row.dataId});
+                $.post($.table._option.exportUrl, paramsJson, function(result) {
+                    if (result.code == web_status.SUCCESS) {
+                        window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;
+                    } else if (result.code == web_status.WARNING) {
+                        $.modal.alertWarning(result.msg)
+                    } else {
+                        $.modal.alertError(result.msg);
+                    }
+                    $.modal.closeLoading();
+                });
+            });
+        }
+
+        /**
+         * 预览报价单
+         * @param formId
+         */
+        function viewPdf(formId) {
+
+            var row = $('#bootstrap-table').bootstrapTable('getSelections')[0];
+            var rows = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
+            if ($.common.isEmpty(row) || rows.length != 1) {
+                $.modal.alertWarning("请选择一条记录");
+                return;
+            }
+
+            var currentId = $.common.isEmpty(formId) ? $('form').attr('id') : formId;
+            console.log("currentId=" + currentId);
+            $.modal.loading("正在导出数据，请稍后...");
+            var paramsJson = $("#" + currentId).serializeArray();
+            paramsJson.push({"name": "dataId", "value": row.dataId});
+            paramsJson.push({"name": "status", "value": "1"});
+            var viewUrl = prefix + "/viewPdf";
+            console.log(row.dataId + "--row.dataId");
+            window.open("../pdfjs/web/viewer.html?file="+ viewUrl + "?id%3D" + row.dataId);
+            $.modal.closeLoading();
+        }
+
     </script>
 </body>
 </html>

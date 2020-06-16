@@ -32,7 +32,7 @@
 		        },
 				{
 					field : 'userId', 
-					title : '用户ID'
+					title : '用户ID1'
 				},
 				{
 					field : 'userCode', 
@@ -81,6 +81,7 @@
     	    $(cur_table).bootstrapTable({
     	        url: prefix + "/list",
     	        method: 'post',
+				cache: true,
     	        sidePagination: "server",
     	        contentType: "application/x-www-form-urlencoded",   // 编码类型
     	        queryParams : {

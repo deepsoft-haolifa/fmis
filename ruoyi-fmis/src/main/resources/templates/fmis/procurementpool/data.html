@@ -2,6 +2,11 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <th:block th:include="include :: header('采购列表')" />
+    <style>
+        .W60 .th-inner {
+            width:120px !important;
+        }
+    </style>
 </head>
 <body class="gray-bg">
      <div class="container-div">
@@ -10,36 +15,37 @@
                 <form id="formId">
                     <div class="select-list">
                         <ul>
-                            <!--
+
                             <li>
-                                <p>状态：</p>
-                                <select name="queryStatus" class="form-control m-b" >
-                                    <option value="0">全部</option>
-                                    <option value="1">待办</option>
-                                    <option value="2">已办</option>
-                                </select>
+                                <p>合同号：</p>
+                                <input type="text" name="string1"/>
                             </li>
                             <li>
-                                <p>备用1：</p>
-                                <input type="text" name="string1"/>
-                                <input type="hidden" name="bizId" id="bizId" value="contract"/>
+                                <p>客户名称：</p>
+                                <input type="text" name="customerName"/>
                             </li>
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
                                 <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
                             </li>
-                            -->
+
                         </ul>
                     </div>
                 </form>
             </div>
-
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="" >
+                    <i class="fa fa-plus"></i> 采购
+                </a>
+            </div>
             <div class="col-sm-12 select-table table-striped">
-                <table id="bootstrap-table"></table>
+                <table id="bootstrap-table"  class="text-nowrap"></table>
             </div>
         </div>
     </div>
     <th:block th:include="include :: footer" />
+     <th:block th:include="include :: bootstrap-editable-css" />
+     <th:block th:include="include :: bootstrap-table-editable-js" />
     <script th:inline="javascript">
         var editFlag = [[${@permission.hasPermi('fmis:data:edit')}]];
         var removeFlag = [[${@permission.hasPermi('fmis:data:remove')}]];
@@ -48,12 +54,20 @@
         $(function() {
             var options = {
                 url: prefix + "/list",
-                createUrl: prefix + "/add",
-                updateUrl: prefix + "/edit/{id}",
-                removeUrl: prefix + "/remove",
-                exportUrl: prefix + "/export",
                 modalName: "采购池",
                 uniqueId: "dataId",
+                detailView: true,
+                cache: true,
+                rowStyle: function(row, index) {
+                    return {classes:'success'};
+                },
+                expandFirst: true,
+                onExpandRow : function(index, row, $detail) {
+                    initChildLevelTable(index, row, $detail);
+                },
+                onCollapseRow:function(index, row, detail){
+                    console.log("detail4=" + $("#childLevelTable").bootstrapTable("getData").length);
+                },
                 columns: [{
                     checkbox: true
                 },
@@ -129,7 +143,373 @@
             $.table.init(options);
         });
 
+        function cellStyle (value, row, index) {
+            return {
+                width: 300,
+                css: {
+                    'background':'red'
+                }
+            }
+        }
 
+
+        //var initChildLevelTableHtml = "";
+        initChildLevelTable = function(index, row, $detail) {
+            console.log("detail=" + $("#childLevelTable").bootstrapTable("getData").length);
+            var cur_table = $detail.html('<table style="table-layout:fixed" id="childLevelTable" data-cache="true"></table>').find('table');
+            var dataId = row["dataId"];
+
+            $(cur_table).bootstrapTable({
+                url: ctx + "fmis/data/listLevel",
+                method: 'post',
+                id: "childLevelTable",
+                detailView: true,
+                cache: true,
+                rowStyle: function(row, index) {
+                    return {classes:'danger'};
+                },
+                async: false,
+                onCollapseRow:function(index, row, detail){
+                    console.log("detail2=" + $("#childLevelTable").bootstrapTable("getData").length);
+                },
+                onLoadSuccess:function (data) {
+                    //initChildLevelTableHtml = $detail.html();
+                },
+                sidePagination: "server",
+                contentType : "application/x-www-form-urlencoded",
+                uniqueId: "levelType",
+                queryParams : {
+                    "dataId": dataId
+                },
+                onExpandRow : function(index, row, $detail) {
+                    initChildLevelListTable(index, row, $detail);
+                },columns: [
+                    {field : 'levelTypeName',title : '类别'},
+                    {field : 'levelType',title : 'type',visible: false},
+                    {field : 'level',title : 'level',visible: false}
+                ]
+            });
+        };
+
+
+
+        initChildProductTable = function(index, row, $detail) {
+            var cur_table = $detail.html('<table style="table-layout:fixed"></table>').find('table');
+            console.log("dataId1=" + row["dataId"]);
+            $(cur_table).bootstrapTable({
+                url: ctx + "fmis/data/listLevelProduct",
+                method: 'post',
+                sidePagination: "server",
+                contentType : "application/x-www-form-urlencoded",
+                uniqueId: "productId",
+                cache: true,
+                queryParams : {
+                    dataId: row["dataId"],
+                    level: row["level"]
+                },
+                columns: [{
+                    checkbox: true
+                },{field : 'rowId',title : '序号',width: 20,visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
+
+                    {field : 'productId',title : '产品ID',visible: false},
+                    {field : 'productName',title : '产品名称',editable: false,width: 100},
+                    {field : 'model',title : '型号',editable: false,width: 200},
+                    {field : 'specifications',title : '规格',editable: false,width: 100},
+                    {field : 'nominalPressure',title : '压力',editable: false,width: 100},
+                    {field : 'valvebodyMaterial',title : '阀体',editable: false,width: 100},
+                    {field : 'valveElement',title : '阀芯',editable: false,width: 100},
+                    {field : 'sealingMaterial',title : '密封材质',editable: false,width: 100},
+                    {field : 'driveForm',title : '驱动形式',editable: false,width: 100},
+                    {field : 'connectionType',title : '连接方式',editable: false,width: 100},
+                    {field : 'productProcurementPrice',title : '采购价',editable: false,width: 100},
+                    {field : 'productNum',title : '数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 80},
+                    {field : 'supplier',title : '供应商',editable: false,width: 300},
+
+
+                ]
+            });
+        };
+        var setupTypeData = [[${@dict.getType('actuator_setup_type')}]];
+        initChildActuatorTable = function(index, row, $detail) {
+            var cur_table = $detail.html('<table style="table-layout:fixed"></table>').find('table');
+            console.log("dataId1=" + row["dataId"]);
+            $(cur_table).bootstrapTable({
+                url: ctx + "fmis/data/listLevelActuator",
+                method: 'post',
+                sidePagination: "server",
+                contentType : "application/x-www-form-urlencoded",
+                uniqueId: "productId",
+                queryParams : {
+                    dataId: row["dataId"],
+                    level: row["level"]
+                },
+                columns: [{
+                    checkbox: true
+                },{field : 'rowId',title : '序号',width: 20,visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
+                    {field : 'actuatorId',title : 'actuatorId',visible: false},
+                    {field : 'actuatorName',title : '执行器名称',editable: false,width: 150},
+                    {field : 'actuatorPrice',title : '执行器价格',editable: false,width: 100},
+                    {field : 'actuatorString5',title : '采购价',editable: false,width: 100},
+                    {field : 'actuatorNum',title : '执行器数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 100},
+                    {
+                        field : 'actuatorBrand',
+                        title : '执行器品牌',width: 100
+                    },
+                    {
+                        field : 'actuatorManufacturer',
+                        title : '生产厂家',width: 200
+                    },
+                    {
+                        field : 'actuatorString4',
+                        title : '厂家代码',width: 100
+                    },
+                    {
+                        field : 'actuatorString1',
+                        title : '型号',width: 200
+                    },
+                    {
+                        field : 'actuatorSetupType',
+                        title : '安装形式',
+                        formatter: function(value, row, index) {
+                            return $.table.selectDictLabel(setupTypeData, value);
+                        },width: 60
+                    },
+                    {
+                        field : 'actuatorOutputTorque',
+                        title : '输出力距',width: 60
+                    },
+                    {
+                        field : 'actuatorString3',
+                        title : '系列',width: 60
+                    },
+                    {
+                        field : 'actuatorActionType',
+                        title : '开启时间',width: 100
+                    },
+                    {
+                        field : 'actuatorControlCircuit',
+                        title : '控制电路',width: 100
+                    },
+                    {
+                        field : 'actuatorAdaptableVoltage',
+                        title : '适用电压',width: 60
+                    },
+                    {
+                        field : 'actuatorProtectionLevel',
+                        title : '防护等级',width: 100
+                    },
+                    {
+                        field : 'actuatorQualityLevel',
+                        title : '品质等级',width: 30
+                    },
+                    {
+                        field : 'actuatorExplosionLevel',
+                        title : '防爆等级',width: 50
+                    }
+                ]
+            });
+        };
+
+        initChildRef1Table = function(index, row, $detail) {
+            var cur_table = $detail.html('<table style="table-layout:fixed"></table>').find('table');
+            console.log("dataId1=" + row["dataId"]);
+            $(cur_table).bootstrapTable({
+                url: ctx + "fmis/data/listLevelRef1",
+                method: 'post',
+                sidePagination: "server",
+                contentType : "application/x-www-form-urlencoded",
+                uniqueId: "productId",
+                queryParams : {
+                    dataId: row["dataId"],
+                    level: row["level"]
+                },
+                columns: [{
+                    checkbox: true
+                },{field : 'rowId',title : '序号',width: 20,visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
+                    {field : 'productRef1Id',title : 'ref1Id',visible: false},
+                    {field : 'ref1Name',title : '法兰名称',editable: false,width: 100},
+                    {field : 'ref1Price',title : '法兰价格',editable: false,width: 100},
+                    {field : 'productRef1Num',title : '法兰数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 100}
+                ]
+            });
+        };
+
+        initChildRef2Table = function(index, row, $detail) {
+            var cur_table = $detail.html('<table style="table-layout:fixed"></table>').find('table');
+            console.log("dataId1=" + row["dataId"]);
+            $(cur_table).bootstrapTable({
+                url: ctx + "fmis/data/listLevelRef2",
+                method: 'post',
+                sidePagination: "server",
+                contentType : "application/x-www-form-urlencoded",
+                uniqueId: "productId",
+                queryParams : {
+                    dataId: row["dataId"],
+                    level: row["level"]
+                },
+                columns: [{
+                    checkbox: true
+                },{field : 'rowId',title : '序号',width: 20,visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
+                    {field : 'productRef2Id',title : 'ref2Id',visible: false},
+                    {field : 'ref2Name',title : '螺栓名称',editable: {type: 'text',emptytext: '空',disabled: true},width: 100},
+                    {field : 'ref2Price',title : '螺栓价格',editable: false,width: 100},
+                    {field : 'productRef2Num',title : '螺栓数量',editable: {type: 'text',emptytext: '0',validate: function(v){ return numberValidate(v)}},width: 100}
+                ]
+            });
+        };
+
+        initChildPATable = function(index, row, $detail) {
+            var cur_table = $detail.html('<table style="table-layout:fixed"></table>').find('table');
+            console.log("dataId1=" + row["dataId"]);
+            $(cur_table).bootstrapTable({
+                url: ctx + "fmis/data/listLevelPA",
+                method: 'post',
+                sidePagination: "server",
+                contentType : "application/x-www-form-urlencoded",
+                uniqueId: "productId",
+                queryParams : {
+                    dataId: row["dataId"],
+                    level: row["level"]
+                },
+                columns: [{
+                    checkbox: true
+                },{field : 'rowId',title : '序号',width: 20,visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
+                    {field : 'pattachmentId',title : 'pattachmentId',visible: false},
+                    {field : 'pattachmentName',title : '定位器',editable: true,width: 100},
+                    {field : 'pattachmentPrice',title : '定位器价格',editable: false,width: 100},
+                    {field : 'pattachmentCount',title : '定位器数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 100}
+                ]
+            });
+        };
+
+        initChildPA1Table = function(index, row, $detail) {
+            var cur_table = $detail.html('<table style="table-layout:fixed"></table>').find('table');
+            console.log("dataId1=" + row["dataId"]);
+            $(cur_table).bootstrapTable({
+                url: ctx + "fmis/data/listLevelPA1",
+                method: 'post',
+                sidePagination: "server",
+                contentType : "application/x-www-form-urlencoded",
+                uniqueId: "productId",
+                queryParams : {
+                    dataId: row["dataId"],
+                    level: row["level"]
+                },
+                columns: [{
+                    checkbox: true
+                },{field : 'rowId',title : '序号',width: 20,visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
+                    {field : 'pattachment1Id',title : 'pattachment1Id',visible: false},
+                    {field : 'pattachment1Name',title : '电磁阀',editable: true,width: 100},
+                    {field : 'pattachment1Price',title : '电磁阀价格',editable: false,width: 100},
+                    {field : 'pattachment1Count',title : '电磁阀数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 100}
+                ]
+            });
+        };
+
+        initChildPA2Table = function(index, row, $detail) {
+            var cur_table = $detail.html('<table style="table-layout:fixed"></table>').find('table');
+            console.log("dataId1=" + row["dataId"]);
+            $(cur_table).bootstrapTable({
+                url: ctx + "fmis/data/listLevelPA2",
+                method: 'post',
+                sidePagination: "server",
+                contentType : "application/x-www-form-urlencoded",
+                uniqueId: "productId",
+                queryParams : {
+                    dataId: row["dataId"],
+                    level: row["level"]
+                },
+                columns: [{
+                    checkbox: true
+                },{field : 'rowId',title : '序号',width: 20,visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
+                    {field : 'pattachment2Id',title : 'pattachment2Id',visible: false},
+                    {field : 'pattachment2Name',title : '回信器数',editable: true,width: 100},
+                    {field : 'pattachment2Price',title : '回信器数价格',editable: false,width: 100},
+                    {field : 'pattachment2Count',title : '回信器数数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 100}
+                ]
+            });
+        };
+
+        initChildPA3Table = function(index, row, $detail) {
+            var cur_table = $detail.html('<table style="table-layout:fixed"></table>').find('table');
+            console.log("dataId1=" + row["dataId"]);
+            $(cur_table).bootstrapTable({
+                url: ctx + "fmis/data/listLevelPA3",
+                method: 'post',
+                sidePagination: "server",
+                contentType : "application/x-www-form-urlencoded",
+                uniqueId: "productId",
+                queryParams : {
+                    dataId: row["dataId"],
+                    level: row["level"]
+                },
+                columns: [{
+                    checkbox: true
+                },{field : 'rowId',title : '序号',width: 20,visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
+                    {field : 'pattachment3Id',title : 'pattachment3Id',visible: false},
+                    {field : 'pattachment3Name',title : '气源三连件',editable: true,width: 100},
+                    {field : 'pattachment3Price',title : '气源三连件价格',editable: false,width: 100},
+                    {field : 'pattachment3Count',title : '气源三连件数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 100}
+                ]
+            });
+        };
+
+        initChildPA4Table = function(index, row, $detail) {
+            var cur_table = $detail.html('<table style="table-layout:fixed"></table>').find('table');
+            console.log("dataId1=" + row["dataId"]);
+            $(cur_table).bootstrapTable({
+                url: ctx + "fmis/data/listLevelPA4",
+                method: 'post',
+                sidePagination: "server",
+                contentType : "application/x-www-form-urlencoded",
+                uniqueId: "productId",
+                queryParams : {
+                    dataId: row["dataId"],
+                    level: row["level"]
+                },
+                columns: [{
+                    checkbox: true
+                },{field : 'rowId',title : '序号',width: 20,visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
+                    {field : 'pattachment4Id',title : 'pattachment4Id',visible: false},
+                    {field : 'pattachment4Name',title : '可离合减速器',editable: true,width: 100},
+                    {field : 'pattachment4Price',title : '可离合减速器价格',editable: false,width: 100},
+                    {field : 'pattachment4Count',title : '可离合减速器数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 100}
+                ]
+            });
+        };
+
+        function initChildLevelListTable(index, row, $detail) {
+            var levelType = row["levelType"];
+            var level = row["level"];
+            var dataId = row["dataId"];
+            $.common.startWith()
+            if ($.common.startWith(levelType,'1')) {
+                initChildProductTable(index, row, $detail);
+            } else if ($.common.startWith(levelType,'2')) {
+                initChildActuatorTable(index, row, $detail);
+            } else if ($.common.startWith(levelType,'3')) {
+                initChildRef1Table(index, row, $detail);
+            } else if ($.common.startWith(levelType,'4')) {
+                initChildRef2Table(index, row, $detail);
+            } else if ($.common.startWith(levelType,'5')) {
+                initChildPATable(index, row, $detail);
+            } else if ($.common.startWith(levelType,'6')) {
+                initChildPA1Table(index, row, $detail);
+            } else if ($.common.startWith(levelType,'7')) {
+                initChildPA2Table(index, row, $detail);
+            } else if ($.common.startWith(levelType,'8')) {
+                initChildPA3Table(index, row, $detail);
+            } else if ($.common.startWith(levelType,'9')) {
+                initChildPA4Table(index, row, $detail);
+            }
+
+        }
+
+        function numberValidate(value) {
+            if (isNaN(value)) {
+                return "必须是数字！";
+            }
+        }
     </script>
 </body>
 </html>

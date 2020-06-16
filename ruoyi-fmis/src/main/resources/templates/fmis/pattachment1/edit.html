@@ -122,7 +122,17 @@
                 </div>
             </div>
 
+            <div class="form-group">
+                <label class="col-sm-3 control-label">等级：</label>
+                <div class="col-sm-8">
+                    <select name="string1" class="form-control m-b" th:with="type=${@dict.getType('product_level')}">
+                        <option value="">请选择</option>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{string1}"></option>
+                    </select>
+                </div>
+            </div>
 
+            <!--
             <div class="form-group">    
                 <label class="col-sm-3 control-label">箱率：</label>
                 <div class="col-sm-8">
@@ -171,6 +181,7 @@
                     <input name="netWeight" th:field="*{netWeight}" class="form-control" type="text">
                 </div>
             </div>
+            -->
             <div class="form-group">    
                 <label class="col-sm-3 control-label">成本价：</label>
                 <div class="col-sm-8">

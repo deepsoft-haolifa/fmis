@@ -53,6 +53,30 @@
                     <input name="materialRequire" th:field="*{materialRequire}" class="form-control" type="text">
                 </div>
             </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">产品等级：</label>
+                <div class="col-sm-8">
+                    <select name="string1" class="form-control m-b" th:with="type=${@dict.getType('product_level')}">
+                        <option value="">请选择</option>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{string1}"></option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">采购价：</label>
+                <div class="col-sm-8">
+                    <input name="string2" id="string2" th:field="*{string2}" onkeyup="AmountKeyUp(this)" class="form-control" type="text">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">成本价：</label>
+                <div class="col-sm-8">
+                    <input name="string3" id="string3" th:field="*{string3}" onkeyup="AmountKeyUp(this)"  class="form-control" type="text">
+                </div>
+            </div>
+
             <div class="form-group">    
                 <label class="col-sm-3 control-label">单价：</label>
                 <div class="col-sm-8">

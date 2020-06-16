@@ -44,7 +44,7 @@ public class PdfUtil {
 
     public static PdfPCell getPDFCell(String text, Font font){
         PdfPCell cell = new PdfPCell();
-        cell.setMinimumHeight(20);
+        cell.setMinimumHeight(15);
         Phrase phrase = new Phrase(text, font);
         cell.setPhrase(phrase);
         return cell;
@@ -57,7 +57,7 @@ public class PdfUtil {
     public static PdfPCell mergeCol(String text, int mergeCount, Font font){
         PdfPCell cell = new PdfPCell();
         //设置表格行高
-        cell.setMinimumHeight(20);
+        cell.setMinimumHeight(15);
         Phrase phrase = new Phrase(text, font);
         cell.setPhrase(phrase);
         cell.setColspan(mergeCount);
@@ -67,7 +67,7 @@ public class PdfUtil {
     public static PdfPCell mergeColRight(String text, int mergeCount, Font font){
         PdfPCell cell = new PdfPCell();
         //设置表格行高
-        cell.setMinimumHeight(20);
+        cell.setMinimumHeight(15);
         Phrase phrase = new Phrase(text, font);
         cell.setPhrase(phrase);
         cell.setColspan(mergeCount);
@@ -76,7 +76,18 @@ public class PdfUtil {
         cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
         return cell;
     }
-
+    public static PdfPCell mergeColLeft(String text, int mergeCount, Font font){
+        PdfPCell cell = new PdfPCell();
+        //设置表格行高
+        cell.setMinimumHeight(15);
+        Phrase phrase = new Phrase(text, font);
+        cell.setPhrase(phrase);
+        cell.setColspan(mergeCount);
+        cell.setUseAscender(true);
+        cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+        return cell;
+    }
     /**
      * 编码文件名
      */

@@ -124,7 +124,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
           d7.name as driveForm,d8.name as structuralStyle,
           s.name as supplier, p.new_supplier,
           p.medium,p.temperature,p.other,d9.name as productString1,
-          p.string2 as productString2,ac.name as actuatorName
+          p.string2 as productString2,ac.name as actuatorName,pc.string14,pc.string15,
+          dd.dict_label as levelLabel,
+
+
+
+          pa.attachment_id as pattachmentId,pa.bh as pattachmentName, pc.pattachment_price as pattachmentPrice, pc.pattachment_count as pattachmentCount, pc.pattachment_coefficient as pattachmentCoefficient,
+          pa1.attachment_id as pattachment1Id,pa1.bh as pattachment1Name, pc.pattachment1_price as pattachment1Price, pc.pattachment1_count as pattachment1Count, pc.pattachment1_coefficient as pattachment1Coefficient,
+          pa2.attachment_id as pattachment2Id,pa2.bh as pattachment2Name, pc.pattachment2_price as pattachment2Price, pc.pattachment2_count as pattachment2Count, pc.pattachment2_coefficient as pattachment2Coefficient,
+          pa3.attachment_id as pattachment3Id,pa3.bh as pattachment3Name, pc.pattachment3_price as pattachment3Price, pc.pattachment3_count as pattachment3Count, pc.pattachment3_coefficient as pattachment3Coefficient,
+          pa4.attachment_id as pattachment4Id,pa4.bh as pattachment4Name, pc.pattachment4_price as pattachment4Price, pc.pattachment4_count as pattachment4Count, pc.pattachment4_coefficient as pattachment4Coefficient
+
+
         from biz_process_child pc
         join biz_process_data pd on pc.data_id=pd.data_id
         left join biz_quotation q on q.quotation_id=pc.string1
@@ -148,6 +159,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         left join biz_dict d9 on d9.parent_type='series_type' and d9.dict_id=p.string1
         left join biz_suppliers s on s.suppliers_id=p.supplier
 
+        left join biz_product_attachment pa on pa.attachment_id=pc.pattachment_id
+        left join biz_product_attachment pa1 on pa1.attachment_id=pc.pattachment1_id
+        left join biz_product_attachment pa2 on pa2.attachment_id=pc.pattachment2_id
+        left join biz_product_attachment pa3 on pa3.attachment_id=pc.pattachment3_id
+        left join biz_product_attachment pa4 on pa4.attachment_id=pc.pattachment4_id
+
+        left join sys_dict_data dd on dd.dict_type='product_level' and dd.dict_value=p.string2
+
     </sql>
     <!-- 流程状态0=未上报  1=销售员上报  2=销售经理同意 -2=销售经理不同意 3=区域经理同意 -3=区域经理不同意 4=副总同意 -4=副总不同意 5=老总同意 -5=老总不同意 -->
     <select id="selectBizQuotationProductList" parameterType="BizProcessChild" resultMap="BizProcessChildResult">
@@ -155,10 +174,214 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <where>
             1=1
             <if test="dataId != null"> and pc.data_id = #{dataId}</if>
+
+            <!-- 产品等级 是 A,B的 -->
+            <if test="levelAB == '1'"> and p.string2 in ('A','B')</if>
+            <if test="levelAB == '2'"> and p.string2 in ('B','C')</if>
+
+
+
         </where>
         order by  pc.child_id
     </select>
 
+
+
+    <!-- 采购池产品信息 -->
+    <sql id="selectBizChildProductVo">
+    select
+          p.price as productPrice,
+          d.name as series, p.model, d1.name as specifications, d2.name as nominalPressure,
+          d3.name as connectionType, d6.name as valvebodyMaterial,
+          d4.name as sealingMaterial, d5.name as valveElement,
+          d7.name as driveForm,d8.name as structuralStyle,
+          s.name as supplier, p.new_supplier,
+          p.medium,p.temperature,p.other,d9.name as productString1,
+          p.string2 as productString2,
+          dd.dict_label as levelLabel,pc.string3 as productNum,p.name as productName,
+          s.name as supplier,p.procurement_price as productProcurementPrice
+    from biz_product p
+    join biz_process_child pc on pc.data_id=#{dataId} and pc.string2=p.product_id
+    left join biz_dict d on  d.parent_id=1 and p.series=d.dict_id
+        left join biz_dict d1 on d1.parent_type='specification' and d1.dict_id=p.specifications
+        left join biz_dict d2 on d2.parent_type='nominal_pressure' and d2.dict_id=p.nominal_pressure
+        left join biz_dict d3 on d3.parent_type='link_type' and d3.dict_id=p.connection_type
+        left join biz_dict d4 on d4.parent_type='sealing_material' and d4.dict_id=p.sealing_material
+        left join biz_dict d5 on d5.parent_type='spool_material' and d5.dict_id=p.valve_element
+        left join biz_dict d6 on d6.parent_type='body_material' and d6.dict_id=p.valvebody_material
+        left join biz_dict d7 on d7.parent_type='drive_mode' and d7.dict_id=p.drive_form
+        left join biz_dict d8 on d8.parent_type='structural_type' and d8.dict_id=p.structural_style
+        left join biz_dict d9 on d9.parent_type='series_type' and d9.dict_id=p.string1
+        left join biz_suppliers s on s.suppliers_id=p.supplier
+        join sys_dict_data dd on dd.dict_type='product_level' and dd.dict_value=p.string2 and p.string2=#{string2}
+    where concat(p.model,p.specifications) in (
+      select concat(p1.model,p1.specifications) from biz_product p1
+      join biz_process_child pc1 on pc1.data_id=#{dataId} and pc1.string2=p1.product_id
+    )
+    </sql>
+    <select id="selectBizChildProductList" parameterType="BizProcessChild" resultMap="BizProcessChildResult">
+        <include refid="selectBizChildProductVo"/>
+        order by p.string2,p.new_supplier
+    </select>
+
+
+    <!-- 采购池 执行器信息 -->
+    <sql id="selectBizChildActuatorVo">
+    select
+      pc.string12 as actuatorNum,pc.string13 as actuatorCoefficient,
+          a.name as actuatorName,a.price as actuatorPrice,
+          a.brand as actuatorBrand,a.manufacturer as actuatorManufacturer,a.string4 as actuatorString4,
+          a.string1 as actuatorString1,a.setup_type as actuatorSetupType,a.output_torque as actuatorOutputTorque,
+          a.string3 as actuatorString3,a.action_type as actuatorActionType,a.control_circuit as actuatorControlCircuit,a.adaptable_voltage as actuatorAdaptableVoltage,
+          a.protection_level as actuatorProtectionLevel,a.quality_level as actuatorQualityLevel,a.explosion_level as actuatorExplosionLevel,a.string5 as actuatorString5
+    from biz_actuator a
+    join biz_process_child pc on pc.data_id=#{dataId} and pc.string11=a.actuator_id
+    where a.string1 in (
+      select a1.string1 from biz_actuator a1
+      join biz_process_child pc1 on pc1.data_id=#{dataId} and pc1.string11=a1.actuator_id
+    ) and a.quality_level=#{levelLabel}
+    </sql>
+    <select id="selectBizChildActuatorList" parameterType="BizProcessChild" resultMap="BizProcessChildResult">
+        <include refid="selectBizChildActuatorVo"/>
+        order by a.quality_level,a.string4
+    </select>
+
+
+    <!-- 采购池 法兰信息 -->
+    <sql id="selectBizChildRef1Vo">
+    select
+      pc.string5 as productRef1Id,pc.string6 as productRef1Num,pc.string7 as productRef1Coefficient,
+          pr.name as ref1Name,pr.price as ref1Price
+    from  biz_product_ref pr
+    join biz_process_child pc on pc.data_id=#{dataId} and pr.product_ref_id=pc.string5
+    where concat(pr.name,pr.model,pr.specifications) in (
+      select concat(p1.name,p1.model,p1.specifications) from biz_product_ref p1
+      join biz_process_child pc1 on pc1.data_id=#{dataId} and pc1.string5=p1.product_ref_id
+      where p1.type=1
+    ) and pr.type=1 and pr.string1=#{levelLabel}
+    </sql>
+    <select id="selectBizChildRef1List" parameterType="BizProcessChild" resultMap="BizProcessChildResult">
+        <include refid="selectBizChildRef1Vo"/>
+        order by pr.string1,pr.suppliers_id
+    </select>
+
+    <!-- 采购池 螺栓信息 -->
+    <sql id="selectBizChildRef2Vo">
+    select
+      pc.string8 as productRef2Id,pc.string9 as productRef2Num,pc.string7 as productRef1Coefficient,pr.name as ref2Name
+    from  biz_product_ref pr
+    join biz_process_child pc on pc.data_id=#{dataId} and pr.product_ref_id=pc.string8
+    where concat(pr.name,pr.model,pr.valvebody_material) in (
+      select concat(p1.name,p1.model,p1.valvebody_material) from biz_product_ref p1
+      join biz_process_child pc1 on pc1.data_id=#{dataId} and pc1.string8=p1.product_ref_id
+      where p1.type=2
+    ) and pr.type=2 and pr.string1=#{levelLabel}
+    </sql>
+    <select id="selectBizChildRef2List" parameterType="BizProcessChild" resultMap="BizProcessChildResult">
+        <include refid="selectBizChildRef2Vo"/>
+        order by pr.string8,pr.suppliers_id
+    </select>
+
+    <!-- 定位器 -->
+    <sql id="selectBizChildPAVo">
+    select
+      pa.attachment_id as pattachmentId,pa.bh as pattachmentName, pc.pattachment_price as pattachmentPrice, sum(pc.pattachment_count) as pattachmentCount,
+      pc.pattachment_coefficient as pattachmentCoefficient
+    from  biz_product_attachment pa
+    join biz_process_child pc on pc.data_id=#{dataId} and pa.attachment_id=pc.pattachment_id
+    where concat(pa.chinese_name,pa.chinese_specifications) in (
+      select concat(p1.chinese_name,p1.chinese_specifications) from biz_product_attachment p1
+      join biz_process_child pc1 on pc1.data_id=#{dataId} and pc1.pattachment_id=p1.attachment_id
+      where  p1.type=1
+    ) and  pa.string1=#{levelLabel} and pa.type=1
+    </sql>
+    <select id="selectBizChildPAList" parameterType="BizProcessChild" resultMap="BizProcessChildResult">
+        <include refid="selectBizChildPAVo"/>
+        group by pa.attachment_id
+        order by pa.string1
+    </select>
+
+
+    <!-- 电磁阀-->
+    <sql id="selectBizChildPA1Vo">
+    select
+     pa.attachment_id as pattachment1Id,pa.bh as pattachment1Name, pc.pattachment1_price as pattachment1Price,
+     sum(pc.pattachment1_count) as pattachment1Count, pc.pattachment1_coefficient as pattachment1Coefficient
+
+    from  biz_product_attachment pa
+    join biz_process_child pc on pc.data_id=#{dataId} and pa.attachment_id=pc.pattachment1_id
+    where concat(pa.chinese_name,pa.chinese_specifications) in (
+      select concat(p1.chinese_name,p1.chinese_specifications) from biz_product_attachment p1
+      join biz_process_child pc1 on pc1.data_id=#{dataId} and pc1.pattachment1_id=p1.attachment_id
+      where  p1.type=2
+    ) and  pa.string1=#{levelLabel} and pa.type=2
+    </sql>
+    <select id="selectBizChildPA1List" parameterType="BizProcessChild" resultMap="BizProcessChildResult">
+        <include refid="selectBizChildPA1Vo"/>
+        group by pa.attachment_id
+        order by pa.string1
+    </select>
+
+    <!-- 回信器数 -->
+    <sql id="selectBizChildPA2Vo">
+    select
+     pa.attachment_id as pattachment2Id,pa.bh as pattachment2Name, pc.pattachment2_price as pattachment2Price, sum(pc.pattachment2_count) as pattachment2Count,
+     pc.pattachment2_coefficient as pattachment2Coefficient
+
+    from  biz_product_attachment pa
+    join biz_process_child pc on pc.data_id=#{dataId} and pa.attachment_id=pc.pattachment2_id
+    where concat(pa.chinese_name,pa.chinese_specifications) in (
+      select concat(p1.chinese_name,p1.chinese_specifications) from biz_product_attachment p1
+      join biz_process_child pc1 on pc1.data_id=#{dataId} and pc1.pattachment2_id=p1.attachment_id
+      where  p1.type=3
+    ) and  pa.string1=#{levelLabel} and pa.type=3
+    </sql>
+    <select id="selectBizChildPA2List" parameterType="BizProcessChild" resultMap="BizProcessChildResult">
+        <include refid="selectBizChildPA2Vo"/>
+        group by pa.attachment_id
+        order by pa.string1
+    </select>
+    <!-- 气源三连件 -->
+    <sql id="selectBizChildPA3Vo">
+    select
+          pa.attachment_id as pattachment3Id,pa.bh as pattachment3Name,
+          pc.pattachment3_price as pattachment3Price, sum(pc.pattachment3_count) as pattachment3Count, pc.pattachment3_coefficient as pattachment3Coefficient
+
+
+    from  biz_product_attachment pa
+    join biz_process_child pc on pc.data_id=#{dataId} and pa.attachment_id=pc.pattachment3_id
+    where concat(pa.chinese_name,pa.chinese_specifications) in (
+      select concat(p1.chinese_name,p1.chinese_specifications) from biz_product_attachment p1
+      join biz_process_child pc1 on pc1.data_id=#{dataId} and pc1.pattachment3_id=p1.attachment_id
+      where  p1.type=4
+    ) and  pa.string1=#{levelLabel} and pa.type=4
+    </sql>
+    <select id="selectBizChildPA3List" parameterType="BizProcessChild" resultMap="BizProcessChildResult">
+        <include refid="selectBizChildPA3Vo"/>
+        group by pa.attachment_id
+        order by pa.string1
+    </select>
+    <!-- 可离合减速器 -->
+    <sql id="selectBizChildPA4Vo">
+    select
+          pa.attachment_id as pattachment4Id,pa.bh as pattachment4Name, pc.pattachment4_price as pattachment4Price,
+          sum(pc.pattachment4_count) as pattachment4Count, pc.pattachment4_coefficient as pattachment4Coefficient
+    from  biz_product_attachment pa
+    join biz_process_child pc on pc.data_id=#{dataId} and pa.attachment_id=pc.pattachment4_id
+    where concat(pa.chinese_name,pa.chinese_specifications) in (
+      select concat(p1.chinese_name,p1.chinese_specifications) from biz_product_attachment p1
+      join biz_process_child pc1 on pc1.data_id=#{dataId} and pc1.pattachment4_id=p1.attachment_id
+      where  p1.type=5
+    ) and  pa.string1=#{levelLabel} and pa.type=5
+    </sql>
+    <select id="selectBizChildPA4List" parameterType="BizProcessChild" resultMap="BizProcessChildResult">
+        <include refid="selectBizChildPA4Vo"/>
+        group by pa.attachment_id
+        order by pa.string1
+    </select>
+
+
+    <!-- 定位器，电磁阀，回信器数，气源三连件，可离合减速器 -->
 
 
     <insert id="insertBizProcessChild" parameterType="BizProcessChild" useGeneratedKeys="true" keyProperty="childId">
@@ -207,6 +430,30 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null ">create_time,</if>
             <if test="updateBy != null  and updateBy != ''">update_by,</if>
             <if test="updateTime != null ">update_time,</if>
+
+            <if test="pattachmentId != null  and pattachmentId != ''">pattachment_id,</if>
+            <if test="pattachment1Id != null  and pattachment1Id != ''">pattachment1_id,</if>
+            <if test="pattachment2Id != null  and pattachment2Id != ''">pattachment2_id,</if>
+            <if test="pattachment3Id != null  and pattachment3Id != ''">pattachment3_id,</if>
+            <if test="pattachment4Id != null  and pattachment4Id != ''">pattachment4_id,</if>
+
+            <if test="pattachmentCount != null  and pattachmentCount != ''">pattachment_count,</if>
+            <if test="pattachment1Count != null  and pattachment1Count != ''">pattachment1_count,</if>
+            <if test="pattachment2Count != null  and pattachment2Count != ''">pattachment2_count,</if>
+            <if test="pattachment3Count != null  and pattachment3Count != ''">pattachment3_count,</if>
+            <if test="pattachment4Count != null  and pattachment4Count != ''">pattachment4_count,</if>
+
+            <if test="pattachmentPrice != null  and pattachmentPrice != ''">pattachment_price,</if>
+            <if test="pattachment1Price != null  and pattachment1Price != ''">pattachment1_price,</if>
+            <if test="pattachment2Price != null  and pattachment2Price != ''">pattachment2_price,</if>
+            <if test="pattachment3Price != null  and pattachment3Price != ''">pattachment3_price,</if>
+            <if test="pattachment4Price != null  and pattachment4Price != ''">pattachment4_price,</if>
+
+            <if test="pattachmentCoefficient != null  and pattachmentCoefficient != ''">pattachment_coefficient,</if>
+            <if test="pattachment1Coefficient != null  and pattachment1Coefficient != ''">pattachment1_coefficient,</if>
+            <if test="pattachment2Coefficient != null  and pattachment2Coefficient != ''">pattachment2_coefficient,</if>
+            <if test="pattachment3Coefficient != null  and pattachment3Coefficient != ''">pattachment3_coefficient,</if>
+            <if test="pattachment4Coefficient != null  and pattachment4Coefficient != ''">pattachment4_coefficient,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="dataId != null ">#{dataId},</if>
@@ -252,6 +499,30 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null ">#{createTime},</if>
             <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
             <if test="updateTime != null ">#{updateTime},</if>
+
+            <if test="pattachmentId != null  and pattachmentId != ''">#{pattachmentId},</if>
+            <if test="pattachment1Id != null  and pattachment1Id != ''">#{pattachment1Id},</if>
+            <if test="pattachment2Id != null  and pattachment2Id != ''">#{pattachment2Id},</if>
+            <if test="pattachment3Id != null  and pattachment3Id != ''">#{pattachment3Id},</if>
+            <if test="pattachment4Id != null  and pattachment4Id != ''">#{pattachment4Id},</if>
+
+            <if test="pattachmentCount != null  and pattachmentCount != ''">#{pattachmentCount},</if>
+            <if test="pattachment1Count != null  and pattachment1Count != ''">#{pattachment1Count},</if>
+            <if test="pattachment2Count != null  and pattachment2Count != ''">#{pattachment2Count},</if>
+            <if test="pattachment3Count != null  and pattachment3Count != ''">#{pattachment3Count},</if>
+            <if test="pattachment4Count != null  and pattachment4Count != ''">#{pattachment4Count},</if>
+
+            <if test="pattachmentPrice != null  and pattachmentPrice != ''">#{pattachmentPrice},</if>
+            <if test="pattachment1Price != null  and pattachment1Price != ''">#{pattachment1Price},</if>
+            <if test="pattachment2Price != null  and pattachment2Price != ''">#{pattachment2Price},</if>
+            <if test="pattachment3Price != null  and pattachment3Price != ''">#{pattachment3Price},</if>
+            <if test="pattachment4Price != null  and pattachment4Price != ''">#{pattachment4Price},</if>
+
+            <if test="pattachmentCoefficient != null  and pattachmentCoefficient != ''">#{pattachmentCoefficient},</if>
+            <if test="pattachment1Coefficient != null  and pattachment1Coefficient != ''">#{pattachment1Coefficient},</if>
+            <if test="pattachment2Coefficient != null  and pattachment2Coefficient != ''">#{pattachment2Coefficient},</if>
+            <if test="pattachment3Coefficient != null  and pattachment3Coefficient != ''">#{pattachment3Coefficient},</if>
+            <if test="pattachment4Coefficient != null  and pattachment4Coefficient != ''">#{pattachment4Coefficient},</if>
          </trim>
     </insert>
 
@@ -301,6 +572,30 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null ">create_time = #{createTime},</if>
             <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
             <if test="updateTime != null ">update_time = #{updateTime},</if>
+
+            <if test="pattachmentId != null ">pattachment_id = #{pattachmentId},</if>
+            <if test="pattachment1Id != null ">pattachment1_id = #{pattachment1Id},</if>
+            <if test="pattachment2Id != null ">pattachment2_id = #{pattachment2Id},</if>
+            <if test="pattachment3Id != null ">pattachment3_id = #{pattachment3Id},</if>
+            <if test="pattachment4Id != null ">pattachment4_id = #{pattachment4Id},</if>
+
+            <if test="pattachmentCount != null ">pattachment_count = #{pattachmentCount},</if>
+            <if test="pattachment1Count != null ">pattachment1_count = #{pattachment1Count},</if>
+            <if test="pattachment2Count != null ">pattachment2_count = #{pattachment2Count},</if>
+            <if test="pattachment3Count != null ">pattachment3_count = #{pattachment3Count},</if>
+            <if test="pattachment4Count != null ">pattachment4_count = #{pattachment4Count},</if>
+
+            <if test="pattachmentPrice != null ">pattachment_price = #{pattachmentPrice},</if>
+            <if test="pattachment1Price != null ">pattachment1_price = #{pattachment1Price},</if>
+            <if test="pattachment2Price != null ">pattachment2_price = #{pattachment2Price},</if>
+            <if test="pattachment3Price != null ">pattachment3_price = #{pattachment3Price},</if>
+            <if test="pattachment4Price != null ">pattachment4_price = #{pattachment4Price},</if>
+
+            <if test="pattachmentCoefficient != null ">pattachment_coefficient = #{pattachmentCoefficient},</if>
+            <if test="pattachment1Coefficient != null ">pattachment1_coefficient = #{pattachment1Coefficient},</if>
+            <if test="pattachment2Coefficient != null ">pattachment2_coefficient = #{pattachment2Coefficient},</if>
+            <if test="pattachment3Coefficient != null ">pattachment3_coefficient = #{pattachment3Coefficient},</if>
+            <if test="pattachment4Coefficient != null ">pattachment4_coefficient = #{pattachment4Coefficient},</if>
         </trim>
         where child_id = #{childId}
     </update>

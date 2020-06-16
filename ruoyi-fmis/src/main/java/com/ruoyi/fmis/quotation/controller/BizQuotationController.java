@@ -887,13 +887,13 @@ public class BizQuotationController extends BaseController {
          *
          * 1=销售 2=销售经理 3=区域经理 4=副总 5=总经理
          */
-        int roleType = sysRoleService.getRoleType(ShiroUtils.getUserId());
+        /*int roleType = sysRoleService.getRoleType(ShiroUtils.getUserId());
         if (roleType > 1) {
             if (normalFlag.equals(roleType + "")) {
                 bizQuotation.setNormalFlag(normalFlag);
                 bizQuotation.setFlowStatus(normalFlag);
             }
-        }
+        }*/
         return normalFlag;
     }
 
@@ -1131,6 +1131,112 @@ public class BizQuotationController extends BaseController {
     public String upload(ModelMap mmap) {
         return prefix + "/upload";
     }
+
+
+
+    @PostMapping("/addQuotationProduct")
+    @ResponseBody
+    public JSONArray addQuotationProduct(){
+        JSONArray jsonArray = new JSONArray();
+        String ids = getRequest().getParameter("ids");
+        String[] ids_ = ids.split(",");
+        Map<Long,BizQuotation> map = new LinkedHashMap<>();
+        for (String id : ids_) {
+            if (StringUtils.isEmpty(id)) {
+                continue;
+            }
+            BizQuotation queryBizQuotation = new BizQuotation();
+            queryBizQuotation.setQuotationId(Long.parseLong(id));
+            List<BizQuotation> list = bizQuotationService.selectBizQuotationProductList(queryBizQuotation);
+            for (BizQuotation bizQuotation : list) {
+                Long productId = bizQuotation.getProductId();
+                if (map.containsKey(productId)) {
+                    BizQuotation oldQProduct = map.get(productId);
+                    bizQuotation.setProductNum(StringUtils.addDouble(bizQuotation.getProductNum(),oldQProduct.getProductNum()));
+                    bizQuotation.setActuatorNum(StringUtils.addDouble(bizQuotation.getActuatorNum(),oldQProduct.getActuatorNum()));
+                    bizQuotation.setProductRef1Num(StringUtils.addDouble(bizQuotation.getProductRef1Num(),oldQProduct.getProductRef1Num()));
+                    bizQuotation.setProductRef2Num(StringUtils.addDouble(bizQuotation.getProductRef2Num(),oldQProduct.getProductRef2Num()));
+                    bizQuotation.setPattachmentCount(StringUtils.addDouble(bizQuotation.getPattachmentCount(),oldQProduct.getPattachmentCount()));
+                    bizQuotation.setPattachment1Count(StringUtils.addDouble(bizQuotation.getPattachment1Count(),oldQProduct.getPattachment1Count()));
+                    bizQuotation.setPattachment2Count(StringUtils.addDouble(bizQuotation.getPattachment2Count(),oldQProduct.getPattachment2Count()));
+                    bizQuotation.setPattachment3Count(StringUtils.addDouble(bizQuotation.getPattachment3Count(),oldQProduct.getPattachment3Count()));
+                    bizQuotation.setPattachment4Count(StringUtils.addDouble(bizQuotation.getPattachment4Count(),oldQProduct.getPattachment4Count()));
+                    map.put(productId,bizQuotation);
+                } else {
+                    map.put(productId,bizQuotation);
+                }
+            }
+        }
+        for (Long productId : map.keySet()) {
+            BizQuotation bizQuotation = map.get(productId);
+            JSONObject json = new JSONObject();
+            json.put("quotationId",bizQuotation.getQuotationId());
+            json.put("quotationName",bizQuotation.getString1());
+            json.put("productId",bizQuotation.getProductId());
+            json.put("productName",bizQuotation.getProductName());
+            json.put("model",bizQuotation.getModel());
+            json.put("specifications",bizQuotation.getSpecifications());
+            json.put("nominalPressure",bizQuotation.getNominalPressure());
+            json.put("valvebodyMaterial",bizQuotation.getValvebodyMaterial());
+            json.put("valveElement",bizQuotation.getValveElement());
+            json.put("sealingMaterial",bizQuotation.getSealingMaterial());
+            json.put("driveForm",bizQuotation.getDriveForm());
+            json.put("connectionType",bizQuotation.getConnectionType());
+            json.put("productNum",bizQuotation.getProductNum());
+            json.put("productPrice",bizQuotation.getProductPrice());
+            json.put("productCoefficient",bizQuotation.getProductCoefficient());
+            json.put("actuatorId",bizQuotation.getActuatorId());
+            json.put("actuatorName",bizQuotation.getActuatorName());
+            json.put("actuatorPrice",bizQuotation.getActuatorPrice());
+            json.put("actuatorNum",bizQuotation.getActuatorNum());
+            json.put("actuatorCoefficient",bizQuotation.getActuatorCoefficient());
+            json.put("productRef1Id",bizQuotation.getProductRef1Id());
+            json.put("ref1Name",bizQuotation.getRef1Name());
+            json.put("ref1Price",bizQuotation.getRef1Price());
+            json.put("productRef1Num",bizQuotation.getProductRef1Num());
+            json.put("productRef1Coefficient",bizQuotation.getProductRef1Coefficient());
+            json.put("productRef2Id",bizQuotation.getProductRef2Id());
+            json.put("ref2Name",bizQuotation.getRef2Name());
+            json.put("ref2Price",bizQuotation.getRef2Price());
+            json.put("productRef2Num",bizQuotation.getProductRef2Num());
+            json.put("productRef2Coefficient",bizQuotation.getProductRef2Coefficient());
+
+            json.put("pattachmentId",bizQuotation.getPattachmentId());
+            json.put("pattachmentName",bizQuotation.getPattachmentName());
+            json.put("pattachmentPrice",bizQuotation.getPattachmentPrice());
+            json.put("pattachmentCount",bizQuotation.getPattachmentCount());
+            json.put("pattachmentCoefficient",bizQuotation.getPattachmentCoefficient());
+
+            json.put("pattachment1Id",bizQuotation.getPattachment1Id());
+            json.put("pattachment1Name",bizQuotation.getPattachment1Name());
+            json.put("pattachment1Price",bizQuotation.getPattachment1Price());
+            json.put("pattachment1Count",bizQuotation.getPattachment1Count());
+            json.put("pattachment1Coefficient",bizQuotation.getPattachment1Coefficient());
+
+            json.put("pattachment2Id",bizQuotation.getPattachment2Id());
+            json.put("pattachment2Name",bizQuotation.getPattachment2Name());
+            json.put("pattachment2Price",bizQuotation.getPattachment2Price());
+            json.put("pattachment2Count",bizQuotation.getPattachment2Count());
+            json.put("pattachment2Coefficient",bizQuotation.getPattachment2Coefficient());
+
+            json.put("pattachment3Id",bizQuotation.getPattachment3Id());
+            json.put("pattachment3Name",bizQuotation.getPattachment3Name());
+            json.put("pattachment3Price",bizQuotation.getPattachment3Price());
+            json.put("pattachment3Count",bizQuotation.getPattachment3Count());
+            json.put("pattachment3Coefficient",bizQuotation.getPattachment3Coefficient());
+
+            json.put("pattachment4Id",bizQuotation.getPattachment4Id());
+            json.put("pattachment4Name",bizQuotation.getPattachment4Name());
+            json.put("pattachment4Price",bizQuotation.getPattachment4Price());
+            json.put("pattachment4Count",bizQuotation.getPattachment4Count());
+            json.put("pattachment4Coefficient",bizQuotation.getPattachment4Coefficient());
+            json.put("string14","0");
+            json.put("string15","RAL5010高光");
+            jsonArray.add(json);
+        }
+        return jsonArray;
+    }
+
 
     @PostMapping("/excelData")
     @ResponseBody

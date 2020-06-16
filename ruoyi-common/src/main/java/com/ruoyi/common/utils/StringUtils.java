@@ -555,4 +555,31 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils
         }
         return result;                                                 //返回新的字符串
     }
+
+    public static String addDouble (String s,String s1) {
+        try {
+            if (StringUtils.isEmpty(s)) {
+                s = "0";
+            }
+            if (StringUtils.isEmpty(s1)) {
+                s1 = "0";
+            }
+
+            Double s2 = Double.parseDouble(s) + Double.parseDouble(s1);
+            return s2.toString();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return "0";
+    }
+    public static Double addDouble (Double s,Double s1) {
+        try {
+
+            Double s2 = s + s1;
+            return s2;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return new Double(0);
+    }
 }

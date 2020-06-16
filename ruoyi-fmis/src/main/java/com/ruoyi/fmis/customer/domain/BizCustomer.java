@@ -65,6 +65,47 @@ public class BizCustomer extends BaseEntity {
     @Getter
     private String string10;
 
+
+    @Setter
+    @Getter
+    private String string11;
+
+    @Setter
+    @Getter
+    private String string12;
+
+    @Setter
+    @Getter
+    private String string13;
+
+    @Setter
+    @Getter
+    private String string14;
+
+    @Setter
+    @Getter
+    private String string15;
+
+    @Setter
+    @Getter
+    private String string16;
+
+    @Setter
+    @Getter
+    private String string17;
+
+    @Setter
+    @Getter
+    private String string18;
+
+    @Setter
+    @Getter
+    private String string19;
+
+    @Setter
+    @Getter
+    private String string20;
+
     /**
      * 区域代码
      */

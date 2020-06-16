@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('报价单列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>状态：</p>
+                                <select name="string6" class="form-control m-b" >
+                                    <option value="0">全部</option>
+                                    <option value="1">待办</option>
+                                    <option value="2">已办</option>
+                                </select>
+                                <input type="hidden" name="customerId" id="customerId" th:value="${customerId}"/>
+                            </li>
+
+                            <li>
+                                <p>报价单号：</p>
+                                <input type="text" name="string1" id="string1"/>
+                            </li>
+
+                            <li>
+                                <p>客户名称：</p>
+                                <input type="text" name="customerName" id="customerName"/>
+                            </li>
+
+                            <li >
+                                <p>申请人：</p>
+                                <input type="text" name="createBy" id="createBy"/>
+                            </li>
+
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('fmis:quotation:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('fmis:quotation:remove')}]];
+        var prefix = ctx + "fmis/quotation";
+        var paymentMethodData = [[${@dict.getType('payment_method')}]];
+
+        var roleType = /*[[${roleType}]]*/;
+        var loginId = /*[[${loginId}]]*/;
+
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "报价单",
+                uniqueId: "quotationId",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'quotationId', 
+                    title : 'ID',
+                    visible: false
+                },
+                {
+                    field : 'string1',
+                    title : '报价单号'
+                },
+                {
+                    field : 'customerName',
+                    title : '客户名称'
+                },
+                {
+                    field : 'specialExpenses', 
+                    title : '特殊费用'
+                },
+                {
+                    field : 'paymentMethod', 
+                    title : '付款方式',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(paymentMethodData, value);
+                    }
+                },
+                {
+                    field : 'freight', 
+                    title : '运费价格'
+                },
+                {
+                    field : 'leadTime', 
+                    title : '供货周期'
+                },
+                {
+                    field : 'reportProject', 
+                    title : '报备项目 默认非项目'
+                },
+                {
+                    field : 'createBy',
+                    title : '申请人'
+                },
+                {
+                    field : 'string9',
+                    title : '总金额'
+                },
+                {
+                    field : 'remark', 
+                    title : '备注',
+                    visible: false
+                },
+                {
+                    field : 'flowStatus',
+                    title : '状态',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = '';
+                        var flowStatus = row.flowStatus;
+                        var normalFlag = row.normalFlag;
+                        var createBy = row.createById;
+
+                        if (flowStatus == "0") {
+                            actions = '未上报';
+                        } else if (flowStatus == "1") {
+                            actions = '<font color=#00bfff>销售员已上报</font>';
+                        } else if (flowStatus == "2") {
+                            actions = '<font color=green>销售经理同意</font>';
+                            if (flowStatus == normalFlag) {
+                                actions = '<font color=green>销售经理同意 已完成</font>';
+                            }
+                        } else if (flowStatus == "-2") {
+                            actions = '<font color=red>销售经理不同意</font>';
+                        } else if (flowStatus == "3") {
+                            actions = '<font color=green>区域经理同意</font>';
+                            if (flowStatus == normalFlag) {
+                                actions = '<font color=green>区域经理同意 已完成</font>';
+                            }
+                        } else if (flowStatus == "-3") {
+                            actions = '<font color=red>区域经理不同意</font>';
+                        } else if (flowStatus == "4") {
+                            actions = '<font color=green>副总同意</font>';
+                            if (flowStatus == normalFlag) {
+                                actions = '<font color=green>副总同意 已完成</font>';
+                            }
+                        } else if (flowStatus == "-4") {
+                            actions = '<font color=red>副总不同意</font>';
+                        } else if (flowStatus == "5") {
+                            actions = '<font color=green>总经理同意</font>';
+                            if (flowStatus == normalFlag) {
+                                actions = '<font color=green>总经理同意 已完成</font>';
+                            }
+                        } else if (flowStatus == "-5") {
+                            actions = '<font color=red>总经理不同意</font>';
+                        }
+
+                        if (flowStatus == normalFlag && loginId == createBy && flowStatus > 1) {
+                            actions = '<font color=green>已通过</font>';
+                        }
+
+                        console.log(actions + "---------" + createBy + "--" + loginId);
+                        return actions;
+                    }
+                },
+                {
+                    field : 'createTime',
+                    title : '创建时间'
+                },{
+                    field : 'updateTime',
+                    title : '修改时间'
+                }]
+            };
+            $.table.init(options);
+        });
+
+        function submitHandler() {
+            console.log("start...");
+            var rows = $.table.selectFirstColumns();
+            if (rows.length == 0) {
+                $.modal.alertWarning("请选择一条记录");
+                return;
+            }
+            var productJsonArray = [];
+            var selectRows = $.btTable.bootstrapTable('getSelections');
+
+            var rows = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
+            var data = { "ids": rows.join() };
+            var retJson = "";
+            $.ajax({
+                url: ctx + "fmis/quotation/addQuotationProduct?ids=" + rows.join(), //请求的url地址
+                dataType:"json", //返回格式为json
+                async:false,//请求是否异步，默认为异步，这也是ajax重要特性
+                type:"POST", //请求方式
+                success:function(retData){
+                    //请求成功时处理
+                    retJson = retData;
+                    parent.$('#form-data-add input[name=productsJsonParamter]').val(JSON.stringify(retData));
+                    parent.$('#form-data-edit input[name=productsJsonParamter]').val(JSON.stringify(retData));
+                    $.modal.close();
+                }
+            });
+
+        }
+
+    </script>
+</body>
+</html>

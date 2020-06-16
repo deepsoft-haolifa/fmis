@@ -68,6 +68,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         left join sys_dept dt on u.dept_id=dt.dept_id
 
         where p.del_flag = '0'
+        <!-- left join sys_dict_data dd1 on dd1.dict_type='product_level' and dd1.dict_value=c.string2 -->
         <!-- 数据范围过滤 ${params.dataScope}-->
 
     </sql>

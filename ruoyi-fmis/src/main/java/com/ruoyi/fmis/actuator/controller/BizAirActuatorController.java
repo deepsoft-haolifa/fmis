@@ -72,6 +72,8 @@ public class BizAirActuatorController extends BaseController {
 
         BizProduct bizProduct = bizProductService.selectBizProductById(Long.parseLong(productId));
 
+        bizProduct = null;
+
         if (bizProduct != null) {
             String specifications = bizProduct.getSpecifications();
 

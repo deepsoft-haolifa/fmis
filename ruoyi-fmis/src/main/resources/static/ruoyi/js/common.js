@@ -258,6 +258,7 @@ function AmountKeyUp (obj) {
 }
 
 
+
 /** 设置全局ajax处理 */
 $.ajaxSetup({
     complete: function(XMLHttpRequest, textStatus) {

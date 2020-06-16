@@ -773,3 +773,68 @@ alter table biz_quotation_product add column string15 varchar(100);
 
 
 
+
+alter table biz_process_child add column pattachment_id bigint(20);
+alter table biz_process_child add column pattachment_count decimal(19,5);
+alter table biz_process_child add column pattachment_price decimal(19,5);
+alter table biz_process_child add column pattachment_coefficient decimal(19,5);
+
+alter table biz_process_child add column pattachment1_id bigint(20);
+alter table biz_process_child add column pattachment1_count decimal(19,5);
+alter table biz_process_child add column pattachment1_price decimal(19,5);
+alter table biz_process_child add column pattachment1_coefficient decimal(19,5);
+
+alter table biz_process_child add column pattachment2_id bigint(20);
+alter table biz_process_child add column pattachment2_count decimal(19,5);
+alter table biz_process_child add column pattachment2_price decimal(19,5);
+alter table biz_process_child add column pattachment2_coefficient decimal(19,5);
+
+alter table biz_process_child add column pattachment3_id bigint(20);
+alter table biz_process_child add column pattachment3_count decimal(19,5);
+alter table biz_process_child add column pattachment3_price decimal(19,5);
+alter table biz_process_child add column pattachment3_coefficient decimal(19,5);
+
+alter table biz_process_child add column pattachment4_id bigint(20);
+alter table biz_process_child add column pattachment4_count decimal(19,5);
+alter table biz_process_child add column pattachment4_price decimal(19,5);
+alter table biz_process_child add column pattachment4_coefficient decimal(19,5);
+
+
+
+alter table biz_customer add column string11 varchar(100);
+alter table biz_customer add column string12 varchar(100);
+alter table biz_customer add column string13 varchar(100);
+alter table biz_customer add column string14 varchar(100);
+alter table biz_customer add column string15 varchar(100);
+alter table biz_customer add column string16 varchar(100);
+alter table biz_customer add column string17 varchar(100);
+alter table biz_customer add column string18 varchar(100);
+alter table biz_customer add column string19 varchar(100);
+alter table biz_customer add column string20 varchar(100);
+
+
+
+
+-- 采购管理 SQL start
+insert into sys_menu (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('采购管理', '0', '30', '#', 'M', '0', '', 'fa fa-folder', 'admin', '2020-06-08', 'admin', '2020-06-08', '');
+
+SELECT @parentIdFP :=  menu_id from sys_menu where menu_name='采购管理' and parent_id=0 and order_num='30';
+
+
+insert into sys_menu (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('整机采购', @parentIdFP, '20', '#', 'M', '0', '', '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+SELECT @parentIdF :=  menu_id from sys_menu where menu_name='整机采购' and menu_type='M' and order_num='20';
+
+-- 采购池
+-- 菜单 SQL
+
+insert into sys_menu (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('采购池', @parentIdF, '10', '/fmis/procurementpool', 'C', '0', 'fmis:procurementpool:view', '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '业务菜单');
+
+-- 按钮父菜单ID
+SELECT @parentId := LAST_INSERT_ID();
+-- 按钮 SQL
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('业务查询', @parentId, '1',  '#',  'F', '0', 'fmis:procurementpool:list',         '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');

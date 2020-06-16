@@ -43,10 +43,54 @@ public class BizProcessChildServiceImpl implements IBizProcessChildService {
     }
 
     @Override
+    public List<BizProcessChild> selectBizChildProductList(BizProcessChild bizProcessChild) {
+        return bizProcessChildMapper.selectBizChildProductList(bizProcessChild);
+    }
+
+    @Override
+    public List<BizProcessChild> selectBizChildActuatorList(BizProcessChild bizProcessChild) {
+        return bizProcessChildMapper.selectBizChildActuatorList(bizProcessChild);
+    }
+
+    @Override
+    public List<BizProcessChild> selectBizChildRef1List(BizProcessChild bizProcessChild) {
+        return bizProcessChildMapper.selectBizChildRef1List(bizProcessChild);
+    }
+
+    @Override
+    public List<BizProcessChild> selectBizChildRef2List(BizProcessChild bizProcessChild) {
+        return bizProcessChildMapper.selectBizChildRef2List(bizProcessChild);
+    }
+
+    @Override
+    public List<BizProcessChild> selectBizChildPAList(BizProcessChild bizProcessChild) {
+        return bizProcessChildMapper.selectBizChildPAList(bizProcessChild);
+    }
+
+    @Override
+    public List<BizProcessChild> selectBizChildPA1List(BizProcessChild bizProcessChild) {
+        return bizProcessChildMapper.selectBizChildPA1List(bizProcessChild);
+    }
+
+    @Override
+    public List<BizProcessChild> selectBizChildPA2List(BizProcessChild bizProcessChild) {
+        return bizProcessChildMapper.selectBizChildPA2List(bizProcessChild);
+    }
+
+    @Override
+    public List<BizProcessChild> selectBizChildPA3List(BizProcessChild bizProcessChild) {
+        return bizProcessChildMapper.selectBizChildPA3List(bizProcessChild);
+    }
+
+    @Override
+    public List<BizProcessChild> selectBizChildPA4List(BizProcessChild bizProcessChild) {
+        return bizProcessChildMapper.selectBizChildPA4List(bizProcessChild);
+    }
+
+    @Override
     public List<BizProcessChild> selectBizQuotationProductList(BizProcessChild bizProcessChild) {
         return bizProcessChildMapper.selectBizQuotationProductList(bizProcessChild);
     }
-
     /**
      * 新增流程数据字
      *

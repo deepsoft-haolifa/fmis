@@ -29,7 +29,23 @@ public interface BizProcessChildMapper {
 
     public List<BizProcessChild> selectBizQuotationProductList(BizProcessChild bizProcessChild);
 
+    public List<BizProcessChild> selectBizChildProductList(BizProcessChild bizProcessChild);
 
+    public List<BizProcessChild> selectBizChildActuatorList(BizProcessChild bizProcessChild);
+
+    public List<BizProcessChild> selectBizChildRef1List(BizProcessChild bizProcessChild);
+
+    public List<BizProcessChild> selectBizChildRef2List(BizProcessChild bizProcessChild);
+
+    public List<BizProcessChild> selectBizChildPAList(BizProcessChild bizProcessChild);
+
+    public List<BizProcessChild> selectBizChildPA1List(BizProcessChild bizProcessChild);
+
+    public List<BizProcessChild> selectBizChildPA2List(BizProcessChild bizProcessChild);
+
+    public List<BizProcessChild> selectBizChildPA3List(BizProcessChild bizProcessChild);
+
+    public List<BizProcessChild> selectBizChildPA4List(BizProcessChild bizProcessChild);
     /**
      * 新增流程数据字
      *
