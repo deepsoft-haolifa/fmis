@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改数据状态')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-status-edit" th:object="${bizDataStatus}">
+            <input name="statusId" th:field="*{statusId}" type="hidden">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">1=采购：</label>
+                <div class="col-sm-8">
+                    <select name="type" class="form-control m-b">
+                        <option value="">所有</option>
+                    </select>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">关联ID 关联 child表 将来也可以关联dataId：</label>
+                <div class="col-sm-8">
+                    <input name="childId" th:field="*{childId}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">例如合同状态 0=未处理 1=已处理：</label>
+                <div class="col-sm-8">
+                    <div class="radio-box">
+                        <input type="radio" name="dataStatus" value="">
+                        <label th:for="dataStatus" th:text="未知"></label>
+                    </div>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">产品 0=未处理 1=已处理：</label>
+                <div class="col-sm-8">
+                    <div class="radio-box">
+                        <input type="radio" name="productStatus" value="">
+                        <label th:for="productStatus" th:text="未知"></label>
+                    </div>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">执行器 0=未处理 1=已处理：</label>
+                <div class="col-sm-8">
+                    <div class="radio-box">
+                        <input type="radio" name="actuatorStatus" value="">
+                        <label th:for="actuatorStatus" th:text="未知"></label>
+                    </div>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">法兰 0=未处理 1=已处理：</label>
+                <div class="col-sm-8">
+                    <div class="radio-box">
+                        <input type="radio" name="ref1Status" value="">
+                        <label th:for="ref1Status" th:text="未知"></label>
+                    </div>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">螺栓 0=未处理 1=已处理：</label>
+                <div class="col-sm-8">
+                    <div class="radio-box">
+                        <input type="radio" name="ref2Status" value="">
+                        <label th:for="ref2Status" th:text="未知"></label>
+                    </div>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">定位器 0=未处理 1=已处理：</label>
+                <div class="col-sm-8">
+                    <div class="radio-box">
+                        <input type="radio" name="pStatus" value="">
+                        <label th:for="pStatus" th:text="未知"></label>
+                    </div>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">电磁阀 0=未处理 1=已处理：</label>
+                <div class="col-sm-8">
+                    <div class="radio-box">
+                        <input type="radio" name="p1Status" value="">
+                        <label th:for="p1Status" th:text="未知"></label>
+                    </div>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">回信器数 0=未处理 1=已处理：</label>
+                <div class="col-sm-8">
+                    <div class="radio-box">
+                        <input type="radio" name="p2Status" value="">
+                        <label th:for="p2Status" th:text="未知"></label>
+                    </div>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">气源三连件 0=未处理 1=已处理：</label>
+                <div class="col-sm-8">
+                    <div class="radio-box">
+                        <input type="radio" name="p3Status" value="">
+                        <label th:for="p3Status" th:text="未知"></label>
+                    </div>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">可离合减速器 0=未处理 1=已处理：</label>
+                <div class="col-sm-8">
+                    <div class="radio-box">
+                        <input type="radio" name="p4Status" value="">
+                        <label th:for="p4Status" th:text="未知"></label>
+                    </div>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">备用1：</label>
+                <div class="col-sm-8">
+                    <input name="string1" th:field="*{string1}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">备用2：</label>
+                <div class="col-sm-8">
+                    <input name="string2" th:field="*{string2}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">备用3：</label>
+                <div class="col-sm-8">
+                    <input name="string3" th:field="*{string3}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">备用4：</label>
+                <div class="col-sm-8">
+                    <input name="string4" th:field="*{string4}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">备用5：</label>
+                <div class="col-sm-8">
+                    <input name="string5" th:field="*{string5}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">备用6：</label>
+                <div class="col-sm-8">
+                    <input name="string6" th:field="*{string6}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">备用7：</label>
+                <div class="col-sm-8">
+                    <input name="string7" th:field="*{string7}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">备用8：</label>
+                <div class="col-sm-8">
+                    <input name="string8" th:field="*{string8}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">备用9：</label>
+                <div class="col-sm-8">
+                    <input name="string9" th:field="*{string9}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">备用10：</label>
+                <div class="col-sm-8">
+                    <input name="string10" th:field="*{string10}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">状态：</label>
+                <div class="col-sm-8">
+                    <div class="radio-box">
+                        <input type="radio" name="status" value="">
+                        <label th:for="status" th:text="未知"></label>
+                    </div>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "fmis/status";
+        $("#form-status-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-status-edit').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

@@ -24,6 +24,121 @@ public class BizProcessChild extends BaseEntity {
 
     @Getter
     @Setter
+    private String productStatus;
+    @Getter
+    @Setter
+    private String dataStatus;
+    @Getter
+    @Setter
+    private String actuatorStatus;
+    @Getter
+    @Setter
+    private String ref1Status;
+    @Getter
+    @Setter
+    private String ref2Status;
+    @Getter
+    @Setter
+    private String pStatus;
+    @Getter
+    @Setter
+    private String p1Status;
+    @Getter
+    @Setter
+    private String p2Status;
+    @Getter
+    @Setter
+    private String p3Status;
+    @Getter
+    @Setter
+    private String p4Status;
+
+
+
+    //回货时间
+    @Getter
+    @Setter
+    private String goodsTime;
+
+    @Getter
+    @Setter
+    private String bh;
+    @Getter
+    @Setter
+    private String chineseName;
+    @Getter
+    @Setter
+    private String chineseSpecifications;
+    @Getter
+    @Setter
+    private String englishName;
+    @Getter
+    @Setter
+    private String englishSpecifications;
+    @Getter
+    @Setter
+    private String chinesePackaging;
+    @Getter
+    @Setter
+    private String englishPackaging;
+    @Getter
+    @Setter
+    private String chineseUnit;
+    @Getter
+    @Setter
+    private String englishUnit;
+    @Getter
+    @Setter
+    private String pressure;
+    @Getter
+    @Setter
+    private String material;
+    @Getter
+    @Setter
+    private String barCode;
+    @Getter
+    @Setter
+    private String customsBh;
+    @Getter
+    @Setter
+    private String handlingFee;
+    @Getter
+    @Setter
+    private String color;
+    @Getter
+    @Setter
+    private String developer;
+    @Getter
+    @Setter
+    private String goodsCategory;
+    @Getter
+    @Setter
+    private String supplierName;
+    @Getter
+    @Setter
+    private Double procurementPrice;
+
+
+
+    @Getter
+    @Setter
+    private String ref1String2;
+    @Getter
+    @Setter
+    private String ref1Specifications;
+    @Getter
+    @Setter
+    private String ref1ValvebodyMaterial;
+    @Getter
+    @Setter
+    private String ref1MaterialRequire;
+    @Getter
+    @Setter
+    private String suppliersName;
+
+
+    @Getter
+    @Setter
     private String actuatorBrand;
     @Getter
     @Setter
@@ -63,7 +178,7 @@ public class BizProcessChild extends BaseEntity {
     private String actuatorExplosionLevel;
     @Getter
     @Setter
-    private String actuatorString5;
+    private String actuatorString6;
 
 
 

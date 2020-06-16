@@ -214,6 +214,12 @@
                     {field : 'productId',title : '产品ID',visible: false},
                     {field : 'productName',title : '产品名称',editable: false,width: 100},
                     {field : 'model',title : '型号',editable: false,width: 200},
+                    {field : 'productNum',title : '数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 80},
+                    {field : 'productStatus',title : '采购状态',editable: false,width: 100,
+                        formatter: function(value, row, index) {
+                            var status = row.productStatus;
+                            if (status == "1") {return "已处理"} else {return "<font color=green>未处理</font>"}
+                        }},
                     {field : 'specifications',title : '规格',editable: false,width: 100},
                     {field : 'nominalPressure',title : '压力',editable: false,width: 100},
                     {field : 'valvebodyMaterial',title : '阀体',editable: false,width: 100},
@@ -222,8 +228,8 @@
                     {field : 'driveForm',title : '驱动形式',editable: false,width: 100},
                     {field : 'connectionType',title : '连接方式',editable: false,width: 100},
                     {field : 'productProcurementPrice',title : '采购价',editable: false,width: 100},
-                    {field : 'productNum',title : '数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 80},
-                    {field : 'supplier',title : '供应商',editable: false,width: 300},
+                    {field : 'goodsTime',title : '回货时间',editable: false,width: 100},
+                    {field : 'supplier',title : '供应商',editable: false,width: 300}
 
 
                 ]
@@ -249,8 +255,14 @@
                     {field : 'actuatorId',title : 'actuatorId',visible: false},
                     {field : 'actuatorName',title : '执行器名称',editable: false,width: 150},
                     {field : 'actuatorPrice',title : '执行器价格',editable: false,width: 100},
-                    {field : 'actuatorString5',title : '采购价',editable: false,width: 100},
+                    {field : 'actuatorString6',title : '采购价',editable: false,width: 100},
                     {field : 'actuatorNum',title : '执行器数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 100},
+                    {field : 'actuatorStatus',title : '采购状态',editable: false,width: 100,
+                        formatter: function(value, row, index) {
+                            var status = row.actuatorStatus;
+                            if (status == "1") {return "已处理"} else {return "<font color=green>未处理</font>"}
+                        }},
+                    {field : 'goodsTime',title : '回货时间',editable: false,width: 100},
                     {
                         field : 'actuatorBrand',
                         title : '执行器品牌',width: 100
@@ -309,7 +321,7 @@
                 ]
             });
         };
-
+        var string2Datas = [[${@dict.getType('product_level')}]];
         initChildRef1Table = function(index, row, $detail) {
             var cur_table = $detail.html('<table style="table-layout:fixed"></table>').find('table');
             console.log("dataId1=" + row["dataId"]);
@@ -329,7 +341,19 @@
                     {field : 'productRef1Id',title : 'ref1Id',visible: false},
                     {field : 'ref1Name',title : '法兰名称',editable: false,width: 100},
                     {field : 'ref1Price',title : '法兰价格',editable: false,width: 100},
-                    {field : 'productRef1Num',title : '法兰数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 100}
+                    {field : 'ref1String2',title : '采购价',editable: false,width: 100},
+                    {field : 'productRef1Num',title : '法兰数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 100},
+                    {field : 'ref1Status',title : '采购状态',editable: false,width: 100,
+                        formatter: function(value, row, index) {
+                            var status = row.ref1Status;
+                            if (status == "1") {return "已处理"} else {return "<font color=green>未处理</font>"}
+                        }},
+                    {field : 'goodsTime',title : '回货时间',editable: false,width: 100},
+                    {field : 'model',title : '型号',width: 100},
+                    {field : 'ref1Specifications',title : '规格',width: 100},
+                    {field : 'ref1ValvebodyMaterial',title : '材质',width: 100},
+                    {field : 'ref1MaterialRequire',title : '材质要求',width: 300},
+                    {field : 'suppliersName',title : '供应商',width: 200}
                 ]
             });
         };
@@ -353,7 +377,19 @@
                     {field : 'productRef2Id',title : 'ref2Id',visible: false},
                     {field : 'ref2Name',title : '螺栓名称',editable: {type: 'text',emptytext: '空',disabled: true},width: 100},
                     {field : 'ref2Price',title : '螺栓价格',editable: false,width: 100},
-                    {field : 'productRef2Num',title : '螺栓数量',editable: {type: 'text',emptytext: '0',validate: function(v){ return numberValidate(v)}},width: 100}
+                    {field : 'ref1String2',title : '采购价',editable: false,width: 100},
+                    {field : 'productRef2Num',title : '螺栓数量',editable: {type: 'text',emptytext: '0',validate: function(v){ return numberValidate(v)}},width: 100},
+                    {field : 'ref2Status',title : '采购状态',editable: false,width: 100,
+                        formatter: function(value, row, index) {
+                            var status = row.ref2Status;
+                            if (status == "1") {return "已处理"} else {return "<font color=green>未处理</font>"}
+                        }},
+                    {field : 'goodsTime',title : '回货时间',editable: false,width: 100},
+                    {field : 'model',title : '型号',width: 100},
+                    {field : 'ref1Specifications',title : '规格',width: 100},
+                    {field : 'ref1ValvebodyMaterial',title : '材质',width: 100},
+                    {field : 'ref1MaterialRequire',title : '材质要求',width: 300},
+                    {field : 'suppliersName',title : '供应商',width: 200}
                 ]
             });
         };
@@ -375,9 +411,87 @@
                     checkbox: true
                 },{field : 'rowId',title : '序号',width: 20,visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
                     {field : 'pattachmentId',title : 'pattachmentId',visible: false},
-                    {field : 'pattachmentName',title : '定位器',editable: true,width: 100},
                     {field : 'pattachmentPrice',title : '定位器价格',editable: false,width: 100},
-                    {field : 'pattachmentCount',title : '定位器数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 100}
+                    {field : 'procurementPrice',title : '采购价',editable: false,width: 100},
+                    {field : 'pattachmentCount',title : '定位器数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 100},
+                    {field : 'pStatus',title : '采购状态',editable: false,width: 100,
+                        formatter: function(value, row, index) {
+                            var status = row.pStatus;
+                            if (status == "1") {return "已处理"} else {return "<font color=green>未处理</font>"}
+                        }},
+                    {field : 'goodsTime',title : '回货时间',editable: false,width: 100},
+                    {
+                        field : 'bh',
+                        title : '商品编号',width: 100
+                    },
+                    {
+                        field : 'chineseName',
+                        title : '中文品名',width: 100
+                    },
+                    {
+                        field : 'chineseSpecifications',
+                        title : '中文规格',width: 100
+                    },
+                    {
+                        field : 'englishName',
+                        title : '英文品名',width: 100
+                    },
+                    {
+                        field : 'englishSpecifications',
+                        title : '英文规格',width: 100
+                    },
+                    {
+                        field : 'chinesePackaging',
+                        title : '中文包装',width: 100
+                    },
+                    {
+                        field : 'englishPackaging',
+                        title : '英文包装',width: 100
+                    },
+                    {
+                        field : 'chineseUnit',
+                        title : '中文单位',width: 100
+                    },
+                    {
+                        field : 'englishUnit',
+                        title : '英文单位',width: 100
+                    },
+                    {
+                        field : 'pressure',
+                        title : '压力',width: 100
+                    },
+                    {
+                        field : 'material',
+                        title : '材质',width: 100
+                    },
+                    {
+                        field : 'barCode',
+                        title : '条形码',width: 100
+                    },
+                    {
+                        field : 'customsBh',
+                        title : '海关编码',width: 100
+                    },
+                    {
+                        field : 'handlingFee',
+                        title : '操作费',width: 100
+                    },
+                    {
+                        field : 'color',
+                        title : '颜色',width: 100
+                    },
+                    {
+                        field : 'developer',
+                        title : '开发人员',width: 100
+                    },
+                    {
+                        field : 'goodsCategory',
+                        title : '商品分类',width: 100
+                    },
+                    {
+                        field : 'supplierName',
+                        title : '供应商',width: 100
+                    }
                 ]
             });
         };
@@ -399,9 +513,87 @@
                     checkbox: true
                 },{field : 'rowId',title : '序号',width: 20,visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
                     {field : 'pattachment1Id',title : 'pattachment1Id',visible: false},
-                    {field : 'pattachment1Name',title : '电磁阀',editable: true,width: 100},
                     {field : 'pattachment1Price',title : '电磁阀价格',editable: false,width: 100},
-                    {field : 'pattachment1Count',title : '电磁阀数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 100}
+                    {field : 'procurementPrice',title : '采购价',editable: false,width: 100},
+                    {field : 'pattachment1Count',title : '电磁阀数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 100},
+                    {field : 'p1Status',title : '采购状态',editable: false,width: 100,
+                        formatter: function(value, row, index) {
+                            var status = row.p1Status;
+                            if (status == "1") {return "已处理"} else {return "<font color=green>未处理</font>"}
+                        }},
+                    {field : 'goodsTime',title : '回货时间',editable: false,width: 100},
+                    {
+                        field : 'bh',
+                        title : '商品编号',width: 100
+                    },
+                    {
+                        field : 'chineseName',
+                        title : '中文品名',width: 100
+                    },
+                    {
+                        field : 'chineseSpecifications',
+                        title : '中文规格',width: 100
+                    },
+                    {
+                        field : 'englishName',
+                        title : '英文品名',width: 100
+                    },
+                    {
+                        field : 'englishSpecifications',
+                        title : '英文规格',width: 100
+                    },
+                    {
+                        field : 'chinesePackaging',
+                        title : '中文包装',width: 100
+                    },
+                    {
+                        field : 'englishPackaging',
+                        title : '英文包装',width: 100
+                    },
+                    {
+                        field : 'chineseUnit',
+                        title : '中文单位',width: 100
+                    },
+                    {
+                        field : 'englishUnit',
+                        title : '英文单位',width: 100
+                    },
+                    {
+                        field : 'pressure',
+                        title : '压力',width: 100
+                    },
+                    {
+                        field : 'material',
+                        title : '材质',width: 100
+                    },
+                    {
+                        field : 'barCode',
+                        title : '条形码',width: 100
+                    },
+                    {
+                        field : 'customsBh',
+                        title : '海关编码',width: 100
+                    },
+                    {
+                        field : 'handlingFee',
+                        title : '操作费',width: 100
+                    },
+                    {
+                        field : 'color',
+                        title : '颜色',width: 100
+                    },
+                    {
+                        field : 'developer',
+                        title : '开发人员',width: 100
+                    },
+                    {
+                        field : 'goodsCategory',
+                        title : '商品分类',width: 100
+                    },
+                    {
+                        field : 'supplierName',
+                        title : '供应商',width: 100
+                    }
                 ]
             });
         };
@@ -423,9 +615,87 @@
                     checkbox: true
                 },{field : 'rowId',title : '序号',width: 20,visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
                     {field : 'pattachment2Id',title : 'pattachment2Id',visible: false},
-                    {field : 'pattachment2Name',title : '回信器数',editable: true,width: 100},
                     {field : 'pattachment2Price',title : '回信器数价格',editable: false,width: 100},
-                    {field : 'pattachment2Count',title : '回信器数数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 100}
+                    {field : 'procurementPrice',title : '采购价',editable: false,width: 100},
+                    {field : 'pattachment2Count',title : '回信器数数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 100},
+                    {field : 'p2Status',title : '采购状态',editable: false,width: 100,
+                        formatter: function(value, row, index) {
+                            var status = row.p2Status;
+                            if (status == "1") {return "已处理"} else {return "<font color=green>未处理</font>"}
+                        }},
+                    {field : 'goodsTime',title : '回货时间',editable: false,width: 100},
+                    {
+                        field : 'bh',
+                        title : '商品编号',width: 100
+                    },
+                    {
+                        field : 'chineseName',
+                        title : '中文品名',width: 100
+                    },
+                    {
+                        field : 'chineseSpecifications',
+                        title : '中文规格',width: 100
+                    },
+                    {
+                        field : 'englishName',
+                        title : '英文品名',width: 100
+                    },
+                    {
+                        field : 'englishSpecifications',
+                        title : '英文规格',width: 100
+                    },
+                    {
+                        field : 'chinesePackaging',
+                        title : '中文包装',width: 100
+                    },
+                    {
+                        field : 'englishPackaging',
+                        title : '英文包装',width: 100
+                    },
+                    {
+                        field : 'chineseUnit',
+                        title : '中文单位',width: 100
+                    },
+                    {
+                        field : 'englishUnit',
+                        title : '英文单位',width: 100
+                    },
+                    {
+                        field : 'pressure',
+                        title : '压力',width: 100
+                    },
+                    {
+                        field : 'material',
+                        title : '材质',width: 100
+                    },
+                    {
+                        field : 'barCode',
+                        title : '条形码',width: 100
+                    },
+                    {
+                        field : 'customsBh',
+                        title : '海关编码',width: 100
+                    },
+                    {
+                        field : 'handlingFee',
+                        title : '操作费',width: 100
+                    },
+                    {
+                        field : 'color',
+                        title : '颜色',width: 100
+                    },
+                    {
+                        field : 'developer',
+                        title : '开发人员',width: 100
+                    },
+                    {
+                        field : 'goodsCategory',
+                        title : '商品分类',width: 100
+                    },
+                    {
+                        field : 'supplierName',
+                        title : '供应商',width: 100
+                    }
                 ]
             });
         };
@@ -447,9 +717,87 @@
                     checkbox: true
                 },{field : 'rowId',title : '序号',width: 20,visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
                     {field : 'pattachment3Id',title : 'pattachment3Id',visible: false},
-                    {field : 'pattachment3Name',title : '气源三连件',editable: true,width: 100},
                     {field : 'pattachment3Price',title : '气源三连件价格',editable: false,width: 100},
-                    {field : 'pattachment3Count',title : '气源三连件数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 100}
+                    {field : 'procurementPrice',title : '采购价',editable: false,width: 100},
+                    {field : 'pattachment3Count',title : '气源三连件数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 100},
+                    {field : 'p3Status',title : '采购状态',editable: false,width: 100,
+                        formatter: function(value, row, index) {
+                            var status = row.p3Status;
+                            if (status == "1") {return "已处理"} else {return "<font color=green>未处理</font>"}
+                        }},
+                    {field : 'goodsTime',title : '回货时间',editable: false,width: 100},
+                    {
+                        field : 'bh',
+                        title : '商品编号',width: 100
+                    },
+                    {
+                        field : 'chineseName',
+                        title : '中文品名',width: 100
+                    },
+                    {
+                        field : 'chineseSpecifications',
+                        title : '中文规格',width: 100
+                    },
+                    {
+                        field : 'englishName',
+                        title : '英文品名',width: 100
+                    },
+                    {
+                        field : 'englishSpecifications',
+                        title : '英文规格',width: 100
+                    },
+                    {
+                        field : 'chinesePackaging',
+                        title : '中文包装',width: 100
+                    },
+                    {
+                        field : 'englishPackaging',
+                        title : '英文包装',width: 100
+                    },
+                    {
+                        field : 'chineseUnit',
+                        title : '中文单位',width: 100
+                    },
+                    {
+                        field : 'englishUnit',
+                        title : '英文单位',width: 100
+                    },
+                    {
+                        field : 'pressure',
+                        title : '压力',width: 100
+                    },
+                    {
+                        field : 'material',
+                        title : '材质',width: 100
+                    },
+                    {
+                        field : 'barCode',
+                        title : '条形码',width: 100
+                    },
+                    {
+                        field : 'customsBh',
+                        title : '海关编码',width: 100
+                    },
+                    {
+                        field : 'handlingFee',
+                        title : '操作费',width: 100
+                    },
+                    {
+                        field : 'color',
+                        title : '颜色',width: 100
+                    },
+                    {
+                        field : 'developer',
+                        title : '开发人员',width: 100
+                    },
+                    {
+                        field : 'goodsCategory',
+                        title : '商品分类',width: 100
+                    },
+                    {
+                        field : 'supplierName',
+                        title : '供应商',width: 100
+                    }
                 ]
             });
         };
@@ -471,9 +819,87 @@
                     checkbox: true
                 },{field : 'rowId',title : '序号',width: 20,visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
                     {field : 'pattachment4Id',title : 'pattachment4Id',visible: false},
-                    {field : 'pattachment4Name',title : '可离合减速器',editable: true,width: 100},
                     {field : 'pattachment4Price',title : '可离合减速器价格',editable: false,width: 100},
-                    {field : 'pattachment4Count',title : '可离合减速器数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 100}
+                    {field : 'procurementPrice',title : '采购价',editable: false,width: 100},
+                    {field : 'pattachment4Count',title : '可离合减速器数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 100},
+                    {field : 'p4Status',title : '采购状态',editable: false,width: 100,
+                        formatter: function(value, row, index) {
+                            var status = row.p4Status;
+                            if (status == "1") {return "已处理"} else {return "<font color=green>未处理</font>"}
+                        }},
+                    {field : 'goodsTime',title : '回货时间',editable: false,width: 100},
+                    {
+                        field : 'bh',
+                        title : '商品编号',width: 100
+                    },
+                    {
+                        field : 'chineseName',
+                        title : '中文品名',width: 100
+                    },
+                    {
+                        field : 'chineseSpecifications',
+                        title : '中文规格',width: 100
+                    },
+                    {
+                        field : 'englishName',
+                        title : '英文品名',width: 100
+                    },
+                    {
+                        field : 'englishSpecifications',
+                        title : '英文规格',width: 100
+                    },
+                    {
+                        field : 'chinesePackaging',
+                        title : '中文包装',width: 100
+                    },
+                    {
+                        field : 'englishPackaging',
+                        title : '英文包装',width: 100
+                    },
+                    {
+                        field : 'chineseUnit',
+                        title : '中文单位',width: 100
+                    },
+                    {
+                        field : 'englishUnit',
+                        title : '英文单位',width: 100
+                    },
+                    {
+                        field : 'pressure',
+                        title : '压力',width: 100
+                    },
+                    {
+                        field : 'material',
+                        title : '材质',width: 100
+                    },
+                    {
+                        field : 'barCode',
+                        title : '条形码',width: 100
+                    },
+                    {
+                        field : 'customsBh',
+                        title : '海关编码',width: 100
+                    },
+                    {
+                        field : 'handlingFee',
+                        title : '操作费',width: 100
+                    },
+                    {
+                        field : 'color',
+                        title : '颜色',width: 100
+                    },
+                    {
+                        field : 'developer',
+                        title : '开发人员',width: 100
+                    },
+                    {
+                        field : 'goodsCategory',
+                        title : '商品分类',width: 100
+                    },
+                    {
+                        field : 'supplierName',
+                        title : '供应商',width: 100
+                    }
                 ]
             });
         };

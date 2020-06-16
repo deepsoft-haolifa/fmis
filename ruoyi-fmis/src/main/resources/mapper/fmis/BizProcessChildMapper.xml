@@ -1,54 +1,54 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.fmis.child.mapper.BizProcessChildMapper">
-    
+
     <resultMap type="BizProcessChild" id="BizProcessChildResult">
-        <result property="childId"    column="child_id"    />
-        <result property="dataId"    column="data_id"    />
-        <result property="remark"    column="remark"    />
-        <result property="price1"    column="price1"    />
-        <result property="price2"    column="price2"    />
-        <result property="price3"    column="price3"    />
-        <result property="price4"    column="price4"    />
-        <result property="price5"    column="price5"    />
-        <result property="price6"    column="price6"    />
-        <result property="price7"    column="price7"    />
-        <result property="price8"    column="price8"    />
-        <result property="price9"    column="price9"    />
-        <result property="price10"    column="price10"    />
-        <result property="string1"    column="string1"    />
-        <result property="string2"    column="string2"    />
-        <result property="string3"    column="string3"    />
-        <result property="string4"    column="string4"    />
-        <result property="string5"    column="string5"    />
-        <result property="string6"    column="string6"    />
-        <result property="string7"    column="string7"    />
-        <result property="string8"    column="string8"    />
-        <result property="string9"    column="string9"    />
-        <result property="string10"    column="string10"    />
-        <result property="string11"    column="string11"    />
-        <result property="string12"    column="string12"    />
-        <result property="string13"    column="string13"    />
-        <result property="string14"    column="string14"    />
-        <result property="string15"    column="string15"    />
-        <result property="string16"    column="string16"    />
-        <result property="string17"    column="string17"    />
-        <result property="string18"    column="string18"    />
-        <result property="string19"    column="string19"    />
-        <result property="string20"    column="string20"    />
-        <result property="datetime1"    column="datetime1"    />
-        <result property="datetime2"    column="datetime2"    />
-        <result property="datetime3"    column="datetime3"    />
-        <result property="datetime4"    column="datetime4"    />
-        <result property="datetime5"    column="datetime5"    />
-        <result property="status"    column="status"    />
-        <result property="delFlag"    column="del_flag"    />
-        <result property="createBy"    column="create_by"    />
-        <result property="createTime"    column="create_time"    />
-        <result property="updateBy"    column="update_by"    />
-        <result property="updateTime"    column="update_time"    />
+        <result property="childId" column="child_id"/>
+        <result property="dataId" column="data_id"/>
+        <result property="remark" column="remark"/>
+        <result property="price1" column="price1"/>
+        <result property="price2" column="price2"/>
+        <result property="price3" column="price3"/>
+        <result property="price4" column="price4"/>
+        <result property="price5" column="price5"/>
+        <result property="price6" column="price6"/>
+        <result property="price7" column="price7"/>
+        <result property="price8" column="price8"/>
+        <result property="price9" column="price9"/>
+        <result property="price10" column="price10"/>
+        <result property="string1" column="string1"/>
+        <result property="string2" column="string2"/>
+        <result property="string3" column="string3"/>
+        <result property="string4" column="string4"/>
+        <result property="string5" column="string5"/>
+        <result property="string6" column="string6"/>
+        <result property="string7" column="string7"/>
+        <result property="string8" column="string8"/>
+        <result property="string9" column="string9"/>
+        <result property="string10" column="string10"/>
+        <result property="string11" column="string11"/>
+        <result property="string12" column="string12"/>
+        <result property="string13" column="string13"/>
+        <result property="string14" column="string14"/>
+        <result property="string15" column="string15"/>
+        <result property="string16" column="string16"/>
+        <result property="string17" column="string17"/>
+        <result property="string18" column="string18"/>
+        <result property="string19" column="string19"/>
+        <result property="string20" column="string20"/>
+        <result property="datetime1" column="datetime1"/>
+        <result property="datetime2" column="datetime2"/>
+        <result property="datetime3" column="datetime3"/>
+        <result property="datetime4" column="datetime4"/>
+        <result property="datetime5" column="datetime5"/>
+        <result property="status" column="status"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
     </resultMap>
 
     <sql id="selectBizProcessChildVo">
@@ -57,52 +57,51 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectBizProcessChildList" parameterType="BizProcessChild" resultMap="BizProcessChildResult">
         <include refid="selectBizProcessChildVo"/>
-        <where>  
-            <if test="dataId != null "> and data_id = #{dataId}</if>
-            <if test="price1 != null "> and price1 = #{price1}</if>
-            <if test="price2 != null "> and price2 = #{price2}</if>
-            <if test="price3 != null "> and price3 = #{price3}</if>
-            <if test="price4 != null "> and price4 = #{price4}</if>
-            <if test="price5 != null "> and price5 = #{price5}</if>
-            <if test="price6 != null "> and price6 = #{price6}</if>
-            <if test="price7 != null "> and price7 = #{price7}</if>
-            <if test="price8 != null "> and price8 = #{price8}</if>
-            <if test="price9 != null "> and price9 = #{price9}</if>
-            <if test="price10 != null "> and price10 = #{price10}</if>
-            <if test="string1 != null  and string1 != ''"> and string1 = #{string1}</if>
-            <if test="string2 != null  and string2 != ''"> and string2 = #{string2}</if>
-            <if test="string3 != null  and string3 != ''"> and string3 = #{string3}</if>
-            <if test="string4 != null  and string4 != ''"> and string4 = #{string4}</if>
-            <if test="string5 != null  and string5 != ''"> and string5 = #{string5}</if>
-            <if test="string6 != null  and string6 != ''"> and string6 = #{string6}</if>
-            <if test="string7 != null  and string7 != ''"> and string7 = #{string7}</if>
-            <if test="string8 != null  and string8 != ''"> and string8 = #{string8}</if>
-            <if test="string9 != null  and string9 != ''"> and string9 = #{string9}</if>
-            <if test="string10 != null  and string10 != ''"> and string10 = #{string10}</if>
-            <if test="string11 != null  and string11 != ''"> and string11 = #{string11}</if>
-            <if test="string12 != null  and string12 != ''"> and string12 = #{string12}</if>
-            <if test="string13 != null  and string13 != ''"> and string13 = #{string13}</if>
-            <if test="string14 != null  and string14 != ''"> and string14 = #{string14}</if>
-            <if test="string15 != null  and string15 != ''"> and string15 = #{string15}</if>
-            <if test="string16 != null  and string16 != ''"> and string16 = #{string16}</if>
-            <if test="string17 != null  and string17 != ''"> and string17 = #{string17}</if>
-            <if test="string18 != null  and string18 != ''"> and string18 = #{string18}</if>
-            <if test="string19 != null  and string19 != ''"> and string19 = #{string19}</if>
-            <if test="string20 != null  and string20 != ''"> and string20 = #{string20}</if>
-            <if test="datetime1 != null "> and datetime1 = #{datetime1}</if>
-            <if test="datetime2 != null "> and datetime2 = #{datetime2}</if>
-            <if test="datetime3 != null "> and datetime3 = #{datetime3}</if>
-            <if test="datetime4 != null "> and datetime4 = #{datetime4}</if>
-            <if test="datetime5 != null "> and datetime5 = #{datetime5}</if>
-            <if test="status != null  and status != ''"> and status = #{status}</if>
+        <where>
+            <if test="dataId != null ">and data_id = #{dataId}</if>
+            <if test="price1 != null ">and price1 = #{price1}</if>
+            <if test="price2 != null ">and price2 = #{price2}</if>
+            <if test="price3 != null ">and price3 = #{price3}</if>
+            <if test="price4 != null ">and price4 = #{price4}</if>
+            <if test="price5 != null ">and price5 = #{price5}</if>
+            <if test="price6 != null ">and price6 = #{price6}</if>
+            <if test="price7 != null ">and price7 = #{price7}</if>
+            <if test="price8 != null ">and price8 = #{price8}</if>
+            <if test="price9 != null ">and price9 = #{price9}</if>
+            <if test="price10 != null ">and price10 = #{price10}</if>
+            <if test="string1 != null  and string1 != ''">and string1 = #{string1}</if>
+            <if test="string2 != null  and string2 != ''">and string2 = #{string2}</if>
+            <if test="string3 != null  and string3 != ''">and string3 = #{string3}</if>
+            <if test="string4 != null  and string4 != ''">and string4 = #{string4}</if>
+            <if test="string5 != null  and string5 != ''">and string5 = #{string5}</if>
+            <if test="string6 != null  and string6 != ''">and string6 = #{string6}</if>
+            <if test="string7 != null  and string7 != ''">and string7 = #{string7}</if>
+            <if test="string8 != null  and string8 != ''">and string8 = #{string8}</if>
+            <if test="string9 != null  and string9 != ''">and string9 = #{string9}</if>
+            <if test="string10 != null  and string10 != ''">and string10 = #{string10}</if>
+            <if test="string11 != null  and string11 != ''">and string11 = #{string11}</if>
+            <if test="string12 != null  and string12 != ''">and string12 = #{string12}</if>
+            <if test="string13 != null  and string13 != ''">and string13 = #{string13}</if>
+            <if test="string14 != null  and string14 != ''">and string14 = #{string14}</if>
+            <if test="string15 != null  and string15 != ''">and string15 = #{string15}</if>
+            <if test="string16 != null  and string16 != ''">and string16 = #{string16}</if>
+            <if test="string17 != null  and string17 != ''">and string17 = #{string17}</if>
+            <if test="string18 != null  and string18 != ''">and string18 = #{string18}</if>
+            <if test="string19 != null  and string19 != ''">and string19 = #{string19}</if>
+            <if test="string20 != null  and string20 != ''">and string20 = #{string20}</if>
+            <if test="datetime1 != null ">and datetime1 = #{datetime1}</if>
+            <if test="datetime2 != null ">and datetime2 = #{datetime2}</if>
+            <if test="datetime3 != null ">and datetime3 = #{datetime3}</if>
+            <if test="datetime4 != null ">and datetime4 = #{datetime4}</if>
+            <if test="datetime5 != null ">and datetime5 = #{datetime5}</if>
+            <if test="status != null  and status != ''">and status = #{status}</if>
         </where>
     </select>
-    
+
     <select id="selectBizProcessChildById" parameterType="Long" resultMap="BizProcessChildResult">
         <include refid="selectBizProcessChildVo"/>
         where child_id = #{childId}
     </select>
-
 
 
     <sql id="selectBizQuotationProductVo">
@@ -173,18 +172,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectBizQuotationProductVo"/>
         <where>
             1=1
-            <if test="dataId != null"> and pc.data_id = #{dataId}</if>
+            <if test="dataId != null">and pc.data_id = #{dataId}</if>
 
             <!-- 产品等级 是 A,B的 -->
-            <if test="levelAB == '1'"> and p.string2 in ('A','B')</if>
-            <if test="levelAB == '2'"> and p.string2 in ('B','C')</if>
-
+            <if test="levelAB == '1'">and p.string2 in ('A','B')</if>
+            <if test="levelAB == '2'">and p.string2 in ('B','C')</if>
 
 
         </where>
-        order by  pc.child_id
+        order by pc.child_id
     </select>
-
 
 
     <!-- 采购池产品信息 -->
@@ -199,9 +196,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
           p.medium,p.temperature,p.other,d9.name as productString1,
           p.string2 as productString2,
           dd.dict_label as levelLabel,pc.string3 as productNum,p.name as productName,
-          s.name as supplier,p.procurement_price as productProcurementPrice
+          s.name as supplier,p.procurement_price as productProcurementPrice,pd.string6 as goodsTime,
+          ds.product_status as productStatus,ds.actuator_status as actuatorStatus,ds.ref1_status as ref1Status,ds.ref2_status as ref2Status,ds.p_status as pStatus,
+          ds.p1_status as p1Status,ds.p2_status as p2Status,ds.p3_status as p3Status,ds.p4_status as p4Status
     from biz_product p
     join biz_process_child pc on pc.data_id=#{dataId} and pc.string2=p.product_id
+    join biz_process_data pd on pc.data_id=pd.data_id
+    left join biz_data_status ds on ds.child_id=pc.child_id
     left join biz_dict d on  d.parent_id=1 and p.series=d.dict_id
         left join biz_dict d1 on d1.parent_type='specification' and d1.dict_id=p.specifications
         left join biz_dict d2 on d2.parent_type='nominal_pressure' and d2.dict_id=p.nominal_pressure
@@ -229,13 +230,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <sql id="selectBizChildActuatorVo">
     select
       pc.string12 as actuatorNum,pc.string13 as actuatorCoefficient,
-          a.name as actuatorName,a.price as actuatorPrice,
+          a.name as actuatorName,a.price as actuatorPrice,a.actuator_id as actuatorId,
           a.brand as actuatorBrand,a.manufacturer as actuatorManufacturer,a.string4 as actuatorString4,
           a.string1 as actuatorString1,a.setup_type as actuatorSetupType,a.output_torque as actuatorOutputTorque,
           a.string3 as actuatorString3,a.action_type as actuatorActionType,a.control_circuit as actuatorControlCircuit,a.adaptable_voltage as actuatorAdaptableVoltage,
-          a.protection_level as actuatorProtectionLevel,a.quality_level as actuatorQualityLevel,a.explosion_level as actuatorExplosionLevel,a.string5 as actuatorString5
+          a.protection_level as actuatorProtectionLevel,a.quality_level as actuatorQualityLevel,a.explosion_level as actuatorExplosionLevel,a.string6 as actuatorString6,
+          pd.string6 as goodsTime,
+          ds.product_status as productStatus,ds.actuator_status as actuatorStatus,ds.ref1_status as ref1Status,ds.ref2_status as ref2Status,ds.p_status as pStatus,
+          ds.p1_status as p1Status,ds.p2_status as p2Status,ds.p3_status as p3Status,ds.p4_status as p4Status
     from biz_actuator a
     join biz_process_child pc on pc.data_id=#{dataId} and pc.string11=a.actuator_id
+    join biz_process_data pd on pc.data_id=pd.data_id
+    left join biz_data_status ds on ds.child_id=pc.child_id
     where a.string1 in (
       select a1.string1 from biz_actuator a1
       join biz_process_child pc1 on pc1.data_id=#{dataId} and pc1.string11=a1.actuator_id
@@ -251,9 +257,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <sql id="selectBizChildRef1Vo">
     select
       pc.string5 as productRef1Id,pc.string6 as productRef1Num,pc.string7 as productRef1Coefficient,
-          pr.name as ref1Name,pr.price as ref1Price
+          pr.name as ref1Name,pr.price as ref1Price,
+          pr.string2 as ref1String2,d1.name as  ref1Specifications,d2.name  as ref1ValvebodyMaterial,
+          pr.material_require as ref1MaterialRequire,s.name as  suppliersName,pr.model,pd.string6 as goodsTime,
+          ds.product_status as productStatus,ds.actuator_status as actuatorStatus,ds.ref1_status as ref1Status,ds.ref2_status as ref2Status,ds.p_status as pStatus,
+          ds.p1_status as p1Status,ds.p2_status as p2Status,ds.p3_status as p3Status,ds.p4_status as p4Status
     from  biz_product_ref pr
     join biz_process_child pc on pc.data_id=#{dataId} and pr.product_ref_id=pc.string5
+    left join biz_data_status ds on ds.child_id=pc.child_id
+join biz_process_data pd on pc.data_id=pd.data_id
+    left join biz_dict d1 on d1.dict_id=pr.specifications
+	 left join biz_dict d2 on d2.dict_id=pr.valvebody_material
+	 left join biz_suppliers s on s.suppliers_id=pr.suppliers_id
     where concat(pr.name,pr.model,pr.specifications) in (
       select concat(p1.name,p1.model,p1.specifications) from biz_product_ref p1
       join biz_process_child pc1 on pc1.data_id=#{dataId} and pc1.string5=p1.product_ref_id
@@ -268,9 +283,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <!-- 采购池 螺栓信息 -->
     <sql id="selectBizChildRef2Vo">
     select
-      pc.string8 as productRef2Id,pc.string9 as productRef2Num,pc.string7 as productRef1Coefficient,pr.name as ref2Name
+      pc.string8 as productRef2Id,pc.string9 as productRef2Num,pc.string7 as productRef1Coefficient,pr.name as ref2Name,pr.price as ref2Price,
+      pr.string2 as ref1String2,d1.name as  ref1Specifications,d2.name  as ref1ValvebodyMaterial,
+          pr.material_require as ref1MaterialRequire,s.name as  suppliersName,pr.model,pd.string6 as goodsTime,
+          ds.product_status as productStatus,ds.actuator_status as actuatorStatus,ds.ref1_status as ref1Status,ds.ref2_status as ref2Status,ds.p_status as pStatus,
+          ds.p1_status as p1Status,ds.p2_status as p2Status,ds.p3_status as p3Status,ds.p4_status as p4Status
     from  biz_product_ref pr
     join biz_process_child pc on pc.data_id=#{dataId} and pr.product_ref_id=pc.string8
+    left join biz_data_status ds on ds.child_id=pc.child_id
+    join biz_process_data pd on pc.data_id=pd.data_id
+    left join biz_dict d1 on d1.dict_id=pr.specifications
+	 left join biz_dict d2 on d2.dict_id=pr.valvebody_material
+	 left join biz_suppliers s on s.suppliers_id=pr.suppliers_id
     where concat(pr.name,pr.model,pr.valvebody_material) in (
       select concat(p1.name,p1.model,p1.valvebody_material) from biz_product_ref p1
       join biz_process_child pc1 on pc1.data_id=#{dataId} and pc1.string8=p1.product_ref_id
@@ -286,9 +310,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <sql id="selectBizChildPAVo">
     select
       pa.attachment_id as pattachmentId,pa.bh as pattachmentName, pc.pattachment_price as pattachmentPrice, sum(pc.pattachment_count) as pattachmentCount,
-      pc.pattachment_coefficient as pattachmentCoefficient
+      pc.pattachment_coefficient as pattachmentCoefficient,
+      pa.type, pa.bh, pa.chinese_name as chineseName, pa.chinese_specifications as chineseSpecifications, pa.english_name as englishName,
+        pa.english_specifications as englishSpecifications, pa.chinese_packaging as chinesePackaging, pa.english_packaging as englishPackaging,
+        pa.chinese_unit as chineseUnit, pa.english_unit as englishUnit, pa.pressure, pa.material, pa.bar_code as barCode, pa.customs_bh as customsBh,
+         pa.handling_fee as handlingFee, pa.color, pa.developer, pa.goods_category as goodsCategory,pa.settlement_price as procurementPrice,s.nick_name as supplierName,
+         pd.string6 as goodsTime,
+          ds.product_status as productStatus,ds.actuator_status as actuatorStatus,ds.ref1_status as ref1Status,ds.ref2_status as ref2Status,ds.p_status as pStatus,
+          ds.p1_status as p1Status,ds.p2_status as p2Status,ds.p3_status as p3Status,ds.p4_status as p4Status
     from  biz_product_attachment pa
     join biz_process_child pc on pc.data_id=#{dataId} and pa.attachment_id=pc.pattachment_id
+    left join biz_data_status ds on ds.child_id=pc.child_id
+    join biz_process_data pd on pc.data_id=pd.data_id
+    left join biz_suppliers s on s.suppliers_id=pa.supplier
     where concat(pa.chinese_name,pa.chinese_specifications) in (
       select concat(p1.chinese_name,p1.chinese_specifications) from biz_product_attachment p1
       join biz_process_child pc1 on pc1.data_id=#{dataId} and pc1.pattachment_id=p1.attachment_id
@@ -306,10 +340,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <sql id="selectBizChildPA1Vo">
     select
      pa.attachment_id as pattachment1Id,pa.bh as pattachment1Name, pc.pattachment1_price as pattachment1Price,
-     sum(pc.pattachment1_count) as pattachment1Count, pc.pattachment1_coefficient as pattachment1Coefficient
+     sum(pc.pattachment1_count) as pattachment1Count, pc.pattachment1_coefficient as pattachment1Coefficient,
+     pa.type, pa.bh, pa.chinese_name as chineseName, pa.chinese_specifications as chineseSpecifications, pa.english_name as englishName,
+        pa.english_specifications as englishSpecifications, pa.chinese_packaging as chinesePackaging, pa.english_packaging as englishPackaging,
+        pa.chinese_unit as chineseUnit, pa.english_unit as englishUnit, pa.pressure, pa.material, pa.bar_code as barCode, pa.customs_bh as customsBh,
+         pa.handling_fee as handlingFee, pa.color, pa.developer, pa.goods_category as goodsCategory,pa.settlement_price as procurementPrice,s.nick_name as supplierName,
+         pd.string6 as goodsTime,
+          ds.product_status as productStatus,ds.actuator_status as actuatorStatus,ds.ref1_status as ref1Status,ds.ref2_status as ref2Status,ds.p_status as pStatus,
+          ds.p1_status as p1Status,ds.p2_status as p2Status,ds.p3_status as p3Status,ds.p4_status as p4Status
 
     from  biz_product_attachment pa
     join biz_process_child pc on pc.data_id=#{dataId} and pa.attachment_id=pc.pattachment1_id
+    left join biz_data_status ds on ds.child_id=pc.child_id
+    join biz_process_data pd on pc.data_id=pd.data_id
+    left join biz_suppliers s on s.suppliers_id=pa.supplier
     where concat(pa.chinese_name,pa.chinese_specifications) in (
       select concat(p1.chinese_name,p1.chinese_specifications) from biz_product_attachment p1
       join biz_process_child pc1 on pc1.data_id=#{dataId} and pc1.pattachment1_id=p1.attachment_id
@@ -326,10 +370,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <sql id="selectBizChildPA2Vo">
     select
      pa.attachment_id as pattachment2Id,pa.bh as pattachment2Name, pc.pattachment2_price as pattachment2Price, sum(pc.pattachment2_count) as pattachment2Count,
-     pc.pattachment2_coefficient as pattachment2Coefficient
+     pc.pattachment2_coefficient as pattachment2Coefficient,
+     pa.type, pa.bh, pa.chinese_name as chineseName, pa.chinese_specifications as chineseSpecifications, pa.english_name as englishName,
+        pa.english_specifications as englishSpecifications, pa.chinese_packaging as chinesePackaging, pa.english_packaging as englishPackaging,
+        pa.chinese_unit as chineseUnit, pa.english_unit as englishUnit, pa.pressure, pa.material, pa.bar_code as barCode, pa.customs_bh as customsBh,
+         pa.handling_fee as handlingFee, pa.color, pa.developer, pa.goods_category as goodsCategory,pa.settlement_price as procurementPrice,s.nick_name as supplierName,
+         pd.string6 as goodsTime,
+          ds.product_status as productStatus,ds.actuator_status as actuatorStatus,ds.ref1_status as ref1Status,ds.ref2_status as ref2Status,ds.p_status as pStatus,
+          ds.p1_status as p1Status,ds.p2_status as p2Status,ds.p3_status as p3Status,ds.p4_status as p4Status
 
     from  biz_product_attachment pa
     join biz_process_child pc on pc.data_id=#{dataId} and pa.attachment_id=pc.pattachment2_id
+    left join biz_data_status ds on ds.child_id=pc.child_id
+    join biz_process_data pd on pc.data_id=pd.data_id
+    left join biz_suppliers s on s.suppliers_id=pa.supplier
     where concat(pa.chinese_name,pa.chinese_specifications) in (
       select concat(p1.chinese_name,p1.chinese_specifications) from biz_product_attachment p1
       join biz_process_child pc1 on pc1.data_id=#{dataId} and pc1.pattachment2_id=p1.attachment_id
@@ -345,11 +399,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <sql id="selectBizChildPA3Vo">
     select
           pa.attachment_id as pattachment3Id,pa.bh as pattachment3Name,
-          pc.pattachment3_price as pattachment3Price, sum(pc.pattachment3_count) as pattachment3Count, pc.pattachment3_coefficient as pattachment3Coefficient
+          pc.pattachment3_price as pattachment3Price, sum(pc.pattachment3_count) as pattachment3Count, pc.pattachment3_coefficient as pattachment3Coefficient,
+          pa.type, pa.bh, pa.chinese_name as chineseName, pa.chinese_specifications as chineseSpecifications, pa.english_name as englishName,
+        pa.english_specifications as englishSpecifications, pa.chinese_packaging as chinesePackaging, pa.english_packaging as englishPackaging,
+        pa.chinese_unit as chineseUnit, pa.english_unit as englishUnit, pa.pressure, pa.material, pa.bar_code as barCode, pa.customs_bh as customsBh,
+         pa.handling_fee as handlingFee, pa.color, pa.developer, pa.goods_category as goodsCategory,pa.settlement_price as procurementPrice,s.nick_name as supplierName,
+         pd.string6 as goodsTime,
+          ds.product_status as productStatus,ds.actuator_status as actuatorStatus,ds.ref1_status as ref1Status,ds.ref2_status as ref2Status,ds.p_status as pStatus,
+          ds.p1_status as p1Status,ds.p2_status as p2Status,ds.p3_status as p3Status,ds.p4_status as p4Status
 
 
     from  biz_product_attachment pa
     join biz_process_child pc on pc.data_id=#{dataId} and pa.attachment_id=pc.pattachment3_id
+    left join biz_data_status ds on ds.child_id=pc.child_id
+    join biz_process_data pd on pc.data_id=pd.data_id
+    left join biz_suppliers s on s.suppliers_id=pa.supplier
     where concat(pa.chinese_name,pa.chinese_specifications) in (
       select concat(p1.chinese_name,p1.chinese_specifications) from biz_product_attachment p1
       join biz_process_child pc1 on pc1.data_id=#{dataId} and pc1.pattachment3_id=p1.attachment_id
@@ -365,9 +429,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <sql id="selectBizChildPA4Vo">
     select
           pa.attachment_id as pattachment4Id,pa.bh as pattachment4Name, pc.pattachment4_price as pattachment4Price,
-          sum(pc.pattachment4_count) as pattachment4Count, pc.pattachment4_coefficient as pattachment4Coefficient
+          sum(pc.pattachment4_count) as pattachment4Count, pc.pattachment4_coefficient as pattachment4Coefficient,
+          pa.type, pa.bh, pa.chinese_name as chineseName, pa.chinese_specifications as chineseSpecifications, pa.english_name as englishName,
+        pa.english_specifications as englishSpecifications, pa.chinese_packaging as chinesePackaging, pa.english_packaging as englishPackaging,
+        pa.chinese_unit as chineseUnit, pa.english_unit as englishUnit, pa.pressure, pa.material, pa.bar_code as barCode, pa.customs_bh as customsBh,
+         pa.handling_fee as handlingFee, pa.color, pa.developer, pa.goods_category as goodsCategory,pa.settlement_price as procurementPrice,s.nick_name as supplierName,
+         pd.string6 as goodsTime,
+          ds.product_status as productStatus,ds.actuator_status as actuatorStatus,ds.ref1_status as ref1Status,ds.ref2_status as ref2Status,ds.p_status as pStatus,
+          ds.p1_status as p1Status,ds.p2_status as p2Status,ds.p3_status as p3Status,ds.p4_status as p4Status
     from  biz_product_attachment pa
     join biz_process_child pc on pc.data_id=#{dataId} and pa.attachment_id=pc.pattachment4_id
+    left join biz_data_status ds on ds.child_id=pc.child_id
+    join biz_process_data pd on pc.data_id=pd.data_id
+    left join biz_suppliers s on s.suppliers_id=pa.supplier
     where concat(pa.chinese_name,pa.chinese_specifications) in (
       select concat(p1.chinese_name,p1.chinese_specifications) from biz_product_attachment p1
       join biz_process_child pc1 on pc1.data_id=#{dataId} and pc1.pattachment4_id=p1.attachment_id
@@ -454,7 +528,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="pattachment2Coefficient != null  and pattachment2Coefficient != ''">pattachment2_coefficient,</if>
             <if test="pattachment3Coefficient != null  and pattachment3Coefficient != ''">pattachment3_coefficient,</if>
             <if test="pattachment4Coefficient != null  and pattachment4Coefficient != ''">pattachment4_coefficient,</if>
-         </trim>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="dataId != null ">#{dataId},</if>
             <if test="remark != null  and remark != ''">#{remark},</if>
@@ -519,11 +593,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="pattachment4Price != null  and pattachment4Price != ''">#{pattachment4Price},</if>
 
             <if test="pattachmentCoefficient != null  and pattachmentCoefficient != ''">#{pattachmentCoefficient},</if>
-            <if test="pattachment1Coefficient != null  and pattachment1Coefficient != ''">#{pattachment1Coefficient},</if>
-            <if test="pattachment2Coefficient != null  and pattachment2Coefficient != ''">#{pattachment2Coefficient},</if>
-            <if test="pattachment3Coefficient != null  and pattachment3Coefficient != ''">#{pattachment3Coefficient},</if>
-            <if test="pattachment4Coefficient != null  and pattachment4Coefficient != ''">#{pattachment4Coefficient},</if>
-         </trim>
+            <if test="pattachment1Coefficient != null  and pattachment1Coefficient != ''">#{pattachment1Coefficient},
+            </if>
+            <if test="pattachment2Coefficient != null  and pattachment2Coefficient != ''">#{pattachment2Coefficient},
+            </if>
+            <if test="pattachment3Coefficient != null  and pattachment3Coefficient != ''">#{pattachment3Coefficient},
+            </if>
+            <if test="pattachment4Coefficient != null  and pattachment4Coefficient != ''">#{pattachment4Coefficient},
+            </if>
+        </trim>
     </insert>
 
     <update id="updateBizProcessChild" parameterType="BizProcessChild">
@@ -605,10 +683,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteBizProcessChildByIds" parameterType="String">
-        delete from biz_process_child where child_id in 
+        delete from biz_process_child where child_id in
         <foreach item="childId" collection="array" open="(" separator="," close=")">
             #{childId}
         </foreach>
     </delete>
-    
+
 </mapper>

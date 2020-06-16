@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.fmis.status.mapper.BizDataStatusMapper">
+    
+    <resultMap type="BizDataStatus" id="BizDataStatusResult">
+        <result property="statusId"    column="status_id"    />
+        <result property="type"    column="type"    />
+        <result property="childId"    column="child_id"    />
+        <result property="dataStatus"    column="data_status"    />
+        <result property="productStatus"    column="product_status"    />
+        <result property="actuatorStatus"    column="actuator_status"    />
+        <result property="ref1Status"    column="ref1_status"    />
+        <result property="ref2Status"    column="ref2_status"    />
+        <result property="pStatus"    column="p_status"    />
+        <result property="p1Status"    column="p1_status"    />
+        <result property="p2Status"    column="p2_status"    />
+        <result property="p3Status"    column="p3_status"    />
+        <result property="p4Status"    column="p4_status"    />
+        <result property="string1"    column="string1"    />
+        <result property="string2"    column="string2"    />
+        <result property="string3"    column="string3"    />
+        <result property="string4"    column="string4"    />
+        <result property="string5"    column="string5"    />
+        <result property="string6"    column="string6"    />
+        <result property="string7"    column="string7"    />
+        <result property="string8"    column="string8"    />
+        <result property="string9"    column="string9"    />
+        <result property="string10"    column="string10"    />
+        <result property="remark"    column="remark"    />
+        <result property="status"    column="status"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBizDataStatusVo">
+        select status_id, type, child_id, data_status, product_status, actuator_status, ref1_status, ref2_status, p_status, p1_status, p2_status, p3_status, p4_status, string1, string2, string3, string4, string5, string6, string7, string8, string9, string10, remark, status, del_flag, create_by, create_time, update_by, update_time from biz_data_status
+    </sql>
+
+    <select id="selectBizDataStatusList" parameterType="BizDataStatus" resultMap="BizDataStatusResult">
+        <include refid="selectBizDataStatusVo"/>
+        <where>  
+            <if test="type != null  and type != ''"> and type = #{type}</if>
+            <if test="childId != null "> and child_id = #{childId}</if>
+            <if test="dataStatus != null  and dataStatus != ''"> and data_status = #{dataStatus}</if>
+            <if test="productStatus != null  and productStatus != ''"> and product_status = #{productStatus}</if>
+            <if test="actuatorStatus != null  and actuatorStatus != ''"> and actuator_status = #{actuatorStatus}</if>
+            <if test="ref1Status != null  and ref1Status != ''"> and ref1_status = #{ref1Status}</if>
+            <if test="ref2Status != null  and ref2Status != ''"> and ref2_status = #{ref2Status}</if>
+            <if test="pStatus != null  and pStatus != ''"> and p_status = #{pStatus}</if>
+            <if test="p1Status != null  and p1Status != ''"> and p1_status = #{p1Status}</if>
+            <if test="p2Status != null  and p2Status != ''"> and p2_status = #{p2Status}</if>
+            <if test="p3Status != null  and p3Status != ''"> and p3_status = #{p3Status}</if>
+            <if test="p4Status != null  and p4Status != ''"> and p4_status = #{p4Status}</if>
+            <if test="string1 != null  and string1 != ''"> and string1 = #{string1}</if>
+            <if test="string2 != null  and string2 != ''"> and string2 = #{string2}</if>
+            <if test="string3 != null  and string3 != ''"> and string3 = #{string3}</if>
+            <if test="string4 != null  and string4 != ''"> and string4 = #{string4}</if>
+            <if test="string5 != null  and string5 != ''"> and string5 = #{string5}</if>
+            <if test="string6 != null  and string6 != ''"> and string6 = #{string6}</if>
+            <if test="string7 != null  and string7 != ''"> and string7 = #{string7}</if>
+            <if test="string8 != null  and string8 != ''"> and string8 = #{string8}</if>
+            <if test="string9 != null  and string9 != ''"> and string9 = #{string9}</if>
+            <if test="string10 != null  and string10 != ''"> and string10 = #{string10}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectBizDataStatusById" parameterType="Long" resultMap="BizDataStatusResult">
+        <include refid="selectBizDataStatusVo"/>
+        where status_id = #{statusId}
+    </select>
+        
+    <insert id="insertBizDataStatus" parameterType="BizDataStatus" useGeneratedKeys="true" keyProperty="statusId">
+        insert into biz_data_status
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="type != null  and type != ''">type,</if>
+            <if test="childId != null ">child_id,</if>
+            <if test="dataStatus != null  and dataStatus != ''">data_status,</if>
+            <if test="productStatus != null  and productStatus != ''">product_status,</if>
+            <if test="actuatorStatus != null  and actuatorStatus != ''">actuator_status,</if>
+            <if test="ref1Status != null  and ref1Status != ''">ref1_status,</if>
+            <if test="ref2Status != null  and ref2Status != ''">ref2_status,</if>
+            <if test="pStatus != null  and pStatus != ''">p_status,</if>
+            <if test="p1Status != null  and p1Status != ''">p1_status,</if>
+            <if test="p2Status != null  and p2Status != ''">p2_status,</if>
+            <if test="p3Status != null  and p3Status != ''">p3_status,</if>
+            <if test="p4Status != null  and p4Status != ''">p4_status,</if>
+            <if test="string1 != null  and string1 != ''">string1,</if>
+            <if test="string2 != null  and string2 != ''">string2,</if>
+            <if test="string3 != null  and string3 != ''">string3,</if>
+            <if test="string4 != null  and string4 != ''">string4,</if>
+            <if test="string5 != null  and string5 != ''">string5,</if>
+            <if test="string6 != null  and string6 != ''">string6,</if>
+            <if test="string7 != null  and string7 != ''">string7,</if>
+            <if test="string8 != null  and string8 != ''">string8,</if>
+            <if test="string9 != null  and string9 != ''">string9,</if>
+            <if test="string10 != null  and string10 != ''">string10,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+            <if test="status != null  and status != ''">status,</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="type != null  and type != ''">#{type},</if>
+            <if test="childId != null ">#{childId},</if>
+            <if test="dataStatus != null  and dataStatus != ''">#{dataStatus},</if>
+            <if test="productStatus != null  and productStatus != ''">#{productStatus},</if>
+            <if test="actuatorStatus != null  and actuatorStatus != ''">#{actuatorStatus},</if>
+            <if test="ref1Status != null  and ref1Status != ''">#{ref1Status},</if>
+            <if test="ref2Status != null  and ref2Status != ''">#{ref2Status},</if>
+            <if test="pStatus != null  and pStatus != ''">#{pStatus},</if>
+            <if test="p1Status != null  and p1Status != ''">#{p1Status},</if>
+            <if test="p2Status != null  and p2Status != ''">#{p2Status},</if>
+            <if test="p3Status != null  and p3Status != ''">#{p3Status},</if>
+            <if test="p4Status != null  and p4Status != ''">#{p4Status},</if>
+            <if test="string1 != null  and string1 != ''">#{string1},</if>
+            <if test="string2 != null  and string2 != ''">#{string2},</if>
+            <if test="string3 != null  and string3 != ''">#{string3},</if>
+            <if test="string4 != null  and string4 != ''">#{string4},</if>
+            <if test="string5 != null  and string5 != ''">#{string5},</if>
+            <if test="string6 != null  and string6 != ''">#{string6},</if>
+            <if test="string7 != null  and string7 != ''">#{string7},</if>
+            <if test="string8 != null  and string8 != ''">#{string8},</if>
+            <if test="string9 != null  and string9 != ''">#{string9},</if>
+            <if test="string10 != null  and string10 != ''">#{string10},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBizDataStatus" parameterType="BizDataStatus">
+        update biz_data_status
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="type != null  and type != ''">type = #{type},</if>
+            <if test="childId != null ">child_id = #{childId},</if>
+            <if test="dataStatus != null  and dataStatus != ''">data_status = #{dataStatus},</if>
+            <if test="productStatus != null  and productStatus != ''">product_status = #{productStatus},</if>
+            <if test="actuatorStatus != null  and actuatorStatus != ''">actuator_status = #{actuatorStatus},</if>
+            <if test="ref1Status != null  and ref1Status != ''">ref1_status = #{ref1Status},</if>
+            <if test="ref2Status != null  and ref2Status != ''">ref2_status = #{ref2Status},</if>
+            <if test="pStatus != null  and pStatus != ''">p_status = #{pStatus},</if>
+            <if test="p1Status != null  and p1Status != ''">p1_status = #{p1Status},</if>
+            <if test="p2Status != null  and p2Status != ''">p2_status = #{p2Status},</if>
+            <if test="p3Status != null  and p3Status != ''">p3_status = #{p3Status},</if>
+            <if test="p4Status != null  and p4Status != ''">p4_status = #{p4Status},</if>
+            <if test="string1 != null  and string1 != ''">string1 = #{string1},</if>
+            <if test="string2 != null  and string2 != ''">string2 = #{string2},</if>
+            <if test="string3 != null  and string3 != ''">string3 = #{string3},</if>
+            <if test="string4 != null  and string4 != ''">string4 = #{string4},</if>
+            <if test="string5 != null  and string5 != ''">string5 = #{string5},</if>
+            <if test="string6 != null  and string6 != ''">string6 = #{string6},</if>
+            <if test="string7 != null  and string7 != ''">string7 = #{string7},</if>
+            <if test="string8 != null  and string8 != ''">string8 = #{string8},</if>
+            <if test="string9 != null  and string9 != ''">string9 = #{string9},</if>
+            <if test="string10 != null  and string10 != ''">string10 = #{string10},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+            <if test="status != null  and status != ''">status = #{status},</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+        </trim>
+        where status_id = #{statusId}
+    </update>
+
+    <delete id="deleteBizDataStatusById" parameterType="Long">
+        delete from biz_data_status where status_id = #{statusId}
+    </delete>
+
+    <delete id="deleteBizDataStatusByIds" parameterType="String">
+        delete from biz_data_status where status_id in 
+        <foreach item="statusId" collection="array" open="(" separator="," close=")">
+            #{statusId}
+        </foreach>
+    </delete>
+    
+</mapper>

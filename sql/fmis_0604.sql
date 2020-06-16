@@ -838,3 +838,66 @@ SELECT @parentId := LAST_INSERT_ID();
 -- 按钮 SQL
 insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
 values('业务查询', @parentId, '1',  '#',  'F', '0', 'fmis:procurementpool:list',         '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+
+
+
+
+drop table if exists biz_data_status;
+create table biz_data_status (
+  status_id           bigint(20)      not null auto_increment    comment 'ID',
+  type           varchar(5)    comment '1=采购',
+  child_id bigint(20) comment '关联ID 关联 child表 将来也可以关联dataId',
+  data_status varchar(1) comment '例如合同状态 0=未处理 1=已处理',
+  product_status varchar(1) comment '产品 0=未处理 1=已处理',
+  actuator_status varchar(1) comment '执行器 0=未处理 1=已处理',
+  ref1_status varchar(1) comment '法兰 0=未处理 1=已处理',
+  ref2_status varchar(1) comment '螺栓 0=未处理 1=已处理',
+  p_status varchar(1) comment '定位器 0=未处理 1=已处理',
+  p1_status varchar(1) comment '电磁阀 0=未处理 1=已处理',
+  p2_status varchar(1) comment '回信器数 0=未处理 1=已处理',
+  p3_status varchar(1) comment '气源三连件 0=未处理 1=已处理',
+  p4_status varchar(1) comment '可离合减速器 0=未处理 1=已处理',
+  string1         varchar(30)          default ''                  comment '备用1',
+  string2         varchar(30)          default ''                  comment '备用2',
+  string3         varchar(30)          default ''                  comment '备用3',
+  string4         varchar(30)          default ''                  comment '备用4',
+  string5         varchar(30)          default ''                  comment '备用5',
+  string6         varchar(30)          default ''                  comment '备用6',
+  string7         varchar(30)          default ''                  comment '备用7',
+  string8         varchar(30)          default ''                  comment '备用8',
+  string9         varchar(30)          default ''                  comment '备用9',
+  string10         varchar(30)          default ''                  comment '备用10',
+  remark         varchar(30)          default ''                  comment '备注',
+  status            char(1)         default '0'                comment '状态（0正常 1停用）',
+  del_flag          char(1)         default '0'                comment '删除标志（0代表存在 2代表删除）',
+  create_by         varchar(64)     default ''                 comment '创建者',
+  create_time 	    datetime                                   comment '创建时间',
+  update_by         varchar(64)     default ''                 comment '更新者',
+  update_time       datetime                                   comment '更新时间',
+  primary key (status_id)
+) engine=innodb auto_increment=200 comment = '数据状态表';
+
+
+-- 菜单 SQL
+insert into sys_menu (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('数据状态', '3', '1', '/fmis/status', 'C', '0', 'fmis:status:view', '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '数据状态菜单');
+
+-- 按钮父菜单ID
+SELECT @parentId := LAST_INSERT_ID();
+
+-- 按钮 SQL
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('数据状态查询', @parentId, '1',  '#',  'F', '0', 'fmis:status:list',         '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('数据状态新增', @parentId, '2',  '#',  'F', '0', 'fmis:status:add',          '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('数据状态修改', @parentId, '3',  '#',  'F', '0', 'fmis:status:edit',         '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('数据状态删除', @parentId, '4',  '#',  'F', '0', 'fmis:status:remove',       '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('数据状态导出', @parentId, '5',  '#',  'F', '0', 'fmis:status:export',       '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
