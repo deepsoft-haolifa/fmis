@@ -191,10 +191,8 @@
             });
         };
 
-
-
         initChildProductTable = function(index, row, $detail) {
-            var cur_table = $detail.html('<table style="table-layout:fixed"></table>').find('table');
+            var cur_table = $detail.html('<div class="col-sm-12 select-table table-striped"><table style="table-layout:fixed" id="childProductTable" ></table></div>').find('table');
             console.log("dataId1=" + row["dataId"]);
             $(cur_table).bootstrapTable({
                 url: ctx + "fmis/data/listLevelProduct",
@@ -208,7 +206,14 @@
                     level: row["level"]
                 },
                 columns: [{
-                    checkbox: true
+                    checkbox: true,
+                    formatter: function (i,row) {
+                        if($.inArray(row.model, overAllIds)!=-1){
+                            return {
+                                checked : true
+                            }
+                        }
+                    }
                 },{field : 'rowId',title : '序号',width: 20,visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
 
                     {field : 'productId',title : '产品ID',visible: false},
@@ -234,7 +239,30 @@
 
                 ]
             });
+            $(cur_table).on('uncheck.bs.table check.bs.table check-all.bs.table uncheck-all.bs.table',function(e,rows){
+                var datas = $.isArray(rows) ? rows : [rows];
+                examine(e.type,datas);
+            });
         };
+
+        var overAllIds = new Array();  //全局数组
+        function examine(type,datas){
+
+            console.log(type);
+            console.log(datas);
+            if(type.indexOf('uncheck')==-1){
+                $.each(datas,function(i,v){
+                    // 添加时，判断一行或多行的 id 是否已经在数组里 不存则添加　
+                    overAllIds.indexOf(v.model) == -1 ? overAllIds.push(v.model) : -1;
+                });
+            }else{
+                $.each(datas,function(i,v){
+                    overAllIds.splice(overAllIds.indexOf(v.model),1);    //删除取消选中行
+                });
+            }
+            console.log(overAllIds);
+        }
+
         var setupTypeData = [[${@dict.getType('actuator_setup_type')}]];
         initChildActuatorTable = function(index, row, $detail) {
             var cur_table = $detail.html('<table style="table-layout:fixed"></table>').find('table');
