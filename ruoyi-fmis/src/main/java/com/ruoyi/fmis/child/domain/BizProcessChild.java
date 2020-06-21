@@ -22,6 +22,29 @@ import java.util.Date;
 public class BizProcessChild extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
+
+    @Getter
+    @Setter
+    private String bizEditFlag;
+    @Getter
+    @Setter
+    private String levelValue;
+
+    @Getter
+    @Setter
+    private String procurementId;
+
+    @Getter
+    @Setter
+    private String actuatorId;
+
+    @Getter
+    @Setter
+    private String productRef1Id;
+    @Getter
+    @Setter
+    private String productRef2Id;
+
     @Getter
     @Setter
     private String productStatus;

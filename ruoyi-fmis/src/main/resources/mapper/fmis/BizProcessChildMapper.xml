@@ -94,7 +94,6 @@
             <if test="datetime3 != null ">and datetime3 = #{datetime3}</if>
             <if test="datetime4 != null ">and datetime4 = #{datetime4}</if>
             <if test="datetime5 != null ">and datetime5 = #{datetime5}</if>
-            <if test="status != null  and status != ''">and status = #{status}</if>
         </where>
     </select>
 
@@ -187,7 +186,7 @@
     <!-- 采购池产品信息 -->
     <sql id="selectBizChildProductVo">
     select
-          p.price as productPrice,
+          p.price as productPrice,p.product_id as productId,
           d.name as series, p.model, d1.name as specifications, d2.name as nominalPressure,
           d3.name as connectionType, d6.name as valvebodyMaterial,
           d4.name as sealingMaterial, d5.name as valveElement,
@@ -195,14 +194,15 @@
           s.name as supplier, p.new_supplier,
           p.medium,p.temperature,p.other,d9.name as productString1,
           p.string2 as productString2,
-          dd.dict_label as levelLabel,pc.string3 as productNum,p.name as productName,
+          dd.dict_label as levelLabel,(case when ds.data_status='1' then ds.string1 else sum(pc.string3) end) as productNum,p.name as productName,
           s.name as supplier,p.procurement_price as productProcurementPrice,pd.string6 as goodsTime,
           ds.product_status as productStatus,ds.actuator_status as actuatorStatus,ds.ref1_status as ref1Status,ds.ref2_status as ref2Status,ds.p_status as pStatus,
-          ds.p1_status as p1Status,ds.p2_status as p2Status,ds.p3_status as p3Status,ds.p4_status as p4Status
+          ds.p1_status as p1Status,ds.p2_status as p2Status,ds.p3_status as p3Status,ds.p4_status as p4Status,pc.data_id as dataId,pc.child_id as childId,ds.data_status as dataStatus,
+          ds.string4 as procurementId,p.string2 as levelValue
     from biz_product p
     join biz_process_child pc on pc.data_id=#{dataId} and pc.string2=p.product_id
     join biz_process_data pd on pc.data_id=pd.data_id
-    left join biz_data_status ds on ds.child_id=pc.child_id
+    left join biz_data_status ds on ds.child_id=pc.child_id and ds.string2=p.product_id
     left join biz_dict d on  d.parent_id=1 and p.series=d.dict_id
         left join biz_dict d1 on d1.parent_type='specification' and d1.dict_id=p.specifications
         left join biz_dict d2 on d2.parent_type='nominal_pressure' and d2.dict_id=p.nominal_pressure
@@ -222,6 +222,11 @@
     </sql>
     <select id="selectBizChildProductList" parameterType="BizProcessChild" resultMap="BizProcessChildResult">
         <include refid="selectBizChildProductVo"/>
+        <!-- 如果是详情，只看有数据 -->
+        <if test="bizEditFlag == 2">and ds.string4 = #{dataId} </if>
+        <if test="dataStatus == 1">and ds.data_status = #{dataStatus} </if>
+        <if test="dataStatus == -1">and ds.data_status is null </if>
+        group by p.product_id
         order by p.string2,p.new_supplier
     </select>
 
@@ -229,7 +234,8 @@
     <!-- 采购池 执行器信息 -->
     <sql id="selectBizChildActuatorVo">
     select
-      pc.string12 as actuatorNum,pc.string13 as actuatorCoefficient,
+      (case when ds.data_status='1' then ds.string1 else sum(pc.string12) end) as actuatorNum,
+      pc.string13 as actuatorCoefficient,
           a.name as actuatorName,a.price as actuatorPrice,a.actuator_id as actuatorId,
           a.brand as actuatorBrand,a.manufacturer as actuatorManufacturer,a.string4 as actuatorString4,
           a.string1 as actuatorString1,a.setup_type as actuatorSetupType,a.output_torque as actuatorOutputTorque,
@@ -237,11 +243,12 @@
           a.protection_level as actuatorProtectionLevel,a.quality_level as actuatorQualityLevel,a.explosion_level as actuatorExplosionLevel,a.string6 as actuatorString6,
           pd.string6 as goodsTime,
           ds.product_status as productStatus,ds.actuator_status as actuatorStatus,ds.ref1_status as ref1Status,ds.ref2_status as ref2Status,ds.p_status as pStatus,
-          ds.p1_status as p1Status,ds.p2_status as p2Status,ds.p3_status as p3Status,ds.p4_status as p4Status
+          ds.p1_status as p1Status,ds.p2_status as p2Status,ds.p3_status as p3Status,ds.p4_status as p4Status,pc.data_id as dataId,pc.child_id as childId,ds.data_status as dataStatus,
+          ds.string4 as procurementId,a.quality_level as levelValue
     from biz_actuator a
     join biz_process_child pc on pc.data_id=#{dataId} and pc.string11=a.actuator_id
     join biz_process_data pd on pc.data_id=pd.data_id
-    left join biz_data_status ds on ds.child_id=pc.child_id
+    left join biz_data_status ds on ds.child_id=pc.child_id and ds.string2=a.actuator_id
     where a.string1 in (
       select a1.string1 from biz_actuator a1
       join biz_process_child pc1 on pc1.data_id=#{dataId} and pc1.string11=a1.actuator_id
@@ -249,6 +256,9 @@
     </sql>
     <select id="selectBizChildActuatorList" parameterType="BizProcessChild" resultMap="BizProcessChildResult">
         <include refid="selectBizChildActuatorVo"/>
+        <if test="dataStatus == 1">and ds.data_status = #{dataStatus} </if>
+        <if test="dataStatus == -1">and ds.data_status is null </if>
+        group by a.actuator_id
         order by a.quality_level,a.string4
     </select>
 
@@ -256,15 +266,18 @@
     <!-- 采购池 法兰信息 -->
     <sql id="selectBizChildRef1Vo">
     select
-      pc.string5 as productRef1Id,pc.string6 as productRef1Num,pc.string7 as productRef1Coefficient,
+      pr.product_ref_id as productRef1Id,
+      (case when ds.data_status='1' then ds.string1 else sum(pc.string6) end)  as productRef1Num,
+      pc.string7 as productRef1Coefficient,
           pr.name as ref1Name,pr.price as ref1Price,
           pr.string2 as ref1String2,d1.name as  ref1Specifications,d2.name  as ref1ValvebodyMaterial,
           pr.material_require as ref1MaterialRequire,s.name as  suppliersName,pr.model,pd.string6 as goodsTime,
           ds.product_status as productStatus,ds.actuator_status as actuatorStatus,ds.ref1_status as ref1Status,ds.ref2_status as ref2Status,ds.p_status as pStatus,
-          ds.p1_status as p1Status,ds.p2_status as p2Status,ds.p3_status as p3Status,ds.p4_status as p4Status
+          ds.p1_status as p1Status,ds.p2_status as p2Status,ds.p3_status as p3Status,ds.p4_status as p4Status,pc.data_id as dataId,pc.child_id as childId,ds.data_status as dataStatus,
+          ds.string4 as procurementId,pr.string1 as levelValue
     from  biz_product_ref pr
     join biz_process_child pc on pc.data_id=#{dataId} and pr.product_ref_id=pc.string5
-    left join biz_data_status ds on ds.child_id=pc.child_id
+    left join biz_data_status ds on ds.child_id=pc.child_id and ds.string2=pr.product_ref_id
 join biz_process_data pd on pc.data_id=pd.data_id
     left join biz_dict d1 on d1.dict_id=pr.specifications
 	 left join biz_dict d2 on d2.dict_id=pr.valvebody_material
@@ -277,20 +290,26 @@ join biz_process_data pd on pc.data_id=pd.data_id
     </sql>
     <select id="selectBizChildRef1List" parameterType="BizProcessChild" resultMap="BizProcessChildResult">
         <include refid="selectBizChildRef1Vo"/>
+        <if test="dataStatus == 1">and ds.data_status = #{ } </if>
+        <if test="dataStatus == -1">and ds.data_status is null </if>
+        group by pr.product_ref_id
         order by pr.string1,pr.suppliers_id
     </select>
 
     <!-- 采购池 螺栓信息 -->
     <sql id="selectBizChildRef2Vo">
     select
-      pc.string8 as productRef2Id,pc.string9 as productRef2Num,pc.string7 as productRef1Coefficient,pr.name as ref2Name,pr.price as ref2Price,
+      pr.product_ref_id as productRef2Id,
+      (case when ds.data_status='1' then ds.string1 else sum(pc.string9) end) as productRef2Num,
+      pc.string7 as productRef1Coefficient,pr.name as ref2Name,pr.price as ref2Price,
       pr.string2 as ref1String2,d1.name as  ref1Specifications,d2.name  as ref1ValvebodyMaterial,
           pr.material_require as ref1MaterialRequire,s.name as  suppliersName,pr.model,pd.string6 as goodsTime,
           ds.product_status as productStatus,ds.actuator_status as actuatorStatus,ds.ref1_status as ref1Status,ds.ref2_status as ref2Status,ds.p_status as pStatus,
-          ds.p1_status as p1Status,ds.p2_status as p2Status,ds.p3_status as p3Status,ds.p4_status as p4Status
+          ds.p1_status as p1Status,ds.p2_status as p2Status,ds.p3_status as p3Status,ds.p4_status as p4Status,pc.data_id as dataId,pc.child_id as childId,ds.data_status as dataStatus,
+          ds.string4 as procurementId,pr.string1 as levelValue
     from  biz_product_ref pr
     join biz_process_child pc on pc.data_id=#{dataId} and pr.product_ref_id=pc.string8
-    left join biz_data_status ds on ds.child_id=pc.child_id
+    left join biz_data_status ds on ds.child_id=pc.child_id and ds.string2=pr.product_ref_id
     join biz_process_data pd on pc.data_id=pd.data_id
     left join biz_dict d1 on d1.dict_id=pr.specifications
 	 left join biz_dict d2 on d2.dict_id=pr.valvebody_material
@@ -303,13 +322,17 @@ join biz_process_data pd on pc.data_id=pd.data_id
     </sql>
     <select id="selectBizChildRef2List" parameterType="BizProcessChild" resultMap="BizProcessChildResult">
         <include refid="selectBizChildRef2Vo"/>
+        <if test="dataStatus == 1">and ds.data_status = #{dataStatus} </if>
+        <if test="dataStatus == -1">and ds.data_status is null </if>
+        group by pr.product_ref_id
         order by pr.string8,pr.suppliers_id
     </select>
 
     <!-- 定位器 -->
     <sql id="selectBizChildPAVo">
     select
-      pa.attachment_id as pattachmentId,pa.bh as pattachmentName, pc.pattachment_price as pattachmentPrice, sum(pc.pattachment_count) as pattachmentCount,
+      pa.attachment_id as pattachmentId,pa.bh as pattachmentName, pc.pattachment_price as pattachmentPrice,
+      (case when ds.data_status='1' then ds.string1 else sum(pc.pattachment_count) end) as pattachmentCount,
       pc.pattachment_coefficient as pattachmentCoefficient,
       pa.type, pa.bh, pa.chinese_name as chineseName, pa.chinese_specifications as chineseSpecifications, pa.english_name as englishName,
         pa.english_specifications as englishSpecifications, pa.chinese_packaging as chinesePackaging, pa.english_packaging as englishPackaging,
@@ -317,10 +340,11 @@ join biz_process_data pd on pc.data_id=pd.data_id
          pa.handling_fee as handlingFee, pa.color, pa.developer, pa.goods_category as goodsCategory,pa.settlement_price as procurementPrice,s.nick_name as supplierName,
          pd.string6 as goodsTime,
           ds.product_status as productStatus,ds.actuator_status as actuatorStatus,ds.ref1_status as ref1Status,ds.ref2_status as ref2Status,ds.p_status as pStatus,
-          ds.p1_status as p1Status,ds.p2_status as p2Status,ds.p3_status as p3Status,ds.p4_status as p4Status
+          ds.p1_status as p1Status,ds.p2_status as p2Status,ds.p3_status as p3Status,ds.p4_status as p4Status,pc.data_id as dataId,pc.child_id as childId,ds.data_status as dataStatus,
+          ds.string4 as procurementId,pa.string1 as levelValue
     from  biz_product_attachment pa
     join biz_process_child pc on pc.data_id=#{dataId} and pa.attachment_id=pc.pattachment_id
-    left join biz_data_status ds on ds.child_id=pc.child_id
+    left join biz_data_status ds on ds.child_id=pc.child_id and ds.string2=pa.attachment_id
     join biz_process_data pd on pc.data_id=pd.data_id
     left join biz_suppliers s on s.suppliers_id=pa.supplier
     where concat(pa.chinese_name,pa.chinese_specifications) in (
@@ -331,6 +355,8 @@ join biz_process_data pd on pc.data_id=pd.data_id
     </sql>
     <select id="selectBizChildPAList" parameterType="BizProcessChild" resultMap="BizProcessChildResult">
         <include refid="selectBizChildPAVo"/>
+        <if test="dataStatus == 1">and ds.data_status = #{dataStatus} </if>
+        <if test="dataStatus == -1">and ds.data_status is null </if>
         group by pa.attachment_id
         order by pa.string1
     </select>
@@ -340,18 +366,20 @@ join biz_process_data pd on pc.data_id=pd.data_id
     <sql id="selectBizChildPA1Vo">
     select
      pa.attachment_id as pattachment1Id,pa.bh as pattachment1Name, pc.pattachment1_price as pattachment1Price,
-     sum(pc.pattachment1_count) as pattachment1Count, pc.pattachment1_coefficient as pattachment1Coefficient,
+     (case when ds.data_status='1' then ds.string1 else sum(pc.pattachment1_count) end) as pattachment1Count,
+      pc.pattachment1_coefficient as pattachment1Coefficient,
      pa.type, pa.bh, pa.chinese_name as chineseName, pa.chinese_specifications as chineseSpecifications, pa.english_name as englishName,
         pa.english_specifications as englishSpecifications, pa.chinese_packaging as chinesePackaging, pa.english_packaging as englishPackaging,
         pa.chinese_unit as chineseUnit, pa.english_unit as englishUnit, pa.pressure, pa.material, pa.bar_code as barCode, pa.customs_bh as customsBh,
          pa.handling_fee as handlingFee, pa.color, pa.developer, pa.goods_category as goodsCategory,pa.settlement_price as procurementPrice,s.nick_name as supplierName,
          pd.string6 as goodsTime,
           ds.product_status as productStatus,ds.actuator_status as actuatorStatus,ds.ref1_status as ref1Status,ds.ref2_status as ref2Status,ds.p_status as pStatus,
-          ds.p1_status as p1Status,ds.p2_status as p2Status,ds.p3_status as p3Status,ds.p4_status as p4Status
+          ds.p1_status as p1Status,ds.p2_status as p2Status,ds.p3_status as p3Status,ds.p4_status as p4Status,pc.data_id as dataId,pc.child_id as childId,ds.data_status as dataStatus,
+          ds.string4 as procurementId,pa.string1 as levelValue
 
     from  biz_product_attachment pa
     join biz_process_child pc on pc.data_id=#{dataId} and pa.attachment_id=pc.pattachment1_id
-    left join biz_data_status ds on ds.child_id=pc.child_id
+    left join biz_data_status ds on ds.child_id=pc.child_id and ds.string2=pa.attachment_id
     join biz_process_data pd on pc.data_id=pd.data_id
     left join biz_suppliers s on s.suppliers_id=pa.supplier
     where concat(pa.chinese_name,pa.chinese_specifications) in (
@@ -362,6 +390,8 @@ join biz_process_data pd on pc.data_id=pd.data_id
     </sql>
     <select id="selectBizChildPA1List" parameterType="BizProcessChild" resultMap="BizProcessChildResult">
         <include refid="selectBizChildPA1Vo"/>
+        <if test="dataStatus == 1">and ds.data_status = #{dataStatus} </if>
+        <if test="dataStatus == -1">and ds.data_status is null </if>
         group by pa.attachment_id
         order by pa.string1
     </select>
@@ -369,7 +399,8 @@ join biz_process_data pd on pc.data_id=pd.data_id
     <!-- 回信器数 -->
     <sql id="selectBizChildPA2Vo">
     select
-     pa.attachment_id as pattachment2Id,pa.bh as pattachment2Name, pc.pattachment2_price as pattachment2Price, sum(pc.pattachment2_count) as pattachment2Count,
+     pa.attachment_id as pattachment2Id,pa.bh as pattachment2Name, pc.pattachment2_price as pattachment2Price,
+     (case when ds.data_status='1' then ds.string1 else sum(pc.pattachment2_count) end) as pattachment2Count,
      pc.pattachment2_coefficient as pattachment2Coefficient,
      pa.type, pa.bh, pa.chinese_name as chineseName, pa.chinese_specifications as chineseSpecifications, pa.english_name as englishName,
         pa.english_specifications as englishSpecifications, pa.chinese_packaging as chinesePackaging, pa.english_packaging as englishPackaging,
@@ -377,11 +408,12 @@ join biz_process_data pd on pc.data_id=pd.data_id
          pa.handling_fee as handlingFee, pa.color, pa.developer, pa.goods_category as goodsCategory,pa.settlement_price as procurementPrice,s.nick_name as supplierName,
          pd.string6 as goodsTime,
           ds.product_status as productStatus,ds.actuator_status as actuatorStatus,ds.ref1_status as ref1Status,ds.ref2_status as ref2Status,ds.p_status as pStatus,
-          ds.p1_status as p1Status,ds.p2_status as p2Status,ds.p3_status as p3Status,ds.p4_status as p4Status
+          ds.p1_status as p1Status,ds.p2_status as p2Status,ds.p3_status as p3Status,ds.p4_status as p4Status,pc.data_id as dataId,pc.child_id as childId,ds.data_status as dataStatus,
+          ds.string4 as procurementId,pa.string1 as levelValue
 
     from  biz_product_attachment pa
     join biz_process_child pc on pc.data_id=#{dataId} and pa.attachment_id=pc.pattachment2_id
-    left join biz_data_status ds on ds.child_id=pc.child_id
+    left join biz_data_status ds on ds.child_id=pc.child_id and ds.string2=pa.attachment_id
     join biz_process_data pd on pc.data_id=pd.data_id
     left join biz_suppliers s on s.suppliers_id=pa.supplier
     where concat(pa.chinese_name,pa.chinese_specifications) in (
@@ -392,6 +424,8 @@ join biz_process_data pd on pc.data_id=pd.data_id
     </sql>
     <select id="selectBizChildPA2List" parameterType="BizProcessChild" resultMap="BizProcessChildResult">
         <include refid="selectBizChildPA2Vo"/>
+        <if test="dataStatus == 1">and ds.data_status = #{dataStatus} </if>
+        <if test="dataStatus == -1">and ds.data_status is null </if>
         group by pa.attachment_id
         order by pa.string1
     </select>
@@ -399,19 +433,22 @@ join biz_process_data pd on pc.data_id=pd.data_id
     <sql id="selectBizChildPA3Vo">
     select
           pa.attachment_id as pattachment3Id,pa.bh as pattachment3Name,
-          pc.pattachment3_price as pattachment3Price, sum(pc.pattachment3_count) as pattachment3Count, pc.pattachment3_coefficient as pattachment3Coefficient,
+          pc.pattachment3_price as pattachment3Price,
+          (case when ds.data_status='1' then ds.string1 else sum(pc.pattachment3_count) end) as pattachment3Count,
+          pc.pattachment3_coefficient as pattachment3Coefficient,
           pa.type, pa.bh, pa.chinese_name as chineseName, pa.chinese_specifications as chineseSpecifications, pa.english_name as englishName,
         pa.english_specifications as englishSpecifications, pa.chinese_packaging as chinesePackaging, pa.english_packaging as englishPackaging,
         pa.chinese_unit as chineseUnit, pa.english_unit as englishUnit, pa.pressure, pa.material, pa.bar_code as barCode, pa.customs_bh as customsBh,
          pa.handling_fee as handlingFee, pa.color, pa.developer, pa.goods_category as goodsCategory,pa.settlement_price as procurementPrice,s.nick_name as supplierName,
          pd.string6 as goodsTime,
           ds.product_status as productStatus,ds.actuator_status as actuatorStatus,ds.ref1_status as ref1Status,ds.ref2_status as ref2Status,ds.p_status as pStatus,
-          ds.p1_status as p1Status,ds.p2_status as p2Status,ds.p3_status as p3Status,ds.p4_status as p4Status
+          ds.p1_status as p1Status,ds.p2_status as p2Status,ds.p3_status as p3Status,ds.p4_status as p4Status,pc.data_id as dataId,pc.child_id as childId,ds.data_status as dataStatus,
+          ds.string4 as procurementId,pa.string1 as levelValue
 
 
     from  biz_product_attachment pa
     join biz_process_child pc on pc.data_id=#{dataId} and pa.attachment_id=pc.pattachment3_id
-    left join biz_data_status ds on ds.child_id=pc.child_id
+    left join biz_data_status ds on ds.child_id=pc.child_id and ds.string2=pa.attachment_id
     join biz_process_data pd on pc.data_id=pd.data_id
     left join biz_suppliers s on s.suppliers_id=pa.supplier
     where concat(pa.chinese_name,pa.chinese_specifications) in (
@@ -422,6 +459,8 @@ join biz_process_data pd on pc.data_id=pd.data_id
     </sql>
     <select id="selectBizChildPA3List" parameterType="BizProcessChild" resultMap="BizProcessChildResult">
         <include refid="selectBizChildPA3Vo"/>
+        <if test="dataStatus == 1">and ds.data_status = #{dataStatus} </if>
+        <if test="dataStatus == -1">and ds.data_status is null </if>
         group by pa.attachment_id
         order by pa.string1
     </select>
@@ -429,17 +468,19 @@ join biz_process_data pd on pc.data_id=pd.data_id
     <sql id="selectBizChildPA4Vo">
     select
           pa.attachment_id as pattachment4Id,pa.bh as pattachment4Name, pc.pattachment4_price as pattachment4Price,
-          sum(pc.pattachment4_count) as pattachment4Count, pc.pattachment4_coefficient as pattachment4Coefficient,
+          (case when ds.data_status='1' then ds.string1 else sum(pc.pattachment4_count) end) as pattachment4Count,
+          pc.pattachment4_coefficient as pattachment4Coefficient,
           pa.type, pa.bh, pa.chinese_name as chineseName, pa.chinese_specifications as chineseSpecifications, pa.english_name as englishName,
         pa.english_specifications as englishSpecifications, pa.chinese_packaging as chinesePackaging, pa.english_packaging as englishPackaging,
         pa.chinese_unit as chineseUnit, pa.english_unit as englishUnit, pa.pressure, pa.material, pa.bar_code as barCode, pa.customs_bh as customsBh,
          pa.handling_fee as handlingFee, pa.color, pa.developer, pa.goods_category as goodsCategory,pa.settlement_price as procurementPrice,s.nick_name as supplierName,
          pd.string6 as goodsTime,
           ds.product_status as productStatus,ds.actuator_status as actuatorStatus,ds.ref1_status as ref1Status,ds.ref2_status as ref2Status,ds.p_status as pStatus,
-          ds.p1_status as p1Status,ds.p2_status as p2Status,ds.p3_status as p3Status,ds.p4_status as p4Status
+          ds.p1_status as p1Status,ds.p2_status as p2Status,ds.p3_status as p3Status,ds.p4_status as p4Status,pc.data_id as dataId,pc.child_id as childId,ds.data_status as dataStatus,
+          ds.string4 as procurementId,pa.string1 as levelValue
     from  biz_product_attachment pa
     join biz_process_child pc on pc.data_id=#{dataId} and pa.attachment_id=pc.pattachment4_id
-    left join biz_data_status ds on ds.child_id=pc.child_id
+    left join biz_data_status ds on ds.child_id=pc.child_id and ds.string2=pa.attachment_id
     join biz_process_data pd on pc.data_id=pd.data_id
     left join biz_suppliers s on s.suppliers_id=pa.supplier
     where concat(pa.chinese_name,pa.chinese_specifications) in (
@@ -450,6 +491,8 @@ join biz_process_data pd on pc.data_id=pd.data_id
     </sql>
     <select id="selectBizChildPA4List" parameterType="BizProcessChild" resultMap="BizProcessChildResult">
         <include refid="selectBizChildPA4Vo"/>
+        <if test="dataStatus == 1">and ds.data_status = #{dataStatus} </if>
+        <if test="dataStatus == -1">and ds.data_status is null </if>
         group by pa.attachment_id
         order by pa.string1
     </select>

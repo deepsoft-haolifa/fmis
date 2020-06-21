@@ -406,7 +406,7 @@ public class BizProcessDataController extends BaseController {
             for (int i = 0; i < productArray.size(); i++) {
                 JSONObject json = productArray.getJSONObject(i);
                 BizProcessChild bizProcessChild = JSONObject.parseObject(json.toJSONString(), BizProcessChild.class);
-                if (StringUtils.isNotEmpty(bizProcessChild.getString1())) {
+                if (StringUtils.isNotEmpty(bizProcessChild.getString2())) {
                     bizProcessChild.setDataId(dataId);
                     bizProcessChildService.insertBizProcessChild(bizProcessChild);
                 }
@@ -432,334 +432,371 @@ public class BizProcessDataController extends BaseController {
 
     @PostMapping("/listProductChild")
     @ResponseBody
-    public TableDataInfo listProductChild(@RequestParam String dataId,@RequestParam String level) {
+    public TableDataInfo listProductChild(BizProcessData bizProcessData) {
+        //@RequestParam String dataId,@RequestParam String level
         BizProcessChild queryBizProcessChild = new BizProcessChild();
-        queryBizProcessChild.setDataId(Long.parseLong(dataId));
-        queryBizProcessChild.setString2(level);
+        queryBizProcessChild.setDataId(bizProcessData.getDataId());
+        queryBizProcessChild.setString2(bizProcessData.getLevel());
         List<BizProcessChild> bizProcessChildList = bizProcessChildService.selectBizChildProductList(queryBizProcessChild);
         return getDataTable(bizProcessChildList);
     }
 
     @PostMapping("/listLevelProduct")
     @ResponseBody
-    public TableDataInfo listLevelProduct(@RequestParam String dataId,@RequestParam String level) {
+    public TableDataInfo listLevelProduct(BizProcessData bizProcessData) {
         BizProcessChild queryBizProcessChild = new BizProcessChild();
-        queryBizProcessChild.setDataId(Long.parseLong(dataId));
-        queryBizProcessChild.setString2(level);
+        queryBizProcessChild.setDataId(bizProcessData.getDataId());
+        queryBizProcessChild.setString2(bizProcessData.getLevel());
+        queryBizProcessChild.setDataStatus(bizProcessData.getDataStatus());
         List<BizProcessChild> bizProcessChildList = bizProcessChildService.selectBizChildProductList(queryBizProcessChild);
         return getDataTable(bizProcessChildList);
     }
 
     @PostMapping("/listLevelActuator")
     @ResponseBody
-    public TableDataInfo listLevelActuator(@RequestParam String dataId,@RequestParam String level) {
+    public TableDataInfo listLevelActuator(BizProcessData bizProcessData) {
         BizProcessChild queryBizProcessChild = new BizProcessChild();
-        queryBizProcessChild.setDataId(Long.parseLong(dataId));
-        queryBizProcessChild.setLevelLabel(level);
+        queryBizProcessChild.setDataId(bizProcessData.getDataId());
+        queryBizProcessChild.setLevelLabel(bizProcessData.getLevel());
+        queryBizProcessChild.setDataStatus(bizProcessData.getDataStatus());
         List<BizProcessChild> bizProcessChildListActuatorA = bizProcessChildService.selectBizChildActuatorList(queryBizProcessChild);
         return getDataTable(bizProcessChildListActuatorA);
     }
 
     @PostMapping("/listLevelRef1")
     @ResponseBody
-    public TableDataInfo listLevelRef1(@RequestParam String dataId,@RequestParam String level) {
+    public TableDataInfo listLevelRef1(BizProcessData bizProcessData) {
         BizProcessChild queryBizProcessChild = new BizProcessChild();
-        queryBizProcessChild.setDataId(Long.parseLong(dataId));
-        queryBizProcessChild.setLevelLabel(level);
+        queryBizProcessChild.setDataId(bizProcessData.getDataId());
+        queryBizProcessChild.setLevelLabel(bizProcessData.getLevel());
+        queryBizProcessChild.setDataStatus(bizProcessData.getDataStatus());
         List<BizProcessChild> bizProcessChildListRefA = bizProcessChildService.selectBizChildRef1List(queryBizProcessChild);
         return getDataTable(bizProcessChildListRefA);
     }
 
     @PostMapping("/listLevelRef2")
     @ResponseBody
-    public TableDataInfo listLevelRef2(@RequestParam String dataId,@RequestParam String level) {
+    public TableDataInfo listLevelRef2(BizProcessData bizProcessData) {
         BizProcessChild queryBizProcessChild = new BizProcessChild();
-        queryBizProcessChild.setDataId(Long.parseLong(dataId));
-        queryBizProcessChild.setLevelLabel(level);
+        queryBizProcessChild.setDataId(bizProcessData.getDataId());
+        queryBizProcessChild.setLevelLabel(bizProcessData.getLevel());
+        queryBizProcessChild.setDataStatus(bizProcessData.getDataStatus());
         List<BizProcessChild> bizProcessChildListRefA = bizProcessChildService.selectBizChildRef2List(queryBizProcessChild);
         return getDataTable(bizProcessChildListRefA);
     }
 
     @PostMapping("/listLevelPA")
     @ResponseBody
-    public TableDataInfo listLevelPA(@RequestParam String dataId,@RequestParam String level) {
+    public TableDataInfo listLevelPA(BizProcessData bizProcessData) {
         BizProcessChild queryBizProcessChild = new BizProcessChild();
-        queryBizProcessChild.setDataId(Long.parseLong(dataId));
-        queryBizProcessChild.setLevelLabel(level);
+        queryBizProcessChild.setDataId(bizProcessData.getDataId());
+        queryBizProcessChild.setLevelLabel(bizProcessData.getLevel());
+        queryBizProcessChild.setDataStatus(bizProcessData.getDataStatus());
         List<BizProcessChild> bizProcessChildListRefA = bizProcessChildService.selectBizChildPAList(queryBizProcessChild);
         return getDataTable(bizProcessChildListRefA);
     }
 
     @PostMapping("/listLevelPA1")
     @ResponseBody
-    public TableDataInfo listLevelPA1(@RequestParam String dataId,@RequestParam String level) {
+    public TableDataInfo listLevelPA1(BizProcessData bizProcessData) {
         BizProcessChild queryBizProcessChild = new BizProcessChild();
-        queryBizProcessChild.setDataId(Long.parseLong(dataId));
-        queryBizProcessChild.setLevelLabel(level);
+        queryBizProcessChild.setDataId(bizProcessData.getDataId());
+        queryBizProcessChild.setLevelLabel(bizProcessData.getLevel());
+        queryBizProcessChild.setDataStatus(bizProcessData.getDataStatus());
         List<BizProcessChild> bizProcessChildListRefA = bizProcessChildService.selectBizChildPA1List(queryBizProcessChild);
         return getDataTable(bizProcessChildListRefA);
     }
     @PostMapping("/listLevelPA2")
     @ResponseBody
-    public TableDataInfo listLevelPA2(@RequestParam String dataId,@RequestParam String level) {
+    public TableDataInfo listLevelPA2(BizProcessData bizProcessData) {
         BizProcessChild queryBizProcessChild = new BizProcessChild();
-        queryBizProcessChild.setDataId(Long.parseLong(dataId));
-        queryBizProcessChild.setLevelLabel(level);
+        queryBizProcessChild.setDataId(bizProcessData.getDataId());
+        queryBizProcessChild.setLevelLabel(bizProcessData.getLevel());
+        queryBizProcessChild.setDataStatus(bizProcessData.getDataStatus());
         List<BizProcessChild> bizProcessChildListRefA = bizProcessChildService.selectBizChildPA2List(queryBizProcessChild);
         return getDataTable(bizProcessChildListRefA);
     }
     @PostMapping("/listLevelPA3")
     @ResponseBody
-    public TableDataInfo listLevelPA3(@RequestParam String dataId,@RequestParam String level) {
+    public TableDataInfo listLevelPA3(BizProcessData bizProcessData) {
         BizProcessChild queryBizProcessChild = new BizProcessChild();
-        queryBizProcessChild.setDataId(Long.parseLong(dataId));
-        queryBizProcessChild.setLevelLabel(level);
+        queryBizProcessChild.setDataId(bizProcessData.getDataId());
+        queryBizProcessChild.setLevelLabel(bizProcessData.getLevel());
+        queryBizProcessChild.setDataStatus(bizProcessData.getDataStatus());
         List<BizProcessChild> bizProcessChildListRefA = bizProcessChildService.selectBizChildPA3List(queryBizProcessChild);
         return getDataTable(bizProcessChildListRefA);
     }
     @PostMapping("/listLevelPA4")
     @ResponseBody
-    public TableDataInfo listLevelPA4(@RequestParam String dataId,@RequestParam String level) {
+    public TableDataInfo listLevelPA4(BizProcessData bizProcessData) {
         BizProcessChild queryBizProcessChild = new BizProcessChild();
-        queryBizProcessChild.setDataId(Long.parseLong(dataId));
-        queryBizProcessChild.setLevelLabel(level);
+        queryBizProcessChild.setDataId(bizProcessData.getDataId());
+        queryBizProcessChild.setLevelLabel(bizProcessData.getLevel());
+        queryBizProcessChild.setDataStatus(bizProcessData.getDataStatus());
         List<BizProcessChild> bizProcessChildListRefA = bizProcessChildService.selectBizChildPA4List(queryBizProcessChild);
         return getDataTable(bizProcessChildListRefA);
     }
     @PostMapping("/listLevel")
     @ResponseBody
-    public TableDataInfo listLevel(@RequestParam String dataId) {
+    public TableDataInfo listLevel(BizProcessData bizProcessData) {
+
+        //@RequestParam String dataId,@RequestParam String dataStatus
 
         List<BizContractLevel> bizContractLevels = new ArrayList<>();
+        bizProcessData.setLevel("A");
 
-        if (!CollectionUtils.isEmpty(listLevelProduct(dataId,"A").getRows())) {
+        if (!CollectionUtils.isEmpty(listLevelProduct(bizProcessData).getRows())) {
             BizContractLevel bizContractLevel = new BizContractLevel();
             bizContractLevel.setLevelTypeName("产品信息A");
             bizContractLevel.setLevelType("11");
             bizContractLevel.setLevel("A");
-            bizContractLevel.setDataId(dataId);
+            bizContractLevel.setDataId(bizProcessData.getDataId().toString());
             bizContractLevels.add(bizContractLevel);
         }
-        if (!CollectionUtils.isEmpty(listLevelProduct(dataId,"B").getRows())) {
+        bizProcessData.setLevel("B");
+        if (!CollectionUtils.isEmpty(listLevelProduct(bizProcessData).getRows())) {
             BizContractLevel bizContractLevel = new BizContractLevel();
             bizContractLevel.setLevelTypeName("产品信息B");
             bizContractLevel.setLevelType("12");
             bizContractLevel.setLevel("B");
-            bizContractLevel.setDataId(dataId);
+            bizContractLevel.setDataId(bizProcessData.getDataId().toString());
             bizContractLevels.add(bizContractLevel);
         }
-        if (!CollectionUtils.isEmpty(listLevelProduct(dataId,"C").getRows())) {
+        bizProcessData.setLevel("C");
+        if (!CollectionUtils.isEmpty(listLevelProduct(bizProcessData).getRows())) {
             BizContractLevel bizContractLevel = new BizContractLevel();
             bizContractLevel.setLevelTypeName("产品信息C");
             bizContractLevel.setLevelType("13");
             bizContractLevel.setLevel("C");
-            bizContractLevel.setDataId(dataId);
+            bizContractLevel.setDataId(bizProcessData.getDataId().toString());
             bizContractLevels.add(bizContractLevel);
         }
 
         //执行器
-        if (!CollectionUtils.isEmpty(listLevelActuator(dataId,"A").getRows())) {
+        bizProcessData.setLevel("A");
+        if (!CollectionUtils.isEmpty(listLevelActuator(bizProcessData).getRows())) {
             BizContractLevel bizContractLevel = new BizContractLevel();
             bizContractLevel.setLevelTypeName("执行器信息A");
             bizContractLevel.setLevelType("21");
             bizContractLevel.setLevel("A");
-            bizContractLevel.setDataId(dataId);
+            bizContractLevel.setDataId(bizProcessData.getDataId().toString());
             bizContractLevels.add(bizContractLevel);
         }
-        if (!CollectionUtils.isEmpty(listLevelActuator(dataId,"B").getRows())) {
+        bizProcessData.setLevel("B");
+        if (!CollectionUtils.isEmpty(listLevelActuator(bizProcessData).getRows())) {
             BizContractLevel bizContractLevel = new BizContractLevel();
             bizContractLevel.setLevelTypeName("执行器信息B");
             bizContractLevel.setLevelType("22");
             bizContractLevel.setLevel("B");
-            bizContractLevel.setDataId(dataId);
+            bizContractLevel.setDataId(bizProcessData.getDataId().toString());
             bizContractLevels.add(bizContractLevel);
         }
-        if (!CollectionUtils.isEmpty(listLevelActuator(dataId,"C").getRows())) {
+        bizProcessData.setLevel("C");
+        if (!CollectionUtils.isEmpty(listLevelActuator(bizProcessData).getRows())) {
             BizContractLevel bizContractLevel = new BizContractLevel();
             bizContractLevel.setLevelTypeName("执行器信息C");
             bizContractLevel.setLevelType("23");
             bizContractLevel.setLevel("C");
-            bizContractLevel.setDataId(dataId);
+            bizContractLevel.setDataId(bizProcessData.getDataId().toString());
             bizContractLevels.add(bizContractLevel);
         }
-
-        if (!CollectionUtils.isEmpty(listLevelRef1(dataId,"A").getRows())) {
+        bizProcessData.setLevel("A");
+        if (!CollectionUtils.isEmpty(listLevelRef1(bizProcessData).getRows())) {
             BizContractLevel bizContractLevel = new BizContractLevel();
             bizContractLevel.setLevelTypeName("法兰信息A");
             bizContractLevel.setLevelType("31");
             bizContractLevel.setLevel("A");
-            bizContractLevel.setDataId(dataId);
+            bizContractLevel.setDataId(bizProcessData.getDataId().toString());
             bizContractLevels.add(bizContractLevel);
         }
-        if (!CollectionUtils.isEmpty(listLevelRef1(dataId,"B").getRows())) {
+        bizProcessData.setLevel("B");
+        if (!CollectionUtils.isEmpty(listLevelRef1(bizProcessData).getRows())) {
             BizContractLevel bizContractLevel = new BizContractLevel();
             bizContractLevel.setLevelTypeName("法兰信息B");
             bizContractLevel.setLevelType("32");
             bizContractLevel.setLevel("B");
-            bizContractLevel.setDataId(dataId);
+            bizContractLevel.setDataId(bizProcessData.getDataId().toString());
             bizContractLevels.add(bizContractLevel);
         }
-        if (!CollectionUtils.isEmpty(listLevelRef1(dataId,"C").getRows())) {
+        bizProcessData.setLevel("C");
+        if (!CollectionUtils.isEmpty(listLevelRef1(bizProcessData).getRows())) {
             BizContractLevel bizContractLevel = new BizContractLevel();
             bizContractLevel.setLevelTypeName("法兰信息C");
             bizContractLevel.setLevelType("33");
             bizContractLevel.setLevel("C");
-            bizContractLevel.setDataId(dataId);
+            bizContractLevel.setDataId(bizProcessData.getDataId().toString());
             bizContractLevels.add(bizContractLevel);
         }
-
-        if (!CollectionUtils.isEmpty(listLevelRef2(dataId,"A").getRows())) {
+        bizProcessData.setLevel("A");
+        if (!CollectionUtils.isEmpty(listLevelRef2(bizProcessData).getRows())) {
             BizContractLevel bizContractLevel = new BizContractLevel();
             bizContractLevel.setLevelTypeName("螺栓信息A");
             bizContractLevel.setLevelType("41");
             bizContractLevel.setLevel("A");
-            bizContractLevel.setDataId(dataId);
+            bizContractLevel.setDataId(bizProcessData.getDataId().toString());
             bizContractLevels.add(bizContractLevel);
         }
-        if (!CollectionUtils.isEmpty(listLevelRef2(dataId,"B").getRows())) {
+        bizProcessData.setLevel("B");
+        if (!CollectionUtils.isEmpty(listLevelRef2(bizProcessData).getRows())) {
             BizContractLevel bizContractLevel = new BizContractLevel();
             bizContractLevel.setLevelTypeName("螺栓信息B");
             bizContractLevel.setLevelType("42");
             bizContractLevel.setLevel("B");
-            bizContractLevel.setDataId(dataId);
+            bizContractLevel.setDataId(bizProcessData.getDataId().toString());
             bizContractLevels.add(bizContractLevel);
         }
-        if (!CollectionUtils.isEmpty(listLevelRef2(dataId,"C").getRows())) {
+        bizProcessData.setLevel("C");
+        if (!CollectionUtils.isEmpty(listLevelRef2(bizProcessData).getRows())) {
             BizContractLevel bizContractLevel = new BizContractLevel();
             bizContractLevel.setLevelTypeName("螺栓信息C");
             bizContractLevel.setLevelType("43");
             bizContractLevel.setLevel("C");
-            bizContractLevel.setDataId(dataId);
+            bizContractLevel.setDataId(bizProcessData.getDataId().toString());
             bizContractLevels.add(bizContractLevel);
         }
 
         //定位器
-        if (!CollectionUtils.isEmpty(listLevelPA(dataId,"A").getRows())) {
+        bizProcessData.setLevel("A");
+        if (!CollectionUtils.isEmpty(listLevelPA(bizProcessData).getRows())) {
             BizContractLevel bizContractLevel = new BizContractLevel();
             bizContractLevel.setLevelTypeName("定位器信息A");
             bizContractLevel.setLevelType("51");
             bizContractLevel.setLevel("A");
-            bizContractLevel.setDataId(dataId);
+            bizContractLevel.setDataId(bizProcessData.getDataId().toString());
             bizContractLevels.add(bizContractLevel);
         }
-        if (!CollectionUtils.isEmpty(listLevelPA(dataId,"B").getRows())) {
+        bizProcessData.setLevel("B");
+        if (!CollectionUtils.isEmpty(listLevelPA(bizProcessData).getRows())) {
             BizContractLevel bizContractLevel = new BizContractLevel();
             bizContractLevel.setLevelTypeName("定位器信息B");
             bizContractLevel.setLevelType("52");
             bizContractLevel.setLevel("B");
-            bizContractLevel.setDataId(dataId);
+            bizContractLevel.setDataId(bizProcessData.getDataId().toString());
             bizContractLevels.add(bizContractLevel);
         }
-        if (!CollectionUtils.isEmpty(listLevelPA(dataId,"C").getRows())) {
+        bizProcessData.setLevel("C");
+        if (!CollectionUtils.isEmpty(listLevelPA(bizProcessData).getRows())) {
             BizContractLevel bizContractLevel = new BizContractLevel();
             bizContractLevel.setLevelTypeName("定位器信息C");
             bizContractLevel.setLevelType("53");
             bizContractLevel.setLevel("C");
-            bizContractLevel.setDataId(dataId);
+            bizContractLevel.setDataId(bizProcessData.getDataId().toString());
             bizContractLevels.add(bizContractLevel);
         }
 
         //电磁阀
-        if (!CollectionUtils.isEmpty(listLevelPA1(dataId,"A").getRows())) {
+        bizProcessData.setLevel("A");
+        if (!CollectionUtils.isEmpty(listLevelPA1(bizProcessData).getRows())) {
             BizContractLevel bizContractLevel = new BizContractLevel();
             bizContractLevel.setLevelTypeName("电磁阀信息A");
             bizContractLevel.setLevelType("61");
             bizContractLevel.setLevel("A");
-            bizContractLevel.setDataId(dataId);
+            bizContractLevel.setDataId(bizProcessData.getDataId().toString());
             bizContractLevels.add(bizContractLevel);
         }
-        if (!CollectionUtils.isEmpty(listLevelPA1(dataId,"B").getRows())) {
+        bizProcessData.setLevel("B");
+        if (!CollectionUtils.isEmpty(listLevelPA1(bizProcessData).getRows())) {
             BizContractLevel bizContractLevel = new BizContractLevel();
             bizContractLevel.setLevelTypeName("电磁阀信息B");
             bizContractLevel.setLevelType("62");
             bizContractLevel.setLevel("B");
-            bizContractLevel.setDataId(dataId);
+            bizContractLevel.setDataId(bizProcessData.getDataId().toString());
             bizContractLevels.add(bizContractLevel);
         }
-        if (!CollectionUtils.isEmpty(listLevelPA1(dataId,"C").getRows())) {
+        bizProcessData.setLevel("C");
+        if (!CollectionUtils.isEmpty(listLevelPA1(bizProcessData).getRows())) {
             BizContractLevel bizContractLevel = new BizContractLevel();
             bizContractLevel.setLevelTypeName("电磁阀信息C");
             bizContractLevel.setLevelType("63");
             bizContractLevel.setLevel("C");
-            bizContractLevel.setDataId(dataId);
+            bizContractLevel.setDataId(bizProcessData.getDataId().toString());
             bizContractLevels.add(bizContractLevel);
         }
 
         //回信器数
-        if (!CollectionUtils.isEmpty(listLevelPA2(dataId,"A").getRows())) {
+        bizProcessData.setLevel("A");
+        if (!CollectionUtils.isEmpty(listLevelPA2(bizProcessData).getRows())) {
             BizContractLevel bizContractLevel = new BizContractLevel();
             bizContractLevel.setLevelTypeName("回信器数信息A");
             bizContractLevel.setLevelType("71");
             bizContractLevel.setLevel("A");
-            bizContractLevel.setDataId(dataId);
+            bizContractLevel.setDataId(bizProcessData.getDataId().toString());
             bizContractLevels.add(bizContractLevel);
         }
-        if (!CollectionUtils.isEmpty(listLevelPA2(dataId,"B").getRows())) {
+        bizProcessData.setLevel("B");
+        if (!CollectionUtils.isEmpty(listLevelPA2(bizProcessData).getRows())) {
             BizContractLevel bizContractLevel = new BizContractLevel();
             bizContractLevel.setLevelTypeName("回信器数信息B");
             bizContractLevel.setLevelType("72");
             bizContractLevel.setLevel("B");
-            bizContractLevel.setDataId(dataId);
+            bizContractLevel.setDataId(bizProcessData.getDataId().toString());
             bizContractLevels.add(bizContractLevel);
         }
-        if (!CollectionUtils.isEmpty(listLevelPA2(dataId,"C").getRows())) {
+        bizProcessData.setLevel("C");
+        if (!CollectionUtils.isEmpty(listLevelPA2(bizProcessData).getRows())) {
             BizContractLevel bizContractLevel = new BizContractLevel();
             bizContractLevel.setLevelTypeName("回信器数信息C");
             bizContractLevel.setLevelType("73");
             bizContractLevel.setLevel("C");
-            bizContractLevel.setDataId(dataId);
+            bizContractLevel.setDataId(bizProcessData.getDataId().toString());
             bizContractLevels.add(bizContractLevel);
         }
 
         //气源三连件
-        if (!CollectionUtils.isEmpty(listLevelPA3(dataId,"A").getRows())) {
+        bizProcessData.setLevel("A");
+        if (!CollectionUtils.isEmpty(listLevelPA3(bizProcessData).getRows())) {
             BizContractLevel bizContractLevel = new BizContractLevel();
             bizContractLevel.setLevelTypeName("气源三连件信息A");
             bizContractLevel.setLevelType("81");
             bizContractLevel.setLevel("A");
-            bizContractLevel.setDataId(dataId);
+            bizContractLevel.setDataId(bizProcessData.getDataId().toString());
             bizContractLevels.add(bizContractLevel);
         }
-        if (!CollectionUtils.isEmpty(listLevelPA3(dataId,"B").getRows())) {
+        bizProcessData.setLevel("B");
+        if (!CollectionUtils.isEmpty(listLevelPA3(bizProcessData).getRows())) {
             BizContractLevel bizContractLevel = new BizContractLevel();
             bizContractLevel.setLevelTypeName("气源三连件信息B");
             bizContractLevel.setLevelType("82");
             bizContractLevel.setLevel("B");
-            bizContractLevel.setDataId(dataId);
+            bizContractLevel.setDataId(bizProcessData.getDataId().toString());
             bizContractLevels.add(bizContractLevel);
         }
-        if (!CollectionUtils.isEmpty(listLevelPA3(dataId,"C").getRows())) {
+        bizProcessData.setLevel("C");
+        if (!CollectionUtils.isEmpty(listLevelPA3(bizProcessData).getRows())) {
             BizContractLevel bizContractLevel = new BizContractLevel();
             bizContractLevel.setLevelTypeName("气源三连件信息C");
             bizContractLevel.setLevelType("83");
             bizContractLevel.setLevel("C");
-            bizContractLevel.setDataId(dataId);
+            bizContractLevel.setDataId(bizProcessData.getDataId().toString());
             bizContractLevels.add(bizContractLevel);
         }
 
         //可离合减速器
-        if (!CollectionUtils.isEmpty(listLevelPA4(dataId,"A").getRows())) {
+        bizProcessData.setLevel("A");
+        if (!CollectionUtils.isEmpty(listLevelPA4(bizProcessData).getRows())) {
             BizContractLevel bizContractLevel = new BizContractLevel();
             bizContractLevel.setLevelTypeName("可离合减速器信息A");
             bizContractLevel.setLevelType("91");
             bizContractLevel.setLevel("A");
-            bizContractLevel.setDataId(dataId);
+            bizContractLevel.setDataId(bizProcessData.getDataId().toString());
             bizContractLevels.add(bizContractLevel);
         }
-        if (!CollectionUtils.isEmpty(listLevelPA4(dataId,"B").getRows())) {
+        bizProcessData.setLevel("B");
+        if (!CollectionUtils.isEmpty(listLevelPA4(bizProcessData).getRows())) {
             BizContractLevel bizContractLevel = new BizContractLevel();
             bizContractLevel.setLevelTypeName("可离合减速器信息B");
             bizContractLevel.setLevelType("92");
             bizContractLevel.setLevel("B");
-            bizContractLevel.setDataId(dataId);
+            bizContractLevel.setDataId(bizProcessData.getDataId().toString());
             bizContractLevels.add(bizContractLevel);
         }
-        if (!CollectionUtils.isEmpty(listLevelPA4(dataId,"C").getRows())) {
+        bizProcessData.setLevel("C");
+        if (!CollectionUtils.isEmpty(listLevelPA4(bizProcessData).getRows())) {
             BizContractLevel bizContractLevel = new BizContractLevel();
             bizContractLevel.setLevelTypeName("可离合减速器信息C");
             bizContractLevel.setLevelType("93");
             bizContractLevel.setLevel("C");
-            bizContractLevel.setDataId(dataId);
+            bizContractLevel.setDataId(bizProcessData.getDataId().toString());
             bizContractLevels.add(bizContractLevel);
         }
 
@@ -863,7 +900,7 @@ public class BizProcessDataController extends BaseController {
             for (int i = 0; i < productArray.size(); i++) {
                 JSONObject json = productArray.getJSONObject(i);
                 BizProcessChild bizProcessChild = JSONObject.parseObject(json.toJSONString(), BizProcessChild.class);
-                if (StringUtils.isNotEmpty(bizProcessChild.getString1())) {
+                if (StringUtils.isNotEmpty(bizProcessChild.getString2())) {
                     bizProcessChild.setDataId(dataId);
                     bizProcessChildService.insertBizProcessChild(bizProcessChild);
                 }
@@ -969,7 +1006,7 @@ public class BizProcessDataController extends BaseController {
         String dataId = getRequest().getParameter("dataId");
         String url = getRequest().getParameter("url");
         BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataById(Long.parseLong(dataId));
-        bizProcessData.setString17(url);
+        bizProcessData.setString20(url);
         return toAjax(bizProcessDataService.updateBizProcessData(bizProcessData));
     }
 
@@ -983,6 +1020,35 @@ public class BizProcessDataController extends BaseController {
         mmap.put("suppliers",bizSuppliersService.selectAllList());
 
         return prefix + "/selectProduct";
+    }
+    /**
+     * 选择系统用户
+     */
+    @GetMapping("/selectActuator")
+    public String selectActuator(ModelMap mmap) {
+        String productId = getRequest().getParameter("productId");
+        mmap.put("productId", productId);
+        return prefix + "/selectActuator";
+    }
+
+
+    /**
+     * 选择产品配件法兰
+     */
+    @GetMapping("/selectProductRef1")
+    public String selectProductRef1(ModelMap mmap) {
+        String productId = getRequest().getParameter("productId");
+        mmap.put("productId", productId);
+        return prefix + "/selectProductRef1";
+    }
+    /**
+     * 选择产品配件螺栓
+     */
+    @GetMapping("/selectProductRef2")
+    public String selectProductRef2(ModelMap mmap) {
+        String productId = getRequest().getParameter("productId");
+        mmap.put("productId", productId);
+        return prefix + "/selectProductRef2";
     }
     /**
      * 选择客户

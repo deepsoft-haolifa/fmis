@@ -139,7 +139,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
     <sql id="selectBizProcessDataVoRef">
-        select q.data_id, q.biz_data_id, q.biz_id, q.normal_flag, q.flow_status, q.remark, q.price1, q.price2, q.price3,
+        select distinct q.data_id, q.biz_data_id, q.biz_id, q.normal_flag, q.flow_status, q.remark, q.price1, q.price2, q.price3,
         q.price4, q.price5, q.price6, q.price7, q.price8, q.price9, q.price10, q.string1, q.string2,
         q.string3, q.string4, q.string5, q.string6, q.string7, q.string8, q.string9, q.string10, q.string11,
         q.string12, q.string13, q.string14, q.string15, q.string16, q.string17, q.string18, q.string19, q.string20,
@@ -150,6 +150,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         from biz_process_data q
         left join sys_user u on q.create_by=u.user_id
         left join sys_dept dt on u.dept_id=dt.dept_id
+
+        left join biz_data_status ds on ds.string3=q.data_id
+
         left join biz_customer ct on ct.customer_id=q.string2
         left join biz_suppliers bs on bs.suppliers_id=q.string3
     </sql>
@@ -161,6 +164,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="bizDataId != null "> and biz_data_id = #{bizDataId}</if>
             <if test="string1 != null and string1 != ''"> and q.string1 like concat('%', #{string1}, '%')</if>
             <if test="customerName != null and customerName != ''"> and ct.name like concat('%', #{customerName}, '%')</if>
+            <!-- 如果是详情，只看有数据 -->
+            <if test="bizEditFlag == 2">and ds.string4 = #{dataId} </if>
 
             <if test="bizId != null  and bizId != ''"> and biz_id = #{bizId}</if>
             <if test="normalFlag != null  and normalFlag != ''"> and normal_flag = #{normalFlag}</if>

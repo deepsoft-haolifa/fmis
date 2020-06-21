@@ -839,6 +839,36 @@ SELECT @parentId := LAST_INSERT_ID();
 insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
 values('业务查询', @parentId, '1',  '#',  'F', '0', 'fmis:procurementpool:list',         '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
 
+SELECT @parentIdF1 :=  menu_id from sys_menu where menu_name='采购池' and menu_type='C' and order_num='10';
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('发起采购', @parentIdF1, '1',  '#',  'F', '0', 'fmis:procurementpool:add',         '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+
+SELECT @parentIdF :=  menu_id from sys_menu where menu_name='整机采购' and menu_type='M' and order_num='20';
+
+-- 采购管理
+insert into sys_menu (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('采购管理', @parentIdF , '20', '/fmis/procurement', 'C', '0', 'fmis:procurement:view', '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '业务菜单');
+
+-- 按钮父菜单ID
+SELECT @parentId := LAST_INSERT_ID();
+
+-- 按钮 SQL
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('业务查询', @parentId, '1',  '#',  'F', '0', 'fmis:procurement:list',         '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('业务新增', @parentId, '2',  '#',  'F', '0', 'fmis:procurement:add',          '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('业务修改', @parentId, '3',  '#',  'F', '0', 'fmis:procurement:edit',         '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('业务删除', @parentId, '4',  '#',  'F', '0', 'fmis:procurement:remove',       '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('业务导出', @parentId, '5',  '#',  'F', '0', 'fmis:procurement:export',       '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
 
 
 
@@ -846,7 +876,7 @@ values('业务查询', @parentId, '1',  '#',  'F', '0', 'fmis:procurementpool:li
 drop table if exists biz_data_status;
 create table biz_data_status (
   status_id           bigint(20)      not null auto_increment    comment 'ID',
-  type           varchar(5)    comment '1=采购',
+  type           varchar(5)    comment '1=产品 2=执行器 3=法兰 4=螺栓 5=定位器 6=电磁阀 7=回信器数 8=气源三连件 9=可离合减速器',
   child_id bigint(20) comment '关联ID 关联 child表 将来也可以关联dataId',
   data_status varchar(1) comment '例如合同状态 0=未处理 1=已处理',
   product_status varchar(1) comment '产品 0=未处理 1=已处理',

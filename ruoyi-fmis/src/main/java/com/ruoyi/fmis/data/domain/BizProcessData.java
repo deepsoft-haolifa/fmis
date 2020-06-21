@@ -22,8 +22,21 @@ import java.util.List;
 public class BizProcessData extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
+
+
     /** ID */
     private Long dataId;
+
+    @Getter
+    @Setter
+    private String bizEditFlag;
+
+    @Getter
+    @Setter
+    private String level;
+    @Getter
+    @Setter
+    private String dataStatus;
 
     @Getter
     @Setter

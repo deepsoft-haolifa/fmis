@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('执行器列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row full-height full-width">
+
+
+            <div class="col-sm-6 full-width full-height">
+                <div class="tabs-container full-width full-height">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a data-toggle="tab" href="#tab-1" aria-expanded="true"> 电动执行器</a>
+                        </li>
+                        <li class=""><a data-toggle="tab" href="#tab-2" aria-expanded="false">气动执行器</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+
+
+
+                        <div id="tab-1" class="tab-pane active">
+
+                            <div class="col-sm-12 search-collapse">
+                                <form id="formId">
+                                    <div class="select-list">
+                                        <ul>
+                                            <li>
+                                                <p>产品名称：</p>
+                                                <input type="text" name="name" id="name1"/>
+                                                <input type="hidden" name="string2" value="1"/>
+                                                <input type="hidden" name="string61" id="string61" value="0"/>
+                                                <input type="hidden" name="productId" id="productId" th:value="${productId}"/>
+                                            </li>
+                                            <li>
+                                                <a class="btn btn-primary btn-rounded btn-sm" onclick="search1()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                                <a class="btn btn-primary btn-rounded btn-sm" onclick="searchAll1()"><i class="fa fa-search"></i>&nbsp;搜索全部</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div class="col-sm-12 select-table table-striped">
+                                <table id="bootstrap-table"></table>
+                            </div>
+
+
+                        </div>
+
+
+
+
+
+                        <div id="tab-2" class="tab-pane">
+
+
+                            <div class="col-sm-12 search-collapse">
+                                <form id="formId1">
+                                    <div class="select-list">
+                                        <ul>
+                                            <li>
+                                                <p>产品名称：</p>
+                                                <input type="text" name="name" id="name2"/>
+                                                <input type="hidden" name="string2" value="2"/>
+                                                <input type="hidden" name="string62" id="string62" value="0"/>
+                                                <input type="hidden" name="productId" id="productId" th:value="${productId}"/>
+                                            </li>
+                                            <li>
+                                                <a class="btn btn-primary btn-rounded btn-sm" onclick="search2()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                                <a class="btn btn-primary btn-rounded btn-sm" onclick="searchAll2()"><i class="fa fa-search"></i>&nbsp;搜索全部</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div class="col-sm-12 select-table table-striped">
+                                <table id="bootstrap-table1"></table>
+                            </div>
+
+
+
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('fmis:actuator:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('fmis:actuator:remove')}]];
+        var prefix = ctx + "fmis/actuator";
+        var prefix1 = ctx + "fmis/airActuator";
+        var setupTypeData = [[${@dict.getType('actuator_setup_type')}]];
+        var productId = $("#productId").val();
+
+
+        var table1;
+        var table2;
+
+        function search1 () {
+            $("#string61").val("0");
+            var data = {"name":$("#name1").val(),"string2":"1","string6":$("#string61").val()};
+            $.table.search('formId','bootstrap-table',data);
+        }
+        function searchAll1 () {
+            $("#string61").val("1");
+            var data = {"name":$("#name1").val(),"string2":"1","string6":$("#string61").val()};
+            $.table.search('formId','bootstrap-table',data);
+        }
+        function search2 () {
+            $("#string62").val("0");
+            var data = {"name":$("#name2").val(),"string2":"2","string6":$("#string61").val()};
+            $.table.search('formId1','bootstrap-table1',data);
+        }
+        function searchAll2 () {
+            $("#string62").val("1");
+            var data = {"name":$("#name2").val(),"string2":"2","string6":$("#string62").val()};
+            $.table.search('formId1','bootstrap-table1',data);
+        }
+
+        var options1 = {
+            id: "bootstrap-table",
+            queryParams:{"string2":"1","string6":"0"},
+            url: prefix + "/listForProductId?productId=" + productId,
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            pagination:false,
+            modalName: "电动执行器",
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field : 'actuatorId',
+                    title : 'ID',
+                    visible: false
+                },
+                {
+                    field : 'name',
+                    title : '产品名称'
+                },
+                {
+                    field : 'brand',
+                    title : '执行器品牌'
+                },
+                {
+                    field : 'manufacturer',
+                    title : '生产厂家'
+                },
+                {
+                    field : 'string1',
+                    title : '型号'
+                },
+                {
+                    field : 'setupType',
+                    title : '安装形式',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(setupTypeData, value);
+                    }
+                },
+                {
+                    field : 'outputTorque',
+                    title : '输出力距'
+                },
+                {
+                    field : 'actionType',
+                    title : '开启时间'
+                },
+                {
+                    field : 'controlCircuit',
+                    title : '控制电路'
+                },
+                {
+                    field : 'adaptableVoltage',
+                    title : '适用电压'
+                },
+                {
+                    field : 'protectionLevel',
+                    title : '防护等级'
+                },
+                {
+                    field : 'qualityLevel',
+                    title : '品质等级'
+                },
+                {
+                    field : 'explosionLevel',
+                    title : '防爆等级'
+                },
+                {
+                    field : 'price',
+                    title : '价格'
+                },
+                {
+                    field : 'remark',
+                    title : '备注'
+                },
+                {
+                    field : 'createTime',
+                    title : '创建时间'
+                },{
+                    field : 'updateTime',
+                    title : '修改时间'
+                }]
+        };
+
+        function initTable1 () {
+            table1 = $.table;
+            table1.init(options1);
+        }
+
+
+
+
+        var options2 = {
+            id: "bootstrap-table1",
+            queryParams:{"string2":"2","string6":"0"},
+            url: prefix + "/listForProductId?productId=" + productId,
+            pagination:false,
+            modalName: "气动执行器",
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field : 'actuatorId',
+                    title : 'ID',
+                    visible: false
+                },
+                {
+                    field : 'name',
+                    title : '产品名称'
+                },
+                {
+                    field : 'brand',
+                    title : '执行器品牌'
+                },
+                {
+                    field : 'manufacturer',
+                    title : '生产厂家'
+                },
+                {
+                    field : 'string1',
+                    title : '型号'
+                },
+                {
+                    field : 'string3',
+                    title : '类别'
+                },
+                {
+                    field : 'string4',
+                    title : '气缸形式'
+                },
+                {
+                    field : 'string5',
+                    title : '壳体材质'
+                },
+                {
+                    field : 'qualityLevel',
+                    title : '品质等级'
+                },
+                {
+                    field : 'price',
+                    title : '价格'
+                },
+                {
+                    field : 'remark',
+                    title : '备注'
+                },
+                {
+                    field : 'createTime',
+                    title : '创建时间'
+                },{
+                    field : 'updateTime',
+                    title : '修改时间'
+                }]
+        };
+        function initTable2 () {
+            table2 = $.table;
+            table2.init(options2);
+        }
+
+        $(function() {
+            initTable1();
+            initTable2();
+        });
+
+        /* 添加用户-选择用户-提交 */
+        function submitHandler() {
+            //row0[0].actuatorId
+            var rows1 = $("#bootstrap-table").bootstrapTable("getSelections");
+            var rows2 = $("#bootstrap-table1").bootstrapTable("getSelections");
+            if (rows1.length == 0 && rows2.length == 0) {
+                $.modal.alertWarning("请选择一条记录");
+                return;
+            }
+            if ((rows1.length + rows2.length) > 1) {
+                $.modal.alertWarning("请只选择一条记录");
+                return;
+            }
+            var selActuatorId;
+            var selName;
+            var selRow;
+
+            if (rows1.length == 1) {
+                selActuatorId = rows1[0].actuatorId;
+                selName = rows1[0].name;
+                selRow = rows1[0];
+            } else {
+                selActuatorId = rows2[0].actuatorId;
+                selName = rows2[0].name;
+                selRow = rows2[0];
+            }
+
+            var rowData = {
+                actuatorId : selActuatorId,
+                actuatorName:selName,
+                actuatorPrice:selRow.price,
+                actuatorNum:"0",
+                actuatorCoefficient:"0",
+            };
+            parent.$('#form-data-add input[id=actuatorJsonParamter]').val(JSON.stringify(rowData));
+            parent.$('#form-data-edit input[id=actuatorJsonParamter]').val(JSON.stringify(rowData));
+            $.modal.close();
+        }
+    </script>
+</body>
+</html>

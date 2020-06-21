@@ -152,24 +152,23 @@
                     align: 'center'
                 },
                 {
-                    field : 'string17',
+                    field : 'string20',
                     title : '合同文件|流传采购池',
                     align: 'center',
                     formatter: function(value, row, index) {
                         var flowStatus = row.flowStatus;
                         var dataId = row.dataId;
                         var normalFlag = row.normalFlag;
-                        var string17 = row.string17;//文件路径
+                        var string20 = row.string20;//文件路径
                         var string13 = row.string13;//1=进入采购池
                         var createBy = row.createBy;
                         var loginUserId = row.loginUserId;
                         var actions = [];
                         if (flowStatus == normalFlag) {
-                            if (!$.common.isEmpty(string17)) {
-                                string17 = fileUrlStart + string17;
-                                actions.push('<a class="btn btn-success btn-xs" target="_blank" href="' + string17 + '" ><i class="fa fa-edit"></i>查看</a>');
-                                console.log("createBy=" + createBy + "---loginUserId=" + loginUserId)
-                                if (createBy == loginUserId) {
+                            if (!$.common.isEmpty(string20)) {
+                                string20 = fileUrlStart + string20;
+                                actions.push('<a class="btn btn-success btn-xs" target="_blank" href="' + string20 + '" ><i class="fa fa-edit"></i>查看</a>');
+                                if (createBy == loginUserId && string13 != 1) {
                                     actions.push('<a class="btn btn-success btn-xs"  href="#" onclick="goPool(' + dataId + ')" ><i class="fa fa-edit"></i>流转</a> ');
                                 }
                             } else {
@@ -329,8 +328,8 @@
         }
         function goPool(dataId) {
             var row = $('#bootstrap-table').bootstrapTable("getRowByUniqueId",dataId);
-            var string17 = row.string17;//文件路径
-            if ($.common.isEmpty(string17)) {
+            var string20 = row.string20;//文件路径
+            if ($.common.isEmpty(string20)) {
                 $.modal.alertWarning("合同未上传不能流转至采购池！");
                 return;
             }

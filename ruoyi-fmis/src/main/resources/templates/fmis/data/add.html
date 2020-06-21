@@ -462,20 +462,20 @@
                 {field : 'actuatorName',title : '执行器名称',editable: false},
                 {field : 'actuatorPrice',title : '执行器价格',editable: false},
                 {field : 'actuatorNum',title : '执行器数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
-                {field : 'actuatorCoefficient',title : '执行器系数',editable: false},
+                {field : 'actuatorCoefficient',title : '执行器系数',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
 
                 {field : 'productRef1Id',title : 'ref1Id',visible: false},
                 {field : 'ref1Name',title : '法兰名称',editable: false},
 
                 {field : 'ref1Price',title : '法兰价格',editable: false},
                 {field : 'productRef1Num',title : '法兰数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
-                {field : 'productRef1Coefficient',title : '法兰系数',editable: false},
+                {field : 'productRef1Coefficient',title : '法兰系数',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
 
                 {field : 'productRef2Id',title : 'ref2Id',visible: false},
                 {field : 'ref2Name',title : '螺栓名称',editable: {type: 'text',emptytext: '空',disabled: true}},
                 {field : 'ref2Price',title : '螺栓价格',editable: false},
                 {field : 'productRef2Num',title : '螺栓数量',editable: {type: 'text',emptytext: '0',validate: function(v){ return numberValidate(v)}}},
-                {field : 'productRef2Coefficient',title : '螺栓系数',editable: false},
+                {field : 'productRef2Coefficient',title : '螺栓系数',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
 
                 //定位器，电磁阀，回信器数，气源三连件，可离合减速器
                 {field : 'pattachmentId',title : 'pattachmentId',visible: false},
@@ -541,7 +541,10 @@
             || field == "productRef2Num" || field == "actuatorNum" || field == "pattachmentPrice" || field == "pattachment1Price" || field == "pattachment2Price" || field == "pattachment3Price" || field == "pattachment4Price"
             || field == "pattachmentCount" || field == "pattachment1Count" || field == "pattachment2Count" || field == "pattachment3Count" || field == "pattachment4Count"
             || field == "pattachmentCoefficient" || field == "pattachment1Coefficient" || field == "pattachment2Coefficient" || field == "pattachment3Coefficient"
-            || field == "pattachment4Coefficient" || field == "string14") {
+            || field == "pattachment4Coefficient" || field == "string14"
+            || field == "productRef1Num"|| field == "productRef1Coefficient"
+            || field == "productRef2Num"|| field == "productRef2Coefficient"
+            || field == "actuatorNum" || field == "actuatorCoefficient") {
             calculateTotalPrice();
         }
     }
@@ -555,7 +558,43 @@
         var idx = $element.parent().data('index');
         console.log("row.index=" + idx + "--" + row.productId);
         var productId = row.productId;
-        if (field == "pattachmentName" || field == "pattachment1Name" || field == "pattachment2Name"
+        if (field == "ref1Name") {
+            //选择法兰
+            var widthNum = $("#form-data-add").width() - 50;
+            var heigthNum = $("#form-data-add").height() + 250;
+            var url = prefix + "/selectProductRef1?productId=" + productId;
+            console.log("widthNum=" + widthNum + "---" + this.innerWidth);
+            $.modal.open("关联产品配件法兰", url,widthNum, heigthNum,function (index, layero) {
+                var iframeWin = layero.find('iframe')[0];
+                iframeWin.contentWindow.submitHandler(index, layero);
+                //ref1JsonParamter
+                var ref1JsonParamter = $("#ref1JsonParamter").val();
+                setTableValueById(ref1JsonParamter,productId,idx);
+            });
+        } else if (field == "ref2Name") {
+            //选择法兰
+            var widthNum = $("#form-data-add").width() - 50;
+            var heigthNum = $("#form-data-add").height() + 250;
+            var url = prefix + "/selectProductRef2?productId=" + productId;
+            console.log("widthNum=" + widthNum + "---" + this.innerWidth);
+            $.modal.open("关联产品配件螺栓", url,widthNum, heigthNum,function (index, layero) {
+                var iframeWin = layero.find('iframe')[0];
+                iframeWin.contentWindow.submitHandler(index, layero);
+                var ref2JsonParamter = $("#ref2JsonParamter").val();
+                setTableValueById(ref2JsonParamter,productId,idx);
+            });
+        } else if (field == "actuatorName") {
+            var widthNum = $("#form-data-add").width() - 50;
+            var heigthNum = $("#form-data-add").height() + 250;
+            var url = prefix + "/selectActuator?productId=" + productId;
+            console.log("widthNum=" + widthNum + "---" + this.innerWidth);
+            $.modal.open("关联执行器", url,widthNum, heigthNum,function (index, layero) {
+                var iframeWin = layero.find('iframe')[0];
+                iframeWin.contentWindow.submitHandler(index, layero);
+                var actuatorJsonParamter = $("#actuatorJsonParamter").val();
+                setTableValueById(actuatorJsonParamter,productId,idx);
+            });
+        } else if (field == "pattachmentName" || field == "pattachment1Name" || field == "pattachment2Name"
             || field == "pattachment3Name" || field == "pattachment4Name") {
             var widthNum = $("#form-data-add").width() - 50;
             var heigthNum = $("#form-data-add").height() + 250;

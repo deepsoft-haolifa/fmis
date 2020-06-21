@@ -4,168 +4,144 @@
     <th:block th:include="include :: header('新增采购管理')" />
     <th:block th:include="include :: datetimepicker-css" />
 </head>
-<body class="white-bg">
+<body class="white-bg" onload="initExpandRow()">
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
         <form class="form-horizontal m" id="form-data-add">
             <input type="hidden" name="bizId" value="procurement"/>
 
             <div class="form-group">    
-                <label class="col-sm-3 control-label">结算单位：</label>
-                <div class="col-sm-8">
+                <label class="col-sm-1 control-label">结算单位：</label>
+                <div class="col-sm-2">
                     <input name="string1" class="form-control" type="text">
                 </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">归属单位：</label>
-                <div class="col-sm-8">
+                <label class="col-sm-1 control-label">归属单位：</label>
+                <div class="col-sm-2">
                     <input name="string2" class="form-control" type="text">
                 </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">订货日期：</label>
-                <div class="col-sm-8">
+                <label class="col-sm-1 control-label">订货日期：</label>
+                <div class="col-sm-2">
                     <div class="input-group date">
                         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                         <input name="datetime1" class="form-control" placeholder="yyyy-MM-dd" type="text">
                     </div>
                 </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">生产单号：</label>
-                <div class="col-sm-8">
+                <label class="col-sm-1 control-label">生产单号：</label>
+                <div class="col-sm-2">
                     <input name="string3" class="form-control" type="text">
                 </div>
-            </div>
 
+            </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label">客户：</label>
-                <div class="col-sm-8">
-                    <input name="string4" class="form-control" type="hidden">
-                    <input name="customerName" id="customerName" class="form-control" type="text" readonly onclick="selectCustomer()" required>
-                </div>
-            </div>
-
-
-
-            <div class="form-group">
-                <label class="col-sm-3 control-label">选择合同：</label>
-                <div class="col-sm-6">
-                    <input name="contractIds" id="contractIds" class="form-control" type="hidden" >
-                    <input name="contractNames" id="contractNames" class="form-control" type="text" readonly onclick="selectContract(0)" required>
-                </div>
-
-                <div class="col-sm-3">
-                    <a class="btn btn-success btn-sm" onclick="selectContract(1)" >
-                        <i class="fa fa"></i> 追加
-                        <input type="hidden" id="productOperationType" name="productOperationType" value="0">
-                    </a>
-                </div>
-            </div>
-
-
-            <div class="hr-line-dashed"></div>
-            <div class="form-horizontal" id="productDiv">
-
-
-
-            </div>
-            <div class="hr-line-dashed"></div>
-
-
-
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">类别：</label>
-                <div class="col-sm-8">
+                <label class="col-sm-1 control-label">类别：</label>
+                <div class="col-sm-2">
                     <input name="string5" class="form-control" type="text">
                 </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">供应商：</label>
-                <div class="col-sm-8">
-                    <input name="price6" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">供应商：</label>
-                <div class="col-sm-8">
+
+
+                <label class="col-sm-1 control-label">供应商：</label>
+                <div class="col-sm-2">
                     <input name="string6" class="form-control" type="text">
                 </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">订货产品：</label>
-                <div class="col-sm-8">
+
+                <label class="col-sm-1 control-label">订货产品：</label>
+                <div class="col-sm-2">
                     <input name="string7" class="form-control" type="text">
                 </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">回传：</label>
-                <div class="col-sm-8">
-                    <input name="string8" class="form-control" type="text">
-                </div>
-            </div>
 
-            <div class="form-group">
-                <label class="col-sm-3 control-label">生产单要求交期：</label>
-                <div class="col-sm-8">
+                <label class="col-sm-1 control-label">生产单要求交期：</label>
+                <div class="col-sm-2">
                     <div class="input-group date">
                         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                         <input name="datetime2" class="form-control" placeholder="yyyy-MM-dd" type="text">
                     </div>
                 </div>
             </div>
+
             <div class="form-group">
-                <label class="col-sm-3 control-label">供应商发货日期：</label>
-                <div class="col-sm-8">
+                <label class="col-sm-1 control-label">回传：</label>
+                <div class="col-sm-2">
+                    <input name="string8" class="form-control" type="text">
+                </div>
+                <label class="col-sm-1 control-label">供应商发货日期：</label>
+                <div class="col-sm-2">
                     <div class="input-group date">
                         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                         <input name="datetime3" class="form-control" placeholder="yyyy-MM-dd" type="text">
                     </div>
                 </div>
-            </div>
-
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">运输方式：</label>
-                <div class="col-sm-8">
+                <label class="col-sm-1 control-label">运输方式：</label>
+                <div class="col-sm-2">
                     <input name="string9" class="form-control" type="text">
                 </div>
+
             </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">合计：</label>
-                <div class="col-sm-8">
-                    <input name="price1" class="form-control" type="text">
+
+            <div class="form-group">
+                <label class="col-sm-1 control-label">客户：</label>
+                <div class="col-sm-2">
+                    <input name="string4" class="form-control" type="hidden">
+                    <input name="customerName" id="customerName" class="form-control" type="text" readonly onclick="selectCustomer()" required>
                 </div>
             </div>
-
-
         </form>
+
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"  class="text-nowrap"></table>
+        </div>
     </div>
     <th:block th:include="include :: footer" />
     <th:block th:include="include :: datetimepicker-js" />
-    <script type="text/javascript">
-        var prefix = ctx + "fmis/procurement"
+    <th:block th:include="include :: bootstrap-editable-css" />
+    <th:block th:include="include :: bootstrap-table-editable-js" />
+    <script th:inline="javascript">
+        var prefix = ctx + "fmis/procurement";
+
+
         $("#form-data-add").validate({
             focusCleanup: true
         });
 
         function submitHandler() {
             var vali = $.validate.form();
+            if (overAllIds.length == 0) {
+                $.modal.alertWarning("请至少选择一条记录");
+                return;
+            }
+
             console.log("vali=" + vali);
             if (vali) {
+
+
+
+                var url = ctx + "fmis/procurement/add";
+                $("#numJsonValue").val(JSON.stringify(datas));
+
                 var dataObj = $('#form-data-add').serializeArray();
-                //计算是否正常
-                //特殊费用
-                var productIds = $("#contractIds").val();
-                var productArray = new Array();
-                var productIdsStrs = productIds.split(",");
-                for (var i = 0; i < productIdsStrs.length; i++) {
+                var datas = [];
+                var productArray = [];
+                $.each(overAllIds,function(index,value){
+                    var num = numberMap.get(value);
+                    if (num == null) {
+                        num = "-1";
+                    }
                     var productObj = new Object();
-                    var productId = productIdsStrs[i];
-                    productObj["string1"] = productId;
-                    productObj["price1"] = $("#productNum_" + productId).val();
-                    productObj["price2"] = $("#productPrice_" + productId).val();
-                    productObj["remark"] = $("#productRemark_" + productId).val();
+                    var values = value.split("_");
+                    var type = values[0];
+                    var childId = values[1];
+                    var dataId = values[2];
+                    var procurementId = values[3];
+                    var levelValue = values[4];
+
+                    productObj["type"] = type;
+                    productObj["childId"] = childId;
+                    productObj["string1"] = num;
+                    productObj["string2"] = dataId;
+                    productObj["string3"] = procurementId;
+                    productObj["string5"] = levelValue;
+                    productObj["dataStatus"] = "1";
                     productArray.push(productObj);
-                }
+                })
+
                 dataObj.push({"name": "productParmters", "value": JSON.stringify(productArray)});
                 $.operate.save(prefix + "/add", dataObj);
             }
@@ -199,76 +175,10 @@
             $.modal.open("关联客户", url,widthNum, heigthNum);
         }
 
-        function selectContract(type) {
-            var url = prefix + "/selectContract";
-            $("#productOperationType").val(type);
-            var widthNum = this.innerWidth - 50;
-            var heigthNum = this.innerHeight - 50;
-
-            $.modal.open("关联合同", url,widthNum, heigthNum);
-        }
-
-
-        /**
-         * 计算总额
-         */
-        function sumPrice (productId) {
-            getProductSum(productId);
-            totalSumPrice();
-        }
-
-        function getProductSum (productId) {
-            //产品数量 产品系数 价格
-            var productNum = $("#productNum_" + productId).val();
-            productNum = isEmpty(productNum) == true ? 0 : parseFloat(productNum);
-
-            var productPrice = $("#productPrice_" + productId).val();
-            productPrice = isEmpty(productPrice) == true ? 0 : parseFloat(productPrice);
-
-            //合计总额 totalSum
-            var productSum = parseFloat(productPrice).toFixed(4);
-            var totalSum = parseFloat(parseFloat(productSum)).toFixed(4);
-            $("#totalSum_" + productId).val(totalSum);
-            return totalSum + "#" + productNum;
-        }
-
-        function FloatAdd(arg1,arg2){
-            var r1,r2,m;
-            try{r1=arg1.toString().split(".")[1].length}catch(e){r1=0}
-            try{r2=arg2.toString().split(".")[1].length}catch(e){r2=0}
-            m=Math.pow(10,Math.max(r1,r2));
-            return (arg1*m+arg2*m)/m;
-        }
-
-        function totalSumPrice () {
-            //产品合计金额
-            var productIds = $("#contractIds").val();
-            var productIdsS = productIds.split(",");
-            var productTotalPrice = 0;
-            var totalPrice = 0;
-            var productTotalNumS = 0;
-            for (var i = 0; i < productIdsS.length; i++) {
-                var productId = productIdsS[i];
-                if (isEmpty(productId)) {
-                    continue;
-                }
-                var totalSumStr = getProductSum(productId,productTotalNum);
-                var totalSum = totalSumStr.split("#")[0];
-                var productTotalNum = totalSumStr.split("#")[1];
-                productTotalPrice = FloatAdd(productTotalPrice,totalSum).toFixed(4);
-                productTotalNumS = FloatAdd(productTotalNumS,productTotalNum).toFixed(0);
-            }
-            var specialExpenses = $("#specialExpenses").val();
-            if (isEmpty(specialExpenses)) {
-                specialExpenses = 0;
-            }
-            totalPrice = parseFloat(productTotalPrice) + parseFloat(specialExpenses);
-            $("#productTotalPrice").val(parseFloat(productTotalPrice).toFixed(4));
-            $("#price1").val(parseFloat(totalPrice).toFixed(4));
-            $("#productTotalNum").val(productTotalNumS);
-        }
-
-
+        var setupTypeData = [[${@dict.getType('actuator_setup_type')}]];
+        var string2Datas = [[${@dict.getType('product_level')}]];
     </script>
+    <script th:src="@{/js/biz/procurement.js}"></script>
+
 </body>
 </html>

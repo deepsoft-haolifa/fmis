@@ -87,13 +87,19 @@ public class BizProcessProcurementpoolController extends BaseController {
     @ResponseBody
     public TableDataInfo list(BizProcessData bizProcessData) {
 
+
+        BizProcessData newBizProcessData = new BizProcessData();
         String bizId = bizProcessData.getBizId();
         //采购池
-        bizProcessData.setString13("1");
-
-
-        startPage();
-        List<BizProcessData> list = bizProcessDataService.selectBizProcessDataListRef(bizProcessData);
+        newBizProcessData.setBizId(bizId);
+        newBizProcessData.setString13("1");
+        newBizProcessData.setBizId(BizConstants.BIZ_contract);
+        if (StringUtils.isNotEmpty(bizProcessData.getBizEditFlag())) {
+            newBizProcessData.setBizEditFlag(bizProcessData.getBizEditFlag());
+            newBizProcessData.setDataId(bizProcessData.getDataId());
+        }
+        //startPage();
+        List<BizProcessData> list = bizProcessDataService.selectBizProcessDataListRef(newBizProcessData);
 
         Map<String, SysRole> flowMap = bizProcessDefineService.getRoleFlowMap(bizId);
         Map<String, SysRole> flowAllMap = bizProcessDefineService.getFlowAllMap(bizId);

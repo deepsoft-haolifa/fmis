@@ -2,6 +2,7 @@ package com.ruoyi.fmis.status.service.impl;
 
 import java.util.List;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.framework.util.ShiroUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.fmis.status.mapper.BizDataStatusMapper;
@@ -51,6 +52,7 @@ public class BizDataStatusServiceImpl implements IBizDataStatusService {
     @Override
     public int insertBizDataStatus(BizDataStatus bizDataStatus) {
         bizDataStatus.setCreateTime(DateUtils.getNowDate());
+        bizDataStatus.setCreateBy(ShiroUtils.getUserId() + "");
         return bizDataStatusMapper.insertBizDataStatus(bizDataStatus);
     }
 

@@ -17,8 +17,8 @@ public class BizDataStatus extends BaseEntity {
     /** ID */
     private Long statusId;
 
-    /** 1=采购 */
-    @Excel(name = "1=采购")
+    /** 1=产品 2=执行器 3=法兰 4=螺栓 5=定位器 6=电磁阀 7=回信器数 8=气源三连件 9=可离合减速器 */
+    @Excel(name = "")
     private String type;
 
     /** 关联ID 关联 child表 将来也可以关联dataId */
@@ -28,6 +28,9 @@ public class BizDataStatus extends BaseEntity {
     /** 例如合同状态 0=未处理 1=已处理 */
     @Excel(name = "例如合同状态 0=未处理 1=已处理")
     private String dataStatus;
+
+
+
 
     /** 产品 0=未处理 1=已处理 */
     @Excel(name = "产品 0=未处理 1=已处理")
@@ -65,7 +68,7 @@ public class BizDataStatus extends BaseEntity {
     @Excel(name = "可离合减速器 0=未处理 1=已处理")
     private String p4Status;
 
-    /** 备用1 */
+    /** 备用1 数量*/
     @Excel(name = "备用1")
     private String string1;
 

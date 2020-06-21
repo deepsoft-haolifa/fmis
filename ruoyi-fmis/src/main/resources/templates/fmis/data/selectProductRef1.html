@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('产品关系列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>名称：</p>
+                                <input type="text" name="name"/>
+                                <input type="hidden" name="productId" id="productId" th:value="${productId}"/>
+                            </li>
+
+                            <li>
+                                <p>属性：</p>
+                                <select name="type" class="form-control m-b" th:with="type=${@dict.getType('product_ref_type')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <input name="refType" id="refType" value="1" type="hidden">
+                </form>
+            </div>
+
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('fmis:productRef:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('fmis:productRef:remove')}]];
+        var prefix = ctx + "fmis/productRef";
+        var productRefTypeData = [[${@dict.getType('product_ref_type')}]];
+        var productId = $("#productId").val();
+
+        var refType = $("#refType").val();
+        console.log(productId + "--" + refType);
+        $(function() {
+            var options = {
+                url: prefix + "/listForProductId?productId=" + productId + "&&refType=" + refType,
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "产品关系",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'productRefId', 
+                    title : 'ID',
+                    visible: false
+                },
+                {
+                    field : 'type',
+                    title : '属性',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(productRefTypeData, value);
+                    }
+                },
+                {
+                    field : 'name', 
+                    title : '名称'
+                },
+                {
+                    field : 'model', 
+                    title : '型号'
+                },
+                {
+                    field : 'specifications', 
+                    title : '规格'
+                },
+                {
+                    field : 'valvebodyMaterial', 
+                    title : '材质'
+                },
+                {
+                    field : 'materialRequire', 
+                    title : '材质要求'
+                },
+                {
+                    field : 'price', 
+                    title : '单价'
+                },
+                {
+                    field : 'remark', 
+                    title : '备注'
+                },
+                {
+                    field : 'suppliersName',
+                    title : '供应商'
+                },
+                {
+                    field : 'createTime',
+                    title : '创建时间'
+                },{
+                    field : 'updateTime',
+                    title : '修改时间'
+                }]
+            };
+            $.table.init(options);
+        });
+
+        /* 添加用户-选择用户-提交 */
+        function submitHandler() {
+            var rows = $.table.selectFirstColumns();
+            if (rows.length == 0) {
+                $.modal.alertWarning("请选择一条记录");
+                return;
+            }
+            if (rows.length > 1) {
+                $.modal.alertWarning("请只选择一条记录");
+                return;
+            }
+            var productRefId = $.table.selectColumns("productRefId");
+            var selectRows = $.btTable.bootstrapTable('getSelections');
+            var rowData = {
+                productRef1Id : productRefId[0],
+                ref1Name:selectRows[0].name,
+                ref1Price:selectRows[0].price,
+                productRef1Num:"0",
+                productRef1Coefficient:"0",
+            };
+            parent.$('#form-data-add input[id=ref1JsonParamter]').val(JSON.stringify(rowData));
+            parent.$('#form-data-edit input[id=ref1JsonParamter]').val(JSON.stringify(rowData));
+            $.modal.close();
+        }
+    </script>
+</body>
+</html>
