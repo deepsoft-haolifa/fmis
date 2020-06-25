@@ -441,6 +441,8 @@ public class BizProcessDataController extends BaseController {
         return getDataTable(bizProcessChildList);
     }
 
+
+
     @PostMapping("/listLevelProduct")
     @ResponseBody
     public TableDataInfo listLevelProduct(BizProcessData bizProcessData) {
@@ -448,6 +450,14 @@ public class BizProcessDataController extends BaseController {
         queryBizProcessChild.setDataId(bizProcessData.getDataId());
         queryBizProcessChild.setString2(bizProcessData.getLevel());
         queryBizProcessChild.setDataStatus(bizProcessData.getDataStatus());
+
+
+
+        String supplierId = bizProcessData.getSupplierId();
+        if (StringUtils.isNotEmpty(supplierId)) {
+            queryBizProcessChild.setSupplierId(supplierId);
+        }
+
         List<BizProcessChild> bizProcessChildList = bizProcessChildService.selectBizChildProductList(queryBizProcessChild);
         return getDataTable(bizProcessChildList);
     }
@@ -459,6 +469,10 @@ public class BizProcessDataController extends BaseController {
         queryBizProcessChild.setDataId(bizProcessData.getDataId());
         queryBizProcessChild.setLevelLabel(bizProcessData.getLevel());
         queryBizProcessChild.setDataStatus(bizProcessData.getDataStatus());
+        String supplierId = bizProcessData.getSupplierId();
+        if (StringUtils.isNotEmpty(supplierId)) {
+            queryBizProcessChild.setSupplierId(supplierId);
+        }
         List<BizProcessChild> bizProcessChildListActuatorA = bizProcessChildService.selectBizChildActuatorList(queryBizProcessChild);
         return getDataTable(bizProcessChildListActuatorA);
     }
@@ -470,6 +484,10 @@ public class BizProcessDataController extends BaseController {
         queryBizProcessChild.setDataId(bizProcessData.getDataId());
         queryBizProcessChild.setLevelLabel(bizProcessData.getLevel());
         queryBizProcessChild.setDataStatus(bizProcessData.getDataStatus());
+        String supplierId = bizProcessData.getSupplierId();
+        if (StringUtils.isNotEmpty(supplierId)) {
+            queryBizProcessChild.setSupplierId(supplierId);
+        }
         List<BizProcessChild> bizProcessChildListRefA = bizProcessChildService.selectBizChildRef1List(queryBizProcessChild);
         return getDataTable(bizProcessChildListRefA);
     }
@@ -481,6 +499,10 @@ public class BizProcessDataController extends BaseController {
         queryBizProcessChild.setDataId(bizProcessData.getDataId());
         queryBizProcessChild.setLevelLabel(bizProcessData.getLevel());
         queryBizProcessChild.setDataStatus(bizProcessData.getDataStatus());
+        String supplierId = bizProcessData.getSupplierId();
+        if (StringUtils.isNotEmpty(supplierId)) {
+            queryBizProcessChild.setSupplierId(supplierId);
+        }
         List<BizProcessChild> bizProcessChildListRefA = bizProcessChildService.selectBizChildRef2List(queryBizProcessChild);
         return getDataTable(bizProcessChildListRefA);
     }
@@ -492,6 +514,10 @@ public class BizProcessDataController extends BaseController {
         queryBizProcessChild.setDataId(bizProcessData.getDataId());
         queryBizProcessChild.setLevelLabel(bizProcessData.getLevel());
         queryBizProcessChild.setDataStatus(bizProcessData.getDataStatus());
+        String supplierId = bizProcessData.getSupplierId();
+        if (StringUtils.isNotEmpty(supplierId)) {
+            queryBizProcessChild.setSupplierId(supplierId);
+        }
         List<BizProcessChild> bizProcessChildListRefA = bizProcessChildService.selectBizChildPAList(queryBizProcessChild);
         return getDataTable(bizProcessChildListRefA);
     }
@@ -503,6 +529,10 @@ public class BizProcessDataController extends BaseController {
         queryBizProcessChild.setDataId(bizProcessData.getDataId());
         queryBizProcessChild.setLevelLabel(bizProcessData.getLevel());
         queryBizProcessChild.setDataStatus(bizProcessData.getDataStatus());
+        String supplierId = bizProcessData.getSupplierId();
+        if (StringUtils.isNotEmpty(supplierId)) {
+            queryBizProcessChild.setSupplierId(supplierId);
+        }
         List<BizProcessChild> bizProcessChildListRefA = bizProcessChildService.selectBizChildPA1List(queryBizProcessChild);
         return getDataTable(bizProcessChildListRefA);
     }
@@ -513,6 +543,10 @@ public class BizProcessDataController extends BaseController {
         queryBizProcessChild.setDataId(bizProcessData.getDataId());
         queryBizProcessChild.setLevelLabel(bizProcessData.getLevel());
         queryBizProcessChild.setDataStatus(bizProcessData.getDataStatus());
+        String supplierId = bizProcessData.getSupplierId();
+        if (StringUtils.isNotEmpty(supplierId)) {
+            queryBizProcessChild.setSupplierId(supplierId);
+        }
         List<BizProcessChild> bizProcessChildListRefA = bizProcessChildService.selectBizChildPA2List(queryBizProcessChild);
         return getDataTable(bizProcessChildListRefA);
     }
@@ -523,6 +557,10 @@ public class BizProcessDataController extends BaseController {
         queryBizProcessChild.setDataId(bizProcessData.getDataId());
         queryBizProcessChild.setLevelLabel(bizProcessData.getLevel());
         queryBizProcessChild.setDataStatus(bizProcessData.getDataStatus());
+        String supplierId = bizProcessData.getSupplierId();
+        if (StringUtils.isNotEmpty(supplierId)) {
+            queryBizProcessChild.setSupplierId(supplierId);
+        }
         List<BizProcessChild> bizProcessChildListRefA = bizProcessChildService.selectBizChildPA3List(queryBizProcessChild);
         return getDataTable(bizProcessChildListRefA);
     }
@@ -533,6 +571,10 @@ public class BizProcessDataController extends BaseController {
         queryBizProcessChild.setDataId(bizProcessData.getDataId());
         queryBizProcessChild.setLevelLabel(bizProcessData.getLevel());
         queryBizProcessChild.setDataStatus(bizProcessData.getDataStatus());
+        String supplierId = bizProcessData.getSupplierId();
+        if (StringUtils.isNotEmpty(supplierId)) {
+            queryBizProcessChild.setSupplierId(supplierId);
+        }
         List<BizProcessChild> bizProcessChildListRefA = bizProcessChildService.selectBizChildPA4List(queryBizProcessChild);
         return getDataTable(bizProcessChildListRefA);
     }
@@ -1566,5 +1608,57 @@ public class BizProcessDataController extends BaseController {
         createPdf(request,response,null);
     }
 
+
+
+    @PostMapping("/selectBizTestProductList")
+    @ResponseBody
+    public TableDataInfo selectBizTestProductList(BizProcessData bizProcessData) {
+        //@RequestParam String dataId,@RequestParam String level
+        BizProcessChild queryBizProcessChild = new BizProcessChild();
+        queryBizProcessChild.setDataId(bizProcessData.getDataId());
+        queryBizProcessChild.setString2(bizProcessData.getLevel());
+        List<BizProcessChild> bizProcessChildList = bizProcessChildService.selectBizTestProductList(queryBizProcessChild);
+        return getDataTable(bizProcessChildList);
+    }
+    @PostMapping("/selectBizTestActuatorList")
+    @ResponseBody
+    public TableDataInfo selectBizTestActuatorList(BizProcessData bizProcessData) {
+        //@RequestParam String dataId,@RequestParam String level
+        BizProcessChild queryBizProcessChild = new BizProcessChild();
+        queryBizProcessChild.setDataId(bizProcessData.getDataId());
+        queryBizProcessChild.setString2(bizProcessData.getLevel());
+        List<BizProcessChild> bizProcessChildList = bizProcessChildService.selectBizTestActuatorList(queryBizProcessChild);
+        return getDataTable(bizProcessChildList);
+    }
+    @PostMapping("/selectBizTestRef1List")
+    @ResponseBody
+    public TableDataInfo selectBizTestRef1List(BizProcessData bizProcessData) {
+        //@RequestParam String dataId,@RequestParam String level
+        BizProcessChild queryBizProcessChild = new BizProcessChild();
+        queryBizProcessChild.setDataId(bizProcessData.getDataId());
+        queryBizProcessChild.setString2(bizProcessData.getLevel());
+        List<BizProcessChild> bizProcessChildList = bizProcessChildService.selectBizTestRef1List(queryBizProcessChild);
+        return getDataTable(bizProcessChildList);
+    }
+    @PostMapping("/selectBizTestRef2List")
+    @ResponseBody
+    public TableDataInfo selectBizTestRef2List(BizProcessData bizProcessData) {
+        //@RequestParam String dataId,@RequestParam String level
+        BizProcessChild queryBizProcessChild = new BizProcessChild();
+        queryBizProcessChild.setDataId(bizProcessData.getDataId());
+        queryBizProcessChild.setString2(bizProcessData.getLevel());
+        List<BizProcessChild> bizProcessChildList = bizProcessChildService.selectBizTestRef2List(queryBizProcessChild);
+        return getDataTable(bizProcessChildList);
+    }
+    @PostMapping("/selectBizTestPAList")
+    @ResponseBody
+    public TableDataInfo selectBizTestPAList(BizProcessData bizProcessData) {
+        //@RequestParam String dataId,@RequestParam String level
+        BizProcessChild queryBizProcessChild = new BizProcessChild();
+        queryBizProcessChild.setDataId(bizProcessData.getDataId());
+        queryBizProcessChild.setString2(bizProcessData.getLevel());
+        List<BizProcessChild> bizProcessChildList = bizProcessChildService.selectBizTestPAList(queryBizProcessChild);
+        return getDataTable(bizProcessChildList);
+    }
 
 }

@@ -931,3 +931,185 @@ values('数据状态删除', @parentId, '4',  '#',  'F', '0', 'fmis:status:remov
 
 insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
 values('数据状态导出', @parentId, '5',  '#',  'F', '0', 'fmis:status:export',       '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+update biz_actuator a join biz_suppliers s on s.nick_name=a.string4
+set a.string10=s.suppliers_id;
+
+update biz_actuator a join biz_suppliers s on s.nick_name=a.string8 and a.string2='2'
+set a.string10=s.suppliers_id;
+
+
+
+-- 质量管理 SQL start
+insert into sys_menu (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('质量管理', '0', '50', '#', 'M', '0', '', 'fa fa-folder', 'admin', '2020-06-08', 'admin', '2020-06-08', '');
+
+SELECT @parentIdFP :=  menu_id from sys_menu where menu_name='质量管理' and parent_id=0 and order_num='50';
+
+
+insert into sys_menu (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('质量检测', @parentIdFP, '10', '#', 'M', '0', '', '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+SELECT @parentIdF :=  menu_id from sys_menu where menu_name='质量检测' and menu_type='M' and order_num='10';
+
+insert into sys_menu (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('整机检验', @parentIdF, '10', '/fmis/procurementtest', 'C', '0', 'fmis:procurementtest:view', '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '业务菜单');
+
+
+
+
+drop table if exists biz_data_stestn;
+create table biz_data_stestn (
+  test_id           bigint(20)      not null auto_increment    comment 'ID',
+  status_id bigint(20) comment '状态表id',
+  num         decimal(10,5)          default 0               comment '数量',
+  string1         varchar(30)          default ''                  comment '备用1',
+  string2         varchar(30)          default ''                  comment '备用2',
+  string3         varchar(30)          default ''                  comment '备用3',
+  string4         varchar(30)          default ''                  comment '备用4',
+  string5         varchar(30)          default ''                  comment '备用5',
+  string6         varchar(30)          default ''                  comment '备用6',
+  string7         varchar(30)          default ''                  comment '备用7',
+  string8         varchar(30)          default ''                  comment '备用8',
+  string9         varchar(30)          default ''                  comment '备用9',
+  string10         varchar(30)          default ''                  comment '备用10',
+  remark         varchar(30)          default ''                  comment '备注',
+  status            char(1)         default '0'                comment '状态（0正常 1停用）',
+  del_flag          char(1)         default '0'                comment '删除标志（0代表存在 2代表删除）',
+  create_by         varchar(64)     default ''                 comment '创建者',
+  create_time 	    datetime                                   comment '创建时间',
+  update_by         varchar(64)     default ''                 comment '更新者',
+  update_time       datetime                                   comment '更新时间',
+  primary key (test_id)
+) engine=innodb auto_increment=200 comment = '采购检测数量';
+
+
+drop table if exists biz_bill;
+create table biz_bill (
+  bill_id           bigint(20)      not null auto_increment    comment 'ID',
+  xh         varchar(50)          default ''                  comment '序号',
+  d         datetime                    comment '日期',
+  certificate_number         varchar(30)          default ''                  comment '凭证号',
+  settlement_type         varchar(50)          default ''                  comment '结算类别',
+  clearing_banks         varchar(30)          default ''                  comment '结算票号',
+  pre_month_money         decimal(10,5)          default 0                  comment '上月结转',
+  collection_money         decimal(10,5)          default 0                  comment '收款',
+  collection_type         varchar(30)          default ''                  comment '收款类别',
+  payment         decimal(10,5)          default 0                  comment '付款',
+  payment_type         varchar(30)          default ''                  comment '付款类别',
+  balance         decimal(10,5)          default 0                  comment '余额',
+  type         varchar(3)          default ''                  comment '类型 1=现金日记账 2=银行日记账',
+  dept_id         varchar(30)          default ''                  comment '部门ID',
+  string1         varchar(30)          default ''                  comment '备用1',
+  string2         varchar(30)          default ''                  comment '备用2',
+  string3         varchar(30)          default ''                  comment '备用3',
+  string4         varchar(30)          default ''                  comment '备用4',
+  string5         varchar(30)          default ''                  comment '备用5',
+  string6         varchar(30)          default ''                  comment '备用6',
+  string7         varchar(30)          default ''                  comment '备用7',
+  string8         varchar(30)          default ''                  comment '备用8',
+  string9         varchar(30)          default ''                  comment '备用9',
+  string10         varchar(30)          default ''                  comment '备用10',
+  remark         varchar(30)          default ''                  comment '备注',
+  status            char(1)         default '0'                comment '状态（0正常 1停用）',
+  del_flag          char(1)         default '0'                comment '删除标志（0代表存在 2代表删除）',
+  create_by         varchar(64)     default ''                 comment '创建者',
+  create_time 	    datetime                                   comment '创建时间',
+  update_by         varchar(64)     default ''                 comment '更新者',
+  update_time       datetime                                   comment '更新时间',
+  primary key (bill_id)
+) engine=innodb auto_increment=200 comment = '日记账表';
+
+
+-- 菜单 SQL
+insert into sys_menu (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('现金日记账', '3', '1', '/fmis/bill', 'C', '0', 'fmis:bill:view', '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '现金日记账菜单');
+
+-- 按钮父菜单ID
+SELECT @parentId := LAST_INSERT_ID();
+
+-- 按钮 SQL
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('现金日记账查询', @parentId, '1',  '#',  'F', '0', 'fmis:bill:list',         '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('现金日记账新增', @parentId, '2',  '#',  'F', '0', 'fmis:bill:add',          '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('现金日记账修改', @parentId, '3',  '#',  'F', '0', 'fmis:bill:edit',         '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('现金日记账删除', @parentId, '4',  '#',  'F', '0', 'fmis:bill:remove',       '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('现金日记账导出', @parentId, '5',  '#',  'F', '0', 'fmis:bill:export',       '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+
+
+-- 财务管理 SQL start
+insert into sys_menu (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('财务管理', '0', '60', '#', 'M', '0', '', 'fa fa-folder', 'admin', '2020-06-08', 'admin', '2020-06-08', '');
+
+SELECT @parentIdFP :=  menu_id from sys_menu where menu_name='财务管理' and parent_id=0 and order_num='60';
+
+insert into sys_menu (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('资金管理', @parentIdFP, '60', '#', 'M', '0', '', '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+SELECT @parentIdF :=  menu_id from sys_menu where menu_name='资金管理' and menu_type='M' and order_num='60';
+
+insert into sys_menu (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('出纳报表', @parentIdF, '10', '#', 'M', '0', '', '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+SELECT @parentIdF1 :=  menu_id from sys_menu where menu_name='出纳报表' and menu_type='M' and order_num='10';
+
+
+
+-- 菜单 SQL
+insert into sys_menu (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('现金日记账', @parentIdF1, '10', '/fmis/bill', 'C', '0', 'fmis:bill:view', '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '现金日记账菜单');
+
+-- 按钮父菜单ID
+SELECT @parentId := LAST_INSERT_ID();
+
+-- 按钮 SQL
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('现金日记账查询', @parentId, '1',  '#',  'F', '0', 'fmis:bill:list',         '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('现金日记账新增', @parentId, '2',  '#',  'F', '0', 'fmis:bill:add',          '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('现金日记账修改', @parentId, '3',  '#',  'F', '0', 'fmis:bill:edit',         '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('现金日记账删除', @parentId, '4',  '#',  'F', '0', 'fmis:bill:remove',       '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('现金日记账导出', @parentId, '5',  '#',  'F', '0', 'fmis:bill:export',       '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+
+
+-- 菜单 SQL
+insert into sys_menu (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('银行存款日记', @parentIdF1, '20', '/fmis/bill2', 'C', '0', 'fmis:bill2:view', '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '现金日记账菜单');
+
+-- 按钮父菜单ID
+SELECT @parentId := LAST_INSERT_ID();
+
+-- 按钮 SQL
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('查询', @parentId, '1',  '#',  'F', '0', 'fmis:bill2:list',         '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('新增', @parentId, '2',  '#',  'F', '0', 'fmis:bill2:add',          '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('修改', @parentId, '3',  '#',  'F', '0', 'fmis:bill2:edit',         '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('删除', @parentId, '4',  '#',  'F', '0', 'fmis:bill2:remove',       '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('导出', @parentId, '5',  '#',  'F', '0', 'fmis:bill2:export',       '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+

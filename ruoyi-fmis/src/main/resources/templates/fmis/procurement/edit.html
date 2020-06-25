@@ -10,6 +10,7 @@
             <input name="dataId" id="dataId" th:field="*{dataId}" type="hidden">
             <input type="hidden" name="bizEditFlag" id="bizEditFlag" value="1"/>
             <input type="hidden" name="bizId" value="procurement"/>
+            <input type="hidden" name="supplierId" id="supplierId" th:field="*{string1}"/>
 
             <div class="form-group">
                 <label class="col-sm-1 control-label">结算单位：</label>
@@ -42,8 +43,14 @@
 
                 <label class="col-sm-1 control-label">供应商：</label>
                 <div class="col-sm-2">
-                    <input name="string6" class="form-control" th:field="*{string6}" type="text">
+                    <select name="string6" style="pointer-events: none;" id="string6" class="form-control select2-multiple" > <!--multiple-->
+                        <option value="">请选择</option>
+                        <option th:each="supplier:${suppliers}" th:value="${supplier.suppliersId}" th:selected="${supplier.flag}" th:text="${supplier.name}"></option>
+                    </select>
                 </div>
+
+
+
 
                 <label class="col-sm-1 control-label">订货产品：</label>
                 <div class="col-sm-2">
@@ -157,6 +164,9 @@
         });
         var setupTypeData = [[${@dict.getType('actuator_setup_type')}]];
         var string2Datas = [[${@dict.getType('product_level')}]];
+
+
+
     </script>
     <script th:src="@{/js/biz/procurement.js}"></script>
 </body>

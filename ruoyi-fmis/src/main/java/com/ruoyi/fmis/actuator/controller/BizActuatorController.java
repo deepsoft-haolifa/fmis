@@ -13,6 +13,8 @@ import com.ruoyi.fmis.dict.domain.BizDict;
 import com.ruoyi.fmis.dict.service.IBizDictService;
 import com.ruoyi.fmis.product.domain.BizProduct;
 import com.ruoyi.fmis.product.service.IBizProductService;
+import com.ruoyi.fmis.suppliers.domain.BizSuppliers;
+import com.ruoyi.fmis.suppliers.service.IBizSuppliersService;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysDictData;
 import com.ruoyi.system.service.ISysDictDataService;
@@ -66,6 +68,9 @@ public class BizActuatorController extends BaseController {
 
     @Autowired
     private IBizProductService bizProductService;
+
+    @Autowired
+    private IBizSuppliersService bizSuppliersService;
     /**
      * 查询执行器列表
      */
@@ -129,7 +134,8 @@ public class BizActuatorController extends BaseController {
      * 新增执行器
      */
     @GetMapping("/add")
-    public String add() {
+    public String add(ModelMap mmap) {
+        mmap.put("suppliers",bizSuppliersService.selectAllList());
         return prefix + "/add";
     }
 
@@ -151,6 +157,17 @@ public class BizActuatorController extends BaseController {
     public String edit(@PathVariable("actuatorId") Long actuatorId, ModelMap mmap) {
         BizActuator bizActuator = bizActuatorService.selectBizActuatorById(actuatorId);
         mmap.put("bizActuator", bizActuator);
+
+
+        List<BizSuppliers> suppliersList = bizSuppliersService.selectAllList();
+        for (BizSuppliers suppliers : suppliersList) {
+            String supplierId = bizActuator.getString10();
+            if (supplierId.equals(suppliers.getSuppliersId().toString())) {
+                suppliers.setFlag(true);
+            }
+        }
+        mmap.put("suppliers",suppliersList);
+
         return prefix + "/edit";
     }
 

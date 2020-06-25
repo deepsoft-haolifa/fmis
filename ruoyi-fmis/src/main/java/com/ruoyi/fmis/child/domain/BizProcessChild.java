@@ -25,6 +25,27 @@ public class BizProcessChild extends BaseEntity {
 
     @Getter
     @Setter
+    private String paType;
+    @Getter
+    @Setter
+    private String statusId;
+    @Getter
+    @Setter
+    private String createByName;
+
+    @Getter
+    @Setter
+    private String testId;
+
+    @Getter
+    @Setter
+    private String yesNum;
+    @Getter
+    @Setter
+    private String noNum;
+
+    @Getter
+    @Setter
     private String bizEditFlag;
     @Getter
     @Setter
@@ -413,6 +434,9 @@ public class BizProcessChild extends BaseEntity {
     @Getter
     @Setter
     private String supplier;
+    @Getter
+    @Setter
+    private String supplierId;
     @Getter
     @Setter
     private String newSupplier;

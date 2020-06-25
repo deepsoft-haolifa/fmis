@@ -1,5 +1,7 @@
 package com.ruoyi.fmis.actuator.domain;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
@@ -13,6 +15,11 @@ import com.ruoyi.common.core.domain.BaseEntity;
  */
 public class BizActuator extends BaseEntity {
     private static final long serialVersionUID = 1L;
+
+
+    @Getter
+    @Setter
+    private String supplier;
 
     /** ID */
     private Long actuatorId;

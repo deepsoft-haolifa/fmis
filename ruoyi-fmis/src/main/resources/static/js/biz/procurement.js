@@ -95,6 +95,8 @@ $(function() {
 var overAllIds = new Array();  //全局数组
 var numberMap = new Map();
 
+var supplierMap = new Map();
+
 /**
  * 展开父子表
  */
@@ -136,7 +138,11 @@ function initExpandRow() {
             if (bizEditFlag == 2) {
 
             }
-
+            if (bizEditFlag == 0) {
+                var paramterSupplierId = parent.$('#paramterSupplierId').val();
+                //增加的时候 把供应商
+                $("#string6").find("option[value='" + paramterSupplierId + "']").attr("selected",true);
+            }
         }
     }, 500);
 
@@ -183,7 +189,8 @@ initChildLevelTable = function(index, row, $detail) {
         queryParams : {
             "dataStatus": $("#dataStatus").val(),
             "dataId": dataId,
-            "bizEditFlag":$("#bizEditFlag").val()
+            "bizEditFlag":$("#bizEditFlag").val(),
+            "supplierId":$("#string6").val()
 
         },
         onExpandRow : function(index, row, $detail) {
@@ -238,6 +245,8 @@ function onEditableSave (field, row, oldValue, $el) {
     } else if (field == "pattachment4Count") {
         numberMap.set("9_" + row.childId + "_" + row.pattachment4Id + "_" + row.dataId + "_" + row.levelValue,row.pattachment4Count);
     }
+
+
 }
 
 function showNum(type,row) {
@@ -287,6 +296,7 @@ function showNum(type,row) {
             row.pattachment4Count = num;
         }
     }
+
 }
 function formaterStatus (value, row, index) {
     var status = row.dataStatus;
@@ -304,6 +314,9 @@ function disableCheckbox (row) {
     }
     return disableValue;
 }
+
+
+
 initChildProductTable = function(index, row, $detail) {
     var cur_table = $detail.html('<div class="col-sm-12 select-table table-striped"><table style="table-layout:fixed" id="initChildProductTable" ></table></div>').find('table');
     $(cur_table).bootstrapTable({
@@ -318,7 +331,8 @@ initChildProductTable = function(index, row, $detail) {
         queryParams : {
             "level": row["level"],
             "dataStatus": $("#dataStatus").val(),
-            "dataId": row["dataId"]
+            "dataId": row["dataId"],
+            "supplierId":$("#string6").val()
         },
         columns: [{
             checkbox: true,
@@ -350,6 +364,10 @@ initChildProductTable = function(index, row, $detail) {
             {field : 'productNum',title : '数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 80},
             {field : 'productStatus',title : '采购状态',editable: false,width: 100,
                 formatter: formaterStatus},
+
+            {field : 'supplierName',title : '供应商',editable: false,width: 100},
+            {field : 'supplierId',title : 'supplierId',visible: false},
+
             {field : 'specifications',title : '规格',editable: false,width: 100},
             {field : 'nominalPressure',title : '压力',editable: false,width: 100},
             {field : 'valvebodyMaterial',title : '阀体',editable: false,width: 100},
@@ -358,8 +376,7 @@ initChildProductTable = function(index, row, $detail) {
             {field : 'driveForm',title : '驱动形式',editable: false,width: 100},
             {field : 'connectionType',title : '连接方式',editable: false,width: 100},
             {field : 'productProcurementPrice',title : '采购价',editable: false,width: 100},
-            {field : 'goodsTime',title : '回货时间',editable: false,width: 100},
-            {field : 'supplier',title : '供应商',editable: false,width: 300}
+            {field : 'goodsTime',title : '回货时间',editable: false,width: 100}
 
 
         ]
@@ -411,6 +428,9 @@ function examine(type,datas,typeIndex){
             overAllIds.indexOf(typeIndex + "_" + v.childId + "_" + dataId + "_" + v.dataId + "_" + v.levelValue) == -1 ?
                 overAllIds.push(typeIndex + "_" + v.childId + "_" + dataId + "_" + v.dataId + "_" + v.levelValue) : -1;
             numberMap.set(typeIndex + "_" + v.childId + "_" + dataId+ "_" + v.dataId + "_" + v.levelValue,num);
+
+            supplierMap.set(v.supplierId,typeIndex + "_" + v.childId + "_" + dataId+ "_" + v.dataId + "_" + v.levelValue);
+
         });
     }else{
         $.each(datas,function(i,v){
@@ -435,6 +455,7 @@ function examine(type,datas,typeIndex){
                 dataId = v.pattachment4Id;
             }
             overAllIds.splice(overAllIds.indexOf(typeIndex + "_" + v.childId + "_" + dataId + "_" + v.dataId + "_" + v.levelValue),1);    //删除取消选中行
+            supplierMap.delete(v.supplierId);
         });
     }
 }
@@ -454,7 +475,8 @@ initChildActuatorTable = function(index, row, $detail) {
         queryParams : {
             "level": row["level"],
             "dataStatus": $("#dataStatus").val(),
-            "dataId": row["dataId"]
+            "dataId": row["dataId"],
+            "supplierId":$("#string6").val()
         },
         columns: [{
             checkbox: true,
@@ -485,6 +507,10 @@ initChildActuatorTable = function(index, row, $detail) {
             {field : 'actuatorNum',title : '执行器数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 100},
             {field : 'actuatorStatus',title : '采购状态',editable: false,width: 100,
                 formatter: formaterStatus},
+
+            {field : 'supplierName',title : '供应商',editable: false,width: 100},
+            {field : 'supplierId',title : 'supplierId',visible: false},
+
             {field : 'goodsTime',title : '回货时间',editable: false,width: 100},
             {
                 field : 'actuatorBrand',
@@ -562,7 +588,8 @@ initChildRef1Table = function(index, row, $detail) {
         queryParams : {
             "level": row["level"],
             "dataStatus": $("#dataStatus").val(),
-            "dataId": row["dataId"]
+            "dataId": row["dataId"],
+            "supplierId":$("#string6").val()
         },
         columns: [{
             checkbox: true,
@@ -593,12 +620,15 @@ initChildRef1Table = function(index, row, $detail) {
             {field : 'productRef1Num',title : '法兰数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 100},
             {field : 'ref1Status',title : '采购状态',editable: false,width: 100,
                 formatter: formaterStatus},
+
+            {field : 'supplierName',title : '供应商',editable: false,width: 100},
+            {field : 'supplierId',title : 'supplierId',visible: false},
+
             {field : 'goodsTime',title : '回货时间',editable: false,width: 100},
             {field : 'model',title : '型号',width: 100},
             {field : 'ref1Specifications',title : '规格',width: 100},
             {field : 'ref1ValvebodyMaterial',title : '材质',width: 100},
-            {field : 'ref1MaterialRequire',title : '材质要求',width: 300},
-            {field : 'suppliersName',title : '供应商',width: 200}
+            {field : 'ref1MaterialRequire',title : '材质要求',width: 300}
         ]
     });
     $(cur_table).on('uncheck.bs.table check.bs.table check-all.bs.table uncheck-all.bs.table',function(e,rows){
@@ -622,7 +652,8 @@ initChildRef2Table = function(index, row, $detail) {
         queryParams : {
             "level": row["level"],
             "dataStatus": $("#dataStatus").val(),
-            "dataId": row["dataId"]
+            "dataId": row["dataId"],
+            "supplierId":$("#string6").val()
         },
         columns: [{
             checkbox: true,
@@ -653,12 +684,15 @@ initChildRef2Table = function(index, row, $detail) {
             {field : 'productRef2Num',title : '螺栓数量',editable: {type: 'text',emptytext: '0',validate: function(v){ return numberValidate(v)}},width: 100},
             {field : 'ref2Status',title : '采购状态',editable: false,width: 100,
                 formatter: formaterStatus},
+
+            {field : 'supplierName',title : '供应商',editable: false,width: 100},
+            {field : 'supplierId',title : 'supplierId',visible: false},
+
             {field : 'goodsTime',title : '回货时间',editable: false,width: 100},
             {field : 'model',title : '型号',width: 100},
             {field : 'ref1Specifications',title : '规格',width: 100},
             {field : 'ref1ValvebodyMaterial',title : '材质',width: 100},
-            {field : 'ref1MaterialRequire',title : '材质要求',width: 300},
-            {field : 'suppliersName',title : '供应商',width: 200}
+            {field : 'ref1MaterialRequire',title : '材质要求',width: 300}
         ]
     });
     $(cur_table).on('uncheck.bs.table check.bs.table check-all.bs.table uncheck-all.bs.table',function(e,rows){
@@ -681,7 +715,8 @@ initChildPATable = function(index, row, $detail) {
         queryParams : {
             "level": row["level"],
             "dataStatus": $("#dataStatus").val(),
-            "dataId": row["dataId"]
+            "dataId": row["dataId"],
+            "supplierId":$("#string6").val()
         },
         columns: [{
             checkbox: true,
@@ -711,6 +746,10 @@ initChildPATable = function(index, row, $detail) {
             {field : 'pattachmentCount',title : '定位器数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 100},
             {field : 'pStatus',title : '采购状态',editable: false,width: 100,
                 formatter: formaterStatus},
+
+            {field : 'supplierName',title : '供应商',editable: false,width: 100},
+            {field : 'supplierId',title : 'supplierId',visible: false},
+
             {field : 'goodsTime',title : '回货时间',editable: false,width: 100},
             {
                 field : 'bh',
@@ -779,10 +818,6 @@ initChildPATable = function(index, row, $detail) {
             {
                 field : 'goodsCategory',
                 title : '商品分类',width: 100
-            },
-            {
-                field : 'supplierName',
-                title : '供应商',width: 100
             }
         ]
     });
@@ -806,7 +841,8 @@ initChildPA1Table = function(index, row, $detail) {
         queryParams : {
             "level": row["level"],
             "dataStatus": $("#dataStatus").val(),
-            "dataId": row["dataId"]
+            "dataId": row["dataId"],
+            "supplierId":$("#string6").val()
         },
         columns: [{
             checkbox: true,
@@ -836,6 +872,10 @@ initChildPA1Table = function(index, row, $detail) {
             {field : 'pattachment1Count',title : '电磁阀数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 100},
             {field : 'p1Status',title : '采购状态',editable: false,width: 100,
                 formatter: formaterStatus},
+
+            {field : 'supplierName',title : '供应商',editable: false,width: 100},
+            {field : 'supplierId',title : 'supplierId',visible: false},
+
             {field : 'goodsTime',title : '回货时间',editable: false,width: 100},
             {
                 field : 'bh',
@@ -904,10 +944,6 @@ initChildPA1Table = function(index, row, $detail) {
             {
                 field : 'goodsCategory',
                 title : '商品分类',width: 100
-            },
-            {
-                field : 'supplierName',
-                title : '供应商',width: 100
             }
         ]
     });
@@ -931,7 +967,8 @@ initChildPA2Table = function(index, row, $detail) {
         queryParams : {
             "level": row["level"],
             "dataStatus": $("#dataStatus").val(),
-            "dataId": row["dataId"]
+            "dataId": row["dataId"],
+            "supplierId":$("#string6").val()
         },
         columns: [{
             checkbox: true,
@@ -962,6 +999,10 @@ initChildPA2Table = function(index, row, $detail) {
             {field : 'pattachment2Count',title : '回信器数数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 100},
             {field : 'p2Status',title : '采购状态',editable: false,width: 100,
                 formatter: formaterStatus},
+
+            {field : 'supplierName',title : '供应商',editable: false,width: 100},
+            {field : 'supplierId',title : 'supplierId',visible: false},
+
             {field : 'goodsTime',title : '回货时间',editable: false,width: 100},
             {
                 field : 'bh',
@@ -1030,10 +1071,6 @@ initChildPA2Table = function(index, row, $detail) {
             {
                 field : 'goodsCategory',
                 title : '商品分类',width: 100
-            },
-            {
-                field : 'supplierName',
-                title : '供应商',width: 100
             }
         ]
     });
@@ -1057,7 +1094,8 @@ initChildPA3Table = function(index, row, $detail) {
         queryParams : {
             "level": row["level"],
             "dataStatus": $("#dataStatus").val(),
-            "dataId": row["dataId"]
+            "dataId": row["dataId"],
+            "supplierId":$("#string6").val()
         },
         columns: [{
             checkbox: true,
@@ -1087,6 +1125,10 @@ initChildPA3Table = function(index, row, $detail) {
             {field : 'pattachment3Count',title : '气源三连件数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 100},
             {field : 'p3Status',title : '采购状态',editable: false,width: 100,
                 formatter: formaterStatus},
+
+            {field : 'supplierName',title : '供应商',editable: false,width: 100},
+            {field : 'supplierId',title : 'supplierId',visible: false},
+
             {field : 'goodsTime',title : '回货时间',editable: false,width: 100},
             {
                 field : 'bh',
@@ -1155,10 +1197,6 @@ initChildPA3Table = function(index, row, $detail) {
             {
                 field : 'goodsCategory',
                 title : '商品分类',width: 100
-            },
-            {
-                field : 'supplierName',
-                title : '供应商',width: 100
             }
         ]
     });
@@ -1183,7 +1221,8 @@ initChildPA4Table = function(index, row, $detail) {
         queryParams : {
             "level": row["level"],
             "dataStatus": $("#dataStatus").val(),
-            "dataId": row["dataId"]
+            "dataId": row["dataId"],
+            "supplierId":$("#string6").val()
         },
         columns: [{
             checkbox: true,
@@ -1213,6 +1252,10 @@ initChildPA4Table = function(index, row, $detail) {
             {field : 'pattachment4Count',title : '可离合减速器数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 100},
             {field : 'p4Status',title : '采购状态',editable: false,width: 100,
                 formatter: formaterStatus},
+
+            {field : 'supplierName',title : '供应商',editable: false,width: 100},
+            {field : 'supplierId',title : 'supplierId',visible: false},
+
             {field : 'goodsTime',title : '回货时间',editable: false,width: 100},
             {
                 field : 'bh',
@@ -1281,10 +1324,6 @@ initChildPA4Table = function(index, row, $detail) {
             {
                 field : 'goodsCategory',
                 title : '商品分类',width: 100
-            },
-            {
-                field : 'supplierName',
-                title : '供应商',width: 100
             }
         ]
     });

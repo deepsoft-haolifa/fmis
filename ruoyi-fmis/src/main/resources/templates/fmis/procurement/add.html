@@ -8,8 +8,8 @@
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
         <form class="form-horizontal m" id="form-data-add">
             <input type="hidden" name="bizId" value="procurement"/>
-
-            <div class="form-group">    
+            <input type="hidden" name="bizEditFlag" id="bizEditFlag" value="0"/>
+            <div class="form-group">
                 <label class="col-sm-1 control-label">结算单位：</label>
                 <div class="col-sm-2">
                     <input name="string1" class="form-control" type="text">
@@ -38,10 +38,15 @@
                 </div>
 
 
+
                 <label class="col-sm-1 control-label">供应商：</label>
                 <div class="col-sm-2">
-                    <input name="string6" class="form-control" type="text">
+                    <select name="string6" style="pointer-events: none;" id="string6" class="form-control select2-multiple" > <!--multiple-->
+                        <option value="">请选择</option>
+                        <option th:each="supplier:${suppliers}" th:value="${supplier.suppliersId}" th:text="${supplier.name}"></option>
+                    </select>
                 </div>
+
 
                 <label class="col-sm-1 control-label">订货产品：</label>
                 <div class="col-sm-2">
@@ -110,8 +115,6 @@
 
             console.log("vali=" + vali);
             if (vali) {
-
-
 
                 var url = ctx + "fmis/procurement/add";
                 $("#numJsonValue").val(JSON.stringify(datas));

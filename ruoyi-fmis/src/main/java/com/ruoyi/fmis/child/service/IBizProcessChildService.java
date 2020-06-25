@@ -31,6 +31,8 @@ public interface IBizProcessChildService {
 
     public List<BizProcessChild> selectBizChildProductList(BizProcessChild bizProcessChild);
 
+    public List<BizProcessChild> selectBizTestChildList(BizProcessChild bizProcessChild);
+
     public List<BizProcessChild> selectBizChildActuatorList(BizProcessChild bizProcessChild);
 
     public List<BizProcessChild> selectBizChildRef1List(BizProcessChild bizProcessChild);
@@ -43,6 +45,13 @@ public interface IBizProcessChildService {
     public List<BizProcessChild> selectBizChildPA2List(BizProcessChild bizProcessChild);
     public List<BizProcessChild> selectBizChildPA3List(BizProcessChild bizProcessChild);
     public List<BizProcessChild> selectBizChildPA4List(BizProcessChild bizProcessChild);
+
+
+    public List<BizProcessChild> selectBizTestProductList(BizProcessChild bizProcessChild);
+    public List<BizProcessChild> selectBizTestActuatorList(BizProcessChild bizProcessChild);
+    public List<BizProcessChild> selectBizTestRef1List(BizProcessChild bizProcessChild);
+    public List<BizProcessChild> selectBizTestRef2List(BizProcessChild bizProcessChild);
+    public List<BizProcessChild> selectBizTestPAList(BizProcessChild bizProcessChild);
     /**
      * 新增流程数据字
      *

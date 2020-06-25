@@ -48,6 +48,33 @@ public class BizProcessChildServiceImpl implements IBizProcessChildService {
     }
 
     @Override
+    public List<BizProcessChild> selectBizTestChildList(BizProcessChild bizProcessChild) {
+        return bizProcessChildMapper.selectBizTestChildList(bizProcessChild);
+    }
+
+    @Override
+    public List<BizProcessChild> selectBizTestProductList(BizProcessChild bizProcessChild) {
+        return bizProcessChildMapper.selectBizTestProductList(bizProcessChild);
+    }
+    @Override
+    public List<BizProcessChild> selectBizTestActuatorList(BizProcessChild bizProcessChild) {
+        return bizProcessChildMapper.selectBizTestActuatorList(bizProcessChild);
+    }
+    @Override
+    public List<BizProcessChild> selectBizTestRef1List(BizProcessChild bizProcessChild) {
+        return bizProcessChildMapper.selectBizTestRef1List(bizProcessChild);
+    }
+    @Override
+    public List<BizProcessChild> selectBizTestRef2List(BizProcessChild bizProcessChild) {
+        return bizProcessChildMapper.selectBizTestRef2List(bizProcessChild);
+    }
+    @Override
+    public List<BizProcessChild> selectBizTestPAList(BizProcessChild bizProcessChild) {
+        return bizProcessChildMapper.selectBizTestPAList(bizProcessChild);
+    }
+
+
+    @Override
     public List<BizProcessChild> selectBizChildActuatorList(BizProcessChild bizProcessChild) {
         return bizProcessChildMapper.selectBizChildActuatorList(bizProcessChild);
     }

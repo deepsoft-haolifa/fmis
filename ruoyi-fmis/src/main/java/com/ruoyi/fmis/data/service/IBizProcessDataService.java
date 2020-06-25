@@ -68,4 +68,11 @@ public interface IBizProcessDataService {
     public int deleteBizProcessDataById(Long dataId);
 
     public int subReportBizQuotation(BizProcessData bizProcessData);
+
+    /**
+     * 开始质检
+     * @param bizProcessData
+     * @return
+     */
+    public int subTestBizQuotation(BizProcessData bizProcessData);
 }

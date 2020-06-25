@@ -191,14 +191,14 @@
           d3.name as connectionType, d6.name as valvebodyMaterial,
           d4.name as sealingMaterial, d5.name as valveElement,
           d7.name as driveForm,d8.name as structuralStyle,
-          s.name as supplier, p.new_supplier,
+          s.nick_name as supplierName,
           p.medium,p.temperature,p.other,d9.name as productString1,
           p.string2 as productString2,
           dd.dict_label as levelLabel,(case when ds.data_status='1' then ds.string1 else sum(pc.string3) end) as productNum,p.name as productName,
           s.name as supplier,p.procurement_price as productProcurementPrice,pd.string6 as goodsTime,
           ds.product_status as productStatus,ds.actuator_status as actuatorStatus,ds.ref1_status as ref1Status,ds.ref2_status as ref2Status,ds.p_status as pStatus,
           ds.p1_status as p1Status,ds.p2_status as p2Status,ds.p3_status as p3Status,ds.p4_status as p4Status,pc.data_id as dataId,pc.child_id as childId,ds.data_status as dataStatus,
-          ds.string4 as procurementId,p.string2 as levelValue
+          ds.string4 as procurementId,p.string2 as levelValue,s.suppliers_id as supplierId
     from biz_product p
     join biz_process_child pc on pc.data_id=#{dataId} and pc.string2=p.product_id
     join biz_process_data pd on pc.data_id=pd.data_id
@@ -226,8 +226,52 @@
         <if test="bizEditFlag == 2">and ds.string4 = #{dataId} </if>
         <if test="dataStatus == 1">and ds.data_status = #{dataStatus} </if>
         <if test="dataStatus == -1">and ds.data_status is null </if>
+
+        <if test="supplierId != null and supplierId != ''">and s.suppliers_id=#{supplierId} </if>
+
         group by p.product_id
         order by p.string2,p.new_supplier
+    </select>
+
+
+    <!-- 质检 产品列表 -->
+    <sql id="selectBizTestProductVo">
+    select
+          p.price as productPrice,p.product_id as productId,ds.string4 as dataId,ds.child_id as childId,sn.remark,ds.status_id as statusId,
+          d.name as series, p.model, d1.name as specifications, d2.name as nominalPressure,
+          d3.name as connectionType, d6.name as valvebodyMaterial,
+          d4.name as sealingMaterial, d5.name as valveElement,
+          d7.name as driveForm,d8.name as structuralStyle,
+          s.nick_name as supplierName,
+          p.medium,p.temperature,p.other,d9.name as productString1,
+          p.string2 as productString2,
+          dd.dict_label as levelLabel,sum(ds.string1) as productNum,p.name as productName,
+          s.name as supplier,p.procurement_price as productProcurementPrice,
+          ds.product_status as productStatus,
+          ds.data_status as dataStatus,
+          p.string2 as levelValue,s.suppliers_id as supplierId,
+          sum(sn.string1) as yesNum, sum(sn.string2) as noNum
+    from biz_product p
+     join biz_data_status ds on   ds.string2=p.product_id and ds.string4=#{dataId}
+     left join biz_data_stestn sn on sn.status_id=ds.status_id
+    left join biz_dict d on  d.parent_id=1 and p.series=d.dict_id
+        left join biz_dict d1 on d1.parent_type='specification' and d1.dict_id=p.specifications
+        left join biz_dict d2 on d2.parent_type='nominal_pressure' and d2.dict_id=p.nominal_pressure
+        left join biz_dict d3 on d3.parent_type='link_type' and d3.dict_id=p.connection_type
+        left join biz_dict d4 on d4.parent_type='sealing_material' and d4.dict_id=p.sealing_material
+        left join biz_dict d5 on d5.parent_type='spool_material' and d5.dict_id=p.valve_element
+        left join biz_dict d6 on d6.parent_type='body_material' and d6.dict_id=p.valvebody_material
+        left join biz_dict d7 on d7.parent_type='drive_mode' and d7.dict_id=p.drive_form
+        left join biz_dict d8 on d8.parent_type='structural_type' and d8.dict_id=p.structural_style
+        left join biz_dict d9 on d9.parent_type='series_type' and d9.dict_id=p.string1
+        left join biz_suppliers s on s.suppliers_id=p.supplier
+        join sys_dict_data dd on dd.dict_type='product_level' and dd.dict_value=p.string2
+    where 1=1
+    </sql>
+    <select id="selectBizTestProductList" parameterType="BizProcessChild" resultMap="BizProcessChildResult">
+        <include refid="selectBizTestProductVo"/>
+        group by p.product_id
+        order by p.new_supplier,d1.dict_id
     </select>
 
 
@@ -244,10 +288,11 @@
           pd.string6 as goodsTime,
           ds.product_status as productStatus,ds.actuator_status as actuatorStatus,ds.ref1_status as ref1Status,ds.ref2_status as ref2Status,ds.p_status as pStatus,
           ds.p1_status as p1Status,ds.p2_status as p2Status,ds.p3_status as p3Status,ds.p4_status as p4Status,pc.data_id as dataId,pc.child_id as childId,ds.data_status as dataStatus,
-          ds.string4 as procurementId,a.quality_level as levelValue
+          ds.string4 as procurementId,a.quality_level as levelValue,s.suppliers_id as supplierId,s.nick_name as supplierName
     from biz_actuator a
     join biz_process_child pc on pc.data_id=#{dataId} and pc.string11=a.actuator_id
     join biz_process_data pd on pc.data_id=pd.data_id
+    left join biz_suppliers s on s.suppliers_id=a.string10
     left join biz_data_status ds on ds.child_id=pc.child_id and ds.string2=a.actuator_id
     where a.string1 in (
       select a1.string1 from biz_actuator a1
@@ -258,9 +303,39 @@
         <include refid="selectBizChildActuatorVo"/>
         <if test="dataStatus == 1">and ds.data_status = #{dataStatus} </if>
         <if test="dataStatus == -1">and ds.data_status is null </if>
+        <if test="supplierId != null and supplierId != ''">and s.suppliers_id=#{supplierId} </if>
         group by a.actuator_id
         order by a.quality_level,a.string4
     </select>
+
+
+    <!-- 质检 执行器信息 -->
+    <sql id="selectBizTestActuatorVo">
+    select
+      ds.string1 as actuatorNum,sn.remark,
+          a.name as actuatorName,a.price as actuatorPrice,a.actuator_id as actuatorId,ds.string4 as dataId,ds.child_id as childId,ds.status_id as statusId,
+          a.brand as actuatorBrand,a.manufacturer as actuatorManufacturer,a.string4 as actuatorString4,
+          a.string1 as actuatorString1,a.setup_type as actuatorSetupType,a.output_torque as actuatorOutputTorque,
+          a.string3 as actuatorString3,a.action_type as actuatorActionType,a.control_circuit as actuatorControlCircuit,a.adaptable_voltage as actuatorAdaptableVoltage,
+          a.protection_level as actuatorProtectionLevel,a.quality_level as actuatorQualityLevel,a.explosion_level as actuatorExplosionLevel,a.string6 as actuatorString6,
+          ds.product_status as productStatus,ds.actuator_status as actuatorStatus,
+          ds.string4 as procurementId,a.quality_level as levelValue,s.suppliers_id as supplierId,s.nick_name as supplierName,
+          sum(sn.string1) as yesNum, sum(sn.string2) as noNum
+    from biz_actuator a
+    join biz_data_status ds on   ds.string2=a.actuator_id and ds.string4=#{dataId}
+     left join biz_data_stestn sn on sn.status_id=ds.status_id
+    left join biz_suppliers s on s.suppliers_id=a.string10
+
+    where 1=1
+    </sql>
+    <select id="selectBizTestActuatorList" parameterType="BizProcessChild" resultMap="BizProcessChildResult">
+        <include refid="selectBizTestActuatorVo"/>
+
+        group by a.actuator_id
+        order by a.quality_level,s.suppliers_id
+    </select>
+
+
 
 
     <!-- 采购池 法兰信息 -->
@@ -274,7 +349,7 @@
           pr.material_require as ref1MaterialRequire,s.name as  suppliersName,pr.model,pd.string6 as goodsTime,
           ds.product_status as productStatus,ds.actuator_status as actuatorStatus,ds.ref1_status as ref1Status,ds.ref2_status as ref2Status,ds.p_status as pStatus,
           ds.p1_status as p1Status,ds.p2_status as p2Status,ds.p3_status as p3Status,ds.p4_status as p4Status,pc.data_id as dataId,pc.child_id as childId,ds.data_status as dataStatus,
-          ds.string4 as procurementId,pr.string1 as levelValue
+          ds.string4 as procurementId,pr.string1 as levelValue,s.suppliers_id as supplierId,s.nick_name as supplierName
     from  biz_product_ref pr
     join biz_process_child pc on pc.data_id=#{dataId} and pr.product_ref_id=pc.string5
     left join biz_data_status ds on ds.child_id=pc.child_id and ds.string2=pr.product_ref_id
@@ -290,8 +365,37 @@ join biz_process_data pd on pc.data_id=pd.data_id
     </sql>
     <select id="selectBizChildRef1List" parameterType="BizProcessChild" resultMap="BizProcessChildResult">
         <include refid="selectBizChildRef1Vo"/>
-        <if test="dataStatus == 1">and ds.data_status = #{ } </if>
+        <if test="dataStatus == 1">and ds.data_status = #{dataStatus} </if>
         <if test="dataStatus == -1">and ds.data_status is null </if>
+        <if test="supplierId != null and supplierId != ''">and s.suppliers_id=#{supplierId} </if>
+        group by pr.product_ref_id
+        order by pr.string1,pr.suppliers_id
+    </select>
+
+
+    <!-- 质检 法兰螺栓信息 -->
+    <sql id="selectBizTestRef1Vo">
+    select
+      pr.type,
+      pr.product_ref_id as productRef1Id,ds.string4 as dataId,ds.child_id as childId,sn.remark,ds.status_id as statusId,
+      ds.string1  as productRefNum,
+          pr.name as ref1Name,pr.price as ref1Price,
+          pr.string2 as ref1String2,d1.name as  ref1Specifications,d2.name  as ref1ValvebodyMaterial,
+          pr.material_require as ref1MaterialRequire,s.name as  suppliersName,pr.model,
+          ds.product_status as productStatus,ds.data_status as dataStatus,
+          ds.string4 as procurementId,pr.string1 as levelValue,s.suppliers_id as supplierId,s.nick_name as supplierName,
+          sum(sn.string1) as yesNum, sum(sn.string2) as noNum
+    from  biz_product_ref pr
+    join biz_data_status ds on   ds.string2=pr.product_ref_id and ds.string4=#{dataId}
+     left join biz_data_stestn sn on sn.status_id=ds.status_id
+    left join biz_dict d1 on d1.dict_id=pr.specifications
+	 left join biz_dict d2 on d2.dict_id=pr.valvebody_material
+	 left join biz_suppliers s on s.suppliers_id=pr.suppliers_id
+    where 1=1 and pr.type=1
+    </sql>
+    <select id="selectBizTestRef1List" parameterType="BizProcessChild" resultMap="BizProcessChildResult">
+        <include refid="selectBizTestRef1Vo"/>
+
         group by pr.product_ref_id
         order by pr.string1,pr.suppliers_id
     </select>
@@ -306,7 +410,7 @@ join biz_process_data pd on pc.data_id=pd.data_id
           pr.material_require as ref1MaterialRequire,s.name as  suppliersName,pr.model,pd.string6 as goodsTime,
           ds.product_status as productStatus,ds.actuator_status as actuatorStatus,ds.ref1_status as ref1Status,ds.ref2_status as ref2Status,ds.p_status as pStatus,
           ds.p1_status as p1Status,ds.p2_status as p2Status,ds.p3_status as p3Status,ds.p4_status as p4Status,pc.data_id as dataId,pc.child_id as childId,ds.data_status as dataStatus,
-          ds.string4 as procurementId,pr.string1 as levelValue
+          ds.string4 as procurementId,pr.string1 as levelValue,s.suppliers_id as supplierId,s.nick_name as supplierName
     from  biz_product_ref pr
     join biz_process_child pc on pc.data_id=#{dataId} and pr.product_ref_id=pc.string8
     left join biz_data_status ds on ds.child_id=pc.child_id and ds.string2=pr.product_ref_id
@@ -324,6 +428,35 @@ join biz_process_data pd on pc.data_id=pd.data_id
         <include refid="selectBizChildRef2Vo"/>
         <if test="dataStatus == 1">and ds.data_status = #{dataStatus} </if>
         <if test="dataStatus == -1">and ds.data_status is null </if>
+        <if test="supplierId != null and supplierId != ''">and s.suppliers_id=#{supplierId} </if>
+        group by pr.product_ref_id
+        order by pr.string8,pr.suppliers_id
+    </select>
+
+
+
+    <!-- 质检 螺栓信息 -->
+    <sql id="selectBizTestRef2Vo">
+    select
+      pr.product_ref_id as productRef2Id,ds.string4 as dataId,ds.child_id as childId,sn.remark,ds.status_id as statusId,
+      ds.string1 as productRef2Num,
+      pr.name as ref2Name,pr.price as ref2Price,
+      pr.string2 as ref1String2,d1.name as  ref1Specifications,d2.name  as ref1ValvebodyMaterial,
+          pr.material_require as ref1MaterialRequire,s.name as  suppliersName,pr.model,
+          ds.data_status as dataStatus,
+          ds.string4 as procurementId,pr.string1 as levelValue,s.suppliers_id as supplierId,s.nick_name as supplierName,
+          sum(sn.string1) as yesNum, sum(sn.string2) as noNum
+    from  biz_product_ref pr
+    join biz_data_status ds on   ds.string2=pr.product_ref_id and ds.string4=#{dataId}
+     left join biz_data_stestn sn on sn.status_id=ds.status_id
+    left join biz_dict d1 on d1.dict_id=pr.specifications
+	 left join biz_dict d2 on d2.dict_id=pr.valvebody_material
+	 left join biz_suppliers s on s.suppliers_id=pr.suppliers_id
+    where 1=1 and pr.type=2
+    </sql>
+    <select id="selectBizTestRef2List" parameterType="BizProcessChild" resultMap="BizProcessChildResult">
+        <include refid="selectBizTestRef2Vo"/>
+
         group by pr.product_ref_id
         order by pr.string8,pr.suppliers_id
     </select>
@@ -341,7 +474,7 @@ join biz_process_data pd on pc.data_id=pd.data_id
          pd.string6 as goodsTime,
           ds.product_status as productStatus,ds.actuator_status as actuatorStatus,ds.ref1_status as ref1Status,ds.ref2_status as ref2Status,ds.p_status as pStatus,
           ds.p1_status as p1Status,ds.p2_status as p2Status,ds.p3_status as p3Status,ds.p4_status as p4Status,pc.data_id as dataId,pc.child_id as childId,ds.data_status as dataStatus,
-          ds.string4 as procurementId,pa.string1 as levelValue
+          ds.string4 as procurementId,pa.string1 as levelValue,s.suppliers_id as supplierId,s.nick_name as supplierName
     from  biz_product_attachment pa
     join biz_process_child pc on pc.data_id=#{dataId} and pa.attachment_id=pc.pattachment_id
     left join biz_data_status ds on ds.child_id=pc.child_id and ds.string2=pa.attachment_id
@@ -357,9 +490,35 @@ join biz_process_data pd on pc.data_id=pd.data_id
         <include refid="selectBizChildPAVo"/>
         <if test="dataStatus == 1">and ds.data_status = #{dataStatus} </if>
         <if test="dataStatus == -1">and ds.data_status is null </if>
+        <if test="supplierId != null and supplierId != ''">and s.suppliers_id=#{supplierId} </if>
         group by pa.attachment_id
         order by pa.string1
     </select>
+
+    <!-- 质检 定位器 -->
+    <sql id="selectBizTestPAVo">
+    select
+      pa.attachment_id as pattachmentId,pa.bh as pattachmentName,ds.string4 as dataId,ds.child_id as childId,sn.remark,ds.status_id as statusId,
+      ds.string1 as pattachmentCount,
+      pa.type as paType, pa.bh, pa.chinese_name as chineseName, pa.chinese_specifications as chineseSpecifications, pa.english_name as englishName,
+        pa.english_specifications as englishSpecifications, pa.chinese_packaging as chinesePackaging, pa.english_packaging as englishPackaging,
+        pa.chinese_unit as chineseUnit, pa.english_unit as englishUnit, pa.pressure, pa.material, pa.bar_code as barCode, pa.customs_bh as customsBh,
+         pa.handling_fee as handlingFee, pa.color, pa.developer, pa.goods_category as goodsCategory,pa.settlement_price as procurementPrice,s.nick_name as supplierName,
+         ds.data_status as dataStatus,
+          ds.string4 as procurementId,pa.string1 as levelValue,s.suppliers_id as supplierId,s.nick_name as supplierName,
+          sum(sn.string1) as yesNum, sum(sn.string2) as noNum
+    from  biz_product_attachment pa
+    join biz_data_status ds on   ds.string2=pa.attachment_id and ds.string4=#{dataId}
+     left join biz_data_stestn sn on sn.status_id=ds.status_id
+    left join biz_suppliers s on s.suppliers_id=pa.supplier
+    where 1=1
+    </sql>
+    <select id="selectBizTestPAList" parameterType="BizProcessChild" resultMap="BizProcessChildResult">
+        <include refid="selectBizTestPAVo"/>
+        group by pa.attachment_id
+        order by pa.string1
+    </select>
+
 
 
     <!-- 电磁阀-->
@@ -375,7 +534,7 @@ join biz_process_data pd on pc.data_id=pd.data_id
          pd.string6 as goodsTime,
           ds.product_status as productStatus,ds.actuator_status as actuatorStatus,ds.ref1_status as ref1Status,ds.ref2_status as ref2Status,ds.p_status as pStatus,
           ds.p1_status as p1Status,ds.p2_status as p2Status,ds.p3_status as p3Status,ds.p4_status as p4Status,pc.data_id as dataId,pc.child_id as childId,ds.data_status as dataStatus,
-          ds.string4 as procurementId,pa.string1 as levelValue
+          ds.string4 as procurementId,pa.string1 as levelValue,s.suppliers_id as supplierId,s.nick_name as supplierName
 
     from  biz_product_attachment pa
     join biz_process_child pc on pc.data_id=#{dataId} and pa.attachment_id=pc.pattachment1_id
@@ -392,6 +551,7 @@ join biz_process_data pd on pc.data_id=pd.data_id
         <include refid="selectBizChildPA1Vo"/>
         <if test="dataStatus == 1">and ds.data_status = #{dataStatus} </if>
         <if test="dataStatus == -1">and ds.data_status is null </if>
+        <if test="supplierId != null and supplierId != ''">and s.suppliers_id=#{supplierId} </if>
         group by pa.attachment_id
         order by pa.string1
     </select>
@@ -409,7 +569,7 @@ join biz_process_data pd on pc.data_id=pd.data_id
          pd.string6 as goodsTime,
           ds.product_status as productStatus,ds.actuator_status as actuatorStatus,ds.ref1_status as ref1Status,ds.ref2_status as ref2Status,ds.p_status as pStatus,
           ds.p1_status as p1Status,ds.p2_status as p2Status,ds.p3_status as p3Status,ds.p4_status as p4Status,pc.data_id as dataId,pc.child_id as childId,ds.data_status as dataStatus,
-          ds.string4 as procurementId,pa.string1 as levelValue
+          ds.string4 as procurementId,pa.string1 as levelValue,s.suppliers_id as supplierId,s.nick_name as supplierName
 
     from  biz_product_attachment pa
     join biz_process_child pc on pc.data_id=#{dataId} and pa.attachment_id=pc.pattachment2_id
@@ -426,6 +586,7 @@ join biz_process_data pd on pc.data_id=pd.data_id
         <include refid="selectBizChildPA2Vo"/>
         <if test="dataStatus == 1">and ds.data_status = #{dataStatus} </if>
         <if test="dataStatus == -1">and ds.data_status is null </if>
+        <if test="supplierId != null and supplierId != ''">and s.suppliers_id=#{supplierId} </if>
         group by pa.attachment_id
         order by pa.string1
     </select>
@@ -443,7 +604,7 @@ join biz_process_data pd on pc.data_id=pd.data_id
          pd.string6 as goodsTime,
           ds.product_status as productStatus,ds.actuator_status as actuatorStatus,ds.ref1_status as ref1Status,ds.ref2_status as ref2Status,ds.p_status as pStatus,
           ds.p1_status as p1Status,ds.p2_status as p2Status,ds.p3_status as p3Status,ds.p4_status as p4Status,pc.data_id as dataId,pc.child_id as childId,ds.data_status as dataStatus,
-          ds.string4 as procurementId,pa.string1 as levelValue
+          ds.string4 as procurementId,pa.string1 as levelValue,s.suppliers_id as supplierId,s.nick_name as supplierName
 
 
     from  biz_product_attachment pa
@@ -461,6 +622,7 @@ join biz_process_data pd on pc.data_id=pd.data_id
         <include refid="selectBizChildPA3Vo"/>
         <if test="dataStatus == 1">and ds.data_status = #{dataStatus} </if>
         <if test="dataStatus == -1">and ds.data_status is null </if>
+        <if test="supplierId != null and supplierId != ''">and s.suppliers_id=#{supplierId} </if>
         group by pa.attachment_id
         order by pa.string1
     </select>
@@ -477,7 +639,7 @@ join biz_process_data pd on pc.data_id=pd.data_id
          pd.string6 as goodsTime,
           ds.product_status as productStatus,ds.actuator_status as actuatorStatus,ds.ref1_status as ref1Status,ds.ref2_status as ref2Status,ds.p_status as pStatus,
           ds.p1_status as p1Status,ds.p2_status as p2Status,ds.p3_status as p3Status,ds.p4_status as p4Status,pc.data_id as dataId,pc.child_id as childId,ds.data_status as dataStatus,
-          ds.string4 as procurementId,pa.string1 as levelValue
+          ds.string4 as procurementId,pa.string1 as levelValue,s.suppliers_id as supplierId,s.nick_name as supplierName
     from  biz_product_attachment pa
     join biz_process_child pc on pc.data_id=#{dataId} and pa.attachment_id=pc.pattachment4_id
     left join biz_data_status ds on ds.child_id=pc.child_id and ds.string2=pa.attachment_id
@@ -493,12 +655,24 @@ join biz_process_data pd on pc.data_id=pd.data_id
         <include refid="selectBizChildPA4Vo"/>
         <if test="dataStatus == 1">and ds.data_status = #{dataStatus} </if>
         <if test="dataStatus == -1">and ds.data_status is null </if>
+        <if test="supplierId != null and supplierId != ''">and s.suppliers_id=#{supplierId} </if>
         group by pa.attachment_id
         order by pa.string1
     </select>
 
 
-    <!-- 定位器，电磁阀，回信器数，气源三连件，可离合减速器 -->
+    <sql id="selectBizTestChildVo">
+    select sn.test_id as testId,sn.remark,sn.status_id,
+    sn.string1 as yesNum,sn.string2 as noNum,
+      u.user_name as createByName,sn.create_time
+    from  biz_data_stestn sn
+    left join sys_user u on sn.create_by=u.user_id
+    where 1=1 and sn.string3=#{paramterId} and sn.string4=#{dataId} and sn.string5=#{childId}
+    </sql>
+    <select id="selectBizTestChildList" parameterType="BizProcessChild" resultMap="BizProcessChildResult">
+        <include refid="selectBizTestChildVo"/>
+        order by sn.create_time desc
+    </select>
 
 
     <insert id="insertBizProcessChild" parameterType="BizProcessChild" useGeneratedKeys="true" keyProperty="childId">

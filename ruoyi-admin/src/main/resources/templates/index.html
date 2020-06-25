@@ -64,11 +64,26 @@
 						<li th:each="cmenu : ${menu.children}">
 							<a th:if="${#lists.isEmpty(cmenu.children)}" th:class="${cmenu.target == ''} ? |menuItem| : ${cmenu.target}" th:utext="${cmenu.menuName}" th:href="@{${cmenu.url}}">二级菜单</a>
 							<a th:if="${not #lists.isEmpty(cmenu.children)}" href="#">[[${cmenu.menuName}]]<span class="fa arrow"></span></a>
-							<ul th:if="${not #lists.isEmpty(cmenu.children)}" class="nav nav-third-level">
+
+                            <!--
+                            <ul th:if="${not #lists.isEmpty(cmenu.children)}" class="nav nav-third-level">
 								<li th:each="emenu : ${cmenu.children}"><a th:class="${emenu.target == ''} ? |menuItem| : ${emenu.target}" th:text="${emenu.menuName}" th:href="@{${emenu.url}}">三级菜单</a></li>
-							</ul>
+
+                            </ul>
+                            -->
+                            <ul class="nav nav-third-level collapse">
+                                <li th:each="tmenu : ${cmenu.children}">
+                                    <a th:if="${#lists.isEmpty(tmenu.children)}" th:class="${tmenu.target == ''} ? |menuItem| : ${tmenu.target}" th:utext="${tmenu.menuName}" th:href="@{${tmenu.url}}">二级菜单</a>
+                                    <a th:if="${not #lists.isEmpty(tmenu.children)}" href="#">[[${tmenu.menuName}]]<span class="fa arrow"></span></a>
+                                    <ul th:if="${not #lists.isEmpty(tmenu.children)}" class="nav nav-third-level">
+                                        <li th:each="emenu : ${tmenu.children}"><a th:class="${emenu.target == ''} ? |menuItem| : ${emenu.target}" th:text="${emenu.menuName}" th:href="@{${emenu.url}}">三级菜单</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
 						</li>
 					</ul>
+
+
                 </li>
 				<!--
                 <li th:if="${demoEnabled}">

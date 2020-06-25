@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('质检列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+
+                            <li>
+                                <p>合同号：</p>
+                                <input type="text" name="string1"/>
+                            </li>
+                            <li>
+                                <p>客户名称：</p>
+                                <input type="text" name="customerName"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <input type="hidden" name="bizId" id="bizId" value="procurement"/>
+                    <input type="hidden" name="string10" id="string10" value="1"/>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+
+
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('fmis:procurement:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('fmis:procurement:remove')}]];
+        var prefix = ctx + "fmis/procurementtest";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                uniqueId: "dataId",
+                modalName: "质检管理",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'dataId', 
+                    title : 'ID',
+                    visible: false
+                },
+
+                {
+                    field : 'string1',
+                    title : '结算单位'
+                },
+                {
+                    field : 'string2',
+                    title : '归属单位'
+                },
+                {
+                    field : 'datetime1',
+                    title : '订货日期'
+                },
+                {
+                    field : 'string3',
+                    title : '生产单号'
+                },
+                {
+                    field : 'customerName',
+                    title : '客户'
+                },
+                {
+                    field : 'string5',
+                    title : '类别'
+                },
+                {
+                    field : 'string6',
+                    title : '供应商'
+                },
+                {
+                    field : 'string7',
+                    title : '订货产品'
+                },
+                {
+                    field : 'string8',
+                    title : '回传'
+                },
+                {
+                    field : 'datetime2',
+                    title : '生产单要求交期'
+                },
+                {
+                    field : 'datetime3',
+                    title : '供应商发货日期'
+                },
+                {
+                    field : 'string9',
+                    title : '运输方式'
+                },
+                {
+                    field : 'price1',
+                    title : '合计'
+                },
+                {
+                    field : 'remark',
+                    title : '备注'
+                },
+
+                {
+                    field : 'flowStatusRemark',
+                    title : '状态',
+                    align: 'center'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        var flowStatus = row.flowStatus;
+                        var normalFlag = row.normalFlag;
+                        var operationExamineStatus = row.operationExamineStatus;
+                        //质检状态
+                        var testStatus = row.string10;
+                        if (flowStatus < 1) {
+                            if (flowStatus == "0") {
+                                //已上报
+                            } else {
+                            }
+                        } else if (flowStatus == normalFlag) {
+                            if (testStatus == 1) {
+                                actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="edit(\'' + row.dataId + '\')"><i class="fa fa-save"></i> 开始质检</a>');
+
+                            }
+                        }
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+
+        function edit(dataId) {
+            var url = prefix + "/edit?dataId=" + dataId;
+            $.modal.openNoEnter("质检", url,$(window).width(),$(window).height(),function(){
+                $.modal.closeAll();
+            });
+        }
+
+    </script>
+</body>
+</html>

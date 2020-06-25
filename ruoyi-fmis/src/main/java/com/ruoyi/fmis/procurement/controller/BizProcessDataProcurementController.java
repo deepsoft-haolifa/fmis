@@ -16,6 +16,8 @@ import com.ruoyi.fmis.product.domain.BizProduct;
 import com.ruoyi.fmis.product.service.IBizProductService;
 import com.ruoyi.fmis.status.domain.BizDataStatus;
 import com.ruoyi.fmis.status.service.IBizDataStatusService;
+import com.ruoyi.fmis.suppliers.domain.BizSuppliers;
+import com.ruoyi.fmis.suppliers.service.IBizSuppliersService;
 import com.ruoyi.system.domain.SysRole;
 import com.ruoyi.system.service.ISysRoleService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -70,6 +72,9 @@ public class BizProcessDataProcurementController extends BaseController {
 
     @Autowired
     private IBizDataStatusService bizDataStatusService;
+
+    @Autowired
+    private IBizSuppliersService bizSuppliersService;
 
     @RequiresPermissions("fmis:procurement:view")
     @GetMapping()
@@ -139,7 +144,44 @@ public class BizProcessDataProcurementController extends BaseController {
     public String examineEdit(ModelMap mmap) {
         String dataId = getRequest().getParameter("dataId");
         BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataById(Long.parseLong(dataId));
+
+        String customerId = bizProcessData.getString4();
+        if (StringUtils.isNotEmpty(customerId)) {
+            bizProcessData.setBizCustomer(bizCustomerService.selectBizCustomerById(Long.parseLong(customerId)));
+        }
+
+        //查询已经选中的采购
+        BizDataStatus queryBizDataStatus = new BizDataStatus();
+        queryBizDataStatus.setString4(bizProcessData.getDataId().toString());
+        List<BizDataStatus> bizDataStatuses = bizDataStatusService.selectBizDataStatusList(queryBizDataStatus);
+        JSONArray numJsonValue = new JSONArray();
+        if (!CollectionUtils.isEmpty(bizDataStatuses)) {
+            for (BizDataStatus bizDataStatus : bizDataStatuses) {
+                String type = bizDataStatus.getType();
+                String childId = bizDataStatus.getChildId().toString();
+                String num = bizDataStatus.getString1();
+                String bizDataId = bizDataStatus.getString2();
+                String parentContractId = bizDataStatus.getString3();
+                String levelValue = bizDataStatus.getString5();
+                JSONObject jsonObject = new JSONObject();
+                String k = type + "_" + childId + "_" + bizDataId + "_" + parentContractId + "_" + levelValue;
+                jsonObject.put("id",k);
+                jsonObject.put("num",num);
+                numJsonValue.add(jsonObject);
+            }
+        }
+        mmap.put("numJsonValue", numJsonValue);
         mmap.put("bizProcessData", bizProcessData);
+
+        List<BizSuppliers> suppliersList = bizSuppliersService.selectAllList();
+        for (BizSuppliers suppliers : suppliersList) {
+            String supplierId = bizProcessData.getString6() == null ? "" : bizProcessData.getString6();
+            if (supplierId.equals(suppliers.getSuppliersId().toString())) {
+                suppliers.setFlag(true);
+            }
+        }
+        mmap.put("suppliers",suppliersList);
+
         return prefix + "/examineEdit";
     }
 
@@ -177,7 +219,8 @@ public class BizProcessDataProcurementController extends BaseController {
      * 新增合同管理
      */
     @GetMapping("/add")
-    public String add() {
+    public String add(ModelMap mmap) {
+        mmap.put("suppliers",bizSuppliersService.selectAllList());
         return prefix + "/add";
     }
 
@@ -243,6 +286,16 @@ public class BizProcessDataProcurementController extends BaseController {
         }
         mmap.put("numJsonValue", numJsonValue);
         mmap.put("bizProcessData", bizProcessData);
+
+        List<BizSuppliers> suppliersList = bizSuppliersService.selectAllList();
+        for (BizSuppliers suppliers : suppliersList) {
+            String supplierId = bizProcessData.getString6() == null ? "" : bizProcessData.getString6();
+            if (supplierId.equals(suppliers.getSuppliersId().toString())) {
+                suppliers.setFlag(true);
+            }
+        }
+        mmap.put("suppliers",suppliersList);
+
         return prefix + "/viewDetail";
     }
 
@@ -280,6 +333,15 @@ public class BizProcessDataProcurementController extends BaseController {
         }
         mmap.put("numJsonValue", numJsonValue);
         mmap.put("bizProcessData", bizProcessData);
+
+        List<BizSuppliers> suppliersList = bizSuppliersService.selectAllList();
+        for (BizSuppliers suppliers : suppliersList) {
+            String supplierId = bizProcessData.getString6() == null ? "" : bizProcessData.getString6();
+            if (supplierId.equals(suppliers.getSuppliersId().toString())) {
+                suppliers.setFlag(true);
+            }
+        }
+        mmap.put("suppliers",suppliersList);
         return prefix + "/edit";
     }
 
@@ -328,7 +390,24 @@ public class BizProcessDataProcurementController extends BaseController {
     @PostMapping( "/remove")
     @ResponseBody
     public AjaxResult remove(String ids) {
-        return toAjax(bizProcessDataService.deleteBizProcessDataByIds(ids));
+
+        String[] ids_ = ids.split(",");
+        for (String id : ids_) {
+            if (StringUtils.isEmpty(id)) {
+                continue;
+            }
+            BizDataStatus queryBizDataStatus = new BizDataStatus();
+            queryBizDataStatus.setString4(id);
+            List<BizDataStatus> bizDataStatuses = bizDataStatusService.selectBizDataStatusList(queryBizDataStatus);
+            if (!CollectionUtils.isEmpty(bizDataStatuses)) {
+                for (BizDataStatus bizDataStatus : bizDataStatuses) {
+                    bizDataStatusService.deleteBizDataStatusById(bizDataStatus.getStatusId());
+                }
+            }
+        }
+
+        AjaxResult returnAjax = toAjax(bizProcessDataService.deleteBizProcessDataByIds(ids));
+        return returnAjax;
     }
 
     @PostMapping("/report")
@@ -339,6 +418,13 @@ public class BizProcessDataProcurementController extends BaseController {
         return toAjax(bizProcessDataService.subReportBizQuotation(bizQuotation));
     }
 
+    @PostMapping("/subTest")
+    @ResponseBody
+    public AjaxResult subTest() {
+        String dataId = getRequest().getParameter("dataId");
+        BizProcessData bizQuotation = bizProcessDataService.selectBizProcessDataById(Long.parseLong(dataId));
+        return toAjax(bizProcessDataService.subTestBizQuotation(bizQuotation));
+    }
     /**
      * 选择客户
      */

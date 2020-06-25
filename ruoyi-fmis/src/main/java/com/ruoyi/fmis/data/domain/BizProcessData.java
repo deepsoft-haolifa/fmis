@@ -29,6 +29,10 @@ public class BizProcessData extends BaseEntity {
 
     @Getter
     @Setter
+    private String supplierId;
+
+    @Getter
+    @Setter
     private String bizEditFlag;
 
     @Getter

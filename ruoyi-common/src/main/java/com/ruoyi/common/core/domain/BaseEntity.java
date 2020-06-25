@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import jdk.nashorn.internal.objects.annotations.Setter;
 
 /**
  * Entity基类
@@ -20,6 +21,8 @@ public class BaseEntity implements Serializable
 
     /** 创建者 */
     private String createBy;
+
+
 
     /** 创建时间 */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")

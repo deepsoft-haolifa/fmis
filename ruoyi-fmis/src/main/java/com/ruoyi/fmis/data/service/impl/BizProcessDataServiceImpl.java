@@ -180,6 +180,16 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
         insertFlow(bizProcessData);
         return updateCount;
     }
+
+    @Override
+    public int subTestBizQuotation(BizProcessData bizProcessData) {
+        bizProcessData.setUpdateTime(DateUtils.getNowDate());
+        bizProcessData.setUpdateBy(ShiroUtils.getUserId().toString());
+        bizProcessData.setString10("1");
+        int updateCount = bizProcessDataMapper.updateBizProcessData(bizProcessData);
+        return updateCount;
+    }
+
     /**
      * 上报报价单
      */

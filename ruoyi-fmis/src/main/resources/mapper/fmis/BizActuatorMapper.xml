@@ -35,10 +35,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createTime"    column="create_time"    />
         <result property="updateBy"    column="update_by"    />
         <result property="updateTime"    column="update_time"    />
+        <result property="supplier"    column="supplier"    />
     </resultMap>
 
     <sql id="selectBizActuatorVo">
-        select actuator_id, name, brand, manufacturer, setup_type, output_torque, action_type, control_circuit, adaptable_voltage, protection_level, quality_level, explosion_level, price, remark, string1, string2, string3, string4, string5, string6, string7, string8, string9, string10, status, del_flag, create_by, create_time, update_by, update_time from biz_actuator
+        select a.actuator_id, a.name, a.brand, a.manufacturer, a.setup_type, a.output_torque, a.action_type, a.control_circuit, a.adaptable_voltage,
+        a.protection_level, a.quality_level, a.explosion_level, a.price, a.remark, a.string1, a.string2, a.string3, a.string4, a.string5,
+        a.string6, a.string7, a.string8, a.string9, a.string10, a.status, a.del_flag, a.create_by, a.create_time, a.update_by, a.update_time ,
+        s.nick_name as supplier
+        from biz_actuator a
+        left join biz_suppliers s on s.suppliers_id=a.string10
     </sql>
 
 
@@ -55,13 +61,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <sql id="selectBizActuatorForRefVo">
 
-		select distinct a.actuator_id, a.name, a.brand, a.manufacturer, a.setup_type, a.output_torque, a.action_type, a.control_circuit, a.adaptable_voltage, a.protection_level, a.quality_level, a.explosion_level, a.price, a.remark, a.string1, a.string2, a.string3, a.string4, a.string5, a.string6, a.string7, a.string8, a.string9, a.string10, a.status, a.del_flag, a.create_by, a.create_time, a.update_by, a.update_time
+		select distinct a.actuator_id, a.name, a.brand, a.manufacturer, a.setup_type, a.output_torque, a.action_type, a.control_circuit,
+		a.adaptable_voltage, a.protection_level, a.quality_level, a.explosion_level, a.price, a.remark, a.string1,
+		a.string2, a.string3, a.string4, a.string5, a.string6, a.string7, a.string8, a.string9, a.string10,
+		 a.status, a.del_flag, a.create_by, a.create_time, a.update_by, a.update_time,s.nick_name as supplier
 		from biz_actuator a
 
 
 		 left join biz_actuator_ref ar on ar.drive_mode=a.string1
         left join biz_dict d1 on d1.dict_id=ar.valve_type
         left join biz_dict d2 on d2.dict_id=ar.pressure
+        left join biz_suppliers s on s.suppliers_id=a.string10
 
 
     </sql>
