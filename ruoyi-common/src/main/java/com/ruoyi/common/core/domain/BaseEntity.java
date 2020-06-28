@@ -16,6 +16,9 @@ public class BaseEntity implements Serializable
 {
     private static final long serialVersionUID = 1L;
 
+
+
+
     /** 搜索值 */
     private String searchValue;
 
@@ -23,6 +26,7 @@ public class BaseEntity implements Serializable
     private String createBy;
 
 
+    private String createByName;
 
     /** 创建时间 */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -99,6 +103,17 @@ public class BaseEntity implements Serializable
     public void setRemark(String remark)
     {
         this.remark = remark;
+    }
+
+
+    public String getCreateByName()
+    {
+        return createByName;
+    }
+
+    public void setCreateByName(String createByName)
+    {
+        this.createByName = createByName;
     }
 
     public Map<String, Object> getParams()

@@ -155,6 +155,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
         left join biz_customer ct on ct.customer_id=q.string2
         left join biz_suppliers bs on bs.suppliers_id=q.string3
+
     </sql>
 
     <select id="selectBizProcessDataListRef" parameterType="BizProcessData" resultMap="BizProcessDataResult">
@@ -166,6 +167,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="customerName != null and customerName != ''"> and ct.name like concat('%', #{customerName}, '%')</if>
             <!-- 如果是详情，只看有数据 -->
             <if test="bizEditFlag == 2">and ds.string4 = #{dataId} </if>
+
+            <if test="billId != null  and billId != ''">and bc.bill_id = #{billId} </if>
 
             <if test="bizId != null  and bizId != ''"> and biz_id = #{bizId}</if>
             <if test="normalFlag != null  and normalFlag != ''"> and normal_flag = #{normalFlag}</if>
@@ -279,6 +282,48 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             </if>
         </where>
     </select>
+
+
+
+
+    <!-- 拆解合同分账start -->
+    <sql id="selectBizProcessDataVoRefBill">
+        select distinct q.data_id, q.biz_data_id, q.biz_id, q.normal_flag, q.flow_status, q.remark, q.price1, q.price2, q.price3,
+        q.price4, q.price5, q.price6, q.price7, q.price8, q.price9, q.price10, q.string1, q.string2,
+        q.string3, q.string4, q.string5, q.string6, q.string7, q.string8, q.string9, q.string10, q.string11,
+        q.string12, q.string13, q.string14, q.string15, q.string16, q.string17, q.string18, q.string19, q.string20,
+        q.datetime1, q.datetime2, q.datetime3, q.datetime4, q.datetime5, q.status, q.del_flag, q.create_by,
+        q.create_time, q.update_by, q.update_time,ct.name as customerName,bs.name as suppliersName,
+        q.string21,q.string22,q.string23,q.string24,q.string25,q.string26,q.string27,q.string28,q.string29,q.string30,
+        q.price11, q.price12, q.price13, q.price14, q.price15, q.price16, q.price17, q.price18, q.price19, q.price20,
+        sum(bc.amount) as billAmount
+        from biz_process_data q
+        left join sys_user u on q.create_by=u.user_id
+        left join sys_dept dt on u.dept_id=dt.dept_id
+
+        left join biz_customer ct on ct.customer_id=q.string2
+        left join biz_suppliers bs on bs.suppliers_id=q.string3
+
+        left join biz_bill_contract bc on bc.data_id=q.data_id
+    </sql>
+
+    <select id="selectBizProcessDataListRefBill" parameterType="BizProcessData" resultMap="BizProcessDataResult">
+        <include refid="selectBizProcessDataVoRefBill"/>
+        <where>
+            1=1
+            <if test="bizDataId != null "> and biz_data_id = #{bizDataId}</if>
+            <if test="string1 != null and string1 != ''"> and q.string1 like concat('%', #{string1}, '%')</if>
+            <if test="customerName != null and customerName != ''"> and ct.name like concat('%', #{customerName}, '%')</if>
+            <!-- 如果是详情，只看有数据 -->
+            <if test="bizEditFlag == 2">and ds.string4 = #{dataId} </if>
+
+            <if test="billId != null  and billId != ''">and bc.bill_id = #{billId} </if>
+
+            <if test="bizId != null  and bizId != ''"> and biz_id = #{bizId}</if>
+
+        </where>
+    </select>
+    <!--拆解合同分账 end -->
 
 
 

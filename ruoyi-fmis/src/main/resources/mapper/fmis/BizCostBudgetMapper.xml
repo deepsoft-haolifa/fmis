@@ -2,23 +2,17 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ruoyi.fmis.bill.mapper.BizBillMapper">
+<mapper namespace="com.ruoyi.fmis.budget.mapper.BizCostBudgetMapper">
     
-    <resultMap type="BizBill" id="BizBillResult">
-        <result property="billId"    column="bill_id"    />
-        <result property="xh"    column="xh"    />
+    <resultMap type="BizCostBudget" id="BizCostBudgetResult">
+        <result property="budgetId"    column="budget_id"    />
+        <result property="name"    column="name"    />
         <result property="d"    column="d"    />
-        <result property="certificateNumber"    column="certificate_number"    />
-        <result property="settlementType"    column="settlement_type"    />
-        <result property="clearingBanks"    column="clearing_banks"    />
-        <result property="preMonthMoney"    column="pre_month_money"    />
-        <result property="collectionMoney"    column="collection_money"    />
-        <result property="collectionType"    column="collection_type"    />
-        <result property="payment"    column="payment"    />
-        <result property="paymentType"    column="payment_type"    />
-        <result property="balance"    column="balance"    />
-        <result property="type"    column="type"    />
+        <result property="y"    column="y"    />
+        <result property="m"    column="m"    />
         <result property="deptId"    column="dept_id"    />
+        <result property="subjectsId"    column="subjects_id"    />
+        <result property="amount"    column="amount"    />
         <result property="string1"    column="string1"    />
         <result property="string2"    column="string2"    />
         <result property="string3"    column="string3"    />
@@ -37,9 +31,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateBy"    column="update_by"    />
         <result property="updateTime"    column="update_time"    />
         <result property="createByName"    column="createByName"    />
-        <result property="billAmount"    column="billAmount"    />
         <association property="dept"    column="dept_id" javaType="SysDept" resultMap="deptResult" />
     </resultMap>
+
     <resultMap id="deptResult" type="SysDept">
         <id     property="deptId"   column="dept_id"     />
         <result property="parentId" column="parent_id"   />
@@ -49,53 +43,39 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="status"   column="dept_status" />
     </resultMap>
 
-    <sql id="selectBizBillVo">
-        select b.bill_id, b.xh, b.d, b.certificate_number, b.settlement_type, b.clearing_banks, b.pre_month_money, b.collection_money, b.collection_type, b.payment, b.payment_type, b.balance,
-        b.type, b.dept_id, b.string1, b.string2, b.string3, b.string4, b.string5, b.string6, b.string7, b.string8, b.string9,
-        b.string10, b.remark, b.status, b.del_flag, b.create_by, b.create_time, b.update_by, b.update_time,
+    <sql id="selectBizCostBudgetVo">
+        select b.budget_id, b.name, b.d, b.y, b.m, b.dept_id, b.subjects_id, b.amount, b.string1, b.string2, b.string3, b.string4, b.string5, b.string6, b.string7, b.string8,
+        b.string9, b.string10, b.remark, b.status, b.del_flag, b.create_by, b.create_time, b.update_by, b.update_time,
         d.parent_id, d.dept_name, d.order_num, d.leader, d.status as dept_status,
-         u.user_name as createByName,sum(bc.amount) as billAmount
-        from biz_bill b
+        u.user_name as createByName
+        from biz_cost_budget b
         left join sys_dept d on d.dept_id = b.dept_id
         left join sys_user u on u.user_id=b.create_by
-        left join biz_bill_contract bc on bc.bill_id=b.bill_id
     </sql>
 
-    <select id="selectBizBillList" parameterType="BizBill" resultMap="BizBillResult">
-        <include refid="selectBizBillVo"/>
+    <select id="selectBizCostBudgetList" parameterType="BizCostBudget" resultMap="BizCostBudgetResult">
+        <include refid="selectBizCostBudgetVo"/>
         <where>  
-            <if test="xh != null  and xh != ''"> and b.xh like concat('%', #{xh}, '%')</if>
-            <if test="certificateNumber != null  and certificateNumber != ''"> and b.certificate_number = #{certificateNumber}</if>
-            <if test="paymentType != null  and paymentType != ''"> and b.payment_type = #{paymentType}</if>
-            <if test="collectionType != null  and collectionType != ''"> and b.collection_type = #{collectionType}</if>
-            <if test="balance != null "> and b.balance = #{balance}</if>
-            <if test="type != null "> and b.type = #{type}</if>
-
-            <if test="billId != null  and billId != ''"> and b.bill_id = #{billId}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="amount != null "> and amount = #{amount}</if>
         </where>
     </select>
     
-    <select id="selectBizBillById" parameterType="Long" resultMap="BizBillResult">
-        <include refid="selectBizBillVo"/>
-        where b.bill_id = #{billId}
+    <select id="selectBizCostBudgetById" parameterType="Long" resultMap="BizCostBudgetResult">
+        <include refid="selectBizCostBudgetVo"/>
+        where budget_id = #{budgetId}
     </select>
         
-    <insert id="insertBizBill" parameterType="BizBill" useGeneratedKeys="true" keyProperty="billId">
-        insert into biz_bill
+    <insert id="insertBizCostBudget" parameterType="BizCostBudget" useGeneratedKeys="true" keyProperty="budgetId">
+        insert into biz_cost_budget
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="xh != null  and xh != ''">xh,</if>
+            <if test="name != null  and name != ''">name,</if>
             <if test="d != null ">d,</if>
-            <if test="certificateNumber != null  and certificateNumber != ''">certificate_number,</if>
-            <if test="settlementType != null  and settlementType != ''">settlement_type,</if>
-            <if test="clearingBanks != null  and clearingBanks != ''">clearing_banks,</if>
-            <if test="preMonthMoney != null ">pre_month_money,</if>
-            <if test="collectionMoney != null ">collection_money,</if>
-            <if test="collectionType != null  and collectionType != ''">collection_type,</if>
-            <if test="payment != null ">payment,</if>
-            <if test="paymentType != null  and paymentType != ''">payment_type,</if>
-            <if test="balance != null ">balance,</if>
-            <if test="type != null  and type != ''">type,</if>
-            <if test="deptId != null  and deptId != ''">dept_id,</if>
+            <if test="y != null  and y != ''">y,</if>
+            <if test="m != null  and m != ''">m,</if>
+            <if test="deptId != null ">dept_id,</if>
+            <if test="subjectsId != null ">subjects_id,</if>
+            <if test="amount != null ">amount,</if>
             <if test="string1 != null  and string1 != ''">string1,</if>
             <if test="string2 != null  and string2 != ''">string2,</if>
             <if test="string3 != null  and string3 != ''">string3,</if>
@@ -115,19 +95,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null ">update_time,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="xh != null  and xh != ''">#{xh},</if>
+            <if test="name != null  and name != ''">#{name},</if>
             <if test="d != null ">#{d},</if>
-            <if test="certificateNumber != null  and certificateNumber != ''">#{certificateNumber},</if>
-            <if test="settlementType != null  and settlementType != ''">#{settlementType},</if>
-            <if test="clearingBanks != null  and clearingBanks != ''">#{clearingBanks},</if>
-            <if test="preMonthMoney != null ">#{preMonthMoney},</if>
-            <if test="collectionMoney != null ">#{collectionMoney},</if>
-            <if test="collectionType != null  and collectionType != ''">#{collectionType},</if>
-            <if test="payment != null ">#{payment},</if>
-            <if test="paymentType != null  and paymentType != ''">#{paymentType},</if>
-            <if test="balance != null ">#{balance},</if>
-            <if test="type != null  and type != ''">#{type},</if>
-            <if test="deptId != null  and deptId != ''">#{deptId},</if>
+            <if test="y != null  and y != ''">#{y},</if>
+            <if test="m != null  and m != ''">#{m},</if>
+            <if test="deptId != null ">#{deptId},</if>
+            <if test="subjectsId != null ">#{subjectsId},</if>
+            <if test="amount != null ">#{amount},</if>
             <if test="string1 != null  and string1 != ''">#{string1},</if>
             <if test="string2 != null  and string2 != ''">#{string2},</if>
             <if test="string3 != null  and string3 != ''">#{string3},</if>
@@ -148,22 +122,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
-    <update id="updateBizBill" parameterType="BizBill">
-        update biz_bill
+    <update id="updateBizCostBudget" parameterType="BizCostBudget">
+        update biz_cost_budget
         <trim prefix="SET" suffixOverrides=",">
-            <if test="xh != null  and xh != ''">xh = #{xh},</if>
+            <if test="name != null  and name != ''">name = #{name},</if>
             <if test="d != null ">d = #{d},</if>
-            <if test="certificateNumber != null  and certificateNumber != ''">certificate_number = #{certificateNumber},</if>
-            <if test="settlementType != null  and settlementType != ''">settlement_type = #{settlementType},</if>
-            <if test="clearingBanks != null  and clearingBanks != ''">clearing_banks = #{clearingBanks},</if>
-            <if test="preMonthMoney != null ">pre_month_money = #{preMonthMoney},</if>
-            <if test="collectionMoney != null ">collection_money = #{collectionMoney},</if>
-            <if test="collectionType != null  and collectionType != ''">collection_type = #{collectionType},</if>
-            <if test="payment != null ">payment = #{payment},</if>
-            <if test="paymentType != null  and paymentType != ''">payment_type = #{paymentType},</if>
-            <if test="balance != null ">balance = #{balance},</if>
-            <if test="type != null  and type != ''">type = #{type},</if>
-            <if test="deptId != null  and deptId != ''">dept_id = #{deptId},</if>
+            <if test="y != null  and y != ''">y = #{y},</if>
+            <if test="m != null  and m != ''">m = #{m},</if>
+            <if test="deptId != null ">dept_id = #{deptId},</if>
+            <if test="subjectsId != null ">subjects_id = #{subjectsId},</if>
+            <if test="amount != null ">amount = #{amount},</if>
             <if test="string1 != null  and string1 != ''">string1 = #{string1},</if>
             <if test="string2 != null  and string2 != ''">string2 = #{string2},</if>
             <if test="string3 != null  and string3 != ''">string3 = #{string3},</if>
@@ -182,17 +150,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
             <if test="updateTime != null ">update_time = #{updateTime},</if>
         </trim>
-        where bill_id = #{billId}
+        where budget_id = #{budgetId}
     </update>
 
-    <delete id="deleteBizBillById" parameterType="Long">
-        delete from biz_bill where bill_id = #{billId}
+    <delete id="deleteBizCostBudgetById" parameterType="Long">
+        delete from biz_cost_budget where budget_id = #{budgetId}
     </delete>
 
-    <delete id="deleteBizBillByIds" parameterType="String">
-        delete from biz_bill where bill_id in 
-        <foreach item="billId" collection="array" open="(" separator="," close=")">
-            #{billId}
+    <delete id="deleteBizCostBudgetByIds" parameterType="String">
+        delete from biz_cost_budget where budget_id in 
+        <foreach item="budgetId" collection="array" open="(" separator="," close=")">
+            #{budgetId}
         </foreach>
     </delete>
     

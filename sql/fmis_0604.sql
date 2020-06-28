@@ -1113,3 +1113,233 @@ insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, 
 values('导出', @parentId, '5',  '#',  'F', '0', 'fmis:bill2:export',       '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
 
 
+-- 往来管理 start
+SELECT @parentIdFP :=  menu_id from sys_menu where menu_name='财务管理' and parent_id=0 and order_num='60';
+
+insert into sys_menu (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('往来管理', @parentIdFP, '20', '#', 'M', '0', '', '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+SELECT @parentIdF :=  menu_id from sys_menu where menu_name='往来管理' and menu_type='M' and order_num='20';
+
+insert into sys_menu (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('应收管理', @parentIdF, '10', '#', 'M', '0', '', '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+SELECT @parentIdF1 :=  menu_id from sys_menu where menu_name='应收管理' and menu_type='M' and order_num='10';
+
+
+-- 菜单 SQL
+insert into sys_menu (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('已收款项', @parentIdF1, '20', '/fmis/bill3', 'C', '0', 'fmis:bill3:view', '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '已收款项');
+
+-- 按钮父菜单ID
+SELECT @parentId := LAST_INSERT_ID();
+
+-- 按钮 SQL
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('查询', @parentId, '1',  '#',  'F', '0', 'fmis:bill3:list',         '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('新增', @parentId, '2',  '#',  'F', '0', 'fmis:bill3:add',          '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('修改', @parentId, '3',  '#',  'F', '0', 'fmis:bill3:edit',         '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('删除', @parentId, '4',  '#',  'F', '0', 'fmis:bill3:remove',       '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+
+drop table if exists biz_bill_contract;
+create table biz_bill_contract (
+  bc_id           bigint(20)      not null auto_increment    comment 'ID',
+  bill_id           bigint(20)        comment '收款id',
+  data_id           bigint(20)        comment '合同id',
+  amount         decimal(10,5)          default 0                  comment '收款金额',
+  string1         varchar(30)          default ''                  comment '备用1',
+  string2         varchar(30)          default ''                  comment '备用2',
+  string3         varchar(30)          default ''                  comment '备用3',
+  string4         varchar(30)          default ''                  comment '备用4',
+  string5         varchar(30)          default ''                  comment '备用5',
+  string6         varchar(30)          default ''                  comment '备用6',
+  string7         varchar(30)          default ''                  comment '备用7',
+  string8         varchar(30)          default ''                  comment '备用8',
+  string9         varchar(30)          default ''                  comment '备用9',
+  string10         varchar(30)          default ''                  comment '备用10',
+  remark         varchar(30)          default ''                  comment '备注',
+  status            char(1)         default '0'                comment '状态（0正常 1停用）',
+  del_flag          char(1)         default '0'                comment '删除标志（0代表存在 2代表删除）',
+  create_by         varchar(64)     default ''                 comment '创建者',
+  create_time 	    datetime                                   comment '创建时间',
+  update_by         varchar(64)     default ''                 comment '更新者',
+  update_time       datetime                                   comment '更新时间',
+  primary key (bc_id)
+) engine=innodb auto_increment=200 comment = '合同收款表';
+
+
+
+
+drop table if exists biz_subjects;
+create table biz_subjects (
+  subjects_id           bigint(20)      not null auto_increment    comment 'ID',
+  name           varchar(50)        comment '名称',
+  d           datetime        comment '日期',
+  type         varchar(5)          default ''                  comment '科目类别，subjects_type 固定费用，变动费用，可节约费用 数据字典',
+  amount         decimal(19,5)          default 0                  comment '费用',
+  string1         varchar(30)          default ''                  comment '备用1',
+  string2         varchar(30)          default ''                  comment '备用2',
+  string3         varchar(30)          default ''                  comment '备用3',
+  string4         varchar(30)          default ''                  comment '备用4',
+  string5         varchar(30)          default ''                  comment '备用5',
+  string6         varchar(30)          default ''                  comment '备用6',
+  string7         varchar(30)          default ''                  comment '备用7',
+  string8         varchar(30)          default ''                  comment '备用8',
+  string9         varchar(30)          default ''                  comment '备用9',
+  string10         varchar(30)          default ''                  comment '备用10',
+  remark         varchar(30)          default ''                  comment '备注',
+  status            char(1)         default '0'                comment '状态（0正常 1停用）',
+  del_flag          char(1)         default '0'                comment '删除标志（0代表存在 2代表删除）',
+  create_by         varchar(64)     default ''                 comment '创建者',
+  create_time 	    datetime                                   comment '创建时间',
+  update_by         varchar(64)     default ''                 comment '更新者',
+  update_time       datetime                                   comment '更新时间',
+  primary key (subjects_id)
+) engine=innodb auto_increment=200 comment = '科目表';
+
+
+drop table if exists biz_cost_budget;
+create table biz_cost_budget (
+  budget_id           bigint(20)      not null auto_increment    comment 'ID',
+  name           varchar(50)        comment '名称',
+  d           datetime        comment '日期',
+  y           varchar(30)    default ''                  comment '年',
+  m           varchar(30)    default ''                  comment '月',
+  dept_id         bigint(20)          default 0                  comment '组织机构id',
+  subjects_id         bigint(20)          default 0                  comment '科目id',
+  amount         decimal(19,5)          default 0                  comment '费用',
+  string1         varchar(30)          default ''                  comment '备用1',
+  string2         varchar(30)          default ''                  comment '备用2',
+  string3         varchar(30)          default ''                  comment '备用3',
+  string4         varchar(30)          default ''                  comment '备用4',
+  string5         varchar(30)          default ''                  comment '备用5',
+  string6         varchar(30)          default ''                  comment '备用6',
+  string7         varchar(30)          default ''                  comment '备用7',
+  string8         varchar(30)          default ''                  comment '备用8',
+  string9         varchar(30)          default ''                  comment '备用9',
+  string10         varchar(30)          default ''                  comment '备用10',
+  remark         varchar(30)          default ''                  comment '备注',
+  status            char(1)         default '0'                comment '状态（0正常 1停用）',
+  del_flag          char(1)         default '0'                comment '删除标志（0代表存在 2代表删除）',
+  create_by         varchar(64)     default ''                 comment '创建者',
+  create_time 	    datetime                                   comment '创建时间',
+  update_by         varchar(64)     default ''                 comment '更新者',
+  update_time       datetime                                   comment '更新时间',
+  primary key (budget_id)
+) engine=innodb auto_increment=200 comment = '费用预算表';
+
+-- 菜单 SQL
+insert into sys_menu (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('费用预算', '3', '1', '/fmis/budget', 'C', '0', 'fmis:budget:view', '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '费用预算菜单');
+
+-- 按钮父菜单ID
+SELECT @parentId := LAST_INSERT_ID();
+
+-- 按钮 SQL
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('费用预算查询', @parentId, '1',  '#',  'F', '0', 'fmis:budget:list',         '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('费用预算新增', @parentId, '2',  '#',  'F', '0', 'fmis:budget:add',          '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('费用预算修改', @parentId, '3',  '#',  'F', '0', 'fmis:budget:edit',         '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('费用预算删除', @parentId, '4',  '#',  'F', '0', 'fmis:budget:remove',       '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('费用预算导出', @parentId, '5',  '#',  'F', '0', 'fmis:budget:export',       '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+
+-- 菜单 SQL
+insert into sys_menu (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('科目', '3', '1', '/fmis/subjects', 'C', '0', 'fmis:subjects:view', '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '科目菜单');
+
+-- 按钮父菜单ID
+SELECT @parentId := LAST_INSERT_ID();
+
+-- 按钮 SQL
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('科目查询', @parentId, '1',  '#',  'F', '0', 'fmis:subjects:list',         '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('科目新增', @parentId, '2',  '#',  'F', '0', 'fmis:subjects:add',          '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('科目修改', @parentId, '3',  '#',  'F', '0', 'fmis:subjects:edit',         '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('科目删除', @parentId, '4',  '#',  'F', '0', 'fmis:subjects:remove',       '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('科目导出', @parentId, '5',  '#',  'F', '0', 'fmis:subjects:export',       '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+
+-- 费用管理 start
+SELECT @parentIdFP :=  menu_id from sys_menu where menu_name='财务管理' and parent_id=0 and order_num='60';
+
+insert into sys_menu (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('费用管理', @parentIdFP, '30', '#', 'M', '0', '', '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+SELECT @parentIdF :=  menu_id from sys_menu where menu_name='费用管理' and menu_type='M' and order_num='30';
+
+
+
+-- 菜单 SQL
+insert into sys_menu (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('科目管理', @parentIdF, '10', '/fmis/subjects', 'C', '0', 'fmis:subjects:view', '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '科目菜单');
+
+-- 按钮父菜单ID
+SELECT @parentId := LAST_INSERT_ID();
+
+-- 按钮 SQL
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('科目查询', @parentId, '1',  '#',  'F', '0', 'fmis:subjects:list',         '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('科目新增', @parentId, '2',  '#',  'F', '0', 'fmis:subjects:add',          '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('科目修改', @parentId, '3',  '#',  'F', '0', 'fmis:subjects:edit',         '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('科目删除', @parentId, '4',  '#',  'F', '0', 'fmis:subjects:remove',       '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('科目导出', @parentId, '5',  '#',  'F', '0', 'fmis:subjects:export',       '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+
+SELECT @parentIdF :=  menu_id from sys_menu where menu_name='费用管理' and menu_type='M' and order_num='30';
+
+
+-- 菜单 SQL
+insert into sys_menu (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('费用预算', @parentIdF, '20', '/fmis/budget', 'C', '0', 'fmis:budget:view', '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '费用预算菜单');
+
+-- 按钮父菜单ID
+SELECT @parentId := LAST_INSERT_ID();
+
+-- 按钮 SQL
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('费用预算查询', @parentId, '1',  '#',  'F', '0', 'fmis:budget:list',         '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('费用预算新增', @parentId, '2',  '#',  'F', '0', 'fmis:budget:add',          '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('费用预算修改', @parentId, '3',  '#',  'F', '0', 'fmis:budget:edit',         '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('费用预算删除', @parentId, '4',  '#',  'F', '0', 'fmis:budget:remove',       '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('费用预算导出', @parentId, '5',  '#',  'F', '0', 'fmis:budget:export',       '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+

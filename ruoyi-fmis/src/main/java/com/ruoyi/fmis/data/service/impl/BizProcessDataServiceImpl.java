@@ -66,6 +66,11 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
         return bizProcessDataMapper.selectBizProcessDataListRef(bizProcessData);
     }
 
+
+    @Override
+    public List<BizProcessData> selectBizProcessDataListRefBill(BizProcessData bizProcessData) {
+        return bizProcessDataMapper.selectBizProcessDataListRefBill(bizProcessData);
+    }
     @Override
     public List<BizProcessData> selectBizProcessDataListRefDelivery(BizProcessData bizProcessData) {
         return bizProcessDataMapper.selectBizProcessDataListRefDelivery(bizProcessData);

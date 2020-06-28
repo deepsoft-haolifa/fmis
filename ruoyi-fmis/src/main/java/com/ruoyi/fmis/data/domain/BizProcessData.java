@@ -23,6 +23,13 @@ public class BizProcessData extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
 
+    @Getter
+    @Setter
+    private Double billAmount;
+
+    @Getter
+    @Setter
+    private Long billId;
 
     /** ID */
     private Long dataId;

@@ -29,6 +29,8 @@ public interface BizProcessDataMapper {
 
     public List<BizProcessData> selectBizProcessDataListRef(BizProcessData bizProcessData);
 
+    public List<BizProcessData> selectBizProcessDataListRefBill(BizProcessData bizProcessData);
+
     /**
      * 发货管理查询
      * @param bizProcessData

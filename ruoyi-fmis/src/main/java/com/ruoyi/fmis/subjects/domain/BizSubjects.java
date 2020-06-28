@@ -1,85 +1,47 @@
-package com.ruoyi.fmis.bill.domain;
+package com.ruoyi.fmis.subjects.domain;
 
-import com.ruoyi.system.domain.SysDept;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 
 /**
- * 现金日记账对象 biz_bill
+ * 科目对象 biz_subjects
  *
  * @author frank
- * @date 2020-06-25
+ * @date 2020-06-28
  */
-public class BizBill extends BaseEntity {
+public class BizSubjects extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     /** ID */
-    private Long billId;
+    private Long subjectsId;
 
     @Getter
     @Setter
-    private String createByName;
+    private boolean flag;
 
-    @Getter
-    @Setter
-    private Double billAmount;
-
-    @Getter
-    @Setter
-    private SysDept dept;
-    /** 序号 */
-    @Excel(name = "序号")
-    private String xh;
+    /** 名称 */
+    @Excel(name = "名称")
+    private String name;
 
     /** 日期 */
-    @Excel(name = "日期", width = 30, dateFormat = "yyyy-MM-dd")
+    @Excel(name = "日期", width = 30, dateFormat = "yyyy-MM")
+    @DateTimeFormat(pattern = "yyyy-MM")
     private Date d;
 
-    /** 凭证号 */
-    @Excel(name = "凭证号")
-    private String certificateNumber;
-
-    /** 结算类别 */
-    private String settlementType;
-
-    /** 结算票号 */
-    private String clearingBanks;
-
-    /** 上月结转 */
-    @Excel(name = "上月结转")
-    private Double preMonthMoney;
-
-    /** 收款 */
-    @Excel(name = "收款")
-    private Double collectionMoney;
-
-    /** 收款类别 */
-    @Excel(name = "收款类别")
-    private String collectionType;
-
-    /** 付款 */
-    @Excel(name = "付款")
-    private Double payment;
-
-    /** 付款类别 */
-    @Excel(name = "付款类别")
-    private String paymentType;
-
-    /** 余额 */
-    @Excel(name = "余额")
-    private Double balance;
-
-    /** 类型 1=现金日记账 2=银行日记账 */
+    /** 科目类别 */
+    @Excel(name = "科目类别")
     private String type;
 
-    /** 部门ID */
-    @Excel(name = "部门ID")
-    private String deptId;
+    /** 费用 */
+    @Excel(name = "费用")
+    private Double amount;
 
     /** 备用1 */
     private String string1;
@@ -117,19 +79,19 @@ public class BizBill extends BaseEntity {
     /** 删除标志（0代表存在 2代表删除） */
     private String delFlag;
 
-    public void setBillId(Long billId) {
-        this.billId = billId;
+    public void setSubjectsId(Long subjectsId) {
+        this.subjectsId = subjectsId;
     }
 
-    public Long getBillId() {
-        return billId;
+    public Long getSubjectsId() {
+        return subjectsId;
     }
-    public void setXh(String xh) {
-        this.xh = xh;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getXh() {
-        return xh;
+    public String getName() {
+        return name;
     }
     public void setD(Date d) {
         this.d = d;
@@ -138,69 +100,6 @@ public class BizBill extends BaseEntity {
     public Date getD() {
         return d;
     }
-    public void setCertificateNumber(String certificateNumber) {
-        this.certificateNumber = certificateNumber;
-    }
-
-    public String getCertificateNumber() {
-        return certificateNumber;
-    }
-    public void setSettlementType(String settlementType) {
-        this.settlementType = settlementType;
-    }
-
-    public String getSettlementType() {
-        return settlementType;
-    }
-    public void setClearingBanks(String clearingBanks) {
-        this.clearingBanks = clearingBanks;
-    }
-
-    public String getClearingBanks() {
-        return clearingBanks;
-    }
-    public void setPreMonthMoney(Double preMonthMoney) {
-        this.preMonthMoney = preMonthMoney;
-    }
-
-    public Double getPreMonthMoney() {
-        return preMonthMoney;
-    }
-    public void setCollectionMoney(Double collectionMoney) {
-        this.collectionMoney = collectionMoney;
-    }
-
-    public Double getCollectionMoney() {
-        return collectionMoney;
-    }
-    public void setCollectionType(String collectionType) {
-        this.collectionType = collectionType;
-    }
-
-    public String getCollectionType() {
-        return collectionType;
-    }
-    public void setPayment(Double payment) {
-        this.payment = payment;
-    }
-
-    public Double getPayment() {
-        return payment;
-    }
-    public void setPaymentType(String paymentType) {
-        this.paymentType = paymentType;
-    }
-
-    public String getPaymentType() {
-        return paymentType;
-    }
-    public void setBalance(Double balance) {
-        this.balance = balance;
-    }
-
-    public Double getBalance() {
-        return balance;
-    }
     public void setType(String type) {
         this.type = type;
     }
@@ -208,12 +107,12 @@ public class BizBill extends BaseEntity {
     public String getType() {
         return type;
     }
-    public void setDeptId(String deptId) {
-        this.deptId = deptId;
+    public void setAmount(Double amount) {
+        this.amount = amount;
     }
 
-    public String getDeptId() {
-        return deptId;
+    public Double getAmount() {
+        return amount;
     }
     public void setString1(String string1) {
         this.string1 = string1;
@@ -303,20 +202,11 @@ public class BizBill extends BaseEntity {
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("billId", getBillId())
-            .append("xh", getXh())
+            .append("subjectsId", getSubjectsId())
+            .append("name", getName())
             .append("d", getD())
-            .append("certificateNumber", getCertificateNumber())
-            .append("settlementType", getSettlementType())
-            .append("clearingBanks", getClearingBanks())
-            .append("preMonthMoney", getPreMonthMoney())
-            .append("collectionMoney", getCollectionMoney())
-            .append("collectionType", getCollectionType())
-            .append("payment", getPayment())
-            .append("paymentType", getPaymentType())
-            .append("balance", getBalance())
             .append("type", getType())
-            .append("deptId", getDeptId())
+            .append("amount", getAmount())
             .append("string1", getString1())
             .append("string2", getString2())
             .append("string3", getString3())

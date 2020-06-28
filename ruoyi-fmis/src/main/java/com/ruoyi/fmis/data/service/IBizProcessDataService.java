@@ -28,6 +28,7 @@ public interface IBizProcessDataService {
 
     public List<BizProcessData> selectBizProcessDataListRef(BizProcessData bizProcessData);
 
+    public List<BizProcessData> selectBizProcessDataListRefBill(BizProcessData bizProcessData);
 
     public List<BizProcessData> selectBizProcessDataListRefDelivery(BizProcessData bizProcessData);
 

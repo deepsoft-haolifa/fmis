@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改费用预算')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-budget-edit" th:object="${bizCostBudget}">
+            <input name="budgetId" th:field="*{budgetId}" type="hidden">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">名称：</label>
+                <div class="col-sm-8">
+                    <input name="name" th:field="*{name}" class="form-control" type="text">
+                </div>
+            </div>
+
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">年：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="y" th:value="*{y}" class="form-control" placeholder="yyyy" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">月：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="m" th:value="*{m}" class="form-control" placeholder="MM" type="text">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">所属部门：</label>
+                <div class="col-sm-8">
+                    <input name="deptId" id="deptId" th:field="*{deptId}" class="form-control" type="hidden">
+                    <div class="input-group">
+                        <input class="form-control" type="text" name="deptName" onclick="selectDeptTree()" id="treeName" th:field="*{dept.deptName}" required>
+                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">科目：</label>
+                <div class="col-sm-8">
+                    <select name="subjectsId" id="subjectsId" class="form-control select2-multiple"> <!--multiple-->
+                        <option value="">请选择</option>
+                        <option th:each="subject:${subjects}" th:value="${subject.subjectsId}" th:text="${subject.name}" th:selected="${subject.flag}"></option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">费用：</label>
+                <div class="col-sm-8">
+                    <input name="amount" th:field="*{amount}" class="form-control" type="text">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">备注：</label>
+                <div class="col-sm-8">
+                    <input name="remark" th:field="*{remark}" class="form-control" type="text">
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script type="text/javascript">
+        var prefix = ctx + "fmis/budget";
+        $("#form-budget-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-budget-edit').serialize());
+            }
+        }
+        function selectDeptTree() {
+            var deptId = $.common.isEmpty($("#deptId").val()) ? "100" : $("#deptId").val();
+            var url = ctx + "system/dept/selectDeptTree/" + deptId;
+            var options = {
+                title: '选择部门',
+                width: "380",
+                url: url,
+                callBack: doSubmit
+            };
+            $.modal.openOptions(options);
+        }
+
+        function doSubmit(index, layero){
+            var tree = layero.find("iframe")[0].contentWindow.$._tree;
+            /*
+            if ($.tree.notAllowParents(tree)) {
+                var body = layer.getChildFrame('body', index);
+                $("#treeId").val(body.find('#treeId').val());
+                $("#treeName").val(body.find('#treeName').val());
+                layer.close(index);
+            }*/
+            var body = layer.getChildFrame('body', index);
+            $("#deptId").val(body.find('#treeId').val());
+            $("#treeName").val(body.find('#treeName').val());
+            layer.close(index);
+        }
+        $("input[name='y']").datetimepicker({
+            format: "yyyy",
+            weekStart: 1,
+            autoclose: true,
+            startView: 4,
+            minView: 4,
+            forceParse: false,
+            autoclose: true
+        });
+
+        $("input[name='m']").datetimepicker({
+            format: "mm",
+            weekStart: 1,
+            autoclose: true,
+            startView: 3,
+            minView: 3,
+            forceParse: false,
+            autoclose: true
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('分解合同')" />
+    <th:block th:include="include :: datetimepicker-css" />
+    <th:block th:include="include :: select2-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-bill-edit" th:object="${bizBill}">
+            <input name="billId" id="billId" th:field="*{billId}" type="hidden">
+            <input name="type" class="form-control" type="hidden" value="2">
+            <!-- 合同标识 -->
+            <input name="queryStatus" class="form-control" type="hidden" value="2">
+
+        </form>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <th:block th:include="include :: bootstrap-editable-css" />
+    <th:block th:include="include :: bootstrap-table-editable-js" />
+    <script type="text/javascript">
+        var prefix = ctx + "fmis/bill3";
+
+        $("#form-bill-edit").validate({
+            focusCleanup: true
+        });
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-bill-edit').serialize());
+            }
+        }
+        $("input[name='d']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $(function() {
+            var options = {
+                url: prefix + "/contractList",
+                modalName: "合同列表",
+                uniqueId: "dataId",
+                detailView: true,
+                cache: true,
+                async: false,
+                showSearch: false,
+                showRefresh: false,
+                showToggle: false,
+                showHeader: false,
+                showFooter: false,
+                showColumns: false,
+                pageSize: 10000,
+                rowStyle: function(row, index) {
+                    return {classes:'success'};
+                },
+                expandFirst: true,
+                onExpandRow : function(index, row, $detail) {
+                    initChildBillTable(index, row, $detail);
+                },
+                columns: [{field : 'rowId',title : '序号',width: 20,visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
+                    {
+                        field : 'dataId',
+                        title : 'ID',
+                        visible: false
+                    },
+                    {field : 'addTest',title : '操作',visible: true,formatter: function(value, row, index) {
+                            var actions = [];
+                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="addTest(' + row.dataId + ",'bootstrap-table'" + ')"><i class="fa fa-add"></i> 添加</a>');
+                            return actions.join('');
+                        }},
+                    {
+                        field : 'dataId',
+                        title : 'ID',
+                        visible: false
+                    },
+
+                    {
+                        field : 'string1',
+                        title : '合同编号'
+                    },
+                    {
+                        field : 'customerName',
+                        title : '客户'
+                    },
+                    {
+                        field : 'datetime1',
+                        title : '签订日期'
+                    },
+                    {
+                        field : 'string3',
+                        title : '供方'
+                    },
+                    {
+                        field : 'string4',
+                        title : '签订地点'
+                    },
+                    {
+                        field : 'string5',
+                        title : '含发票'
+                    },
+                    {
+                        field : 'string6',
+                        title : '发货时间'
+                    },
+                    {
+                        field : 'string7',
+                        title : '运输方式'
+                    },
+                    {
+                        field : 'string8',
+                        title : '付款方式'
+                    },
+                    {
+                        field : 'string9',
+                        title : '交货地点'
+                    },
+                    {
+                        field : 'string10',
+                        title : '运费承担'
+                    },
+                    {
+                        field : 'string11',
+                        title : '收货人'
+                    },
+                    {
+                        field : 'string12',
+                        title : '收货电话'
+                    },
+                    {
+                        field : 'price1',
+                        title : '总价'
+                    },
+                    {
+                        field : 'billAmount',
+                        title : '已付'
+                    }
+                ]
+            };
+            $.table.init(options);
+        });
+        function expandChildTablePromise(dataId,tableId) {
+            var promise;
+            promise = new Promise(function(resolve, reject) {
+                $("#" + tableId).bootstrapTable('expandRow', $("#" + tableId).bootstrapTable('getRowByUniqueId', dataId).rowId);
+                resolve();
+            });
+            return promise;
+        }
+        function numberValidate(value) {
+            if (isNaN(value)) {
+                return "必须是数字！";
+            }
+        }
+
+        function addTest(dataId,tableId) {
+            expandChildTablePromise(dataId,tableId).then(function () {
+                var rowData = {
+                    bcId: 0,
+                    amount: 0,
+                    remark: "",
+                    createTime: "",
+                    createByName: ""
+                };
+                setTimeout(function () {
+                    $("#initChildBillTableId_" + dataId).bootstrapTable('append', rowData);
+                },500)
+
+            })
+        }
+
+        initChildBillTable = function(index, rows, $detail) {
+            var dataId = rows["dataId"];
+            var billId = $("#billId").val();
+            var initChildTestTableId = "initChildBillTableId_" + dataId;
+            var cur_table = $detail.html('<table style="table-layout:fixed" id=' + initChildTestTableId + ' data-cache="true"></table>').find('table');
+            $(cur_table).bootstrapTable({
+                url: ctx + "fmis/bill3/selectBizBillChildList",
+                method: 'post',
+                detailView: false,
+                cache: true,
+                rowStyle: function(row, index) {
+                    return {classes:'danger'};
+                },
+                async: false,
+                sidePagination: "server",
+                contentType : "application/x-www-form-urlencoded",
+                uniqueId: "bcId",
+                queryParams : {
+                    "billId": billId,
+                    "dataId": dataId
+                },columns: [
+                    {field : 'rowId',title : '序号',width: 50,visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
+                    {field : 'bcId',title : 'id',visible: false},
+                    {field : 'amount',title : '金额',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 150},
+                    {field : 'saveTest',title : '操作',width: 200,visible: true,formatter: function(value, row, index) {
+                            var actions = [];
+                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="saveTest(' + row.rowId + "," + dataId + "," + billId + ')"><i class="fa fa-save"></i> 保存</a>');
+                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="removeTest(' + row.rowId + "," + dataId + "," + billId + ')"><i class="fa fa-remove"></i> 删除</a>');
+                            return actions.join('');
+                        }},
+                    {field : 'remark',title : '备注',editable: true,width: 300},
+                    {field : 'createTime',title : '创建时间',width: 200},
+                    {field : 'createByName',title : '创建人',width: 200}
+                ]
+            });
+        };
+
+
+
+        function saveTest (rowId,dataId,billId) {
+
+            var rows = $("#initChildBillTableId_" + dataId).bootstrapTable('getData');
+            var row;
+            for (var i = 0; i < rows.length; i++) {
+                var r = rows[i];
+                if (r.rowId == rowId) {
+                    row = r;
+                    break;
+                }
+            }
+            var remark = row.remark;
+            var amount = row.amount;
+            var bcId = row.bcId;
+
+            var url = ctx + "fmis/bill3/saveTest?dataId=" + dataId + "&billId=" + billId + "&remark=" + remark + "&amount=" + amount + "&bcId=" + bcId;
+            $.operate.saveModal(url,'',function(){
+                //$.table.refresh();
+                $("#initChildBillTableId_" + dataId).bootstrapTable('refresh');
+            });
+        }
+        function removeTest (rowId,dataId,billId) {
+            var rows = $("#initChildBillTableId_" + dataId).bootstrapTable('getData');
+            var row;
+            for (var i = 0; i < rows.length; i++) {
+                var r = rows[i];
+                if (r.rowId == rowId) {
+                    row = r;
+                    break;
+                }
+            }
+            var bcId = row.bcId;
+            var url = ctx + "fmis/bill3/removeTest?bcId=" + bcId;
+            $.operate.saveModal(url,'',function(){
+                //$.table.refresh();
+                $("#initChildBillTableId_" + dataId).bootstrapTable('refresh');
+            });
+        }
+
+    </script>
+</body>
+</html>
