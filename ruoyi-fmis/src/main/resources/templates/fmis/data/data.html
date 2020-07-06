@@ -63,7 +63,6 @@
         var prefix = ctx + "fmis/data";
         var dotoType = [[${todo}]];
         if (dotoType == "1") {
-            console.log("dotoType=" + dotoType);
             $("#queryStatus").val("1");
         }
         $(function() {
@@ -141,6 +140,10 @@
                     field : 'string12',
                     title : '收货电话'
                 },
+                    {
+                        field : 'deptName',
+                        title : '代收'
+                    },
                 {
                     field : 'price1',
                     title : '总价'

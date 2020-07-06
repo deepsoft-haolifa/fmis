@@ -213,8 +213,10 @@ public class BizProcessDataController extends BaseController {
                 String quotationId = bizProcessChild.getString1();
                 if (StringUtils.isNotEmpty(quotationId)) {
                     BizQuotation bizQuotation = bizQuotationService.selectBizQuotationById(Long.parseLong(quotationId));
-                    productNames += bizQuotation.getString1() + ",";
-                    bizProcessChild.setBizQuotation(bizQuotation);
+                    if (bizQuotation != null) {
+                        productNames += bizQuotation.getString1() + ",";
+                        bizProcessChild.setBizQuotation(bizQuotation);
+                    }
 
                 }
                 BizProduct bizProduct = null;

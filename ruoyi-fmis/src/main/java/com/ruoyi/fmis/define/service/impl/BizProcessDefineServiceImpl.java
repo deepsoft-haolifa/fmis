@@ -56,6 +56,7 @@ public class BizProcessDefineServiceImpl implements IBizProcessDefineService {
     public Map<String,SysRole> getFlowAllMap (String bizId) {
 
         List<SysRole> roleList = sysRoleService.selectRoleListNoAuth(new SysRole());
+        //List<SysRole> roleList = sysRoleService.selectRolesByUserId(ShiroUtils.getUserId());
 
         Map<String,SysRole> flowMap = new LinkedHashMap<>();
         BizProcessDefine queryBizProcessDefine = new BizProcessDefine();

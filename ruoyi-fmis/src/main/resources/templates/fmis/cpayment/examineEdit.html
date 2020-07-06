@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改付款申请')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-data-edit" th:object="${bizProcessData}">
+        <input name="dataId" th:field="*{dataId}" type="hidden">
+        <input type="hidden" name="bizId" value="cpayment"/>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">日期：</label>
+            <div class="col-sm-8">
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input name="datetime1" th:value="${#dates.format(bizProcessData.datetime1, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">收款单位：</label>
+            <div class="col-sm-8">
+                <input name="string1" th:field="*{string1}" class="form-control" type="text">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">客户名称：</label>
+            <div class="col-sm-8">
+                <input name="string4" class="form-control" type="hidden" th:field="*{string2}" >
+                <input name="customerName" id="customerName" class="form-control" th:field="*{customerName}" type="text" readonly onclick="selectCustomer()" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">选择合同：</label>
+            <div class="col-sm-6">
+                <input name="contractIds" id="contractIds" th:value="${contractIds}" class="form-control" type="hidden" >
+                <input name="contractNames" id="contractNames" th:value="${contractNames}" class="form-control" type="text" readonly onclick="selectContract(0)" required>
+            </div>
+
+            <div class="col-sm-3">
+                <a class="btn btn-success btn-sm" onclick="selectContract(1)" >
+                    <i class="fa fa"></i> 追加
+                    <input type="hidden" id="productOperationType" name="productOperationType" value="0">
+                </a>
+            </div>
+        </div>
+
+
+        <div class="hr-line-dashed"></div>
+        <div class="form-horizontal" id="productDiv">
+
+
+            <div class="ibox float-e-margins" th:each="qp:${bizProcessData.bizProcessChildList}" th:id="'productDiv_' + ${qp.string1}" >
+                <h5 th:text="${qp.bizProcessData.string1}" ></h5>
+
+                <div class='form-group' >
+                    <label class='control-label col-sm-3'>合同编号：</label>
+                    <div class='col-sm-2'>
+                        <input th:id="'qpId_' + ${qp.dataId}" class='form-control' type='hidden' th:value="${qp.dataId}">
+                        <input th:id="'productId_' + ${qp.string1}" class='form-control' type='hidden' th:value="${qp.string1}">
+                        <input name='productName' id="productName" th:value="${qp.bizProcessData.string1}" value="productShowText" class='form-control' type='text' readonly >
+                    </div>
+
+                    <div class='col-sm-3'>
+                        <input class='form-control' type='text' th:id="'productNum_' + ${qp.string1}" th:value="${qp.price1}"  name='productNum' placeholder='数量' onkeyup="AmountKeyUp(this)"/>
+                    </div>
+
+                    <div class='col-sm-3'>
+                        <input class='form-control' type='text' th:id="'productPrice_' + ${qp.string1}"  name="productPrice" th:value="${qp.price2}"   placeholder='金额' onblur="sumPrice(this.value)" onkeyup="AmountKeyUp(this)"/>
+                    </div>
+
+                </div>
+
+
+
+                <div class='form-group' th:id="'productRef3Div_' + ${qp.string1}">
+                    <label class='control-label col-sm-3'>备注：</label>
+
+                    <div class='col-sm-5'>
+                        <input th:id="'productRemark_' + ${qp.string1}" th:value="${qp.remark}"  class='form-control' type='text'>
+                    </div>
+
+                    <div class='col-sm-3' >
+                        <a class="btn btn-danger btn-xs" th:onclick="removeProject([[${qp.string1}]]);" >
+                            <i class="fa fa-remove"></i> 删除
+                        </a>
+                    </div>
+                </div>
+
+
+            </div>
+
+
+        </div>
+        <div class="hr-line-dashed"></div>
+
+
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">总计：</label>
+            <div class="col-sm-8">
+                <input name="price1" th:field="*{price1}" class="form-control" type="text">
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">付款金额：</label>
+            <div class="col-sm-8">
+                <input name="price2" th:field="*{price2}" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">合同约定付款方式：</label>
+            <div class="col-sm-8">
+                <input name="string4" th:field="*{string4}" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">采购单号：</label>
+            <div class="col-sm-8">
+                <input name="string5" th:field="*{string5}" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">付款公司：</label>
+            <div class="col-sm-8">
+                <input name="string6" th:field="*{string6}" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">备注：</label>
+            <div class="col-sm-8">
+                <input name="string20" th:field="*{remark}" class="form-control" type="text">
+            </div>
+        </div>
+
+        <div class="form-group has-success">
+            <label class="col-sm-3 control-label">审批意见：</label>
+            <div class="col-sm-8">
+                <select name="examineStatus" id="examineStatus" class="form-control m-b" th:with="type=${@dict.getType('examine_status')}">
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                </select>
+            </div>
+        </div>
+
+
+        <div class="form-group has-success">
+            <label class="col-sm-3 control-label" >审批备注：</label>
+            <div class="col-sm-8">
+                <textarea name="examineRemark" class="form-control" id="examineRemark"></textarea>
+            </div>
+        </div>
+    </form>
+</div>
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: datetimepicker-js" />
+<script type="text/javascript">
+    var prefix = ctx + "fmis/cpayment";
+    $("#form-data-edit").validate({
+        focusCleanup: true
+    });
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/doExamine", $('#form-data-edit').serialize());
+        }
+    }
+
+    $("input[name='datetime1']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+
+    $("input[name='datetime2']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+
+    function selectCustomer() {
+        var widthNum = this.innerWidth - 50;
+        var heigthNum = this.innerHeight - 50;
+        var url = prefix + "/selectCustomer";
+        $.modal.open("关联客户", url,widthNum, heigthNum);
+    }
+
+    function selectContract(type) {
+        var url = prefix + "/selectContract";
+        $("#productOperationType").val(type);
+        var widthNum = this.innerWidth - 50;
+        var heigthNum = this.innerHeight - 50;
+
+        $.modal.open("关联合同", url,widthNum, heigthNum);
+    }
+
+    /**
+     * 计算总额
+     */
+    function sumPrice (productId) {
+        //getProductSum(productId);
+        totalSumPrice();
+    }
+
+    function getProductSum (productId) {
+        //产品数量 产品系数 价格
+        var productNum = $("#productNum_" + productId).val();
+        productNum = isEmpty(productNum) == true ? 0 : parseFloat(productNum);
+
+        var productPrice = $("#productPrice_" + productId).val();
+
+        productPrice = isEmpty(productPrice) == true ? 0 : parseFloat(productPrice);
+
+        //合计总额 totalSum
+        var productPrice = parseFloat(productPrice).toFixed(4);
+        var productNum = parseFloat(productNum).toFixed(4);
+        return productPrice + "#" + productNum;
+    }
+
+    function FloatAdd(arg1,arg2){
+        var r1,r2,m;
+        try{r1=arg1.toString().split(".")[1].length}catch(e){r1=0}
+        try{r2=arg2.toString().split(".")[1].length}catch(e){r2=0}
+        m=Math.pow(10,Math.max(r1,r2));
+        return (arg1*m+arg2*m)/m;
+    }
+
+    function totalSumPrice () {
+        //产品合计金额
+        var productIds = $("#contractIds").val();
+        var productIdsS = productIds.split(",");
+        var productTotalPrice = 0;
+        var totalPrice = 0;
+        for (var i = 0; i < productIdsS.length; i++) {
+            var productId = productIdsS[i];
+            if (isEmpty(productId)) {
+                continue;
+            }
+            var totalSumStr = getProductSum(productId);
+            console.log("totalSumStr:" + totalSumStr);
+            var productPrice = totalSumStr.split("#")[0];
+            productTotalPrice = FloatAdd(productTotalPrice,productPrice).toFixed(4);
+        }
+        console.log("delivery:productTotalPrice:" + productTotalPrice);
+        totalPrice = parseFloat(productTotalPrice);
+        $("#price1").val(parseFloat(totalPrice).toFixed(4));
+    }
+
+    function isEmpty(v) {
+        return $.common.isEmpty(v);
+    }
+
+    function removeProject (productId) {
+
+        $.modal.confirm("确定要删除该产品吗？", function() {
+            $("#productDiv_" + productId).remove();
+            var productIds = $("#productIds").val();
+            var productNames = $("#productNames").val();
+            var productIdsS = productIds.split(",");
+            var productNamesS = productNames.split(",");
+            for (var i = 0; i < productIdsS.length; i++) {
+                if (productId == productIdsS[i]) {
+                    var productName = productNamesS[i];
+                    productNamesS.splice(i,1);
+                    productIdsS.splice(i,1);
+                } else {
+                    sumPrice(productId);
+                }
+            }
+            $("#productIds").val(productIdsS.toString());
+            $("#productNames").val(productNamesS.toString());
+        });
+
+
+    }
+</script>
+</body>
+</html>

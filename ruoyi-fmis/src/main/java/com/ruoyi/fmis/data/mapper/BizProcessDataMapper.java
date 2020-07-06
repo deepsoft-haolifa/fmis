@@ -18,6 +18,8 @@ public interface BizProcessDataMapper {
      */
     public BizProcessData selectBizProcessDataById(Long dataId);
 
+    public BizProcessData selectBizProcessDataBorrowingById(Long dataId);
+
     /**
      * 查询合同管理列表
      *
@@ -45,6 +47,7 @@ public interface BizProcessDataMapper {
      */
     public List<BizProcessData> selectBizProcessDataListRefProcurement(BizProcessData bizProcessData);
 
+    public List<BizProcessData> selectBizProcessDataVoRefBorrowing(BizProcessData bizProcessData);
 
     /**
      * 新增合同管理

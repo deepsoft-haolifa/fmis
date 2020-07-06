@@ -17,7 +17,7 @@ public class BaseEntity implements Serializable
     private static final long serialVersionUID = 1L;
 
 
-
+    private String deptName;
 
     /** 搜索值 */
     private String searchValue;
@@ -44,6 +44,17 @@ public class BaseEntity implements Serializable
 
     /** 请求参数 */
     private Map<String, Object> params;
+
+
+    public String getDeptName()
+    {
+        return deptName;
+    }
+
+    public void setDeptName(String deptName)
+    {
+        this.deptName = deptName;
+    }
 
     public String getSearchValue()
     {

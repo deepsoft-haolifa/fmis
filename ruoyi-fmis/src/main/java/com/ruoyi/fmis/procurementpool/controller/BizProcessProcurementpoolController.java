@@ -73,7 +73,7 @@ public class BizProcessProcurementpoolController extends BaseController {
     @Autowired
     private IBizCustomerService bizCustomerService;
 
-    @RequiresPermissions("fmis:data:view")
+    @RequiresPermissions("fmis:procurementpool:view")
     @GetMapping()
     public String data() {
         return prefix + "/data";

@@ -1465,3 +1465,4 @@ Date.prototype.Format = function (fmt) {
     return fmt;
 }
 console.log("date formate init...");
+

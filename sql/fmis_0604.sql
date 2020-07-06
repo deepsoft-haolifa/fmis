@@ -1343,3 +1343,204 @@ values('费用预算删除', @parentId, '4',  '#',  'F', '0', 'fmis:budget:remov
 insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
 values('费用预算导出', @parentId, '5',  '#',  'F', '0', 'fmis:budget:export',       '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
 
+-- 固定资产
+drop table if exists biz_assets;
+create table biz_assets (
+  assets_id           bigint(20)      not null auto_increment    comment 'ID',
+  name           varchar(50) default ''       comment '设备名称',
+  bh           varchar(50)  default ''      comment '设备编号',
+  type           varchar(50) default ''       comment '类别名称 数据字典 	assets_type',
+  specifications           varchar(50)   default ''     comment '规格型号',
+  num           varchar(50)     default ''   comment '设备数量',
+  dept_id           varchar(50)   default ''     comment '部门',
+  user_name           varchar(50)  default ''      comment '领用人',
+  add_type           varchar(50)   default ''     comment '增加方式 数据字典 assets_add_type',
+  location           varchar(50)   default ''     comment '存放地点',
+  equipment_state           varchar(50)  default ''      comment '设备状态 数据字典',
+  manufacturer           varchar(50)    default ''    comment '生产厂家',
+  purchasing_time           datetime        comment '采购时间',
+  price           decimal(19,5)    default 0    comment '采购金额',
+  use_year           varchar(50)   default ''     comment '使用年限',
+  depreciation_method           varchar(50)  default ''      comment '折旧方法 数据字典 depreciation_method',
+  start_time           datetime        comment '开始使用日期',
+  accrued_month           varchar(50) default ''       comment '已计提月份',
+  output_rate           varchar(50)    default ''    comment '净产值率',
+  salvage_value           varchar(50)  default ''      comment '净残值',
+  accumulated_depreciation           varchar(50)   default ''     comment '累计折旧',
+  month_rate           varchar(50)    default ''    comment '月折旧率',
+  month_depreciation           varchar(50)   default ''     comment '月折旧额',
+  net_worth           varchar(50)        comment '净值',
+  string1         varchar(30)          default ''                  comment '备用1',
+  string2         varchar(30)          default ''                  comment '备用2',
+  string3         varchar(30)          default ''                  comment '备用3',
+  string4         varchar(30)          default ''                  comment '备用4',
+  string5         varchar(30)          default ''                  comment '备用5',
+  string6         varchar(30)          default ''                  comment '备用6',
+  string7         varchar(30)          default ''                  comment '备用7',
+  string8         varchar(30)          default ''                  comment '备用8',
+  string9         varchar(30)          default ''                  comment '备用9',
+  string10         varchar(30)          default ''                  comment '备用10',
+  remark         varchar(30)          default ''                  comment '备注',
+  status            char(1)         default '0'                comment '状态（0正常 1停用）',
+  del_flag          char(1)         default '0'                comment '删除标志（0代表存在 2代表删除）',
+  create_by         varchar(64)     default ''                 comment '创建者',
+  create_time 	    datetime                                   comment '创建时间',
+  update_by         varchar(64)     default ''                 comment '更新者',
+  update_time       datetime                                   comment '更新时间',
+  primary key (assets_id)
+) engine=innodb auto_increment=200 comment = '固定资产表';
+
+
+-- 菜单 SQL
+insert into sys_menu (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('固定资产', '3', '1', '/fmis/assets', 'C', '0', 'fmis:assets:view', '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '固定资产菜单');
+
+-- 按钮父菜单ID
+SELECT @parentId := LAST_INSERT_ID();
+
+-- 按钮 SQL
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('固定资产查询', @parentId, '1',  '#',  'F', '0', 'fmis:assets:list',         '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('固定资产新增', @parentId, '2',  '#',  'F', '0', 'fmis:assets:add',          '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('固定资产修改', @parentId, '3',  '#',  'F', '0', 'fmis:assets:edit',         '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('固定资产删除', @parentId, '4',  '#',  'F', '0', 'fmis:assets:remove',       '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('固定资产导出', @parentId, '5',  '#',  'F', '0', 'fmis:assets:export',       '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+
+
+-- 固定资产 start
+SELECT @parentIdFP :=  menu_id from sys_menu where menu_name='财务管理' and parent_id=0 and order_num='60';
+
+insert into sys_menu (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('固定资产', @parentIdFP, '40', '/fmis/assets', 'C', '0', 'fmis:assets:view', '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '固定资产菜单');
+
+-- 按钮父菜单ID
+SELECT @parentId := LAST_INSERT_ID();
+
+-- 按钮 SQL
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('固定资产查询', @parentId, '1',  '#',  'F', '0', 'fmis:assets:list',         '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('固定资产新增', @parentId, '2',  '#',  'F', '0', 'fmis:assets:add',          '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('固定资产修改', @parentId, '3',  '#',  'F', '0', 'fmis:assets:edit',         '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('固定资产删除', @parentId, '4',  '#',  'F', '0', 'fmis:assets:remove',       '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('固定资产导出', @parentId, '5',  '#',  'F', '0', 'fmis:assets:export',       '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+
+-- 借款管理
+SELECT @parentIdF :=  menu_id from sys_menu where menu_name='费用管理' and menu_type='M' and order_num='30';
+
+-- 菜单 SQL
+insert into sys_menu (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('借款管理', @parentIdF, '50', '#', 'M', '0', '', '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+SELECT @parentIdFP :=  menu_id from sys_menu where menu_name='借款管理' and menu_type='M' and order_num='50';
+
+
+-- 借款申请
+insert into sys_menu (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('借款申请', @parentIdFP, '10', '/fmis/borrowing', 'C', '0', 'fmis:borrowing:view', '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '业务菜单');
+
+-- 按钮父菜单ID
+SELECT @parentId := LAST_INSERT_ID();
+
+-- 按钮 SQL
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('业务查询', @parentId, '1',  '#',  'F', '0', 'fmis:borrowing:list',         '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('业务新增', @parentId, '2',  '#',  'F', '0', 'fmis:borrowing:add',          '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('业务修改', @parentId, '3',  '#',  'F', '0', 'fmis:borrowing:edit',         '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('业务删除', @parentId, '4',  '#',  'F', '0', 'fmis:borrowing:remove',       '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('业务导出', @parentId, '5',  '#',  'F', '0', 'fmis:borrowing:export',       '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+
+-- 出纳付款
+SELECT @parentIdFP :=  menu_id from sys_menu where menu_name='借款管理' and menu_type='M' and order_num='50';
+
+insert into sys_menu (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('出纳付款', @parentIdFP, '20', '/fmis/borrowingpay', 'C', '0', 'fmis:borrowingpay:view', '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '业务菜单');
+
+-- 按钮父菜单ID
+SELECT @parentId := LAST_INSERT_ID();
+
+-- 按钮 SQL
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('业务查询', @parentId, '1',  '#',  'F', '0', 'fmis:borrowingpay:list',         '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('付款', @parentId, '2',  '#',  'F', '0', 'fmis:borrowingpay:add',          '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+
+
+
+-- 费用报销
+SELECT @parentIdF :=  menu_id from sys_menu where menu_name='费用管理' and menu_type='M' and order_num='30';
+
+-- 菜单 SQL
+insert into sys_menu (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('费用报销', @parentIdF, '30', '/fmis/payment', 'C', '0', 'fmis:payment:view', '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+-- 按钮父菜单ID
+SELECT @parentId := LAST_INSERT_ID();
+
+-- 按钮 SQL
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('查询', @parentId, '1',  '#',  'F', '0', 'fmis:payment:list',         '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('新增', @parentId, '2',  '#',  'F', '0', 'fmis:payment:add',          '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('修改', @parentId, '3',  '#',  'F', '0', 'fmis:payment:edit',         '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('删除', @parentId, '4',  '#',  'F', '0', 'fmis:payment:remove',       '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+-- 合同付款申请 cpayment
+
+SELECT @parentIdF :=  menu_id from sys_menu where menu_name='整机采购' and menu_type='M' and order_num='20';
+
+-- 合同付款申请
+insert into sys_menu (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('付款申请', @parentIdF , '30', '/fmis/cpayment', 'C', '0', 'fmis:cpayment:view', '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '业务菜单');
+
+-- 按钮父菜单ID
+SELECT @parentId := LAST_INSERT_ID();
+
+-- 按钮 SQL
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('业务查询', @parentId, '1',  '#',  'F', '0', 'fmis:cpayment:list',         '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('业务新增', @parentId, '2',  '#',  'F', '0', 'fmis:cpayment:add',          '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('业务修改', @parentId, '3',  '#',  'F', '0', 'fmis:cpayment:edit',         '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('业务删除', @parentId, '4',  '#',  'F', '0', 'fmis:cpayment:remove',       '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('业务导出', @parentId, '5',  '#',  'F', '0', 'fmis:cpayment:export',       '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+

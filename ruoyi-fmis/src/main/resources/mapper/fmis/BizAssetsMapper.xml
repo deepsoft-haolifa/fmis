@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.fmis.assets.mapper.BizAssetsMapper">
+    
+    <resultMap type="BizAssets" id="BizAssetsResult">
+        <result property="assetsId"    column="assets_id"    />
+        <result property="name"    column="name"    />
+        <result property="bh"    column="bh"    />
+        <result property="type"    column="type"    />
+        <result property="specifications"    column="specifications"    />
+        <result property="num"    column="num"    />
+        <result property="deptId"    column="dept_id"    />
+        <result property="userName"    column="user_name"    />
+        <result property="addType"    column="add_type"    />
+        <result property="location"    column="location"    />
+        <result property="equipmentState"    column="equipment_state"    />
+        <result property="manufacturer"    column="manufacturer"    />
+        <result property="purchasingTime"    column="purchasing_time"    />
+        <result property="price"    column="price"    />
+        <result property="useYear"    column="use_year"    />
+        <result property="depreciationMethod"    column="depreciation_method"    />
+        <result property="startTime"    column="start_time"    />
+        <result property="accruedMonth"    column="accrued_month"    />
+        <result property="outputRate"    column="output_rate"    />
+        <result property="salvageValue"    column="salvage_value"    />
+        <result property="accumulatedDepreciation"    column="accumulated_depreciation"    />
+        <result property="monthRate"    column="month_rate"    />
+        <result property="monthDepreciation"    column="month_depreciation"    />
+        <result property="netWorth"    column="net_worth"    />
+        <result property="string1"    column="string1"    />
+        <result property="string2"    column="string2"    />
+        <result property="string3"    column="string3"    />
+        <result property="string4"    column="string4"    />
+        <result property="string5"    column="string5"    />
+        <result property="string6"    column="string6"    />
+        <result property="string7"    column="string7"    />
+        <result property="string8"    column="string8"    />
+        <result property="string9"    column="string9"    />
+        <result property="string10"    column="string10"    />
+        <result property="remark"    column="remark"    />
+        <result property="status"    column="status"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBizAssetsVo">
+        select a.assets_id, a.name, a.bh, a.type, a.specifications,a.num, a.dept_id, a.user_name, a.add_type,
+        a.location, a.equipment_state, a.manufacturer, a.purchasing_time, a.price, a.use_year, a.depreciation_method,
+        a.start_time, a.accrued_month, a.output_rate, a.salvage_value, a.accumulated_depreciation, a.month_rate,
+        a.month_depreciation, a.net_worth, a.string1, a.string2, a.string3, a.string4, a.string5, a.string6, a.string7,
+        a.string8, a.string9, a.string10, a.remark, a.status, a.del_flag, a.create_by, a.create_time, a.update_by, a.update_time,
+        u.user_name as createByName,d.dept_name as deptName
+        from biz_assets a
+        left join sys_dept d on d.dept_id = a.dept_id
+        left join sys_user u on u.user_id=a.create_by
+    </sql>
+
+    <select id="selectBizAssetsList" parameterType="BizAssets" resultMap="BizAssetsResult">
+        <include refid="selectBizAssetsVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="bh != null  and bh != ''"> and bh like concat('%', #{bh}, '%')</if>
+            <if test="type != null  and type != ''"> and type = #{type}</if>
+            <if test="specifications != null  and specifications != ''"> and specifications like concat('%', #{specifications}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectBizAssetsById" parameterType="Long" resultMap="BizAssetsResult">
+        <include refid="selectBizAssetsVo"/>
+        where assets_id = #{assetsId}
+    </select>
+        
+    <insert id="insertBizAssets" parameterType="BizAssets" useGeneratedKeys="true" keyProperty="assetsId">
+        insert into biz_assets
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null  and name != ''">name,</if>
+            <if test="bh != null  and bh != ''">bh,</if>
+            <if test="type != null  and type != ''">type,</if>
+            <if test="specifications != null  and specifications != ''">specifications,</if>
+            <if test="num != null  and num != ''">num,</if>
+            <if test="deptId != null  and deptId != ''">dept_id,</if>
+            <if test="userName != null  and userName != ''">user_name,</if>
+            <if test="addType != null  and addType != ''">add_type,</if>
+            <if test="location != null  and location != ''">location,</if>
+            <if test="equipmentState != null  and equipmentState != ''">equipment_state,</if>
+            <if test="manufacturer != null  and manufacturer != ''">manufacturer,</if>
+            <if test="purchasingTime != null ">purchasing_time,</if>
+            <if test="price != null ">price,</if>
+            <if test="useYear != null  and useYear != ''">use_year,</if>
+            <if test="depreciationMethod != null  and depreciationMethod != ''">depreciation_method,</if>
+            <if test="startTime != null ">start_time,</if>
+            <if test="accruedMonth != null  and accruedMonth != ''">accrued_month,</if>
+            <if test="outputRate != null  and outputRate != ''">output_rate,</if>
+            <if test="salvageValue != null  and salvageValue != ''">salvage_value,</if>
+            <if test="accumulatedDepreciation != null  and accumulatedDepreciation != ''">accumulated_depreciation,</if>
+            <if test="monthRate != null  and monthRate != ''">month_rate,</if>
+            <if test="monthDepreciation != null  and monthDepreciation != ''">month_depreciation,</if>
+            <if test="netWorth != null  and netWorth != ''">net_worth,</if>
+            <if test="string1 != null  and string1 != ''">string1,</if>
+            <if test="string2 != null  and string2 != ''">string2,</if>
+            <if test="string3 != null  and string3 != ''">string3,</if>
+            <if test="string4 != null  and string4 != ''">string4,</if>
+            <if test="string5 != null  and string5 != ''">string5,</if>
+            <if test="string6 != null  and string6 != ''">string6,</if>
+            <if test="string7 != null  and string7 != ''">string7,</if>
+            <if test="string8 != null  and string8 != ''">string8,</if>
+            <if test="string9 != null  and string9 != ''">string9,</if>
+            <if test="string10 != null  and string10 != ''">string10,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+            <if test="status != null  and status != ''">status,</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null  and name != ''">#{name},</if>
+            <if test="bh != null  and bh != ''">#{bh},</if>
+            <if test="type != null  and type != ''">#{type},</if>
+            <if test="specifications != null  and specifications != ''">#{specifications},</if>
+            <if test="num != null  and num != ''">#{num},</if>
+            <if test="deptId != null  and deptId != ''">#{deptId},</if>
+            <if test="userName != null  and userName != ''">#{userName},</if>
+            <if test="addType != null  and addType != ''">#{addType},</if>
+            <if test="location != null  and location != ''">#{location},</if>
+            <if test="equipmentState != null  and equipmentState != ''">#{equipmentState},</if>
+            <if test="manufacturer != null  and manufacturer != ''">#{manufacturer},</if>
+            <if test="purchasingTime != null ">#{purchasingTime},</if>
+            <if test="price != null ">#{price},</if>
+            <if test="useYear != null  and useYear != ''">#{useYear},</if>
+            <if test="depreciationMethod != null  and depreciationMethod != ''">#{depreciationMethod},</if>
+            <if test="startTime != null ">#{startTime},</if>
+            <if test="accruedMonth != null  and accruedMonth != ''">#{accruedMonth},</if>
+            <if test="outputRate != null  and outputRate != ''">#{outputRate},</if>
+            <if test="salvageValue != null  and salvageValue != ''">#{salvageValue},</if>
+            <if test="accumulatedDepreciation != null  and accumulatedDepreciation != ''">#{accumulatedDepreciation},</if>
+            <if test="monthRate != null  and monthRate != ''">#{monthRate},</if>
+            <if test="monthDepreciation != null  and monthDepreciation != ''">#{monthDepreciation},</if>
+            <if test="netWorth != null  and netWorth != ''">#{netWorth},</if>
+            <if test="string1 != null  and string1 != ''">#{string1},</if>
+            <if test="string2 != null  and string2 != ''">#{string2},</if>
+            <if test="string3 != null  and string3 != ''">#{string3},</if>
+            <if test="string4 != null  and string4 != ''">#{string4},</if>
+            <if test="string5 != null  and string5 != ''">#{string5},</if>
+            <if test="string6 != null  and string6 != ''">#{string6},</if>
+            <if test="string7 != null  and string7 != ''">#{string7},</if>
+            <if test="string8 != null  and string8 != ''">#{string8},</if>
+            <if test="string9 != null  and string9 != ''">#{string9},</if>
+            <if test="string10 != null  and string10 != ''">#{string10},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBizAssets" parameterType="BizAssets">
+        update biz_assets
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null  and name != ''">name = #{name},</if>
+            <if test="bh != null  and bh != ''">bh = #{bh},</if>
+            <if test="type != null  and type != ''">type = #{type},</if>
+            <if test="specifications != null  and specifications != ''">specifications = #{specifications},</if>
+            <if test="num != null  and num != ''">num = #{num},</if>
+            <if test="deptId != null  and deptId != ''">dept_id = #{deptId},</if>
+            <if test="userName != null  and userName != ''">user_name = #{userName},</if>
+            <if test="addType != null  and addType != ''">add_type = #{addType},</if>
+            <if test="location != null  and location != ''">location = #{location},</if>
+            <if test="equipmentState != null  and equipmentState != ''">equipment_state = #{equipmentState},</if>
+            <if test="manufacturer != null  and manufacturer != ''">manufacturer = #{manufacturer},</if>
+            <if test="purchasingTime != null ">purchasing_time = #{purchasingTime},</if>
+            <if test="price != null ">price = #{price},</if>
+            <if test="useYear != null  and useYear != ''">use_year = #{useYear},</if>
+            <if test="depreciationMethod != null  and depreciationMethod != ''">depreciation_method = #{depreciationMethod},</if>
+            <if test="startTime != null ">start_time = #{startTime},</if>
+            <if test="accruedMonth != null  and accruedMonth != ''">accrued_month = #{accruedMonth},</if>
+            <if test="outputRate != null  and outputRate != ''">output_rate = #{outputRate},</if>
+            <if test="salvageValue != null  and salvageValue != ''">salvage_value = #{salvageValue},</if>
+            <if test="accumulatedDepreciation != null  and accumulatedDepreciation != ''">accumulated_depreciation = #{accumulatedDepreciation},</if>
+            <if test="monthRate != null  and monthRate != ''">month_rate = #{monthRate},</if>
+            <if test="monthDepreciation != null  and monthDepreciation != ''">month_depreciation = #{monthDepreciation},</if>
+            <if test="netWorth != null  and netWorth != ''">net_worth = #{netWorth},</if>
+            <if test="string1 != null  and string1 != ''">string1 = #{string1},</if>
+            <if test="string2 != null  and string2 != ''">string2 = #{string2},</if>
+            <if test="string3 != null  and string3 != ''">string3 = #{string3},</if>
+            <if test="string4 != null  and string4 != ''">string4 = #{string4},</if>
+            <if test="string5 != null  and string5 != ''">string5 = #{string5},</if>
+            <if test="string6 != null  and string6 != ''">string6 = #{string6},</if>
+            <if test="string7 != null  and string7 != ''">string7 = #{string7},</if>
+            <if test="string8 != null  and string8 != ''">string8 = #{string8},</if>
+            <if test="string9 != null  and string9 != ''">string9 = #{string9},</if>
+            <if test="string10 != null  and string10 != ''">string10 = #{string10},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+            <if test="status != null  and status != ''">status = #{status},</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+        </trim>
+        where assets_id = #{assetsId}
+    </update>
+
+    <delete id="deleteBizAssetsById" parameterType="Long">
+        delete from biz_assets where assets_id = #{assetsId}
+    </delete>
+
+    <delete id="deleteBizAssetsByIds" parameterType="String">
+        delete from biz_assets where assets_id in 
+        <foreach item="assetsId" collection="array" open="(" separator="," close=")">
+            #{assetsId}
+        </foreach>
+    </delete>
+    
+</mapper>

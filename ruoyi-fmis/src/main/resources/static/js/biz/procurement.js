@@ -117,7 +117,7 @@ function initExpandRow() {
             if (repeartMap.get(repeartKey) != null) {
                 continue;
             }
-            console.log("pathId=") + pathId;
+            console.log("pathId22=" + pathId);
             repeartMap.set(repeartKey,i);
             $("#bootstrap-table").bootstrapTable('expandRow', $("#bootstrap-table").bootstrapTable('getRowByUniqueId', parentDataId).rowId);
             var levelUniqueId = "";
@@ -138,8 +138,10 @@ function initExpandRow() {
             if (bizEditFlag == 2) {
 
             }
+            console.log("bizEditFlag=" + bizEditFlag);
             if (bizEditFlag == 0) {
                 var paramterSupplierId = parent.$('#paramterSupplierId').val();
+                console.log("paramterSupplierId=" + paramterSupplierId);
                 //增加的时候 把供应商
                 $("#string6").find("option[value='" + paramterSupplierId + "']").attr("selected",true);
             }

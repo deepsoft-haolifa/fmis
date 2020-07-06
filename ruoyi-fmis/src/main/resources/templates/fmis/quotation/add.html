@@ -379,9 +379,11 @@
                     {field : 'productNum',title : '数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
                     {field : 'productPrice',title : '单价',editable: false},
 
-                    {field : 'totalPrice',title : '总价',editable: false},
-
                     {field : 'productCoefficient',title : '系数',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
+                    {field : 'totalPrice',title : '金额',editable: false},
+                    {field : 'totalPriceOnly',title : '总价',editable: false},
+
+
 
 
                     {field : 'actuatorId',title : 'actuatorId',visible: false},
@@ -511,6 +513,8 @@
             var pattachmentPrice = row["pattachmentPrice"];
             pattachmentPrice = isEmpty(pattachmentPrice) == true ? 0 : parseFloat(pattachmentPrice);
             var pattachmentSum = parseFloat(pattachmentCount * pattachmentPrice * pattachmentCoefficient).toFixed(4);
+            var pattachmentSumOnly = parseFloat(pattachmentPrice * pattachmentCoefficient).toFixed(4);
+
 
             //附件1
             var pattachment1Count = row["pattachment1Count"];
@@ -520,6 +524,7 @@
             var pattachment1Price = row["pattachment1Price"];
             pattachment1Price = isEmpty(pattachment1Price) == true ? 0 : parseFloat(pattachment1Price);
             var pattachment1Sum = parseFloat(pattachment1Count * pattachment1Price * pattachment1Coefficient).toFixed(4);
+            var pattachment1SumOnly = parseFloat(pattachment1Price * pattachment1Coefficient).toFixed(4);
 
             //附件2
             var pattachment2Count = row["pattachment2Count"];
@@ -529,6 +534,7 @@
             var pattachment2Price = row["pattachment2Price"];
             pattachment2Price = isEmpty(pattachment2Price) == true ? 0 : parseFloat(pattachment2Price);
             var pattachment2Sum = parseFloat(pattachment2Count * pattachment2Price * pattachment2Coefficient).toFixed(4);
+            var pattachment2SumOnly = parseFloat(pattachment2Price * pattachment2Coefficient).toFixed(4);
 
             //附件3
             var pattachment3Count = row["pattachment3Count"];
@@ -538,6 +544,7 @@
             var pattachment3Price = row["pattachment3Price"];
             pattachment3Price = isEmpty(pattachment3Price) == true ? 0 : parseFloat(pattachment3Price);
             var pattachment3Sum = parseFloat(pattachment3Count * pattachment3Price * pattachment3Coefficient).toFixed(4);
+            var pattachment3SumOnly = parseFloat(pattachment3Price * pattachment3Coefficient).toFixed(4);
 
             //附件4
             var pattachment4Count = row["pattachment4Count"];
@@ -547,19 +554,39 @@
             var pattachment4Price = row["pattachment4Price"];
             pattachment4Price = isEmpty(pattachment4Price) == true ? 0 : parseFloat(pattachment4Price);
             var pattachment4Sum = parseFloat(pattachment4Count * pattachment4Price * pattachment4Coefficient).toFixed(4);
+            var pattachment4SumOnly = parseFloat(pattachment4Price * pattachment4Coefficient).toFixed(4);
 
             var productSum = parseFloat(productNum * productPrice * productCoefficient).toFixed(4);
+            var productSumOnly = parseFloat(productPrice * productCoefficient).toFixed(4);
             var productRef1Sum = parseFloat(productRef1Num * productRef1Price * productRef1Coefficient).toFixed(4);
+            var productRef1SumOnly = parseFloat(productRef1Price * productRef1Coefficient).toFixed(4);
             var productRef2Sum = parseFloat(productRef2Num * productRef2Price * productRef2Coefficient).toFixed(4);
+            var productRef2SumOnly = parseFloat(productRef2Price * productRef2Coefficient).toFixed(4);
             var actuatorSum = parseFloat(actuatorNum * actuatorCoefficient * actuatorPrice).toFixed(4);
+            var actuatorSumOnly = parseFloat(actuatorCoefficient * actuatorPrice).toFixed(4);
+
             var totalSum = parseFloat(parseFloat(productSum) + parseFloat(productRef1Sum) + parseFloat(productRef2Sum) + parseFloat(actuatorSum)
                 + parseFloat(pattachmentSum)+ parseFloat(pattachment1Sum)+ parseFloat(pattachment2Sum)+ parseFloat(pattachment3Sum)+ parseFloat(pattachment4Sum)).toFixed(4);
+
+
+            var totalPriceOnly = parseFloat(parseFloat(productSumOnly) + parseFloat(productRef1SumOnly) + parseFloat(productRef2SumOnly) + parseFloat(actuatorSumOnly)
+                + parseFloat(pattachmentSumOnly)+ parseFloat(pattachment1SumOnly)+ parseFloat(pattachment2SumOnly)+ parseFloat(pattachment3SumOnly)+ parseFloat(pattachment4SumOnly)).toFixed(4);
+
+            var updateObjOnly = {
+                index : row.rowId,
+                field : "totalPriceOnly",
+                value : totalPriceOnly
+            };
+            $.btTable.bootstrapTable("updateCell",updateObjOnly);
+
             var updateObj = {
                 index : row.rowId,
                 field : "totalPrice",
                 value : totalSum
             };
             $.btTable.bootstrapTable("updateCell",updateObj);
+
+
             //$("#totalSum_" + productId).val(totalSum);
             return totalSum;
         }

@@ -98,7 +98,7 @@ public class BizCustomerController extends BaseController {
     @ResponseBody
     public TableDataInfo listNoAuth(BizCustomer bizCustomer) {
         startPage();
-        List<BizCustomer> list = bizCustomerService.selectBizCustomerList(bizCustomer);
+        List<BizCustomer> list = bizCustomerService.selectBizCustomerListNoAuth(bizCustomer);
         return getDataTable(list);
     }
 

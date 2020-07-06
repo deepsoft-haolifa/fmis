@@ -70,16 +70,16 @@
                 $.modal.alertWarning("请至少选择一条记录");
                 return;
             }
-            /*
+
             if (supplierMap.size != 1) {
                 $.modal.alertWarning("请选择同一个供应商的数据");
                 return;
-            }*/
+            }
             var paramterSupplierId = "";
             supplierMap.forEach(function (value, key, map) {
                 paramterSupplierId = key;
             })
-            $("#paramterSupplierId").val("paramterSupplierId");
+            $("#paramterSupplierId").val(paramterSupplierId);
 
             var datas = [];
             $.each(overAllIds,function(index,value){

@@ -48,6 +48,11 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
         return bizProcessDataMapper.selectBizProcessDataById(dataId);
     }
 
+    @Override
+    public BizProcessData selectBizProcessDataBorrowingById(Long dataId) {
+        return bizProcessDataMapper.selectBizProcessDataBorrowingById(dataId);
+    }
+
     /**
      * 查询合同管理列表
      *
@@ -82,6 +87,11 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
         return bizProcessDataMapper.selectBizProcessDataListRefProcurement(bizProcessData);
     }
 
+    @Override
+    @DataScope(deptAlias = "dt", userAlias = "u")
+    public List<BizProcessData> selectBizProcessDataVoRefBorrowing(BizProcessData bizProcessData) {
+        return bizProcessDataMapper.selectBizProcessDataVoRefBorrowing(bizProcessData);
+    }
     /**
      * 审批
      * @param dataId
@@ -181,6 +191,23 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
         bizProcessData.setUpdateTime(DateUtils.getNowDate());
         bizProcessData.setUpdateBy(ShiroUtils.getUserId().toString());
         bizProcessData.setFlowStatus(BizConstants.FLOW_STATUS_1);
+        int updateCount = bizProcessDataMapper.updateBizProcessData(bizProcessData);
+        insertFlow(bizProcessData);
+        return updateCount;
+    }
+
+    @Override
+    public int subReportBizQuotationBorrowing(BizProcessData bizProcessData) {
+        bizProcessData.setUpdateTime(DateUtils.getNowDate());
+        bizProcessData.setUpdateBy(ShiroUtils.getUserId().toString());
+
+
+        Map<String, SysRole> flowMap = bizProcessDefineService.getRoleFlowMap(bizProcessData.getBizId());
+        String lastRoleKey = "";
+        for (String key : flowMap.keySet()) {
+            lastRoleKey = key;
+        }
+        bizProcessData.setFlowStatus(lastRoleKey);
         int updateCount = bizProcessDataMapper.updateBizProcessData(bizProcessData);
         insertFlow(bizProcessData);
         return updateCount;

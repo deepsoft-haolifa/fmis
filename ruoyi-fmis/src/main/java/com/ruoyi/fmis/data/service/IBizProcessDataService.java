@@ -18,6 +18,7 @@ public interface IBizProcessDataService {
      */
     public BizProcessData selectBizProcessDataById(Long dataId);
 
+    public BizProcessData selectBizProcessDataBorrowingById(Long dataId);
     /**
      * 查询合同管理列表
      *
@@ -34,6 +35,8 @@ public interface IBizProcessDataService {
 
 
     public List<BizProcessData> selectBizProcessDataListRefProcurement(BizProcessData bizProcessData);
+
+    public List<BizProcessData> selectBizProcessDataVoRefBorrowing(BizProcessData bizProcessData);
 
     public int doExamine(String dataId,String status,String remark,String bizId);
     /**
@@ -70,6 +73,7 @@ public interface IBizProcessDataService {
 
     public int subReportBizQuotation(BizProcessData bizProcessData);
 
+    public int subReportBizQuotationBorrowing(BizProcessData bizProcessData);
     /**
      * 开始质检
      * @param bizProcessData

@@ -26,6 +26,8 @@ public interface IBizCustomerService {
      */
     public List<BizCustomer> selectBizCustomerList(BizCustomer bizCustomer);
 
+
+    public List<BizCustomer> selectBizCustomerListNoAuth(BizCustomer bizCustomer);
     /**
      * 新增客户
      *

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('借款管理列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <input type="hidden" name="bizId" id="bizId" value="borrowing"/>
+                    <div class="select-list">
+                        <ul>
+
+                            <li>
+                                <p>状态：</p>
+                                <select name="queryStatus" class="form-control m-b" >
+                                    <option value="0">全部</option>
+                                    <option value="1">待办</option>
+                                    <option value="2">已办</option>
+                                </select>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="add()" shiro:hasPermission="fmis:borrowing:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('fmis:borrowing:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('fmis:borrowing:remove')}]];
+        var prefix = ctx + "fmis/borrowing";
+
+        var capitalPropertyDatas = [[${@dict.getType('capital_property')}]];
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                uniqueId: "dataId",
+                modalName: "借款管理",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'dataId', 
+                    title : 'ID',
+                    visible: false
+                },
+
+                {
+                    field : 'deptName',
+                    title : '借款单位'
+                },
+                {
+                    field : 'deptName1',
+                    title : '付款公司'
+                },
+                {
+                    field : 'datetime1',
+                    title : '借款日期'
+                },
+                {
+                    field : 'string3',
+                    title : '用途'
+                },
+                {
+                    field : 'createByName',
+                    title : '借款人'
+                },
+                {
+                    field : 'string4',
+                    title : '资金性质',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(capitalPropertyDatas, value);
+                    }
+                },
+                {
+                    field : 'string5',
+                    title : '户名'
+                },
+                {
+                    field : 'string6',
+                    title : '卡号'
+                },
+                {
+                    field : 'strin7',
+                    title : '开户行'
+                },
+                {
+                    field : 'price1',
+                    title : '借款金额'
+                },
+                {
+                    field : 'datetime2',
+                    title : '预计还款日期'
+                },
+                {
+                    field : 'flowStatusRemark',
+                    title : '状态',
+                    align: 'center'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        var flowStatus = row.flowStatus;
+                        var normalFlag = row.normalFlag;
+                        var operationExamineStatus = row.operationExamineStatus;
+                        var createBy = row.createBy;
+                        var loginUserId = row.loginUserId;
+                        console.log("loginUserId=" + loginUserId + " createBy=" + createBy + " flowStatus=" + flowStatus);
+                        if (flowStatus < 1 || (flowStatus > 10 && createBy == loginUserId)) {
+                            actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="edit(\'' + row.dataId + '\')"><i class="fa fa-edit"></i> 编辑</a> ');
+                            actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 删除</a>');
+                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subReport(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 上报</a>');
+                        } else if (flowStatus == normalFlag) {
+                            //已完成
+                        } else if (operationExamineStatus == true || operationExamineStatus == "true") {
+                            //审批
+                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subExamine(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 审批</a>');
+                        }
+                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewExamineHistory(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 审批记录 </a>');
+                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewDetail(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 详情 </a>');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+
+        function add() {
+            var url = prefix + "/add";
+            $.modal.openFull("增加", url);
+        }
+        function edit(id) {
+            if($.common.isEmpty(id) && $.table._option.type == table_type.bootstrapTreeTable) {
+                var row = $.bttTable.bootstrapTreeTable('getSelections')[0];
+                if ($.common.isEmpty(row)) {
+                    $.modal.alertWarning("请至少选择一条记录");
+                    return;
+                }
+
+
+                var url = $.table._option.updateUrl.replace("{id}", row[$.table._option.uniqueId]);
+                $.modal.openFull("修改" + $.table._option.modalName, url);
+            } else {
+                var row = $('#bootstrap-table').bootstrapTable("getRowByUniqueId",id);
+                if (row == null) {
+                    row = $('#bootstrap-table').bootstrapTable('getSelections')[0];
+                }
+                if (row != null) {
+                    var flowStatus = row.flowStatus;
+
+                }
+                $.modal.openFull("修改" + $.table._option.modalName, $.operate.editUrl(id));
+            }
+        }
+
+        function viewExamineHistory(dataId) {
+            var bizId = $("#bizId").val();
+            var url = prefix + "/viewExamineHistory?dataId=" + dataId + "&&bizId=" + bizId;
+            $.modal.openNoEnter("审批记录", url,'','',function(){
+                $.modal.closeAll();
+            });
+        }
+        function subExamine(dataId) {
+            var url = prefix + "/examineEdit?dataId=" + dataId;
+            $.modal.openFull("审批", url);
+        }
+
+
+        function viewDetail(dataId) {
+            var bizId = $("#bizId").val();
+            var url = prefix + "/viewDetail?dataId=" + dataId + "&&bizId=" + bizId;
+            $.modal.openNoEnter("详情", url,$(window).width(),$(window).height(),function(){
+                $.modal.closeAll();
+            });
+        }
+        function subReport(dataId) {
+            $.modal.confirm("确定上报该条信息吗？", function() {
+                console.log(dataId + "--dataId");
+                var url = prefix + "/report?dataId=" + dataId;
+                $.operate.saveModal(url,'',function(){
+                    $.table.refresh();
+                });
+            });
+        }
+    </script>
+</body>
+</html>

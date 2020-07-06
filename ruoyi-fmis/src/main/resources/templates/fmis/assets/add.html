@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增固定资产')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-assets-add">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">设备名称：</label>
+                <div class="col-sm-8">
+                    <input name="name" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">设备编号：</label>
+                <div class="col-sm-8">
+                    <input name="bh" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">类别名称：</label>
+                <div class="col-sm-8">
+                    <select name="type" class="form-control m-b" th:with="type=${@dict.getType('assets_type')}">
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">规格型号：</label>
+                <div class="col-sm-8">
+                    <input name="specifications" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">设备数量：</label>
+                <div class="col-sm-8">
+                    <input name="num" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">部门：</label>
+                <div class="col-sm-8">
+                    <input name="deptId" id="deptId" class="form-control" type="hidden">
+                    <div class="input-group">
+                        <input name="deptName" onclick="selectDeptTree()" id="treeName" type="text" placeholder="请选择部门" class="form-control" required>
+                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">领用人：</label>
+                <div class="col-sm-8">
+                    <input name="userName" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">增加方式：</label>
+                <div class="col-sm-8">
+                    <select name="addType" class="form-control m-b" th:with="type=${@dict.getType('assets_add_type')}">
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">存放地点：</label>
+                <div class="col-sm-8">
+                    <input name="location" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">设备状态：</label>
+                <div class="col-sm-8">
+                    <input name="equipmentState" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">生产厂家：</label>
+                <div class="col-sm-8">
+                    <input name="manufacturer" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">采购时间：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="purchasingTime" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">采购金额：</label>
+                <div class="col-sm-8"> <!--   -->
+                    <input name="price" id="price" class="form-control" onblur="calculateOutputRate()" onkeyup="AmountKeyUp(this)" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">使用年限：</label>
+                <div class="col-sm-8">
+                    <input name="useYear" id="useYear" class="form-control" onblur="calculateOutputRate()"  onkeyup="AmountKeyUp(this)" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">折旧方法：</label>
+                <div class="col-sm-8">
+                    <select name="depreciationMethod" class="form-control m-b" th:with="type=${@dict.getType('depreciation_method')}">
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">开始使用日期：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="startTime" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">已计提月份：</label>
+                <div class="col-sm-8">
+                    <input name="accruedMonth" id="accruedMonth" onblur="calculateOutputRate()" onkeyup="AmountKeyUp(this)" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">净残值率：</label>
+                <div class="col-sm-8"> <!--  -->
+                    <input name="outputRate" id="outputRate" class="form-control" onblur="calculateOutputRate()" onkeyup="AmountKeyUp(this)"  type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">净残值：</label>
+                <div class="col-sm-8">
+                    <input name="salvageValue" id="salvageValue" class="form-control" onkeyup="AmountKeyUp(this)"   type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">累计折旧：</label>
+                <div class="col-sm-8">
+                    <input name="accumulatedDepreciation" id="accumulatedDepreciation" onkeyup="AmountKeyUp(this)"  class="form-control"  type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">月折旧率：</label>
+                <div class="col-sm-8">
+                    <input name="monthRate" id="monthRate" class="form-control" onkeyup="AmountKeyUp(this)"   type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">月折旧额：</label>
+                <div class="col-sm-8">
+                    <input name="monthDepreciation" id="monthDepreciation" onkeyup="AmountKeyUp(this)"  class="form-control"  type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">净值：</label>
+                <div class="col-sm-8">
+                    <input name="netWorth" id="netWorth" class="form-control" onkeyup="AmountKeyUp(this)"   type="text">
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script type="text/javascript">
+        var prefix = ctx + "fmis/assets"
+        $("#form-assets-add").validate({
+            focusCleanup: true
+        });
+        function isEmpty(v) {
+            return $.common.isEmpty(v);
+        }
+        function calculateOutputRate () {
+            var price = $("#price").val();
+            price = isEmpty(price) == true ? 0 : price;
+            var outputRate = $("#outputRate").val();
+            outputRate = isEmpty(outputRate) == true ? 0 : outputRate;
+            var salvageValue = parseFloat(price * outputRate).toFixed(2);
+            $("#salvageValue").val(salvageValue);
+            var useYear = $("#useYear").val();
+            useYear = isEmpty(useYear) == true ? 0 : useYear;
+            //monthRate 月折旧率  （1-净残值率）/使用年限/12
+            $("#monthRate").val(parseFloat( (1 - outputRate) / useYear / 12 ).toFixed(2));
+            //accumulatedDepreciation 累计折旧 已计提月份*月折旧额 accruedMonth monthRate
+            var monthRate = $("#monthRate").val();
+            monthRate = isEmpty(monthRate) == true ? 0 : monthRate;
+
+            var accruedMonth = $("#accruedMonth").val();
+            accruedMonth = isEmpty(accruedMonth) == true ? 0 : accruedMonth;
+            $("#accumulatedDepreciation").val(parseFloat(accruedMonth * monthRate).toFixed(2))
+            //月折旧额 monthDepreciation=月折旧率*采购金额
+            var accumulatedDepreciation = $("#accumulatedDepreciation").val();
+            accumulatedDepreciation = isEmpty(accumulatedDepreciation) == true ? 0 : accumulatedDepreciation;
+            $("#monthDepreciation").val(parseFloat(accumulatedDepreciation * price).toFixed(2))
+            //净值 netWorth = 采购金额-累计折旧
+            $("#netWorth").val(parseFloat(price - accumulatedDepreciation).toFixed(2))
+
+        }
+
+        function selectDeptTree() {
+            var treeId = $("#deptId").val();
+            var deptId = $.common.isEmpty(treeId) ? "100" : $("#deptId").val();
+            var url = ctx + "system/dept/selectDeptTree/" + deptId;
+            var options = {
+                title: '选择部门',
+                width: "380",
+                url: url,
+                callBack: doSubmit
+            };
+            $.modal.openOptions(options);
+        }
+        function doSubmit(index, layero){
+            var tree = layero.find("iframe")[0].contentWindow.$._tree;
+            var body = layer.getChildFrame('body', index);
+            $("#deptId").val(body.find('#treeId').val());
+            $("#treeName").val(body.find('#treeName').val());
+            layer.close(index);
+        }
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/add", $('#form-budget-add').serialize());
+            }
+        }
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/add", $('#form-assets-add').serialize());
+            }
+        }
+
+        $("input[name='purchasingTime']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $("input[name='startTime']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+    </script>
+</body>
+</html>
