@@ -15,7 +15,7 @@ ruoyi:
   # 获取ip地址开关
   addressEnabled: true
 
-  filePath: /Users/a/IdeaProjects/fmis-process/uploadPath
+  filePath: /Users/a/IdeaProjects/fmis-process/uploadPath/
   #filePath: /home/img/images/
   fileUrl: http://oa.haolifa.com/images/
 

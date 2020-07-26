@@ -1544,3 +1544,53 @@ values('业务删除', @parentId, '4',  '#',  'F', '0', 'fmis:cpayment:remove', 
 insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
 values('业务导出', @parentId, '5',  '#',  'F', '0', 'fmis:cpayment:export',       '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
 
+
+drop table if exists biz_data_steststay;
+create table biz_data_steststay (
+  stay_id           bigint(20)      not null auto_increment    comment 'ID',
+  num         decimal(10,5)          default 0               comment '待质检数量',
+  status_id         bigint(20)          default 0                  comment '质检状态id',
+  string1         varchar(30)          default ''                  comment '备用1',
+  string2         varchar(30)          default ''                  comment '备用2',
+  string3         varchar(30)          default ''                  comment '备用3',
+  string4         varchar(30)          default ''                  comment '备用4',
+  string5         varchar(30)          default ''                  comment '备用5',
+  string6         varchar(30)          default ''                  comment '备用6',
+  string7         varchar(30)          default ''                  comment '备用7',
+  string8         varchar(30)          default ''                  comment '备用8',
+  string9         varchar(30)          default ''                  comment '备用9',
+  string10         varchar(30)          default ''                  comment '备用10',
+  remark         varchar(30)          default ''                  comment '备注',
+  status            char(1)         default '0'                comment '状态（0正常 1停用）',
+  del_flag          char(1)         default '0'                comment '删除标志（0代表存在 2代表删除）',
+  create_by         varchar(64)     default ''                 comment '创建者',
+  create_time 	    datetime                                   comment '创建时间',
+  update_by         varchar(64)     default ''                 comment '更新者',
+  update_time       datetime                                   comment '更新时间',
+  primary key (stay_id)
+) engine=innodb auto_increment=200 comment = '待质检表';
+
+-- 菜单 SQL
+insert into sys_menu (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('待质检', '3', '1', '/fmis/steststay', 'C', '0', 'fmis:steststay:view', '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '待质检菜单');
+
+-- 按钮父菜单ID
+SELECT @parentId := LAST_INSERT_ID();
+
+-- 按钮 SQL
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('待质检查询', @parentId, '1',  '#',  'F', '0', 'fmis:steststay:list',         '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('待质检新增', @parentId, '2',  '#',  'F', '0', 'fmis:steststay:add',          '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('待质检修改', @parentId, '3',  '#',  'F', '0', 'fmis:steststay:edit',         '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('待质检删除', @parentId, '4',  '#',  'F', '0', 'fmis:steststay:remove',       '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('待质检导出', @parentId, '5',  '#',  'F', '0', 'fmis:steststay:export',       '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('待质检列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>待质检数量：</p>
+                                <input type="text" name="num"/>
+                            </li>
+                            <li>
+                                <p>质检状态id：</p>
+                                <input type="text" name="statusId"/>
+                            </li>
+                            <li>
+                                <p>备用1：</p>
+                                <input type="text" name="string1"/>
+                            </li>
+                            <li>
+                                <p>备用2：</p>
+                                <input type="text" name="string2"/>
+                            </li>
+                            <li>
+                                <p>备用3：</p>
+                                <input type="text" name="string3"/>
+                            </li>
+                            <li>
+                                <p>备用4：</p>
+                                <input type="text" name="string4"/>
+                            </li>
+                            <li>
+                                <p>备用5：</p>
+                                <input type="text" name="string5"/>
+                            </li>
+                            <li>
+                                <p>备用6：</p>
+                                <input type="text" name="string6"/>
+                            </li>
+                            <li>
+                                <p>备用7：</p>
+                                <input type="text" name="string7"/>
+                            </li>
+                            <li>
+                                <p>备用8：</p>
+                                <input type="text" name="string8"/>
+                            </li>
+                            <li>
+                                <p>备用9：</p>
+                                <input type="text" name="string9"/>
+                            </li>
+                            <li>
+                                <p>备用10：</p>
+                                <input type="text" name="string10"/>
+                            </li>
+                            <li>
+                                <p>状态：</p>
+                                <select name="status">
+                                    <option value="">所有</option>
+                                </select>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="fmis:steststay:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="fmis:steststay:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="fmis:steststay:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="fmis:steststay:export">
+                    <i class="fa fa-download"></i> 导出
+                 </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('fmis:steststay:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('fmis:steststay:remove')}]];
+        var prefix = ctx + "fmis/steststay";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "待质检",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'stayId', 
+                    title : 'ID',
+                    visible: false
+                },
+                {
+                    field : 'num', 
+                    title : '待质检数量'
+                },
+                {
+                    field : 'statusId', 
+                    title : '质检状态id'
+                },
+                {
+                    field : 'string1', 
+                    title : '备用1'
+                },
+                {
+                    field : 'string2', 
+                    title : '备用2'
+                },
+                {
+                    field : 'string3', 
+                    title : '备用3'
+                },
+                {
+                    field : 'string4', 
+                    title : '备用4'
+                },
+                {
+                    field : 'string5', 
+                    title : '备用5'
+                },
+                {
+                    field : 'string6', 
+                    title : '备用6'
+                },
+                {
+                    field : 'string7', 
+                    title : '备用7'
+                },
+                {
+                    field : 'string8', 
+                    title : '备用8'
+                },
+                {
+                    field : 'string9', 
+                    title : '备用9'
+                },
+                {
+                    field : 'string10', 
+                    title : '备用10'
+                },
+                {
+                    field : 'remark', 
+                    title : '备注'
+                },
+                {
+                    field : 'status', 
+                    title : '状态'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.stayId + '\')"><i class="fa fa-edit"></i> 编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.stayId + '\')"><i class="fa fa-remove"></i> 删除</a>');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

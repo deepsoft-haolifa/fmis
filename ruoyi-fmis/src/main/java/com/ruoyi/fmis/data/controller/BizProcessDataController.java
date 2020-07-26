@@ -43,6 +43,7 @@ import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysRole;
 import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.service.ISysDeptService;
+import com.ruoyi.system.service.ISysDictDataService;
 import com.ruoyi.system.service.ISysRoleService;
 import com.ruoyi.system.service.ISysUserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -111,6 +112,9 @@ public class BizProcessDataController extends BaseController {
     @Autowired
     private IBizQuotationService bizQuotationService;
 
+    @Autowired
+    private ISysDictDataService dictDataService;
+
     @RequiresPermissions("fmis:data:view")
     @GetMapping()
     public String data(ModelMap mmap) {
@@ -155,6 +159,7 @@ public class BizProcessDataController extends BaseController {
                 //结束标识
                 String normalFlag = data.getNormalFlag();
                 String flowStatusRemark = "待上报";
+                data.setLoginUserId(ShiroUtils.getUserId().toString());
                 if ("0".equals(flowStatus)) {
                     flowStatusRemark = "待上报";
                 } else if ("1".equals(flowStatus)) {
@@ -174,7 +179,7 @@ public class BizProcessDataController extends BaseController {
                     }
                 }
                 data.setFlowStatusRemark(flowStatusRemark);
-                data.setLoginUserId(ShiroUtils.getUserId().toString());
+
                 //计算是否可以审批
                 int flowStatusInt = Integer.parseInt(flowStatus);
                 data.setOperationExamineStatus(false);
@@ -364,6 +369,10 @@ public class BizProcessDataController extends BaseController {
     public String selectNewProduct(ModelMap mmap) {
         String customerId = getRequest().getParameter("customerId");
         mmap.put("customerId",customerId);
+
+        mmap.put("seriesSelect",bizDictService.selectBizDictByProductType(BizConstants.productTypeCode));
+        mmap.put("suppliers",bizSuppliersService.selectAllList());
+
         return prefix + "/selectNewProduct";
     }
     @GetMapping("/selectPattachment")
@@ -452,8 +461,8 @@ public class BizProcessDataController extends BaseController {
         queryBizProcessChild.setDataId(bizProcessData.getDataId());
         queryBizProcessChild.setString2(bizProcessData.getLevel());
         queryBizProcessChild.setDataStatus(bizProcessData.getDataStatus());
-
-
+        queryBizProcessChild.setBizEditFlag(bizProcessData.getBizEditFlag());
+        queryBizProcessChild.setProcurementId(bizProcessData.getProcurementId());
 
         String supplierId = bizProcessData.getSupplierId();
         if (StringUtils.isNotEmpty(supplierId)) {
@@ -471,6 +480,8 @@ public class BizProcessDataController extends BaseController {
         queryBizProcessChild.setDataId(bizProcessData.getDataId());
         queryBizProcessChild.setLevelLabel(bizProcessData.getLevel());
         queryBizProcessChild.setDataStatus(bizProcessData.getDataStatus());
+        queryBizProcessChild.setBizEditFlag(bizProcessData.getBizEditFlag());
+        queryBizProcessChild.setProcurementId(bizProcessData.getProcurementId());
         String supplierId = bizProcessData.getSupplierId();
         if (StringUtils.isNotEmpty(supplierId)) {
             queryBizProcessChild.setSupplierId(supplierId);
@@ -486,6 +497,8 @@ public class BizProcessDataController extends BaseController {
         queryBizProcessChild.setDataId(bizProcessData.getDataId());
         queryBizProcessChild.setLevelLabel(bizProcessData.getLevel());
         queryBizProcessChild.setDataStatus(bizProcessData.getDataStatus());
+        queryBizProcessChild.setBizEditFlag(bizProcessData.getBizEditFlag());
+        queryBizProcessChild.setProcurementId(bizProcessData.getProcurementId());
         String supplierId = bizProcessData.getSupplierId();
         if (StringUtils.isNotEmpty(supplierId)) {
             queryBizProcessChild.setSupplierId(supplierId);
@@ -501,6 +514,8 @@ public class BizProcessDataController extends BaseController {
         queryBizProcessChild.setDataId(bizProcessData.getDataId());
         queryBizProcessChild.setLevelLabel(bizProcessData.getLevel());
         queryBizProcessChild.setDataStatus(bizProcessData.getDataStatus());
+        queryBizProcessChild.setBizEditFlag(bizProcessData.getBizEditFlag());
+        queryBizProcessChild.setProcurementId(bizProcessData.getProcurementId());
         String supplierId = bizProcessData.getSupplierId();
         if (StringUtils.isNotEmpty(supplierId)) {
             queryBizProcessChild.setSupplierId(supplierId);
@@ -516,6 +531,8 @@ public class BizProcessDataController extends BaseController {
         queryBizProcessChild.setDataId(bizProcessData.getDataId());
         queryBizProcessChild.setLevelLabel(bizProcessData.getLevel());
         queryBizProcessChild.setDataStatus(bizProcessData.getDataStatus());
+        queryBizProcessChild.setBizEditFlag(bizProcessData.getBizEditFlag());
+        queryBizProcessChild.setProcurementId(bizProcessData.getProcurementId());
         String supplierId = bizProcessData.getSupplierId();
         if (StringUtils.isNotEmpty(supplierId)) {
             queryBizProcessChild.setSupplierId(supplierId);
@@ -531,6 +548,8 @@ public class BizProcessDataController extends BaseController {
         queryBizProcessChild.setDataId(bizProcessData.getDataId());
         queryBizProcessChild.setLevelLabel(bizProcessData.getLevel());
         queryBizProcessChild.setDataStatus(bizProcessData.getDataStatus());
+        queryBizProcessChild.setBizEditFlag(bizProcessData.getBizEditFlag());
+        queryBizProcessChild.setProcurementId(bizProcessData.getProcurementId());
         String supplierId = bizProcessData.getSupplierId();
         if (StringUtils.isNotEmpty(supplierId)) {
             queryBizProcessChild.setSupplierId(supplierId);
@@ -545,6 +564,8 @@ public class BizProcessDataController extends BaseController {
         queryBizProcessChild.setDataId(bizProcessData.getDataId());
         queryBizProcessChild.setLevelLabel(bizProcessData.getLevel());
         queryBizProcessChild.setDataStatus(bizProcessData.getDataStatus());
+        queryBizProcessChild.setBizEditFlag(bizProcessData.getBizEditFlag());
+        queryBizProcessChild.setProcurementId(bizProcessData.getProcurementId());
         String supplierId = bizProcessData.getSupplierId();
         if (StringUtils.isNotEmpty(supplierId)) {
             queryBizProcessChild.setSupplierId(supplierId);
@@ -559,6 +580,8 @@ public class BizProcessDataController extends BaseController {
         queryBizProcessChild.setDataId(bizProcessData.getDataId());
         queryBizProcessChild.setLevelLabel(bizProcessData.getLevel());
         queryBizProcessChild.setDataStatus(bizProcessData.getDataStatus());
+        queryBizProcessChild.setBizEditFlag(bizProcessData.getBizEditFlag());
+        queryBizProcessChild.setProcurementId(bizProcessData.getProcurementId());
         String supplierId = bizProcessData.getSupplierId();
         if (StringUtils.isNotEmpty(supplierId)) {
             queryBizProcessChild.setSupplierId(supplierId);
@@ -573,6 +596,8 @@ public class BizProcessDataController extends BaseController {
         queryBizProcessChild.setDataId(bizProcessData.getDataId());
         queryBizProcessChild.setLevelLabel(bizProcessData.getLevel());
         queryBizProcessChild.setDataStatus(bizProcessData.getDataStatus());
+        queryBizProcessChild.setBizEditFlag(bizProcessData.getBizEditFlag());
+        queryBizProcessChild.setProcurementId(bizProcessData.getProcurementId());
         String supplierId = bizProcessData.getSupplierId();
         if (StringUtils.isNotEmpty(supplierId)) {
             queryBizProcessChild.setSupplierId(supplierId);
@@ -588,7 +613,7 @@ public class BizProcessDataController extends BaseController {
 
         List<BizContractLevel> bizContractLevels = new ArrayList<>();
         bizProcessData.setLevel("A");
-
+        String editFlag = bizProcessData.getBizEditFlag();
         if (!CollectionUtils.isEmpty(listLevelProduct(bizProcessData).getRows())) {
             BizContractLevel bizContractLevel = new BizContractLevel();
             bizContractLevel.setLevelTypeName("产品信息A");
@@ -1004,12 +1029,14 @@ public class BizProcessDataController extends BaseController {
              * 如果报价系数大于1.0--1.1则由区域经理审批完成后流程结束；
              * 如果系数大于1.1，则由部门销售经理审核完成后流程结束
              */
-            if (minCoefficient < 0.88 || minOtherCoefficient < 0.92) {
+            if (minCoefficient < 0.88 || (minOtherCoefficient > 0 && minOtherCoefficient < 0.92)) {
                 normalFlag = "5";
             }else if ((minCoefficient >= 0.88 && minCoefficient < 0.95) || (minOtherCoefficient >= 0.92 && minOtherCoefficient < 0.97)) {
                 normalFlag = "4";
             } else if ((minCoefficient >= 0.95 && minCoefficient < 1) || (minOtherCoefficient >= 0.97 && minOtherCoefficient <= 1)) {
                 normalFlag = "3";
+            } else {
+                normalFlag = "2";
             }
         }
         bizProcessData.setNormalFlag(normalFlag);
@@ -1494,7 +1521,7 @@ public class BizProcessDataController extends BaseController {
 
 
             table.addCell(PdfUtil.mergeCol("二、", 1,textFont));
-            table.addCell(PdfUtil.mergeColLeft("特殊要求：220系列蝶阀的安装法兰必须选用承插焊法兰", 14,textFont));
+            table.addCell(PdfUtil.mergeColLeft("特殊要求：" + StringUtils.trim(bizProcessData.getString25()), 14,textFont));
 
 
             table.addCell(PdfUtil.mergeCol("三、", 1,textFont));
@@ -1504,13 +1531,31 @@ public class BizProcessDataController extends BaseController {
             table.addCell(PdfUtil.mergeCol("四、", 1,textFont));
             table.addCell(PdfUtil.mergeColLeft("产品验收标准：按国家标准验收。", 14,textFont));
             table.addCell(PdfUtil.mergeCol("", 1,textFont));
-            table.addCell(PdfUtil.mergeColLeft("付款及运输：电汇结算，款到发货；货物采用纸箱包装，采用市内送货运输，运输费用卖方承担", 14,textFont));
+            //电汇结算，款到发货；货物采用纸箱包装，采用市内送货运输，运输费用卖方承担
+
+            String payRemark = "";
+            String string18 = StringUtils.trim(bizProcessData.getString18());
+            String string7 = StringUtils.trim(bizProcessData.getString7());
+
+            String paymentType = dictDataService.selectDictLabel("payment_type",string18);
+            String transportType = dictDataService.selectDictLabel("transport_type",string7);
+
+            if (StringUtils.isNotEmpty(paymentType)) {
+                payRemark += paymentType;
+            }
+
+            if (StringUtils.isNotEmpty(transportType)) {
+                payRemark = payRemark + "," + transportType;
+            }
+
+            table.addCell(PdfUtil.mergeColLeft("付款及运输：" + payRemark, 14,textFont));
             table.addCell(PdfUtil.mergeCol("", 1,textFont));
-            table.addCell(PdfUtil.mergeColLeft("1、交货周期：合同签定后5个工作日发货（若未当日回传，发货期则从收到回传之日延后）", 14,textFont));
+            //合同签定后5个工作日发货（若未当日回传，发货期则从收到回传之日延后）
+            table.addCell(PdfUtil.mergeColLeft("1、交货周期：" + StringUtils.trim(bizProcessData.getString23()), 14,textFont));
             table.addCell(PdfUtil.mergeCol("", 1,textFont));
-            table.addCell(PdfUtil.mergeColLeft("2、收  货  人：" + StringUtils.trim(remark5), 14,textFont));
+            table.addCell(PdfUtil.mergeColLeft("2、收  货  人：" + StringUtils.trim(bizProcessData.getString11()), 14,textFont));
             table.addCell(PdfUtil.mergeCol("", 1,textFont));
-            table.addCell(PdfUtil.mergeColLeft("3、交货地点：北京顺义区赵全营顺华峰商贸公司院内", 14,textFont));
+            table.addCell(PdfUtil.mergeColLeft("3、交货地点：" + StringUtils.trim(bizProcessData.getString9()), 14,textFont));
 
             table.addCell(PdfUtil.mergeCol("五、", 1,textFont));
             table.addCell(PdfUtil.mergeColLeft("质量保证按国家标准执行：质保期12个月（自出厂日算起）；质保期内如因产品本身质量问题，卖方予以免费更换。", 14,textFont));

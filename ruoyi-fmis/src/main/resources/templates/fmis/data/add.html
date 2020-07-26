@@ -143,6 +143,8 @@
         </div>
 
 
+
+
         <div class="form-group">
             <label class="col-sm-1 control-label">代收代付：</label>
             <div class="col-sm-2">
@@ -152,9 +154,6 @@
                     <span class="input-group-addon"><i class="fa fa-search"></i></span>
                 </div>
             </div>
-        </div>
-
-        <div class="form-group">
             <label class="col-sm-1 control-label">产品标识：</label>
             <div class="col-sm-2">
                 <select name="string19" id="string19" class="form-control m-b" th:with="type=${@dict.getType('product_logo')}">
@@ -173,7 +172,24 @@
             <div class="col-sm-2">
                 <input name="string14" id="string14"  onblur="calculateTotalPrice()" onkeyup="AmountKeyUp(this)" class="form-control" type="text">
             </div>
-            <label class="col-sm-1 control-label">总价：</label>
+
+        </div>
+
+
+        <div class="form-group">
+            <label class="col-sm-1 control-label">交货周期：</label>
+            <div class="col-sm-2">
+                <input name="string24" id="string24" class="form-control" type="text" >
+            </div>
+            <label class="col-sm-1 control-label">特殊要求：</label>
+            <div class="col-sm-2">
+                <input name="string25" id="string25" class="form-control" type="text" >
+            </div>
+            <label class="col-sm-1 control-label">合计数量：</label>
+            <div class="col-sm-2">
+                <input name="totalNum" id="totalNum" class="form-control" type="text" readonly>
+            </div>
+            <label class="col-sm-1 control-label">总金额：</label>
             <div class="col-sm-2">
                 <input name="price1" id="price1" class="form-control" type="text" readonly>
             </div>
@@ -489,7 +505,7 @@
                 {field : 'connectionType',title : '连接方式',editable: false},
                 {field : 'productNum',title : '数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
                 {field : 'productPrice',title : '单价',editable: false},
-                {field : 'productCoefficient',title : '系数',editable: false},
+                {field : 'productCoefficient',title : '系数',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
                 {field : 'totalPrice',title : '总价',editable: false},
                 {field : 'string14',title : '优惠',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
 
@@ -754,10 +770,14 @@
         function calculateTotalPrice() {
             var data = $.btTable.bootstrapTable('getData');
             var productTotalPrice = 0;
+            var totalNum = 0;
             for (var i = 0; i < data.length; i++) {
                 var rowData = data[i];
                 var price = calculatePrice(rowData);
                 productTotalPrice = FloatAdd(productTotalPrice, price).toFixed(0);
+                var productNum = rowData["productNum"];
+                productNum = isEmpty(productNum) == true ? 0 : parseFloat(productNum);
+                totalNum += parseFloat(productNum);
             }
             var specialExpenses = $("#string14").val();
             if (isEmpty(specialExpenses)) {
@@ -766,6 +786,8 @@
             $("#productTotalPrice").val(parseFloat(productTotalPrice).toFixed(0));
             var totalPrice = parseFloat(productTotalPrice) + parseFloat(specialExpenses);
             $("#price1").val(parseFloat(totalPrice).toFixed(0));
+
+            $("#totalNum").val(parseFloat(totalNum).toFixed(0));
         }
 
         function calculatePrice(row) {

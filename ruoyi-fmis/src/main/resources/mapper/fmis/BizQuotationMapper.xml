@@ -123,7 +123,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <!-- 销售经理 查看已上报的 -->
             <if test="string2 == 2 ">
                 <if test="string6 == 0 ">
-                    and q.flow_status in ('1','2','-2','3','-3','-4','-5')
+                    and q.flow_status in ('1','2','-2','3','-3','-4','-5','4','5')
                 </if>
                 <if test="string6 == 1 ">
                     and q.flow_status in ('1')
@@ -136,7 +136,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <!-- 区域经理  查看 销售经理同意的  -->
             <if test="string2 == 3 ">
                 <if test="string6 == 0 ">
-                    and q.flow_status in ('2','3','-3','4','-4','-5')
+                    and q.flow_status in ('1','2','3','-3','4','-4','-5','5')
                 </if>
                 <if test="string6 == 1 ">
                     and q.flow_status in ('2')
@@ -149,7 +149,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <!-- 副总  查看 区域经理同意的  -->
             <if test="string2 == 4 ">
                 <if test="string6 == 0 ">
-                    and q.flow_status in ('3','4','-4','-5')
+                    and q.flow_status in ('1','2','-2','3','4','-4','-5','5')
                 </if>
                 <if test="string6 == 1 ">
                     and q.flow_status in ('3')
@@ -163,7 +163,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <!-- 总经理  查看 副总同意的  -->
             <if test="string2 == 5 ">
                 <if test="string6 == 0 ">
-                    and q.flow_status in ('4','5','-5')
+                    and q.flow_status in ('1','2','-2','3','-3','4','5','-5')
                 </if>
                 <if test="string6 == 1 ">
                     and q.flow_status in ('4')

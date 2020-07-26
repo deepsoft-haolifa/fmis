@@ -102,6 +102,17 @@ public class BizCustomerController extends BaseController {
         return getDataTable(list);
     }
 
+    @PostMapping("/listSelf")
+    @ResponseBody
+    public TableDataInfo listSelf(BizCustomer bizCustomer) {
+
+        bizCustomer.setUserId(ShiroUtils.getUserId().toString());
+
+        startPage();
+        List<BizCustomer> list = bizCustomerService.selectBizCustomerSelfList(bizCustomer);
+        return getDataTable(list);
+    }
+
     public String getBh () {
         String areCode = "";
         Long deptId = ShiroUtils.getSysUser().getDeptId();

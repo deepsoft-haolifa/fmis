@@ -22,6 +22,32 @@
                             </li>
 
                             <li>
+                                <p>供应商：</p>
+                                <input type="text" name="string6"  value=""/>
+                            </li>
+                            <li>
+                                <p>合同号：</p>
+                                <input type="text" name="string10"  value=""/>
+                            </li>
+                            <li>
+                                <p>归属单位：</p>
+                                <input type="text" name="string2"  value=""/>
+                            </li>
+
+                            <li>
+                                <p>采购状态：</p>
+                                <select name="string11" class="form-control m-b" >
+                                    <option value="">全部</option>
+                                    <option value="1">未采购</option>
+                                    <option value="2">审批中</option>
+                                    <option value="3">采购中</option>
+                                    <option value="4">已完成</option>
+                                    <option value="5">已回票</option>
+                                    <option value="6">已付款</option>
+                                </select>
+                            </li>
+
+                            <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
                                 <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
                             </li>
@@ -41,9 +67,10 @@
                 <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="fmis:procurement:remove">
                     <i class="fa fa-remove"></i> 删除
                 </a>
+                <!--
                 <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="fmis:procurement:export">
                     <i class="fa fa-download"></i> 导出
-                 </a>
+                 </a> -->
             </div>
             <div class="col-sm-12 select-table table-striped">
                 <table id="bootstrap-table"></table>
@@ -77,6 +104,10 @@
                 {
                     field : 'string1',
                     title : '结算单位'
+                },
+                {
+                    field : 'string10',
+                    title : '合同号'
                 },
                 {
                     field : 'string2',
@@ -130,7 +161,27 @@
                     field : 'remark',
                     title : '备注'
                 },
-
+                    {
+                        field : 'string11',
+                        title : '采购状态',
+                        formatter: function(value, row, index) {
+                            var actions = [];
+                            var remark = "未采购";
+                            if (value == "2") {
+                                remark = "审批中";
+                            } else if (value == "3") {
+                                remark = "采购中";
+                            } else if (value == "4") {
+                                remark = "已完成";
+                            } else if (value == "5") {
+                                remark = "已回票";
+                            } else if (value == "6") {
+                                remark = "已付款";
+                            }
+                            actions.push(remark);
+                            return actions.join('');
+                        }
+                    },
                 {
                     field : 'flowStatusRemark',
                     title : '状态',
@@ -143,6 +194,8 @@
                         var actions = [];
                         var flowStatus = row.flowStatus;
                         var normalFlag = row.normalFlag;
+                        var createBy = row.createBy;
+                        var loginUserId = row.loginUserId;
                         var operationExamineStatus = row.operationExamineStatus;
                         //质检状态
                         var testStatus = row.string10;
@@ -156,10 +209,15 @@
                             }
                         } else if (flowStatus == normalFlag) {
                             //已完成
+                            /**
                             if (testStatus == 1) {
                                 actions.push('<i class="fa fa-save">质检中</i>');
-
                             } else {
+                                if (loginUserId == createBy) {
+                                    actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subTest(\'' + row.dataId + '\')"><i class="fa fa-save"></i> 发起质检</a>');
+                                }
+                            }*/
+                            if (loginUserId == createBy) {
                                 actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subTest(\'' + row.dataId + '\')"><i class="fa fa-save"></i> 发起质检</a>');
                             }
                         } else if (operationExamineStatus == true || operationExamineStatus == "true") {
@@ -232,7 +290,7 @@
             });
         }
 
-        function subTest(dataId) {
+        function subTest1(dataId) {
             $.modal.confirm("确定质检该条信息吗？", function() {
                 console.log(dataId + "--dataId");
                 var url = prefix + "/subTest?dataId=" + dataId;
@@ -241,7 +299,12 @@
                 });
             });
         }
-
+        function subTest(dataId) {
+            var url = prefix + "/startTest?dataId=" + dataId;
+            $.modal.openNoEnter("发起质检", url,$(window).width(),$(window).height(),function(){
+                $.modal.closeAll();
+            });
+        }
         function viewExamineDetail(dataId) {
             var url = prefix + "/viewDetail?dataId=" + dataId;
 

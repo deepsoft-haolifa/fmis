@@ -63,6 +63,10 @@ public class BizCustomerServiceImpl implements IBizCustomerService {
         return bizCustomerMapper.selectBizCustomerList(bizCustomer);
     }
 
+    @Override
+    public List<BizCustomer> selectBizCustomerSelfList(BizCustomer bizCustomer) {
+        return bizCustomerMapper.selectBizCustomerSelfList(bizCustomer);
+    }
     /**
      * 新增客户
      *

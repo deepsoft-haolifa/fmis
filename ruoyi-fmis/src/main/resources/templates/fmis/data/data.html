@@ -43,7 +43,7 @@
                 <a class="btn btn-danger multiple disabled" onclick="remove()" shiro:hasPermission="fmis:data:remove">
                     <i class="fa fa-remove"></i> 删除
                 </a>
-                <a class="btn btn-warning" onclick="exportPdf()" shiro:hasPermission="fmis:quotation:export">
+                <a class="btn btn-warning" onclick="exportPdf()" shiro:hasPermission="fmis:data:export">
                     <i class="fa fa-download"></i> 生成合同
                 </a>
 
@@ -60,6 +60,13 @@
     <script th:inline="javascript">
         var editFlag = [[${@permission.hasPermi('fmis:data:edit')}]];
         var removeFlag = [[${@permission.hasPermi('fmis:data:remove')}]];
+
+        var supplierTypeData = [[${@dict.getType('supplier_type')}]];
+        var paymentTypeData = [[${@dict.getType('payment_type')}]];
+        var transportTypeData = [[${@dict.getType('transport_type')}]];
+
+
+
         var prefix = ctx + "fmis/data";
         var dotoType = [[${todo}]];
         if (dotoType == "1") {
@@ -102,7 +109,10 @@
                 },
                 {
                     field : 'string3',
-                    title : '供方'
+                    title : '供方',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(supplierTypeData, value);
+                    }
                 },
                 {
                     field : 'string4',
@@ -118,11 +128,17 @@
                 },
                 {
                     field : 'string7',
-                    title : '运输方式'
+                    title : '运输方式',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(transportTypeData, value);
+                    }
                 },
                 {
                     field : 'string8',
-                    title : '付款方式'
+                    title : '付款方式',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(paymentTypeData, value);
+                    }
                 },
                 {
                     field : 'string9',
@@ -174,7 +190,9 @@
                                     actions.push('<a class="btn btn-success btn-xs"  href="#" onclick="goPool(' + dataId + ')" ><i class="fa fa-edit"></i>流转</a> ');
                                 }
                             } else {
-                                actions.push('<a class="btn btn-success btn-xs"  href="#" onclick="uploadFile(' + dataId + ')" ><i class="fa fa-edit"></i>上传合同</a> ');
+                                if (loginUserId == createBy) {
+                                    actions.push('<a class="btn btn-success btn-xs"  href="#" onclick="uploadFile(' + dataId + ')" ><i class="fa fa-edit"></i>上传合同</a> ');
+                                }
                             }
                             if (!$.common.isEmpty(string13) && (string13 == "1" || string13 == 1)) {
                                 actions.push('<span class=\'default\'>已流转</span>');

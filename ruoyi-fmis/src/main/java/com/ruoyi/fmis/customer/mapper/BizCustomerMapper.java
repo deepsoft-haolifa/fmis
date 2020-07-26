@@ -26,6 +26,8 @@ public interface BizCustomerMapper {
      */
     public List<BizCustomer> selectBizCustomerList(BizCustomer bizCustomer);
 
+    public List<BizCustomer> selectBizCustomerSelfList(BizCustomer bizCustomer);
+
     /**
      * 新增客户
      *

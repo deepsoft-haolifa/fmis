@@ -31,6 +31,10 @@ public class BizCustomer extends BaseEntity {
 
     @Setter
     @Getter
+    private String userId;
+
+    @Setter
+    @Getter
     private String string2;
 
     @Setter

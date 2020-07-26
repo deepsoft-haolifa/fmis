@@ -124,6 +124,16 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
             }
         }
         bizProcessData.setFlowStatus(flowStatus);
+
+        /**
+         * 采购管理 如果已完成 采购状态修改为 采购中
+         */
+        if (BizConstants.BIZ_procurement.equals(bizProcessData.getBizId())) {
+            if (bizProcessData.getFlowStatus().equals(bizProcessData.getNormalFlag())) {
+                bizProcessData.setString11("3");
+            }
+        }
+
         int updateCount = bizProcessDataMapper.updateBizProcessData(bizProcessData);
         BizFlow bizFlow = new BizFlow();
         bizFlow.setCreateTime(DateUtils.getNowDate());

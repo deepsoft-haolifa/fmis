@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.fmis.steststay.mapper.BizDataSteststayMapper">
+    
+    <resultMap type="BizDataSteststay" id="BizDataSteststayResult">
+        <result property="stayId"    column="stay_id"    />
+        <result property="num"    column="num"    />
+        <result property="statusId"    column="status_id"    />
+        <result property="string1"    column="string1"    />
+        <result property="string2"    column="string2"    />
+        <result property="string3"    column="string3"    />
+        <result property="string4"    column="string4"    />
+        <result property="string5"    column="string5"    />
+        <result property="string6"    column="string6"    />
+        <result property="string7"    column="string7"    />
+        <result property="string8"    column="string8"    />
+        <result property="string9"    column="string9"    />
+        <result property="string10"    column="string10"    />
+        <result property="remark"    column="remark"    />
+        <result property="status"    column="status"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBizDataSteststayVo">
+        select stay_id, num, status_id, string1, string2, string3, string4, string5, string6, string7, string8, string9, string10, remark, status, del_flag, create_by, create_time, update_by, update_time from biz_data_steststay
+    </sql>
+
+    <select id="selectBizDataSteststayList" parameterType="BizDataSteststay" resultMap="BizDataSteststayResult">
+        <include refid="selectBizDataSteststayVo"/>
+        <where>  
+            <if test="num != null "> and num = #{num}</if>
+            <if test="statusId != null "> and status_id = #{statusId}</if>
+            <if test="string1 != null  and string1 != ''"> and string1 = #{string1}</if>
+            <if test="string2 != null  and string2 != ''"> and string2 = #{string2}</if>
+            <if test="string3 != null  and string3 != ''"> and string3 = #{string3}</if>
+            <if test="string4 != null  and string4 != ''"> and string4 = #{string4}</if>
+            <if test="string5 != null  and string5 != ''"> and string5 = #{string5}</if>
+            <if test="string6 != null  and string6 != ''"> and string6 = #{string6}</if>
+            <if test="string7 != null  and string7 != ''"> and string7 = #{string7}</if>
+            <if test="string8 != null  and string8 != ''"> and string8 = #{string8}</if>
+            <if test="string9 != null  and string9 != ''"> and string9 = #{string9}</if>
+            <if test="string10 != null  and string10 != ''"> and string10 = #{string10}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectBizDataSteststayById" parameterType="Long" resultMap="BizDataSteststayResult">
+        <include refid="selectBizDataSteststayVo"/>
+        where stay_id = #{stayId}
+    </select>
+        
+    <insert id="insertBizDataSteststay" parameterType="BizDataSteststay" useGeneratedKeys="true" keyProperty="stayId">
+        insert into biz_data_steststay
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="num != null ">num,</if>
+            <if test="statusId != null ">status_id,</if>
+            <if test="string1 != null  and string1 != ''">string1,</if>
+            <if test="string2 != null  and string2 != ''">string2,</if>
+            <if test="string3 != null  and string3 != ''">string3,</if>
+            <if test="string4 != null  and string4 != ''">string4,</if>
+            <if test="string5 != null  and string5 != ''">string5,</if>
+            <if test="string6 != null  and string6 != ''">string6,</if>
+            <if test="string7 != null  and string7 != ''">string7,</if>
+            <if test="string8 != null  and string8 != ''">string8,</if>
+            <if test="string9 != null  and string9 != ''">string9,</if>
+            <if test="string10 != null  and string10 != ''">string10,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+            <if test="status != null  and status != ''">status,</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="num != null ">#{num},</if>
+            <if test="statusId != null ">#{statusId},</if>
+            <if test="string1 != null  and string1 != ''">#{string1},</if>
+            <if test="string2 != null  and string2 != ''">#{string2},</if>
+            <if test="string3 != null  and string3 != ''">#{string3},</if>
+            <if test="string4 != null  and string4 != ''">#{string4},</if>
+            <if test="string5 != null  and string5 != ''">#{string5},</if>
+            <if test="string6 != null  and string6 != ''">#{string6},</if>
+            <if test="string7 != null  and string7 != ''">#{string7},</if>
+            <if test="string8 != null  and string8 != ''">#{string8},</if>
+            <if test="string9 != null  and string9 != ''">#{string9},</if>
+            <if test="string10 != null  and string10 != ''">#{string10},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBizDataSteststay" parameterType="BizDataSteststay">
+        update biz_data_steststay
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="num != null ">num = #{num},</if>
+            <if test="statusId != null ">status_id = #{statusId},</if>
+            <if test="string1 != null  and string1 != ''">string1 = #{string1},</if>
+            <if test="string2 != null  and string2 != ''">string2 = #{string2},</if>
+            <if test="string3 != null  and string3 != ''">string3 = #{string3},</if>
+            <if test="string4 != null  and string4 != ''">string4 = #{string4},</if>
+            <if test="string5 != null  and string5 != ''">string5 = #{string5},</if>
+            <if test="string6 != null  and string6 != ''">string6 = #{string6},</if>
+            <if test="string7 != null  and string7 != ''">string7 = #{string7},</if>
+            <if test="string8 != null  and string8 != ''">string8 = #{string8},</if>
+            <if test="string9 != null  and string9 != ''">string9 = #{string9},</if>
+            <if test="string10 != null  and string10 != ''">string10 = #{string10},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+            <if test="status != null  and status != ''">status = #{status},</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+        </trim>
+        where stay_id = #{stayId}
+    </update>
+
+    <delete id="deleteBizDataSteststayById" parameterType="Long">
+        delete from biz_data_steststay where stay_id = #{stayId}
+    </delete>
+
+    <delete id="deleteBizDataSteststayByIds" parameterType="String">
+        delete from biz_data_steststay where stay_id in 
+        <foreach item="stayId" collection="array" open="(" separator="," close=")">
+            #{stayId}
+        </foreach>
+    </delete>
+    
+</mapper>

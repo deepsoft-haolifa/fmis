@@ -39,6 +39,8 @@ public interface BizProcessChildMapper {
 
     public List<BizProcessChild> selectBizTestChildList(BizProcessChild bizProcessChild);
 
+    public List<BizProcessChild> selectBizTestStayChildList(BizProcessChild bizProcessChild);
+
 
     public List<BizProcessChild> selectBizChildActuatorList(BizProcessChild bizProcessChild);
 

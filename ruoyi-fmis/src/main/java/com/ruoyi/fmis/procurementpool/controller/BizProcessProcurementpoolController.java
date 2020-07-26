@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.util.StringUtil;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.fmis.child.domain.BizProcessChild;
 import com.ruoyi.fmis.child.service.IBizProcessChildService;
@@ -98,6 +99,11 @@ public class BizProcessProcurementpoolController extends BaseController {
             newBizProcessData.setBizEditFlag(bizProcessData.getBizEditFlag());
             newBizProcessData.setDataId(bizProcessData.getDataId());
         }
+
+        if (StringUtil.isNotEmpty(bizProcessData.getString23())) {
+            newBizProcessData.setString23(bizProcessData.getString23());
+        }
+
         //startPage();
         List<BizProcessData> list = bizProcessDataService.selectBizProcessDataListRef(newBizProcessData);
 

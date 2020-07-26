@@ -2,6 +2,9 @@ var prefixPool = ctx + "fmis/procurementpool";
 
 log.info("loading procurment...")
 
+
+var procurementId = $("#dataId").val();
+
 $(function() {
     var options = {
         url: prefixPool + "/list",
@@ -31,10 +34,26 @@ $(function() {
                 title : 'ID',
                 visible: false
             },
-
             {
                 field : 'string1',
                 title : '合同编号'
+            },
+            {
+                field : 'string23',
+                title : '采购状态',
+                formatter: function(value, row, index) {
+                    var actions = [];
+                    var v = row["string23"];
+                    var showText = "未采购";
+                    if (value == "1") {
+                        showText = "采购中";
+                    } else if (value == "2") {
+                        showText = "采购完成";
+                    }
+                    console.log("value1=" + v);
+                    actions.push($.common.sprintf("<span class='default'>%s</span>", showText));
+                    return actions;
+                }
             },
             {
                 field : 'customerName',
@@ -163,7 +182,7 @@ function expandChildLevelTablePromise(initChildLevelTableId,levelUniqueId) {
 
 function cellStyle (value, row, index) {
     return {
-        width: 300,
+        width: 100,
         css: {
             'background':'red'
         }
@@ -192,7 +211,8 @@ initChildLevelTable = function(index, row, $detail) {
             "dataStatus": $("#dataStatus").val(),
             "dataId": dataId,
             "bizEditFlag":$("#bizEditFlag").val(),
-            "supplierId":$("#string6").val()
+            "supplierId":$("#string6").val(),
+            "procurementId": procurementId
 
         },
         onExpandRow : function(index, row, $detail) {
@@ -334,7 +354,9 @@ initChildProductTable = function(index, row, $detail) {
             "level": row["level"],
             "dataStatus": $("#dataStatus").val(),
             "dataId": row["dataId"],
-            "supplierId":$("#string6").val()
+            "bizEditFlag":$("#bizEditFlag").val(),
+            "supplierId":$("#string6").val(),
+            "procurementId": procurementId
         },
         columns: [{
             checkbox: true,
@@ -360,6 +382,9 @@ initChildProductTable = function(index, row, $detail) {
             {field : 'dataId',title : 'dataId',visible: false},
             {field : 'levelValue',title : 'levelValue',visible: false},
             {field : 'childId',title : 'childId',visible: false},
+
+            {field : 'contractNo',title : 'contractNo',visible: false},
+
             {field : 'procurementId',title : 'childId',visible: false},
             {field : 'productName',title : '产品名称',editable: false,width: 100},
             {field : 'model',title : '型号',editable: false,width: 200},
@@ -478,7 +503,9 @@ initChildActuatorTable = function(index, row, $detail) {
             "level": row["level"],
             "dataStatus": $("#dataStatus").val(),
             "dataId": row["dataId"],
-            "supplierId":$("#string6").val()
+            "supplierId":$("#string6").val(),
+            "bizEditFlag":$("#bizEditFlag").val(),
+            "procurementId": procurementId
         },
         columns: [{
             checkbox: true,
@@ -501,6 +528,7 @@ initChildActuatorTable = function(index, row, $detail) {
             {field : 'actuatorId',title : 'actuatorId',visible: false},
             {field : 'procurementId',title : 'childId',visible: false},
             {field : 'dataId',title : 'dataId',visible: false},
+            {field : 'contractNo',title : 'contractNo',visible: false},
             {field : 'levelValue',title : 'levelValue',visible: false},
             {field : 'childId',title : 'childId',visible: false},
             {field : 'actuatorName',title : '执行器名称',editable: false,width: 150},
@@ -591,7 +619,9 @@ initChildRef1Table = function(index, row, $detail) {
             "level": row["level"],
             "dataStatus": $("#dataStatus").val(),
             "dataId": row["dataId"],
-            "supplierId":$("#string6").val()
+            "supplierId":$("#string6").val(),
+            "bizEditFlag":$("#bizEditFlag").val(),
+            "procurementId": procurementId
         },
         columns: [{
             checkbox: true,
@@ -616,6 +646,7 @@ initChildRef1Table = function(index, row, $detail) {
             {field : 'levelValue',title : 'levelValue',visible: false},
             {field : 'procurementId',title : 'childId',visible: false},
             {field : 'childId',title : 'childId',visible: false},
+            {field : 'contractNo',title : 'contractNo',visible: false},
             {field : 'ref1Name',title : '法兰名称',editable: false,width: 100},
             {field : 'ref1Price',title : '法兰价格',editable: false,width: 100},
             {field : 'ref1String2',title : '采购价',editable: false,width: 100},
@@ -655,7 +686,9 @@ initChildRef2Table = function(index, row, $detail) {
             "level": row["level"],
             "dataStatus": $("#dataStatus").val(),
             "dataId": row["dataId"],
-            "supplierId":$("#string6").val()
+            "supplierId":$("#string6").val(),
+            "bizEditFlag":$("#bizEditFlag").val(),
+            "procurementId": procurementId
         },
         columns: [{
             checkbox: true,
@@ -680,6 +713,7 @@ initChildRef2Table = function(index, row, $detail) {
             {field : 'dataId',title : 'dataId',visible: false},
             {field : 'levelValue',title : 'levelValue',visible: false},
             {field : 'childId',title : 'childId',visible: false},
+            {field : 'contractNo',title : 'contractNo',visible: false},
             {field : 'ref2Name',title : '螺栓名称',editable: {type: 'text',emptytext: '空',disabled: true},width: 100},
             {field : 'ref2Price',title : '螺栓价格',editable: false,width: 100},
             {field : 'ref1String2',title : '采购价',editable: false,width: 100},
@@ -718,7 +752,9 @@ initChildPATable = function(index, row, $detail) {
             "level": row["level"],
             "dataStatus": $("#dataStatus").val(),
             "dataId": row["dataId"],
-            "supplierId":$("#string6").val()
+            "supplierId":$("#string6").val(),
+            "bizEditFlag":$("#bizEditFlag").val(),
+            "procurementId": procurementId
         },
         columns: [{
             checkbox: true,
@@ -743,6 +779,7 @@ initChildPATable = function(index, row, $detail) {
             {field : 'levelValue',title : 'levelValue',visible: false},
             {field : 'procurementId',title : 'childId',visible: false},
             {field : 'childId',title : 'childId',visible: false},
+            {field : 'contractNo',title : 'contractNo',visible: false},
             {field : 'pattachmentPrice',title : '定位器价格',editable: false,width: 100},
             {field : 'procurementPrice',title : '采购价',editable: false,width: 100},
             {field : 'pattachmentCount',title : '定位器数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 100},
@@ -844,7 +881,9 @@ initChildPA1Table = function(index, row, $detail) {
             "level": row["level"],
             "dataStatus": $("#dataStatus").val(),
             "dataId": row["dataId"],
-            "supplierId":$("#string6").val()
+            "supplierId":$("#string6").val(),
+            "bizEditFlag":$("#bizEditFlag").val(),
+            "procurementId": procurementId
         },
         columns: [{
             checkbox: true,
@@ -869,6 +908,7 @@ initChildPA1Table = function(index, row, $detail) {
             {field : 'levelValue',title : 'levelValue',visible: false},
             {field : 'procurementId',title : 'childId',visible: false},
             {field : 'childId',title : 'childId',visible: false},
+            {field : 'contractNo',title : 'contractNo',visible: false},
             {field : 'pattachment1Price',title : '电磁阀价格',editable: false,width: 100},
             {field : 'procurementPrice',title : '采购价',editable: false,width: 100},
             {field : 'pattachment1Count',title : '电磁阀数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 100},
@@ -970,7 +1010,9 @@ initChildPA2Table = function(index, row, $detail) {
             "level": row["level"],
             "dataStatus": $("#dataStatus").val(),
             "dataId": row["dataId"],
-            "supplierId":$("#string6").val()
+            "supplierId":$("#string6").val(),
+            "bizEditFlag":$("#bizEditFlag").val(),
+            "procurementId": procurementId
         },
         columns: [{
             checkbox: true,
@@ -996,6 +1038,7 @@ initChildPA2Table = function(index, row, $detail) {
             {field : 'levelValue',title : 'levelValue',visible: false},
             {field : 'procurementId',title : 'childId',visible: false},
             {field : 'childId',title : 'childId',visible: false},
+            {field : 'contractNo',title : 'contractNo',visible: false},
             {field : 'pattachment2Price',title : '回信器数价格',editable: false,width: 100},
             {field : 'procurementPrice',title : '采购价',editable: false,width: 100},
             {field : 'pattachment2Count',title : '回信器数数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 100},
@@ -1097,7 +1140,9 @@ initChildPA3Table = function(index, row, $detail) {
             "level": row["level"],
             "dataStatus": $("#dataStatus").val(),
             "dataId": row["dataId"],
-            "supplierId":$("#string6").val()
+            "supplierId":$("#string6").val(),
+            "bizEditFlag":$("#bizEditFlag").val(),
+            "procurementId": procurementId
         },
         columns: [{
             checkbox: true,
@@ -1122,6 +1167,7 @@ initChildPA3Table = function(index, row, $detail) {
             {field : 'procurementId',title : 'childId',visible: false},
             {field : 'levelValue',title : 'levelValue',visible: false},
             {field : 'childId',title : 'childId',visible: false},
+            {field : 'contractNo',title : 'contractNo',visible: false},
             {field : 'pattachment3Price',title : '气源三连件价格',editable: false,width: 100},
             {field : 'procurementPrice',title : '采购价',editable: false,width: 100},
             {field : 'pattachment3Count',title : '气源三连件数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 100},
@@ -1224,7 +1270,9 @@ initChildPA4Table = function(index, row, $detail) {
             "level": row["level"],
             "dataStatus": $("#dataStatus").val(),
             "dataId": row["dataId"],
-            "supplierId":$("#string6").val()
+            "supplierId":$("#string6").val(),
+            "bizEditFlag":$("#bizEditFlag").val(),
+            "procurementId": procurementId
         },
         columns: [{
             checkbox: true,
@@ -1249,6 +1297,7 @@ initChildPA4Table = function(index, row, $detail) {
             {field : 'levelValue',title : 'levelValue',visible: false},
             {field : 'procurementId',title : 'childId',visible: false},
             {field : 'childId',title : 'childId',visible: false},
+            {field : 'contractNo',title : 'contractNo',visible: false},
             {field : 'pattachment4Price',title : '可离合减速器价格',editable: false,width: 100},
             {field : 'procurementPrice',title : '采购价',editable: false,width: 100},
             {field : 'pattachment4Count',title : '可离合减速器数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 100},

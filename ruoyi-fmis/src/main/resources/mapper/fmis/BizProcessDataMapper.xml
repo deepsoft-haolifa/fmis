@@ -216,6 +216,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="datetime5 != null "> and datetime5 = #{datetime5}</if>
             <if test="status != null  and status != ''"> and status = #{status}</if>
 
+            <if test="string23 == 0 ">
+                and (q.string23 = '' or q.string23 is null)
+            </if>
+            <if test="string23 == 1 ">
+                and q.string23 = '1'
+            </if>
+            <if test="string23 == 2 ">
+                and q.string23 = '2'
+            </if>
+
 
             <!-- string2作为角色参数 1=销售 2=销售经理 3=区域经理 4=副总 5=老总-->
             <!--flow_status 0=待上报 1=已上报 2=销售经理同意 -2=不同意 3=区域经理同意 -3=不同意 4=副总同意 -4=不同意 5=老总同意 -5=不同意 -->
@@ -231,7 +241,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <!-- 销售经理 查看已上报的 -->
             <if test="roleType == 2 ">
                 <if test="queryStatus == 0 ">
-                    and q.flow_status in ('1','2','-2','3','-3','-4','-5')
+                    and q.flow_status in ('1','2','-2','3','-3','-4','-5','4','5')
                 </if>
                 <if test="queryStatus == 1 ">
                     and q.flow_status in ('1')
@@ -244,7 +254,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <!-- 区域经理  查看 销售经理同意的  -->
             <if test="roleType == 3 ">
                 <if test="queryStatus == 0 ">
-                    and q.flow_status in ('2','3','-3','4','-4','-5')
+                    and q.flow_status in ('1','2','-2','3','-3','4','-4','-5','5')
                 </if>
                 <if test="queryStatus == 1 ">
                     and q.flow_status in ('2')
@@ -258,7 +268,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <!-- 副总  查看 区域经理同意的  -->
             <if test="roleType == 4 ">
                 <if test="queryStatus == 0 ">
-                    and q.flow_status in ('3','4','-4','-5')
+                    and q.flow_status in ('1','2','-2','3','-3','4','-4','-5','5')
                 </if>
                 <if test="queryStatus == 1 ">
                     and q.flow_status in ('3')
@@ -272,7 +282,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <!-- 总经理  查看 副总同意的  -->
             <if test="roleType == 5 ">
                 <if test="queryStatus == 0 ">
-                    and q.flow_status in ('4','5','-5')
+                    and q.flow_status in ('1','2','-2','3','-3','4','-4','5','-5')
                 </if>
                 <if test="queryStatus == 1 ">
                     and q.flow_status in ('4')
@@ -288,6 +298,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 and q.flow_status=q.normal_flag
             </if>
         </where>
+
+        order by q.create_time desc
+
     </select>
 
 
@@ -423,15 +436,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="price9 != null "> and price9 = #{price9}</if>
             <if test="price10 != null "> and price10 = #{price10}</if>
             <if test="string1 != null  and string1 != ''"> and string1 = #{string1}</if>
-            <if test="string2 != null  and string2 != ''"> and string2 = #{string2}</if>
+            <if test="string2 != null  and string2 != ''"> and string2 like concat('%', #{string2}, '%')</if>
             <if test="string3 != null  and string3 != ''"> and string3 = #{string3}</if>
             <if test="string4 != null  and string4 != ''"> and string4 = #{string4}</if>
             <if test="string5 != null  and string5 != ''"> and string5 = #{string5}</if>
-            <if test="string6 != null  and string6 != ''"> and string6 = #{string6}</if>
+            <if test="string6 != null  and string6 != ''"> and string6 like concat('%', #{string6}, '%')</if>
             <if test="string7 != null  and string7 != ''"> and string7 = #{string7}</if>
             <if test="string8 != null  and string8 != ''"> and string8 = #{string8}</if>
             <if test="string9 != null  and string9 != ''"> and string9 = #{string9}</if>
-            <if test="string10 != null  and string10 != ''"> and string10 = #{string10}</if>
+            <if test="string10 != null  and string10 != ''"> and string10  like concat('%', #{string10}, '%')</if>
             <if test="string11 != null  and string11 != ''"> and string11 = #{string11}</if>
             <if test="string12 != null  and string12 != ''"> and string12 = #{string12}</if>
             <if test="string13 != null  and string13 != ''"> and string13 = #{string13}</if>

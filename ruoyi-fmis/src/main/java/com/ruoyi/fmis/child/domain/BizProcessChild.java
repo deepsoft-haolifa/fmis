@@ -21,7 +21,13 @@ import java.util.Date;
  */
 public class BizProcessChild extends BaseEntity {
     private static final long serialVersionUID = 1L;
+    @Getter
+    @Setter
+    private String procurementId;
 
+    @Getter
+    @Setter
+    private String contractNo;
 
     @Getter
     @Setter
@@ -32,6 +38,15 @@ public class BizProcessChild extends BaseEntity {
     @Getter
     @Setter
     private String createByName;
+
+
+    @Getter
+    @Setter
+    private String stayId;
+
+    @Getter
+    @Setter
+    private Double stayNum;
 
     @Getter
     @Setter
@@ -51,9 +66,7 @@ public class BizProcessChild extends BaseEntity {
     @Setter
     private String levelValue;
 
-    @Getter
-    @Setter
-    private String procurementId;
+
 
     @Getter
     @Setter

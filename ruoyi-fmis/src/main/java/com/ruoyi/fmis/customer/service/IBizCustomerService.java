@@ -28,6 +28,8 @@ public interface IBizCustomerService {
 
 
     public List<BizCustomer> selectBizCustomerListNoAuth(BizCustomer bizCustomer);
+
+    public List<BizCustomer> selectBizCustomerSelfList(BizCustomer bizCustomer);
     /**
      * 新增客户
      *
