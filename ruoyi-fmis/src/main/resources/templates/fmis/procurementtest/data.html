@@ -26,7 +26,6 @@
                         </ul>
                     </div>
                     <input type="hidden" name="bizId" id="bizId" value="procurement"/>
-                    <input type="hidden" name="string10" id="string10" value="1"/>
                 </form>
             </div>
 
@@ -116,6 +115,11 @@
                     title : '合计'
                 },
                 {
+                    field : 'stayNum',
+                    title : '待质检',
+                    cellStyle: cellStyle
+                },
+                {
                     field : 'remark',
                     title : '备注'
                 },
@@ -132,6 +136,7 @@
                         var actions = [];
                         var flowStatus = row.flowStatus;
                         var normalFlag = row.normalFlag;
+                        var stayNum = row.stayNum;
                         var operationExamineStatus = row.operationExamineStatus;
                         //质检状态
                         var testStatus = row.string10;
@@ -141,9 +146,8 @@
                             } else {
                             }
                         } else if (flowStatus == normalFlag) {
-                            if (testStatus == 1) {
+                            if ($.common.isNotEmpty(stayNum) && stayNum > 0) {
                                 actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="edit(\'' + row.dataId + '\')"><i class="fa fa-save"></i> 开始质检</a>');
-
                             }
                         }
                         return actions.join('');
@@ -159,7 +163,14 @@
                 $.modal.closeAll();
             });
         }
-
+        function cellStyle (value, row, index) {
+            return {
+                width: 100,
+                css: {
+                    'background':'yellow'
+                }
+            }
+        }
     </script>
 </body>
 </html>

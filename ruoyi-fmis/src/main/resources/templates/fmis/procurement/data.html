@@ -71,6 +71,13 @@
                 <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="fmis:procurement:export">
                     <i class="fa fa-download"></i> 导出
                  </a> -->
+                <a class="btn btn-warning" onclick="exportPdf()" >
+                    <i class="fa fa-download"></i> 生成合同
+                </a>
+
+                <a class="btn btn-success" onclick="viewPdf()">
+                    <i class="fa fa-street-view"></i> 预览合同
+                </a>
             </div>
             <div class="col-sm-12 select-table table-striped">
                 <table id="bootstrap-table"></table>
@@ -82,6 +89,7 @@
         var editFlag = [[${@permission.hasPermi('fmis:procurement:edit')}]];
         var removeFlag = [[${@permission.hasPermi('fmis:procurement:remove')}]];
         var prefix = ctx + "fmis/procurement";
+        var supplierTypeData = [[${@dict.getType('supplier_type')}]];
 
         $(function() {
             var options = {
@@ -105,9 +113,13 @@
                     field : 'string1',
                     title : '结算单位'
                 },
+                    {
+                        field : 'string12',
+                        title : '采购合同号'
+                    },
                 {
                     field : 'string10',
-                    title : '合同号'
+                    title : '销售合同号'
                 },
                 {
                     field : 'string2',
@@ -121,16 +133,13 @@
                     field : 'string3',
                     title : '生产单号'
                 },
-                {
-                    field : 'customerName',
-                    title : '客户'
-                },
+
                 {
                     field : 'string5',
                     title : '类别'
                 },
                 {
-                    field : 'string6',
+                    field : 'supplierName',
                     title : '供应商'
                 },
                 {
@@ -310,6 +319,64 @@
 
             $.modal.openNoEnter("详情", url,$(window).width(),$(window).height(),function(){
                 $.modal.closeAll();
+            });
+        }
+
+        /**
+         * 预览报价单
+         * @param formId
+         */
+        function viewPdf(formId) {
+
+            var row = $('#bootstrap-table').bootstrapTable('getSelections')[0];
+            var rows = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
+            if ($.common.isEmpty(row) || rows.length != 1) {
+                $.modal.alertWarning("请选择一条记录");
+                return;
+            }
+
+            var currentId = $.common.isEmpty(formId) ? $('form').attr('id') : formId;
+            console.log("currentId=" + currentId);
+            $.modal.loading("正在导出数据，请稍后...");
+            var paramsJson = $("#" + currentId).serializeArray();
+            paramsJson.push({"name": "dataId", "value": row.dataId});
+            paramsJson.push({"name": "status", "value": "1"});
+            var viewUrl = prefix + "/viewPdf";
+            console.log(row.dataId + "--row.dataId");
+            window.open("../pdfjs/web/viewer.html?file="+ viewUrl + "?id%3D" + row.dataId);
+            $.modal.closeLoading();
+        }
+
+        function exportPdf(formId) {
+
+            var row = $('#bootstrap-table').bootstrapTable('getSelections')[0];
+            var rows = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
+            if ($.common.isEmpty(row) || rows.length != 1) {
+                $.modal.alertWarning("请选择一条记录");
+                return;
+            }
+            var flowStatus = row.flowStatus;
+            var normalFlag = row.normalFlag;
+            /*if (flowStatus == "0" || flowStatus != normalFlag) {
+                $.modal.alertWarning("请等待审批结束后生成！");
+                return;
+            }*/
+            $.modal.confirm("确定生成合同吗？", function() {
+                var currentId = $.common.isEmpty(formId) ? $('form').attr('id') : formId;
+                console.log("currentId=" + currentId);
+                $.modal.loading("正在导出数据，请稍后...");
+                var paramsJson = $("#" + currentId).serializeArray();
+                paramsJson.push({"name": "dataId", "value": row.dataId});
+                $.post($.table._option.exportUrl, paramsJson, function(result) {
+                    if (result.code == web_status.SUCCESS) {
+                        window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;
+                    } else if (result.code == web_status.WARNING) {
+                        $.modal.alertWarning(result.msg)
+                    } else {
+                        $.modal.alertError(result.msg);
+                    }
+                    $.modal.closeLoading();
+                });
             });
         }
     </script>

@@ -245,4 +245,9 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
         bizFlow.setFlowStatus(BizConstants.FLOW_STATUS_0);
         bizFlowMapper.insertBizFlow(bizFlow);
     }
+
+    @Override
+    public Long selectProcurementMaxNo () {
+        return bizProcessDataMapper.selectProcurementMaxNo();
+    }
 }

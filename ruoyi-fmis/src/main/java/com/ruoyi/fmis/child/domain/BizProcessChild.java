@@ -1,5 +1,6 @@
 package com.ruoyi.fmis.child.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ruoyi.fmis.actuator.domain.BizActuator;
 import com.ruoyi.fmis.data.domain.BizProcessData;
 import com.ruoyi.fmis.product.domain.BizProduct;
@@ -27,7 +28,16 @@ public class BizProcessChild extends BaseEntity {
 
     @Getter
     @Setter
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date stayCreateTime;
+
+    @Getter
+    @Setter
     private String contractNo;
+
+    @Getter
+    @Setter
+    private String procurementNo;
 
     @Getter
     @Setter
@@ -39,7 +49,9 @@ public class BizProcessChild extends BaseEntity {
     @Setter
     private String createByName;
 
-
+    @Setter
+    @Getter
+    private String orderNo;
     @Getter
     @Setter
     private String stayId;
@@ -82,6 +94,11 @@ public class BizProcessChild extends BaseEntity {
     @Getter
     @Setter
     private String productStatus;
+
+    @Getter
+    @Setter
+    private String queryStatus;
+
     @Getter
     @Setter
     private String dataStatus;

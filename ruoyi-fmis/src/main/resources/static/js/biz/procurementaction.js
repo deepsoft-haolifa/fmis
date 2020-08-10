@@ -32,7 +32,7 @@ $(function() {
                     return actions.join('');
                 }},
             {field : 'productNum',title : '数量',editable: false,width: 100},
-            {field : 'stayNum',title : '已发起数量',editable: false,width: 100},
+
             {field : 'yesNum',title : '合格数量',editable: false,width: 100},
             {field : 'noNum',title : '不合格数量',editable: false,width: 100},
             {field : 'productId',title : '产品ID',visible: false},
@@ -103,19 +103,23 @@ initChildTestTable = function(index, rows, $detail) {
 
     var dataId = rows["dataId"];
     var paramterId = rows["productId"];
-
+    var totalNum = rows["productNum"];
 
     if ($.common.isEmpty(paramterId)) {
         paramterId = rows["actuatorId"];
+        totalNum = rows["actuatorNum"];
     }
     if ($.common.isEmpty(paramterId)) {
         paramterId = rows["productRef1Id"];
+        totalNum = rows["productRef1Num"];
     }
     if ($.common.isEmpty(paramterId)) {
         paramterId = rows["productRef2Id"];
+        totalNum = rows["productRef2Num"];
     }
     if ($.common.isEmpty(paramterId)) {
         paramterId = rows["pattachmentId"];
+        totalNum = rows["pattachmentCount"];
     }
     console.log("paramterId=" + paramterId);
     var childId = rows["childId"];
@@ -148,27 +152,50 @@ initChildTestTable = function(index, rows, $detail) {
             {field : 'stayNum',title : '数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 150},
             {field : 'saveTest',title : '操作',width: 200,visible: true,formatter: function(value, row, index) {
                     var actions = [];
-                    actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="saveTest(' + row.rowId + "," + childId + "," + paramterId + "," + dataId + "," + statusId + ')"><i class="fa fa-save"></i> 保存</a>');
+                    actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="saveTest(' + row.rowId + "," + childId + "," + paramterId + "," + dataId + "," + statusId + "," + totalNum + ')"><i class="fa fa-save"></i> 保存</a>');
                     //actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="removeTest(' + row.rowId + "," + childId + "," + paramterId + "," + dataId + ')"><i class="fa fa-remove"></i> 删除</a>');
                     return actions.join('');
                 }},
-            {field : 'remark',title : '原因',editable: true,width: 300},
+            {field : 'orderNo',title : '报检单号',editable: false,width: 200},
+            {field : 'remark',title : '备注',editable: true,width: 300},
             {field : 'createTime',title : '创建时间',width: 200},
             {field : 'createByName',title : '创建人',width: 200}
         ]
     });
 };
 
-function saveTest (rowId,childId,paramterId,dataId,statusId) {
+function saveTest (rowId,childId,paramterId,dataId,statusId,parentTotalNum) {
     //dataId,paramterId,childId,remark,testId,yesNum,noNum
 
     var rows = $("#initChildTestTableId_" + childId).bootstrapTable('getData');
+
+    //var parentTable = $("#initChildTestTableId_" + childId).bootstrapTable("getParent");
+
     var row;
     for (var i = 0; i < rows.length; i++) {
         var r = rows[i];
         if (r.rowId == rowId) {
             row = r;
             break;
+        }
+    }
+    var totalNum = 0;
+    for (var i = 0; i < rows.length; i++) {
+        var r = rows[i];
+        var rStayNum = r.stayNum;
+        if ($.common.isEmpty(rStayNum)) {
+            rStayNum = 0;
+        }
+        totalNum = parseFloat(FloatAdd(totalNum,rStayNum)).toFixed(0);
+    }
+
+    console.log("parentTotalNum=" + parentTotalNum + " totalNum=" + totalNum);
+    if ($.common.isNotEmpty(parentTotalNum)) {
+        var parentTotalNumF = parseFloat(parentTotalNum).toFixed(0);
+
+        if (parseInt(totalNum) > parseInt(parentTotalNumF)) {
+            $.modal.alertWarning("数量填写错误");
+            return;
         }
     }
 
@@ -183,6 +210,15 @@ function saveTest (rowId,childId,paramterId,dataId,statusId) {
         $("#initChildTestTableId_" + childId).bootstrapTable('refresh');
     });
 }
+
+function FloatAdd(arg1,arg2){
+    var r1,r2,m;
+    try{r1=arg1.toString().split(".")[1].length}catch(e){r1=0}
+    try{r2=arg2.toString().split(".")[1].length}catch(e){r2=0}
+    m=Math.pow(10,Math.max(r1,r2));
+    return (arg1*m+arg2*m)/m;
+}
+
 function removeTest (rowId,childId,paramterId,dataId) {
     //dataId,paramterId,childId,remark,testId,yesNum,noNum
     var rows = $("#initChildTestTableId_" + childId).bootstrapTable('getData');
@@ -236,7 +272,7 @@ $(function() {
             {field : 'rowId',title : '序号',width: 50,visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
             {field : 'addTest',title : '操作',visible: true,formatter: function(value, row, index) {
                     var actions = [];
-                    actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="addTest(' + row.dataId + "," + row.actuatorId +  "," + row.childId + ",'bootstrap-table-actuator'" + ')"><i class="fa fa-add"></i> 添加</a>');
+                    actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="addTest(' + row.dataId + "," + row.actuatorId +  "," + row.childId + ",'bootstrap-table-actuator'" + ')"><i class="fa fa-add"></i> 发起质检</a>');
                     return actions.join('');
                 }},
             {field : 'actuatorNum',title : '执行器数量',editable: false,width: 100},
@@ -345,7 +381,7 @@ $(function() {
             {field : 'rowId',title : '序号',width: 50,visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
             {field : 'addTest',title : '操作',visible: true,formatter: function(value, row, index) {
                     var actions = [];
-                    actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="addTest(' + row.dataId + "," + row.productRef1Id +  "," + row.childId  + ",'bootstrap-table-ref1'" + ')"><i class="fa fa-add"></i> 添加</a>');
+                    actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="addTest(' + row.dataId + "," + row.productRef1Id +  "," + row.childId  + ",'bootstrap-table-ref1'" + ')"><i class="fa fa-add"></i> 发起质检</a>');
                     return actions.join('');
                 }},
             {field : 'productRef1Num',title : '法兰数量',editable: false,width: 100},
@@ -404,7 +440,7 @@ $(function() {
             {field : 'rowId',title : '序号',width: 50,visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
             {field : 'addTest',title : '操作',visible: true,formatter: function(value, row, index) {
                     var actions = [];
-                    actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="addTest(' + row.dataId + "," + row.productRef2Id +  "," + row.childId + ",'bootstrap-table-ref2'" + ')"><i class="fa fa-add"></i> 添加</a>');
+                    actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="addTest(' + row.dataId + "," + row.productRef2Id +  "," + row.childId + ",'bootstrap-table-ref2'" + ')"><i class="fa fa-add"></i> 发起质检</a>');
                     return actions.join('');
                 }},
             {field : 'productRef2Num',title : '螺栓数量',editable: false,width: 100},
@@ -477,7 +513,7 @@ $(function() {
                 }},
             {field : 'addTest',title : '操作',visible: true,formatter: function(value, row, index) {
                     var actions = [];
-                    actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="addTest(' + row.dataId + "," + row.pattachmentId +  "," + row.childId + ",'bootstrap-table-pa'" + ')"><i class="fa fa-add"></i> 添加</a>');
+                    actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="addTest(' + row.dataId + "," + row.pattachmentId +  "," + row.childId + ",'bootstrap-table-pa'" + ')"><i class="fa fa-add"></i> 发起质检</a>');
                     return actions.join('');
                 }},
             {field : 'pattachmentCount',title : '数量',editable: false,width: 100},

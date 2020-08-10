@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('合同智能添加')" />
+    <th:block th:include="include :: bootstrap-fileinput-css" />
+</head>
+<body class="gray-bg">
+<div class="modal fade" id="loadingModal">
+    <div style="width: 200px;height:20px; z-index: 20000; position: absolute; text-align: center; left: 50%; top: 50%;margin-left:-100px;margin-top:-10px">
+        <div class="progress progress-striped active" style="margin-bottom: 0;">
+            <div class="progress-bar" style="width: 100%;"></div>
+        </div>
+        <h5 id="processBarDiv">正在导入...</h5>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <ul  id="errorMsgDiv" class="text-danger">
+                    </ul>
+                </div>
+                <div class="ibox-content">
+                    <div class="form-group">
+                        <label class="font-noraml">合同产品上传</label>
+                        <input id="file_paths_" type="file" name="file" multiple data-min-file-count="1" data-theme="fas" class="imgFile form-control">
+                        <input id="filePaths" name="filePaths" type="hidden">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: bootstrap-fileinput-js" />
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("#file_paths_").fileinput({
+            'theme': 'explorer-fas',
+            'uploadUrl': ctx + 'fmis/file/upload',
+            dropZoneTitle: "请通过拖拽产品文件放到这里",
+            allowedFileExtensions: ['xlsx','xls'],
+            msgFilesTooMany: "选择上传的文件数量({n}) 超过允许的最大数值{m}！",
+            maxFileCount:1,
+            showUpload: false,
+            overwriteInitial: false,
+            initialPreviewAsData: true
+        }).on("filebatchselected", function(event, files) {
+            $(this).fileinput("upload");
+        }).on("fileuploaded", function(event, data) {
+            $("#loadingModal").modal('show');
+            console.log("data.data=" + data.response.data);
+            $("#filePaths").val(data.response.data);
+            $.ajax({
+                url: ctx + "fmis/data/excelData", //请求的url地址
+                dataType:"json", //返回格式为json
+                async:true,//请求是否异步，默认为异步，这也是ajax重要特性
+                data:{"url": data.response.data}, //参数值
+                type:"POST", //请求方式
+                success:function(retData){
+                    //请求成功时处理
+                    $("#errorMsgDiv").html("");
+                    var retSuccessData = retData.data;
+                    var retError = retData.error;
+                    if (retError != null && retError.length > 0) {
+                        //存在错误数据
+                        var errorMsgDiv = "";
+                        for (var i = 0; i < retError.length; i++) {
+                            var errorJson = retError[i];
+                            var msg = errorJson["msg"];
+                            errorMsgDiv += "<li>" + msg + "</li>";
+                        }
+                        $("#errorMsgDiv").html(errorMsgDiv);
+                    } else {
+                        parent.$('#form-data-add input[id=productsJsonParamter]').val(JSON.stringify(retSuccessData));
+                        parent.$('#form-data-edit input[id=productsJsonParamter]').val(JSON.stringify(retSuccessData));
+                    }
+                    $("#loadingModal").modal('hide');
+                }
+            });
+        });
+    });
+    function submitHandler() {
+        $.modal.close();
+    }
+</script>
+</body>
+</html>

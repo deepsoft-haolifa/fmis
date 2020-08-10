@@ -1,8 +1,10 @@
 package com.ruoyi.fmis.steststay.controller;
 
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.List;
 
+import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.fmis.child.domain.BizProcessChild;
 import com.ruoyi.fmis.child.service.IBizProcessChildService;
@@ -97,6 +99,7 @@ public class BizDataSteststayController extends BaseController {
     @PostMapping("/add")
     @ResponseBody
     public AjaxResult addSave(BizDataSteststay bizDataSteststay) {
+
         return toAjax(bizDataSteststayService.insertBizDataSteststay(bizDataSteststay));
     }
 
@@ -165,8 +168,19 @@ public class BizDataSteststayController extends BaseController {
         bizDataStestn.setString3(paramterId);
         bizDataStestn.setString4(dataId);
         bizDataStestn.setString5(childId);
+        bizDataStestn.setString1("0");
         bizDataStestn.setRemark(remark);
         if ("0".equals(stayId) || StringUtils.isEmpty(stayId)) {
+            //string6 报检单号
+            String noStart = "BJ";
+            noStart += DateUtils.dateTime();
+            Long no = bizDataSteststayService.selectMaxNo();
+            if (no == null) {
+                no = 1L;
+            }
+            String orderNo = noStart + new DecimalFormat("000").format(no);
+            bizDataStestn.setString6(orderNo);
+
             bizDataStestn.setCreateTime(new Date());
             bizDataStestn.setCreateBy(ShiroUtils.getUserId().toString());
             bizDataSteststayService.insertBizDataSteststay(bizDataStestn);

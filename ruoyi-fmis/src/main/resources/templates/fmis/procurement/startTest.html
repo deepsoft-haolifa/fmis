@@ -4,7 +4,7 @@
     <th:block th:include="include :: header('修改采购管理')" />
     <th:block th:include="include :: datetimepicker-css" />
 </head>
-<body class="white-bg" onload="initExpandRow()">
+<body class="white-bg" >
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
     <form class="form-horizontal m" id="form-data-edit" th:object="${bizProcessData}">
         <input name="dataId" id="dataId" th:field="*{dataId}" type="hidden">
@@ -90,6 +90,24 @@
     <div class="col-sm-12 select-table table-striped">
         <table id="bootstrap-table"  class="text-nowrap"></table>
     </div>
+
+
+    <div class="col-sm-12 select-table table-striped">
+        <table id="bootstrap-table-actuator"  class="text-nowrap"></table>
+    </div>
+
+    <div class="col-sm-12 select-table table-striped">
+        <table id="bootstrap-table-ref1"  class="text-nowrap"></table>
+    </div>
+
+    <div class="col-sm-12 select-table table-striped">
+        <table id="bootstrap-table-ref2"  class="text-nowrap"></table>
+    </div>
+
+    <div class="col-sm-12 select-table table-striped">
+        <table id="bootstrap-table-pa"  class="text-nowrap"></table>
+    </div>
+
 </div>
 <th:block th:include="include :: footer" />
 <th:block th:include="include :: datetimepicker-js" />

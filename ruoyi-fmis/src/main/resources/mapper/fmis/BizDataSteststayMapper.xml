@@ -54,7 +54,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectBizDataSteststayVo"/>
         where stay_id = #{stayId}
     </select>
-        
+
+
+    <select id="selectMaxNo" parameterType="String" resultType="Long">
+        SELECT (max(CONVERT(right(string6,3),UNSIGNED INTEGER)) + 1) as fileNumber FROM biz_data_steststay
+        where string6 like concat('BJ',date_format(now(), '%Y%m%d'), '%')
+    </select>
+
     <insert id="insertBizDataSteststay" parameterType="BizDataSteststay" useGeneratedKeys="true" keyProperty="stayId">
         insert into biz_data_steststay
         <trim prefix="(" suffix=")" suffixOverrides=",">

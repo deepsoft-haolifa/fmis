@@ -33,7 +33,14 @@
 				},
 				{
 					field : 'userCode', 
-					title : '用户编号'
+					title : '用户编号',
+                    footerFormatter:function (value) {
+                        var sumBalance = 0;
+                        for (var i in value) {
+                            sumBalance += parseFloat(value[i].userBalance);
+                        }
+                        return "总金额：" + sumBalance;
+                    }
 				},
 				{
 					field : 'userName', 
@@ -47,17 +54,7 @@
 					field : 'userEmail', 
 					title : '用户邮箱'
 				},
-				{
-				    field : 'userBalance',
-				    title : '用户余额',
-				    footerFormatter:function (value) {
-				    	var sumBalance = 0;
-				        for (var i in value) {
-				        	sumBalance += parseFloat(value[i].userBalance);
-				        }
-				        return "总金额：" + sumBalance;
-				    }
-				},
+
 				{
                     field: 'status',
                     title: '用户状态',

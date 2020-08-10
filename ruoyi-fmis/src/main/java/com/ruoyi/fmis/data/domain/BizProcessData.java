@@ -24,7 +24,17 @@ public class BizProcessData extends BaseEntity {
 
     @Getter
     @Setter
+    private String contractNo;
+    @Getter
+    @Setter
     private String procurementId;
+    @Getter
+    @Setter
+    private String supplierName;
+
+    @Getter
+    @Setter
+    private Double stayNum;
 
     @Getter
     @Setter
@@ -167,7 +177,12 @@ public class BizProcessData extends BaseEntity {
     @Setter
     @Getter
     private String examineRemark;
-
+    @Setter
+    @Getter
+    private String orderNo;
+    @Getter
+    @Setter
+    private String procurementNo;
     /**
      * 是否可以审批
      */

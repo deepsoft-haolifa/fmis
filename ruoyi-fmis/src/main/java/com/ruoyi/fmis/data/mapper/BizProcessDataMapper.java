@@ -80,4 +80,6 @@ public interface BizProcessDataMapper {
      * @return 结果
      */
     public int deleteBizProcessDataByIds(String[] dataIds);
+
+    public Long selectProcurementMaxNo();
 }

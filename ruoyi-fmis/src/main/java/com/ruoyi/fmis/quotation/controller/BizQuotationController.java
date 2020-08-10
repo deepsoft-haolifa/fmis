@@ -171,7 +171,7 @@ public class BizQuotationController extends BaseController {
     /**
      * 查询报价单列表
      */
-    @RequiresPermissions("fmis:quotation:list")
+    //@RequiresPermissions("fmis:quotation:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(BizQuotation bizQuotation) {

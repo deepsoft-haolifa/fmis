@@ -203,6 +203,7 @@ public class BizProcessProcurementtestController extends BaseController {
         queryBizProcessChild.setDataId(bizProcessData.getDataId());
         queryBizProcessChild.setParamterId(bizProcessData.getParamterId());
         queryBizProcessChild.setChildId(bizProcessData.getChildId());
+        queryBizProcessChild.setStayId(bizProcessData.getStayId());
         List<BizProcessChild> bizProcessChildList = bizProcessChildService.selectBizTestChildList(queryBizProcessChild);
         return getDataTable(bizProcessChildList);
     }
@@ -211,6 +212,7 @@ public class BizProcessProcurementtestController extends BaseController {
     @ResponseBody
     public AjaxResult saveTest() {
         String testId = getRequest().getParameter("testId");
+        String stayId = getRequest().getParameter("stayId");
         String dataId = getRequest().getParameter("dataId");//合同id
         String paramterId = getRequest().getParameter("paramterId");//业务数据id
         String childId = getRequest().getParameter("childId");//关联字表id
@@ -230,6 +232,7 @@ public class BizProcessProcurementtestController extends BaseController {
         bizDataStestn.setString3(paramterId);
         bizDataStestn.setString4(dataId);
         bizDataStestn.setString5(childId);
+        bizDataStestn.setString6(stayId);
         bizDataStestn.setRemark(remark);
         if ("0".equals(testId) || StringUtils.isEmpty(testId)) {
             bizDataStestn.setCreateTime(new Date());

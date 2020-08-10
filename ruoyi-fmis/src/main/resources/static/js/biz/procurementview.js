@@ -4,7 +4,7 @@ $(function() {
     var options = {
         url: prefixPool + "/selectBizTestProductList",
         modalName: "采购产品",
-        uniqueId: "productId",
+        uniqueId: "stayId",
         detailView: true,
         cache: true,
         async: false,
@@ -28,18 +28,27 @@ $(function() {
             {field : 'rowId',title : '序号',width: 50,visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
             {field : 'addTest',title : '操作',visible: true,formatter: function(value, row, index) {
                     var actions = [];
-                    actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="addTest(' + row.dataId + "," + row.productId +  "," + row.childId + ",'bootstrap-table'" + ')"><i class="fa fa-add"></i> 添加</a>');
+                    actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="addTest(' + row.dataId + "," + row.productId +  "," + row.childId +  "," + row.stayId + ",'bootstrap-table'" + ')"><i class="fa fa-add"></i> 添加</a>');
                     return actions.join('');
                 }},
+            {field : 'stayId',title : 'stayId',visible: false},
             {field : 'productNum',title : '数量',editable: false,width: 100},
-            {field : 'yesNum',title : '合格数量',editable: false,width: 100},
-            {field : 'noNum',title : '不合格数量',editable: false,width: 100},
+            {field : 'stayNum',title : '待检测数量',editable: false,width: 100},
+            {field : 'yesNum',title : '已检测合格数量',editable: false,width: 100},
+            {field : 'noNum',title : '已检测未合格数量',editable: false,width: 100},
+
             {field : 'productId',title : '产品ID',visible: false},
             {field : 'dataId',title : 'dataId',visible: false},
             {field : 'levelValue',title : 'levelValue',visible: false},
             {field : 'childId',title : 'childId',visible: false,width:100},
             {field : 'statusId',title : 'statusId',visible: false,width:100},
             {field : 'procurementId',title : 'childId',visible: false},
+
+            {field : 'stayCreateTime',title : '发起时间',editable: false,width: 100},
+            {field : 'contractNo',title : '销售合同号',editable: false,width: 100},
+            {field : 'procurementNo',title : '采购合同号',editable: false,width: 100},
+            {field : 'orderNo',title : '报检单号',editable: false,width: 100},
+
             {field : 'productName',title : '产品名称',editable: false,width: 100},
             {field : 'model',title : '型号',editable: false,width: 200},
             {field : 'supplierName',title : '供应商',editable: false,width: 100},
@@ -51,18 +60,17 @@ $(function() {
             {field : 'valveElement',title : '阀芯',editable: false,width: 100},
             {field : 'sealingMaterial',title : '密封材质',editable: false,width: 100},
             {field : 'driveForm',title : '驱动形式',editable: false,width: 100},
-            {field : 'connectionType',title : '连接方式',editable: false,width: 100},
-            {field : 'productProcurementPrice',title : '采购价',editable: false,width: 100}
+            {field : 'connectionType',title : '连接方式',editable: false,width: 100}
         ]
     };
     $.table.init(options);
 });
 
-function expandChildTablePromise(dataId,paramterId,childId,tableId) {
+function expandChildTablePromise(dataId,paramterId,childId,stayId,tableId) {
     var promise;
     promise = new Promise(function(resolve, reject) {
         console.log("tableId2=" + tableId);
-        $("#" + tableId).bootstrapTable('expandRow', $("#" + tableId).bootstrapTable('getRowByUniqueId', paramterId).rowId);
+        $("#" + tableId).bootstrapTable('expandRow', $("#" + tableId).bootstrapTable('getRowByUniqueId', stayId).rowId);
         //bootstrap-table-actuator
         //bootstrap-table-ref1
         //bootstrap-table-ref2
@@ -72,20 +80,27 @@ function expandChildTablePromise(dataId,paramterId,childId,tableId) {
     });
     return promise;
 }
-
-function addTest(dataId,paramterId,childId,tableId) {
-    expandChildTablePromise(dataId,paramterId,childId,tableId).then(function () {
+function FloatAdd(arg1,arg2){
+    var r1,r2,m;
+    try{r1=arg1.toString().split(".")[1].length}catch(e){r1=0}
+    try{r2=arg2.toString().split(".")[1].length}catch(e){r2=0}
+    m=Math.pow(10,Math.max(r1,r2));
+    return (arg1*m+arg2*m)/m;
+}
+function addTest(dataId,paramterId,childId,stayId,tableId) {
+    expandChildTablePromise(dataId,paramterId,childId,stayId,tableId).then(function () {
         var rowData = {
             testId: 0,
             yesNum: 0,
             noNum: 0,
+            stayId: stayId,
             remark: "",
             createTime: "",
             createByName: ""
         };
         setTimeout(function () {
             console.log("promise 2." + paramterId);
-            $("#initChildTestTableId_" + childId).bootstrapTable('append', rowData);
+            $("#initChildTestTableId_" + stayId).bootstrapTable('append', rowData);
             console.log("promise 4." + paramterId);
         },500)
 
@@ -110,11 +125,12 @@ initChildTestTable = function(index, rows, $detail) {
     if ($.common.isEmpty(paramterId)) {
         paramterId = rows["pattachmentId"];
     }
-    console.log("paramterId=" + paramterId);
+    var stayNum = rows["stayNum"];
+    console.log("paramterId=" + paramterId + " stayNum=" + stayNum);
     var childId = rows["childId"];
     var statusId = rows["statusId"];
-
-    var initChildTestTableId = "initChildTestTableId_" + childId;
+    var stayId = rows["stayId"];
+    var initChildTestTableId = "initChildTestTableId_" + stayId;
     var cur_table = $detail.html('<table style="table-layout:fixed" id=' + initChildTestTableId + ' data-cache="true"></table>').find('table');
 
     $(cur_table).bootstrapTable({
@@ -133,6 +149,7 @@ initChildTestTable = function(index, rows, $detail) {
             "paramterId": paramterId,
             "dataId": dataId,
             "childId": childId,
+            "stayId": stayId,
             "statusId": statusId
         },columns: [
             {field : 'rowId',title : '序号',width: 50,visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
@@ -142,8 +159,8 @@ initChildTestTable = function(index, rows, $detail) {
             {field : 'noNum',title : '不合格数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 150},
             {field : 'saveTest',title : '操作',width: 200,visible: true,formatter: function(value, row, index) {
                     var actions = [];
-                    actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="saveTest(' + row.rowId + "," + childId + "," + paramterId + "," + dataId + "," + statusId + ')"><i class="fa fa-save"></i> 保存</a>');
-                    actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="removeTest(' + row.rowId + "," + childId + "," + paramterId + "," + dataId + ')"><i class="fa fa-remove"></i> 删除</a>');
+                    actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="saveTest(' + row.rowId + "," + childId + "," + paramterId + "," + dataId + "," + statusId + "," + stayId + "," + stayNum + ')"><i class="fa fa-save"></i> 保存</a>');
+                    actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="removeTest(' + row.rowId + "," + childId + "," + paramterId + "," + dataId + "," + stayId  + ')"><i class="fa fa-remove"></i> 删除</a>');
                     return actions.join('');
                 }},
             {field : 'remark',title : '原因',editable: true,width: 300},
@@ -153,10 +170,10 @@ initChildTestTable = function(index, rows, $detail) {
     });
 };
 
-function saveTest (rowId,childId,paramterId,dataId,statusId) {
+function saveTest (rowId,childId,paramterId,dataId,statusId,stayId,stayNum) {
     //dataId,paramterId,childId,remark,testId,yesNum,noNum
 
-    var rows = $("#initChildTestTableId_" + childId).bootstrapTable('getData');
+    var rows = $("#initChildTestTableId_" + stayId).bootstrapTable('getData');
     var row;
     for (var i = 0; i < rows.length; i++) {
         var r = rows[i];
@@ -166,6 +183,18 @@ function saveTest (rowId,childId,paramterId,dataId,statusId) {
         }
     }
 
+    var totalNum = 0;
+    for (var i = 0; i < rows.length; i++) {
+        var r = rows[i];
+        var yesNum = r.yesNum;
+        var noNum = r.noNum;
+        totalNum = parseFloat(FloatAdd(totalNum,FloatAdd(yesNum,noNum))).toFixed(0);
+    }
+    console.log("totalNum=" + totalNum);
+    if (parseInt(totalNum) > parseInt(stayNum)) {
+        $.modal.alertWarning("数量填写错误");
+        return;
+    }
     var remark = row.remark;
     var testId = row.testId;
     var yesNum = row.yesNum;
@@ -173,15 +202,15 @@ function saveTest (rowId,childId,paramterId,dataId,statusId) {
     console.log("statusId=" + statusId);
     console.log("yesNum=" + yesNum + " remark=" + remark);
     var url = ctx + "fmis/procurementtest/saveTest?dataId=" + dataId + "&paramterId=" + paramterId + "&childId=" + childId + "&remark=" + remark + "&testId=" + testId +
-        "&yesNum=" + yesNum + "&noNum=" + noNum + "&statusId=" + statusId;
+        "&yesNum=" + yesNum + "&noNum=" + noNum + "&statusId=" + statusId + "&stayId=" + stayId;
     $.operate.saveModal(url,'',function(){
         //$.table.refresh();
-        $("#initChildTestTableId_" + childId).bootstrapTable('refresh');
+        $("#initChildTestTableId_" + stayId).bootstrapTable('refresh');
     });
 }
-function removeTest (rowId,childId,paramterId,dataId) {
+function removeTest (rowId,childId,paramterId,dataId,stayId) {
     //dataId,paramterId,childId,remark,testId,yesNum,noNum
-    var rows = $("#initChildTestTableId_" + childId).bootstrapTable('getData');
+    var rows = $("#initChildTestTableId_" + stayId).bootstrapTable('getData');
     var row;
     for (var i = 0; i < rows.length; i++) {
         var r = rows[i];
@@ -198,7 +227,7 @@ function removeTest (rowId,childId,paramterId,dataId) {
     var url = ctx + "fmis/procurementtest/removeTest?testId=" + testId;
     $.operate.saveModal(url,'',function(){
         //$.table.refresh();
-        $("#initChildTestTableId_" + childId).bootstrapTable('refresh');
+        $("#initChildTestTableId_" + stayId).bootstrapTable('refresh');
     });
 }
 
@@ -211,7 +240,7 @@ $(function() {
     var options1 = {
         url: prefixPool + "/selectBizTestActuatorList",
         modalName: "采购执行器",
-        uniqueId: "actuatorId",
+        uniqueId: "stayId",
         id: "bootstrap-table-actuator",
         cache: true,
         async: false,
@@ -235,18 +264,24 @@ $(function() {
             {field : 'rowId',title : '序号',width: 50,visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
             {field : 'addTest',title : '操作',visible: true,formatter: function(value, row, index) {
                     var actions = [];
-                    actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="addTest(' + row.dataId + "," + row.actuatorId +  "," + row.childId + ",'bootstrap-table-actuator'" + ')"><i class="fa fa-add"></i> 添加</a>');
+                    actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="addTest(' + row.dataId + "," + row.actuatorId +  "," + row.childId + "," + row.stayId + ",'bootstrap-table-actuator'" + ')"><i class="fa fa-add"></i> 添加</a>');
                     return actions.join('');
                 }},
             {field : 'actuatorNum',title : '执行器数量',editable: false,width: 100},
+            {field : 'stayNum',title : '待检测数量',editable: false,width: 100},
             {field : 'yesNum',title : '合格数量',editable: false,width: 100},
             {field : 'noNum',title : '不合格数量',editable: false,width: 100},
+            {field : 'stayId',title : 'stayId',visible: false},
             {field : 'actuatorId',title : 'actuatorId',visible: false},
             {field : 'procurementId',title : 'childId',visible: false},
             {field : 'dataId',title : 'dataId',visible: false},
             {field : 'levelValue',title : 'levelValue',visible: false},
             {field : 'childId',title : 'childId',visible: false},
             {field : 'statusId',title : 'statusId',visible: false,width:100},
+            {field : 'stayCreateTime',title : '发起时间',editable: false,width: 100},
+            {field : 'contractNo',title : '销售合同号',editable: false,width: 100},
+            {field : 'procurementNo',title : '采购合同号',editable: false,width: 100},
+            {field : 'orderNo',title : '报检单号',editable: false,width: 100},
             {field : 'actuatorName',title : '执行器名称',editable: false,width: 150},
             {field : 'actuatorPrice',title : '执行器价格',editable: false,width: 100},
             {field : 'actuatorString6',title : '采购价',editable: false,width: 100},
@@ -320,7 +355,7 @@ $(function() {
     var options1 = {
         url: prefixPool + "/selectBizTestRef1List",
         modalName: "法兰",
-        uniqueId: "productRef1Id",
+        uniqueId: "stayId",
         id: "bootstrap-table-ref1",
         cache: true,
         detailView: true,
@@ -344,18 +379,24 @@ $(function() {
             {field : 'rowId',title : '序号',width: 50,visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
             {field : 'addTest',title : '操作',visible: true,formatter: function(value, row, index) {
                     var actions = [];
-                    actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="addTest(' + row.dataId + "," + row.productRef1Id +  "," + row.childId  + ",'bootstrap-table-ref1'" + ')"><i class="fa fa-add"></i> 添加</a>');
+                    actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="addTest(' + row.dataId + "," + row.productRef1Id +  "," + row.childId + "," + row.stayId  + ",'bootstrap-table-ref1'" + ')"><i class="fa fa-add"></i> 添加</a>');
                     return actions.join('');
                 }},
             {field : 'productRef1Num',title : '法兰数量',editable: false,width: 100},
+            {field : 'stayNum',title : '待检测数量',editable: false,width: 100},
             {field : 'yesNum',title : '合格数量',editable: false,width: 100},
             {field : 'noNum',title : '不合格数量',editable: false,width: 100},
+            {field : 'stayId',title : 'stayId',visible: false},
             {field : 'productRef1Id',title : 'ref1Id',visible: false},
             {field : 'dataId',title : 'dataId',visible: false},
             {field : 'levelValue',title : 'levelValue',visible: false},
             {field : 'procurementId',title : 'childId',visible: false},
             {field : 'statusId',title : 'statusId',visible: false,width:100},
             {field : 'childId',title : 'childId',visible: false},
+            {field : 'stayCreateTime',title : '发起时间',editable: false,width: 100},
+            {field : 'contractNo',title : '销售合同号',editable: false,width: 100},
+            {field : 'procurementNo',title : '采购合同号',editable: false,width: 100},
+            {field : 'orderNo',title : '报检单号',editable: false,width: 100},
             {field : 'ref1Name',title : '法兰名称',editable: false,width: 100},
             {field : 'ref1Price',title : '法兰价格',editable: false,width: 100},
             {field : 'ref1String2',title : '采购价',editable: false,width: 100},
@@ -379,7 +420,7 @@ $(function() {
     var options1 = {
         url: prefixPool + "/selectBizTestRef2List",
         modalName: "螺栓",
-        uniqueId: "productRef2Id",
+        uniqueId: "stayId",
         id: "bootstrap-table-ref2",
         cache: true,
         async: false,
@@ -403,18 +444,24 @@ $(function() {
             {field : 'rowId',title : '序号',width: 50,visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
             {field : 'addTest',title : '操作',visible: true,formatter: function(value, row, index) {
                     var actions = [];
-                    actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="addTest(' + row.dataId + "," + row.productRef2Id +  "," + row.childId + ",'bootstrap-table-ref2'" + ')"><i class="fa fa-add"></i> 添加</a>');
+                    actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="addTest(' + row.dataId + "," + row.productRef2Id +  "," + row.childId + "," + row.stayId + ",'bootstrap-table-ref2'" + ')"><i class="fa fa-add"></i> 添加</a>');
                     return actions.join('');
                 }},
             {field : 'productRef2Num',title : '螺栓数量',editable: false,width: 100},
+            {field : 'stayNum',title : '待检测数量',editable: false,width: 100},
             {field : 'yesNum',title : '合格数量',editable: false,width: 100},
             {field : 'noNum',title : '不合格数量',editable: false,width: 100},
+            {field : 'stayId',title : 'stayId',visible: false},
             {field : 'productRef2Id',title : 'ref2Id',visible: false},
             {field : 'procurementId',title : 'childId',visible: false},
             {field : 'dataId',title : 'dataId',visible: false},
             {field : 'levelValue',title : 'levelValue',visible: false},
             {field : 'childId',title : 'childId',visible: false},
             {field : 'statusId',title : 'statusId',visible: false,width:100},
+            {field : 'stayCreateTime',title : '发起时间',editable: false,width: 100},
+            {field : 'contractNo',title : '销售合同号',editable: false,width: 100},
+            {field : 'procurementNo',title : '采购合同号',editable: false,width: 100},
+            {field : 'orderNo',title : '报检单号',editable: false,width: 100},
             {field : 'ref2Name',title : '螺栓名称',editable: {type: 'text',emptytext: '空',disabled: true},width: 100},
             {field : 'ref2Price',title : '螺栓价格',editable: false,width: 100},
             {field : 'ref1String2',title : '采购价',editable: false,width: 100},
@@ -435,7 +482,7 @@ $(function() {
     var options1 = {
         url: prefixPool + "/selectBizTestPAList",
         modalName: "螺栓",
-        uniqueId: "pattachmentId",
+        uniqueId: "stayId",
         id: "bootstrap-table-pa",
         cache: true,
         async: false,
@@ -476,12 +523,14 @@ $(function() {
                 }},
             {field : 'addTest',title : '操作',visible: true,formatter: function(value, row, index) {
                     var actions = [];
-                    actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="addTest(' + row.dataId + "," + row.pattachmentId +  "," + row.childId + ",'bootstrap-table-pa'" + ')"><i class="fa fa-add"></i> 添加</a>');
+                    actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="addTest(' + row.dataId + "," + row.pattachmentId +  "," + row.childId + "," + row.stayId + ",'bootstrap-table-pa'" + ')"><i class="fa fa-add"></i> 添加</a>');
                     return actions.join('');
                 }},
             {field : 'pattachmentCount',title : '数量',editable: false,width: 100},
+            {field : 'stayNum',title : '待检测数量',editable: false,width: 100},
             {field : 'yesNum',title : '合格数量',editable: false,width: 100},
             {field : 'noNum',title : '不合格数量',editable: false,width: 100},
+            {field : 'stayId',title : 'stayId',visible: false},
             {field : 'pattachmentId',title : 'pattachmentId',visible: false},
             {field : 'dataId',title : 'dataId',visible: false},
             {field : 'levelValue',title : 'levelValue',visible: false},
@@ -491,6 +540,12 @@ $(function() {
             {field : 'pattachmentPrice',title : '价格',editable: false,width: 100},
             {field : 'procurementPrice',title : '采购价',editable: false,width: 100},
             {field : 'supplierName',title : '供应商',editable: false,width: 100},
+
+            {field : 'stayCreateTime',title : '发起时间',editable: false,width: 100},
+            {field : 'contractNo',title : '销售合同号',editable: false,width: 100},
+            {field : 'procurementNo',title : '采购合同号',editable: false,width: 100},
+            {field : 'orderNo',title : '报检单号',editable: false,width: 100},
+
             {field : 'supplierId',title : 'supplierId',visible: false},
             {field : 'goodsTime',title : '回货时间',editable: false,width: 100},
             {

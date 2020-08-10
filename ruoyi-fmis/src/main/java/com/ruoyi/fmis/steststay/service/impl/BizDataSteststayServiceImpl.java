@@ -31,6 +31,11 @@ public class BizDataSteststayServiceImpl implements IBizDataSteststayService {
         return bizDataSteststayMapper.selectBizDataSteststayById(stayId);
     }
 
+    @Override
+    public Long selectMaxNo() {
+        return bizDataSteststayMapper.selectMaxNo();
+    }
+
     /**
      * 查询待质检列表
      *

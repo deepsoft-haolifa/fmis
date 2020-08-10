@@ -1,6 +1,5 @@
 var prefixPool = ctx + "fmis/procurementpool";
 
-log.info("loading procurment...")
 
 
 var procurementId = $("#dataId").val();
@@ -50,14 +49,9 @@ $(function() {
                     } else if (value == "2") {
                         showText = "采购完成";
                     }
-                    console.log("value1=" + v);
                     actions.push($.common.sprintf("<span class='default'>%s</span>", showText));
                     return actions;
                 }
-            },
-            {
-                field : 'customerName',
-                title : '客户'
             },
             {
                 field : 'datetime1',
@@ -65,43 +59,14 @@ $(function() {
             },
             {
                 field : 'string3',
-                title : '供方'
-            },
-            {
-                field : 'string4',
-                title : '签订地点'
-            },
-            {
-                field : 'string5',
-                title : '含发票'
+                title : '供方',
+                formatter: function(value, row, index) {
+                    return $.table.selectDictLabel(supplierTypeData, value);
+                }
             },
             {
                 field : 'string6',
                 title : '发货时间'
-            },
-            {
-                field : 'string7',
-                title : '运输方式'
-            },
-            {
-                field : 'string8',
-                title : '付款方式'
-            },
-            {
-                field : 'string9',
-                title : '交货地点'
-            },
-            {
-                field : 'string10',
-                title : '运费承担'
-            },
-            {
-                field : 'string11',
-                title : '收货人'
-            },
-            {
-                field : 'string12',
-                title : '收货电话'
             },
             {
                 field : 'price1',
@@ -113,7 +78,7 @@ $(function() {
 });
 var overAllIds = new Array();  //全局数组
 var numberMap = new Map();
-
+var priceMap = new Map();
 var supplierMap = new Map();
 
 /**
@@ -123,7 +88,6 @@ function initExpandRow() {
     setTimeout(function () {
 
         var repeartMap = new Map();
-        console.log("initExpandRow...");
         for (var i = 0; i < overAllIds.length; i++) {
             var pathId = overAllIds[i];
             var pathIds = pathId.split("_");
@@ -136,11 +100,9 @@ function initExpandRow() {
             if (repeartMap.get(repeartKey) != null) {
                 continue;
             }
-            console.log("pathId22=" + pathId);
             repeartMap.set(repeartKey,i);
             $("#bootstrap-table").bootstrapTable('expandRow', $("#bootstrap-table").bootstrapTable('getRowByUniqueId', parentDataId).rowId);
             var levelUniqueId = "";
-            console.log("pathIds1=" + pathIds);
             if (levelValue == "A") {
                 levelUniqueId = type + "1";
             } else if (levelValue == "B") {
@@ -157,15 +119,16 @@ function initExpandRow() {
             if (bizEditFlag == 2) {
 
             }
-            console.log("bizEditFlag=" + bizEditFlag);
             if (bizEditFlag == 0) {
                 var paramterSupplierId = parent.$('#paramterSupplierId').val();
-                console.log("paramterSupplierId=" + paramterSupplierId);
+                var totalPrice = parent.$('#totalPrice').val();
+                $("#price1").val(totalPrice);
                 //增加的时候 把供应商
                 $("#string6").find("option[value='" + paramterSupplierId + "']").attr("selected",true);
             }
         }
-    }, 500);
+        calculatePrice();
+    }, 1000);
 
 }
 
@@ -242,33 +205,114 @@ if (!$.common.isEmpty(numJsonValue)) {
             numberMap.set(id,value);
         }
     }
-
+    calculatePrice();
 }
 
 
 //保存数量
 function onEditableSave (field, row, oldValue, $el) {
+    var columnName1 = "";
+    var columnName2 = "";
+    var tableName = "";
     if (field == "productNum") {
+        columnName1 = "productNum";
+        columnName2 = "productProcurementPrice";
+        tableName = "initChildProductTable_" + row.dataId;
+        var price1 = setRowTotalPrice(columnName1,columnName2,tableName,row);
         numberMap.set("1_" + row.childId + "_" + row.productId + "_" + row.dataId + "_" + row.levelValue,row.productNum);
+        priceMap.set("1_" + row.childId + "_" + row.productId + "_" + row.dataId + "_" + row.levelValue,price1);
     } else if (field == "actuatorNum") {
+        columnName1 = "actuatorNum";
+        columnName2 = "actuatorString6";
+        tableName = "initChildActuatorTable_" + row.dataId;
+        var price1 = setRowTotalPrice(columnName1,columnName2,tableName,row);
         numberMap.set("2_" + row.childId + "_" + row.actuatorId + "_" + row.dataId + "_" + row.levelValue,row.actuatorNum);
+        priceMap.set("2_" + row.childId + "_" + row.actuatorId + "_" + row.dataId + "_" + row.levelValue,price1);
     } else if (field == "productRef1Num") {
+        columnName1 = "productRef1Num";
+        columnName2 = "ref1String2";
+        tableName = "initChildRef1Table_" + row.dataId;
+        var price1 = setRowTotalPrice(columnName1,columnName2,tableName,row);
         numberMap.set("3_" + row.childId + "_" + row.productRef1Id + "_" + row.dataId + "_" + row.levelValue,row.productRef1Num);
+        priceMap.set("3_" + row.childId + "_" + row.productRef1Id + "_" + row.dataId + "_" + row.levelValue,price1);
     } else if (field == "productRef2Num") {
+        columnName1 = "productRef2Num";
+        columnName2 = "ref1String2";
+        tableName = "initChildRef2Table_" + row.dataId;
+        var price1 = setRowTotalPrice(columnName1,columnName2,tableName,row);
         numberMap.set("4_" + row.childId + "_" + row.productRef2Id + "_" + row.dataId + "_" + row.levelValue,row.productRef2Num);
+        priceMap.set("4_" + row.childId + "_" + row.productRef2Id + "_" + row.dataId + "_" + row.levelValue,price1);
     } else if (field == "pattachmentCount") {
+        columnName1 = "pattachmentCount";
+        columnName2 = "procurementPrice";
+        tableName = "initChildPATable_" + row.dataId;
+        var price1 = setRowTotalPrice(columnName1,columnName2,tableName,row);
         numberMap.set("5_" + row.childId + "_" + row.pattachmentId + "_" + row.dataId + "_" + row.levelValue,row.pattachmentCount);
+        priceMap.set("5_" + row.childId + "_" + row.pattachmentId + "_" + row.dataId + "_" + row.levelValue,price1);
     } else if (field == "pattachment1Count") {
+        columnName1 = "pattachment1Count";
+        columnName2 = "procurementPrice";
+        tableName = "initChildPA1Table_" + row.dataId;
+        var price1 = setRowTotalPrice(columnName1,columnName2,tableName,row);
         numberMap.set("6_" + row.childId + "_" + row.pattachment1Id + "_" + row.dataId + "_" + row.levelValue,row.pattachment1Count);
+        priceMap.set("6_" + row.childId + "_" + row.pattachment1Id + "_" + row.dataId + "_" + row.levelValue,price1);
     } else if (field == "pattachment2Count") {
+        columnName1 = "pattachment2Count";
+        columnName2 = "procurementPrice";
+        tableName = "initChildPA2Table_" + row.dataId;
+        var price1 = setRowTotalPrice(columnName1,columnName2,tableName,row);
         numberMap.set("7_" + row.childId + "_" + row.pattachment2Id + "_" + row.dataId + "_" + row.levelValue,row.pattachment2Count);
+        priceMap.set("7_" + row.childId + "_" + row.pattachment2Id + "_" + row.dataId + "_" + row.levelValue,price1);
     } else if (field == "pattachment3Count") {
+        columnName1 = "pattachment3Count";
+        columnName2 = "procurementPrice";
+        tableName = "initChildPA3Table_" + row.dataId;
+        var price1 = setRowTotalPrice(columnName1,columnName2,tableName,row);
         numberMap.set("8_" + row.childId + "_" + row.pattachment3Id + "_" + row.dataId + "_" + row.levelValue,row.pattachment3Count);
+        priceMap.set("8_" + row.childId + "_" + row.pattachment3Id + "_" + row.dataId + "_" + row.levelValue,price1);
     } else if (field == "pattachment4Count") {
+        columnName1 = "pattachment4Count";
+        columnName2 = "procurementPrice";
+        tableName = "initChildPA4Table_" + row.dataId;
+        var price1 = setRowTotalPrice(columnName1,columnName2,tableName,row);
         numberMap.set("9_" + row.childId + "_" + row.pattachment4Id + "_" + row.dataId + "_" + row.levelValue,row.pattachment4Count);
+        priceMap.set("9_" + row.childId + "_" + row.pattachment4Id + "_" + row.dataId + "_" + row.levelValue,price1);
     }
+    calculatePrice();
+}
 
+function calculatePrice () {
+    var price1 = 0;
+    priceMap.forEach(function (value, key, map) {
+        console.log("-----")
+        price1 = FloatAdd(price1,value);
+    });
+    console.log("--000---")
+    $("#price1").val(price1);
+}
+function FloatAdd(arg1,arg2){
+    var r1,r2,m;
+    try{r1=arg1.toString().split(".")[1].length}catch(e){r1=0}
+    try{r2=arg2.toString().split(".")[1].length}catch(e){r2=0}
+    m=Math.pow(10,Math.max(r1,r2));
+    return (arg1*m+arg2*m)/m;
+}
 
+function setRowTotalPrice(columnName1,columnName2,tableName,row) {
+    var productNum = row[columnName1];
+    productNum = $.common.isEmpty(productNum) == true ? 0 : parseFloat(productNum);
+    var procurementPrice = row[columnName2];
+    procurementPrice = $.common.isEmpty(procurementPrice) == true ? 0 : parseFloat(procurementPrice);
+    var total = parseFloat(productNum * procurementPrice).toFixed(2);
+    var rowId = parseInt(row["rowId"]);
+
+    var updateObj = {
+        index: rowId,
+        field: "totalPrice",
+        value: total
+    };
+    $("#" + tableName).bootstrapTable("updateCell", updateObj);
+    return total;
 }
 
 function showNum(type,row) {
@@ -337,10 +381,9 @@ function disableCheckbox (row) {
     return disableValue;
 }
 
-
-
 initChildProductTable = function(index, row, $detail) {
-    var cur_table = $detail.html('<div class="col-sm-12 select-table table-striped"><table style="table-layout:fixed" id="initChildProductTable" ></table></div>').find('table');
+    var tableHtml = '<div class="col-sm-12 select-table table-striped"><table style="table-layout:fixed" id="initChildProductTable_' + row.dataId + '"></table></div>';
+    var cur_table = $detail.html(tableHtml).find('table');
     $(cur_table).bootstrapTable({
         url: ctx + "fmis/data/listLevelProduct",
         method: 'post',
@@ -376,9 +419,9 @@ initChildProductTable = function(index, row, $detail) {
                 }
 
             }
-        },{field : 'rowId',title : '序号',width: 20,visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
+        },{field : 'rowId',title : '序号',width: 25,visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
 
-            {field : 'productId',title : '产品ID',visible: false},
+            {field : 'productId',title : '产品ID1',visible: false,width: 100},
             {field : 'dataId',title : 'dataId',visible: false},
             {field : 'levelValue',title : 'levelValue',visible: false},
             {field : 'childId',title : 'childId',visible: false},
@@ -388,7 +431,19 @@ initChildProductTable = function(index, row, $detail) {
             {field : 'procurementId',title : 'childId',visible: false},
             {field : 'productName',title : '产品名称',editable: false,width: 100},
             {field : 'model',title : '型号',editable: false,width: 200},
-            {field : 'productNum',title : '数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 80},
+            {field : 'productNum',title : '数量',editable: {type: 'text',validate: function(v,r){ return numberValidate(v)}},width: 80},
+            {field : 'productProcurementPrice',title : '采购价',editable: false,width: 100},
+            {field : 'totalPrice',title : '分项金额',editable: false,width: 100,formatter: function(value, row, index) {
+                    var actions = [];
+                    var productNum = row["productNum"];
+                    productNum = $.common.isEmpty(productNum) == true ? 0 : parseFloat(productNum);
+                    var procurementPrice = row["productProcurementPrice"];
+                    procurementPrice = $.common.isEmpty(procurementPrice) == true ? 0 : parseFloat(procurementPrice);
+                    var total = parseFloat(productNum * procurementPrice).toFixed(2);
+                    actions.push(total);
+                    return actions.join('');
+                }},
+
             {field : 'productStatus',title : '采购状态',editable: false,width: 100,
                 formatter: formaterStatus},
 
@@ -402,7 +457,7 @@ initChildProductTable = function(index, row, $detail) {
             {field : 'sealingMaterial',title : '密封材质',editable: false,width: 100},
             {field : 'driveForm',title : '驱动形式',editable: false,width: 100},
             {field : 'connectionType',title : '连接方式',editable: false,width: 100},
-            {field : 'productProcurementPrice',title : '采购价',editable: false,width: 100},
+
             {field : 'goodsTime',title : '回货时间',editable: false,width: 100}
 
 
@@ -423,41 +478,84 @@ function examine(type,datas,typeIndex){
             // 添加时，判断一行或多行的 id 是否已经在数组里 不存则添加　
             var dataId = "";
             var num = "0";
+            var price = 0;
+            var columnName1 = "";
+            var columnName2 = "";
+            var tableName = "";
             if (typeIndex == 1) {
                 dataId = v.productId;
                 num = v.productNum;
+                price = v.productProcurementPrice;
+                columnName1 = "productNum";
+                columnName2 = "productProcurementPrice";
+                tableName = "initChildProductTable_" + v.dataId;
             } else if (typeIndex == 2) {
                 dataId = v.actuatorId;
                 num = v.actuatorNum;
+                price = v.actuatorString6;
+                columnName1 = "actuatorNum";
+                columnName2 = "actuatorString6";
+                tableName = "initChildActuatorTable_" + v.dataId;
             } else if (typeIndex == 3) {
                 dataId = v.productRef1Id;
                 num = v.productRef1Num;
+                price = v.ref1String2;
+                columnName1 = "productRef1Num";
+                columnName2 = "ref1String2";
+                tableName = "initChildRef1Table_" + v.dataId;
             } else if (typeIndex == 4) {
                 dataId = v.productRef2Id;
                 num = v.productRef2Num;
+                price = v.ref1String2;
+                columnName1 = "productRef2Num";
+                columnName2 = "ref1String2";
+                tableName = "initChildRef2Table_" + v.dataId;
             } else if (typeIndex == 5){
                 dataId = v.pattachmentId;
                 num = v.pattachmentCount;
+                price = v.procurementPrice;
+                columnName1 = "pattachmentCount";
+                columnName2 = "procurementPrice";
+                tableName = "initChildPATable_" + v.dataId;
             } else if (typeIndex == 6){
                 dataId = v.pattachment1Id;
                 num = v.pattachment1Count;
+                price = v.procurementPrice;
+                columnName1 = "pattachment1Count";
+                columnName2 = "procurementPrice";
+                tableName = "initChildPA1Table_" + v.dataId;
             } else if (typeIndex == 7){
                 dataId = v.pattachment2Id;
                 num = v.pattachment2Count;
+                price = v.procurementPrice;
+                columnName1 = "pattachment2Count";
+                columnName2 = "procurementPrice";
+                tableName = "initChildPA2Table_" + v.dataId;
             } else if (typeIndex == 8){
                 dataId = v.pattachment3Id;
                 num = v.pattachment3Count;
+                price = v.procurementPrice;
+                columnName1 = "pattachment3Count";
+                columnName2 = "procurementPrice";
+                tableName = "initChildPA3Table_" + v.dataId;
             } else if (typeIndex == 9){
                 dataId = v.pattachment4Id;
                 num = v.pattachment4Count;
+                price = v.procurementPrice;
+                columnName1 = "pattachment4Count";
+                columnName2 = "procurementPrice";
+                tableName = "initChildPA4Table_" + v.dataId;
             }
-            $("#initChildProductTable").bootstrapTable('expandRow', 0);
+            $("#initChildProductTable_" + dataId).bootstrapTable('expandRow', 0);
             overAllIds.indexOf(typeIndex + "_" + v.childId + "_" + dataId + "_" + v.dataId + "_" + v.levelValue) == -1 ?
                 overAllIds.push(typeIndex + "_" + v.childId + "_" + dataId + "_" + v.dataId + "_" + v.levelValue) : -1;
             numberMap.set(typeIndex + "_" + v.childId + "_" + dataId+ "_" + v.dataId + "_" + v.levelValue,num);
 
-            supplierMap.set(v.supplierId,typeIndex + "_" + v.childId + "_" + dataId+ "_" + v.dataId + "_" + v.levelValue);
+            var price1 = setRowTotalPrice(columnName1,columnName2,tableName,v);
+            console.log("v.totalPrice1=" + price1);
+            priceMap.set(typeIndex + "_" + v.childId + "_" + dataId+ "_" + v.dataId + "_" + v.levelValue,price1);
 
+            supplierMap.set(v.supplierId,typeIndex + "_" + v.childId + "_" + dataId + "_" + v.dataId + "_" + v.levelValue);
         });
     }else{
         $.each(datas,function(i,v){
@@ -483,6 +581,7 @@ function examine(type,datas,typeIndex){
             }
             overAllIds.splice(overAllIds.indexOf(typeIndex + "_" + v.childId + "_" + dataId + "_" + v.dataId + "_" + v.levelValue),1);    //删除取消选中行
             supplierMap.delete(v.supplierId);
+            priceMap.delete(typeIndex + "_" + v.childId + "_" + dataId+ "_" + v.dataId + "_" + v.levelValue);
         });
     }
 }
@@ -490,7 +589,7 @@ function examine(type,datas,typeIndex){
 
 
 initChildActuatorTable = function(index, row, $detail) {
-    var cur_table = $detail.html('<table style="table-layout:fixed" id="initChildActuatorTable"></table>').find('table');
+    var cur_table = $detail.html('<table style="table-layout:fixed" id="initChildActuatorTable_' + row.dataId + '"></table>').find('table');
     $(cur_table).bootstrapTable({
         url: ctx + "fmis/data/listLevelActuator",
         method: 'post',
@@ -532,9 +631,20 @@ initChildActuatorTable = function(index, row, $detail) {
             {field : 'levelValue',title : 'levelValue',visible: false},
             {field : 'childId',title : 'childId',visible: false},
             {field : 'actuatorName',title : '执行器名称',editable: false,width: 150},
-            {field : 'actuatorPrice',title : '执行器价格',editable: false,width: 100},
-            {field : 'actuatorString6',title : '采购价',editable: false,width: 100},
+
+
             {field : 'actuatorNum',title : '执行器数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 100},
+            {field : 'actuatorString6',title : '采购价',editable: false,width: 100},
+            {field : 'totalPrice',title : '分项金额',editable: false,width: 100,formatter: function(value, row, index) {
+                    var actions = [];
+                    var productNum = row["actuatorNum"];
+                    productNum = $.common.isEmpty(productNum) == true ? 0 : parseFloat(productNum);
+                    var procurementPrice = row["actuatorString6"];
+                    procurementPrice = $.common.isEmpty(procurementPrice) == true ? 0 : parseFloat(procurementPrice);
+                    var total = parseFloat(productNum * procurementPrice).toFixed(2);
+                    actions.push(total);
+                    return actions.join('');
+                }},
             {field : 'actuatorStatus',title : '采购状态',editable: false,width: 100,
                 formatter: formaterStatus},
 
@@ -606,7 +716,7 @@ initChildActuatorTable = function(index, row, $detail) {
 };
 
 initChildRef1Table = function(index, row, $detail) {
-    var cur_table = $detail.html('<table style="table-layout:fixed" id="initChildRef1Table"></table>').find('table');
+    var cur_table = $detail.html('<table style="table-layout:fixed" id="initChildRef1Table_' + row.dataId + '"></table>').find('table');
     $(cur_table).bootstrapTable({
         url: ctx + "fmis/data/listLevelRef1",
         method: 'post',
@@ -648,9 +758,19 @@ initChildRef1Table = function(index, row, $detail) {
             {field : 'childId',title : 'childId',visible: false},
             {field : 'contractNo',title : 'contractNo',visible: false},
             {field : 'ref1Name',title : '法兰名称',editable: false,width: 100},
-            {field : 'ref1Price',title : '法兰价格',editable: false,width: 100},
-            {field : 'ref1String2',title : '采购价',editable: false,width: 100},
+
             {field : 'productRef1Num',title : '法兰数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 100},
+            {field : 'ref1String2',title : '采购价',editable: false,width: 100},
+            {field : 'totalPrice',title : '分项金额',editable: false,width: 100,formatter: function(value, row, index) {
+                    var actions = [];
+                    var productNum = row["productRef1Num"];
+                    productNum = $.common.isEmpty(productNum) == true ? 0 : parseFloat(productNum);
+                    var procurementPrice = row["ref1String2"];
+                    procurementPrice = $.common.isEmpty(procurementPrice) == true ? 0 : parseFloat(procurementPrice);
+                    var total = parseFloat(productNum * procurementPrice).toFixed(2);
+                    actions.push(total);
+                    return actions.join('');
+                }},
             {field : 'ref1Status',title : '采购状态',editable: false,width: 100,
                 formatter: formaterStatus},
 
@@ -673,7 +793,7 @@ initChildRef1Table = function(index, row, $detail) {
 
 
 initChildRef2Table = function(index, row, $detail) {
-    var cur_table = $detail.html('<table style="table-layout:fixed" id="initChildRef2Table"></table>').find('table');
+    var cur_table = $detail.html('<table style="table-layout:fixed" id="initChildRef2Table_' + row.dataId + '"></table>').find('table');
     $(cur_table).bootstrapTable({
         url: ctx + "fmis/data/listLevelRef2",
         method: 'post',
@@ -715,9 +835,19 @@ initChildRef2Table = function(index, row, $detail) {
             {field : 'childId',title : 'childId',visible: false},
             {field : 'contractNo',title : 'contractNo',visible: false},
             {field : 'ref2Name',title : '螺栓名称',editable: {type: 'text',emptytext: '空',disabled: true},width: 100},
-            {field : 'ref2Price',title : '螺栓价格',editable: false,width: 100},
-            {field : 'ref1String2',title : '采购价',editable: false,width: 100},
+
             {field : 'productRef2Num',title : '螺栓数量',editable: {type: 'text',emptytext: '0',validate: function(v){ return numberValidate(v)}},width: 100},
+            {field : 'ref1String2',title : '采购价',editable: false,width: 100},
+            {field : 'totalPrice',title : '分项金额',editable: false,width: 100,formatter: function(value, row, index) {
+                    var actions = [];
+                    var productNum = row["productRef2Num"];
+                    productNum = $.common.isEmpty(productNum) == true ? 0 : parseFloat(productNum);
+                    var procurementPrice = row["ref1String2"];
+                    procurementPrice = $.common.isEmpty(procurementPrice) == true ? 0 : parseFloat(procurementPrice);
+                    var total = parseFloat(productNum * procurementPrice).toFixed(2);
+                    actions.push(total);
+                    return actions.join('');
+                }},
             {field : 'ref2Status',title : '采购状态',editable: false,width: 100,
                 formatter: formaterStatus},
 
@@ -738,8 +868,7 @@ initChildRef2Table = function(index, row, $detail) {
 };
 
 initChildPATable = function(index, row, $detail) {
-    var cur_table = $detail.html('<table style="table-layout:fixed" id="initChildPATable"></table>').find('table');
-    console.log("dataId1=" + row["dataId"]);
+    var cur_table = $detail.html('<table style="table-layout:fixed" id="initChildPATable_' + row.dataId + '"></table>').find('table');
     $(cur_table).bootstrapTable({
         url: ctx + "fmis/data/listLevelPA",
         method: 'post',
@@ -780,9 +909,18 @@ initChildPATable = function(index, row, $detail) {
             {field : 'procurementId',title : 'childId',visible: false},
             {field : 'childId',title : 'childId',visible: false},
             {field : 'contractNo',title : 'contractNo',visible: false},
-            {field : 'pattachmentPrice',title : '定位器价格',editable: false,width: 100},
-            {field : 'procurementPrice',title : '采购价',editable: false,width: 100},
             {field : 'pattachmentCount',title : '定位器数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 100},
+            {field : 'procurementPrice',title : '采购价',editable: false,width: 100},
+            {field : 'totalPrice',title : '分项金额',editable: false,width: 100,formatter: function(value, row, index) {
+                    var actions = [];
+                    var productNum = row["pattachmentCount"];
+                    productNum = $.common.isEmpty(productNum) == true ? 0 : parseFloat(productNum);
+                    var procurementPrice = row["procurementPrice"];
+                    procurementPrice = $.common.isEmpty(procurementPrice) == true ? 0 : parseFloat(procurementPrice);
+                    var total = parseFloat(productNum * procurementPrice).toFixed(2);
+                    actions.push(total);
+                    return actions.join('');
+                }},
             {field : 'pStatus',title : '采购状态',editable: false,width: 100,
                 formatter: formaterStatus},
 
@@ -867,8 +1005,7 @@ initChildPATable = function(index, row, $detail) {
 };
 
 initChildPA1Table = function(index, row, $detail) {
-    var cur_table = $detail.html('<table style="table-layout:fixed" id="initChildPA1Table"></table>').find('table');
-    console.log("dataId1=" + row["dataId"]);
+    var cur_table = $detail.html('<table style="table-layout:fixed" id="initChildPA1Table_' + row.dataId + '"></table>').find('table');
     $(cur_table).bootstrapTable({
         url: ctx + "fmis/data/listLevelPA1",
         method: 'post',
@@ -909,9 +1046,18 @@ initChildPA1Table = function(index, row, $detail) {
             {field : 'procurementId',title : 'childId',visible: false},
             {field : 'childId',title : 'childId',visible: false},
             {field : 'contractNo',title : 'contractNo',visible: false},
-            {field : 'pattachment1Price',title : '电磁阀价格',editable: false,width: 100},
-            {field : 'procurementPrice',title : '采购价',editable: false,width: 100},
             {field : 'pattachment1Count',title : '电磁阀数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 100},
+            {field : 'procurementPrice',title : '采购价',editable: false,width: 100},
+            {field : 'totalPrice',title : '分项金额',editable: false,width: 100,formatter: function(value, row, index) {
+                    var actions = [];
+                    var productNum = row["pattachment1Count"];
+                    productNum = $.common.isEmpty(productNum) == true ? 0 : parseFloat(productNum);
+                    var procurementPrice = row["procurementPrice"];
+                    procurementPrice = $.common.isEmpty(procurementPrice) == true ? 0 : parseFloat(procurementPrice);
+                    var total = parseFloat(productNum * procurementPrice).toFixed(2);
+                    actions.push(total);
+                    return actions.join('');
+                }},
             {field : 'p1Status',title : '采购状态',editable: false,width: 100,
                 formatter: formaterStatus},
 
@@ -996,8 +1142,7 @@ initChildPA1Table = function(index, row, $detail) {
 };
 
 initChildPA2Table = function(index, row, $detail) {
-    var cur_table = $detail.html('<table style="table-layout:fixed" id="initChildPA2Table"></table>').find('table');
-    console.log("dataId1=" + row["dataId"]);
+    var cur_table = $detail.html('<table style="table-layout:fixed" id="initChildPA2Table_' + row.dataId + '"></table>').find('table');
     $(cur_table).bootstrapTable({
         url: ctx + "fmis/data/listLevelPA2",
         method: 'post',
@@ -1039,9 +1184,18 @@ initChildPA2Table = function(index, row, $detail) {
             {field : 'procurementId',title : 'childId',visible: false},
             {field : 'childId',title : 'childId',visible: false},
             {field : 'contractNo',title : 'contractNo',visible: false},
-            {field : 'pattachment2Price',title : '回信器数价格',editable: false,width: 100},
-            {field : 'procurementPrice',title : '采购价',editable: false,width: 100},
             {field : 'pattachment2Count',title : '回信器数数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 100},
+            {field : 'procurementPrice',title : '采购价',editable: false,width: 100},
+            {field : 'totalPrice',title : '分项金额',editable: false,width: 100,formatter: function(value, row, index) {
+                    var actions = [];
+                    var productNum = row["pattachment2Count"];
+                    productNum = $.common.isEmpty(productNum) == true ? 0 : parseFloat(productNum);
+                    var procurementPrice = row["procurementPrice"];
+                    procurementPrice = $.common.isEmpty(procurementPrice) == true ? 0 : parseFloat(procurementPrice);
+                    var total = parseFloat(productNum * procurementPrice).toFixed(2);
+                    actions.push(total);
+                    return actions.join('');
+                }},
             {field : 'p2Status',title : '采购状态',editable: false,width: 100,
                 formatter: formaterStatus},
 
@@ -1126,8 +1280,7 @@ initChildPA2Table = function(index, row, $detail) {
 };
 
 initChildPA3Table = function(index, row, $detail) {
-    var cur_table = $detail.html('<table style="table-layout:fixed" id="initChildPA3Table"></table>').find('table');
-    console.log("dataId1=" + row["dataId"]);
+    var cur_table = $detail.html('<table style="table-layout:fixed" id="initChildPA3Table_' + row.dataId + '"></table>').find('table');
     $(cur_table).bootstrapTable({
         url: ctx + "fmis/data/listLevelPA3",
         method: 'post',
@@ -1168,9 +1321,18 @@ initChildPA3Table = function(index, row, $detail) {
             {field : 'levelValue',title : 'levelValue',visible: false},
             {field : 'childId',title : 'childId',visible: false},
             {field : 'contractNo',title : 'contractNo',visible: false},
-            {field : 'pattachment3Price',title : '气源三连件价格',editable: false,width: 100},
-            {field : 'procurementPrice',title : '采购价',editable: false,width: 100},
             {field : 'pattachment3Count',title : '气源三连件数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 100},
+            {field : 'procurementPrice',title : '采购价',editable: false,width: 100},
+            {field : 'totalPrice',title : '分项金额',editable: false,width: 100,formatter: function(value, row, index) {
+                    var actions = [];
+                    var productNum = row["pattachment3Count"];
+                    productNum = $.common.isEmpty(productNum) == true ? 0 : parseFloat(productNum);
+                    var procurementPrice = row["procurementPrice"];
+                    procurementPrice = $.common.isEmpty(procurementPrice) == true ? 0 : parseFloat(procurementPrice);
+                    var total = parseFloat(productNum * procurementPrice).toFixed(2);
+                    actions.push(total);
+                    return actions.join('');
+                }},
             {field : 'p3Status',title : '采购状态',editable: false,width: 100,
                 formatter: formaterStatus},
 
@@ -1256,8 +1418,7 @@ initChildPA3Table = function(index, row, $detail) {
 
 
 initChildPA4Table = function(index, row, $detail) {
-    var cur_table = $detail.html('<table style="table-layout:fixed" id="initChildPA4Table"></table>').find('table');
-    console.log("dataId1=" + row["dataId"]);
+    var cur_table = $detail.html('<table style="table-layout:fixed" id="initChildPA4Table_' + row.dataId + '"></table>').find('table');
     $(cur_table).bootstrapTable({
         url: ctx + "fmis/data/listLevelPA4",
         method: 'post',
@@ -1298,9 +1459,18 @@ initChildPA4Table = function(index, row, $detail) {
             {field : 'procurementId',title : 'childId',visible: false},
             {field : 'childId',title : 'childId',visible: false},
             {field : 'contractNo',title : 'contractNo',visible: false},
-            {field : 'pattachment4Price',title : '可离合减速器价格',editable: false,width: 100},
-            {field : 'procurementPrice',title : '采购价',editable: false,width: 100},
             {field : 'pattachment4Count',title : '可离合减速器数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 100},
+            {field : 'procurementPrice',title : '采购价',editable: false,width: 100},
+            {field : 'totalPrice',title : '分项金额',editable: false,width: 100,formatter: function(value, row, index) {
+                    var actions = [];
+                    var productNum = row["pattachment4Count"];
+                    productNum = $.common.isEmpty(productNum) == true ? 0 : parseFloat(productNum);
+                    var procurementPrice = row["procurementPrice"];
+                    procurementPrice = $.common.isEmpty(procurementPrice) == true ? 0 : parseFloat(procurementPrice);
+                    var total = parseFloat(productNum * procurementPrice).toFixed(2);
+                    actions.push(total);
+                    return actions.join('');
+                }},
             {field : 'p4Status',title : '采购状态',editable: false,width: 100,
                 formatter: formaterStatus},
 
@@ -1414,3 +1584,4 @@ function numberValidate(value) {
         return "必须是数字！";
     }
 }
+

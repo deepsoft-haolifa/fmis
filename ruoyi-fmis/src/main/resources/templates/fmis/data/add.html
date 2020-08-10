@@ -231,14 +231,21 @@
     </form>
 
     <div class="form-horizontal m form-group">
-        <div class='col-sm-3 form-inline'>
+        <div class='col-sm-5 form-inline'>
             <a class="btn btn-success btn-sm" onclick="insertRowQ()">
                 <i class="fa fa-plus"></i> 报价单新增
             </a>
             <a class="btn btn-success btn-sm" onclick="insertRowP()">
                 <i class="fa fa-plus"></i> 产品新增
             </a>
+            <a class="btn btn-success btn-sm" onclick="uploadFileContract()">
+                <i class="fa fa-plus"></i> 智能增加
+            </a>
+            <a class="btn btn-success btn-sm" target="_blank" th:href="@{/bj_template_contract.xlsx}">
+                <i class="fa fa-plus"></i> 下载智能增加模板文件
+            </a>
         </div>
+
 
     </div>
 
@@ -262,6 +269,18 @@
     $("#form-data-add").validate({
         focusCleanup: true
     });
+
+    function uploadFileContract () {
+        var url = prefix + "/uploadContract";
+        var widthNum = this.innerWidth - 80;
+        var heigthNum = this.innerHeight - 80;
+        $.modal.open("关联产品", url,widthNum, heigthNum,function (index, layero) {
+            var iframeWin = layero.find('iframe')[0];
+            iframeWin.contentWindow.submitHandler(index, layero);
+            appendTable();
+            calculateTotalPrice();
+        });
+    }
 
     $("#string18").change(function (){
         var payType = $("#string18").val();

@@ -20,16 +20,35 @@
 <div class="row  border-bottom white-bg dashboard-header">
   欢迎访问 北京好利信息化管控平台
   <ul class="m-b">
-    <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 报价单 <a id="quotationNum" style="color: red;" onclick="todoQuotation(1)"></a> </li>
-    <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 合同 <a id="contractNum" style="color: red;" onclick="todoContract(1)"></a> </li>
+
+    <li style="display: none"><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 报价单 <a id="quotationNum" style="color: red;" onclick="todoQuotation(1)"></a> </li>
+    <li style="display: none"><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 合同 <a id="contractNum" style="color: red;" onclick="todoContract(1)"></a> </li>
 
   </ul>
+
+  <div class="form-horizontal">
+    <div class="form-group">
+      <div class="col-sm-5">
+        <table  id="bootstrap-table1"></table>
+      </div>
+      <div class="col-sm-5">
+        <table  id="bootstrap-table2"></table>
+      </div>
+    </div>
+
+  </div>
 </div>
+
+<form id="formId">
+
+</form>
+
 
 <script th:src="@{/js/jquery.min.js}"></script>
 <script th:src="@{/js/bootstrap.min.js}"></script>
 <script th:src="@{/ajax/libs/layer/layer.min.js}"></script>
-<script type="text/javascript">
+<div th:include="include :: footer"></div>
+<script th:inline="javascript">
     var prefix = "/fmis/quotation/";
 
     function todoQuotation (type) {
@@ -49,6 +68,87 @@
             //$.modal.alertError("1111");
         }
     }
+    var loginId = /*[[${loginId}]]*/;
+    $(function(){
+        //请求参数
+        var list = {};
+        //
+        $.ajax({
+            //请求方式
+            type : "POST",
+            //请求的媒体类型
+            contentType: "application/json;charset=UTF-8",
+            //请求地址
+            url : prefix + "todoView",
+            dataType: 'json',
+            //请求成功
+            success : function(result) {
+                var quotationNum = result.data.quotationNum;
+                var contractNum = result.data.contractNum;
+                $("#quotationNum").text(quotationNum);
+                $("#contractNum").text(contractNum);
+                console.log("result=" + result.data.quotationNum);
+                if (quotationNum > 0 || contractNum > 0) {
+                    parent.$('#todoListFlag').text("*");
+                }
+            },
+            //请求失败，包含具体的错误信息
+            error : function(e){
+                console.log(e.status);
+                console.log(e.responseText);
+            }
+        });
+    });
+
+
+    $('#pay-qrcode').click(function () {
+        var html = $(this).html();
+        parent.layer.open({
+            title: false,
+            type: 1,
+            closeBtn: false,
+            shadeClose: true,
+            area: ['600px', 'auto'],
+            content: html
+        });
+    });
+
+    $(function() {
+        var options = {
+            url: "/fmis/quotation/list",
+            modalName: "报价单",
+            uniqueId: "quotationId",
+            id: "bootstrap-table1",
+            classes: "table table-bordered table-sm",
+            queryParams: {
+                "string6":1
+            },
+            showFooter: true,
+            columns: [
+                {
+                    field : 'quotationId',
+                    title : 'ID',
+                    visible: false
+                },
+                {
+                    field : 'createBy',
+                    title : '申请人',
+                    footerFormatter:function (value) {
+
+                        return "<a href='/fmis/quotation/todoQuotation'>更多报价单...</a>";
+                    }
+                },
+                {
+                    field : 'string9',
+                    title : '总金额'
+                },
+                {
+                    field : 'createTime',
+                    title : '创建时间'
+                }]
+        };
+        $.table.init(options);
+    });
 
     $(function(){
         //请求参数
@@ -70,7 +170,7 @@
                 $("#contractNum").text(contractNum);
                 console.log("result=" + result.data.quotationNum);
                 if (quotationNum > 0 || contractNum > 0) {
-                  parent.$('#todoListFlag').text("*");
+                    parent.$('#todoListFlag').text("*");
                 }
             },
             //请求失败，包含具体的错误信息
@@ -82,17 +182,54 @@
     });
 
 
-  $('#pay-qrcode').click(function () {
-    var html = $(this).html();
-    parent.layer.open({
-      title: false,
-      type: 1,
-      closeBtn: false,
-      shadeClose: true,
-      area: ['600px', 'auto'],
-      content: html
+    $('#pay-qrcode').click(function () {
+        var html = $(this).html();
+        parent.layer.open({
+            title: false,
+            type: 1,
+            closeBtn: false,
+            shadeClose: true,
+            area: ['600px', 'auto'],
+            content: html
+        });
     });
-  });
+
+    $(function() {
+        var options = {
+            url: "/fmis/data/list",
+            id: "bootstrap-table2",
+            classes: "table table-bordered table-sm",
+            modalName: "合同管理",
+            queryParams: {
+                "queryStatus":1
+            },
+            showFooter: true,
+            uniqueId: "dataId",
+            columns: [
+                {
+                    field : 'dataId',
+                    title : 'ID',
+                    visible: false
+                },
+                {
+                    field : 'createByName',
+                    title : '申请人',
+                    footerFormatter:function (value) {
+                        return "<a href='/fmis/data?todo=1'>更多合同...</a>";
+                    }
+                },
+                {
+                    field : 'price1',
+                    title : '总价'
+                },
+                {
+                    field : 'createTime',
+                    title : '创建时间'
+                }]
+        };
+        $.table.init(options);
+    });
+
 </script>
 </body>
 </html>

@@ -79,10 +79,10 @@
         </div>
 
         <div class="form-group">
-            <label class="col-sm-1 control-label">客户：</label>
+
+            <label class="col-sm-1 control-label">采购合同号：</label>
             <div class="col-sm-2">
-                <input name="string4" class="form-control" th:field="*{string4}" type="hidden">
-                <input name="customerName" id="customerName" th:field="*{bizCustomer.name}" readonly class="form-control" type="text"  required>
+                <input name="string11" class="form-control" type="text" th:field="*{string11}" readonly>
             </div>
         </div>
         <input type="hidden" id="numJsonValue" name="numJsonValue" th:value="${numJsonValue}"/>

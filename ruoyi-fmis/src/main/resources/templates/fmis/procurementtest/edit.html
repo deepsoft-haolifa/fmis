@@ -10,7 +10,31 @@
         <input name="dataId" id="dataId" th:field="*{dataId}" type="hidden">
         <input type="hidden" name="bizEditFlag" id="bizEditFlag" value="3"/>
         <input type="hidden" name="bizId" value="procurement"/>
+        <!-- 0=待检测 -->
+        <input type="hidden" name="queryStatus" value="0"/>
+
         <input type="hidden" id="numJsonValue" name="numJsonValue" th:value="${numJsonValue}"/>
+        <div class="select-list">
+            <ul>
+
+                <li>
+                    <p>销售合同号：</p>
+                    <input type="text" name="contractNo"/>
+                </li>
+                <li>
+                    <p>采购合同号：</p>
+                    <input type="text" name="procurementNo"/>
+                </li>
+                <li>
+                    <p>报检单号：</p>
+                    <input type="text" name="orderNo"/>
+                </li>
+                <li>
+                    <a class="btn btn-primary btn-rounded btn-sm" onclick="searchAll()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                    <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                </li>
+            </ul>
+        </div>
     </form>
     <div class="col-sm-12 select-table table-striped">
         <table id="bootstrap-table"  class="text-nowrap"></table>
@@ -43,6 +67,13 @@
     $("#form-data-edit").validate({
         focusCleanup: true
     });
+    function searchAll() {
+        $("#bootstrap-table").bootstrapTable('refresh');
+        $("#bootstrap-table-actuator").bootstrapTable('refresh');
+        $("#bootstrap-table-ref1").bootstrapTable('refresh');
+        $("#bootstrap-table-ref2").bootstrapTable('refresh');
+        $("#bootstrap-table-pa").bootstrapTable('refresh');
+    }
 
     function submitHandler() {
         if ($.validate.form()) {

@@ -293,6 +293,9 @@ public class SysDeptServiceImpl implements ISysDeptService
             sysDepts.add(sysDept);
             return;
         }
+        if (sysDept == null) {
+            return;
+        }
         getDeptRemarkForUserPdf(sysDept.getParentId(),sysDepts);
     }
 

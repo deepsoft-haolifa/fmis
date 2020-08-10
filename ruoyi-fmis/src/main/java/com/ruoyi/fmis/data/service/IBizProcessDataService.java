@@ -80,4 +80,6 @@ public interface IBizProcessDataService {
      * @return
      */
     public int subTestBizQuotation(BizProcessData bizProcessData);
+
+    public Long selectProcurementMaxNo ();
 }

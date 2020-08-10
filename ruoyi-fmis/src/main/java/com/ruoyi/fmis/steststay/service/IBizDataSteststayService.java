@@ -18,6 +18,8 @@ public interface IBizDataSteststayService {
      */
     public BizDataSteststay selectBizDataSteststayById(Long stayId);
 
+    public Long selectMaxNo();
+
     /**
      * 查询待质检列表
      *

@@ -28,12 +28,12 @@
         		    firstLoad: true,
         		    showFooter: false,
         		    search: false,
-                    showSearch: true,
+                    showSearch: false,//true
                     showPageGo: false,
-                    showRefresh: true,
-                    showColumns: true,
+                    showRefresh: false,//true
+                    showColumns: false,//true
                     cache: false,
-                    showToggle: true,
+                    showToggle: false,//true
                     showExport: false,
                     clickToSelect: false,
                     mobileResponsive: true,

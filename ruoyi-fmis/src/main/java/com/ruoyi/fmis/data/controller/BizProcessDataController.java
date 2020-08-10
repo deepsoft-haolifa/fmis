@@ -3,10 +3,8 @@ package com.ruoyi.fmis.data.controller;
 import java.io.FileOutputStream;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -26,6 +24,7 @@ import com.ruoyi.fmis.child.domain.BizProcessChild;
 import com.ruoyi.fmis.child.service.IBizProcessChildService;
 import com.ruoyi.fmis.common.BizConstants;
 import com.ruoyi.fmis.common.BizContractLevel;
+import com.ruoyi.fmis.common.BizProductExcel;
 import com.ruoyi.fmis.common.CommonUtils;
 import com.ruoyi.fmis.customer.domain.BizCustomer;
 import com.ruoyi.fmis.customer.service.IBizCustomerService;
@@ -128,7 +127,7 @@ public class BizProcessDataController extends BaseController {
     /**
      * 查询合同管理列表
      */
-    @RequiresPermissions("fmis:data:list")
+    //@RequiresPermissions("fmis:data:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(BizProcessData bizProcessData) {
@@ -466,10 +465,27 @@ public class BizProcessDataController extends BaseController {
 
         String supplierId = bizProcessData.getSupplierId();
         if (StringUtils.isNotEmpty(supplierId)) {
-            queryBizProcessChild.setSupplierId(supplierId);
+            //queryBizProcessChild.setSupplierId(supplierId);
         }
 
         List<BizProcessChild> bizProcessChildList = bizProcessChildService.selectBizChildProductList(queryBizProcessChild);
+
+        if (!CollectionUtils.isEmpty(bizProcessChildList)) {
+            Map<String,String> productNumMap = new HashMap<>();
+            for (BizProcessChild bizProcessChild : bizProcessChildList) {
+                String productNum = bizProcessChild.getProductNum();
+                String model = bizProcessChild.getModel();
+                String specifications = bizProcessChild.getSpecifications();
+                String k = model + "_" + specifications;
+                if (!productNumMap.containsKey(k)) {
+                    productNumMap.put(k,productNum);
+                } else {
+                    productNum = productNumMap.get(k);
+                }
+                bizProcessChild.setProductNum(productNum);
+            }
+        }
+
         return getDataTable(bizProcessChildList);
     }
 
@@ -484,7 +500,7 @@ public class BizProcessDataController extends BaseController {
         queryBizProcessChild.setProcurementId(bizProcessData.getProcurementId());
         String supplierId = bizProcessData.getSupplierId();
         if (StringUtils.isNotEmpty(supplierId)) {
-            queryBizProcessChild.setSupplierId(supplierId);
+            //queryBizProcessChild.setSupplierId(supplierId);
         }
         List<BizProcessChild> bizProcessChildListActuatorA = bizProcessChildService.selectBizChildActuatorList(queryBizProcessChild);
         return getDataTable(bizProcessChildListActuatorA);
@@ -501,7 +517,7 @@ public class BizProcessDataController extends BaseController {
         queryBizProcessChild.setProcurementId(bizProcessData.getProcurementId());
         String supplierId = bizProcessData.getSupplierId();
         if (StringUtils.isNotEmpty(supplierId)) {
-            queryBizProcessChild.setSupplierId(supplierId);
+            //queryBizProcessChild.setSupplierId(supplierId);
         }
         List<BizProcessChild> bizProcessChildListRefA = bizProcessChildService.selectBizChildRef1List(queryBizProcessChild);
         return getDataTable(bizProcessChildListRefA);
@@ -518,7 +534,7 @@ public class BizProcessDataController extends BaseController {
         queryBizProcessChild.setProcurementId(bizProcessData.getProcurementId());
         String supplierId = bizProcessData.getSupplierId();
         if (StringUtils.isNotEmpty(supplierId)) {
-            queryBizProcessChild.setSupplierId(supplierId);
+            //queryBizProcessChild.setSupplierId(supplierId);
         }
         List<BizProcessChild> bizProcessChildListRefA = bizProcessChildService.selectBizChildRef2List(queryBizProcessChild);
         return getDataTable(bizProcessChildListRefA);
@@ -535,7 +551,7 @@ public class BizProcessDataController extends BaseController {
         queryBizProcessChild.setProcurementId(bizProcessData.getProcurementId());
         String supplierId = bizProcessData.getSupplierId();
         if (StringUtils.isNotEmpty(supplierId)) {
-            queryBizProcessChild.setSupplierId(supplierId);
+            //queryBizProcessChild.setSupplierId(supplierId);
         }
         List<BizProcessChild> bizProcessChildListRefA = bizProcessChildService.selectBizChildPAList(queryBizProcessChild);
         return getDataTable(bizProcessChildListRefA);
@@ -552,7 +568,7 @@ public class BizProcessDataController extends BaseController {
         queryBizProcessChild.setProcurementId(bizProcessData.getProcurementId());
         String supplierId = bizProcessData.getSupplierId();
         if (StringUtils.isNotEmpty(supplierId)) {
-            queryBizProcessChild.setSupplierId(supplierId);
+            //queryBizProcessChild.setSupplierId(supplierId);
         }
         List<BizProcessChild> bizProcessChildListRefA = bizProcessChildService.selectBizChildPA1List(queryBizProcessChild);
         return getDataTable(bizProcessChildListRefA);
@@ -568,7 +584,7 @@ public class BizProcessDataController extends BaseController {
         queryBizProcessChild.setProcurementId(bizProcessData.getProcurementId());
         String supplierId = bizProcessData.getSupplierId();
         if (StringUtils.isNotEmpty(supplierId)) {
-            queryBizProcessChild.setSupplierId(supplierId);
+            //queryBizProcessChild.setSupplierId(supplierId);
         }
         List<BizProcessChild> bizProcessChildListRefA = bizProcessChildService.selectBizChildPA2List(queryBizProcessChild);
         return getDataTable(bizProcessChildListRefA);
@@ -584,7 +600,7 @@ public class BizProcessDataController extends BaseController {
         queryBizProcessChild.setProcurementId(bizProcessData.getProcurementId());
         String supplierId = bizProcessData.getSupplierId();
         if (StringUtils.isNotEmpty(supplierId)) {
-            queryBizProcessChild.setSupplierId(supplierId);
+            //queryBizProcessChild.setSupplierId(supplierId);
         }
         List<BizProcessChild> bizProcessChildListRefA = bizProcessChildService.selectBizChildPA3List(queryBizProcessChild);
         return getDataTable(bizProcessChildListRefA);
@@ -600,7 +616,7 @@ public class BizProcessDataController extends BaseController {
         queryBizProcessChild.setProcurementId(bizProcessData.getProcurementId());
         String supplierId = bizProcessData.getSupplierId();
         if (StringUtils.isNotEmpty(supplierId)) {
-            queryBizProcessChild.setSupplierId(supplierId);
+            //queryBizProcessChild.setSupplierId(supplierId);
         }
         List<BizProcessChild> bizProcessChildListRefA = bizProcessChildService.selectBizChildPA4List(queryBizProcessChild);
         return getDataTable(bizProcessChildListRefA);
@@ -1664,6 +1680,12 @@ public class BizProcessDataController extends BaseController {
         BizProcessChild queryBizProcessChild = new BizProcessChild();
         queryBizProcessChild.setDataId(bizProcessData.getDataId());
         queryBizProcessChild.setString2(bizProcessData.getLevel());
+        queryBizProcessChild.setQueryStatus(bizProcessData.getQueryStatus());
+
+        queryBizProcessChild.setOrderNo(bizProcessData.getOrderNo());
+        queryBizProcessChild.setContractNo(bizProcessData.getContractNo());
+        queryBizProcessChild.setProcurementNo(bizProcessData.getProcurementNo());
+
         List<BizProcessChild> bizProcessChildList = bizProcessChildService.selectBizTestProductList(queryBizProcessChild);
         return getDataTable(bizProcessChildList);
     }
@@ -1674,6 +1696,10 @@ public class BizProcessDataController extends BaseController {
         BizProcessChild queryBizProcessChild = new BizProcessChild();
         queryBizProcessChild.setDataId(bizProcessData.getDataId());
         queryBizProcessChild.setString2(bizProcessData.getLevel());
+        queryBizProcessChild.setQueryStatus(bizProcessData.getQueryStatus());
+        queryBizProcessChild.setOrderNo(bizProcessData.getOrderNo());
+        queryBizProcessChild.setContractNo(bizProcessData.getContractNo());
+        queryBizProcessChild.setProcurementNo(bizProcessData.getProcurementNo());
         List<BizProcessChild> bizProcessChildList = bizProcessChildService.selectBizTestActuatorList(queryBizProcessChild);
         return getDataTable(bizProcessChildList);
     }
@@ -1684,6 +1710,10 @@ public class BizProcessDataController extends BaseController {
         BizProcessChild queryBizProcessChild = new BizProcessChild();
         queryBizProcessChild.setDataId(bizProcessData.getDataId());
         queryBizProcessChild.setString2(bizProcessData.getLevel());
+        queryBizProcessChild.setQueryStatus(bizProcessData.getQueryStatus());
+        queryBizProcessChild.setOrderNo(bizProcessData.getOrderNo());
+        queryBizProcessChild.setContractNo(bizProcessData.getContractNo());
+        queryBizProcessChild.setProcurementNo(bizProcessData.getProcurementNo());
         List<BizProcessChild> bizProcessChildList = bizProcessChildService.selectBizTestRef1List(queryBizProcessChild);
         return getDataTable(bizProcessChildList);
     }
@@ -1694,6 +1724,10 @@ public class BizProcessDataController extends BaseController {
         BizProcessChild queryBizProcessChild = new BizProcessChild();
         queryBizProcessChild.setDataId(bizProcessData.getDataId());
         queryBizProcessChild.setString2(bizProcessData.getLevel());
+        queryBizProcessChild.setQueryStatus(bizProcessData.getQueryStatus());
+        queryBizProcessChild.setOrderNo(bizProcessData.getOrderNo());
+        queryBizProcessChild.setContractNo(bizProcessData.getContractNo());
+        queryBizProcessChild.setProcurementNo(bizProcessData.getProcurementNo());
         List<BizProcessChild> bizProcessChildList = bizProcessChildService.selectBizTestRef2List(queryBizProcessChild);
         return getDataTable(bizProcessChildList);
     }
@@ -1704,8 +1738,179 @@ public class BizProcessDataController extends BaseController {
         BizProcessChild queryBizProcessChild = new BizProcessChild();
         queryBizProcessChild.setDataId(bizProcessData.getDataId());
         queryBizProcessChild.setString2(bizProcessData.getLevel());
+        queryBizProcessChild.setQueryStatus(bizProcessData.getQueryStatus());
+        queryBizProcessChild.setOrderNo(bizProcessData.getOrderNo());
+        queryBizProcessChild.setContractNo(bizProcessData.getContractNo());
+        queryBizProcessChild.setProcurementNo(bizProcessData.getProcurementNo());
         List<BizProcessChild> bizProcessChildList = bizProcessChildService.selectBizTestPAList(queryBizProcessChild);
         return getDataTable(bizProcessChildList);
     }
 
+    @GetMapping("/uploadContract")
+    public String uploadContract(ModelMap mmap) {
+        return prefix + "/uploadContract";
+    }
+
+    @PostMapping("/excelData")
+    @ResponseBody
+    public JSONObject excelData(){
+        JSONObject retJson = new JSONObject();
+        JSONArray dataArray = new JSONArray();
+        JSONArray errorArray = new JSONArray();
+        String url = getRequest().getParameter("url");
+        String realPath = Global.getFilePath() + url;
+        List<BizProductExcel> list = new ArrayList<>();
+        try {
+            ExcelUtil<BizProductExcel> excelUtil = new ExcelUtil(BizProductExcel.class);
+            list = excelUtil.importExcel("",realPath);
+
+            if (CollectionUtils.isEmpty(list)) {
+                JSONObject json = new JSONObject();
+                json.put("msg","格式错误，请按照标准格式增加！");
+                errorArray.add(json);
+            }
+            Map<Long,Long> map = new HashMap<>();
+
+            int i = 1;
+            for (BizProductExcel product : list) {
+                JSONObject jsonData = new JSONObject();
+                String model = product.getModel();
+                if (StringUtils.isEmpty(model)) {
+                    JSONObject json = new JSONObject();
+                    json.put("msg","第" + (i + 1) + "行产品型号不能为空！");
+                    errorArray.add(json);
+                    i++;
+                    continue;
+                } else {
+                    model = model.trim();
+                }
+                String level = product.getLevel().trim();
+                if (StringUtils.isNotEmpty(level)) {
+                    level = level.trim();
+                }
+                String num = product.getNum();
+                if (StringUtils.isNotEmpty(num)) {
+                    num = num.trim();
+                }
+                if (!StringUtils.isNumeric(num)) {
+                    JSONObject json = new JSONObject();
+                    json.put("msg","第" + (i + 1) + "行数量格式错误！");
+                    errorArray.add(json);
+                    i++;
+                    continue;
+                }
+
+                BizProduct queryBizProduct = new BizProduct();
+                queryBizProduct.setModelEq(model);
+
+                String specifications = product.getSpecifications();
+                if (StringUtils.isNotEmpty(specifications)) {
+                    queryBizProduct.setSpecificationsName(specifications);
+                }
+                if (StringUtils.isNotEmpty(level)) {
+                    queryBizProduct.setString2(level);
+                }
+                List<BizProduct> bizProductList = bizProductService.selectBizProductList(queryBizProduct);
+                if (!CollectionUtils.isEmpty(bizProductList)) {
+                    if (bizProductList.size() > 1) {
+                        JSONObject json = new JSONObject();
+                        json.put("msg","第" + (i + 1) + "行 查询出多条数据！");
+                        errorArray.add(json);
+                        i++;
+                        continue;
+                    }
+
+                    BizProduct bizProduct = bizProductList.get(0);
+                    Long productId = bizProduct.getProductId();
+                    jsonData.put("productId",productId);
+                    jsonData.put("productName",bizProduct.getName());
+                    jsonData.put("model",bizProduct.getModel());
+                    jsonData.put("specifications",bizProduct.getSpecifications());
+                    jsonData.put("nominalPressure",bizProduct.getNominalPressure());
+                    jsonData.put("valvebodyMaterial",bizProduct.getValvebodyMaterial());
+                    jsonData.put("valveElement",bizProduct.getValveElement());
+                    jsonData.put("sealingMaterial",bizProduct.getSealingMaterial());
+                    jsonData.put("driveForm",bizProduct.getDriveForm());
+                    jsonData.put("connectionType",bizProduct.getConnectionType());
+                    jsonData.put("productNum",num);
+
+                    //执行器*1 法兰*2
+
+
+                    jsonData.put("productPrice",bizProduct.getPrice());
+                    jsonData.put("productCoefficient","1");
+                    jsonData.put("productRef1Id","");
+                    jsonData.put("ref1Name","请选择");
+
+                    jsonData.put("ref1Price","0");
+                    jsonData.put("productRef1Num","0");
+                    jsonData.put("productRef1Coefficient","0");
+                    jsonData.put("productRef2Id","");
+                    jsonData.put("ref2Name","请选择");
+                    jsonData.put("ref2Price","0");
+                    jsonData.put("productRef2Num","0");
+                    jsonData.put("productRef2Coefficient","0");
+                    jsonData.put("actuatorId","");
+                    jsonData.put("actuatorName","请选择");
+                    jsonData.put("actuatorPrice","0");
+                    jsonData.put("actuatorNum","0");
+                    jsonData.put("actuatorCoefficient","0");
+                    jsonData.put("productRemark","");
+                    jsonData.put("string14","0");
+                    jsonData.put("totalPrice","0");
+
+                    jsonData.put("pattachmentName","请选择");
+                    jsonData.put("pattachmentPrice","0");
+                    jsonData.put("pattachmentCount","0");
+                    jsonData.put("pattachmentCoefficient","0");
+
+                    jsonData.put("pattachment1Name","请选择");
+                    jsonData.put("pattachment1Price","0");
+                    jsonData.put("pattachment1Count","0");
+                    jsonData.put("pattachment1Coefficient","0");
+
+                    jsonData.put("pattachment2Name","请选择");
+                    jsonData.put("pattachment2Price","0");
+                    jsonData.put("pattachment2Count","0");
+                    jsonData.put("pattachment2Coefficient","0");
+
+                    jsonData.put("pattachment3Name","请选择");
+                    jsonData.put("pattachment3Price","0");
+                    jsonData.put("pattachment3Count","0");
+                    jsonData.put("pattachment3Coefficient","0");
+
+                    jsonData.put("pattachment4Name","请选择");
+                    jsonData.put("pattachment4Price","0");
+                    jsonData.put("pattachment4Count","0");
+                    jsonData.put("pattachment4Coefficient","0");
+
+                    jsonData.put("string15","RAL5010高光");
+
+
+                    if (!map.containsKey(productId)) {
+                        dataArray.add(jsonData);
+                        map.put(productId,productId);
+                    } else {
+                        JSONObject json = new JSONObject();
+                        json.put("msg","第" + (i + 1) + "行数据重复！");
+                        errorArray.add(json);
+                    }
+                } else {
+                    JSONObject json = new JSONObject();
+                    json.put("msg","第" + (i + 1) + "行数据不存在！");
+                    errorArray.add(json);
+                }
+                i++;
+            }
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+            throw new BusinessException("导出失败，请联系网站管理员！");
+        }
+        retJson.put("data",dataArray);
+        if (errorArray.size() > 0) {
+            retJson.put("error",errorArray);
+        }
+        return retJson;
+    }
 }

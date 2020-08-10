@@ -22,7 +22,7 @@
                 <div class="col-sm-2">
                     <div class="input-group date">
                         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input name="datetime1" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                        <input name="datetime1" id="datetime1" class="form-control" placeholder="yyyy-MM-dd" type="text">
                     </div>
                 </div>
                 <label class="col-sm-1 control-label">生产单号：</label>
@@ -82,10 +82,11 @@
             </div>
 
             <div class="form-group">
-                <label class="col-sm-1 control-label">客户：</label>
+
+
+                <label class="col-sm-1 control-label">合同金额：</label>
                 <div class="col-sm-2">
-                    <input name="string4" class="form-control" type="hidden">
-                    <input name="customerName" id="customerName" class="form-control" type="text" readonly onclick="selectCustomer()" required>
+                    <input name="price1" id="price1" readonly class="form-control" type="text" onkeyup="AmountKeyUp(this)">
                 </div>
             </div>
         </form>
@@ -157,6 +158,12 @@
             autoclose: true
         });
 
+        var d = new Date();
+        var month = (d.getMonth()+1).toString().padStart(2,'0');
+        var day = d.getDate().toString().padStart(2,'0');
+        var year = d.getFullYear();
+        $("#datetime1").val(year + "-" + month + "-" + day);
+
         $("input[name='datetime2']").datetimepicker({
             format: "yyyy-mm-dd",
             minView: "month",
@@ -181,6 +188,7 @@
 
         var setupTypeData = [[${@dict.getType('actuator_setup_type')}]];
         var string2Datas = [[${@dict.getType('product_level')}]];
+        var supplierTypeData = [[${@dict.getType('supplier_type')}]];
     </script>
     <script th:src="@{/js/biz/procurement.js}"></script>
 

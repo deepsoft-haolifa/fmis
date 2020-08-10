@@ -20,10 +20,11 @@
                                 <p>合同号：</p>
                                 <input type="text" name="string1"/>
                             </li>
+                            <!--
                             <li>
                                 <p>客户名称：</p>
                                 <input type="text" name="customerName"/>
-                            </li>
+                            </li>-->
 
                             <li>
                                 <p>处理状态：</p>
@@ -66,6 +67,8 @@
 
          <input type="hidden" id="paramterSupplierId" name="paramterSupplierId"/>
          <input type="hidden" id="paramterContractNo" name="paramterContractNo"/>
+
+         <input type="hidden" id="totalPrice" name="totalPrice"/>
     </div>
     <th:block th:include="include :: footer" />
      <th:block th:include="include :: bootstrap-editable-css" />
@@ -75,6 +78,7 @@
         var removeFlag = [[${@permission.hasPermi('fmis:data:remove')}]];
         var setupTypeData = [[${@dict.getType('actuator_setup_type')}]];
         var string2Datas = [[${@dict.getType('product_level')}]];
+        var supplierTypeData = [[${@dict.getType('supplier_type')}]];
 
         function saveProcurement() {
             if (overAllIds.length == 0) {
@@ -82,16 +86,23 @@
                 return;
             }
 
-            if (supplierMap.size != 1) {
+            /*if (supplierMap.size != 1) {
                 $.modal.alertWarning("请选择同一个供应商的数据");
                 return;
-            }
+            }*/
             var paramterSupplierId = "";
             supplierMap.forEach(function (value, key, map) {
                 paramterSupplierId = key;
             })
             $("#paramterSupplierId").val(paramterSupplierId);
 
+            var price1 = 0;
+            priceMap.forEach(function (value, key, map) {
+                price1 = FloatAdd(price1,value);
+            });
+            $("#totalPrice").val(price1);
+
+            console.log("price1=" + price1);
 
             var datas = [];
             $.each(overAllIds,function(index,value){
