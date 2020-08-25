@@ -362,6 +362,7 @@
                 showColumns: false,
                 showToggle: false,
                 useRowAttrFunc: true,
+                cache: false,
                 uniqueId: "productId",
                 onEditableSave: onEditableSave,
                 onClickCell: onClickCell,
@@ -462,6 +463,9 @@
         });
         function removeProduct(uid) {
             $.btTable.bootstrapTable('removeByUniqueId', uid);
+
+            $.btTable.bootstrapTable('load',$.btTable.bootstrapTable('getData'));
+
             calculateTotalPrice();
         }
         function onEditableSave (field, row, oldValue, $el) {
@@ -576,11 +580,13 @@
             var totalPriceOnly = parseFloat(parseFloat(productSumOnly) + parseFloat(productRef1SumOnly) + parseFloat(productRef2SumOnly) + parseFloat(actuatorSumOnly)
                 + parseFloat(pattachmentSumOnly)+ parseFloat(pattachment1SumOnly)+ parseFloat(pattachment2SumOnly)+ parseFloat(pattachment3SumOnly)+ parseFloat(pattachment4SumOnly)).toFixed(4);
 
+
             var updateObjOnly = {
                 index : row.rowId,
                 field : "totalPriceOnly",
                 value : totalPriceOnly
             };
+            console.log("updateObjOnly2=" + JSON.stringify(updateObjOnly));
             $.btTable.bootstrapTable("updateCell",updateObjOnly);
 
             var updateObj = {
@@ -588,6 +594,7 @@
                 field : "totalPrice",
                 value : totalSum
             };
+            console.log("updateObj2=" + JSON.stringify(updateObj));
             $.btTable.bootstrapTable("updateCell",updateObj);
 
 
@@ -598,6 +605,8 @@
         function calculateTotalPrice () {
             var data = $.btTable.bootstrapTable('getData');
             var productTotalPrice = 0;
+
+
             for (var i = 0; i < data.length; i++) {
                 var rowData = data[i];
                 var price = calculatePrice(rowData);
@@ -735,7 +744,6 @@
 
         function appendTable () {
             var productsJsonParamter = $("#productsJsonParamter").val();
-            console.log("productsJsonParamter=" + productsJsonParamter);
             var productsJsonArray = JSON.parse(productsJsonParamter);
             var tableData = $.btTable.bootstrapTable('getData');
             var tableMap = new Map();

@@ -10,6 +10,9 @@
             <div class="col-sm-12 search-collapse">
                 <form id="formId">
                     <div class="select-list">
+                        <input type="hidden" name="model" th:value="${bizProductModel}"/>
+                        <input type="hidden" name="specificationsName" th:value="${bizProductSpecifications}"/>
+                        <input type="hidden" name="oldProductId" id="oldProductId" th:value="${oldProductId}"/>
                         <ul>
                             <li>
                                 <p>产品名称：</p>
@@ -29,20 +32,21 @@
                                     <option value="">请选择</option>
                                 </select>
                             </li>
+                            <!--
                             <li>
                                 <p>产品型号：</p>
-                                <input name="model"  class="form-control" type="text">
-                            </li>
+                                <input name="model"  class="form-control" type="text" th:value="${bizProductModel}">
+                            </li> -->
 
                             <li>
                                 <p>好利型号：</p>
                                 <input name="string4"  class="form-control" type="text">
                             </li>
-
+                            <!--
                             <li>
                                 <p>规格：</p>
                                 <select name="specifications" id="specifications" class="form-control select2-multiple"><option value="">请选择</option></select>
-                            </li>
+                            </li> -->
 
                             <li>
                                 <p>公称压力：</p>
@@ -245,7 +249,7 @@
             var series = $("#series").val();
             console.log("series=" + series);
             if (series == null || series == "请选择" || series == "") {
-                $("#specifications").html("");
+                //$("#specifications").html("");
                 $("#nominalPressure").html("");
                 $("#connectionType").html("");
                 $("#sealingMaterial").html("");
@@ -266,8 +270,8 @@
                 type : "post",
                 data : {"dictId" : series},
                 success : function (data) {
-                    var specificationArray = data["specification"];
-                    setDataToOption(specificationArray,"specifications");
+                    /*var specificationArray = data["specification"];
+                    setDataToOption(specificationArray,"specifications");*/
                     //nominalPressure
                     var nominalPressures = data["nominalPressure"];
                     setDataToOption(nominalPressures,"nominalPressure");
@@ -308,19 +312,27 @@
         }
 
         function submitHandler() {
-            console.log("start...");
+            console.log("start1...");
+            var oldProductId = $("#oldProductId").val();
+            var pSessionId = parent.$('#formId input[id=pSessionId]').val();
             var rows = $.table.selectFirstColumns();
             if (rows.length == 0) {
                 $.modal.alertWarning("请选择一条记录");
                 return;
             }
-            var productJsonArray = [];
+            if (rows.length > 1) {
+                $.modal.alertWarning("请选择一条记录");
+                return;
+            }
+            var productJson = {};
             var selectRows = $.btTable.bootstrapTable('getSelections');
+            var newProductId = 0;
             for (var i = 0; i < selectRows.length; i++) {
                 var price = selectRows[i].price;
                 var name = selectRows[i].name;
+                newProductId = selectRows[i].productId;
                 var rowData = {
-                    productId: selectRows[i].productId,
+                    newProductId: selectRows[i].productId,
                     productName: name,
                     model: selectRows[i].model,
                     specifications:selectRows[i].specifications,
@@ -330,61 +342,22 @@
                     sealingMaterial:selectRows[i].sealingMaterial,
                     driveForm:selectRows[i].driveForm,
                     connectionType:selectRows[i].connectionType,
-                    productNum:"0",
-                    productPrice:selectRows[i].price,
-                    productCoefficient:"1",
-                    productRef1Id:"",
-                    ref1Name:"请选择",
-                    ref1Price:"0",
-                    productRef1Num:"0",
-                    productRef1Coefficient:"0",
-                    productRef2Id:"",
-                    ref2Name:"请选择",
-                    ref2Price:"0",
-                    productRef2Num:"0",
-                    productRef2Coefficient:"0",
-                    actuatorId:"",
-                    actuatorName:"请选择",
-                    actuatorPrice: "0",
-                    actuatorNum: "0",
-                    actuatorCoefficient:"0",
-
-                    pattachmentName:"请选择",
-                    pattachmentPrice:"0",
-                    pattachmentCount:"0",
-                    pattachmentCoefficient:"0",
-
-                    pattachment1Name:"请选择",
-                    pattachment1Price:"0",
-                    pattachment1Count:"0",
-                    pattachment1Coefficient:"0",
-
-                    pattachment2Name:"请选择",
-                    pattachment2Price:"0",
-                    pattachment2Count:"0",
-                    pattachment2Coefficient:"0",
-
-                    pattachment3Name:"请选择",
-                    pattachment3Price:"0",
-                    pattachment3Count:"0",
-                    pattachment3Coefficient:"0",
-
-                    pattachment4Name:"请选择",
-                    pattachment4Price:"0",
-                    pattachment4Count:"0",
-                    pattachment4Coefficient:"0",
-
-                    productRemark:""
+                    productProcurementPrice:selectRows[i].price,
                 };
-                productJsonArray.push(rowData);
+                productJson = rowData;
             }
-            parent.$('#form-quotation-add input[id=productsJsonParamter]').val(JSON.stringify(productJsonArray));
-            parent.$('#form-quotation-edit input[id=productsJsonParamter]').val(JSON.stringify(productJsonArray));
-            $.modal.confirm('添加成功，确定要离开吗？',
-                function() {
-                    $.modal.close();
-                }
-            );
+            parent.$('#formId input[id=productsJsonParamter]').val(JSON.stringify(productJson));
+
+            //old 产品ID  new 产品ID，pSessionId
+            //oldProductId=旧的产品ID newProductId=新产品ID pSessionId=暂时缓存key
+
+            var prefixPool = ctx + "fmis/procurementpool";
+
+            var json = {"productId":oldProductId,"newProductId":newProductId,"pSessionId":pSessionId};
+            console.log("selectProduct json=" + JSON.stringify(json));
+            $.operate.save(prefixPool + "/saveSessionId", json);
+
+            $.modal.close();
 
         }
     </script>

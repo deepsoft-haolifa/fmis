@@ -19,7 +19,7 @@ $(function() {
         onExpandRow : function(index, row, $detail) {
             initChildLevelTable(index, row, $detail);
         },
-        columns: [{field : 'rowId',title : '序号',width: 20,visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
+        columns: [{field : 'rowId',title : '序号',visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
             {
             checkbox: true
             },
@@ -181,7 +181,7 @@ initChildLevelTable = function(index, row, $detail) {
         onExpandRow : function(index, row, $detail) {
             initChildLevelListTable(index, row, $detail);
         },columns: [
-            {field : 'rowId',title : '序号',width: 20,visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
+            {field : 'rowId',title : '序号',visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
             {field : 'levelTypeName',title : '类别'},
             {field : 'levelType',title : 'type',visible: false},
             {field : 'dataId',title : 'dataId',visible: false},
@@ -382,8 +382,14 @@ function disableCheckbox (row) {
 }
 
 initChildProductTable = function(index, row, $detail) {
-    var tableHtml = '<div class="col-sm-12 select-table table-striped"><table style="table-layout:fixed" id="initChildProductTable_' + row.dataId + '"></table></div>';
+    //var tableHtml = '<div class="col-sm-12 select-table table-striped"><table style="table-layout:fixed" id="initChildProductTable_' + row.dataId + '"></table></div>';
+
+    var tableHtml = '<div class="table-responsive"><table class="table text-nowrap"  id="initChildProductTable_' + row.dataId + '"></table></div>';
+
+
     var cur_table = $detail.html(tableHtml).find('table');
+    var pSessionId = parent.$('#formId input[id=pSessionId]').val();
+    console.log("parent formId pSessionId=" + pSessionId);
     $(cur_table).bootstrapTable({
         url: ctx + "fmis/data/listLevelProduct",
         method: 'post',
@@ -393,13 +399,17 @@ initChildProductTable = function(index, row, $detail) {
         uniqueId: "productId",
         cache: true,
         onEditableSave: onEditableSave,
+        onClickCell: function(field, value, row, $element) {
+            onClickProductCell(field, value, row, $element,row.dataId);
+        },
         queryParams : {
             "level": row["level"],
             "dataStatus": $("#dataStatus").val(),
             "dataId": row["dataId"],
             "bizEditFlag":$("#bizEditFlag").val(),
             "supplierId":$("#string6").val(),
-            "procurementId": procurementId
+            "procurementId": procurementId,
+            "pSessionId": pSessionId
         },
         columns: [{
             checkbox: true,
@@ -419,9 +429,10 @@ initChildProductTable = function(index, row, $detail) {
                 }
 
             }
-        },{field : 'rowId',title : '序号',width: 25,visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
+        },{field : 'rowId',title : '序号',visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
 
-            {field : 'productId',title : '产品ID1',visible: false,width: 100},
+            {field : 'productId',title : '产品ID1',visible: false},
+            {field : 'newProductId',title : 'new产品ID',visible: false},
             {field : 'dataId',title : 'dataId',visible: false},
             {field : 'levelValue',title : 'levelValue',visible: false},
             {field : 'childId',title : 'childId',visible: false},
@@ -429,11 +440,11 @@ initChildProductTable = function(index, row, $detail) {
             {field : 'contractNo',title : 'contractNo',visible: false},
 
             {field : 'procurementId',title : 'childId',visible: false},
-            {field : 'productName',title : '产品名称',editable: false,width: 100},
-            {field : 'model',title : '型号',editable: false,width: 200},
-            {field : 'productNum',title : '数量',editable: {type: 'text',validate: function(v,r){ return numberValidate(v)}},width: 80},
-            {field : 'productProcurementPrice',title : '采购价',editable: false,width: 100},
-            {field : 'totalPrice',title : '分项金额',editable: false,width: 100,formatter: function(value, row, index) {
+            {field : 'productName',title : '产品名称',editable: false},
+            {field : 'model',title : '型号',editable: false},
+            {field : 'productNum',title : '数量',editable: {type: 'text',validate: function(v,r){ return numberValidate(v)}}},
+            {field : 'productProcurementPrice',title : '采购价',editable: false},
+            {field : 'totalPrice',title : '分项金额',editable: false,formatter: function(value, row, index) {
                     var actions = [];
                     var productNum = row["productNum"];
                     productNum = $.common.isEmpty(productNum) == true ? 0 : parseFloat(productNum);
@@ -444,21 +455,21 @@ initChildProductTable = function(index, row, $detail) {
                     return actions.join('');
                 }},
 
-            {field : 'productStatus',title : '采购状态',editable: false,width: 100,
+            {field : 'productStatus',title : '采购状态',editable: false,
                 formatter: formaterStatus},
 
-            {field : 'supplierName',title : '供应商',editable: false,width: 100},
+            {field : 'supplierName',title : '供应商',editable: false},
             {field : 'supplierId',title : 'supplierId',visible: false},
 
-            {field : 'specifications',title : '规格',editable: false,width: 100},
-            {field : 'nominalPressure',title : '压力',editable: false,width: 100},
-            {field : 'valvebodyMaterial',title : '阀体',editable: false,width: 100},
-            {field : 'valveElement',title : '阀芯',editable: false,width: 100},
-            {field : 'sealingMaterial',title : '密封材质',editable: false,width: 100},
-            {field : 'driveForm',title : '驱动形式',editable: false,width: 100},
-            {field : 'connectionType',title : '连接方式',editable: false,width: 100},
+            {field : 'specifications',title : '规格',editable: false},
+            {field : 'nominalPressure',title : '压力',editable: false},
+            {field : 'valvebodyMaterial',title : '阀体',editable: false},
+            {field : 'valveElement',title : '阀芯',editable: false},
+            {field : 'sealingMaterial',title : '密封材质',editable: false},
+            {field : 'driveForm',title : '驱动形式',editable: false},
+            {field : 'connectionType',title : '连接方式',editable: false},
 
-            {field : 'goodsTime',title : '回货时间',editable: false,width: 100}
+            {field : 'goodsTime',title : '回货时间',editable: false}
 
 
         ]
@@ -469,8 +480,41 @@ initChildProductTable = function(index, row, $detail) {
     });
 };
 
+function onClickProductCell (field, value, row, $element,dataId) {
+    var bizEditFlag = $("#bizEditFlag").val();
+    if (field == "productName" && bizEditFlag == -1) {
+        var idx = $element.parent().data('index');
+        var tableId = "initChildProductTable_" + dataId;
+        console.log("-1=" + tableId);
+        var productId = row.productId;
+        var widthNum = $("#formId").width() - 50;
+        var heigthNum = $("#formId").height() + 450;
+        var url = prefixPool + "/selectProduct?productId=" + productId;
+        console.log("widthNum=" + widthNum + "---" + this.innerWidth);
+        $.modal.open("关联产品配件法兰", url,widthNum, heigthNum,function (index, layero) {
+            var iframeWin = layero.find('iframe')[0];
+            iframeWin.contentWindow.submitHandler(index, layero);
+            //ref1JsonParamter
+            var productsJsonParamter = $("#productsJsonParamter").val();
+            setTableValueById(tableId,productsJsonParamter,productId,idx);
+        });
 
+    }
 
+}
+//根据表ID修改某一列的值
+function setTableValueById (tableId,jsonValue,id,idx) {
+    var jsonObj = JSON.parse(jsonValue);
+    for (key in jsonObj) {
+        var updateObj = {
+            index : idx,
+            field : key,
+            value : jsonObj[key]
+        };
+        $("#" + tableId).bootstrapTable("updateCell",updateObj);
+        console.log("updateCell=" + JSON.stringify(updateObj));
+    }
+}
 
 function examine(type,datas,typeIndex){
     if(type.indexOf('uncheck')==-1){
@@ -589,7 +633,7 @@ function examine(type,datas,typeIndex){
 
 
 initChildActuatorTable = function(index, row, $detail) {
-    var cur_table = $detail.html('<table style="table-layout:fixed" id="initChildActuatorTable_' + row.dataId + '"></table>').find('table');
+    var cur_table = $detail.html('<div class="table-responsive"><table class="table text-nowrap"  id="initChildActuatorTable_' + row.dataId + '"></table></div>').find('table');
     $(cur_table).bootstrapTable({
         url: ctx + "fmis/data/listLevelActuator",
         method: 'post',
@@ -623,19 +667,19 @@ initChildActuatorTable = function(index, row, $detail) {
                     checked : checkedValue
                 }
             }
-        },{field : 'rowId',title : '序号',width: 20,visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
+        },{field : 'rowId',title : '序号',visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
             {field : 'actuatorId',title : 'actuatorId',visible: false},
             {field : 'procurementId',title : 'childId',visible: false},
             {field : 'dataId',title : 'dataId',visible: false},
             {field : 'contractNo',title : 'contractNo',visible: false},
             {field : 'levelValue',title : 'levelValue',visible: false},
             {field : 'childId',title : 'childId',visible: false},
-            {field : 'actuatorName',title : '执行器名称',editable: false,width: 150},
+            {field : 'actuatorName',title : '执行器名称',editable: false},
 
 
-            {field : 'actuatorNum',title : '执行器数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 100},
-            {field : 'actuatorString6',title : '采购价',editable: false,width: 100},
-            {field : 'totalPrice',title : '分项金额',editable: false,width: 100,formatter: function(value, row, index) {
+            {field : 'actuatorNum',title : '执行器数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
+            {field : 'actuatorString6',title : '采购价',editable: false},
+            {field : 'totalPrice',title : '分项金额',editable: false,formatter: function(value, row, index) {
                     var actions = [];
                     var productNum = row["actuatorNum"];
                     productNum = $.common.isEmpty(productNum) == true ? 0 : parseFloat(productNum);
@@ -645,67 +689,67 @@ initChildActuatorTable = function(index, row, $detail) {
                     actions.push(total);
                     return actions.join('');
                 }},
-            {field : 'actuatorStatus',title : '采购状态',editable: false,width: 100,
+            {field : 'actuatorStatus',title : '采购状态',editable: false,
                 formatter: formaterStatus},
 
-            {field : 'supplierName',title : '供应商',editable: false,width: 100},
+            {field : 'supplierName',title : '供应商',editable: false},
             {field : 'supplierId',title : 'supplierId',visible: false},
 
-            {field : 'goodsTime',title : '回货时间',editable: false,width: 100},
+            {field : 'goodsTime',title : '回货时间',editable: false},
             {
                 field : 'actuatorBrand',
-                title : '执行器品牌',width: 100
+                title : '执行器品牌'
             },
             {
                 field : 'actuatorManufacturer',
-                title : '生产厂家',width: 200
+                title : '生产厂家'
             },
             {
                 field : 'actuatorString4',
-                title : '厂家代码',width: 100
+                title : '厂家代码'
             },
             {
                 field : 'actuatorString1',
-                title : '型号',width: 200
+                title : '型号'
             },
             {
                 field : 'actuatorSetupType',
                 title : '安装形式',
                 formatter: function(value, row, index) {
                     return $.table.selectDictLabel(setupTypeData, value);
-                },width: 60
+                }
             },
             {
                 field : 'actuatorOutputTorque',
-                title : '输出力距',width: 60
+                title : '输出力距'
             },
             {
                 field : 'actuatorString3',
-                title : '系列',width: 60
+                title : '系列'
             },
             {
                 field : 'actuatorActionType',
-                title : '开启时间',width: 100
+                title : '开启时间'
             },
             {
                 field : 'actuatorControlCircuit',
-                title : '控制电路',width: 100
+                title : '控制电路'
             },
             {
                 field : 'actuatorAdaptableVoltage',
-                title : '适用电压',width: 60
+                title : '适用电压'
             },
             {
                 field : 'actuatorProtectionLevel',
-                title : '防护等级',width: 100
+                title : '防护等级'
             },
             {
                 field : 'actuatorQualityLevel',
-                title : '品质等级',width: 30
+                title : '品质等级'
             },
             {
                 field : 'actuatorExplosionLevel',
-                title : '防爆等级',width: 50
+                title : '防爆等级'
             }
         ]
     });
@@ -716,7 +760,10 @@ initChildActuatorTable = function(index, row, $detail) {
 };
 
 initChildRef1Table = function(index, row, $detail) {
-    var cur_table = $detail.html('<table style="table-layout:fixed" id="initChildRef1Table_' + row.dataId + '"></table>').find('table');
+    //var cur_table = $detail.html('<table style="table-layout:fixed" id="initChildRef1Table_' + row.dataId + '"></table>').find('table');
+
+    var cur_table = $detail.html('<div class="table-responsive"><table class="table text-nowrap"  id="initChildRef1Table_' + row.dataId + '"></table></div>').find('table');
+
     $(cur_table).bootstrapTable({
         url: ctx + "fmis/data/listLevelRef1",
         method: 'post',
@@ -750,18 +797,18 @@ initChildRef1Table = function(index, row, $detail) {
                     checked : checkedValue
                 }
             }
-        },{field : 'rowId',title : '序号',width: 20,visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
+        },{field : 'rowId',title : '序号',visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
             {field : 'productRef1Id',title : 'ref1Id',visible: false},
             {field : 'dataId',title : 'dataId',visible: false},
             {field : 'levelValue',title : 'levelValue',visible: false},
             {field : 'procurementId',title : 'childId',visible: false},
             {field : 'childId',title : 'childId',visible: false},
             {field : 'contractNo',title : 'contractNo',visible: false},
-            {field : 'ref1Name',title : '法兰名称',editable: false,width: 100},
+            {field : 'ref1Name',title : '法兰名称',editable: false},
 
-            {field : 'productRef1Num',title : '法兰数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 100},
-            {field : 'ref1String2',title : '采购价',editable: false,width: 100},
-            {field : 'totalPrice',title : '分项金额',editable: false,width: 100,formatter: function(value, row, index) {
+            {field : 'productRef1Num',title : '法兰数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
+            {field : 'ref1String2',title : '采购价',editable: false},
+            {field : 'totalPrice',title : '分项金额',editable: false,formatter: function(value, row, index) {
                     var actions = [];
                     var productNum = row["productRef1Num"];
                     productNum = $.common.isEmpty(productNum) == true ? 0 : parseFloat(productNum);
@@ -771,17 +818,17 @@ initChildRef1Table = function(index, row, $detail) {
                     actions.push(total);
                     return actions.join('');
                 }},
-            {field : 'ref1Status',title : '采购状态',editable: false,width: 100,
+            {field : 'ref1Status',title : '采购状态',editable: false,
                 formatter: formaterStatus},
 
-            {field : 'supplierName',title : '供应商',editable: false,width: 100},
+            {field : 'supplierName',title : '供应商',editable: false},
             {field : 'supplierId',title : 'supplierId',visible: false},
 
-            {field : 'goodsTime',title : '回货时间',editable: false,width: 100},
-            {field : 'model',title : '型号',width: 100},
-            {field : 'ref1Specifications',title : '规格',width: 100},
-            {field : 'ref1ValvebodyMaterial',title : '材质',width: 100},
-            {field : 'ref1MaterialRequire',title : '材质要求',width: 300}
+            {field : 'goodsTime',title : '回货时间',editable: false},
+            {field : 'model',title : '型号'},
+            {field : 'ref1Specifications',title : '规格'},
+            {field : 'ref1ValvebodyMaterial',title : '材质'},
+            {field : 'ref1MaterialRequire',title : '材质要求'}
         ]
     });
     $(cur_table).on('uncheck.bs.table check.bs.table check-all.bs.table uncheck-all.bs.table',function(e,rows){
@@ -793,7 +840,10 @@ initChildRef1Table = function(index, row, $detail) {
 
 
 initChildRef2Table = function(index, row, $detail) {
-    var cur_table = $detail.html('<table style="table-layout:fixed" id="initChildRef2Table_' + row.dataId + '"></table>').find('table');
+    //var cur_table = $detail.html('<table style="table-layout:fixed" id="initChildRef2Table_' + row.dataId + '"></table>').find('table');
+
+    var cur_table = $detail.html('<div class="table-responsive"><table class="table text-nowrap"  id="initChildRef2Table_' + row.dataId + '"></table></div>').find('table');
+
     $(cur_table).bootstrapTable({
         url: ctx + "fmis/data/listLevelRef2",
         method: 'post',
@@ -827,18 +877,18 @@ initChildRef2Table = function(index, row, $detail) {
                     checked : checkedValue
                 }
             }
-        },{field : 'rowId',title : '序号',width: 20,visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
+        },{field : 'rowId',title : '序号',visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
             {field : 'productRef2Id',title : 'ref2Id',visible: false},
             {field : 'procurementId',title : 'childId',visible: false},
             {field : 'dataId',title : 'dataId',visible: false},
             {field : 'levelValue',title : 'levelValue',visible: false},
             {field : 'childId',title : 'childId',visible: false},
             {field : 'contractNo',title : 'contractNo',visible: false},
-            {field : 'ref2Name',title : '螺栓名称',editable: {type: 'text',emptytext: '空',disabled: true},width: 100},
+            {field : 'ref2Name',title : '螺栓名称',editable: {type: 'text',emptytext: '空',disabled: true}},
 
-            {field : 'productRef2Num',title : '螺栓数量',editable: {type: 'text',emptytext: '0',validate: function(v){ return numberValidate(v)}},width: 100},
-            {field : 'ref1String2',title : '采购价',editable: false,width: 100},
-            {field : 'totalPrice',title : '分项金额',editable: false,width: 100,formatter: function(value, row, index) {
+            {field : 'productRef2Num',title : '螺栓数量',editable: {type: 'text',emptytext: '0',validate: function(v){ return numberValidate(v)}}},
+            {field : 'ref1String2',title : '采购价',editable: false},
+            {field : 'totalPrice',title : '分项金额',editable: false,formatter: function(value, row, index) {
                     var actions = [];
                     var productNum = row["productRef2Num"];
                     productNum = $.common.isEmpty(productNum) == true ? 0 : parseFloat(productNum);
@@ -848,17 +898,17 @@ initChildRef2Table = function(index, row, $detail) {
                     actions.push(total);
                     return actions.join('');
                 }},
-            {field : 'ref2Status',title : '采购状态',editable: false,width: 100,
+            {field : 'ref2Status',title : '采购状态',editable: false,
                 formatter: formaterStatus},
 
-            {field : 'supplierName',title : '供应商',editable: false,width: 100},
+            {field : 'supplierName',title : '供应商',editable: false},
             {field : 'supplierId',title : 'supplierId',visible: false},
 
-            {field : 'goodsTime',title : '回货时间',editable: false,width: 100},
-            {field : 'model',title : '型号',width: 100},
-            {field : 'ref1Specifications',title : '规格',width: 100},
-            {field : 'ref1ValvebodyMaterial',title : '材质',width: 100},
-            {field : 'ref1MaterialRequire',title : '材质要求',width: 300}
+            {field : 'goodsTime',title : '回货时间',editable: false},
+            {field : 'model',title : '型号'},
+            {field : 'ref1Specifications',title : '规格'},
+            {field : 'ref1ValvebodyMaterial',title : '材质'},
+            {field : 'ref1MaterialRequire',title : '材质要求'}
         ]
     });
     $(cur_table).on('uncheck.bs.table check.bs.table check-all.bs.table uncheck-all.bs.table',function(e,rows){
@@ -868,7 +918,9 @@ initChildRef2Table = function(index, row, $detail) {
 };
 
 initChildPATable = function(index, row, $detail) {
-    var cur_table = $detail.html('<table style="table-layout:fixed" id="initChildPATable_' + row.dataId + '"></table>').find('table');
+    //var cur_table = $detail.html('<table style="table-layout:fixed" id="initChildPATable_' + row.dataId + '"></table>').find('table');
+    var cur_table = $detail.html('<div class="table-responsive"><table class="table text-nowrap"  id="initChildPATable_' + row.dataId + '"></table></div>').find('table');
+
     $(cur_table).bootstrapTable({
         url: ctx + "fmis/data/listLevelPA",
         method: 'post',
@@ -902,16 +954,16 @@ initChildPATable = function(index, row, $detail) {
                     checked : checkedValue
                 }
             }
-        },{field : 'rowId',title : '序号',width: 20,visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
+        },{field : 'rowId',title : '序号',visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
             {field : 'pattachmentId',title : 'pattachmentId',visible: false},
             {field : 'dataId',title : 'dataId',visible: false},
             {field : 'levelValue',title : 'levelValue',visible: false},
             {field : 'procurementId',title : 'childId',visible: false},
             {field : 'childId',title : 'childId',visible: false},
             {field : 'contractNo',title : 'contractNo',visible: false},
-            {field : 'pattachmentCount',title : '定位器数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 100},
-            {field : 'procurementPrice',title : '采购价',editable: false,width: 100},
-            {field : 'totalPrice',title : '分项金额',editable: false,width: 100,formatter: function(value, row, index) {
+            {field : 'pattachmentCount',title : '定位器数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
+            {field : 'procurementPrice',title : '采购价',editable: false},
+            {field : 'totalPrice',title : '分项金额',editable: false,formatter: function(value, row, index) {
                     var actions = [];
                     var productNum = row["pattachmentCount"];
                     productNum = $.common.isEmpty(productNum) == true ? 0 : parseFloat(productNum);
@@ -921,80 +973,80 @@ initChildPATable = function(index, row, $detail) {
                     actions.push(total);
                     return actions.join('');
                 }},
-            {field : 'pStatus',title : '采购状态',editable: false,width: 100,
+            {field : 'pStatus',title : '采购状态',editable: false,
                 formatter: formaterStatus},
 
-            {field : 'supplierName',title : '供应商',editable: false,width: 100},
+            {field : 'supplierName',title : '供应商',editable: false},
             {field : 'supplierId',title : 'supplierId',visible: false},
 
-            {field : 'goodsTime',title : '回货时间',editable: false,width: 100},
+            {field : 'goodsTime',title : '回货时间',editable: false},
             {
                 field : 'bh',
-                title : '商品编号',width: 100
+                title : '商品编号'
             },
             {
                 field : 'chineseName',
-                title : '中文品名',width: 100
+                title : '中文品名'
             },
             {
                 field : 'chineseSpecifications',
-                title : '中文规格',width: 100
+                title : '中文规格'
             },
             {
                 field : 'englishName',
-                title : '英文品名',width: 100
+                title : '英文品名'
             },
             {
                 field : 'englishSpecifications',
-                title : '英文规格',width: 100
+                title : '英文规格'
             },
             {
                 field : 'chinesePackaging',
-                title : '中文包装',width: 100
+                title : '中文包装'
             },
             {
                 field : 'englishPackaging',
-                title : '英文包装',width: 100
+                title : '英文包装'
             },
             {
                 field : 'chineseUnit',
-                title : '中文单位',width: 100
+                title : '中文单位'
             },
             {
                 field : 'englishUnit',
-                title : '英文单位',width: 100
+                title : '英文单位'
             },
             {
                 field : 'pressure',
-                title : '压力',width: 100
+                title : '压力'
             },
             {
                 field : 'material',
-                title : '材质',width: 100
+                title : '材质'
             },
             {
                 field : 'barCode',
-                title : '条形码',width: 100
+                title : '条形码'
             },
             {
                 field : 'customsBh',
-                title : '海关编码',width: 100
+                title : '海关编码'
             },
             {
                 field : 'handlingFee',
-                title : '操作费',width: 100
+                title : '操作费'
             },
             {
                 field : 'color',
-                title : '颜色',width: 100
+                title : '颜色'
             },
             {
                 field : 'developer',
-                title : '开发人员',width: 100
+                title : '开发人员'
             },
             {
                 field : 'goodsCategory',
-                title : '商品分类',width: 100
+                title : '商品分类'
             }
         ]
     });
@@ -1005,7 +1057,9 @@ initChildPATable = function(index, row, $detail) {
 };
 
 initChildPA1Table = function(index, row, $detail) {
-    var cur_table = $detail.html('<table style="table-layout:fixed" id="initChildPA1Table_' + row.dataId + '"></table>').find('table');
+    //var cur_table = $detail.html('<table style="table-layout:fixed" id="initChildPA1Table_' + row.dataId + '"></table>').find('table');
+    var cur_table = $detail.html('<div class="table-responsive"><table class="table text-nowrap"  id="initChildPA1Table_' + row.dataId + '"></table></div>').find('table');
+
     $(cur_table).bootstrapTable({
         url: ctx + "fmis/data/listLevelPA1",
         method: 'post',
@@ -1039,16 +1093,16 @@ initChildPA1Table = function(index, row, $detail) {
                     checked : checkedValue
                 }
             }
-        },{field : 'rowId',title : '序号',width: 20,visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
+        },{field : 'rowId',title : '序号',visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
             {field : 'pattachment1Id',title : 'pattachment1Id',visible: false},
             {field : 'dataId',title : 'dataId',visible: false},
             {field : 'levelValue',title : 'levelValue',visible: false},
             {field : 'procurementId',title : 'childId',visible: false},
             {field : 'childId',title : 'childId',visible: false},
             {field : 'contractNo',title : 'contractNo',visible: false},
-            {field : 'pattachment1Count',title : '电磁阀数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 100},
-            {field : 'procurementPrice',title : '采购价',editable: false,width: 100},
-            {field : 'totalPrice',title : '分项金额',editable: false,width: 100,formatter: function(value, row, index) {
+            {field : 'pattachment1Count',title : '电磁阀数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
+            {field : 'procurementPrice',title : '采购价',editable: false},
+            {field : 'totalPrice',title : '分项金额',editable: false,formatter: function(value, row, index) {
                     var actions = [];
                     var productNum = row["pattachment1Count"];
                     productNum = $.common.isEmpty(productNum) == true ? 0 : parseFloat(productNum);
@@ -1058,80 +1112,80 @@ initChildPA1Table = function(index, row, $detail) {
                     actions.push(total);
                     return actions.join('');
                 }},
-            {field : 'p1Status',title : '采购状态',editable: false,width: 100,
+            {field : 'p1Status',title : '采购状态',editable: false,
                 formatter: formaterStatus},
 
-            {field : 'supplierName',title : '供应商',editable: false,width: 100},
+            {field : 'supplierName',title : '供应商',editable: false},
             {field : 'supplierId',title : 'supplierId',visible: false},
 
-            {field : 'goodsTime',title : '回货时间',editable: false,width: 100},
+            {field : 'goodsTime',title : '回货时间',editable: false},
             {
                 field : 'bh',
-                title : '商品编号',width: 100
+                title : '商品编号'
             },
             {
                 field : 'chineseName',
-                title : '中文品名',width: 100
+                title : '中文品名'
             },
             {
                 field : 'chineseSpecifications',
-                title : '中文规格',width: 100
+                title : '中文规格'
             },
             {
                 field : 'englishName',
-                title : '英文品名',width: 100
+                title : '英文品名'
             },
             {
                 field : 'englishSpecifications',
-                title : '英文规格',width: 100
+                title : '英文规格'
             },
             {
                 field : 'chinesePackaging',
-                title : '中文包装',width: 100
+                title : '中文包装'
             },
             {
                 field : 'englishPackaging',
-                title : '英文包装',width: 100
+                title : '英文包装'
             },
             {
                 field : 'chineseUnit',
-                title : '中文单位',width: 100
+                title : '中文单位'
             },
             {
                 field : 'englishUnit',
-                title : '英文单位',width: 100
+                title : '英文单位'
             },
             {
                 field : 'pressure',
-                title : '压力',width: 100
+                title : '压力'
             },
             {
                 field : 'material',
-                title : '材质',width: 100
+                title : '材质'
             },
             {
                 field : 'barCode',
-                title : '条形码',width: 100
+                title : '条形码'
             },
             {
                 field : 'customsBh',
-                title : '海关编码',width: 100
+                title : '海关编码'
             },
             {
                 field : 'handlingFee',
-                title : '操作费',width: 100
+                title : '操作费'
             },
             {
                 field : 'color',
-                title : '颜色',width: 100
+                title : '颜色'
             },
             {
                 field : 'developer',
-                title : '开发人员',width: 100
+                title : '开发人员'
             },
             {
                 field : 'goodsCategory',
-                title : '商品分类',width: 100
+                title : '商品分类'
             }
         ]
     });
@@ -1142,7 +1196,9 @@ initChildPA1Table = function(index, row, $detail) {
 };
 
 initChildPA2Table = function(index, row, $detail) {
-    var cur_table = $detail.html('<table style="table-layout:fixed" id="initChildPA2Table_' + row.dataId + '"></table>').find('table');
+    //var cur_table = $detail.html('<table style="table-layout:fixed" id="initChildPA2Table_' + row.dataId + '"></table>').find('table');
+    var cur_table = $detail.html('<div class="table-responsive"><table class="table text-nowrap"  id="initChildPA2Table_' + row.dataId + '"></table></div>').find('table');
+
     $(cur_table).bootstrapTable({
         url: ctx + "fmis/data/listLevelPA2",
         method: 'post',
@@ -1177,16 +1233,16 @@ initChildPA2Table = function(index, row, $detail) {
                     checked : checkedValue
                 }
             }
-        },{field : 'rowId',title : '序号',width: 20,visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
+        },{field : 'rowId',title : '序号',visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
             {field : 'pattachment2Id',title : 'pattachment2Id',visible: false},
             {field : 'dataId',title : 'dataId',visible: false},
             {field : 'levelValue',title : 'levelValue',visible: false},
             {field : 'procurementId',title : 'childId',visible: false},
             {field : 'childId',title : 'childId',visible: false},
             {field : 'contractNo',title : 'contractNo',visible: false},
-            {field : 'pattachment2Count',title : '回信器数数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 100},
-            {field : 'procurementPrice',title : '采购价',editable: false,width: 100},
-            {field : 'totalPrice',title : '分项金额',editable: false,width: 100,formatter: function(value, row, index) {
+            {field : 'pattachment2Count',title : '回信器数数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
+            {field : 'procurementPrice',title : '采购价',editable: false},
+            {field : 'totalPrice',title : '分项金额',editable: false,formatter: function(value, row, index) {
                     var actions = [];
                     var productNum = row["pattachment2Count"];
                     productNum = $.common.isEmpty(productNum) == true ? 0 : parseFloat(productNum);
@@ -1196,80 +1252,80 @@ initChildPA2Table = function(index, row, $detail) {
                     actions.push(total);
                     return actions.join('');
                 }},
-            {field : 'p2Status',title : '采购状态',editable: false,width: 100,
+            {field : 'p2Status',title : '采购状态',editable: false,
                 formatter: formaterStatus},
 
-            {field : 'supplierName',title : '供应商',editable: false,width: 100},
+            {field : 'supplierName',title : '供应商',editable: false},
             {field : 'supplierId',title : 'supplierId',visible: false},
 
-            {field : 'goodsTime',title : '回货时间',editable: false,width: 100},
+            {field : 'goodsTime',title : '回货时间',editable: false},
             {
                 field : 'bh',
-                title : '商品编号',width: 100
+                title : '商品编号'
             },
             {
                 field : 'chineseName',
-                title : '中文品名',width: 100
+                title : '中文品名'
             },
             {
                 field : 'chineseSpecifications',
-                title : '中文规格',width: 100
+                title : '中文规格'
             },
             {
                 field : 'englishName',
-                title : '英文品名',width: 100
+                title : '英文品名'
             },
             {
                 field : 'englishSpecifications',
-                title : '英文规格',width: 100
+                title : '英文规格'
             },
             {
                 field : 'chinesePackaging',
-                title : '中文包装',width: 100
+                title : '中文包装'
             },
             {
                 field : 'englishPackaging',
-                title : '英文包装',width: 100
+                title : '英文包装'
             },
             {
                 field : 'chineseUnit',
-                title : '中文单位',width: 100
+                title : '中文单位'
             },
             {
                 field : 'englishUnit',
-                title : '英文单位',width: 100
+                title : '英文单位'
             },
             {
                 field : 'pressure',
-                title : '压力',width: 100
+                title : '压力'
             },
             {
                 field : 'material',
-                title : '材质',width: 100
+                title : '材质'
             },
             {
                 field : 'barCode',
-                title : '条形码',width: 100
+                title : '条形码'
             },
             {
                 field : 'customsBh',
-                title : '海关编码',width: 100
+                title : '海关编码'
             },
             {
                 field : 'handlingFee',
-                title : '操作费',width: 100
+                title : '操作费'
             },
             {
                 field : 'color',
-                title : '颜色',width: 100
+                title : '颜色'
             },
             {
                 field : 'developer',
-                title : '开发人员',width: 100
+                title : '开发人员'
             },
             {
                 field : 'goodsCategory',
-                title : '商品分类',width: 100
+                title : '商品分类'
             }
         ]
     });
@@ -1280,7 +1336,9 @@ initChildPA2Table = function(index, row, $detail) {
 };
 
 initChildPA3Table = function(index, row, $detail) {
-    var cur_table = $detail.html('<table style="table-layout:fixed" id="initChildPA3Table_' + row.dataId + '"></table>').find('table');
+    //var cur_table = $detail.html('<table style="table-layout:fixed" id="initChildPA3Table_' + row.dataId + '"></table>').find('table');
+    var cur_table = $detail.html('<div class="table-responsive"><table class="table text-nowrap"  id="initChildPA3Table_' + row.dataId + '"></table></div>').find('table');
+
     $(cur_table).bootstrapTable({
         url: ctx + "fmis/data/listLevelPA3",
         method: 'post',
@@ -1314,16 +1372,16 @@ initChildPA3Table = function(index, row, $detail) {
                     checked : checkedValue
                 }
             }
-        },{field : 'rowId',title : '序号',width: 20,visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
+        },{field : 'rowId',title : '序号',visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
             {field : 'pattachment3Id',title : 'pattachment3Id',visible: false},
             {field : 'dataId',title : 'dataId',visible: false},
             {field : 'procurementId',title : 'childId',visible: false},
             {field : 'levelValue',title : 'levelValue',visible: false},
             {field : 'childId',title : 'childId',visible: false},
             {field : 'contractNo',title : 'contractNo',visible: false},
-            {field : 'pattachment3Count',title : '气源三连件数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 100},
-            {field : 'procurementPrice',title : '采购价',editable: false,width: 100},
-            {field : 'totalPrice',title : '分项金额',editable: false,width: 100,formatter: function(value, row, index) {
+            {field : 'pattachment3Count',title : '气源三连件数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
+            {field : 'procurementPrice',title : '采购价',editable: false},
+            {field : 'totalPrice',title : '分项金额',editable: false,formatter: function(value, row, index) {
                     var actions = [];
                     var productNum = row["pattachment3Count"];
                     productNum = $.common.isEmpty(productNum) == true ? 0 : parseFloat(productNum);
@@ -1333,80 +1391,80 @@ initChildPA3Table = function(index, row, $detail) {
                     actions.push(total);
                     return actions.join('');
                 }},
-            {field : 'p3Status',title : '采购状态',editable: false,width: 100,
+            {field : 'p3Status',title : '采购状态',editable: false,
                 formatter: formaterStatus},
 
-            {field : 'supplierName',title : '供应商',editable: false,width: 100},
+            {field : 'supplierName',title : '供应商',editable: false},
             {field : 'supplierId',title : 'supplierId',visible: false},
 
-            {field : 'goodsTime',title : '回货时间',editable: false,width: 100},
+            {field : 'goodsTime',title : '回货时间',editable: false},
             {
                 field : 'bh',
-                title : '商品编号',width: 100
+                title : '商品编号'
             },
             {
                 field : 'chineseName',
-                title : '中文品名',width: 100
+                title : '中文品名'
             },
             {
                 field : 'chineseSpecifications',
-                title : '中文规格',width: 100
+                title : '中文规格'
             },
             {
                 field : 'englishName',
-                title : '英文品名',width: 100
+                title : '英文品名'
             },
             {
                 field : 'englishSpecifications',
-                title : '英文规格',width: 100
+                title : '英文规格'
             },
             {
                 field : 'chinesePackaging',
-                title : '中文包装',width: 100
+                title : '中文包装'
             },
             {
                 field : 'englishPackaging',
-                title : '英文包装',width: 100
+                title : '英文包装'
             },
             {
                 field : 'chineseUnit',
-                title : '中文单位',width: 100
+                title : '中文单位'
             },
             {
                 field : 'englishUnit',
-                title : '英文单位',width: 100
+                title : '英文单位'
             },
             {
                 field : 'pressure',
-                title : '压力',width: 100
+                title : '压力'
             },
             {
                 field : 'material',
-                title : '材质',width: 100
+                title : '材质'
             },
             {
                 field : 'barCode',
-                title : '条形码',width: 100
+                title : '条形码'
             },
             {
                 field : 'customsBh',
-                title : '海关编码',width: 100
+                title : '海关编码'
             },
             {
                 field : 'handlingFee',
-                title : '操作费',width: 100
+                title : '操作费'
             },
             {
                 field : 'color',
-                title : '颜色',width: 100
+                title : '颜色'
             },
             {
                 field : 'developer',
-                title : '开发人员',width: 100
+                title : '开发人员'
             },
             {
                 field : 'goodsCategory',
-                title : '商品分类',width: 100
+                title : '商品分类'
             }
         ]
     });
@@ -1418,7 +1476,9 @@ initChildPA3Table = function(index, row, $detail) {
 
 
 initChildPA4Table = function(index, row, $detail) {
-    var cur_table = $detail.html('<table style="table-layout:fixed" id="initChildPA4Table_' + row.dataId + '"></table>').find('table');
+    //var cur_table = $detail.html('<table style="table-layout:fixed" id="initChildPA4Table_' + row.dataId + '"></table>').find('table');
+    var cur_table = $detail.html('<div class="table-responsive"><table class="table text-nowrap"  id="initChildPA4Table_' + row.dataId + '"></table></div>').find('table');
+
     $(cur_table).bootstrapTable({
         url: ctx + "fmis/data/listLevelPA4",
         method: 'post',
@@ -1452,16 +1512,16 @@ initChildPA4Table = function(index, row, $detail) {
                     checked : checkedValue
                 }
             }
-        },{field : 'rowId',title : '序号',width: 20,visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
+        },{field : 'rowId',title : '序号',visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
             {field : 'pattachment4Id',title : 'pattachment4Id',visible: false},
             {field : 'dataId',title : 'dataId',visible: false},
             {field : 'levelValue',title : 'levelValue',visible: false},
             {field : 'procurementId',title : 'childId',visible: false},
             {field : 'childId',title : 'childId',visible: false},
             {field : 'contractNo',title : 'contractNo',visible: false},
-            {field : 'pattachment4Count',title : '可离合减速器数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 100},
-            {field : 'procurementPrice',title : '采购价',editable: false,width: 100},
-            {field : 'totalPrice',title : '分项金额',editable: false,width: 100,formatter: function(value, row, index) {
+            {field : 'pattachment4Count',title : '可离合减速器数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
+            {field : 'procurementPrice',title : '采购价',editable: false},
+            {field : 'totalPrice',title : '分项金额',editable: false,formatter: function(value, row, index) {
                     var actions = [];
                     var productNum = row["pattachment4Count"];
                     productNum = $.common.isEmpty(productNum) == true ? 0 : parseFloat(productNum);
@@ -1471,80 +1531,80 @@ initChildPA4Table = function(index, row, $detail) {
                     actions.push(total);
                     return actions.join('');
                 }},
-            {field : 'p4Status',title : '采购状态',editable: false,width: 100,
+            {field : 'p4Status',title : '采购状态',editable: false,
                 formatter: formaterStatus},
 
-            {field : 'supplierName',title : '供应商',editable: false,width: 100},
+            {field : 'supplierName',title : '供应商',editable: false},
             {field : 'supplierId',title : 'supplierId',visible: false},
 
-            {field : 'goodsTime',title : '回货时间',editable: false,width: 100},
+            {field : 'goodsTime',title : '回货时间',editable: false},
             {
                 field : 'bh',
-                title : '商品编号',width: 100
+                title : '商品编号'
             },
             {
                 field : 'chineseName',
-                title : '中文品名',width: 100
+                title : '中文品名'
             },
             {
                 field : 'chineseSpecifications',
-                title : '中文规格',width: 100
+                title : '中文规格'
             },
             {
                 field : 'englishName',
-                title : '英文品名',width: 100
+                title : '英文品名'
             },
             {
                 field : 'englishSpecifications',
-                title : '英文规格',width: 100
+                title : '英文规格'
             },
             {
                 field : 'chinesePackaging',
-                title : '中文包装',width: 100
+                title : '中文包装'
             },
             {
                 field : 'englishPackaging',
-                title : '英文包装',width: 100
+                title : '英文包装'
             },
             {
                 field : 'chineseUnit',
-                title : '中文单位',width: 100
+                title : '中文单位'
             },
             {
                 field : 'englishUnit',
-                title : '英文单位',width: 100
+                title : '英文单位'
             },
             {
                 field : 'pressure',
-                title : '压力',width: 100
+                title : '压力'
             },
             {
                 field : 'material',
-                title : '材质',width: 100
+                title : '材质'
             },
             {
                 field : 'barCode',
-                title : '条形码',width: 100
+                title : '条形码'
             },
             {
                 field : 'customsBh',
-                title : '海关编码',width: 100
+                title : '海关编码'
             },
             {
                 field : 'handlingFee',
-                title : '操作费',width: 100
+                title : '操作费'
             },
             {
                 field : 'color',
-                title : '颜色',width: 100
+                title : '颜色'
             },
             {
                 field : 'developer',
-                title : '开发人员',width: 100
+                title : '开发人员'
             },
             {
                 field : 'goodsCategory',
-                title : '商品分类',width: 100
+                title : '商品分类'
             }
         ]
     });

@@ -363,6 +363,16 @@ public class BizProcessChild extends BaseEntity {
 
     @Getter
     @Setter
+    private String newProductId;
+
+    @Getter
+    @Setter
+    private String pSessionId;
+
+
+
+    @Getter
+    @Setter
     private Double productPrice;
     @Getter
     @Setter

@@ -6,6 +6,7 @@ import java.util.Map;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.util.StringUtil;
+import com.ruoyi.common.config.RedisUtil;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.fmis.child.domain.BizProcessChild;
 import com.ruoyi.fmis.child.service.IBizProcessChildService;
@@ -73,6 +74,9 @@ public class BizProcessProcurementpoolController extends BaseController {
 
     @Autowired
     private IBizCustomerService bizCustomerService;
+
+    @Autowired
+    private RedisUtil redisUtil;
 
     @RequiresPermissions("fmis:procurementpool:view")
     @GetMapping()
@@ -152,5 +156,34 @@ public class BizProcessProcurementpoolController extends BaseController {
         }
         return getDataTable(list);
     }
+    @GetMapping("/selectProduct")
+    public String selectProduct(ModelMap mmap) {
+        String productId = getRequest().getParameter("productId");
+        BizProduct bizProduct = null;
+        BizProduct queryBizProduct = new BizProduct();
+        queryBizProduct.setProductId(Long.parseLong(productId));
+        List<BizProduct> bizProductList = bizProductService.selectBizProductList(queryBizProduct);
+        bizProduct = bizProductList.get(0);
+        mmap.put("seriesSelect",bizDictService.selectBizDictByProductType(BizConstants.productTypeCode));
+        mmap.put("suppliers",bizSuppliersService.selectAllList());
 
+        mmap.put("bizProductModel",bizProduct.getModel());
+        mmap.put("bizProductSpecifications",bizProduct.getSpecifications());
+
+        mmap.put("oldProductId",productId);
+        return prefix + "/selectProduct";
+    }
+
+    /**
+     * 保存临时文件
+     */
+    @PostMapping("/saveSessionId")
+    @ResponseBody
+    public AjaxResult saveSessionId(BizProcessChild bizProcessChild) {
+        String pSessionId = bizProcessChild.getPSessionId();
+        String productId = bizProcessChild.getProductId();
+        String newProductId = bizProcessChild.getNewProductId();
+        redisUtil.set(pSessionId + "_" + productId,newProductId,600);
+        return toAjax(0);
+    }
 }

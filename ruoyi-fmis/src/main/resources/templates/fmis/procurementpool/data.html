@@ -13,9 +13,11 @@
         <div class="row">
             <div class="col-sm-12 search-collapse">
                 <form id="formId">
+                    <input type="hidden" id="pSessionId" name="pSessionId"/>
                     <div class="select-list">
                         <ul>
-
+                            <input type="hidden" id="productsJsonParamter" value=""/>
+                            <input type="hidden" id="bizEditFlag" value="-1"/>
                             <li>
                                 <p>合同号：</p>
                                 <input type="text" name="string1"/>
@@ -65,10 +67,14 @@
         </div>
          <input type="hidden" id="numJsonValue" name="numJsonValue"/>
 
+
+
          <input type="hidden" id="paramterSupplierId" name="paramterSupplierId"/>
          <input type="hidden" id="paramterContractNo" name="paramterContractNo"/>
 
          <input type="hidden" id="totalPrice" name="totalPrice"/>
+
+
     </div>
     <th:block th:include="include :: footer" />
      <th:block th:include="include :: bootstrap-editable-css" />
@@ -80,6 +86,10 @@
         var string2Datas = [[${@dict.getType('product_level')}]];
         var supplierTypeData = [[${@dict.getType('supplier_type')}]];
 
+
+        var pSessionId = Math.random();
+        console.log("data pSessionId=" + pSessionId);
+        $("#pSessionId").val(pSessionId);
         function saveProcurement() {
             if (overAllIds.length == 0) {
                 $.modal.alertWarning("请至少选择一条记录");
@@ -115,6 +125,7 @@
             })
             var url = ctx + "fmis/procurement/add";
             $("#numJsonValue").val(JSON.stringify(datas));
+
             $.modal.openFull("审批", url);
         }
     </script>

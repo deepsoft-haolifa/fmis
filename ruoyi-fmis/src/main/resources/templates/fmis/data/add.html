@@ -194,6 +194,13 @@
                 <input name="price1" id="price1" class="form-control" type="text" readonly>
             </div>
         </div>
+
+        <div class="form-group">
+            <label class="col-sm-1 control-label">质保期：</label>
+            <div class="col-sm-2 form-inline">
+                <input name="string26" id="string26" style="width: 80px" class="form-control" type="text" onkeyup="AmountKeyUp(this)">月
+            </div>
+        </div>
         <!--
                 <div class="form-group">
                     <label class="col-sm-1 control-label">报价产品：</label>
@@ -413,6 +420,7 @@
     }
 
     function selectQuotation(type) {
+        //string2
         var url = prefix + "/selectQuotation";
         $("#productOperationType").val(type);
         var widthNum = this.innerWidth - 50;

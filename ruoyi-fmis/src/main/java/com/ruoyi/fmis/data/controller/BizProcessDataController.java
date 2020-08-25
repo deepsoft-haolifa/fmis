@@ -13,6 +13,7 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.ruoyi.common.config.Global;
+import com.ruoyi.common.config.RedisUtil;
 import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
@@ -113,6 +114,10 @@ public class BizProcessDataController extends BaseController {
 
     @Autowired
     private ISysDictDataService dictDataService;
+
+    @Autowired
+    private RedisUtil redisUtil;
+
 
     @RequiresPermissions("fmis:data:view")
     @GetMapping()
@@ -470,6 +475,9 @@ public class BizProcessDataController extends BaseController {
 
         List<BizProcessChild> bizProcessChildList = bizProcessChildService.selectBizChildProductList(queryBizProcessChild);
 
+
+        String pSessionId = bizProcessData.getPSessionId();
+
         if (!CollectionUtils.isEmpty(bizProcessChildList)) {
             Map<String,String> productNumMap = new HashMap<>();
             for (BizProcessChild bizProcessChild : bizProcessChildList) {
@@ -483,6 +491,31 @@ public class BizProcessDataController extends BaseController {
                     productNum = productNumMap.get(k);
                 }
                 bizProcessChild.setProductNum(productNum);
+
+                if (StringUtils.isNotEmpty(pSessionId)) {
+                    Object newProductIdObj = redisUtil.get(pSessionId + "_" + bizProcessChild.getProductId());
+                    if (newProductIdObj != null) {
+                        String newProductId = newProductIdObj.toString();
+                        //替换新的
+                        BizProduct queryBizProduct = new BizProduct();
+                        queryBizProduct.setProductId(Long.parseLong(newProductId));
+                        List<BizProduct> bizProductList = bizProductService.selectBizProductList(queryBizProduct);
+                        if (!CollectionUtils.isEmpty(bizProductList)) {
+                            BizProduct newBizProduct = bizProductList.get(0);
+                            bizProcessChild.setProductName(newBizProduct.getName());
+                            bizProcessChild.setNewProductId(newBizProduct.getProductId().toString());
+                            bizProcessChild.setModel(newBizProduct.getModel());
+                            bizProcessChild.setSupplier(newBizProduct.getSupplier());
+                            bizProcessChild.setSpecifications(newBizProduct.getSpecifications());
+                            bizProcessChild.setNominalPressure(newBizProduct.getNominalPressure());
+                            bizProcessChild.setValvebodyMaterial(newBizProduct.getValvebodyMaterial());
+                            bizProcessChild.setValveElement(newBizProduct.getValveElement());
+                            bizProcessChild.setDriveForm(newBizProduct.getDriveForm());
+                            bizProcessChild.setConnectionType(newBizProduct.getConnectionType());
+                        }
+                    }
+                }
+
             }
         }
 
@@ -1012,47 +1045,92 @@ public class BizProcessDataController extends BaseController {
         } else if (StringUtils.isNotEmpty(totalPrice) && Double.parseDouble(totalPrice) >= 100000) {
             normalFlag = "3";
         }  else {
-            JSONArray productArray = JSONArray.parseArray(productArrayStr);
-            Double minCoefficient = new Double(10000000);
-            Double minOtherCoefficient = new Double(10000000);
-            for (int i = 0; i < productArray.size(); i++) {
-                JSONObject json = productArray.getJSONObject(i);
-                BizProcessChild bizProcessChild = JSONObject.parseObject(json.toJSONString(), BizProcessChild.class);
-                if (bizProcessChild.getString2() != null) {
+            String payType = bizProcessData.getString18();
+            String payType1 = bizProcessData.getString8();
 
-                    String productCoefficient = bizProcessChild.getString4();
-                    if (StringUtils.isNotEmpty(productCoefficient) && Double.parseDouble(productCoefficient) < minCoefficient) {
-                        minCoefficient = Double.parseDouble(productCoefficient);
-                    }
-                    String actuatorCoefficient = bizProcessChild.getString13();
-                    if (StringUtils.isNotEmpty(actuatorCoefficient) && Double.parseDouble(actuatorCoefficient) < minOtherCoefficient) {
-                        minOtherCoefficient = Double.parseDouble(actuatorCoefficient);
-                    }
-                    String productRef1Coefficient = bizProcessChild.getString7();
-                    if (StringUtils.isNotEmpty(productRef1Coefficient) && Double.parseDouble(productRef1Coefficient) < minOtherCoefficient) {
-                        minOtherCoefficient = Double.parseDouble(productRef1Coefficient);
-                    }
-                    String productRef2Coefficient = bizProcessChild.getString10();
-                    if (StringUtils.isNotEmpty(productRef2Coefficient) && Double.parseDouble(productRef2Coefficient) < minOtherCoefficient) {
-                        minOtherCoefficient = Double.parseDouble(productRef2Coefficient);
+            String string15 = bizProcessData.getString15();//账期
+            String string17 = bizProcessData.getString17();//账期天数
+            String string26 = bizProcessData.getString26();//质保期
+            if (StringUtils.isEmpty(string26)) {
+                string26 = "0";
+            }
+            if ("1".equals(payType) && ("1".equals(payType1) || "2".equals(payType1) || "3".equals(payType1) || "4".equals(payType1))) {
+                //预付款	预付（0，20,30,50）%，发货前付至100%	销售人员	销售经理
+                normalFlag = "2";
+            } else if ("2".equals(payType) && ("1".equals(string15) || "2".equals(string15))) {
+                //货到□/票到□30/45天 销售总经理
+                normalFlag = "3";
+            } else if ("2".equals(payType) && ("3".equals(string15))) {
+                //货到□/票到□60 天（可选项30天/45天/60天/90天/其它）
+                normalFlag = "4";
+            } else if ("2".equals(payType) && ("4".equals(string15) || "5".equals(string15))) {
+                //货到□/票到□90 天/其它
+                normalFlag = "5";
+            } else if ("3".equals(payType)) {
+                //协议付款
+                normalFlag = "5";
+                //price6=发货前付款
+                //price7=货到款天数
+                //price11=质保金
+                //price9=调试款
+                /**
+                 * 发货前付款低于65%；货到款超过90天；质保金超过10%；质保期超过12个月
+                 * 发货前付款低于65%；货到款、调试款超过90天；质保金超过10%；质保期超过12个月  副总
+                 */
+                Double price6 = bizProcessData.getPrice6() == null ? 0 : bizProcessData.getPrice6();
+                Double price7 = bizProcessData.getPrice7() == null ? 0 : bizProcessData.getPrice7();
+                Double price11 = bizProcessData.getPrice11() == null ? 0 : bizProcessData.getPrice11();
+                Double price9 = bizProcessData.getPrice9() == null ? 0 : bizProcessData.getPrice9();
+                if (price6 < 65 || price7 > 90 || price11 > 10 || Integer.parseInt(string26) > 12 || price9 > 90) {
+                    normalFlag = "4";
+                }
+
+
+
+
+            } else {
+                JSONArray productArray = JSONArray.parseArray(productArrayStr);
+                Double minCoefficient = new Double(10000000);
+                Double minOtherCoefficient = new Double(10000000);
+                for (int i = 0; i < productArray.size(); i++) {
+                    JSONObject json = productArray.getJSONObject(i);
+                    BizProcessChild bizProcessChild = JSONObject.parseObject(json.toJSONString(), BizProcessChild.class);
+                    if (bizProcessChild.getString2() != null) {
+
+                        String productCoefficient = bizProcessChild.getString4();
+                        if (StringUtils.isNotEmpty(productCoefficient) && Double.parseDouble(productCoefficient) < minCoefficient) {
+                            minCoefficient = Double.parseDouble(productCoefficient);
+                        }
+                        String actuatorCoefficient = bizProcessChild.getString13();
+                        if (StringUtils.isNotEmpty(actuatorCoefficient) && Double.parseDouble(actuatorCoefficient) < minOtherCoefficient) {
+                            minOtherCoefficient = Double.parseDouble(actuatorCoefficient);
+                        }
+                        String productRef1Coefficient = bizProcessChild.getString7();
+                        if (StringUtils.isNotEmpty(productRef1Coefficient) && Double.parseDouble(productRef1Coefficient) < minOtherCoefficient) {
+                            minOtherCoefficient = Double.parseDouble(productRef1Coefficient);
+                        }
+                        String productRef2Coefficient = bizProcessChild.getString10();
+                        if (StringUtils.isNotEmpty(productRef2Coefficient) && Double.parseDouble(productRef2Coefficient) < minOtherCoefficient) {
+                            minOtherCoefficient = Double.parseDouble(productRef2Coefficient);
+                        }
                     }
                 }
-            }
-            /**
-             * 计算最低系数
-             * 如果系数（报价员录入的系数）底于0.9，由必须由销售副总审核、总经理审批，流程结束；
-             * 如果系数0.9--1.0，必须由销售副总审核，流程结束，
-             * 如果报价系数大于1.0--1.1则由区域经理审批完成后流程结束；
-             * 如果系数大于1.1，则由部门销售经理审核完成后流程结束
-             */
-            if (minCoefficient < 0.88 || (minOtherCoefficient > 0 && minOtherCoefficient < 0.92)) {
-                normalFlag = "5";
-            }else if ((minCoefficient >= 0.88 && minCoefficient < 0.95) || (minOtherCoefficient >= 0.92 && minOtherCoefficient < 0.97)) {
-                normalFlag = "4";
-            } else if ((minCoefficient >= 0.95 && minCoefficient < 1) || (minOtherCoefficient >= 0.97 && minOtherCoefficient <= 1)) {
-                normalFlag = "3";
-            } else {
-                normalFlag = "2";
+                /**
+                 * 计算最低系数
+                 * 如果系数（报价员录入的系数）底于0.9，由必须由销售副总审核、总经理审批，流程结束；
+                 * 如果系数0.9--1.0，必须由销售副总审核，流程结束，
+                 * 如果报价系数大于1.0--1.1则由区域经理审批完成后流程结束；
+                 * 如果系数大于1.1，则由部门销售经理审核完成后流程结束
+                 */
+                if (minCoefficient < 0.88 || (minOtherCoefficient > 0 && minOtherCoefficient < 0.92)) {
+                    normalFlag = "5";
+                }else if ((minCoefficient >= 0.88 && minCoefficient < 0.95) || (minOtherCoefficient >= 0.92 && minOtherCoefficient < 0.97)) {
+                    normalFlag = "4";
+                } else if ((minCoefficient >= 0.95 && minCoefficient < 1) || (minOtherCoefficient >= 0.97 && minOtherCoefficient <= 1)) {
+                    normalFlag = "3";
+                } else {
+                    normalFlag = "2";
+                }
             }
         }
         bizProcessData.setNormalFlag(normalFlag);
@@ -1346,7 +1424,13 @@ public class BizProcessDataController extends BaseController {
                 String productName = bizProduct.getProductName();
                 String model = bizProduct.getModel();
                 //执行器计算
-                BizActuator bizActuator = bizProduct.getBizActuator();
+
+                String actuatorId = bizProduct.getActuatorId();
+                BizActuator bizActuator = null;
+                if (StringUtils.isNotEmpty(actuatorId)) {
+                    bizActuator = bizActuatorService.selectBizActuatorById(Long.parseLong(actuatorId));
+                }
+
                 Double actuatorTotal = new Double(0);
                 if (bizActuator != null) {
                     Double actuatorPrice = bizActuator.getPrice();
@@ -1558,6 +1642,32 @@ public class BizProcessDataController extends BaseController {
 
             if (StringUtils.isNotEmpty(paymentType)) {
                 payRemark += paymentType;
+                if ("1".equals(string18)) {
+                    //预付
+                    String string8 = StringUtils.trim(bizProcessData.getString8());
+                    if (StringUtils.isNotEmpty(string8)) {
+                        String string8Name = dictDataService.selectDictLabel("payment_type",string8);
+                        payRemark += " : " + string8Name;
+                    }
+
+                } else if ("2".equals(string18)) {
+                    //账期
+                    String string15 = StringUtils.trim(bizProcessData.getString15());
+                    if (StringUtils.isNotEmpty(string15)) {
+                        String string15Name = dictDataService.selectDictLabel("payment_days",string15);
+                        payRemark += " : " + string15Name + " " + StringUtils.trim(bizProcessData.getString17()) + " 天";
+                    }
+
+                } else if ("3".equals(string18)) {
+                    //协议付款
+                    payRemark += " : 预付" + StringUtils.getDoubleString0(bizProcessData.getPrice5()) + " % ";
+                    payRemark += "发货前付款" + StringUtils.getDoubleString0(bizProcessData.getPrice6()) + " % ";
+                    payRemark += "货到" + StringUtils.getDoubleString0(bizProcessData.getPrice7()) + " 天付 ";
+                    payRemark += StringUtils.getDoubleString0(bizProcessData.getPrice8()) + " % ";
+                    payRemark += "安装调试" + StringUtils.getDoubleString0(bizProcessData.getPrice9()) + " 天 ";
+                    payRemark += "付" + StringUtils.getDoubleString0(bizProcessData.getPrice10()) + " % ";
+                    payRemark += "质保金" + StringUtils.getDoubleString0(bizProcessData.getPrice11()) + " % ";
+                }
             }
 
             if (StringUtils.isNotEmpty(transportType)) {

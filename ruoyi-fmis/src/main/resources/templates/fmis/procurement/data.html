@@ -208,6 +208,7 @@
                         var operationExamineStatus = row.operationExamineStatus;
                         //质检状态
                         var testStatus = row.string10;
+                        console.log("flowStatus=" + flowStatus + " normalFlag=" + normalFlag);
                         if (flowStatus < 1) {
                             if (flowStatus == "0") {
                                 //已上报
@@ -217,6 +218,7 @@
                                 actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subReport(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 上报</a>');
                             }
                         } else if (flowStatus == normalFlag) {
+                            console.log("11111");
                             //已完成
                             /**
                             if (testStatus == 1) {
@@ -226,6 +228,7 @@
                                     actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subTest(\'' + row.dataId + '\')"><i class="fa fa-save"></i> 发起质检</a>');
                                 }
                             }*/
+                            console.log("loginUserId=" + loginUserId + " createBy=" + createBy);
                             if (loginUserId == createBy) {
                                 actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subTest(\'' + row.dataId + '\')"><i class="fa fa-save"></i> 发起质检</a>');
                             }

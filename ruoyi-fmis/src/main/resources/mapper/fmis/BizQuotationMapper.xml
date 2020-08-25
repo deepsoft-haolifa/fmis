@@ -101,6 +101,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
             <if test="string1 != null"> and q.string1 like concat('%', #{string1}, '%')</if>
             <if test="customerName != null"> and ct.name like concat('%', #{customerName}, '%')</if>
+            <if test="customerId != null"> and ct.customer_id = #{customerId}</if>
             <if test="createBy != null"> and u.user_name like concat('%', #{createBy}, '%')</if>
 
 

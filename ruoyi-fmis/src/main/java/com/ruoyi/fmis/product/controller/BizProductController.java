@@ -212,6 +212,8 @@ public class BizProductController extends BaseController {
         String realPath = Global.getFilePath() + url;
         List<BizProductImport> list = new ArrayList<>();
         Date now = new Date();
+        int insertCount = 0;
+        int updateCount = 0;
         try {
             ExcelProduct<BizProductImport> excelUtil = new ExcelProduct(BizProductImport.class);
             int rows = excelUtil.getRowLength("",realPath);
@@ -264,8 +266,10 @@ public class BizProductController extends BaseController {
                 if (!CollectionUtils.isEmpty(existProductList)) {
                     for (BizProduct bizProduct : existProductList) {
                         String model = bizProduct.getModel();
+                        String specifications = bizProduct.getSpecifications();
+                        String supplierNickName = bizProduct.getSupplier();
                         if (StringUtils.isNotEmpty(model)) {
-                            existProductMap.put(model,bizProduct);
+                            existProductMap.put(model + "_" + specifications + "_" + supplierNickName,bizProduct);
                         }
                     }
                 }
@@ -641,9 +645,12 @@ public class BizProductController extends BaseController {
                     }*/
 
                     //插入产品数据
+                    String specifications_ = product.getSpecifications();
+                    String supplierNickName_ = product.getSupplierCode();
+                    String existKey = model + "_" + specifications_ + "_" + supplierNickName_;
                     BizProduct bizProduct = new BizProduct();
-                    if (existProductMap.containsKey(model)) {
-                        bizProduct = existProductMap.get(model);
+                    if (existProductMap.containsKey(existKey)) {
+                        bizProduct = existProductMap.get(existKey);
                     }
                     bizProduct.setName(product.getName());
                     bizProduct.setString1(seriesTypeId.toString());
@@ -660,17 +667,19 @@ public class BizProductController extends BaseController {
                     bizProduct.setDriveForm(driveFormId.toString());
                     bizProduct.setPrice(Double.parseDouble(product.getPrice()));
                     bizProduct.setSupplier(bizSuppliers.getSuppliersId().toString());
-                    if (existProductMap.containsKey(model)) {
+                    if (existProductMap.containsKey(existKey)) {
                         bizProductService.updateBizProduct(bizProduct);
+                        updateCount++;
                     } else {
                         bizProduct.setCreateBy(ShiroUtils.getUserId().toString());
                         bizProduct.setCreateTime(now);
                         bizProductService.insertBizProduct(bizProduct);
+                        insertCount++;
                     }
 
                 }
                 JSONObject json = new JSONObject();
-                json.put("msg","成功导入" + list.size() + "条数据！");
+                json.put("msg","成功导入" + list.size() + "条数据，增加" + insertCount + "条，更新" + updateCount + "条！");
                 dataArray.add(json);
                 retJson.put("data",dataArray);
                 processTotal = 0L;

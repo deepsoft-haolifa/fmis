@@ -727,6 +727,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="price8 != null ">#{price8},</if>
             <if test="price9 != null ">#{price9},</if>
             <if test="price10 != null ">#{price10},</if>
+
+            <if test="price11 != null ">#{price11},</if>
+            <if test="price12 != null ">#{price12},</if>
+            <if test="price13 != null ">#{price13},</if>
+            <if test="price14 != null ">#{price14},</if>
+            <if test="price15 != null ">#{price15},</if>
+            <if test="price16 != null ">#{price16},</if>
+            <if test="price17 != null ">#{price17},</if>
+            <if test="price18 != null ">#{price18},</if>
+            <if test="price19 != null ">#{price19},</if>
+            <if test="price20 != null ">#{price20},</if>
+
+
             <if test="string1 != null  and string1 != ''">#{string1},</if>
             <if test="string2 != null  and string2 != ''">#{string2},</if>
             <if test="string3 != null  and string3 != ''">#{string3},</if>

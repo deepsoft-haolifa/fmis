@@ -34,6 +34,11 @@ public class BizProcessData extends BaseEntity {
 
     @Getter
     @Setter
+    private String pSessionId;
+
+
+    @Getter
+    @Setter
     private Double stayNum;
 
     @Getter
