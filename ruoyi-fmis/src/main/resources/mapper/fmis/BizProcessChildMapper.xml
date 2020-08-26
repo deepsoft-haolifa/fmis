@@ -245,7 +245,7 @@
           s.name as supplierName,
           p.medium,p.temperature,p.other,d9.name as productString1,
           p.string2 as productString2,
-          dd.dict_label as levelLabel,sum(ds.string1) as productNum,p.name as productName,
+          dd.dict_label as levelLabel,ds.string1 as productNum,p.name as productName,
           s.name as supplier,p.procurement_price as productProcurementPrice,
           ds.product_status as productStatus,
           ds.data_status as dataStatus,
