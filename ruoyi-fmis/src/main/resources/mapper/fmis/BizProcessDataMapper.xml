@@ -348,23 +348,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
     <sql id="selectBizProcessDataVoRefDelivery">
-        select data_id, biz_data_id, biz_id, normal_flag, flow_status, remark, price1, price2, price3,
-        price4, price5, price6, price7, price8, price9, price10, string1, string2,
-        string3, string4, string5, string6, string7, string8, string9, string10, string11,
-        string12, string13, string14, string15, string16, string17, string18, string19, string20,
-        datetime1, datetime2, datetime3, datetime4, datetime5, status, del_flag, create_by,
-        create_time, update_by, update_time
-
-        from biz_process_data
+        select d.data_id, d.biz_data_id, d.biz_id, d.normal_flag, d.flow_status, d.remark, d.price1, d.price2, d.price3,
+        d.price4, d.price5, d.price6, d.price7, d.price8, d.price9, d.price10, d.string1, d.string2,
+        d.string3, d.string4, d.string5, d.string6, d.string7, d.string8, d.string9, d.string10, d.string11,
+        d.string12, d.string13, d.string14, d.string15, d.string16, d.string17, d.string18, d.string19, d.string20,
+        d.datetime1, d.datetime2, d.datetime3, d.datetime4, d.datetime5, d.status, d.del_flag, d.create_by,
+        d.create_time, d.update_by, d.update_time,u.user_name as createByName
+        from biz_process_data d
+        left join sys_user u on d.create_by=u.user_id
     </sql>
 
     <select id="selectBizProcessDataListRefDelivery" parameterType="BizProcessData" resultMap="BizProcessDataResult">
         <include refid="selectBizProcessDataVoRefDelivery"/>
         <where>
-            <if test="bizDataId != null "> and biz_data_id = #{bizDataId}</if>
-            <if test="bizId != null  and bizId != ''"> and biz_id = #{bizId}</if>
-            <if test="normalFlag != null  and normalFlag != ''"> and normal_flag = #{normalFlag}</if>
-            <if test="flowStatus != null  and flowStatus != ''"> and flow_status = #{flowStatus}</if>
+            <if test="bizDataId != null "> and d.biz_data_id = #{bizDataId}</if>
+            <if test="bizId != null  and bizId != ''"> and d.biz_id = #{bizId}</if>
+            <if test="normalFlag != null  and normalFlag != ''"> and d.normal_flag = #{normalFlag}</if>
+            <if test="flowStatus != null  and flowStatus != ''"> and d.flow_status = #{flowStatus}</if>
             <if test="price1 != null "> and price1 = #{price1}</if>
             <if test="price2 != null "> and price2 = #{price2}</if>
             <if test="price3 != null "> and price3 = #{price3}</if>

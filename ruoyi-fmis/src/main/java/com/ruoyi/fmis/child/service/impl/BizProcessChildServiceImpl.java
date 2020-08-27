@@ -43,6 +43,11 @@ public class BizProcessChildServiceImpl implements IBizProcessChildService {
     }
 
     @Override
+    public List<BizProcessChild> selectBizProcessChildInventoryList(BizProcessChild bizProcessChild){
+        return bizProcessChildMapper.selectBizProcessChildInventoryList(bizProcessChild);
+    }
+
+    @Override
     public List<BizProcessChild> selectBizChildProductList(BizProcessChild bizProcessChild) {
         return bizProcessChildMapper.selectBizChildProductList(bizProcessChild);
     }

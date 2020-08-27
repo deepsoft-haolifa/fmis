@@ -51,6 +51,16 @@ public class BizProcessChildController extends BaseController {
         return getDataTable(list);
     }
 
+
+    @PostMapping("/selectBizProcessChildInventoryList")
+    @ResponseBody
+    public TableDataInfo selectBizProcessChildInventoryList(BizProcessChild bizProcessChild) {
+
+        startPage();
+        List<BizProcessChild> list = bizProcessChildService.selectBizProcessChildInventoryList(bizProcessChild);
+        return getDataTable(list);
+    }
+
     /**
      * 导出流程数据字列表
      */

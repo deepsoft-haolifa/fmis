@@ -14,6 +14,7 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.ruoyi.common.config.Global;
 import com.ruoyi.common.config.RedisUtil;
+import com.ruoyi.common.constant.Constants;
 import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
@@ -262,6 +263,13 @@ public class BizProcessDataController extends BaseController {
         return prefix + "/examineEdit";
     }
 
+    @GetMapping("/viewInventory")
+    public String viewInventory(ModelMap mmap) {
+        String dataId = getRequest().getParameter("dataId");
+        BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataById(Long.parseLong(dataId));
+        mmap.put("bizProcessData", bizProcessData);
+        return prefix + "/viewInventory";
+    }
 
 
     @GetMapping("/viewDetail")
@@ -345,6 +353,9 @@ public class BizProcessDataController extends BaseController {
         mmap.put("bizTable", bizId);
         return prefix + "/viewExamineHistory";
     }
+
+
+
 
     @GetMapping("/upload")
     public String upload(ModelMap mmap) {
@@ -987,6 +998,50 @@ public class BizProcessDataController extends BaseController {
         mmap.put("quotationIds", productIds);
         mmap.put("bizProcessData", bizProcessData);
         return prefix + "/edit";
+    }
+
+
+
+    /**
+     * 保存 发货
+     */
+    @Log(title = "发货保存", businessType = BusinessType.UPDATE)
+    @PostMapping("/saveInventory")
+    @ResponseBody
+    public AjaxResult saveInventory(BizProcessData bizProcessData) {
+        String productArrayStr = bizProcessData.getProductParmters();
+        String string1 = bizProcessData.getString1();
+        String string2 = DateUtils.dateTimeNow();//发货通知单号
+        BizProcessData newData = new BizProcessData();
+        newData.setString1(string1);
+        newData.setString2(string2);
+        newData.setBizId(BizConstants.BIZ_newdelivery);
+        newData.setNormalFlag("5");
+        newData.setFlowStatus("0");
+        int insertReturn = bizProcessDataService.insertBizProcessData(newData);
+        if (StringUtils.isNotEmpty(productArrayStr)) {
+            JSONArray productArray = JSONArray.parseArray(productArrayStr);
+            for (int i = 0; i < productArray.size(); i++) {
+                JSONObject json = productArray.getJSONObject(i);
+                BizProcessChild bizProcessChild = JSONObject.parseObject(json.toJSONString(), BizProcessChild.class);
+                if (StringUtils.isNotEmpty(bizProcessChild.getString2())) {
+                    bizProcessChild.setDataId(newData.getDataId());
+                    bizProcessChild.setChildId(null);
+                    bizProcessChild.setString14("1");
+                    bizProcessChildService.insertBizProcessChild(bizProcessChild);
+
+                    //减去 库存数
+                    String inventoryChildId = bizProcessChild.getString15();
+                    BizProcessChild inventoryChild = bizProcessChildService.selectBizProcessChildById(Long.parseLong(inventoryChildId));
+                    inventoryChild.setString11((Integer.parseInt(inventoryChild.getString11()) - Integer.parseInt(bizProcessChild.getString13())) + "");
+                    inventoryChild.setUpdateTime(new Date());
+                    inventoryChild.setUpdateBy(ShiroUtils.getUserId() + "");
+                    inventoryChild.setString14("1");
+                    bizProcessChildService.updateBizProcessChild(inventoryChild);
+                }
+            }
+        }
+        return toAjax(insertReturn);
     }
 
     /**

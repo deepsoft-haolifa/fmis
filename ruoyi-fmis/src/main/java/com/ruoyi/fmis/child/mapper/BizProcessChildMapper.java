@@ -26,6 +26,7 @@ public interface BizProcessChildMapper {
      */
     public List<BizProcessChild> selectBizProcessChildList(BizProcessChild bizProcessChild);
 
+    public List<BizProcessChild> selectBizProcessChildInventoryList(BizProcessChild bizProcessChild);
 
     public List<BizProcessChild> selectBizQuotationProductList(BizProcessChild bizProcessChild);
 

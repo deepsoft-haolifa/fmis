@@ -1594,3 +1594,20 @@ insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, 
 values('待质检导出', @parentId, '5',  '#',  'F', '0', 'fmis:steststay:export',       '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
 
 
+
+-- 库存管理 SQL start
+insert into sys_menu (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('库存管理', '0', '35', '#', 'M', '0', '', 'fa fa-folder', 'admin', '2020-06-08', 'admin', '2020-06-08', '');
+
+SELECT @parentIdFP :=  menu_id from sys_menu where menu_name='库存管理' and parent_id=0 and order_num='35';
+
+insert into sys_menu (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('发货列表', @parentIdFP, '1', '/fmis/newdelivery', 'C', '0', 'fmis:newdelivery:view', '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '库存列表');
+
+-- 按钮父菜单ID
+SELECT @parentId := LAST_INSERT_ID();
+
+-- 按钮 SQL
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('发货列表', @parentId, '1',  '#',  'F', '0', 'fmis:newdelivery:list',         '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+

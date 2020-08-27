@@ -210,12 +210,14 @@
                         var flowStatus = row.flowStatus;
                         var normalFlag = row.normalFlag;
                         var operationExamineStatus = row.operationExamineStatus;
+                        var deliveryStatus = row.string27;
                         if (flowStatus < 1) {
                             actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="edit(\'' + row.dataId + '\')"><i class="fa fa-edit"></i> 编辑</a> ');
                             actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="remove(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 删除</a>');
                             actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subReport(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 上报</a>');
                         } else if (flowStatus == normalFlag) {
                             //已完成
+                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewInventory(\'' + row.dataId + '\')"><i class="fa fa-edit"></i> 查看库存</a>');
                         } else if (operationExamineStatus == true || operationExamineStatus == "true") {
                             //审批
                             actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subExamine(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 审批</a>');
@@ -335,6 +337,11 @@
         function subExamine(dataId) {
             var url = prefix + "/examineEdit?dataId=" + dataId;
             $.modal.openFull("审批", url);
+        }
+
+        function viewInventory(dataId) {
+            var url = prefix + "/viewInventory?dataId=" + dataId;
+            $.modal.openFull("查看库存", url);
         }
 
         function subReport(dataId) {

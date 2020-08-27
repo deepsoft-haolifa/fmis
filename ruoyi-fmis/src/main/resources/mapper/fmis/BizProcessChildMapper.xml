@@ -97,6 +97,28 @@
         </where>
     </select>
 
+
+    <!-- 库存查看 -->
+    <sql id="selectBizProcessChildInventoryVo">
+        select child_id, data_id, remark, price1, price2, price3, price4,
+        price5, price6, price7, price8, price9, price10, string1, string2,
+        string3, string4, string5, string6, string7, string8, string9, string10,
+        string11, string12, string13, string14, string15, string16, string17,
+        string18, string19, string20, datetime1, datetime2, datetime3, datetime4,
+        datetime5, status, del_flag, create_by, create_time, update_by, update_time
+        from biz_process_child
+    </sql>
+
+    <select id="selectBizProcessChildInventoryList" parameterType="BizProcessChild" resultMap="BizProcessChildResult">
+        <include refid="selectBizProcessChildInventoryVo"/>
+        <where>
+            1=1
+            <if test="string5 != null  and string5 != ''">and concat(string5,',') like concat('%', #{string5}, '%') and ifnull(string14,'0') != '1'</if>
+            <if test="dataId != null">and data_id = #{dataId}</if>
+
+        </where>
+    </select>
+
     <select id="selectBizProcessChildById" parameterType="Long" resultMap="BizProcessChildResult">
         <include refid="selectBizProcessChildVo"/>
         where child_id = #{childId}

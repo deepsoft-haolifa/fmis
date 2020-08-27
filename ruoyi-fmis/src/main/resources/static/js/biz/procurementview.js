@@ -112,20 +112,25 @@ initChildTestTable = function(index, rows, $detail) {
     var dataId = rows["dataId"];
     var paramterId = rows["productId"];
 
-
+    var totalNum = rows["productNum"];
     if ($.common.isEmpty(paramterId)) {
         paramterId = rows["actuatorId"];
+        totalNum = rows["actuatorNum"];
     }
     if ($.common.isEmpty(paramterId)) {
         paramterId = rows["productRef1Id"];
+        totalNum = rows["productRef1Num"];
     }
     if ($.common.isEmpty(paramterId)) {
         paramterId = rows["productRef2Id"];
+        totalNum = rows["productRef2Num"];
     }
     if ($.common.isEmpty(paramterId)) {
         paramterId = rows["pattachmentId"];
+        totalNum = rows["pattachmentCount"];
     }
     var stayNum = rows["stayNum"];
+
     console.log("paramterId=" + paramterId + " stayNum=" + stayNum);
     var childId = rows["childId"];
     var statusId = rows["statusId"];
@@ -159,7 +164,7 @@ initChildTestTable = function(index, rows, $detail) {
             {field : 'noNum',title : '不合格数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 150},
             {field : 'saveTest',title : '操作',width: 200,visible: true,formatter: function(value, row, index) {
                     var actions = [];
-                    actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="saveTest(' + row.rowId + "," + childId + "," + paramterId + "," + dataId + "," + statusId + "," + stayId + "," + stayNum + ')"><i class="fa fa-save"></i> 保存</a>');
+                    actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="saveTest(' + row.rowId + "," + childId + "," + paramterId + "," + dataId + "," + statusId + "," + stayId + "," + totalNum + ')"><i class="fa fa-save"></i> 保存</a>');
                     actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="removeTest(' + row.rowId + "," + childId + "," + paramterId + "," + dataId + "," + stayId  + ')"><i class="fa fa-remove"></i> 删除</a>');
                     return actions.join('');
                 }},
@@ -170,7 +175,7 @@ initChildTestTable = function(index, rows, $detail) {
     });
 };
 
-function saveTest (rowId,childId,paramterId,dataId,statusId,stayId,stayNum) {
+function saveTest (rowId,childId,paramterId,dataId,statusId,stayId,totalNumAll) {
     //dataId,paramterId,childId,remark,testId,yesNum,noNum
 
     var rows = $("#initChildTestTableId_" + stayId).bootstrapTable('getData');
@@ -190,8 +195,8 @@ function saveTest (rowId,childId,paramterId,dataId,statusId,stayId,stayNum) {
         var noNum = r.noNum;
         totalNum = parseFloat(FloatAdd(totalNum,FloatAdd(yesNum,noNum))).toFixed(0);
     }
-    console.log("totalNum=" + totalNum);
-    if (parseInt(totalNum) > parseInt(stayNum)) {
+    console.log("totalNum=" + totalNum + " totalNumAll=" + totalNumAll);
+    if (parseInt(totalNum) > parseInt(totalNumAll)) {
         $.modal.alertWarning("数量填写错误");
         return;
     }
@@ -199,6 +204,7 @@ function saveTest (rowId,childId,paramterId,dataId,statusId,stayId,stayNum) {
     var testId = row.testId;
     var yesNum = row.yesNum;
     var noNum = row.noNum;
+
     console.log("statusId=" + statusId);
     console.log("yesNum=" + yesNum + " remark=" + remark);
     var url = ctx + "fmis/procurementtest/saveTest?dataId=" + dataId + "&paramterId=" + paramterId + "&childId=" + childId + "&remark=" + remark + "&testId=" + testId +

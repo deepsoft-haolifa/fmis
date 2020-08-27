@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('发货列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <input type="hidden" name="bizId" id="bizId" value="newdelivery"/>
+
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('fmis:newdelivery:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('fmis:newdelivery:remove')}]];
+        var sysYesNo = [[${@dict.getType('sys_yes_no')}]];
+        var prefix = ctx + "fmis/newdelivery";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "发货列表",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'dataId', 
+                    title : 'ID',
+                    visible: false
+                },
+                {
+                    field : 'string1',
+                    title : '销售合同号'
+                },
+                {
+                    field : 'string2',
+                    title : '发货通知单号'
+                },
+                {
+                    field : 'createByName',
+                    title : '发起人'
+                },
+                {
+                    field : 'createTime',
+                    title : '发起时间'
+                },
+                {
+                    field : 'flowStatusRemark',
+                    title : '状态',
+                    align: 'center'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        var flowStatus = row.flowStatus;
+                        var normalFlag = row.normalFlag;
+                        var operationExamineStatus = row.operationExamineStatus;
+                        if (flowStatus < 1) {
+                            if (flowStatus == "0") {
+                                //已上报
+                            } else {
+                                actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.editFull(\'' + row.dataId + '\')"><i class="fa fa-edit"></i> 编辑</a> ');
+                                actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 删除</a>');
+                                actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subReport(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 上报</a>');
+                            }
+                        } else if (flowStatus == normalFlag) {
+                            //已完成
+                        } else if (operationExamineStatus == true || operationExamineStatus == "true") {
+                            //审批
+                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subExamine(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 审批</a>');
+                        }
+
+                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subExamine(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 审批</a>');
+
+                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewExamineHistory(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 审批记录 </a>');
+                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewExamineDetail(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 详情 </a>');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+        function viewExamineHistory(dataId) {
+            var bizId = $("#bizId").val();
+            var url = prefix + "/viewExamineHistory?dataId=" + dataId + "&&bizId=" + bizId;
+            $.modal.openNoEnter("审批记录", url,'','',function(){
+                $.modal.closeAll();
+            });
+        }
+
+        function subExamine(dataId) {
+            var url = prefix + "/examineEdit?dataId=" + dataId;
+            $.modal.openFull("审批", url);
+        }
+
+        function subReport(dataId) {
+            $.modal.confirm("确定上报该条信息吗？", function() {
+                console.log(dataId + "--dataId");
+                var url = prefix + "/report?dataId=" + dataId;
+                $.operate.saveModal(url,'',function(){
+                    $.table.refresh();
+                });
+            });
+        }
+    </script>
+</body>
+</html>
