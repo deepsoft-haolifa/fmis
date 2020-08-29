@@ -341,7 +341,7 @@
 
         function viewInventory(dataId) {
             var url = prefix + "/viewInventory?dataId=" + dataId;
-            $.modal.openFull("查看库存", url);
+            $.modal.openFullBtnName("查看库存", url,null,null,"申请发货");
         }
 
         function subReport(dataId) {

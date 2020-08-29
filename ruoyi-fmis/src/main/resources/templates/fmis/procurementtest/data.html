@@ -160,6 +160,7 @@
         function edit(dataId) {
             var url = prefix + "/edit?dataId=" + dataId;
             $.modal.openNoEnter("质检", url,$(window).width(),$(window).height(),function(){
+                $("#bootstrap-table").bootstrapTable('refresh');
                 $.modal.closeAll();
             });
         }

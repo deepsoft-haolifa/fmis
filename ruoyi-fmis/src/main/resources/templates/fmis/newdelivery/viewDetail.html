@@ -1,35 +1,19 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" >
 <head>
-    <th:block th:include="include :: header('修改合同管理')" />
+    <th:block th:include="include :: header('查看库存')" />
     <th:block th:include="include :: datetimepicker-css" />
 </head>
 <body class="white-bg">
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
         <form class="form-horizontal m" id="form-data-edit" th:object="${bizProcessData}">
-            <input name="dataId" th:field="*{dataId}" type="hidden">
-            <input type="hidden" name="bizId" value="newdelivery"/>
+            <input name="dataId" id="dataId" th:field="*{dataId}" type="hidden">
+            <input type="hidden" name="bizId" value="contract"/>
 
-            <div class="form-group has-success">
-                <label class="col-sm-3 control-label">审批意见：</label>
-                <div class="col-sm-8">
-                    <select name="examineStatus" id="examineStatus" class="form-control m-b" th:with="type=${@dict.getType('examine_status')}">
-                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                    </select>
-                </div>
-            </div>
+            <input id="string1" name="string1" class="form-control" th:field="*{string1}" type="hidden">
 
-
-            <div class="form-group has-success">
-                <label class="col-sm-3 control-label" >审批备注：</label>
-                <div class="col-sm-8">
-                    <textarea name="examineRemark" class="form-control" id="examineRemark"></textarea>
-                </div>
-            </div>
         </form>
-
-
-        <div class="form-horizontal" >
+        <div class="form-horizontal" id="productDiv">
             <div class="row">
                 <div class="col-sm-12 select-table table-striped">
                     <table id="bootstrap-table" data-use-row-attr-func="true"
@@ -37,21 +21,18 @@
                 </div>
             </div>
         </div>
+
     </div>
     <th:block th:include="include :: footer" />
     <th:block th:include="include :: datetimepicker-js" />
+    <th:block th:include="include :: bootstrap-editable-css" />
+    <th:block th:include="include :: bootstrap-table-reorder-js" />
+    <th:block th:include="include :: bootstrap-table-editable-js" />
     <script type="text/javascript">
-        var prefix = ctx + "fmis/delivery";
+        var prefix = ctx + "fmis/child";
         $("#form-data-edit").validate({
             focusCleanup: true
         });
-
-        function submitHandler() {
-            if ($.validate.form()) {
-                $.operate.save(prefix + "/doExamine", $('#form-data-edit').serialize());
-            }
-        }
-
         $(function() {
             var options = {
                 showSearch: false,
@@ -62,10 +43,12 @@
                 useRowAttrFunc: true,
                 uniqueId: "childId",
                 async: true,
-                url: ctx + "fmis/child/selectBizProcessChildInventoryList",
+                url: prefix + "/selectBizProcessChildInventoryList",
                 //onEditableSave: onEditableSave,
                 //rowStyle: tableRowStyle,
                 queryParams : {
+                    "string5": $("#string1").val(),
+                    "string6": "1",
                     "dataId": $("#dataId").val()
                 },
                 columns: [{
@@ -106,8 +89,7 @@
                     {field : 'string9',title : '等级',editable: false},
                     {field : 'string10',title : '价格',editable: false},
                     {field : 'string11',title : '数量',editable: false},
-                    {field : 'string16',title : '已发货数量',editable: false},
-                    {field : 'string13',title : '发货数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
+                    {field : 'string13',title : '发货数量',editable: false},
                     {field : 'string14',title : '状态',formatter: function(value, row, index) {
                             var actions = [];
                             if (value == 1) {
@@ -117,11 +99,27 @@
                             }
                             return actions.join('');
                         }},
-                ]
+                    ]
             };
             $.table.init(options);
 
         });
+
+        function numberValidate(value) {
+            if (isNaN(value)) {
+                return "必须是数字！";
+            }
+        }
+
+        function submitHandler() {
+
+        }
+        $("input[name='datetime1']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
 
     </script>
 </body>

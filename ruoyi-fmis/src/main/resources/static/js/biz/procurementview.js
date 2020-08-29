@@ -32,7 +32,7 @@ $(function() {
                     return actions.join('');
                 }},
             {field : 'stayId',title : 'stayId',visible: false},
-            {field : 'productNum',title : '数量',editable: false,width: 100},
+            {field : 'productNum',title : '数量',editable: false,width: 100,visible: false},
             {field : 'stayNum',title : '待检测数量',editable: false,width: 100},
             {field : 'yesNum',title : '已检测合格数量',editable: false,width: 100},
             {field : 'noNum',title : '已检测未合格数量',editable: false,width: 100},
@@ -273,7 +273,7 @@ $(function() {
                     actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="addTest(' + row.dataId + "," + row.actuatorId +  "," + row.childId + "," + row.stayId + ",'bootstrap-table-actuator'" + ')"><i class="fa fa-add"></i> 添加</a>');
                     return actions.join('');
                 }},
-            {field : 'actuatorNum',title : '执行器数量',editable: false,width: 100},
+            {field : 'actuatorNum',title : '执行器数量',editable: false,width: 100,visible: false},
             {field : 'stayNum',title : '待检测数量',editable: false,width: 100},
             {field : 'yesNum',title : '合格数量',editable: false,width: 100},
             {field : 'noNum',title : '不合格数量',editable: false,width: 100},
@@ -388,7 +388,7 @@ $(function() {
                     actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="addTest(' + row.dataId + "," + row.productRef1Id +  "," + row.childId + "," + row.stayId  + ",'bootstrap-table-ref1'" + ')"><i class="fa fa-add"></i> 添加</a>');
                     return actions.join('');
                 }},
-            {field : 'productRef1Num',title : '法兰数量',editable: false,width: 100},
+            {field : 'productRef1Num',title : '法兰数量',editable: false,width: 100,visible: false},
             {field : 'stayNum',title : '待检测数量',editable: false,width: 100},
             {field : 'yesNum',title : '合格数量',editable: false,width: 100},
             {field : 'noNum',title : '不合格数量',editable: false,width: 100},
@@ -453,7 +453,7 @@ $(function() {
                     actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="addTest(' + row.dataId + "," + row.productRef2Id +  "," + row.childId + "," + row.stayId + ",'bootstrap-table-ref2'" + ')"><i class="fa fa-add"></i> 添加</a>');
                     return actions.join('');
                 }},
-            {field : 'productRef2Num',title : '螺栓数量',editable: false,width: 100},
+            {field : 'productRef2Num',title : '螺栓数量',editable: false,width: 100,visible: false},
             {field : 'stayNum',title : '待检测数量',editable: false,width: 100},
             {field : 'yesNum',title : '合格数量',editable: false,width: 100},
             {field : 'noNum',title : '不合格数量',editable: false,width: 100},
@@ -532,7 +532,7 @@ $(function() {
                     actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="addTest(' + row.dataId + "," + row.pattachmentId +  "," + row.childId + "," + row.stayId + ",'bootstrap-table-pa'" + ')"><i class="fa fa-add"></i> 添加</a>');
                     return actions.join('');
                 }},
-            {field : 'pattachmentCount',title : '数量',editable: false,width: 100},
+            {field : 'pattachmentCount',title : '数量',editable: false,width: 100,visible: false},
             {field : 'stayNum',title : '待检测数量',editable: false,width: 100},
             {field : 'yesNum',title : '合格数量',editable: false,width: 100},
             {field : 'noNum',title : '不合格数量',editable: false,width: 100},

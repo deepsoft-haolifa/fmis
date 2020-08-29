@@ -112,7 +112,9 @@
             content: html
         });
     });
-
+    function goQuotation () {
+        $.modal.openTab("报价单审批","/fmis/quotation/todoQuotation");
+    }
     $(function() {
         var options = {
             url: "/fmis/quotation/list",
@@ -135,7 +137,7 @@
                     title : '申请人',
                     footerFormatter:function (value) {
 
-                        return "<a href='/fmis/quotation/todoQuotation'>更多报价单...</a>";
+                        return "<a onclick='goQuotation()' href='#'>更多报价单...</a>";
                     }
                 },
                 {
@@ -194,6 +196,10 @@
         });
     });
 
+    function goContract () {
+        $.modal.openTab("合同审批","/fmis/data?todo=1");
+    }
+
     $(function() {
         var options = {
             url: "/fmis/data/list",
@@ -215,7 +221,7 @@
                     field : 'createByName',
                     title : '申请人',
                     footerFormatter:function (value) {
-                        return "<a href='/fmis/data?todo=1'>更多合同...</a>";
+                        return "<a onclick='goContract()' href='#'>更多合同...</a>";
                     }
                 },
                 {

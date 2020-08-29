@@ -77,13 +77,12 @@
                         var flowStatus = row.flowStatus;
                         var normalFlag = row.normalFlag;
                         var operationExamineStatus = row.operationExamineStatus;
+                        console.log("operationExamineStatus=" + operationExamineStatus);
                         if (flowStatus < 1) {
                             if (flowStatus == "0") {
                                 //已上报
                             } else {
-                                actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.editFull(\'' + row.dataId + '\')"><i class="fa fa-edit"></i> 编辑</a> ');
-                                actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 删除</a>');
-                                actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subReport(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 上报</a>');
+
                             }
                         } else if (flowStatus == normalFlag) {
                             //已完成
@@ -91,9 +90,6 @@
                             //审批
                             actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subExamine(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 审批</a>');
                         }
-
-                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subExamine(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 审批</a>');
-
                         actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewExamineHistory(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 审批记录 </a>');
                         actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewExamineDetail(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 详情 </a>');
                         return actions.join('');
@@ -109,7 +105,13 @@
                 $.modal.closeAll();
             });
         }
-
+        function viewExamineDetail(dataId) {
+            var bizId = $("#bizId").val();
+            var url = prefix + "/viewDetail?dataId=" + dataId + "&&bizId=" + bizId;
+            $.modal.openNoEnter("详情", url,$(window).width(),$(window).height(),function(){
+                $.modal.closeAll();
+            });
+        }
         function subExamine(dataId) {
             var url = prefix + "/examineEdit?dataId=" + dataId;
             $.modal.openFull("审批", url);

@@ -1016,8 +1016,8 @@ public class BizProcessDataController extends BaseController {
         newData.setString1(string1);
         newData.setString2(string2);
         newData.setBizId(BizConstants.BIZ_newdelivery);
-        newData.setNormalFlag("5");
-        newData.setFlowStatus("0");
+        newData.setNormalFlag("4");
+        newData.setFlowStatus("1");
         int insertReturn = bizProcessDataService.insertBizProcessData(newData);
         if (StringUtils.isNotEmpty(productArrayStr)) {
             JSONArray productArray = JSONArray.parseArray(productArrayStr);
@@ -1033,7 +1033,10 @@ public class BizProcessDataController extends BaseController {
                     //减去 库存数
                     String inventoryChildId = bizProcessChild.getString15();
                     BizProcessChild inventoryChild = bizProcessChildService.selectBizProcessChildById(Long.parseLong(inventoryChildId));
-                    inventoryChild.setString11((Integer.parseInt(inventoryChild.getString11()) - Integer.parseInt(bizProcessChild.getString13())) + "");
+
+                    String string16 = inventoryChild.getString16();
+                    inventoryChild.setString16(StringUtils.toLong(string16) + StringUtils.toLong(bizProcessChild.getString13()) + "");
+                    inventoryChild.setString11((StringUtils.toLong(inventoryChild.getString11()) - StringUtils.toLong(bizProcessChild.getString13())) + "");
                     inventoryChild.setUpdateTime(new Date());
                     inventoryChild.setUpdateBy(ShiroUtils.getUserId() + "");
                     inventoryChild.setString14("1");

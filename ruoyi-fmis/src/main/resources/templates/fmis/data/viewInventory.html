@@ -47,7 +47,8 @@
                 //onEditableSave: onEditableSave,
                 //rowStyle: tableRowStyle,
                 queryParams : {
-                    "string5": $("#string1").val()
+                    "string5": $("#string1").val(),
+                    "string7": "1"
                 },
                 columns: [{
                     checkbox: true
@@ -87,7 +88,7 @@
                     {field : 'string9',title : '等级',editable: false},
                     {field : 'string10',title : '价格',editable: false},
                     {field : 'string11',title : '数量',editable: false},
-                    {field : 'string11',title : '已发货数量',editable: false},
+                    {field : 'string16',title : '已发货数量',editable: false},
                     {field : 'string13',title : '发货数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
                     {field : 'string14',title : '状态',formatter: function(value, row, index) {
                             var actions = [];

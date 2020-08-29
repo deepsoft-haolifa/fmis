@@ -351,7 +351,8 @@ public class BizDataSteststayController extends BaseController {
             }
             insertChild.setString2(type);
             insertChild.setString3(orderNo);
-
+            //质检状态
+            insertChild.setString20("1");
 
             BizProcessChild queryChildExist = new BizProcessChild();
             queryChildExist.setString1(childId);
@@ -361,6 +362,7 @@ public class BizDataSteststayController extends BaseController {
                 bizProcessChildService.insertBizProcessChild(insertChild);
             } else {
                 BizProcessChild updateChild = bizProcessChildListExist.get(0);
+                updateChild.setString20("1");
                 updateChild.setString11((Integer.parseInt(updateChild.getString11()) + Integer.parseInt(stayNum)) + "");
                 updateChild.setUpdateBy(ShiroUtils.getUserId().toString());
                 updateChild.setUpdateTime(new Date());

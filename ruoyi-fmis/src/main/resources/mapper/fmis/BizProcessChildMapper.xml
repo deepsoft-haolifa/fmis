@@ -113,7 +113,8 @@
         <include refid="selectBizProcessChildInventoryVo"/>
         <where>
             1=1
-            <if test="string5 != null  and string5 != ''">and concat(string5,',') like concat('%', #{string5}, '%') and ifnull(string14,'0') != '1'</if>
+            <if test="string7 != null  and string7 != ''">and concat(string5,',') like concat('%', #{string5}, '%') and string20='1'</if>
+            <if test="string6 != null  and string6 != ''">and concat(string5,',') like concat('%', #{string5}, '%') and ifnull(string14,'0') = '1' and ifnull(string13,0) > 0 and string20='0'</if>
             <if test="dataId != null">and data_id = #{dataId}</if>
 
         </where>
@@ -256,7 +257,7 @@
     </select>
 
 
-    <!-- 质检 产品列表 -->
+    <!-- 质检 产品列表 (COALESCE(sum(ss.num),0)-COALESCE(sum(sn.string1),0)-COALESCE(sum(sn.string2),0))-->
     <sql id="selectBizTestProductVo">
     select
           p.price as productPrice,p.product_id as productId,ds.string4 as dataId,ds.child_id as childId,sn.remark,ds.status_id as statusId,
@@ -272,7 +273,7 @@
           ds.product_status as productStatus,
           ds.data_status as dataStatus,
           p.string2 as levelValue,s.suppliers_id as supplierId,
-          COALESCE(sum(sn.string1),0) as yesNum, COALESCE(sum(sn.string2),0) as noNum,(COALESCE(sum(ss.num),0)-COALESCE(sum(sn.string1),0)-COALESCE(sum(sn.string2),0)) as stayNum,ss.create_time as stayCreateTime,ss.stay_id as stayId,ss.string6 as orderNo,
+          COALESCE(sum(sn.string1),0) as yesNum, COALESCE(sum(sn.string2),0) as noNum,ss.num as stayNum,ss.create_time as stayCreateTime,ss.stay_id as stayId,ss.string6 as orderNo,
           da.string10 as contractNo,da.string12 as procurementNo
     from biz_product p
      join biz_data_status ds on   ds.string2=p.product_id and ds.string4=#{dataId} and ds.type=1
@@ -333,6 +334,8 @@
     </sql>
     <select id="selectBizChildActuatorList" parameterType="BizProcessChild" resultMap="BizProcessChildResult">
         <include refid="selectBizChildActuatorVo"/>
+        <!-- 如果是详情，只看有数据 -->
+        <if test="bizEditFlag == 2">and ds.string4 = #{procurementId} </if>
         <if test="dataStatus == 1">and ds.data_status = #{dataStatus} </if>
         <if test="dataStatus == -1">and ds.data_status is null </if>
         <if test="supplierId != null and supplierId != ''">and s.suppliers_id=#{supplierId} </if>
@@ -402,7 +405,8 @@ join biz_process_data pd on pc.data_id=pd.data_id
     </sql>
     <select id="selectBizChildRef1List" parameterType="BizProcessChild" resultMap="BizProcessChildResult">
         <include refid="selectBizChildRef1Vo"/>
-
+        <!-- 如果是详情，只看有数据 -->
+        <if test="bizEditFlag == 2">and ds.string4 = #{procurementId} </if>
         <if test="dataStatus == 1">and ds.data_status = #{dataStatus} </if>
         <if test="dataStatus == -1">and ds.data_status is null </if>
         <if test="supplierId != null and supplierId != ''">and s.suppliers_id=#{supplierId} </if>
@@ -469,6 +473,8 @@ join biz_process_data pd on pc.data_id=pd.data_id
     </sql>
     <select id="selectBizChildRef2List" parameterType="BizProcessChild" resultMap="BizProcessChildResult">
         <include refid="selectBizChildRef2Vo"/>
+        <!-- 如果是详情，只看有数据 -->
+        <if test="bizEditFlag == 2">and ds.string4 = #{procurementId} </if>
         <if test="dataStatus == 1">and ds.data_status = #{dataStatus} </if>
         <if test="dataStatus == -1">and ds.data_status is null </if>
         <if test="supplierId != null and supplierId != ''">and s.suppliers_id=#{supplierId} </if>
@@ -537,6 +543,8 @@ join biz_process_data pd on pc.data_id=pd.data_id
     </sql>
     <select id="selectBizChildPAList" parameterType="BizProcessChild" resultMap="BizProcessChildResult">
         <include refid="selectBizChildPAVo"/>
+        <!-- 如果是详情，只看有数据 -->
+        <if test="bizEditFlag == 2">and ds.string4 = #{procurementId} </if>
         <if test="dataStatus == 1">and ds.data_status = #{dataStatus} </if>
         <if test="dataStatus == -1">and ds.data_status is null </if>
         <if test="supplierId != null and supplierId != ''">and s.suppliers_id=#{supplierId} </if>
@@ -605,6 +613,8 @@ join biz_process_data pd on pc.data_id=pd.data_id
     </sql>
     <select id="selectBizChildPA1List" parameterType="BizProcessChild" resultMap="BizProcessChildResult">
         <include refid="selectBizChildPA1Vo"/>
+        <!-- 如果是详情，只看有数据 -->
+        <if test="bizEditFlag == 2">and ds.string4 = #{procurementId} </if>
         <if test="dataStatus == 1">and ds.data_status = #{dataStatus} </if>
         <if test="dataStatus == -1">and ds.data_status is null </if>
         <if test="supplierId != null and supplierId != ''">and s.suppliers_id=#{supplierId} </if>
@@ -676,6 +686,8 @@ join biz_process_data pd on pc.data_id=pd.data_id
     </sql>
     <select id="selectBizChildPA3List" parameterType="BizProcessChild" resultMap="BizProcessChildResult">
         <include refid="selectBizChildPA3Vo"/>
+        <!-- 如果是详情，只看有数据 -->
+        <if test="bizEditFlag == 2">and ds.string4 = #{procurementId} </if>
         <if test="dataStatus == 1">and ds.data_status = #{dataStatus} </if>
         <if test="dataStatus == -1">and ds.data_status is null </if>
         <if test="supplierId != null and supplierId != ''">and s.suppliers_id=#{supplierId} </if>
@@ -709,6 +721,8 @@ join biz_process_data pd on pc.data_id=pd.data_id
     </sql>
     <select id="selectBizChildPA4List" parameterType="BizProcessChild" resultMap="BizProcessChildResult">
         <include refid="selectBizChildPA4Vo"/>
+        <!-- 如果是详情，只看有数据 -->
+        <if test="bizEditFlag == 2">and ds.string4 = #{procurementId} </if>
         <if test="dataStatus == 1">and ds.data_status = #{dataStatus} </if>
         <if test="dataStatus == -1">and ds.data_status is null </if>
         <if test="supplierId != null and supplierId != ''">and s.suppliers_id=#{supplierId} </if>

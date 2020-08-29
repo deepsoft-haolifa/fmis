@@ -87,7 +87,6 @@ public class BizProcessProcurementpoolController extends BaseController {
     /**
      * 查询合同管理列表
      */
-    @RequiresPermissions("fmis:procurementpool:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(BizProcessData bizProcessData) {

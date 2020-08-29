@@ -129,7 +129,13 @@ public class BizProcessDataNewDeliveryController extends BaseController {
         mmap.put("bizProcessData", bizProcessData);
         return prefix + "/examineEdit";
     }
-
+    @GetMapping("/viewDetail")
+    public String viewDetail(ModelMap mmap) {
+        String dataId = getRequest().getParameter("dataId");
+        BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataById(Long.parseLong(dataId));
+        mmap.put("bizProcessData", bizProcessData);
+        return prefix + "/viewDetail";
+    }
     @PostMapping("/doExamine")
     @ResponseBody
     public AjaxResult doExamine(BizProcessData bizProcessData) {

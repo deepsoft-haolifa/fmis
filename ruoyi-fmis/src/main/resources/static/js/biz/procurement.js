@@ -127,7 +127,7 @@ function initExpandRow() {
                 $("#string6").find("option[value='" + paramterSupplierId + "']").attr("selected",true);
             }
         }
-        calculatePrice();
+        //calculatePrice();
     }, 1000);
 
 }
@@ -278,7 +278,8 @@ function onEditableSave (field, row, oldValue, $el) {
         numberMap.set("9_" + row.childId + "_" + row.pattachment4Id + "_" + row.dataId + "_" + row.levelValue,row.pattachment4Count);
         priceMap.set("9_" + row.childId + "_" + row.pattachment4Id + "_" + row.dataId + "_" + row.levelValue,price1);
     }
-    calculatePrice();
+    console.log("no calculatePrice");
+    //calculatePrice();
 }
 
 function calculatePrice () {
@@ -287,7 +288,7 @@ function calculatePrice () {
         console.log("-----")
         price1 = FloatAdd(price1,value);
     });
-    console.log("--000---")
+    console.log("--0001---" + price1);
     $("#price1").val(price1);
 }
 function FloatAdd(arg1,arg2){
@@ -306,12 +307,21 @@ function setRowTotalPrice(columnName1,columnName2,tableName,row) {
     var total = parseFloat(productNum * procurementPrice).toFixed(2);
     var rowId = parseInt(row["rowId"]);
 
+    console.log("10201222----" + columnName1);
+
     var updateObj = {
         index: rowId,
         field: "totalPrice",
         value: total
     };
     $("#" + tableName).bootstrapTable("updateCell", updateObj);
+
+    var updateObj1 = {
+        index: rowId,
+        field: columnName1,
+        value: productNum
+    };
+    $("#" + tableName).bootstrapTable("updateCell", updateObj1);
     return total;
 }
 
