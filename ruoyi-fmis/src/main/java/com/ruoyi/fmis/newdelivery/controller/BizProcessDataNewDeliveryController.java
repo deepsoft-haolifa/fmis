@@ -18,15 +18,18 @@ import com.ruoyi.fmis.data.domain.BizProcessData;
 import com.ruoyi.fmis.data.service.IBizProcessDataService;
 import com.ruoyi.fmis.define.service.IBizProcessDefineService;
 import com.ruoyi.fmis.product.service.IBizProductService;
+import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysRole;
 import com.ruoyi.system.service.ISysRoleService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -64,6 +67,18 @@ public class BizProcessDataNewDeliveryController extends BaseController {
     public String data() {
         return prefix + "/data";
     }
+
+    @GetMapping("/inventory")
+    public String inventory() {
+        return prefix + "/inventory";
+    }
+
+    @GetMapping("/outbound")
+    public String outbound() {
+        return prefix + "/outbound";
+    }
+
+
 
     /**
      * 查询发货管理列表
@@ -138,10 +153,32 @@ public class BizProcessDataNewDeliveryController extends BaseController {
     }
     @PostMapping("/doExamine")
     @ResponseBody
+    @Transactional
     public AjaxResult doExamine(BizProcessData bizProcessData) {
         String examineStatus = bizProcessData.getExamineStatus();
         String examineRemark = bizProcessData.getExamineRemark();
         String dataId = bizProcessData.getDataId().toString();
+
+        if (!"1".equals(examineStatus)) {
+            //不同意把库存减去
+            BizProcessChild queryChild = new BizProcessChild();
+            queryChild.setDataId(Long.parseLong(dataId));
+            List<BizProcessChild> childList = bizProcessChildService.selectBizProcessChildInventoryList(queryChild);
+            if (!CollectionUtils.isEmpty(childList)) {
+                Long totalNum = 0L;
+                String updateChildId = "";
+                for (BizProcessChild child : childList) {
+                    String string13 = child.getString13();
+                    totalNum += StringUtils.toLong(string13);
+                    updateChildId = child.getString15();
+                }
+                //查询主数据
+                BizProcessChild updateChild = bizProcessChildService.selectBizProcessChildById(Long.parseLong(updateChildId));
+                updateChild.setString11((StringUtils.toLong(updateChild.getString11()) + totalNum) + "");
+                bizProcessChildService.updateBizProcessChild(updateChild);
+            }
+        }
+
         return toAjax(bizProcessDataService.doExamine(dataId,examineStatus,examineRemark,bizProcessData.getBizId()));
     }
 
@@ -280,6 +317,18 @@ public class BizProcessDataNewDeliveryController extends BaseController {
         }
         return toAjax(updateReturn);
     }
+
+    @PostMapping( "/saveOutbound")
+    @ResponseBody
+    public AjaxResult saveOutbound(String childId) {
+
+        BizProcessChild child = bizProcessChildService.selectBizProcessChildById(Long.parseLong(childId));
+        child.setUpdateBy(ShiroUtils.getUserId().toString());
+        child.setUpdateTime(new Date());
+        child.setString19("1");
+        return toAjax(bizProcessChildService.updateBizProcessChild(child));
+    }
+
 
     /**
      * 删除发货管理

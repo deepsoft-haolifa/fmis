@@ -148,6 +148,15 @@
                 })
 
                 dataObj.push({"name": "productParmters", "value": JSON.stringify(productArray)});
+
+                //刷新 采购管理 页面
+                console.log("refresh procurement page...");
+                var pageDataId = ctx + "fmis/procurement";
+                var topWindow = $(parent.window.parent.document);
+                var target = $('.RuoYi_iframe[data-id="' + pageDataId + '"]', topWindow);
+                var urlR = target.attr('src');
+                target.attr('src', urlR).ready();
+
                 $.operate.save(prefix + "/add", dataObj);
             }
         }

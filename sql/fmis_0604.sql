@@ -1611,3 +1611,14 @@ SELECT @parentId := LAST_INSERT_ID();
 insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
 values('发货列表', @parentId, '1',  '#',  'F', '0', 'fmis:newdelivery:list',         '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
 
+
+SELECT @parentIdFP :=  menu_id from sys_menu where menu_name='库存管理' and parent_id=0 and order_num='35';
+-- 按钮 SQL
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('库存列表', @parentIdFP, '2',  '/fmis/newdelivery/inventory',  'C', '0', 'fmis:inventorylist:list',         '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+SELECT @parentIdFP :=  menu_id from sys_menu where menu_name='库存管理' and parent_id=0 and order_num='35';
+-- 按钮 SQL
+insert into sys_menu  (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('待出库列表', @parentIdFP, '3',  '/fmis/newdelivery/outbound',  'C', '0', 'fmis:inventorylist:list',         '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+

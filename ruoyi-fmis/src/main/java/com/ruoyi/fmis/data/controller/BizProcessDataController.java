@@ -50,6 +50,7 @@ import com.ruoyi.system.service.ISysUserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
@@ -1008,6 +1009,7 @@ public class BizProcessDataController extends BaseController {
     @Log(title = "发货保存", businessType = BusinessType.UPDATE)
     @PostMapping("/saveInventory")
     @ResponseBody
+    @Transactional
     public AjaxResult saveInventory(BizProcessData bizProcessData) {
         String productArrayStr = bizProcessData.getProductParmters();
         String string1 = bizProcessData.getString1();
@@ -1027,7 +1029,7 @@ public class BizProcessDataController extends BaseController {
                 if (StringUtils.isNotEmpty(bizProcessChild.getString2())) {
                     bizProcessChild.setDataId(newData.getDataId());
                     bizProcessChild.setChildId(null);
-                    bizProcessChild.setString14("1");
+                    bizProcessChild.setString14("0");
                     bizProcessChildService.insertBizProcessChild(bizProcessChild);
 
                     //减去 库存数

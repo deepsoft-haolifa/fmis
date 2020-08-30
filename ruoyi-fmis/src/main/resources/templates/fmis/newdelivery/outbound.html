@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('待出库列表')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-data-edit" >
+        <input type="hidden" name="bizId" value="contract"/>
+
+    </form>
+    <div class="form-horizontal" id="productDiv">
+        <div class="row">
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table" data-use-row-attr-func="true"
+                       data-reorderable-rows="true"></table>
+            </div>
+        </div>
+    </div>
+
+</div>
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: datetimepicker-js" />
+<th:block th:include="include :: bootstrap-editable-css" />
+<th:block th:include="include :: bootstrap-table-reorder-js" />
+<th:block th:include="include :: bootstrap-table-editable-js" />
+<script type="text/javascript">
+    var prefix = ctx + "fmis/child";
+    $("#form-data-edit").validate({
+        focusCleanup: true
+    });
+    $(function() {
+        var options = {
+            showSearch: false,
+            showRefresh: false,
+            pagination: false,
+            showColumns: false,
+            showToggle: false,
+            useRowAttrFunc: true,
+            uniqueId: "childId",
+            async: true,
+            url: prefix + "/selectBizProcessChildInventoryList",
+            //onEditableSave: onEditableSave,
+            //rowStyle: tableRowStyle,
+            queryParams : {
+                "string8": "1"
+            },
+            columns: [{
+                checkbox: true
+            },
+                {field : 'rowId',title : '序号',visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
+
+                {field : 'childId',title : 'childId',visible: false},
+                {field : 'string3',title : '报检单号',editable: false},
+                {field : 'string4',title : '销售合同号'},
+                {field : 'string5',title : '采购合同号',editable: false},
+                {field : 'string2',title : '类型',formatter: function(value, row, index) {
+                        var actions = [];
+                        if (value == 1) {
+                            actions.push('产品');
+                        } else if (value == 2) {
+                            actions.push('执行器');
+                        } else if (value == 3) {
+                            actions.push('法兰');
+                        } else if (value == 4) {
+                            actions.push('螺栓');
+                        } else if (value == 5) {
+                            actions.push('定位器');
+                        } else if (value == 6) {
+                            actions.push('电磁阀');
+                        } else if (value == 7) {
+                            actions.push('回信器数');
+                        } else if (value == 8) {
+                            actions.push('气源三连件');
+                        } else if (value == 9) {
+                            actions.push('气源三连件');
+                        }
+                        return actions.join('');
+                    }},
+                {field : 'string6',title : '名称',editable: false},
+                {field : 'string7',title : '型号',editable: false},
+                {field : 'string8',title : '规格',editable: false},
+                {field : 'string9',title : '等级',editable: false},
+                {field : 'string10',title : '价格',editable: false},
+                {field : 'string13',title : '数量',editable: false},
+                {field : 'string19',title : '操作',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+
+                        if (value  == 1) {
+                            actions.push('已出库');
+                        } else {
+                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="saveOutbound(\'' + row.childId + '\')"><i class="fa fa-save"></i> 确认</a>');
+                        }
+                        return actions.join('');
+                    }
+                }
+            ]
+        };
+        $.table.init(options);
+
+    });
+
+    function numberValidate(value) {
+        if (isNaN(value)) {
+            return "必须是数字！";
+        }
+    }
+
+    function saveOutbound(childId) {
+        var url = ctx + "fmis/newdelivery/saveOutbound?childId=" + childId;
+        $.operate.saveModal(url,null,function(){
+
+            $('#bootstrap-table').bootstrapTable("refresh");
+            return "操作成功";
+        });
+    }
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            var dataObj = $('#form-data-edit').serializeArray();
+            var productArray = new Array();
+            var data = $.btTable.bootstrapTable('getData');
+            for (var i = 0; i < data.length; i++) {
+                var rowData = data[i];
+                var num = rowData["string13"];
+
+                if ($.common.isNotEmpty(num) &&  num != "0") {
+                    var productObj = rowData;
+                    productObj["string15"] = rowData["childId"];
+                    productObj["childId"] = "";
+                    productArray.push(productObj);
+                }
+            }
+            //console.log("productArray=" + JSON.stringify(productArray));
+            dataObj.push({"name": "productParmters", "value": JSON.stringify(productArray)});
+            $.operate.save(ctx + "fmis/data/saveInventory", dataObj);
+        }
+    }
+    $("input[name='datetime1']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+
+
+</script>
+</body>
+</html>

@@ -100,24 +100,30 @@
 
     <!-- 库存查看 -->
     <sql id="selectBizProcessChildInventoryVo">
-        select child_id, data_id, remark, price1, price2, price3, price4,
-        price5, price6, price7, price8, price9, price10, string1, string2,
-        string3, string4, string5, string6, string7, string8, string9, string10,
-        string11, string12, string13, string14, string15, string16, string17,
-        string18, string19, string20, datetime1, datetime2, datetime3, datetime4,
-        datetime5, status, del_flag, create_by, create_time, update_by, update_time
-        from biz_process_child
+        select c.child_id, c.data_id, c.remark, c.price1, c.price2, c.price3, c.price4,
+        c.price5, c.price6, c.price7, c.price8, c.price9, c.price10, c.string1, c.string2,
+        c.string3, c.string4, c.string5, c.string6, c.string7, c.string8, c.string9, c.string10,
+        c.string11, c.string12, c.string13, c.string14, c.string15, c.string16, c.string17,
+        c.string18, c.string19, c.string20, c.datetime1, c.datetime2, c.datetime3, c.datetime4,
+        c.datetime5, c.status, c.del_flag, c.create_by, c.create_time, c.update_by, c.update_time
+        from biz_process_child c
     </sql>
 
     <select id="selectBizProcessChildInventoryList" parameterType="BizProcessChild" resultMap="BizProcessChildResult">
         <include refid="selectBizProcessChildInventoryVo"/>
         <where>
             1=1
-            <if test="string7 != null  and string7 != ''">and concat(string5,',') like concat('%', #{string5}, '%') and string20='1'</if>
+            <!-- 合同中合计的数量 -->
+            <if test="string7 != null  and string7 != ''">and concat(string5,',') like concat('%', #{string5}, '%') and ifnull(string13,0)=0</if>
             <if test="string6 != null  and string6 != ''">and concat(string5,',') like concat('%', #{string5}, '%') and ifnull(string14,'0') = '1' and ifnull(string13,0) > 0 and string20='0'</if>
+            <!-- 审核通过的发货 -->
+            <if test="string8 != null  and string8 != ''">
+                and c.data_id in (select data_id from biz_process_data where biz_id='newdelivery' and normal_flag=flow_status)
+            </if>
             <if test="dataId != null">and data_id = #{dataId}</if>
 
         </where>
+        order by c.create_time desc
     </select>
 
     <select id="selectBizProcessChildById" parameterType="Long" resultMap="BizProcessChildResult">

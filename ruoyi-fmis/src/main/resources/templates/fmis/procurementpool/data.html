@@ -104,6 +104,7 @@
             supplierMap.forEach(function (value, key, map) {
                 paramterSupplierId = key;
             })
+            console.log("paramterSupplierId=" + paramterSupplierId);
             $("#paramterSupplierId").val(paramterSupplierId);
 
             var price1 = 0;
@@ -127,6 +128,9 @@
             $("#numJsonValue").val(JSON.stringify(datas));
 
             $.modal.openFull("审批", url);
+
+
+
         }
     </script>
      <script th:src="@{/js/biz/procurement.js}"></script>

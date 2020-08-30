@@ -41,7 +41,7 @@
     <th:block th:include="include :: footer" />
     <th:block th:include="include :: datetimepicker-js" />
     <script type="text/javascript">
-        var prefix = ctx + "fmis/delivery";
+        var prefix = ctx + "fmis/newdelivery";
         $("#form-data-edit").validate({
             focusCleanup: true
         });
@@ -105,18 +105,8 @@
                     {field : 'string8',title : '规格',editable: false},
                     {field : 'string9',title : '等级',editable: false},
                     {field : 'string10',title : '价格',editable: false},
-                    {field : 'string11',title : '数量',editable: false},
-                    {field : 'string16',title : '已发货数量',editable: false},
-                    {field : 'string13',title : '发货数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
-                    {field : 'string14',title : '状态',formatter: function(value, row, index) {
-                            var actions = [];
-                            if (value == 1) {
-                                actions.push('已发货');
-                            } else{
-                                actions.push('未发货');
-                            }
-                            return actions.join('');
-                        }},
+                    {field : 'string13',title : '已发货数量',editable: false}
+
                 ]
             };
             $.table.init(options);
