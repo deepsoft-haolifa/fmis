@@ -225,6 +225,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="string23 == 2 ">
                 and q.string23 = '2'
             </if>
+            <if test="string23 == 3 ">
+                and (ifnull(q.string23,'0') != 2)
+            </if>
 
 
             <!-- string2作为角色参数 1=销售 2=销售经理 3=区域经理 4=副总 5=老总-->

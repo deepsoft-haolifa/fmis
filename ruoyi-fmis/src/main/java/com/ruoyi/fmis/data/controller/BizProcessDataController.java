@@ -482,7 +482,7 @@ public class BizProcessDataController extends BaseController {
 
         String supplierId = bizProcessData.getSupplierId();
         if (StringUtils.isNotEmpty(supplierId)) {
-            //queryBizProcessChild.setSupplierId(supplierId);
+            queryBizProcessChild.setSupplierId(supplierId);
         }
 
         List<BizProcessChild> bizProcessChildList = bizProcessChildService.selectBizChildProductList(queryBizProcessChild);
@@ -545,7 +545,7 @@ public class BizProcessDataController extends BaseController {
         queryBizProcessChild.setProcurementId(bizProcessData.getProcurementId());
         String supplierId = bizProcessData.getSupplierId();
         if (StringUtils.isNotEmpty(supplierId)) {
-            //queryBizProcessChild.setSupplierId(supplierId);
+            queryBizProcessChild.setSupplierId(supplierId);
         }
         List<BizProcessChild> bizProcessChildListActuatorA = bizProcessChildService.selectBizChildActuatorList(queryBizProcessChild);
         return getDataTable(bizProcessChildListActuatorA);
@@ -562,7 +562,7 @@ public class BizProcessDataController extends BaseController {
         queryBizProcessChild.setProcurementId(bizProcessData.getProcurementId());
         String supplierId = bizProcessData.getSupplierId();
         if (StringUtils.isNotEmpty(supplierId)) {
-            //queryBizProcessChild.setSupplierId(supplierId);
+            queryBizProcessChild.setSupplierId(supplierId);
         }
         List<BizProcessChild> bizProcessChildListRefA = bizProcessChildService.selectBizChildRef1List(queryBizProcessChild);
         return getDataTable(bizProcessChildListRefA);
@@ -579,7 +579,7 @@ public class BizProcessDataController extends BaseController {
         queryBizProcessChild.setProcurementId(bizProcessData.getProcurementId());
         String supplierId = bizProcessData.getSupplierId();
         if (StringUtils.isNotEmpty(supplierId)) {
-            //queryBizProcessChild.setSupplierId(supplierId);
+            queryBizProcessChild.setSupplierId(supplierId);
         }
         List<BizProcessChild> bizProcessChildListRefA = bizProcessChildService.selectBizChildRef2List(queryBizProcessChild);
         return getDataTable(bizProcessChildListRefA);
@@ -596,7 +596,7 @@ public class BizProcessDataController extends BaseController {
         queryBizProcessChild.setProcurementId(bizProcessData.getProcurementId());
         String supplierId = bizProcessData.getSupplierId();
         if (StringUtils.isNotEmpty(supplierId)) {
-            //queryBizProcessChild.setSupplierId(supplierId);
+            queryBizProcessChild.setSupplierId(supplierId);
         }
         List<BizProcessChild> bizProcessChildListRefA = bizProcessChildService.selectBizChildPAList(queryBizProcessChild);
         return getDataTable(bizProcessChildListRefA);
@@ -613,7 +613,7 @@ public class BizProcessDataController extends BaseController {
         queryBizProcessChild.setProcurementId(bizProcessData.getProcurementId());
         String supplierId = bizProcessData.getSupplierId();
         if (StringUtils.isNotEmpty(supplierId)) {
-            //queryBizProcessChild.setSupplierId(supplierId);
+            queryBizProcessChild.setSupplierId(supplierId);
         }
         List<BizProcessChild> bizProcessChildListRefA = bizProcessChildService.selectBizChildPA1List(queryBizProcessChild);
         return getDataTable(bizProcessChildListRefA);
@@ -629,7 +629,7 @@ public class BizProcessDataController extends BaseController {
         queryBizProcessChild.setProcurementId(bizProcessData.getProcurementId());
         String supplierId = bizProcessData.getSupplierId();
         if (StringUtils.isNotEmpty(supplierId)) {
-            //queryBizProcessChild.setSupplierId(supplierId);
+            queryBizProcessChild.setSupplierId(supplierId);
         }
         List<BizProcessChild> bizProcessChildListRefA = bizProcessChildService.selectBizChildPA2List(queryBizProcessChild);
         return getDataTable(bizProcessChildListRefA);
@@ -645,7 +645,7 @@ public class BizProcessDataController extends BaseController {
         queryBizProcessChild.setProcurementId(bizProcessData.getProcurementId());
         String supplierId = bizProcessData.getSupplierId();
         if (StringUtils.isNotEmpty(supplierId)) {
-            //queryBizProcessChild.setSupplierId(supplierId);
+            queryBizProcessChild.setSupplierId(supplierId);
         }
         List<BizProcessChild> bizProcessChildListRefA = bizProcessChildService.selectBizChildPA3List(queryBizProcessChild);
         return getDataTable(bizProcessChildListRefA);
@@ -661,7 +661,7 @@ public class BizProcessDataController extends BaseController {
         queryBizProcessChild.setProcurementId(bizProcessData.getProcurementId());
         String supplierId = bizProcessData.getSupplierId();
         if (StringUtils.isNotEmpty(supplierId)) {
-            //queryBizProcessChild.setSupplierId(supplierId);
+            queryBizProcessChild.setSupplierId(supplierId);
         }
         List<BizProcessChild> bizProcessChildListRefA = bizProcessChildService.selectBizChildPA4List(queryBizProcessChild);
         return getDataTable(bizProcessChildListRefA);

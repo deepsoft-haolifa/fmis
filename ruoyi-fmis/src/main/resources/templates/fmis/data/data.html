@@ -211,7 +211,7 @@
                         var normalFlag = row.normalFlag;
                         var operationExamineStatus = row.operationExamineStatus;
                         var deliveryStatus = row.string27;
-                        if (flowStatus < 1) {
+                        if (flowStatus < 1 && flowStatus > -1) {
                             actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="edit(\'' + row.dataId + '\')"><i class="fa fa-edit"></i> 编辑</a> ');
                             actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="remove(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 删除</a>');
                             actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subReport(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 上报</a>');

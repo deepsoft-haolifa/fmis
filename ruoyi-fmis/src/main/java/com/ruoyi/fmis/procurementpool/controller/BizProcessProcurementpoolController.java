@@ -115,6 +115,14 @@ public class BizProcessProcurementpoolController extends BaseController {
         if (!CollectionUtils.isEmpty(flowMap)) {
             //计算流程描述
             for (BizProcessData data : list) {
+
+
+                //过滤数据
+
+
+
+
+
                 String flowStatus = data.getFlowStatus();
                 //结束标识
                 String normalFlag = data.getNormalFlag();
