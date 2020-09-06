@@ -78,7 +78,7 @@ public class BizProductRefController extends BaseController {
         String refType = getRequest().getParameter("refType");
 
         BizProduct bizProduct = bizProductService.selectBizProductById(Long.parseLong(productId));
-        bizProduct = null;
+        //bizProduct = null;
         if (bizProduct != null) {
             String specifications = bizProduct.getSpecifications();
             if (StringUtils.isNotEmpty(specifications)) {

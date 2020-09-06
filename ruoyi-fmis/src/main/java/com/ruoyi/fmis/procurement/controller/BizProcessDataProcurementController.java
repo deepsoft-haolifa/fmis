@@ -325,6 +325,7 @@ public class BizProcessDataProcurementController extends BaseController {
             }
         }
         bizProcessData.setString10(contractNos);
+        bizProcessData.setString3(contractNos);
         bizProcessDataService.updateBizProcessData(bizProcessData);
     }
 

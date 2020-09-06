@@ -92,7 +92,7 @@ public class BizActuatorController extends BaseController {
 
         BizProduct bizProduct = bizProductService.selectBizProductById(Long.parseLong(productId));
 
-        bizProduct = null;
+        //bizProduct = null;
 
         if (bizProduct != null) {
             String specifications = bizProduct.getSpecifications();
