@@ -36,7 +36,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
     <sql id="selectBizFlowViewVo">
-      select f.flow_id, f.biz_table, f.biz_id, f.examine_user_id,u.user_name as examineUserName, f.flow_status, f.remark, f.string1, f.string2, f.string3, f.string4, f.string5, f.status, f.del_flag, f.create_by, f.create_time, f.update_by, f.update_time
+      select f.flow_id, f.biz_table, f.biz_id, f.examine_user_id,u.user_name as examineUserName, f.flow_status, f.remark,
+      f.string1, f.string2, f.string3, f.string4, f.string5, f.status, f.del_flag, f.create_by, f.create_time,
+      f.update_by, f.update_time
       from biz_flow f
       left join sys_user u on u.user_id=f.examine_user_id
 

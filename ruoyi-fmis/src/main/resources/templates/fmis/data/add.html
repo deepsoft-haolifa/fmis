@@ -28,7 +28,7 @@
             <div class="col-sm-2">
                 <div class="input-group date">
                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                    <input name="datetime1" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    <input name="datetime1" id="datetime1" class="form-control" placeholder="yyyy-MM-dd" type="text">
                 </div>
             </div>
 
@@ -51,7 +51,7 @@
             </div>
             <label class="col-sm-1 control-label">含发票：</label>
             <div class="col-sm-2">
-                <input name="string5" class="form-control" type="text">
+                <input name="string5" class="form-control" type="text" value="0.13">
             </div>
             <label class="col-sm-1 control-label">发货时间：</label>
             <div class="col-sm-2">
@@ -61,7 +61,7 @@
                 </div>
             </div>
 
-            <label class="col-sm-1 control-label">运输方式：</label>
+            <label class="col-sm-1 control-label">配送方式：</label>
             <div class="col-sm-2">
                 <select name="string7" id="string7" class="form-control m-b" th:with="type=${@dict.getType('transport_type')}">
                     <option value="0">请选择</option>
@@ -146,7 +146,7 @@
 
 
         <div class="form-group">
-            <label class="col-sm-1 control-label">代收代付：</label>
+            <label class="col-sm-1 control-label">归属部门：</label>
             <div class="col-sm-2">
                 <input name="string22" id="string22" class="form-control" type="hidden">
                 <div class="input-group">
@@ -161,8 +161,8 @@
                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                 </select>
             </div>
-            <label class="col-sm-1 control-label">送货方式：</label>
-            <div class="col-sm-2">
+            <label style="display: none" class="col-sm-1 control-label">送货方式：</label>
+            <div style="display: none" class="col-sm-2">
                 <select name="string21" id="string21" class="form-control m-b" th:with="type=${@dict.getType('shipping_method')}">
                     <option value="0">请选择</option>
                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
@@ -453,6 +453,11 @@
         minView: "month",
         autoclose: true
     });
+    var d = new Date();
+    var month = (d.getMonth()+1).toString().padStart(2,'0');
+    var day = d.getDate().toString().padStart(2,"0");
+    var year = d.getFullYear();
+    $("#datetime1").val(year + "-" + month + "-" + day);
 
     $("input[name='string6']").datetimepicker({
         format: "yyyy-mm-dd",

@@ -62,7 +62,7 @@
                 </div>
             </div>
 
-            <label class="col-sm-1 control-label">运输方式：</label>
+            <label class="col-sm-1 control-label">配送方式：</label>
             <div class="col-sm-2">
                 <select name="string7" disabled id="string7" class="form-control m-b" th:with="type=${@dict.getType('transport_type')}">
                     <option value="0">请选择</option>
@@ -135,7 +135,7 @@
 
 
         <div class="form-group">
-            <label class="col-sm-1 control-label">代收：</label>
+            <label class="col-sm-1 control-label">归属部门：</label>
             <div class="col-sm-2">
                 <input name="string22" id="string22" th:field="*{string22}" class="form-control" type="hidden">
                 <div class="input-group">
@@ -150,8 +150,8 @@
                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:field="*{string19}" th:value="${dict.dictValue}"></option>
                 </select>
             </div>
-            <label class="col-sm-1 control-label">送货方式：</label>
-            <div class="col-sm-2">
+            <label style="display: none" class="col-sm-1 control-label">送货方式：</label>
+            <div style="display: none" class="col-sm-2">
                 <select name="string21" id="string21" disabled class="form-control m-b" th:with="type=${@dict.getType('shipping_method')}">
                     <option value="0">请选择</option>
                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:field="*{string21}" th:value="${dict.dictValue}"></option>

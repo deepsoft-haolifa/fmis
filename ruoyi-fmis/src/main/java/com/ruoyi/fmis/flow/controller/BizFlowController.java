@@ -1,10 +1,15 @@
 package com.ruoyi.fmis.web.controller.fmis;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import com.ruoyi.system.domain.SysRole;
+import com.ruoyi.system.service.ISysRoleService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,6 +38,9 @@ public class BizFlowController extends BaseController {
     @Autowired
     private IBizFlowService bizFlowService;
 
+    @Autowired
+    private ISysRoleService sysRoleService;
+
     @RequiresPermissions("fmis:flow:view")
     @GetMapping()
     public String flow() {
@@ -42,7 +50,6 @@ public class BizFlowController extends BaseController {
     /**
      * 查询流程记录列表
      */
-    @RequiresPermissions("fmis:flow:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(BizFlow bizFlow) {
@@ -57,6 +64,31 @@ public class BizFlowController extends BaseController {
     public TableDataInfo listView(BizFlow bizFlow) {
         //startPage();
         List<BizFlow> list = bizFlowService.selectBizFlowViewList(bizFlow);
+
+        if (!CollectionUtils.isEmpty(list)) {
+            for (BizFlow flow : list) {
+                Long userId = flow.getExamineUserId();
+                List<SysRole> roleList = sysRoleService.selectRolesByUserId(userId);
+                String roleNames = "";
+
+                if (!CollectionUtils.isEmpty(roleList)) {
+                    List<String> roleNameList = new ArrayList<>();
+                    for (SysRole sysRole : roleList) {
+                        if (sysRole.isFlag()) {
+                            if (!roleNameList.contains(sysRole.getRoleName())) {
+                                roleNameList.add(sysRole.getRoleName());
+                            }
+                        }
+                    }
+                    for (String roleName : roleNameList) {
+                        roleNames += roleName + ",";
+                    }
+                    roleNames = roleNames.substring(0,roleNames.length() - 1);
+                }
+                flow.setRoleNames(roleNames);
+            }
+        }
+
         return getDataTable(list);
     }
 

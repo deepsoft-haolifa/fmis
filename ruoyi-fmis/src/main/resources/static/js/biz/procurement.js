@@ -307,7 +307,6 @@ function setRowTotalPrice(columnName1,columnName2,tableName,row) {
     var total = parseFloat(productNum * procurementPrice).toFixed(2);
     var rowId = parseInt(row["rowId"]);
 
-    console.log("10201222----" + columnName1);
 
     var updateObj = {
         index: rowId,
