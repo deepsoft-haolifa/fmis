@@ -624,6 +624,6 @@ $(function() {
                 title : '商品分类',width: 100
             }
         ]
-};
+    };
     $.table.init(options1);
 });
