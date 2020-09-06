@@ -160,14 +160,15 @@ initChildTestTable = function(index, rows, $detail) {
             {field : 'rowId',title : '序号',width: 50,visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
             {field : 'testId',title : 'id',visible: false},
             {field : 'statusId',title : 'statusId',visible: false},
-            {field : 'yesNum',title : '合格数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 150},
-            {field : 'noNum',title : '不合格数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 150},
             {field : 'saveTest',title : '操作',width: 200,visible: true,formatter: function(value, row, index) {
                     var actions = [];
                     actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="saveTest(' + row.rowId + "," + childId + "," + paramterId + "," + dataId + "," + statusId + "," + stayId + "," + totalNum + ')"><i class="fa fa-save"></i> 保存</a>');
                     actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="removeTest(' + row.rowId + "," + childId + "," + paramterId + "," + dataId + "," + stayId  + ')"><i class="fa fa-remove"></i> 删除</a>');
                     return actions.join('');
                 }},
+            {field : 'yesNum',title : '合格数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 150},
+            {field : 'noNum',title : '不合格数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 150},
+
             {field : 'remark',title : '原因',editable: true,width: 300},
             {field : 'createTime',title : '创建时间',width: 200},
             {field : 'createByName',title : '创建人',width: 200}

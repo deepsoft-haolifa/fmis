@@ -64,7 +64,7 @@
                 <a class="btn btn-primary single disabled" onclick="edit()" shiro:hasPermission="fmis:procurement:edit">
                     <i class="fa fa-edit"></i> 修改
                 </a>
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="fmis:procurement:remove">
+                <a class="btn btn-danger multiple disabled" onclick="remove()" shiro:hasPermission="fmis:procurement:remove">
                     <i class="fa fa-remove"></i> 删除
                 </a>
                 <!--
@@ -214,7 +214,7 @@
                                 //已上报
                             } else {
                                 actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="edit(\'' + row.dataId + '\')"><i class="fa fa-edit"></i> 编辑</a> ');
-                                actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 删除</a>');
+                                actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="remove(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 删除</a>');
                                 actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subReport(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 上报</a>');
                             }
                         } else if (flowStatus == normalFlag) {
@@ -279,7 +279,52 @@
                 $.modal.openFull("修改" + $.table._option.modalName, $.operate.editUrl(id));
             }
         }
+        function remove(id) {
+            if($.common.isEmpty(id)) {
+                var row = $('#bootstrap-table').bootstrapTable('getSelections')[0];
+                if ($.common.isEmpty(row)) {
+                    $.modal.alertWarning("请至少选择一条记录");
+                    return;
+                }
 
+                var rowss = $('#bootstrap-table').bootstrapTable('getSelections');
+                for (var i = 0; i < rowss.length; i++) {
+                    row = rowss[i];
+                    var flowStatus = row.flowStatus;
+                    if (flowStatus > 0) {
+                        $.modal.alertWarning("已上报数据不能删除");
+                        return;
+                    }
+                }
+                var rows = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
+                $.modal.confirm("确认要删除选中的" + rows.length + "条数据吗?", function() {
+                    var url = $.table._option.removeUrl;
+                    var data = { "ids": rows.join() };
+                    $.operate.submit(url, "post", "json", data);
+                });
+            } else {
+                var row = $('#bootstrap-table').bootstrapTable("getRowByUniqueId",id);
+                if (row == null) {
+                    row = $('#bootstrap-table').bootstrapTable('getSelections')[0];
+                }
+                if (row != null) {
+                    var flowStatus = row.flowStatus;
+                    if (flowStatus > 0) {
+                        $.modal.alertWarning("已上报数据不能删除");
+                        return;
+                    }
+                }
+                $.modal.confirm("确定删除该条" + $.table._option.modalName + "信息吗？", function() {
+                    var url = $.common.isEmpty(id) ? $.table._option.removeUrl : $.table._option.removeUrl.replace("{id}", id);
+                    if($.table._option.type == table_type.bootstrapTreeTable) {
+                        $.operate.get(url);
+                    } else {
+                        var data = { "ids": id };
+                        $.operate.submit(url, "post", "json", data);
+                    }
+                });
+            }
+        }
         function viewExamineHistory(dataId) {
             var bizId = $("#bizId").val();
             var url = prefix + "/viewExamineHistory?dataId=" + dataId + "&&bizId=" + bizId;

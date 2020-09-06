@@ -119,6 +119,12 @@
                 for (var i = 0; i < data.length; i++) {
                     var rowData = data[i];
                     var num = rowData["string13"];
+                    var totalNum = rowData["string11"];
+
+                    if (parseFloat(num) > totalNum) {
+                        $.modal.alertWarning("发货数量填写错误");
+                        return;
+                    }
 
                     if ($.common.isNotEmpty(num) &&  num != "0") {
                         var productObj = rowData;

@@ -7,7 +7,28 @@
 <body class="white-bg">
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
     <form class="form-horizontal m" id="form-data-edit" >
-        <input type="hidden" name="bizId" value="contract"/>
+        <input type="hidden" name="string8" id="string8" value="1"/>
+        <div class="select-list">
+            <ul>
+
+                <li>
+                    <p>报检单号：</p>
+                    <input type="text" name="string3" id="string3"/>
+                </li>
+                <li>
+                    <p>销售合同号：</p>
+                    <input type="text" name="string4" id="string4"/>
+                </li>
+                <li>
+                    <p>采购合同号：</p>
+                    <input type="text" name="string5" id="string5"/>
+                </li>
+                <li>
+                    <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                    <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                </li>
+            </ul>
+        </div>
 
     </form>
     <div class="form-horizontal" id="productDiv">
@@ -43,9 +64,6 @@
             url: prefix + "/selectBizProcessChildInventoryList",
             //onEditableSave: onEditableSave,
             //rowStyle: tableRowStyle,
-            queryParams : {
-                "string8": "1"
-            },
             columns: [{
                 checkbox: true
             },

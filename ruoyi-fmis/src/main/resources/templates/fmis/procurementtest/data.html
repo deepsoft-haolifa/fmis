@@ -72,7 +72,10 @@
                 },
                 {
                     field : 'datetime1',
-                    title : '订货日期'
+                    title : '订货日期',
+                    formatter: function (value, row, index) {
+                        return $.common.formatDateString(value);
+                    }
                 },
                 {
                     field : 'string3',
@@ -100,11 +103,17 @@
                 },
                 {
                     field : 'datetime2',
-                    title : '生产单要求交期'
+                    title : '生产单要求交期',
+                    formatter: function (value, row, index) {
+                        return $.common.formatDateString(value);
+                    }
                 },
                 {
                     field : 'datetime3',
-                    title : '供应商发货日期'
+                    title : '供应商发货日期',
+                    formatter: function (value, row, index) {
+                        return $.common.formatDateString(value);
+                    }
                 },
                 {
                     field : 'string9',

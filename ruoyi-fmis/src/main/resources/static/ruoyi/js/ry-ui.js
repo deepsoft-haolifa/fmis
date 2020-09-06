@@ -1466,6 +1466,19 @@
 							var leave3 = leave2 % 60;                           // 计算分钟数后剩余的毫秒数
 							var seconds = Math.round(leave3);
 							return days + " 天 " + hours + " 时 " + minutes + " 分 " + seconds + ' 秒';
+						},
+						/**
+						 * 日期格式转换
+						 * @param secondSub
+						 */
+						formatDateString: function(value) {
+							if (this.isEmpty(value)) {
+								return value;
+							}
+							if (value.length > 10) {
+								return value.substring(0,10);
+							}
+							return "";
 						}
         }
     });

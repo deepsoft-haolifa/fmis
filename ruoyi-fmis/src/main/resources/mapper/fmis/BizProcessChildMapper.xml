@@ -122,6 +122,11 @@
             </if>
             <if test="dataId != null">and data_id = #{dataId}</if>
 
+            <if test="string3 != null  and string3 != ''"> and c.string3 like concat('%', #{string3}, '%')</if>
+            <if test="string4 != null  and string4 != ''"> and c.string4 like concat('%', #{string4}, '%')</if>
+            <if test="string4 != null  and string5 != ''"> and c.string5 like concat('%', #{string5}, '%')</if>
+
+
         </where>
         order by c.create_time desc
     </select>

@@ -124,7 +124,7 @@ initChildTestTable = function(index, rows, $detail) {
     console.log("paramterId=" + paramterId);
     var childId = rows["childId"];
     var statusId = rows["statusId"];
-
+    var yesNum = rows["yesNum"];
     var initChildTestTableId = "initChildTestTableId_" + childId;
     var cur_table = $detail.html('<table style="table-layout:fixed" id=' + initChildTestTableId + ' data-cache="true"></table>').find('table');
 
@@ -149,13 +149,13 @@ initChildTestTable = function(index, rows, $detail) {
             {field : 'rowId',title : '序号',width: 50,visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
             {field : 'stayId',title : 'stayId',visible: false},
             {field : 'statusId',title : 'statusId',visible: false},
-            {field : 'stayNum',title : '数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 150},
             {field : 'saveTest',title : '操作',width: 200,visible: true,formatter: function(value, row, index) {
                     var actions = [];
-                    actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="saveTest(' + row.rowId + "," + childId + "," + paramterId + "," + dataId + "," + statusId + "," + totalNum + ')"><i class="fa fa-save"></i> 保存</a>');
+                    actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="saveTest(' + row.rowId + "," + childId + "," + paramterId + "," + dataId + "," + statusId + "," + totalNum + "," + yesNum + ')"><i class="fa fa-save"></i> 保存</a>');
                     //actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="removeTest(' + row.rowId + "," + childId + "," + paramterId + "," + dataId + ')"><i class="fa fa-remove"></i> 删除</a>');
                     return actions.join('');
                 }},
+            {field : 'stayNum',title : '数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 150},
             {field : 'orderNo',title : '报检单号',editable: false,width: 200},
             {field : 'remark',title : '备注',editable: true,width: 300},
             {field : 'createTime',title : '创建时间',width: 200},
@@ -164,7 +164,7 @@ initChildTestTable = function(index, rows, $detail) {
     });
 };
 
-function saveTest (rowId,childId,paramterId,dataId,statusId,parentTotalNum) {
+function saveTest (rowId,childId,paramterId,dataId,statusId,parentTotalNum,parentYesNum) {
     //dataId,paramterId,childId,remark,testId,yesNum,noNum
 
     var rows = $("#initChildTestTableId_" + childId).bootstrapTable('getData');
@@ -192,13 +192,11 @@ function saveTest (rowId,childId,paramterId,dataId,statusId,parentTotalNum) {
     console.log("parentTotalNum=" + parentTotalNum + " totalNum=" + totalNum);
     if ($.common.isNotEmpty(parentTotalNum)) {
         var parentTotalNumF = parseFloat(parentTotalNum).toFixed(0);
-
-        if (parseInt(totalNum) > parseInt(parentTotalNumF)) {
+        if (parseInt(totalNum) > parseInt(parentTotalNumF - parentYesNum)) {
             $.modal.alertWarning("数量填写错误");
             return;
         }
     }
-
     var remark = row.remark;
     var stayId = row.stayId;
     var stayNum = row.stayNum;
