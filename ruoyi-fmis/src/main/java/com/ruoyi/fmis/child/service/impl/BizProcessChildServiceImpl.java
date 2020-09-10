@@ -58,6 +58,11 @@ public class BizProcessChildServiceImpl implements IBizProcessChildService {
     }
 
     @Override
+    public List<BizProcessChild> selectBizTestChildHistoryList(BizProcessChild bizProcessChild) {
+        return bizProcessChildMapper.selectBizTestChildHistoryList(bizProcessChild);
+    }
+
+    @Override
     public List<BizProcessChild> selectBizTestStayChildList(BizProcessChild bizProcessChild) {
         return bizProcessChildMapper.selectBizTestStayChildList(bizProcessChild);
     }

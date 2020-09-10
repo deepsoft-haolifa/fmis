@@ -26,6 +26,11 @@ public class BizProcessChild extends BaseEntity {
     @Setter
     private String procurementId;
 
+
+    @Getter
+    @Setter
+    private String bjNo;
+
     @Getter
     @Setter
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")

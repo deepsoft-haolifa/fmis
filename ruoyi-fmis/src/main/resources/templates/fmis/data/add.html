@@ -4,19 +4,21 @@
     <th:block th:include="include :: header('新增合同')" />
     <th:block th:include="include :: datetimepicker-css" />
     <style>
-
+        .form-group {
+            margin-bottom: 0px;
+        }
     </style>
 </head>
 <body class="white-bg">
-<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content" style="margin-bottom: 5px;font-size: 12px;">
     <form class="form-horizontal m" id="form-data-add">
         <input type="hidden" name="bizId" value="contract"/>
-
-        <div class="form-group" style="margin-bottom: 7px">
+        <div class="form-group " >
+            <!--
             <label class="col-sm-1 control-label">合同编号：</label>
             <div class="col-sm-2" >
                 <input name="string1" class="form-control" type="text">
-            </div>
+            </div>-->
 
             <label class="col-sm-1 control-label">客户：</label>
             <div class="col-sm-2">

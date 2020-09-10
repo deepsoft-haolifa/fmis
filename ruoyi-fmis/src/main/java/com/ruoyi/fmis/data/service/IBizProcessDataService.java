@@ -1,5 +1,7 @@
 package com.ruoyi.fmis.data.service;
 
+import com.ruoyi.common.core.page.TableDataInfo;
+import com.ruoyi.fmis.common.BizContractLevel;
 import com.ruoyi.fmis.data.domain.BizProcessData;
 import java.util.List;
 
@@ -10,6 +12,18 @@ import java.util.List;
  * @date 2020-05-05
  */
 public interface IBizProcessDataService {
+
+
+    public List<BizContractLevel> listLevel (BizProcessData bizProcessData);
+    public TableDataInfo listLevelProduct(BizProcessData bizProcessData);
+    public TableDataInfo listLevelActuator(BizProcessData bizProcessData);
+    public TableDataInfo listLevelRef1(BizProcessData bizProcessData);
+    public TableDataInfo listLevelRef2(BizProcessData bizProcessData);
+    public TableDataInfo listLevelPA(BizProcessData bizProcessData);
+    public TableDataInfo listLevelPA1(BizProcessData bizProcessData);
+    public TableDataInfo listLevelPA2(BizProcessData bizProcessData);
+    public TableDataInfo listLevelPA3(BizProcessData bizProcessData);
+    public TableDataInfo listLevelPA4(BizProcessData bizProcessData);
     /**
      * 查询合同管理
      *

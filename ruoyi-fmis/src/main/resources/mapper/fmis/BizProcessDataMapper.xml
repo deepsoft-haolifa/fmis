@@ -175,6 +175,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <!-- 如果是详情，只看有数据 -->
             <if test="bizEditFlag == 2">and ds.string4 = #{dataId} </if>
 
+
+            <!-- 采购状态=未处理 过滤合同 -->
+
+
             <if test="billId != null  and billId != ''">and bc.bill_id = #{billId} </if>
 
             <if test="bizId != null  and bizId != ''"> and biz_id = #{bizId}</if>
@@ -229,6 +233,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 and (ifnull(q.string23,'0') != 2)
             </if>
 
+            <if test="dataStatus == -1 ">
+                and (ifnull(q.string23,'0') != 2)
+            </if>
 
             <!-- string2作为角色参数 1=销售 2=销售经理 3=区域经理 4=副总 5=老总-->
             <!--flow_status 0=待上报 1=已上报 2=销售经理同意 -2=不同意 3=区域经理同意 -3=不同意 4=副总同意 -4=不同意 5=老总同意 -5=不同意 -->
@@ -380,7 +387,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
     <sql id="selectBizProcessDataVoRefProcurement">
-        select d.data_id, d.biz_data_id, d.biz_id, d.normal_flag, d.flow_status, d.remark, d.price1, d.price2, d.price3,
+        select * from (select d.data_id, d.biz_data_id, d.biz_id, d.normal_flag, d.flow_status, d.remark, d.price1, d.price2, d.price3,
         d.price4, d.price5, d.price6, d.price7, d.price8, d.price9, d.price10, d.string1, d.string2,
         d.string3, d.string4, d.string5, d.string6, d.string7, d.string8, d.string9, d.string10, d.string11,
         d.string12, d.string13, d.string14, d.string15, d.string16, d.string17, d.string18, d.string19, d.string20,
@@ -388,17 +395,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         d.create_time, d.update_by, d.update_time,
         d.string21,d.string22,d.string23,d.string24,d.string25,d.string26,d.string27,d.string28,d.string29,d.string30,
         d.price11, d.price12, d.price13, d.price14, d.price15, d.price16, d.price17, d.price18, d.price19, d.price20,
-        (COALESCE(sum(ss.num),0)-(select COALESCE(sum(sn.string1),0) from biz_data_stestn sn where sn.string4=d.data_id) - (select COALESCE(sum(sn.string2),0) from biz_data_stestn sn where sn.string4=d.data_id)) as stayNum,
+
+         ((COALESCE(sum(ss.num),0)-ifnull(sn1.cn1,0) - ifnull(sn1.cn2,0))) as stayNum,
         s.name as supplierName
         from biz_process_data d
         left join biz_data_steststay ss on ss.string4=d.data_id and ss.num > 0 and ss.string1='0'
         left join biz_suppliers s on s.suppliers_id=d.string6
+        left join (select sn.string4, COALESCE(sum(sn.string1),0) cn1,COALESCE(sum(sn.string2),0) cn2 from biz_data_stestn sn group by sn.string4) sn1 on sn1.string4=d.data_id
+        group by d.data_id
+      ) d
     </sql>
 
     <select id="selectBizProcessDataListRefProcurement" parameterType="BizProcessData" resultMap="BizProcessDataResult">
         <include refid="selectBizProcessDataVoRefProcurement"/>
 
         <where>
+            1=1
+            <if test="dataStatus == -1"> and d.stayNum > 0</if>
             <if test="bizDataId != null "> and d.biz_data_id = #{bizDataId}</if>
             <if test="bizId != null  and bizId != ''"> and d.biz_id = #{bizId}</if>
             <if test="normalFlag != null  and normalFlag != ''"> and normal_flag = #{normalFlag}</if>
@@ -440,7 +453,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="datetime5 != null "> and datetime5 = #{datetime5}</if>
             <if test="status != null  and status != ''"> and status = #{status}</if>
         </where>
-        group by d.data_id
         order by d.create_time desc
     </select>
 

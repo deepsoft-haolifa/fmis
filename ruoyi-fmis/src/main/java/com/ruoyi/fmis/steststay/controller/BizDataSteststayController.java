@@ -84,7 +84,6 @@ public class BizDataSteststayController extends BaseController {
     /**
      * 查询待质检列表
      */
-    @RequiresPermissions("fmis:steststay:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(BizDataSteststay bizDataSteststay) {

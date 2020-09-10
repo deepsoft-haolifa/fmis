@@ -8,6 +8,7 @@
         <div class="row">
             <div class="col-sm-12 search-collapse">
                 <form id="formId">
+                    <input type="hidden" name="dataStatus" value="-1"/>
                     <div class="select-list">
                         <ul>
 
@@ -159,6 +160,7 @@
                                 actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="edit(\'' + row.dataId + '\')"><i class="fa fa-save"></i> 开始质检</a>');
                             }
                         }
+
                         return actions.join('');
                     }
                 }]

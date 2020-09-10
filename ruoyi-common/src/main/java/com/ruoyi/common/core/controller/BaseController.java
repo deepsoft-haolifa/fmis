@@ -91,7 +91,16 @@ public class BaseController
      * 响应请求分页数据
      */
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    protected TableDataInfo getDataTable(List<?> list)
+    public TableDataInfo getDataTable(List<?> list)
+    {
+        TableDataInfo rspData = new TableDataInfo();
+        rspData.setCode(0);
+        rspData.setRows(list);
+        rspData.setTotal(new PageInfo(list).getTotal());
+        return rspData;
+    }
+
+    public static TableDataInfo getDataTableImpl(List<?> list)
     {
         TableDataInfo rspData = new TableDataInfo();
         rspData.setCode(0);

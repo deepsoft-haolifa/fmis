@@ -188,18 +188,18 @@ function saveTest (rowId,childId,paramterId,dataId,statusId,parentTotalNum,paren
         }
         totalNum = parseFloat(FloatAdd(totalNum,rStayNum)).toFixed(0);
     }
-
+    var stayNum = row.stayNum;
     console.log("parentTotalNum=" + parentTotalNum + " totalNum=" + totalNum);
     if ($.common.isNotEmpty(parentTotalNum)) {
         var parentTotalNumF = parseFloat(parentTotalNum).toFixed(0);
-        if (parseInt(totalNum) > parseInt(parentTotalNumF - parentYesNum)) {
+        if (parseInt(stayNum) > parseInt(parentTotalNumF - parentYesNum)) {
             $.modal.alertWarning("数量填写错误");
             return;
         }
     }
     var remark = row.remark;
     var stayId = row.stayId;
-    var stayNum = row.stayNum;
+
     console.log("statusId=" + statusId);
     var url = ctx + "fmis/steststay/saveTest?dataId=" + dataId + "&paramterId=" + paramterId + "&childId=" + childId + "&remark=" + remark + "&stayId=" + stayId +
         "&stayNum=" + stayNum + "&statusId=" + statusId;

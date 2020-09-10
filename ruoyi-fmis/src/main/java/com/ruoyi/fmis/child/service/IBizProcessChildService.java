@@ -34,6 +34,7 @@ public interface IBizProcessChildService {
 
     public List<BizProcessChild> selectBizTestChildList(BizProcessChild bizProcessChild);
 
+    public List<BizProcessChild> selectBizTestChildHistoryList(BizProcessChild bizProcessChild);
 
     public List<BizProcessChild> selectBizTestStayChildList(BizProcessChild bizProcessChild);
 

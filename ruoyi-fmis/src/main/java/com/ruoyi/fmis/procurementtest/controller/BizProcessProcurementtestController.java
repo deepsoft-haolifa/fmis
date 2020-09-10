@@ -100,10 +100,15 @@ public class BizProcessProcurementtestController extends BaseController {
 
     @Autowired
     private IBizDataStatusService bizDataStatusService;
-    @RequiresPermissions("fmis:procurementtest:view")
     @GetMapping()
     public String data() {
         return prefix + "/data";
+    }
+
+
+    @GetMapping("/history")
+    public String history() {
+        return prefix + "/history";
     }
 
     /**
@@ -220,6 +225,14 @@ public class BizProcessProcurementtestController extends BaseController {
         queryBizProcessChild.setChildId(bizProcessData.getChildId());
         queryBizProcessChild.setStayId(bizProcessData.getStayId());
         List<BizProcessChild> bizProcessChildList = bizProcessChildService.selectBizTestChildList(queryBizProcessChild);
+        return getDataTable(bizProcessChildList);
+    }
+
+
+    @PostMapping("/selectBizTestChildHistoryList")
+    @ResponseBody
+    public TableDataInfo selectBizTestChildHistoryList(BizProcessChild bizProcessData) {
+        List<BizProcessChild> bizProcessChildList = bizProcessChildService.selectBizTestChildHistoryList(bizProcessData);
         return getDataTable(bizProcessChildList);
     }
 

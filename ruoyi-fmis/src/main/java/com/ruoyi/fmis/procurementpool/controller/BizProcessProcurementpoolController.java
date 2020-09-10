@@ -1,5 +1,6 @@
 package com.ruoyi.fmis.procurementpool.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -11,6 +12,7 @@ import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.fmis.child.domain.BizProcessChild;
 import com.ruoyi.fmis.child.service.IBizProcessChildService;
 import com.ruoyi.fmis.common.BizConstants;
+import com.ruoyi.fmis.common.BizContractLevel;
 import com.ruoyi.fmis.common.CommonUtils;
 import com.ruoyi.fmis.customer.service.IBizCustomerService;
 import com.ruoyi.fmis.define.service.IBizProcessDefineService;
@@ -98,6 +100,7 @@ public class BizProcessProcurementpoolController extends BaseController {
         newBizProcessData.setBizId(bizId);
         newBizProcessData.setString13("1");
         newBizProcessData.setBizId(BizConstants.BIZ_contract);
+        newBizProcessData.setDataStatus(bizProcessData.getDataStatus());
         if (StringUtils.isNotEmpty(bizProcessData.getBizEditFlag())) {
             newBizProcessData.setBizEditFlag(bizProcessData.getBizEditFlag());
             newBizProcessData.setDataId(bizProcessData.getDataId());
@@ -110,18 +113,27 @@ public class BizProcessProcurementpoolController extends BaseController {
         //startPage();
         List<BizProcessData> list = bizProcessDataService.selectBizProcessDataListRef(newBizProcessData);
 
+
+        List<BizProcessData> newList = new ArrayList<>();
+
         Map<String, SysRole> flowMap = bizProcessDefineService.getRoleFlowMap(bizId);
         Map<String, SysRole> flowAllMap = bizProcessDefineService.getFlowAllMap(bizId);
-        if (!CollectionUtils.isEmpty(flowMap)) {
+        //if (!CollectionUtils.isEmpty(flowMap)) {
             //计算流程描述
             for (BizProcessData data : list) {
 
 
+                BizProcessData queryLevelData = new BizProcessData();
+                queryLevelData.setDataStatus(bizProcessData.getDataStatus());
+                queryLevelData.setDataId(data.getDataId());
+                queryLevelData.setBizEditFlag(bizProcessData.getBizEditFlag());
+                //queryLevelData.setSupplierId(bizProcessData.getString6());
+                //queryLevelData.setProcurementId(bizProcessData.getProcurementId());
                 //过滤数据
-
-
-
-
+                //List<BizContractLevel> levelList = bizProcessDataService.listLevel(queryLevelData);
+                //if (CollectionUtils.isEmpty(levelList)) {
+                //    continue;
+                //}
 
                 String flowStatus = data.getFlowStatus();
                 //结束标识
@@ -151,16 +163,18 @@ public class BizProcessProcurementpoolController extends BaseController {
                 data.setOperationExamineStatus(false);
                 if (flowStatusInt > 0) {
                     if (!flowStatus.equals(normalFlag)) {
-                        String userFlowStatus = flowMap.keySet().iterator().next();
-                        int userFlowStatusInt = Integer.parseInt(userFlowStatus);
-                        if (userFlowStatusInt == flowStatusInt + 1) {
-                            data.setOperationExamineStatus(true);
+                        if (!CollectionUtils.isEmpty(flowMap)) {
+                            String userFlowStatus = flowMap.keySet().iterator().next();
+                            int userFlowStatusInt = Integer.parseInt(userFlowStatus);
+                            if (userFlowStatusInt == flowStatusInt + 1) {
+                                data.setOperationExamineStatus(true);
+                            }
                         }
-
                     }
                 }
+                newList.add(data);
             }
-        }
+        //}
         return getDataTable(list);
     }
     @GetMapping("/selectProduct")

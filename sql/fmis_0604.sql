@@ -955,6 +955,11 @@ SELECT @parentIdF :=  menu_id from sys_menu where menu_name='质量检测' and m
 insert into sys_menu (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
 values('整机检验', @parentIdF, '10', '/fmis/procurementtest', 'C', '0', 'fmis:procurementtest:view', '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '业务菜单');
 
+SELECT @parentIdF :=  menu_id from sys_menu where menu_name='质量检测' and menu_type='M' and order_num='10';
+
+insert into sys_menu (menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('质检记录', @parentIdF, '20', '/fmis/procurementtest/history', 'C', '0', 'fmis:procurementtest:history', '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '业务菜单');
+
 
 
 

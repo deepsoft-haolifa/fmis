@@ -42,7 +42,10 @@
 
             <label class="col-sm-1 control-label">供应商：</label>
             <div class="col-sm-2">
-                <input name="string6" class="form-control" th:field="*{string6}" readonly type="text">
+                <select name="string6" style="pointer-events: none;" id="string6" class="form-control select2-multiple" > <!--multiple-->
+                    <option value="">请选择</option>
+                    <option th:each="supplier:${suppliers}" th:value="${supplier.suppliersId}" th:selected="${supplier.flag}" th:text="${supplier.name}"></option>
+                </select>
             </div>
 
             <label class="col-sm-1 control-label">订货产品：</label>

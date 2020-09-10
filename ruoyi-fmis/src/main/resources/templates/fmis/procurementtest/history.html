@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('质检记录')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+
+                            <li>
+                                <p>采购合同号：</p>
+                                <input type="text" name="procurementNo"/>
+                            </li>
+                            <li>
+                                <p>销售合同号：</p>
+                                <input type="text" name="contractNo"/>
+                            </li>
+                            <li>
+                                <p>报检单号：</p>
+                                <input type="text" name="bjNo"/>
+                            </li>
+
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+
+
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('fmis:procurement:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('fmis:procurement:remove')}]];
+        var prefix = ctx + "fmis/procurementtest";
+
+        $(function() {
+            var options = {
+                url: prefix + "/selectBizTestChildHistoryList",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                uniqueId: "testId",
+                modalName: "质检记录",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'testId',
+                    title : 'ID',
+                    visible: false
+                },
+
+                {
+                    field : 'procurementNo',
+                    title : '采购合同号'
+                },
+                {
+                    field : 'contractNo',
+                    title : '销售合同号'
+                },
+
+                    {
+                        field : 'bjNo',
+                        title : '报检单号'
+                    },
+                    {field : 'paType',title : '类型',visible: false,formatter: function(value, row, index) {
+                            var actions = [];
+                            if (value == 1) {
+                                actions.push('产品');
+                            } else if (value == 2) {
+                                actions.push('执行器');
+                            } else if (value == 3) {
+                                actions.push('法兰');
+                            } else if (value == 4) {
+                                actions.push('螺栓');
+                            } else if (value == 5) {
+                                actions.push('定位器');
+                            } else if (value == 6) {
+                                actions.push('电磁阀');
+                            } else if (value == 7) {
+                                actions.push('回信器数');
+                            } else if (value == 8) {
+                                actions.push('气源三连件');
+                            } else if (value == 9) {
+                                actions.push('气源三连件');
+                            }
+                            return actions.join('');
+                        }},
+                    {
+                        field : 'yesNum',
+                        title : '合格数'
+                    },
+                    {
+                        field : 'noNum',
+                        title : '不合格数'
+                    },
+                {
+                    field : 'createTime',
+                    title : '检测时间'
+                },
+                    {
+                        field : 'createByName',
+                        title : '检测人'
+                    }
+                ]
+            };
+            $.table.init(options);
+        });
+
+
+    </script>
+</body>
+</html>

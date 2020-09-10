@@ -431,6 +431,10 @@ initChildProductTable = function(index, row, $detail) {
                 if($.inArray("1_" + row.childId + "_" + row.productId + "_" + row.dataId + "_" + row.levelValue, overAllIds)!=-1){
                     showNum(1,row);
                     checkedValue = true;
+
+                } else {
+
+
                 }
                 return {
                     disabled: disabledValue,
@@ -608,6 +612,7 @@ function examine(type,datas,typeIndex){
             console.log("v.totalPrice1=" + price1);
             priceMap.set(typeIndex + "_" + v.childId + "_" + dataId+ "_" + v.dataId + "_" + v.levelValue,price1);
 
+            console.log("checked supplierId=" + v.supplierId);
             supplierMap.set(v.supplierId,typeIndex + "_" + v.childId + "_" + dataId + "_" + v.dataId + "_" + v.levelValue);
         });
     }else{

@@ -162,8 +162,8 @@ initChildTestTable = function(index, rows, $detail) {
             {field : 'statusId',title : 'statusId',visible: false},
             {field : 'saveTest',title : '操作',width: 200,visible: true,formatter: function(value, row, index) {
                     var actions = [];
-                    actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="saveTest(' + row.rowId + "," + childId + "," + paramterId + "," + dataId + "," + statusId + "," + stayId + "," + totalNum + ')"><i class="fa fa-save"></i> 保存</a>');
-                    actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="removeTest(' + row.rowId + "," + childId + "," + paramterId + "," + dataId + "," + stayId  + ')"><i class="fa fa-remove"></i> 删除</a>');
+                    actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="saveTest(' + row.rowId + "," + childId + "," + paramterId + "," + dataId + "," + statusId + "," + stayId + "," + stayNum + ')"><i class="fa fa-save"></i> 保存</a>');
+                    //actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="removeTest(' + row.rowId + "," + childId + "," + paramterId + "," + dataId + "," + stayId  + ')"><i class="fa fa-remove"></i> 删除</a>');
                     return actions.join('');
                 }},
             {field : 'yesNum',title : '合格数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 150},
@@ -176,7 +176,7 @@ initChildTestTable = function(index, rows, $detail) {
     });
 };
 
-function saveTest (rowId,childId,paramterId,dataId,statusId,stayId,totalNumAll) {
+function saveTest (rowId,childId,paramterId,dataId,statusId,stayId,stayNum) {
     //dataId,paramterId,childId,remark,testId,yesNum,noNum
 
     var rows = $("#initChildTestTableId_" + stayId).bootstrapTable('getData');
@@ -196,8 +196,8 @@ function saveTest (rowId,childId,paramterId,dataId,statusId,stayId,totalNumAll) 
         var noNum = r.noNum;
         totalNum = parseFloat(FloatAdd(totalNum,FloatAdd(yesNum,noNum))).toFixed(0);
     }
-    console.log("totalNum=" + totalNum + " totalNumAll=" + totalNumAll);
-    if (parseInt(totalNum) > parseInt(totalNumAll)) {
+    console.log("totalNum=" + totalNum + " totalNumAll=" + stayNum);
+    if (parseInt(totalNum) > parseInt(stayNum)) {
         $.modal.alertWarning("数量填写错误");
         return;
     }
