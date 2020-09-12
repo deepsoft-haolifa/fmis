@@ -824,12 +824,12 @@ public class BizProcessDataProcurementController extends BaseController {
             table.addCell(PdfUtil.mergeCol(bizProcessData.getString10(), 5,textFont));
             //第四行
             table.addCell(PdfUtil.mergeCol("签订日期：", 2,textFont));
-            table.addCell(PdfUtil.mergeCol(DateUtils.dateTime(bizProcessData.getCreateTime()), 5,textFont));
-            table.addCell(PdfUtil.mergeCol("", 2,textFont));
-            table.addCell(PdfUtil.mergeCol("", 5,textFont));
+            table.addCell(PdfUtil.mergeCol(DateUtils.dateTime(bizProcessData.getCreateTime()), 2,textFont));
+            table.addCell(PdfUtil.mergeCol("", 1,textFont));
+            table.addCell(PdfUtil.mergeCol("", 1,textFont));
 
             //第五行
-            table.addCell(PdfUtil.mergeCol("为保障买卖双方的合法权益，根据《合同法》及有关法律规定，买卖双方经友好协商，一致同意按下列条款签订本合同。", 15,textFont));
+            table.addCell(PdfUtil.mergeCol("为保障买卖双方的合法权益，根据《合同法》及有关法律规定，买卖双方经友好协商，一致同意按下列条款签订本合同。", 9,textFont));
 
             table.addCell(PdfUtil.mergeCol("一、", 1,textFont));
             table.addCell(PdfUtil.mergeColLeft("供货内容：", 14,textFont));

@@ -1241,12 +1241,12 @@ public class BizProcessDataController extends BaseController {
 
 
                 String startRemark = "";
-                if (StringUtils.isNotEmpty(bizProduct.getValvebodyMaterial())) {startRemark += bizProduct.getValvebodyMaterial() + ",";}
+                if (StringUtils.isNotEmpty(bizProduct.getValvebodyMaterial())) {startRemark += "阀体材质：" + bizProduct.getValvebodyMaterial() + ",";}
                 //if (StringUtils.isNotEmpty(bizProduct.getValveElement())) {startRemark += bizProduct.getValveElement() + ",";}
-                if (StringUtils.isNotEmpty(bizProduct.getSealingMaterial())) {startRemark += bizProduct.getSealingMaterial() + ",";}
-                if (StringUtils.isNotEmpty(bizProduct.getDriveForm())) {startRemark += bizProduct.getDriveForm() + ",";}
-                if (StringUtils.isNotEmpty(bizProduct.getConnectionType())) {startRemark += bizProduct.getConnectionType() + ",";}
-                if (StringUtils.isNotEmpty(bizProduct.getString15())) {startRemark += bizProduct.getString15() + ",";}
+                if (StringUtils.isNotEmpty(bizProduct.getSealingMaterial())) {startRemark += "密封材质：" + bizProduct.getSealingMaterial() + ",";}
+                if (StringUtils.isNotEmpty(bizProduct.getDriveForm())) {startRemark += "驱动形式：" + bizProduct.getDriveForm() + ",";}
+                if (StringUtils.isNotEmpty(bizProduct.getConnectionType())) {startRemark += "连接方式：" + bizProduct.getConnectionType() + ",";}
+                if (StringUtils.isNotEmpty(bizProduct.getString15())) {startRemark += "颜色：" +bizProduct.getString15() + ",";}
                 if (startRemark.length() > 1) {
                     startRemark = startRemark.substring(0,startRemark.length() - 1);
                 }
@@ -1257,7 +1257,7 @@ public class BizProcessDataController extends BaseController {
             //金额合计
             table.addCell(PdfUtil.mergeColRight("合计", 5,textFont));//4
             table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(sumTotalNum), 1,textFont));//总数量
-            table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(sumTotalPrice), 1,textFont));//单价
+            table.addCell(PdfUtil.mergeCol("", 1,textFont));//单价
             table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(sumTotalAmount), 1,textFont));//合计
             table.addCell(PdfUtil.mergeCol("", 7,textFont));//备注
 

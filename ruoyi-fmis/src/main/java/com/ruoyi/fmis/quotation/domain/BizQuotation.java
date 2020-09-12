@@ -104,9 +104,7 @@ public class BizQuotation extends BaseEntity {
     @Getter
     @Setter
     private String string11;
-    @Getter
-    @Setter
-    private String string12;
+
     @Getter
     @Setter
     private String string13;
@@ -327,6 +325,8 @@ public class BizQuotation extends BaseEntity {
 
     /** 备用1 报价单号 */
     private String string1;
+    /** 备用1 天数*/
+    private String string12;
 
     /** 备用2 客户ID*/
     private String string2;
@@ -509,6 +509,15 @@ public class BizQuotation extends BaseEntity {
     public String getString1() {
         return string1;
     }
+
+    public String getString12() {
+        return string12;
+    }
+
+    public void setString12(String string12) {
+        this.string12 = string12;
+    }
+
     public void setString2(String string2) {
         this.string2 = string2;
     }
@@ -615,6 +624,7 @@ public class BizQuotation extends BaseEntity {
             .append("string8", getString8())
             .append("string9", getString9())
             .append("string10", getString10())
+            .append("string12", getString12())
             .append("status", getStatus())
             .append("delFlag", getDelFlag())
             .append("createBy", getCreateBy())

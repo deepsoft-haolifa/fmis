@@ -405,10 +405,10 @@
             }
             var flowStatus = row.flowStatus;
             var normalFlag = row.normalFlag;
-            /*if (flowStatus == "0" || flowStatus != normalFlag) {
+            if (flowStatus == "0" || flowStatus != normalFlag) {
                 $.modal.alertWarning("请等待审批结束后生成！");
                 return;
-            }*/
+            }
             $.modal.confirm("确定生成合同吗？", function() {
                 var currentId = $.common.isEmpty(formId) ? $('form').attr('id') : formId;
                 console.log("currentId=" + currentId);

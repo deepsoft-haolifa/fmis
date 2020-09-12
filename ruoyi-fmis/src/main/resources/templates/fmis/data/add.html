@@ -53,7 +53,7 @@
             </div>
             <label class="col-sm-1 control-label">含发票：</label>
             <div class="col-sm-2">
-                <input name="string5" class="form-control" type="text" value="0.13">
+                <input name="string5" class="form-control" type="text" value="含13%增值税票">
             </div>
             <label class="col-sm-1 control-label">发货时间：</label>
             <div class="col-sm-2">
@@ -183,9 +183,9 @@
             <div class="col-sm-2">
                 <input name="string24" id="string24" class="form-control" type="text" >
             </div>
-            <label class="col-sm-1 control-label">特殊要求：</label>
-            <div class="col-sm-2">
-                <input name="string25" id="string25" class="form-control" type="text" >
+            <label class="col-sm-1 control-label">质保期：</label>
+            <div class="col-sm-2 form-inline">
+                <input name="string26" id="string26" style="width: 80px" class="form-control" type="text" onkeyup="AmountKeyUp(this)">月
             </div>
             <label class="col-sm-1 control-label">合计数量：</label>
             <div class="col-sm-2">
@@ -198,9 +198,10 @@
         </div>
 
         <div class="form-group" style="margin-bottom: 7px">
-            <label class="col-sm-1 control-label">质保期：</label>
-            <div class="col-sm-2 form-inline">
-                <input name="string26" id="string26" style="width: 80px" class="form-control" type="text" onkeyup="AmountKeyUp(this)">月
+
+            <label class="col-sm-1 control-label">特殊要求：</label>
+            <div class="col-sm-9">
+                <input name="string25" id="string25" class="form-control" type="text" >
             </div>
         </div>
         <!--

@@ -496,7 +496,7 @@ public class BizQuotationController extends BaseController {
             String totalRemark = "阀门：" + sumTotalNum + " 台   法兰合计：" + sumTotalNumRef1 + " 片   螺栓合计：" + sumTotalNumRef2 + " 条   总金额：" + sumTotalAmount;
             table.addCell(PdfUtil.mergeColRight("合计", 9,textFont));
             table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(sumTotalNum), 1,textFont));//总数量
-            table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(sumTotalPrice), 1,textFont));//单价
+            table.addCell(PdfUtil.mergeCol("", 1,textFont));//单价
             table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(sumTotalAmount), 1,textFont));//合计
             table.addCell(PdfUtil.mergeCol("", 3,textFont));//备注
 
@@ -521,7 +521,7 @@ public class BizQuotationController extends BaseController {
             String payMethod = dictDataService.selectDictLabel("payment_method",bizQuotationDict.getPaymentMethod());
             paragraphRemark.add(new Chunk("        3、供货方式： " + payMethod + " 款到发货；", remarkFont));
             paragraphRemark.add(Chunk.NEWLINE);
-            paragraphRemark.add(new Chunk("        4、价格有效期     天；", remarkFont));
+            paragraphRemark.add(new Chunk("        4、价格有效期  " + bizQuotation.getString12() + "   天；", remarkFont));
             paragraphRemark.add(Chunk.NEWLINE);
 
 
