@@ -770,7 +770,7 @@ join biz_process_data pd on pc.data_id=pd.data_id
 
 
     <sql id="selectBizTestChildHistoryVo">
-    select sn.test_id as testId,sn.remark,sn.status_id, sn.string1 as yesNum,sn.string2 as noNum, u.user_name as createByName,
+    select distinct sn.test_id as testId,sn.remark,sn.status_id, sn.string1 as yesNum,sn.string2 as noNum, u.user_name as createByName,
     sn.create_time,ss.string6 as orderNo,
     ss.string6 as  bjNo,d.string3 as contractNo,d.string1 as procurementNo,c.string2 as paType,c.string6 as string6,c.string8 as string8
     ,c.string7 as string7

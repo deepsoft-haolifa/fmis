@@ -232,6 +232,8 @@ public class BizProcessProcurementtestController extends BaseController {
     @PostMapping("/selectBizTestChildHistoryList")
     @ResponseBody
     public TableDataInfo selectBizTestChildHistoryList(BizProcessChild bizProcessData) {
+
+        startPage();
         List<BizProcessChild> bizProcessChildList = bizProcessChildService.selectBizTestChildHistoryList(bizProcessData);
         return getDataTable(bizProcessChildList);
     }

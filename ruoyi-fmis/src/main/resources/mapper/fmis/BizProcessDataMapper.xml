@@ -466,10 +466,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <!-- 采购主管 查看已上报的 -->
             <if test="roleType == 2 ">
                 <if test="queryStatus == 0 ">
-                    and d.flow_status in ('20','1','2','-2','3','-3','-4','4')
+                    and d.flow_status in ('20','2','-2','3','-3','-4','4')
                 </if>
                 <if test="queryStatus == 1 ">
-                    and d.flow_status in ('1','20')
+                    and d.flow_status in ('20')
                 </if>
                 <if test="queryStatus == 2 ">
                     and d.flow_status in ('2','-2','3','-3','-4','-5','4')
