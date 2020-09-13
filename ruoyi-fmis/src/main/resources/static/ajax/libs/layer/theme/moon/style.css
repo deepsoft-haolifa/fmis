@@ -87,6 +87,7 @@ body .layer-ext-moon .layui-layer-btn {
     padding: 10px 15px 12px;
 	background: #f0f4f7;
 	border-top: 1px #c7c7c7 solid;
+	margin-bottom:-10px;
 }
 body .layer-ext-moon .layui-layer-btn a {
 	font-size: 12px;
