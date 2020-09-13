@@ -285,6 +285,8 @@
                 dataObj.push({"name": "string10", "value": JSON.stringify(productArray)});
                 var totalPrice = $("#totalPrice").val();
                 dataObj.push({"name": "string9", "value": totalPrice});
+                var grossPrice = $("#grossPrice").val();
+                dataObj.push({"name": "string20", "value": grossPrice});
                 $.operate.save(prefix + "/add", dataObj);
             }
         }
@@ -388,6 +390,7 @@
                     {field : 'connectionType',title : '连接方式',editable: false},
                     {field : 'productNum',title : '数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
                     {field : 'productPrice',title : '单价',editable: false},
+                    {field : 'productCostPrice',title : '产品成本价',editable: false,visible: false},
 
                     {field : 'productCoefficient',title : '系数',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
                     {field : 'totalPrice',title : '金额',editable: false},
@@ -399,6 +402,9 @@
                     {field : 'actuatorId',title : 'actuatorId',visible: false},
                     {field : 'actuatorName',title : '执行器名称',editable: true},
                     {field : 'actuatorPrice',title : '执行器价格',editable: false},
+
+                    {field : 'actuatorCostPrice',title : '执行器成本价',editable: false,visible: false},
+
                     {field : 'actuatorNum',title : '执行器数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
                     {field : 'actuatorCoefficient',title : '执行器系数',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
 
@@ -406,12 +412,18 @@
                     {field : 'ref1Name',title : '法兰名称',editable: false},
 
                     {field : 'ref1Price',title : '法兰价格',editable: false},
+
+                    {field : 'ref1CostPrice',title : '法兰成本价',editable: false,visible: false},
+
                     {field : 'productRef1Num',title : '法兰数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
                     {field : 'productRef1Coefficient',title : '法兰系数',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
 
                     {field : 'productRef2Id',title : 'ref2Id',visible: false},
                     {field : 'ref2Name',title : '螺栓名称',editable: true},
                     {field : 'ref2Price',title : '螺栓价格',editable: false},
+
+                    {field : 'ref2CostPrice',title : '螺栓成本价',editable: false,visible: false},
+
                     {field : 'productRef2Num',title : '螺栓数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
                     {field : 'productRef2Coefficient',title : '螺栓系数',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
 
@@ -420,30 +432,45 @@
                     {field : 'pattachmentId',title : 'pattachmentId',visible: false},
                     {field : 'pattachmentName',title : '定位器',editable: true},
                     {field : 'pattachmentPrice',title : '定位器价格',editable: false},
+
+                    {field : 'pattachmentCostPrice',title : '成本价',editable: false,visible: false},
+
                     {field : 'pattachmentCount',title : '定位器数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
                     {field : 'pattachmentCoefficient',title : '定位器系数',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
 
                     {field : 'pattachment1Id',title : 'pattachment1Id',visible: false},
                     {field : 'pattachment1Name',title : '电磁阀',editable: true},
                     {field : 'pattachment1Price',title : '电磁阀价格',editable: false},
+
+                    {field : 'pattachment1CostPrice',title : '成本价',editable: false,visible: false},
+
                     {field : 'pattachment1Count',title : '电磁阀数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
                     {field : 'pattachment1Coefficient',title : '电磁阀系数',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
 
                     {field : 'pattachment2Id',title : 'pattachment2Id',visible: false},
                     {field : 'pattachment2Name',title : '回信器数',editable: true},
                     {field : 'pattachment2Price',title : '回信器数价格',editable: false},
+
+                    {field : 'pattachment2CostPrice',title : '成本价',editable: false,visible: false},
+
                     {field : 'pattachment2Count',title : '回信器数数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
                     {field : 'pattachment2Coefficient',title : '回信器数系数',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
 
                     {field : 'pattachment3Id',title : 'pattachment3Id',visible: false},
                     {field : 'pattachment3Name',title : '气源三连件',editable: true},
                     {field : 'pattachment3Price',title : '气源三连件价格',editable: false},
+
+                    {field : 'pattachment3CostPrice',title : '成本价',editable: false,visible: false},
+
                     {field : 'pattachment3Count',title : '气源三连件数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
                     {field : 'pattachment3Coefficient',title : '气源三连件系数',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
 
                     {field : 'pattachment4Id',title : 'pattachment4Id',visible: false},
                     {field : 'pattachment4Name',title : '可离合减速器',editable: true},
                     {field : 'pattachment4Price',title : '可离合减速器价格',editable: false},
+
+                    {field : 'pattachment4CostPrice',title : '成本价',editable: false,visible: false},
+
                     {field : 'pattachment4Count',title : '可离合减速器数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
                     {field : 'pattachment4Coefficient',title : '可离合减速器系数',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
 
@@ -473,6 +500,9 @@
 
             calculateTotalPrice();
         }
+
+        var totalCostPriceMap = new Map();
+
         function onEditableSave (field, row, oldValue, $el) {
             //alert("字段名：" + field + "，当前值：" + row[field]  + "，旧值：" + oldValue);
             if (field == "productNum" || field == "productCoefficient" || field == "productRef1Num"|| field == "productRef1Coefficient"
@@ -578,12 +608,40 @@
             var actuatorSum = parseFloat(actuatorNum * actuatorCoefficient * actuatorPrice).toFixed(4);
             var actuatorSumOnly = parseFloat(actuatorCoefficient * actuatorPrice).toFixed(4);
 
+
+            var productCostPrice = parsePrice(row["productCostPrice"]);
+            var totalPriceCost = parseFloat(productNum * productCostPrice).toFixed(4);
+
+            var actuatorCostPrice = parsePrice(row["actuatorCostPrice"]);
+            var totalActuatorCost = parseFloat(actuatorNum * actuatorCostPrice).toFixed(4);
+
+            var ref1CostPrice = parsePrice(row["ref1CostPrice"]);
+            var totalRef1Cost = parseFloat(productRef1Num * ref1CostPrice).toFixed(4);
+            var ref2CostPrice = parsePrice(row["ref2CostPrice"]);
+            var totalRef2Cost = parseFloat(productRef2Num * ref2CostPrice).toFixed(4);
+
+            var pattachmentCostPrice = parsePrice(row["pattachmentCostPrice"]);
+            var totalPattachmentCost = parseFloat(pattachmentCount * pattachmentCostPrice).toFixed(4);
+            var pattachment1CostPrice = parsePrice(row["pattachment1CostPrice"]);
+            var totalPattachment1Cost = parseFloat(pattachment1Count * pattachment1CostPrice).toFixed(4);
+            var pattachment2CostPrice = parsePrice(row["pattachment2CostPrice"]);
+            var totalPattachment2Cost = parseFloat(pattachment2Count * pattachment2CostPrice).toFixed(4);
+            var pattachment3CostPrice = parsePrice(row["pattachment3CostPrice"]);
+            var totalPattachment3Cost = parseFloat(pattachment3Count * pattachment3CostPrice).toFixed(4);
+            var pattachment4CostPrice = parsePrice(row["pattachment4CostPrice"]);
+            var totalPattachment4Cost = parseFloat(pattachment4Count * pattachment4CostPrice).toFixed(4);
+
+            var totalCostPrice = parseFloat(parseFloat(totalPriceCost) + parseFloat(totalActuatorCost) + parseFloat(totalRef1Cost) + parseFloat(totalRef2Cost) + parseFloat(totalPattachmentCost)
+                + parseFloat(totalPattachment1Cost) + parseFloat(totalPattachment2Cost) + parseFloat(totalPattachment3Cost) + parseFloat(totalPattachment4Cost)).toFixed(4);
+            totalCostPriceMap.set("totalCostPrice",totalCostPrice);
+
             var totalSum = parseFloat(parseFloat(productSum) + parseFloat(productRef1Sum) + parseFloat(productRef2Sum) + parseFloat(actuatorSum)
                 + parseFloat(pattachmentSum)+ parseFloat(pattachment1Sum)+ parseFloat(pattachment2Sum)+ parseFloat(pattachment3Sum)+ parseFloat(pattachment4Sum)).toFixed(4);
 
 
             var totalPriceOnly = parseFloat(parseFloat(productSumOnly) + parseFloat(productRef1SumOnly) + parseFloat(productRef2SumOnly) + parseFloat(actuatorSumOnly)
                 + parseFloat(pattachmentSumOnly)+ parseFloat(pattachment1SumOnly)+ parseFloat(pattachment2SumOnly)+ parseFloat(pattachment3SumOnly)+ parseFloat(pattachment4SumOnly)).toFixed(4);
+
 
 
             var updateObjOnly = {
@@ -606,16 +664,20 @@
             //$("#totalSum_" + productId).val(totalSum);
             return totalSum;
         }
-
+        function parsePrice (p) {
+            return isEmpty(p) == true ? 0 : parseFloat(p);
+        }
         function calculateTotalPrice () {
             var data = $.btTable.bootstrapTable('getData');
             var productTotalPrice = 0;
 
-
+            var allTotalCost = 0;
             for (var i = 0; i < data.length; i++) {
                 var rowData = data[i];
                 var price = calculatePrice(rowData);
+                var totalCostPrice = totalCostPriceMap.get("totalCostPrice");
                 productTotalPrice = FloatAdd(productTotalPrice,price).toFixed(4);
+                allTotalCost =  FloatAdd(totalCostPrice,allTotalCost).toFixed(4);
             }
             var specialExpenses = $("#specialExpenses").val();
             if (isEmpty(specialExpenses)) {
@@ -624,6 +686,11 @@
             $("#productTotalPrice").val(parseFloat(productTotalPrice).toFixed(4));
             var totalPrice = parseFloat(productTotalPrice) + parseFloat(specialExpenses);
             $("#totalPrice").val(parseFloat(totalPrice).toFixed(4));
+
+            //productTotalPrice 毛利 产品金额-成本价格-特殊费用
+            var grossPrice = (parseFloat(productTotalPrice) - parseFloat(allTotalCost) - parseFloat(specialExpenses)).toFixed(2);
+            $("#grossPrice").val(grossPrice);
+
         }
 
         function numberValidate(value) {
@@ -641,7 +708,6 @@
         /* 查询表格所有数据值 */
         function getData(){
             var data = $.btTable.bootstrapTable('getData');
-            alert(JSON.stringify(data))
         }
         function onClickCell(field, value, row, $element){
             var idx = $element.parent().data('index');

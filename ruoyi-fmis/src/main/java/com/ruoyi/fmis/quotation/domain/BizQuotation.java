@@ -25,6 +25,37 @@ public class BizQuotation extends BaseEntity {
     private Long quotationId;
 
 
+
+    @Getter
+    @Setter
+    private String productCostPrice;
+    @Getter
+    @Setter
+    private String ref1CostPrice;
+    @Getter
+    @Setter
+    private String ref2CostPrice;
+    @Getter
+    @Setter
+    private String pattachmentCostPrice;
+    @Getter
+    @Setter
+    private String pattachment1CostPrice;
+    @Getter
+    @Setter
+    private String pattachment2CostPrice;
+    @Getter
+    @Setter
+    private String pattachment3CostPrice;
+    @Getter
+    @Setter
+    private String pattachment4CostPrice;
+    @Getter
+    @Setter
+    private String actuatorCostPrice;
+
+
+
     @Getter
     @Setter
     private String examineStatus;

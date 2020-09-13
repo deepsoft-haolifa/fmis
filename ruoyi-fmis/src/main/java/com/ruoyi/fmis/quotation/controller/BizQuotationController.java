@@ -1321,6 +1321,8 @@ public class BizQuotationController extends BaseController {
                     jsonData.put("connectionType",bizProduct.getConnectionType());
                     jsonData.put("productNum",num);
 
+                    jsonData.put("productCostPrice",bizProduct.getCostPrice());
+
                     //执行器*1 法兰*2
 
 

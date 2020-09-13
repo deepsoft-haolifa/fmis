@@ -96,6 +96,11 @@
                     field : 'price', 
                     title : '单价'
                 },
+                    {
+                        field : 'string3',
+                        title : '成本价格',
+                        visible: false
+                    },
                 {
                     field : 'remark', 
                     title : '备注'
@@ -141,6 +146,7 @@
                 productRef2Id : productRefId[0],
                 ref2Name:$.table.selectColumns("name"),
                 ref2Price:$.table.selectColumns("price"),
+                ref2CostPrice:$.table.selectColumns("string3"),
                 productRef2Num:"0",
                 productRef2Coefficient:"0",
             };

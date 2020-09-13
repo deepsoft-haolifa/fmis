@@ -201,6 +201,11 @@
                     title : '价格'
                 },
                 {
+                    field : 'string5',
+                    title : '成本价格',
+                    visible: false
+                },
+                {
                     field : 'remark',
                     title : '备注'
                 },
@@ -272,6 +277,11 @@
                     title : '价格'
                 },
                 {
+                    field : 'string9',
+                    title : '成本价格',
+                    visible: false
+                },
+                {
                     field : 'remark',
                     title : '备注'
                 },
@@ -309,21 +319,26 @@
             var selActuatorId;
             var selName;
             var selRow;
-
+            var costPrice;
             if (rows1.length == 1) {
                 selActuatorId = rows1[0].actuatorId;
                 selName = rows1[0].name;
                 selRow = rows1[0];
+                costPrice = rows1[0].string5;
             } else {
                 selActuatorId = rows2[0].actuatorId;
                 selName = rows2[0].name;
                 selRow = rows2[0];
+                costPrice = rows2[0].string9;
             }
 
             var rowData = {
                 actuatorId : selActuatorId,
                 actuatorName:selName,
                 actuatorPrice:selRow.price,
+
+                actuatorCostPrice:costPrice,
+
                 actuatorNum:"0",
                 actuatorCoefficient:"0",
             };
