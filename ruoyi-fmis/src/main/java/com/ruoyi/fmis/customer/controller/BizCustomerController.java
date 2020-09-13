@@ -263,7 +263,26 @@ public class BizCustomerController extends BaseController {
         mmap.put("fileUrl", Global.getFileUrl());
         return prefix + "/edit";
     }
-
+    /**
+     * 修改客户
+     */
+    @GetMapping("/detail/{customerId}")
+    public String detail(@PathVariable("customerId") Long customerId, ModelMap mmap) {
+        BizCustomer bizCustomer = bizCustomerService.selectBizCustomerById(customerId);
+        String ownerId = bizCustomer.getOwnerUserId();
+        if (StringUtils.isEmpty(ownerId)) {
+            ownerId = "0";
+        }
+        SysUser selUser = userService.selectUserById(Long.parseLong(ownerId));
+        if (selUser == null) {
+            selUser = new SysUser();
+        }
+        mmap.put("usersel", selUser);
+        mmap.put("users", userService.selectUserList(new SysUser()));
+        mmap.put("bizCustomer", bizCustomer);
+        mmap.put("fileUrl", Global.getFileUrl());
+        return prefix + "/detail";
+    }
     /**
      * 修改保存客户
      */

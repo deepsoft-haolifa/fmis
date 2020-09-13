@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改客户')" />
+    <th:block th:include="include :: datetimepicker-css" />
+    <th:block th:include="include :: select2-css" />
+    <th:block th:include="include :: bootstrap-fileinput-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-customer-edit" name="form-customer-edit" th:object="${bizCustomer}">
+            <input name="customerId" id="customerId" th:field="*{customerId}" type="hidden">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">初次备案日期：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="recordDate" th:field="*{recordDate}" readonly class="form-control" placeholder="yyyy-MM" type="text">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">客户所属商务公司代码：</label>
+                <div class="col-sm-8">
+                    <select name="areaCode" class="form-control m-b" disabled th:with="type=${@dict.getType('customer_company_code')}">
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{areaCode}"></option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">所属区域：</label>
+                <div class="col-sm-8">
+                    <select name="area" class="form-control m-b" disabled th:with="type=${@dict.getType('customer_area')}">
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{area}"></option>
+                    </select>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">客户类别：</label>
+                <div class="col-sm-8">
+                    <select name="customerLevel" disabled class="form-control m-b" th:with="type=${@dict.getType('customer_level')}">
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{customerLevel}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">客户代号：</label>
+                <div class="col-sm-8">
+                    <input name="codeName" readonly class="form-control" type="text" th:field="*{codeName}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">行业划分：</label>
+                <div class="col-sm-8">
+                    <select name="industryDivision" disabled class="form-control m-b" th:with="type=${@dict.getType('industry_division')}">
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{industryDivision}"></option>
+                    </select>
+                </div>
+            </div>
+
+
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">分配日期：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="allocationDate" readonly class="form-control" placeholder="yyyy-MM-dd" type="text" th:value="${#dates.format(bizCustomer.allocationDate,'yyyy-MM-dd')}">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">分配次数：</label>
+                <div class="col-sm-8">
+                    <select name="assignNumber" disabled class="form-control m-b" th:with="type=${@dict.getType('assign_number')}">
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{assignNumber}"></option>
+                    </select>
+                </div>
+            </div>
+
+            <!--
+            <div class="form-group">
+                <label class="col-sm-3 control-label">档案编号：</label>
+                <div class="col-sm-8">
+                    <input name="fileNumber" class="form-control" type="text" th:field="*{fileNumber}">
+                </div>
+            </div>
+            -->
+
+
+
+
+            <!--
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">项目备案号：</label>
+                <div class="col-sm-8">
+                    <input name="recordCode" th:field="*{recordCode}" class="form-control" type="text">
+                </div>
+            </div>-->
+
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">业务负责人：</label>
+                <div class="col-sm-8">
+                    <select id="user" disabled class="form-control select2-multiple"> <!--multiple-->
+                        <option value="0">请选择</option>
+                        <option th:selected="${user.userId eq usersel.userId}" th:each="user:${users}" th:value="${user.userId}" th:text="${user.userName} + ' ' + ${user.loginName}"> </option>
+                    </select>
+                </div>
+            </div>
+
+            <!--
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">业务负责人：</label>
+                <div class="col-sm-8">
+                    <input name="ownerUserId" th:field="*{ownerUserId}" class="form-control" type="text">
+                </div>
+            </div>-->
+
+
+
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">客户名称：</label>
+                <div class="col-sm-8">
+                    <input name="name" th:field="*{name}" readonly id="name" class="form-control" type="text" required>
+                </div>
+            </div>
+
+            <!-- 新添加字段 start -->
+            <div class="form-group">
+                <label class="col-sm-3 control-label">客户来源：</label>
+                <div class="col-sm-8">
+                    <select name="source" class="form-control m-b" disabled th:with="type=${@dict.getType('customer_source')}">
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{source}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">备案类别：</label>
+                <div class="col-sm-8">
+                    <select name="recordType" class="form-control m-b" disabled th:with="type=${@dict.getType('customer_record_type')}">
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{recordType}"></option>
+                    </select>
+                </div>
+            </div>
+            <!-- 重复了
+            <div class="form-group">
+                <label class="col-sm-3 control-label">备案号：</label>
+                <div class="col-sm-8">
+                    <input name="recordNum" th:field="*{recordNum}" class="form-control" type="text">
+                </div>
+            </div>-->
+            <div class="form-group">
+                <label class="col-sm-3 control-label">座机电话：</label>
+                <div class="col-sm-8">
+                    <input name="telephone" readonly th:field="*{telephone}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">联系传真：</label>
+                <div class="col-sm-8">
+                    <input name="fax" readonly th:field="*{fax}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">公司地址：</label>
+                <div class="col-sm-8">
+                    <input name="companyAddress" readonly th:field="*{companyAddress}"  class="form-control" type="text">
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">开户银行：</label>
+                <div class="col-sm-8">
+                    <input name="string11" readonly th:field="*{string11}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">账号：</label>
+                <div class="col-sm-8">
+                    <input name="string12" readonly th:field="*{string12}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">税号：</label>
+                <div class="col-sm-8">
+                    <input name="string13" readonly th:field="*{string13}" class="form-control" type="text">
+                </div>
+            </div>
+
+            <!-- 新添加字段 end -->
+
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">项目名称：</label>
+                <div class="col-sm-8">
+                    <input name="projectAme" readonly th:field="*{projectAme}" class="form-control" type="text">
+                </div>
+            </div>
+
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">品牌：</label>
+                <div class="col-sm-8">
+                    <select name="brand" disabled class="form-control m-b" th:with="type=${@dict.getType('customer_brand')}">
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{brand}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">主要产品：</label>
+                <div class="col-sm-8">
+                    <input name="productInfo" readonly th:field="*{productInfo}" class="form-control" type="text">
+                </div>
+            </div>
+
+
+
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">联系人1姓名：</label>
+                <div class="col-sm-8">
+                    <input name="contactName" readonly class="form-control" id="contactName" th:field="*{contactName}" type="text" >
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">联系人1电话：</label>
+                <div class="col-sm-8">
+                    <input name="contactPhone" readonly class="form-control" id="contactPhone" th:field="*{contactPhone}" type="text" >
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">联系人1邮箱：</label>
+                <div class="col-sm-8">
+                    <input name="contactEmail" readonly class="form-control" type="text" th:field="*{contactEmail}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">联系人1职务：</label>
+                <div class="col-sm-8">
+                    <input name="string1" readonly class="form-control" type="text" th:field="*{string1}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">联系人2姓名：</label>
+                <div class="col-sm-8">
+                    <input name="string2" readonly class="form-control" id="string2" type="text" th:field="*{string2}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">联系人2电话：</label>
+                <div class="col-sm-8">
+                    <input name="string3" readonly class="form-control" id="string3" type="text" th:field="*{string3}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">联系人2邮箱：</label>
+                <div class="col-sm-8">
+                    <input name="string4" readonly class="form-control" type="text" th:field="*{string4}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">联系人2职务：</label>
+                <div class="col-sm-8">
+                    <input name="string5" readonly class="form-control" type="text" th:field="*{string5}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">联系人3姓名：</label>
+                <div class="col-sm-8">
+                    <input name="string6" readonly class="form-control" id="string6" type="text" th:field="*{string6}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">联系人3电话：</label>
+                <div class="col-sm-8">
+                    <input name="string7" readonly class="form-control" id="string7" type="text" th:field="*{string7}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">联系人3邮箱：</label>
+                <div class="col-sm-8">
+                    <input name="string8" readonly class="form-control" type="text" th:field="*{string8}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">联系人3职务：</label>
+                <div class="col-sm-8">
+                    <input name="string9" readonly class="form-control" type="text" th:field="*{string9}">
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <input id="filePaths" name="filePaths" type="hidden" th:field="*{filePaths}">
+                <label class="font-noraml">开票资料上传</label>
+                <div class="file-loading">
+                    <input id="file_paths_" type="file" name="file" class="imgFile form-control">
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <th:block th:include="include :: select2-js" />
+    <th:block th:include="include :: bootstrap-fileinput-js" />
+    <script type="text/javascript">
+        var prefix = ctx + "fmis/customer";
+        var icon = "<i class='fa fa-times-circle'></i> ";
+
+        var pathStr = $("#filePaths").val();
+        console.log("pathStr=" + pathStr);
+        var fileUrl = "[[${fileUrl}]]";
+        console.log("fileUrl=" + fileUrl);
+        $(document).ready(function () {
+            $("#file_paths_").fileinput({
+                'theme': 'fas',
+                'uploadUrl': ctx + 'fmis/file/upload',
+                dropZoneTitle: "请通过拖拽图片文件放到这里",
+                allowedFileExtensions: ['pdf', 'jpg','word'],
+                msgFilesTooMany: "选择上传的文件数量({n}) 超过允许的最大数值{m}！",
+                maxFileCount:1,
+                showUpload: false,
+                overwriteInitial: false,
+                initialPreviewAsData: true,
+                autoReplace: true,
+                deleteUrl: "#",
+                initialPreview: [
+                    fileUrl + pathStr
+                ],
+                initialPreviewAsData: true
+            }).on("filebatchselected", function(event, files) {
+                console.log("filebatchselected");
+                $(this).fileinput("upload");
+            }).on("fileuploaded", function(event, data) {
+                console.log("fileuploaded");
+                console.log("data.data=" + data.response.data);
+                $("#filePaths").val(data.response.data);
+            });
+        });
+
+        $("#form-customer-edit").validate({
+            onkeyup: false,
+            rules: {
+                name:{
+                    required: true,
+                    remote: {
+                        url: prefix + "/checkCustomerName",
+                        type: "post",
+                        dataType: "json",
+                        async: false,
+                        cache: false,
+                        data: {
+                            name : function() {
+                                return $.common.trim($("#name").val());
+                            },
+                            status : 1,
+                            customerId : $.common.trim($("#customerId").val())
+                        },
+                        dataFilter: function(data, type) {
+                            var validateUnique = $.validate.unique(data);
+                            return validateUnique;
+                        }
+                    }
+                },
+                contactName:{
+                    required: true,
+                    remote: {
+                        url: prefix + "/checkContactName",
+                        type: "post",
+                        dataType: "json",
+                        async: false,
+                        cache: false,
+                        data: {
+                            contactName : function() {
+                                return $.common.trim($("#contactName").val());
+                            },
+                            status : 1,
+                            customerId : $.common.trim($("#customerId").val())
+                        },
+                        dataFilter: function(data, type) {
+                            var validateUnique = $.validate.unique(data);
+                            return validateUnique;
+                        }
+                    }
+                },
+                contactPhone:{
+                    required: true,
+                    remote: {
+                        url: prefix + "/checkContactPhone",
+                        type: "post",
+                        dataType: "json",
+                        async: false,
+                        cache: false,
+                        data: {
+                            contactPhone : function() {
+                                return $.common.trim($("#contactPhone").val());
+                            },
+                            status : 1,
+                            customerId : $.common.trim($("#customerId").val())
+                        },
+                        dataFilter: function(data, type) {
+                            var validateUnique = $.validate.unique(data);
+                            return validateUnique;
+                        }
+                    }
+                },
+            },
+            messages: {
+                "name": {
+                    remote: icon + "客户名称重复"
+                },"contactName": {
+                    remote: icon + "联系人姓名重复"
+                },"contactPhone": {
+                    remote: icon + "联系人电话重复"
+                }
+            },
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            var vali = $.validate.form();
+            vali = $.validate.form();
+            console.log("vali=" + vali);
+            if (vali) {
+                var data = $('#form-customer-edit').serializeArray();
+                var userIds = $.form.selectSelects("user");
+                data.push({"name": "ownerUserId", "value": userIds});
+                $.operate.save(prefix + "/edit", data);
+            }
+        }
+
+        $("input[name='recordDate']").datetimepicker({
+            format: "yyyy-mm",
+            minView: "year",
+            startView: "year",
+            autoclose: true
+        });
+        $("input[name='allocationDate']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+    </script>
+</body>
+</html>

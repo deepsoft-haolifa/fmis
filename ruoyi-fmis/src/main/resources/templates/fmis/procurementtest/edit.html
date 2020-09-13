@@ -9,9 +9,9 @@
     <form class="form-horizontal m" id="form-data-edit" th:object="${bizProcessData}">
         <input name="dataId" id="dataId" th:field="*{dataId}" type="hidden">
         <input type="hidden" name="bizEditFlag" id="bizEditFlag" value="3"/>
-        <input type="hidden" name="bizId" value="procurement"/>
+        <input type="hidden" id="bizId" name="bizId" value="procurement"/>
         <!-- 0=待检测 -->
-        <input type="hidden" name="queryStatus" value="0"/>
+        <input type="hidden" id="queryStatus" name="queryStatus" value="0"/>
 
         <input type="hidden" id="numJsonValue" name="numJsonValue" th:value="${numJsonValue}"/>
         <div class="select-list">
@@ -19,15 +19,15 @@
 
                 <li>
                     <p>销售合同号：</p>
-                    <input type="text" name="contractNo"/>
+                    <input type="text" id="contractNo" name="contractNo"/>
                 </li>
                 <li>
                     <p>采购合同号：</p>
-                    <input type="text" name="procurementNo"/>
+                    <input type="text" id="procurementNo" name="procurementNo"/>
                 </li>
                 <li>
                     <p>报检单号：</p>
-                    <input type="text" name="orderNo"/>
+                    <input type="text" id="orderNo" name="orderNo"/>
                 </li>
                 <li>
                     <a class="btn btn-primary btn-rounded btn-sm" onclick="searchAll()"><i class="fa fa-search"></i>&nbsp;搜索</a>

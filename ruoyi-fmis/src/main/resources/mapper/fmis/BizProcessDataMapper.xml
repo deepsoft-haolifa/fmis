@@ -452,6 +452,67 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="datetime4 != null "> and datetime4 = #{datetime4}</if>
             <if test="datetime5 != null "> and datetime5 = #{datetime5}</if>
             <if test="status != null  and status != ''"> and status = #{status}</if>
+
+            <!-- 采购 采购员-采购主管-采购经理-总经理审批 -->
+            <if test="roleType == 1 ">
+                <if test="queryStatus == 1 ">
+                    and d.flow_status in ('0','-2','-3','-4')
+                </if>
+                <if test="queryStatus == 2 ">
+                    and d.flow_status != '0'
+                </if>
+                ${params.dataScope}
+            </if>
+            <!-- 采购主管 查看已上报的 -->
+            <if test="roleType == 2 ">
+                <if test="queryStatus == 0 ">
+                    and d.flow_status in ('20','1','2','-2','3','-3','-4','4')
+                </if>
+                <if test="queryStatus == 1 ">
+                    and d.flow_status in ('1','20')
+                </if>
+                <if test="queryStatus == 2 ">
+                    and d.flow_status in ('2','-2','3','-3','-4','-5','4')
+                </if>
+                ${params.dataScope}
+            </if>
+            <!-- 采购经理  查看 销售经理同意的  -->
+            <if test="roleType == 3 ">
+                <if test="queryStatus == 0 ">
+                    and d.flow_status in ('2','3','-3','4','-4','30')
+                </if>
+                <if test="queryStatus == 1 ">
+                    and d.flow_status in ('2','30')
+                </if>
+                <if test="queryStatus == 2 ">
+                    and d.flow_status in ('3','-3','4','-4')
+                </if>
+                ${params.dataScope}
+            </if>
+
+            <!-- 总经理审批  查看 区域经理同意的  -->
+            <if test="roleType == 4 ">
+                <if test="queryStatus == 0 ">
+                    and d.flow_status in ('3','4','-4','40')
+                </if>
+                <if test="queryStatus == 1 ">
+                    and d.flow_status in ('3','40')
+                </if>
+                <if test="queryStatus == 2 ">
+                    and d.flow_status in ('4','-4','-5','5','-6','6')
+                </if>
+
+                ${params.dataScope}
+            </if>
+
+            <!-- 查询全部 已经完成的 -->
+            <if test="roleType == 0 ">
+                and d.flow_status=d.normal_flag
+            </if>
+
+
+
+
         </where>
         order by d.create_time desc
     </select>

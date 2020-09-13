@@ -122,10 +122,17 @@ public class BizProcessDataProcurementController extends BaseController {
 
         String bizId = bizProcessData.getBizId();
 
+
+        Map<String, SysRole> flowMap = bizProcessDefineService.getRoleFlowMap(bizId);
+        String userFlowStatus = "";
+        if (!CollectionUtils.isEmpty(flowMap)) {
+            userFlowStatus = flowMap.keySet().iterator().next();
+            bizProcessData.setRoleType(userFlowStatus);
+        }
+
         startPage();
         List<BizProcessData> list = bizProcessDataService.selectBizProcessDataListRefProcurement(bizProcessData);
 
-        Map<String, SysRole> flowMap = bizProcessDefineService.getRoleFlowMap(bizId);
         Map<String, SysRole> flowAllMap = bizProcessDefineService.getFlowAllMap(bizId);
         if (!CollectionUtils.isEmpty(flowMap)) {
             //计算流程描述
@@ -160,7 +167,7 @@ public class BizProcessDataProcurementController extends BaseController {
 
                 if (flowStatusInt > 0) {
                     if (!flowStatus.equals(normalFlag)) {
-                        String userFlowStatus = flowMap.keySet().iterator().next();
+                        userFlowStatus = flowMap.keySet().iterator().next();
                         int userFlowStatusInt = Integer.parseInt(userFlowStatus);
                         if (userFlowStatusInt == flowStatusInt + 1) {
                             data.setOperationExamineStatus(true);

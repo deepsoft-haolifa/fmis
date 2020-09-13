@@ -1,70 +1,8 @@
 var prefixPool = ctx + "fmis/data";
 
-$(function() {
-    var options = {
-        url: prefixPool + "/selectBizTestProductList",
-        modalName: "采购产品",
-        uniqueId: "stayId",
-        detailView: true,
-        cache: true,
-        async: false,
-        showSearch: false,
-        showRefresh: false,
-        showToggle: false,
-        showHeader: false,
-        showFooter: false,
-        showColumns: false,
-        pageSize: 10000,
-        id: "bootstrap-table",
-        pagination: false,
-        rowStyle: function(row, index) {
-            return {classes:'success'};
-        },
-        expandFirst: true,
-        onExpandRow : function(index, row, $detail) {
-            initChildTestTable(index, row, $detail);
-        },
-        columns: [
-            {field : 'rowId',title : '序号',width: 50,visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
-            {field : 'addTest',title : '操作',visible: true,formatter: function(value, row, index) {
-                    var actions = [];
-                    actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="addTest(' + row.dataId + "," + row.productId +  "," + row.childId +  "," + row.stayId + ",'bootstrap-table'" + ')"><i class="fa fa-add"></i> 添加</a>');
-                    return actions.join('');
-                }},
-            {field : 'stayId',title : 'stayId',visible: false},
-            {field : 'productNum',title : '数量',editable: false,width: 100,visible: false},
-            {field : 'stayNum',title : '待检测数量',editable: false,width: 100},
-            {field : 'yesNum',title : '已检测合格数量',editable: false,width: 100},
-            {field : 'noNum',title : '已检测未合格数量',editable: false,width: 100},
 
-            {field : 'productId',title : '产品ID',visible: false},
-            {field : 'dataId',title : 'dataId',visible: false},
-            {field : 'levelValue',title : 'levelValue',visible: false},
-            {field : 'childId',title : 'childId',visible: false,width:100},
-            {field : 'statusId',title : 'statusId',visible: false,width:100},
-            {field : 'procurementId',title : 'childId',visible: false},
 
-            {field : 'stayCreateTime',title : '发起时间',editable: false,width: 100},
-            {field : 'contractNo',title : '销售合同号',editable: false,width: 100},
-            {field : 'procurementNo',title : '采购合同号',editable: false,width: 100},
-            {field : 'orderNo',title : '报检单号',editable: false,width: 100},
 
-            {field : 'productName',title : '产品名称',editable: false,width: 100},
-            {field : 'model',title : '型号',editable: false,width: 200},
-            {field : 'supplierName',title : '供应商',editable: false,width: 100},
-            {field : 'supplierId',title : 'supplierId',visible: false},
-
-            {field : 'specifications',title : '规格',editable: false,width: 100},
-            {field : 'nominalPressure',title : '压力',editable: false,width: 100},
-            {field : 'valvebodyMaterial',title : '阀体',editable: false,width: 100},
-            {field : 'valveElement',title : '阀芯',editable: false,width: 100},
-            {field : 'sealingMaterial',title : '密封材质',editable: false,width: 100},
-            {field : 'driveForm',title : '驱动形式',editable: false,width: 100},
-            {field : 'connectionType',title : '连接方式',editable: false,width: 100}
-        ]
-    };
-    $.table.init(options);
-});
 
 function expandChildTablePromise(dataId,paramterId,childId,stayId,tableId) {
     var promise;
@@ -176,6 +114,8 @@ initChildTestTable = function(index, rows, $detail) {
     });
 };
 
+
+
 function saveTest (rowId,childId,paramterId,dataId,statusId,stayId,stayNum) {
     //dataId,paramterId,childId,remark,testId,yesNum,noNum
 
@@ -205,8 +145,12 @@ function saveTest (rowId,childId,paramterId,dataId,statusId,stayId,stayNum) {
     var testId = row.testId;
     var yesNum = row.yesNum;
     var noNum = row.noNum;
+    console.log("testId=" + testId);
+    if (!$.common.isEmpty(testId) && testId != 0) {
+        $.modal.alertWarning("不能重复保存");
+        return;
+    }
 
-    console.log("statusId=" + statusId);
     console.log("yesNum=" + yesNum + " remark=" + remark);
     var url = ctx + "fmis/procurementtest/saveTest?dataId=" + dataId + "&paramterId=" + paramterId + "&childId=" + childId + "&remark=" + remark + "&testId=" + testId +
         "&yesNum=" + yesNum + "&noNum=" + noNum + "&statusId=" + statusId + "&stayId=" + stayId;
@@ -243,7 +187,95 @@ function numberValidate(value) {
         return "必须是数字！";
     }
 }
+
 $(function() {
+    var options = {
+        url: prefixPool + "/selectBizTestProductList",
+        modalName: "采购产品",
+        uniqueId: "stayId",
+        detailView: true,
+        cache: true,
+        async: false,
+        showSearch: false,
+        showRefresh: false,
+        showToggle: false,
+        showHeader: true,
+        showFooter: false,
+        showColumns: false,
+        pageSize: 10000,
+        id: "bootstrap-table",
+        pagination: false,
+        rowStyle: function(row, index) {
+            return {classes:'success'};
+        },
+        expandFirst: true,
+        onExpandRow : function(index, row, $detail) {
+            initChildTestTable(index, row, $detail);
+        },
+
+        method: 'post',
+        sidePagination: "server",
+        contentType : "application/x-www-form-urlencoded",
+        queryParams: {
+            "dataId": $("#dataId").val(),
+            "level": $("#level").val(),
+            "queryStatus": $("#queryStatus").val(),
+            "orderNo": $("#orderNo").val(),
+            "contractNo": $("#contractNo").val(),
+            "procurementNo": $("#procurementNo").val()
+        },
+        onLoadSuccess : function (data) {
+            if (data.total == 0) {
+                //隐藏此窗口
+                //$.destroy("bootstrap-table-ref2");
+                $("#bootstrap-table").hide();
+                //$('#bootstrap-table').bootstrapTable('destroy');
+            }
+        },
+        columns: [
+            {field : 'rowId',title : '序号3',width: 50,visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
+            {field : 'addTest',title : '操作',visible: true,formatter: function(value, row, index) {
+                    var actions = [];
+                    actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="addTest(' + row.dataId + "," + row.productId +  "," + row.childId +  "," + row.stayId + ",'bootstrap-table'" + ')"><i class="fa fa-add"></i> 添加</a>');
+                    return actions.join('');
+                }},
+            {field : 'stayId',title : 'stayId',visible: false},
+            {field : 'productNum',title : '数量',editable: false,width: 100,visible: false},
+            {field : 'stayNum',title : '待检测数量',editable: false,width: 100},
+            {field : 'yesNum',title : '已检测合格数量',editable: false,width: 100},
+            {field : 'noNum',title : '已检测未合格数量',editable: false,width: 100},
+
+            {field : 'productId',title : '产品ID',visible: false},
+            {field : 'dataId',title : 'dataId',visible: false},
+            {field : 'levelValue',title : 'levelValue',visible: false},
+            {field : 'childId',title : 'childId',visible: false,width:100},
+            {field : 'statusId',title : 'statusId',visible: false,width:100},
+            {field : 'procurementId',title : 'childId',visible: false},
+
+            {field : 'stayCreateTime',title : '发起时间',editable: false,width: 100},
+            {field : 'contractNo',title : '销售合同号',editable: false,width: 100},
+            {field : 'procurementNo',title : '采购合同号',editable: false,width: 100},
+            {field : 'orderNo',title : '报检单号',editable: false,width: 100},
+
+            {field : 'productName',title : '产品名称',editable: false,width: 100},
+            {field : 'model',title : '型号',editable: false,width: 200},
+            {field : 'supplierName',title : '供应商',editable: false,width: 100},
+            {field : 'supplierId',title : 'supplierId',visible: false},
+
+            {field : 'specifications',title : '规格',editable: false,width: 100},
+            {field : 'nominalPressure',title : '压力',editable: false,width: 100},
+            {field : 'valvebodyMaterial',title : '阀体',editable: false,width: 100},
+            {field : 'valveElement',title : '阀芯',editable: false,width: 100},
+            {field : 'sealingMaterial',title : '密封材质',editable: false,width: 100},
+            {field : 'driveForm',title : '驱动形式',editable: false,width: 100},
+            {field : 'connectionType',title : '连接方式',editable: false,width: 100}
+        ]
+    };
+
+    //$.table.init(options);
+    $("#bootstrap-table").bootstrapTable(options);
+
+
     var options1 = {
         url: prefixPool + "/selectBizTestActuatorList",
         modalName: "采购执行器",
@@ -255,7 +287,7 @@ $(function() {
         showSearch: false,
         showRefresh: false,
         showToggle: false,
-        showHeader: false,
+        showHeader: true,
         showFooter: false,
         showColumns: false,
         pageSize: 10000,
@@ -266,6 +298,24 @@ $(function() {
         expandFirst: true,
         onExpandRow : function(index, row, $detail) {
             initChildTestTable(index, row, $detail);
+        },
+        method: 'post',
+        sidePagination: "server",
+        contentType : "application/x-www-form-urlencoded",
+        queryParams: {
+            "dataId": $("#dataId").val(),
+            "level": $("#level").val(),
+            "queryStatus": $("#queryStatus").val(),
+            "orderNo": $("#orderNo").val(),
+            "contractNo": $("#contractNo").val(),
+            "procurementNo": $("#procurementNo").val()
+        },
+        onLoadSuccess : function (data) {
+            if (data.total == 0) {
+                //隐藏此窗口
+                //$.destroy("bootstrap-table-ref2");
+                $("#bootstrap-table-actuator").hide();
+            }
         },
         columns: [
             {field : 'rowId',title : '序号',width: 50,visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
@@ -354,12 +404,10 @@ $(function() {
             }
         ]
     };
-    $.table.init(options1);
-});
+    //$.table.init(options1);
+    $("#bootstrap-table-actuator").bootstrapTable(options1);
 
-
-$(function() {
-    var options1 = {
+    var options2 = {
         url: prefixPool + "/selectBizTestRef1List",
         modalName: "法兰",
         uniqueId: "stayId",
@@ -370,7 +418,7 @@ $(function() {
         showSearch: false,
         showRefresh: false,
         showToggle: false,
-        showHeader: false,
+        showHeader: true,
         showFooter: false,
         showColumns: false,
         pageSize: 10000,
@@ -381,6 +429,24 @@ $(function() {
         expandFirst: true,
         onExpandRow : function(index, row, $detail) {
             initChildTestTable(index, row, $detail);
+        },
+        method: 'post',
+        sidePagination: "server",
+        contentType : "application/x-www-form-urlencoded",
+        queryParams: {
+            "dataId": $("#dataId").val(),
+            "level": $("#level").val(),
+            "queryStatus": $("#queryStatus").val(),
+            "orderNo": $("#orderNo").val(),
+            "contractNo": $("#contractNo").val(),
+            "procurementNo": $("#procurementNo").val()
+        },
+        onLoadSuccess : function (data) {
+            if (data.total == 0) {
+                //隐藏此窗口
+                //$.destroy("bootstrap-table-ref2");
+                $("#bootstrap-table-ref1").hide();
+            }
         },
         columns: [
             {field : 'rowId',title : '序号',width: 50,visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
@@ -418,13 +484,10 @@ $(function() {
             {field : 'ref1MaterialRequire',title : '材质要求',width: 300}
         ]
     };
-    $.table.init(options1);
-});
+    //$.table.init(options2);
+    $("#bootstrap-table-ref1").bootstrapTable(options2);
 
-
-
-$(function() {
-    var options1 = {
+    var options3 = {
         url: prefixPool + "/selectBizTestRef2List",
         modalName: "螺栓",
         uniqueId: "stayId",
@@ -435,7 +498,7 @@ $(function() {
         showSearch: false,
         showRefresh: false,
         showToggle: false,
-        showHeader: false,
+        showHeader: true,
         showFooter: false,
         showColumns: false,
         pageSize: 10000,
@@ -446,6 +509,24 @@ $(function() {
         expandFirst: true,
         onExpandRow : function(index, row, $detail) {
             initChildTestTable(index, row, $detail);
+        },
+        method: 'post',
+        sidePagination: "server",
+        contentType : "application/x-www-form-urlencoded",
+        queryParams: {
+            "dataId": $("#dataId").val(),
+            "level": $("#level").val(),
+            "queryStatus": $("#queryStatus").val(),
+            "orderNo": $("#orderNo").val(),
+            "contractNo": $("#contractNo").val(),
+            "procurementNo": $("#procurementNo").val()
+        },
+        onLoadSuccess : function (data) {
+            if (data.total == 0) {
+                //隐藏此窗口
+                //$.destroy("bootstrap-table-ref2");
+                $("#bootstrap-table-ref2").hide();
+            }
         },
         columns: [
             {field : 'rowId',title : '序号',width: 50,visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
@@ -481,12 +562,11 @@ $(function() {
             {field : 'ref1MaterialRequire',title : '材质要求',width: 300}
         ]
     };
-    $.table.init(options1);
-});
+    //$.table.init(options3);
+    $("#bootstrap-table-ref2").bootstrapTable(options3);
 
 
-$(function() {
-    var options1 = {
+    var options4 = {
         url: prefixPool + "/selectBizTestPAList",
         modalName: "螺栓",
         uniqueId: "stayId",
@@ -497,7 +577,7 @@ $(function() {
         showSearch: false,
         showRefresh: false,
         showToggle: false,
-        showHeader: false,
+        showHeader: true,
         showFooter: false,
         showColumns: false,
         pageSize: 10000,
@@ -508,6 +588,24 @@ $(function() {
         expandFirst: true,
         onExpandRow : function(index, row, $detail) {
             initChildTestTable(index, row, $detail);
+        },
+        method: 'post',
+        sidePagination: "server",
+        contentType : "application/x-www-form-urlencoded",
+        queryParams: {
+            "dataId": $("#dataId").val(),
+            "level": $("#level").val(),
+            "queryStatus": $("#queryStatus").val(),
+            "orderNo": $("#orderNo").val(),
+            "contractNo": $("#contractNo").val(),
+            "procurementNo": $("#procurementNo").val()
+        },
+        onLoadSuccess : function (data) {
+            if (data.total == 0) {
+                //隐藏此窗口
+                //console.log("pa data=" + JSON.stringify(data));
+                $("#bootstrap-table-pa").hide();
+            }
         },
         columns: [
             {field : 'rowId',title : '序号',width: 50,visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
@@ -625,5 +723,7 @@ $(function() {
             }
         ]
     };
-    $.table.init(options1);
+    $("#bootstrap-table-pa").bootstrapTable(options4);
 });
+
+

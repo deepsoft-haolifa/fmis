@@ -171,6 +171,7 @@
                 updateUrl: prefix + "/edit/{id}",
                 removeUrl: prefix + "/remove",
                 exportUrl: prefix + "/export",
+                detailUrl: prefix + "/detail",
                 modalName: "客户",
                 columns: [{
                     checkbox: true
@@ -342,6 +343,17 @@
                         field : 'string9',
                         title : '联系人3职务'
                     },
+                    {
+                        field : 'filePaths',
+                        title : '开票资料',
+                        align: 'center',
+                        formatter: function(value, row, index) {
+                            var filePaths = fileUrlStart + value;
+                            var actions = [];
+                            actions.push('<a class="btn btn-success btn-xs" target="_blank" href="' + filePaths + '" ><i class="fa fa-edit"></i>查看</a>');
+                            return actions.join('');
+                        }
+                    },
 
                 {
                     field : 'remark',
@@ -366,13 +378,20 @@
                         var actions = [];
                         actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.customerId + '\')"><i class="fa fa-edit"></i> 编辑</a> ');
                         actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.customerId + '\')"><i class="fa fa-remove"></i> 删除</a>');
+                        actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="viewExamineDetail(\'' + row.customerId + '\')"><i class="fa fa-edit"></i> 详情</a>');
                         return actions.join('');
                     }
                 }]
             };
             $.table.init(options);
         });
-
+        function viewExamineDetail(dataId) {
+            var bizId = $("#bizId").val();
+            var url = prefix + "/detail/" + dataId;
+            $.modal.openNoEnter("详情", url,$(window).width(),$(window).height(),function(){
+                $.modal.closeAll();
+            });
+        }
         $("input[name='recordDate']").datetimepicker({
             format: "yyyy-mm",
             minView: "year",
