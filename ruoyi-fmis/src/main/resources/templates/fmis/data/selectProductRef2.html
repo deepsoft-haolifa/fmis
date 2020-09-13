@@ -96,6 +96,11 @@
                     field : 'price', 
                     title : '单价'
                 },
+                    {
+                        field : 'string3',
+                        title : '成本价',
+                        visible: false
+                    },
                 {
                     field : 'remark', 
                     title : '备注'
@@ -144,6 +149,7 @@
                 ref2Price:selectRows[0].price,
                 productRef2Num:"0",
                 productRef2Coefficient:"0",
+                ref2CostPrice:selectRows[0].string3
             };
             parent.$('#form-data-add input[id=ref2JsonParamter]').val(JSON.stringify(rowData));
             parent.$('#form-data-edit input[id=ref2JsonParamter]').val(JSON.stringify(rowData));

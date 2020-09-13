@@ -165,7 +165,12 @@
           pa1.attachment_id as pattachment1Id,pa1.bh as pattachment1Name, pc.pattachment1_price as pattachment1Price, pc.pattachment1_count as pattachment1Count, pc.pattachment1_coefficient as pattachment1Coefficient,
           pa2.attachment_id as pattachment2Id,pa2.bh as pattachment2Name, pc.pattachment2_price as pattachment2Price, pc.pattachment2_count as pattachment2Count, pc.pattachment2_coefficient as pattachment2Coefficient,
           pa3.attachment_id as pattachment3Id,pa3.bh as pattachment3Name, pc.pattachment3_price as pattachment3Price, pc.pattachment3_count as pattachment3Count, pc.pattachment3_coefficient as pattachment3Coefficient,
-          pa4.attachment_id as pattachment4Id,pa4.bh as pattachment4Name, pc.pattachment4_price as pattachment4Price, pc.pattachment4_count as pattachment4Count, pc.pattachment4_coefficient as pattachment4Coefficient
+          pa4.attachment_id as pattachment4Id,pa4.bh as pattachment4Name, pc.pattachment4_price as pattachment4Price, pc.pattachment4_count as pattachment4Count, pc.pattachment4_coefficient as pattachment4Coefficient,
+
+          p.cost_price as productCostPrice,pr1.string3 as ref1CostPrice,pr2.string3 as ref2CostPrice,
+          pa.cost_price as pattachmentCostPrice,pa1.cost_price as pattachment1CostPrice,
+          pa2.cost_price as pattachment2CostPrice,pa3.cost_price as pattachment3CostPrice,pa4.cost_price as pattachment4CostPrice,
+          (case when ac.string2 = '1' then ifnull(ac.string5,'0') when ac.string2 = '2' then ifnull(ac.string9,'0') end) as actuatorCostPrice
 
 
         from biz_process_child pc

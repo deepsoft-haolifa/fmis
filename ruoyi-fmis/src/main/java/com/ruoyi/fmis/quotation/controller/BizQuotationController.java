@@ -1161,6 +1161,7 @@ public class BizQuotationController extends BaseController {
                     bizQuotation.setPattachment2Count(StringUtils.addDouble(bizQuotation.getPattachment2Count(),oldQProduct.getPattachment2Count()));
                     bizQuotation.setPattachment3Count(StringUtils.addDouble(bizQuotation.getPattachment3Count(),oldQProduct.getPattachment3Count()));
                     bizQuotation.setPattachment4Count(StringUtils.addDouble(bizQuotation.getPattachment4Count(),oldQProduct.getPattachment4Count()));
+
                     map.put(productId,bizQuotation);
                 } else {
                     map.put(productId,bizQuotation);
@@ -1183,27 +1184,46 @@ public class BizQuotationController extends BaseController {
             json.put("driveForm",bizQuotation.getDriveForm());
             json.put("connectionType",bizQuotation.getConnectionType());
             json.put("productNum",bizQuotation.getProductNum());
+
+            json.put("productCostPrice",bizQuotation.getProductCostPrice());
+
             json.put("productPrice",bizQuotation.getProductPrice());
             json.put("productCoefficient",bizQuotation.getProductCoefficient());
             json.put("actuatorId",bizQuotation.getActuatorId());
             json.put("actuatorName",bizQuotation.getActuatorName());
             json.put("actuatorPrice",bizQuotation.getActuatorPrice());
+
+            json.put("actuatorCostPrice",bizQuotation.getActuatorCostPrice());
+
             json.put("actuatorNum",bizQuotation.getActuatorNum());
             json.put("actuatorCoefficient",bizQuotation.getActuatorCoefficient());
             json.put("productRef1Id",bizQuotation.getProductRef1Id());
             json.put("ref1Name",bizQuotation.getRef1Name());
             json.put("ref1Price",bizQuotation.getRef1Price());
+
+            json.put("ref1CostPrice",bizQuotation.getRef1CostPrice());
+
             json.put("productRef1Num",bizQuotation.getProductRef1Num());
             json.put("productRef1Coefficient",bizQuotation.getProductRef1Coefficient());
             json.put("productRef2Id",bizQuotation.getProductRef2Id());
             json.put("ref2Name",bizQuotation.getRef2Name());
             json.put("ref2Price",bizQuotation.getRef2Price());
+
+            json.put("ref2CostPrice",bizQuotation.getRef2CostPrice());
+
             json.put("productRef2Num",bizQuotation.getProductRef2Num());
             json.put("productRef2Coefficient",bizQuotation.getProductRef2Coefficient());
 
             json.put("pattachmentId",bizQuotation.getPattachmentId());
             json.put("pattachmentName",bizQuotation.getPattachmentName());
             json.put("pattachmentPrice",bizQuotation.getPattachmentPrice());
+
+            json.put("pattachmentCostPrice",bizQuotation.getPattachmentCostPrice());
+            json.put("pattachment1CostPrice",bizQuotation.getPattachment1CostPrice());
+            json.put("pattachment2CostPrice",bizQuotation.getPattachment2CostPrice());
+            json.put("pattachment3CostPrice",bizQuotation.getPattachment3CostPrice());
+            json.put("pattachment4CostPrice",bizQuotation.getPattachment4CostPrice());
+
             json.put("pattachmentCount",bizQuotation.getPattachmentCount());
             json.put("pattachmentCoefficient",bizQuotation.getPattachmentCoefficient());
 

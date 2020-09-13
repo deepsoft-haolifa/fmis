@@ -204,6 +204,11 @@
                     title : '产品单价'
                 },
                 {
+                    field : 'costPrice',
+                    title : '成本价',
+                    visible: false
+                },
+                {
                     field : 'supplier',
                     title : '供应商代号'
                 },
@@ -352,6 +357,10 @@
                 connectionType:selectRows[i].connectionType,
                 productNum:"0",
                 productPrice:selectRows[i].price,
+
+
+                productCostPrice:selectRows[i].costPrice,
+
                 productCoefficient:"1",
                 productRef1Id:"",
                 ref1Name:"请选择",

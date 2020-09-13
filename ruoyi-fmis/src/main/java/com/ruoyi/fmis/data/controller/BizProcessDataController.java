@@ -1602,7 +1602,7 @@ public class BizProcessDataController extends BaseController {
                     jsonData.put("productNum",num);
 
                     //执行器*1 法兰*2
-
+                    jsonData.put("productCostPrice",bizProduct.getCostPrice());
 
                     jsonData.put("productPrice",bizProduct.getPrice());
                     jsonData.put("productCoefficient","1");
