@@ -85,9 +85,11 @@ var supplierMap = new Map();
  * 展开父子表
  */
 function initExpandRow() {
+    $("#loadingModalFmis").modal('show');
     setTimeout(function () {
-
         var repeartMap = new Map();
+
+        console.log("loadingModalFmis show...")
         for (var i = 0; i < overAllIds.length; i++) {
             var pathId = overAllIds[i];
             var pathIds = pathId.split("_");
@@ -122,18 +124,29 @@ function initExpandRow() {
             if (bizEditFlag == 0) {
                 var paramterSupplierId = parent.$('#paramterSupplierId').val();
                 var totalPrice = parent.$('#totalPrice').val();
+
                 $("#price1").val(totalPrice);
                 //增加的时候 把供应商
                 $("#string6").find("option[value='" + paramterSupplierId + "']").attr("selected",true);
             }
         }
         //calculatePrice();
-    }, 1000);
+        $("#loadingModalFmis").modal('hide');
+    }, 2000);
+}
 
+function isDouble (v) {
+    var reg = /^[0-9,.]*$/ //^[-\+]?\d+(\.\d+)?$/;
+    if (reg.test(v)) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 function expandChildLevelTablePromise(initChildLevelTableId,levelUniqueId) {
     var promise;
+    console.log("initChildLevelTableId=" + initChildLevelTableId);
     promise = new Promise(function(resolve, reject) {
         $("#" + initChildLevelTableId).on("load-success.bs.table",{unid: levelUniqueId},(function(e){
             $("#" + initChildLevelTableId).bootstrapTable('expandRow', $("#" + initChildLevelTableId).bootstrapTable('getRowByUniqueId', e.data.unid).rowId);
@@ -155,6 +168,7 @@ function cellStyle (value, row, index) {
 initChildLevelTable = function(index, row, $detail) {
 
     var initChildLevelTableId = "initChildLevelTable_" + row.dataId;
+    console.log("initChildLevelTableId1=" + initChildLevelTableId);
     var cur_table = $detail.html('<table style="table-layout:fixed" id=' + initChildLevelTableId + ' data-cache="true"></table>').find('table');
     var dataId = row["dataId"];
 

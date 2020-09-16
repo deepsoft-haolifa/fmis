@@ -174,7 +174,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="customerName != null and customerName != ''"> and ct.name like concat('%', #{customerName}, '%')</if>
             <!-- 如果是详情，只看有数据 -->
             <if test="bizEditFlag == 2">and ds.string4 = #{dataId} </if>
-
+            <!-- 编辑 只看有数据的 -->
+            <if test="bizEditFlag == 1">and ds.string4 = #{dataId} </if>
 
             <!-- 采购状态=未处理 过滤合同 -->
 
@@ -466,20 +467,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <!-- 采购主管 查看已上报的 -->
             <if test="roleType == 2 ">
                 <if test="queryStatus == 0 ">
-                    and d.flow_status in ('20','2','-2','3','-3','-4','4')
+                    and d.flow_status in ('20','1','2','3','-3','-4','4')
                 </if>
                 <if test="queryStatus == 1 ">
-                    and d.flow_status in ('20')
+                    and d.flow_status in ('20','1')
                 </if>
                 <if test="queryStatus == 2 ">
-                    and d.flow_status in ('2','-2','3','-3','-4','-5','4')
+                    and d.flow_status in ('2','3','-3','-4','-5','4')
                 </if>
                 ${params.dataScope}
             </if>
             <!-- 采购经理  查看 销售经理同意的  -->
             <if test="roleType == 3 ">
                 <if test="queryStatus == 0 ">
-                    and d.flow_status in ('2','3','-3','4','-4','30')
+                    and d.flow_status in ('1','2','3','-3','4','-4','30')
                 </if>
                 <if test="queryStatus == 1 ">
                     and d.flow_status in ('2','30')
@@ -493,7 +494,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <!-- 总经理审批  查看 区域经理同意的  -->
             <if test="roleType == 4 ">
                 <if test="queryStatus == 0 ">
-                    and d.flow_status in ('3','4','-4','40')
+                    and d.flow_status in ('1','2','3','4','-4','40')
                 </if>
                 <if test="queryStatus == 1 ">
                     and d.flow_status in ('3','40')

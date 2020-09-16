@@ -114,7 +114,7 @@
         <where>
             1=1
             <!-- 合同中合计的数量 -->
-            <if test="string7 != null  and string7 != ''">and concat(string5,',') like concat('%', #{string5}, '%') and ifnull(string13,0)=0</if>
+            <if test="string7 != null  and string7 != ''">and ifnull(string13,0)=0 and c.data_id=0</if>
             <if test="string6 != null  and string6 != ''">and concat(string5,',') like concat('%', #{string5}, '%') and ifnull(string14,'0') = '1' and ifnull(string13,0) > 0 and string20='0'</if>
             <!-- 审核通过的发货 -->
             <if test="string8 != null  and string8 != ''">
@@ -124,9 +124,8 @@
 
             <if test="string3 != null  and string3 != ''"> and c.string3 like concat('%', #{string3}, '%')</if>
             <if test="string4 != null  and string4 != ''"> and c.string4 like concat('%', #{string4}, '%')</if>
-            <if test="string4 != null  and string5 != ''"> and c.string5 like concat('%', #{string5}, '%')</if>
-
-
+            <if test="string5 != null  and string5 != ''"> and c.string5 like concat('%', #{string5}, '%')</if>
+            <if test="productName != null  and productName != ''"> and c.string6 like concat('%', #{productName}, '%')</if>
         </where>
         order by c.create_time desc
     </select>
@@ -257,13 +256,14 @@
     where concat(p.model,p.specifications) in (
       select concat(p1.model,p1.specifications) from biz_product p1
       join biz_process_child pc1 on pc1.data_id=#{dataId} and pc1.string2=p1.product_id
+        <if test="supplierId != null and supplierId != ''">and p1.supplier=#{supplierId} </if>
     )
     </sql>
     <select id="selectBizChildProductList" parameterType="BizProcessChild" resultMap="BizProcessChildResult">
         <include refid="selectBizChildProductVo"/>
-        <!-- 如果是详情，只看有数据 -->
+        <!-- 如果是详情，只看有数据 || bizEditFlag == 1-->
 
-        <if test="bizEditFlag == 0 || bizEditFlag == 1">and ifnull(ds.data_status,'0') = '0'</if>
+        <if test="bizEditFlag == 0 ">and ifnull(ds.data_status,'0') = '0'</if>
 
         <if test="bizEditFlag == 2">and ds.string4 = #{procurementId} </if>
         <if test="dataStatus == 1">and ds.data_status = #{dataStatus} </if>
@@ -349,11 +349,12 @@
     where a.string1 in (
       select a1.string1 from biz_actuator a1
       join biz_process_child pc1 on pc1.data_id=#{dataId} and pc1.string11=a1.actuator_id
+        <if test="supplierId != null and supplierId != ''">and a1.string10=#{supplierId} </if>
     ) and a.quality_level=#{levelLabel}
     </sql>
     <select id="selectBizChildActuatorList" parameterType="BizProcessChild" resultMap="BizProcessChildResult">
         <include refid="selectBizChildActuatorVo"/>
-        <if test="bizEditFlag == 0 || bizEditFlag == 1">and ifnull(ds.data_status,'0') = '0'</if>
+        <if test="bizEditFlag == 0">and ifnull(ds.data_status,'0') = '0'</if>
         <!-- 如果是详情，只看有数据 -->
         <if test="bizEditFlag == 2">and ds.string4 = #{procurementId} </if>
         <if test="dataStatus == 1">and ds.data_status = #{dataStatus} </if>
@@ -420,12 +421,12 @@ join biz_process_data pd on pc.data_id=pd.data_id
     where concat(pr.name,pr.model,pr.specifications) in (
       select concat(p1.name,p1.model,p1.specifications) from biz_product_ref p1
       join biz_process_child pc1 on pc1.data_id=#{dataId} and pc1.string5=p1.product_ref_id
-      where p1.type=1
+      where p1.type=1 <if test="supplierId != null and supplierId != ''">and p1.suppliers_Id=#{supplierId} </if>
     ) and pr.type=1 and pr.string1=#{levelLabel}
     </sql>
     <select id="selectBizChildRef1List" parameterType="BizProcessChild" resultMap="BizProcessChildResult">
         <include refid="selectBizChildRef1Vo"/>
-        <if test="bizEditFlag == 0 || bizEditFlag == 1">and ifnull(ds.data_status,'0') = '0'</if>
+        <if test="bizEditFlag == 0 ">and ifnull(ds.data_status,'0') = '0'</if>
         <!-- 如果是详情，只看有数据 -->
         <if test="bizEditFlag == 2">and ds.string4 = #{procurementId} </if>
         <if test="dataStatus == 1">and ds.data_status = #{dataStatus} </if>
@@ -489,12 +490,12 @@ join biz_process_data pd on pc.data_id=pd.data_id
     where concat(pr.name,pr.model,pr.valvebody_material) in (
       select concat(p1.name,p1.model,p1.valvebody_material) from biz_product_ref p1
       join biz_process_child pc1 on pc1.data_id=#{dataId} and pc1.string8=p1.product_ref_id
-      where p1.type=2
+      where p1.type=2 <if test="supplierId != null and supplierId != ''">and p1.suppliers_Id=#{supplierId} </if>
     ) and pr.type=2 and pr.string1=#{levelLabel}
     </sql>
     <select id="selectBizChildRef2List" parameterType="BizProcessChild" resultMap="BizProcessChildResult">
         <include refid="selectBizChildRef2Vo"/>
-        <if test="bizEditFlag == 0 || bizEditFlag == 1">and ifnull(ds.data_status,'0') = '0'</if>
+        <if test="bizEditFlag == 0 ">and ifnull(ds.data_status,'0') = '0'</if>
         <!-- 如果是详情，只看有数据 -->
         <if test="bizEditFlag == 2">and ds.string4 = #{procurementId} </if>
         <if test="dataStatus == 1">and ds.data_status = #{dataStatus} </if>
@@ -565,7 +566,7 @@ join biz_process_data pd on pc.data_id=pd.data_id
     </sql>
     <select id="selectBizChildPAList" parameterType="BizProcessChild" resultMap="BizProcessChildResult">
         <include refid="selectBizChildPAVo"/>
-        <if test="bizEditFlag == 0 || bizEditFlag == 1">and ifnull(ds.data_status,'0') = '0'</if>
+        <if test="bizEditFlag == 0 ">and ifnull(ds.data_status,'0') = '0'</if>
         <!-- 如果是详情，只看有数据 -->
         <if test="bizEditFlag == 2">and ds.string4 = #{procurementId} </if>
         <if test="dataStatus == 1">and ds.data_status = #{dataStatus} </if>

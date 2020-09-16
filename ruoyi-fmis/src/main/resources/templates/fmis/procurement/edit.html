@@ -5,6 +5,14 @@
     <th:block th:include="include :: datetimepicker-css" />
 </head>
 <body class="white-bg" onload="initExpandRow()">
+<div class="modal fade" id="loadingModalFmis">
+    <div style="width: 200px;height:20px; z-index: 20000; position: absolute; text-align: center; left: 50%; top: 50%;margin-left:-100px;margin-top:-10px">
+        <div class="progress progress-striped active" style="margin-bottom: 0;">
+            <div class="progress-bar" style="width: 100%;"></div>
+        </div>
+        <h5 id="processBarDiv">请稍后...</h5>
+    </div>
+</div>
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
         <form class="form-horizontal m" id="form-data-edit" th:object="${bizProcessData}">
             <input name="dataId" id="dataId" th:field="*{dataId}" type="hidden">

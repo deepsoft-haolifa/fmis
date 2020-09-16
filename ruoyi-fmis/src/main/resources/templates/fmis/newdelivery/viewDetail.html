@@ -47,8 +47,6 @@
                 //onEditableSave: onEditableSave,
                 //rowStyle: tableRowStyle,
                 queryParams : {
-                    "string5": $("#string1").val(),
-                    "string6": "1",
                     "dataId": $("#dataId").val()
                 },
                 columns: [{
@@ -90,15 +88,7 @@
                     {field : 'string10',title : '价格',editable: false},
                     {field : 'string11',title : '数量',editable: false},
                     {field : 'string13',title : '发货数量',editable: false},
-                    {field : 'string14',title : '状态',formatter: function(value, row, index) {
-                            var actions = [];
-                            if (value == 1) {
-                                actions.push('已发货');
-                            } else{
-                                actions.push('未发货');
-                            }
-                            return actions.join('');
-                        }},
+                    {field : 'createTime',title : '时间',editable: false}
                     ]
             };
             $.table.init(options);

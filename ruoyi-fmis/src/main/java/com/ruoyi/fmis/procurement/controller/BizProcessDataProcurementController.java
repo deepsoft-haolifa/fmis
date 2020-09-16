@@ -282,6 +282,15 @@ public class BizProcessDataProcurementController extends BaseController {
         }
         String orderNo = noStart + new DecimalFormat("000").format(no);
         bizProcessData.setString12(orderNo);
+        try {
+            Double price1 = bizProcessData.getPrice1();
+            if (price1.isNaN()) {
+                bizProcessData.setPrice1(0D);
+            }
+        } catch(Exception ex) {
+            bizProcessData.setPrice1(0D);
+            logger.info(ex.getMessage());
+        }
 
         int insertReturn = bizProcessDataService.insertBizProcessData(bizProcessData);
         Long dataId = bizProcessData.getDataId();
