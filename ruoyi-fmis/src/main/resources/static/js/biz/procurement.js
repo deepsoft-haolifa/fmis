@@ -90,6 +90,7 @@ function initExpandRow() {
         var repeartMap = new Map();
 
         console.log("loadingModalFmis show...")
+        var initOver = false;
         for (var i = 0; i < overAllIds.length; i++) {
             var pathId = overAllIds[i];
             var pathIds = pathId.split("_");
@@ -114,6 +115,8 @@ function initExpandRow() {
             }
             var initChildLevelTableId = "initChildLevelTable_" + parentDataId;
             expandChildLevelTablePromise(initChildLevelTableId,levelUniqueId).then(function () {
+                //console.log("initExpandRow i=" + i);
+                $("#loadingModalFmis").modal('hide');
             })
 
             //展开合同类别
@@ -131,7 +134,7 @@ function initExpandRow() {
             }
         }
         //calculatePrice();
-        $("#loadingModalFmis").modal('hide');
+
     }, 2000);
 }
 
@@ -150,6 +153,7 @@ function expandChildLevelTablePromise(initChildLevelTableId,levelUniqueId) {
     promise = new Promise(function(resolve, reject) {
         $("#" + initChildLevelTableId).on("load-success.bs.table",{unid: levelUniqueId},(function(e){
             $("#" + initChildLevelTableId).bootstrapTable('expandRow', $("#" + initChildLevelTableId).bootstrapTable('getRowByUniqueId', e.data.unid).rowId);
+            //console.log("expandChildLevelTablePromise... ...");
         }));
         resolve();
     });
@@ -228,72 +232,78 @@ function onEditableSave (field, row, oldValue, $el) {
     var columnName1 = "";
     var columnName2 = "";
     var tableName = "";
+    console.log("onEditableSave1 ... ... ");
     if (field == "productNum") {
         columnName1 = "productNum";
         columnName2 = "productProcurementPrice";
         tableName = "initChildProductTable_" + row.dataId;
-        var price1 = setRowTotalPrice(columnName1,columnName2,tableName,row);
+        var tempNum = row.productNum;
         numberMap.set("1_" + row.childId + "_" + row.productId + "_" + row.dataId + "_" + row.levelValue,row.productNum);
+        var price1 = setRowTotalPrice(columnName1,columnName2,tableName,row);
+        //row.productNum = tempNum;
+        console.log("row.productNum=" + row.productNum + " tempNum=" + tempNum);
         priceMap.set("1_" + row.childId + "_" + row.productId + "_" + row.dataId + "_" + row.levelValue,price1);
     } else if (field == "actuatorNum") {
         columnName1 = "actuatorNum";
         columnName2 = "actuatorString6";
         tableName = "initChildActuatorTable_" + row.dataId;
-        var price1 = setRowTotalPrice(columnName1,columnName2,tableName,row);
         numberMap.set("2_" + row.childId + "_" + row.actuatorId + "_" + row.dataId + "_" + row.levelValue,row.actuatorNum);
+        var price1 = setRowTotalPrice(columnName1,columnName2,tableName,row);
         priceMap.set("2_" + row.childId + "_" + row.actuatorId + "_" + row.dataId + "_" + row.levelValue,price1);
     } else if (field == "productRef1Num") {
         columnName1 = "productRef1Num";
         columnName2 = "ref1String2";
         tableName = "initChildRef1Table_" + row.dataId;
-        var price1 = setRowTotalPrice(columnName1,columnName2,tableName,row);
         numberMap.set("3_" + row.childId + "_" + row.productRef1Id + "_" + row.dataId + "_" + row.levelValue,row.productRef1Num);
+        var price1 = setRowTotalPrice(columnName1,columnName2,tableName,row);
         priceMap.set("3_" + row.childId + "_" + row.productRef1Id + "_" + row.dataId + "_" + row.levelValue,price1);
     } else if (field == "productRef2Num") {
         columnName1 = "productRef2Num";
         columnName2 = "ref1String2";
         tableName = "initChildRef2Table_" + row.dataId;
-        var price1 = setRowTotalPrice(columnName1,columnName2,tableName,row);
         numberMap.set("4_" + row.childId + "_" + row.productRef2Id + "_" + row.dataId + "_" + row.levelValue,row.productRef2Num);
+        var price1 = setRowTotalPrice(columnName1,columnName2,tableName,row);
         priceMap.set("4_" + row.childId + "_" + row.productRef2Id + "_" + row.dataId + "_" + row.levelValue,price1);
     } else if (field == "pattachmentCount") {
         columnName1 = "pattachmentCount";
         columnName2 = "procurementPrice";
         tableName = "initChildPATable_" + row.dataId;
-        var price1 = setRowTotalPrice(columnName1,columnName2,tableName,row);
         numberMap.set("5_" + row.childId + "_" + row.pattachmentId + "_" + row.dataId + "_" + row.levelValue,row.pattachmentCount);
+        var price1 = setRowTotalPrice(columnName1,columnName2,tableName,row);
         priceMap.set("5_" + row.childId + "_" + row.pattachmentId + "_" + row.dataId + "_" + row.levelValue,price1);
     } else if (field == "pattachment1Count") {
         columnName1 = "pattachment1Count";
         columnName2 = "procurementPrice";
         tableName = "initChildPA1Table_" + row.dataId;
-        var price1 = setRowTotalPrice(columnName1,columnName2,tableName,row);
         numberMap.set("6_" + row.childId + "_" + row.pattachment1Id + "_" + row.dataId + "_" + row.levelValue,row.pattachment1Count);
+        var price1 = setRowTotalPrice(columnName1,columnName2,tableName,row);
         priceMap.set("6_" + row.childId + "_" + row.pattachment1Id + "_" + row.dataId + "_" + row.levelValue,price1);
     } else if (field == "pattachment2Count") {
         columnName1 = "pattachment2Count";
         columnName2 = "procurementPrice";
         tableName = "initChildPA2Table_" + row.dataId;
-        var price1 = setRowTotalPrice(columnName1,columnName2,tableName,row);
         numberMap.set("7_" + row.childId + "_" + row.pattachment2Id + "_" + row.dataId + "_" + row.levelValue,row.pattachment2Count);
+        var price1 = setRowTotalPrice(columnName1,columnName2,tableName,row);
+
         priceMap.set("7_" + row.childId + "_" + row.pattachment2Id + "_" + row.dataId + "_" + row.levelValue,price1);
     } else if (field == "pattachment3Count") {
         columnName1 = "pattachment3Count";
         columnName2 = "procurementPrice";
         tableName = "initChildPA3Table_" + row.dataId;
-        var price1 = setRowTotalPrice(columnName1,columnName2,tableName,row);
         numberMap.set("8_" + row.childId + "_" + row.pattachment3Id + "_" + row.dataId + "_" + row.levelValue,row.pattachment3Count);
+        var price1 = setRowTotalPrice(columnName1,columnName2,tableName,row);
+
         priceMap.set("8_" + row.childId + "_" + row.pattachment3Id + "_" + row.dataId + "_" + row.levelValue,price1);
     } else if (field == "pattachment4Count") {
         columnName1 = "pattachment4Count";
         columnName2 = "procurementPrice";
         tableName = "initChildPA4Table_" + row.dataId;
-        var price1 = setRowTotalPrice(columnName1,columnName2,tableName,row);
         numberMap.set("9_" + row.childId + "_" + row.pattachment4Id + "_" + row.dataId + "_" + row.levelValue,row.pattachment4Count);
+        var price1 = setRowTotalPrice(columnName1,columnName2,tableName,row);
         priceMap.set("9_" + row.childId + "_" + row.pattachment4Id + "_" + row.dataId + "_" + row.levelValue,price1);
     }
-    console.log("no calculatePrice");
-    //calculatePrice();
+    //console.log("no calculatePrice");
+    calculatePrice();
 }
 
 function calculatePrice () {
@@ -302,7 +312,6 @@ function calculatePrice () {
         console.log("-----")
         price1 = FloatAdd(price1,value);
     });
-    console.log("--0001---" + price1);
     $("#price1").val(price1);
 }
 function FloatAdd(arg1,arg2){
@@ -321,27 +330,43 @@ function setRowTotalPrice(columnName1,columnName2,tableName,row) {
     var total = parseFloat(productNum * procurementPrice).toFixed(2);
     var rowId = parseInt(row["rowId"]);
 
-
+    var rowCheckStatus = row[0];
+    if (rowCheckStatus) {
+        //row.checked = false;
+        //console.log("check no... ...");
+    }
+    console.log("rowCheckStatus1=" + rowCheckStatus);
     var updateObj = {
         index: rowId,
         field: "totalPrice",
         value: total
     };
+    row["totalPrice"] = total;
+    //console.log("updateRow2=" + JSON.stringify(row));
+    //$("#" + tableName).bootstrapTable('updateRow', {index: rowId, row: row});
     $("#" + tableName).bootstrapTable("updateCell", updateObj);
+    row[columnName1] = productNum;
+//updateRow
 
-    var updateObj1 = {
+    /*var updateObj1 = {
         index: rowId,
         field: columnName1,
         value: productNum
     };
-    $("#" + tableName).bootstrapTable("updateCell", updateObj1);
+    console.log("updateCell num=" + JSON.stringify(updateObj1));
+    $("#" + tableName).bootstrapTable("updateCell", updateObj1);*/
+    if (rowCheckStatus) {
+        //row.checkbox = false;
+    }
     return total;
 }
 
 function showNum(type,row) {
+    console.log("showNum ... ... ");
     if (type == 1) {
         var num = numberMap.get(type + "_" + row.childId + "_"  + row.productId + "_" + row.dataId + "_" + row.levelValue);
         if (num != null) {
+            console.log("showNum1 num=" + num);
             row.productNum = num;
         }
     } else if (type == 2) {
@@ -445,9 +470,7 @@ initChildProductTable = function(index, row, $detail) {
                 if($.inArray("1_" + row.childId + "_" + row.productId + "_" + row.dataId + "_" + row.levelValue, overAllIds)!=-1){
                     showNum(1,row);
                     checkedValue = true;
-
                 } else {
-
 
                 }
                 return {
