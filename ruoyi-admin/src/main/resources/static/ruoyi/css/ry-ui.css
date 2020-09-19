@@ -606,10 +606,10 @@ label {
 .search-collapse,.select-table {
 	width: 100%;
 	background: #fff;
-	border-radius: 6px;
-	margin-top: 10px;
-	padding-top: 5px;
-	padding-bottom: 13px;
+	border-radius: 1px;
+	margin-top: 1px;
+	padding-top: 1px;
+	padding-bottom: 0px;
 	box-shadow: 1px 1px 3px rgba(0,0,0,.2);
 }
 
@@ -621,13 +621,13 @@ label {
 	color: #333;
 }
 
-@media ( max-width : 768px) {
+@media ( max-width : 778px) {
 	.search-collapse {
 		display: none;
 	}
 }
 
-@media ( min-width : 768px) {
+@media ( min-width : 778px) {
 	.select-list li {
 		float: left;
 	}
@@ -635,7 +635,7 @@ label {
 
 .select-list li {
 	color: #333;
-	margin: 5px 15px 5px 0px;
+	margin: 1px 1px 1px 0px;
 }
 
 .select-list li p{
