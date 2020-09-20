@@ -242,6 +242,7 @@ body.body-small .navbar-top-links li:last-child {
 
 .navbar-form-custom .form-group {
     margin-bottom: 0;
+    word-break: keep-all;
 }
 
 .nav.navbar-top-links a {
@@ -3436,7 +3437,7 @@ nav.page-tabs .page-tabs-content {
 
 .ibox-content.text-box {
     padding-bottom: 0px;
-    padding-top: 15px;
+    padding-top: 5px;
 }
 
 .border-left-right {
@@ -3630,7 +3631,7 @@ code {
 .ibox-content {
     background-color: #ffffff;
     color: inherit;
-    padding: 15px 20px 20px 20px;
+    padding: 2px 2px 2px 2px;
     border-color: #e7eaec;
     -webkit-border-image: none;
     -o-border-image: none;
@@ -3640,7 +3641,7 @@ code {
 }
 
 table.table-mail tr td {
-    padding: 12px;
+    padding: 3px;
 }
 
 .table-mail .check-mail {
@@ -4002,7 +4003,7 @@ a.close-canvas-menu:hover {
 }
 
 .m {
-    margin: 15px;
+    margin: 2px;
 }
 
 .m-md {
@@ -5032,6 +5033,7 @@ dd.project-people {
 
 .chat-message-form .form-group {
     margin-bottom: 0;
+    word-break: keep-all;
 }
 /* jsTree */
 .jstree-open>.jstree-anchor>.fa-folder:before {

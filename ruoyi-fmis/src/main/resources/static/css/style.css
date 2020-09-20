@@ -3436,7 +3436,7 @@ nav.page-tabs .page-tabs-content {
 
 .ibox-content.text-box {
     padding-bottom: 0px;
-    padding-top: 15px;
+    padding-top: 5px;
 }
 
 .border-left-right {
@@ -3630,7 +3630,7 @@ code {
 .ibox-content {
     background-color: #ffffff;
     color: inherit;
-    padding: 15px 20px 20px 20px;
+    padding: 1px 2px 2px 2px;
     border-color: #e7eaec;
     -webkit-border-image: none;
     -o-border-image: none;
@@ -4815,7 +4815,8 @@ a.compose-mail {
 }
 
 .mail-body .form-group {
-    margin-bottom: 5px;
+    margin-bottom: 2px;
+    word-break: keep-all;
 }
 
 .mail-text .note-editor .note-toolbar {
@@ -5032,6 +5033,7 @@ dd.project-people {
 
 .chat-message-form .form-group {
     margin-bottom: 0;
+    word-break: keep-all;
 }
 /* jsTree */
 .jstree-open>.jstree-anchor>.fa-folder:before {
