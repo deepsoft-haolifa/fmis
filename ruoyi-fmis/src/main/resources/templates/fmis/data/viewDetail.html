@@ -169,10 +169,11 @@
             <div class="col-sm-2">
                 <input name="string24" id="string24" class="form-control" type="text" th:field="*{string24}" readonly>
             </div>
-            <label class="col-sm-1 control-label">特殊要求：</label>
-            <div class="col-sm-2">
-                <input name="string25" id="string25" class="form-control" type="text" th:field="*{string25}" readonly>
+            <label class="col-sm-1 control-label">质保期：</label>
+            <div class="col-sm-2 form-inline">
+                <input name="string26" id="string26" style="width: 80px" class="form-control" type="text" th:field="*{string26}" readonly>月
             </div>
+
             <label class="col-sm-1 control-label">合计数量：</label>
             <div class="col-sm-2">
                 <input name="totalNum" id="totalNum" class="form-control" type="text" readonly>
@@ -188,9 +189,13 @@
             <div class="col-sm-2">
                 <input name="grossPrice" id="grossPrice" class="form-control" type="text"  readonly>
             </div>
-            <label class="col-sm-1 control-label">质保期：</label>
-            <div class="col-sm-2 form-inline">
-                <input name="string26" id="string26" style="width: 80px" class="form-control" type="text" th:field="*{string26}" readonly>月
+            <label class="col-sm-1 control-label">毛利率：</label>
+            <div class="col-sm-2">
+                <input name="price3" id="price3" class="form-control" type="text"  readonly>
+            </div>
+            <label class="col-sm-1 control-label">特殊要求：</label>
+            <div class="col-sm-2">
+                <input name="string25" id="string25" class="form-control" type="text" th:field="*{string25}" readonly>
             </div>
         </div>
         <input type="hidden" id="productOperationType" name="productOperationType" value="0">
@@ -648,6 +653,11 @@
 
         var grossPrice = (parseFloat(productTotalPrice) - parseFloat(allTotalCost) - parseFloat(specialExpenses)).toFixed(0);
         $("#grossPrice").val(grossPrice);
+        $("#price3").val(parseFloat(grossPrice / totalPrice).toFixed(3));
+        if ($.common.isEmpty($("#price3").val()) || $.common.isEmpty(grossPrice)
+            || $.common.isEmpty(totalPrice) || "NaN" == $("#price3").val()) {
+            $("#price3").val(0);
+        }
     }
     function calculatePrice (row) {
         var productNum = row["productNum"];

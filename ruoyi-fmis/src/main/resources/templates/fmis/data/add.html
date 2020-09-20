@@ -202,8 +202,12 @@
             <div class="col-sm-2">
                 <input name="grossPrice" id="grossPrice" class="form-control" type="text"  readonly>
             </div>
+            <label class="col-sm-1 control-label">毛利率：</label>
+            <div class="col-sm-2">
+                <input name="price3" id="price3" class="form-control" type="text"  readonly>
+            </div>
             <label class="col-sm-1 control-label">特殊要求：</label>
-            <div class="col-sm-6">
+            <div class="col-sm-4">
                 <input name="string25" id="string25" class="form-control" type="text" >
             </div>
         </div>
@@ -847,6 +851,12 @@
 
             var grossPrice = (parseFloat(productTotalPrice) - parseFloat(allTotalCost) - parseFloat(specialExpenses)).toFixed(0);
             $("#grossPrice").val(grossPrice);
+            //毛利率
+            $("#price3").val(parseFloat(grossPrice / totalPrice).toFixed(3));//NaN
+            if ($.common.isEmpty($("#price3").val()) || $.common.isEmpty(grossPrice)
+                || $.common.isEmpty(totalPrice) || "NaN" == $("#price3").val()) {
+                $("#price3").val(0);
+            }
         }
 
         function calculatePrice(row) {
