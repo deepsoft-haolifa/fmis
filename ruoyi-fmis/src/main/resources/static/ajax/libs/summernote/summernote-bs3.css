@@ -3091,7 +3091,7 @@ fieldset[disabled] .note-editor .btn-link:focus {
   padding: 1px 5px;
 }
 .note-editor .btn-group-sm > .btn {
-  padding: 5px 10px;
+  padding: 3px 5px;
   font-size: 12px;
   line-height: 1.5;
   border-radius: 3px;

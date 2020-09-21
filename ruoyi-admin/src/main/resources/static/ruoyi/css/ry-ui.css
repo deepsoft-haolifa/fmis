@@ -635,7 +635,7 @@ label {
 
 .select-list li {
 	color: #333;
-	margin: 1px 1px 1px 0px;
+	margin: 1px -5px 1px -10px;
 }
 
 .select-list li p{
@@ -650,9 +650,9 @@ label {
 	border-radius: 4px;
 	background: transparent;
 	outline: none;
-	height: 30px;
-	width: 150px;
-	padding-left: 5px;
+	height: 25px;
+	width: 120px;
+	padding-left: 2px;
 }
 
 .select-list li .submit-btn {
@@ -669,8 +669,8 @@ label {
 	border-radius: 4px;
 	background: transparent;
 	outline: none;
-	height: 30px;
-    width: 150px;
+	height: 25px;
+    width: 120px;
 }
 
 .bootstrap-select.form-control .btn-default {

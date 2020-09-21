@@ -56,24 +56,17 @@
                 </div>
 
 
-                <label class="col-sm-1 control-label">订货产品：</label>
+               <!-- <label class="col-sm-1 control-label">订货产品：</label>
                 <div class="col-sm-2">
                     <input name="string7" class="form-control" type="text">
-                </div>
+                </div>-->
 
-                <label class="col-sm-1 control-label">生产单要求交期：</label>
+                <label class="col-sm-1 control-label">销售合同交付日期：</label>
                 <div class="col-sm-2">
                     <div class="input-group date">
                         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                         <input name="datetime2" class="form-control" placeholder="yyyy-MM-dd" type="text">
                     </div>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="col-sm-1 control-label">回传：</label>
-                <div class="col-sm-2">
-                    <input name="string8" class="form-control" type="text">
                 </div>
                 <label class="col-sm-1 control-label">供应商发货日期：</label>
                 <div class="col-sm-2">
@@ -82,6 +75,14 @@
                         <input name="datetime3" class="form-control" placeholder="yyyy-MM-dd" type="text">
                     </div>
                 </div>
+            </div>
+
+            <div class="form-group">
+                <!--<label class="col-sm-1 control-label">回传：</label>
+                <div class="col-sm-2">
+                    <input name="string8" class="form-control" type="text">
+                </div>-->
+
                 <label class="col-sm-1 control-label">运输方式：</label>
                 <div class="col-sm-2">
                     <input name="string9" class="form-control" type="text">
@@ -93,16 +94,13 @@
                         <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                     </select>
                 </div>
-            </div>
-
-            <div class="form-group">
-
 
                 <label class="col-sm-1 control-label">合同金额：</label>
                 <div class="col-sm-2">
                     <input name="price1" id="price1" readonly class="form-control" type="text" onkeyup="AmountKeyUp(this)">
                 </div>
             </div>
+
         </form>
 
         <div class="col-sm-12 select-table table-striped">

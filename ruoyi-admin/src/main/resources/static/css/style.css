@@ -4215,7 +4215,7 @@ a.close-canvas-menu:hover {
 }
 
 .m-b {
-    margin-bottom: 15px;
+    margin-bottom: 5px;
 }
 
 .m-b-md {
@@ -4816,7 +4816,7 @@ a.compose-mail {
 }
 
 .mail-body .form-group {
-    margin-bottom: 5px;
+    margin-bottom: 2px;
 }
 
 .mail-text .note-editor .note-toolbar {
