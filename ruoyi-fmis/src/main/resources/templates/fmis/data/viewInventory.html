@@ -12,6 +12,144 @@
 
             <input id="string1" name="string1" class="form-control" th:field="*{string1}" type="hidden">
 
+
+            <div class="form-group " >
+                <label class="col-sm-1 control-label">编号：</label>
+                <div class="col-sm-2">
+                    <input name="string26" class="form-control" type="text">
+                </div>
+                <label class="col-sm-1 control-label">合同单号：</label>
+                <div class="col-sm-2">
+                    <input name="string27" class="form-control" type="text">
+                </div>
+
+                <label class="col-sm-1 control-label">客户代号：</label>
+                <div class="col-sm-2">
+                    <input name="string4" class="form-control" type="text">
+                </div>
+
+
+            </div>
+
+            <div class="form-group " >
+
+
+                <label class="col-sm-1 control-label">发货日期：</label>
+                <div class="col-sm-2">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="datetime1" id="datetime1" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+
+                <label class="col-sm-1 control-label">发货地：</label>
+                <div class="col-sm-2">
+                    <input name="string7" class="form-control" type="text">
+                </div>
+
+                <label class="col-sm-1 control-label">收货人：</label>
+                <div class="col-sm-2">
+                    <input name="string8" class="form-control" type="text">
+                </div>
+            </div>
+
+            <div class="form-group " >
+
+                <label class="col-sm-1 control-label">电话：</label>
+                <div class="col-sm-2">
+                    <input name="string9" class="form-control" type="text">
+                </div>
+
+                <label class="col-sm-1 control-label">手机：</label>
+                <div class="col-sm-2">
+                    <input name="string10" class="form-control" type="text">
+                </div>
+
+                <label class="col-sm-1 control-label">运费付费方式：</label>
+                <div class="col-sm-2">
+                    <input name="string12" class="form-control" type="text">
+                </div>
+            </div>
+
+
+
+            <div class="form-group " >
+                <label class="col-sm-1 control-label">运输方式：</label>
+                <div class="col-sm-2">
+                    <input name="string14" class="form-control" type="text">
+                </div>
+                <label class="col-sm-1 control-label">件数：</label>
+                <div class="col-sm-2">
+                    <input name="string15" class="form-control" type="text">
+                </div>
+
+                <label class="col-sm-1 control-label">毛重：</label>
+                <div class="col-sm-2">
+                    <input name="string16" class="form-control" type="text">
+                </div>
+            </div>
+
+            <div class="form-group " >
+                <label class="col-sm-1 control-label">净重：</label>
+                <div class="col-sm-2">
+                    <input name="string17" class="form-control" type="text">
+                </div>
+                <label class="col-sm-1 control-label">承运单位：</label>
+                <div class="col-sm-2">
+                    <input name="string18" class="form-control" type="text">
+                </div>
+
+                <label class="col-sm-1 control-label">收费标准：</label>
+                <div class="col-sm-2">
+                    <input name="string19" class="form-control" type="text">
+                </div>
+            </div>
+
+            <div class="form-group " >
+                <label class="col-sm-1 control-label">其他费用：</label>
+                <div class="col-sm-2">
+                    <input name="string20" class="form-control" type="text">
+                </div>
+                <label class="col-sm-1 control-label">计划费用：</label>
+                <div class="col-sm-2">
+                    <input name="string21" class="form-control" type="text">
+                </div>
+
+                <label class="col-sm-1 control-label">运单号：</label>
+                <div class="col-sm-2">
+                    <input name="string22" class="form-control" type="text">
+                </div>
+            </div>
+
+            <div class="form-group " >
+                <label class="col-sm-1 control-label">实际运费：</label>
+                <div class="col-sm-2">
+                    <input name="string23" class="form-control" type="text">
+                </div>
+                <label class="col-sm-1 control-label">查货电话：</label>
+                <div class="col-sm-2">
+                    <input name="string24" class="form-control" type="text">
+                </div>
+
+                <label class="col-sm-1 control-label">备注：</label>
+                <div class="col-sm-2">
+                    <input name="string25" class="form-control" type="text">
+                </div>
+            </div>
+
+            <div class="form-group " >
+                <label class="col-sm-1 control-label">特殊要求：</label>
+                <div class="col-sm-2">
+                    <input name="string11" class="form-control" type="text">
+                </div>
+
+
+                <label class="col-sm-1 control-label">是否送货：</label>
+                <div class="col-sm-2">
+                    <input name="string13" class="form-control" type="text">
+                </div>
+            </div>
+
         </form>
         <div class="form-horizontal" id="productDiv">
             <div class="row">
@@ -116,6 +254,10 @@
                 var dataObj = $('#form-data-edit').serializeArray();
                 var productArray = new Array();
                 var data = $.btTable.bootstrapTable('getData');
+                if (data.length == 0) {
+                    $.modal.alertWarning("无发货数据");
+                    return;
+                }
                 for (var i = 0; i < data.length; i++) {
                     var rowData = data[i];
                     var num = rowData["string13"];
@@ -133,6 +275,9 @@
                         productArray.push(productObj);
                     }
                 }
+
+
+
                 //console.log("productArray=" + JSON.stringify(productArray));
                 dataObj.push({"name": "productParmters", "value": JSON.stringify(productArray)});
                 $.operate.save(ctx + "fmis/data/saveInventory", dataObj);

@@ -10,6 +10,147 @@
             <input name="dataId" th:field="*{dataId}" type="hidden">
             <input type="hidden" name="bizId" value="newdelivery"/>
 
+
+
+            <div class="form-group " >
+                <label class="col-sm-1 control-label">编号：</label>
+                <div class="col-sm-2">
+                    <input name="string26" class="form-control" th:field="*{string26}" readonly type="text">
+                </div>
+                <label class="col-sm-1 control-label">合同单号：</label>
+                <div class="col-sm-2">
+                    <input name="string27" class="form-control" th:field="*{string27}" readonly type="text">
+                </div>
+
+                <label class="col-sm-1 control-label">客户代号：</label>
+                <div class="col-sm-2">
+                    <input name="string4" class="form-control"  th:field="*{string4}" readonly type="text">
+                </div>
+
+
+            </div>
+
+            <div class="form-group " >
+
+
+                <label class="col-sm-1 control-label">发货日期：</label>
+                <div class="col-sm-2">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="datetime1" id="datetime1" class="form-control" th:value="${#dates.format(bizProcessData.datetime1,'yyyy-MM-dd')}"  readonly placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+
+                <label class="col-sm-1 control-label">发货地：</label>
+                <div class="col-sm-2">
+                    <input name="string7" class="form-control" th:field="*{string7}" readonly type="text">
+                </div>
+
+                <label class="col-sm-1 control-label">收货人：</label>
+                <div class="col-sm-2">
+                    <input name="string8" class="form-control" th:field="*{string8}" readonly  type="text">
+                </div>
+            </div>
+
+            <div class="form-group " >
+
+                <label class="col-sm-1 control-label">电话：</label>
+                <div class="col-sm-2">
+                    <input name="string9" class="form-control" th:field="*{string9}" readonly type="text">
+                </div>
+
+                <label class="col-sm-1 control-label">手机：</label>
+                <div class="col-sm-2">
+                    <input name="string10" class="form-control" th:field="*{string10}" readonly type="text">
+                </div>
+
+                <label class="col-sm-1 control-label">运费付费方式：</label>
+                <div class="col-sm-2">
+                    <input name="string12" class="form-control" th:field="*{string12}" readonly type="text">
+                </div>
+            </div>
+
+
+
+            <div class="form-group " >
+                <label class="col-sm-1 control-label">运输方式：</label>
+                <div class="col-sm-2">
+                    <input name="string14" class="form-control" th:field="*{string14}" readonly type="text">
+                </div>
+                <label class="col-sm-1 control-label">件数：</label>
+                <div class="col-sm-2">
+                    <input name="string15" class="form-control" th:field="*{string15}" readonly type="text">
+                </div>
+
+                <label class="col-sm-1 control-label">毛重：</label>
+                <div class="col-sm-2">
+                    <input name="string16" class="form-control" th:field="*{string16}" readonly type="text">
+                </div>
+            </div>
+
+            <div class="form-group " >
+                <label class="col-sm-1 control-label">净重：</label>
+                <div class="col-sm-2">
+                    <input name="string17" class="form-control" th:field="*{string17}" readonly type="text">
+                </div>
+                <label class="col-sm-1 control-label">承运单位：</label>
+                <div class="col-sm-2">
+                    <input name="string18" class="form-control" th:field="*{string18}" readonly type="text">
+                </div>
+
+                <label class="col-sm-1 control-label">收费标准：</label>
+                <div class="col-sm-2">
+                    <input name="string19" class="form-control" th:field="*{string19}" readonly type="text">
+                </div>
+            </div>
+
+            <div class="form-group " >
+                <label class="col-sm-1 control-label">其他费用：</label>
+                <div class="col-sm-2">
+                    <input name="string20" class="form-control" th:field="*{string20}" readonly type="text">
+                </div>
+                <label class="col-sm-1 control-label">计划费用：</label>
+                <div class="col-sm-2">
+                    <input name="string21" class="form-control" th:field="*{string21}" readonly type="text">
+                </div>
+
+                <label class="col-sm-1 control-label">运单号：</label>
+                <div class="col-sm-2">
+                    <input name="string22" class="form-control" th:field="*{string22}" readonly type="text">
+                </div>
+            </div>
+
+            <div class="form-group " >
+                <label class="col-sm-1 control-label">实际运费：</label>
+                <div class="col-sm-2">
+                    <input name="string23" class="form-control" th:field="*{string23}" readonly type="text">
+                </div>
+                <label class="col-sm-1 control-label">查货电话：</label>
+                <div class="col-sm-2">
+                    <input name="string24" class="form-control" th:field="*{string24}" readonly type="text">
+                </div>
+
+                <label class="col-sm-1 control-label">备注：</label>
+                <div class="col-sm-2">
+                    <input name="string25" class="form-control" th:field="*{string25}" readonly type="text">
+                </div>
+            </div>
+
+            <div class="form-group " >
+                <label class="col-sm-1 control-label">特殊要求：</label>
+                <div class="col-sm-2">
+                    <input name="string11" class="form-control" th:field="*{string11}" readonly type="text">
+                </div>
+
+
+                <label class="col-sm-1 control-label">是否送货：</label>
+                <div class="col-sm-2">
+                    <input name="string13" class="form-control" th:field="*{string13}" readonly type="text">
+                </div>
+            </div>
+
+
+
             <div class="form-group has-success">
                 <label class="col-sm-3 control-label">审批意见：</label>
                 <div class="col-sm-8">

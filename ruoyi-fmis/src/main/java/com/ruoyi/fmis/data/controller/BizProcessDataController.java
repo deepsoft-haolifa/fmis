@@ -611,20 +611,23 @@ public class BizProcessDataController extends BaseController {
         String productArrayStr = bizProcessData.getProductParmters();
         String string1 = bizProcessData.getString1();
         String string2 = DateUtils.dateTimeNow();//发货通知单号
-        BizProcessData newData = new BizProcessData();
-        newData.setString1(string1);
-        newData.setString2(string2);
-        newData.setBizId(BizConstants.BIZ_newdelivery);
-        newData.setNormalFlag("4");
-        newData.setFlowStatus("1");
-        int insertReturn = bizProcessDataService.insertBizProcessData(newData);
+        //BizProcessData newData = new BizProcessData();
+        bizProcessData.setString1(string1);
+        bizProcessData.setString2(string2);
+        bizProcessData.setBizId(BizConstants.BIZ_newdelivery);
+        bizProcessData.setNormalFlag("4");
+        bizProcessData.setFlowStatus("1");
+
+
+
+        int insertReturn = bizProcessDataService.insertBizProcessData(bizProcessData);
         if (StringUtils.isNotEmpty(productArrayStr)) {
             JSONArray productArray = JSONArray.parseArray(productArrayStr);
             for (int i = 0; i < productArray.size(); i++) {
                 JSONObject json = productArray.getJSONObject(i);
                 BizProcessChild bizProcessChild = JSONObject.parseObject(json.toJSONString(), BizProcessChild.class);
                 if (StringUtils.isNotEmpty(bizProcessChild.getString2())) {
-                    bizProcessChild.setDataId(newData.getDataId());
+                    bizProcessChild.setDataId(bizProcessData.getDataId());
                     bizProcessChild.setChildId(null);
                     bizProcessChild.setString14("0");
                     bizProcessChildService.insertBizProcessChild(bizProcessChild);
