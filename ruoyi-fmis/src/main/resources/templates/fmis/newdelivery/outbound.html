@@ -70,6 +70,7 @@
                 {field : 'rowId',title : '序号',visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
 
                 {field : 'childId',title : 'childId',visible: false},
+                {field : 'dataId',title : 'dataId',visible: false},
                 {field : 'string3',title : '报检单号',editable: false},
                 {field : 'string4',title : '销售合同号'},
                 {field : 'string5',title : '采购合同号',editable: false},
@@ -105,7 +106,7 @@
                 {field : 'string19',title : '操作',
                     formatter: function(value, row, index) {
                         var actions = [];
-
+                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="editDelivery(\'' + row.dataId + '\')"><i class="fa fa-save"></i> 修改</a>');
                         if (value  == 1) {
                             actions.push('已出库');
                         } else {
@@ -124,6 +125,12 @@
         if (isNaN(value)) {
             return "必须是数字！";
         }
+    }
+
+
+    function editDelivery(dataId) {
+        var url = ctx + "fmis/newdelivery/editdelivery?dataId=" + dataId;
+        $.modal.openFull("修改", url);
     }
 
     function saveOutbound(childId) {

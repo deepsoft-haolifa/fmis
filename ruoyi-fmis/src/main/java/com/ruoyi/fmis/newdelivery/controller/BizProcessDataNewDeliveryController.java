@@ -280,41 +280,24 @@ public class BizProcessDataNewDeliveryController extends BaseController {
         mmap.put("bizProcessData", bizProcessData);
         return prefix + "/edit";
     }
+    @GetMapping("/editdelivery")
+    public String editdelivery(ModelMap mmap) {
+        String dataId = getRequest().getParameter("dataId");
+        BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataById(Long.parseLong(dataId));
+        mmap.put("bizProcessData", bizProcessData);
+        return prefix + "/editdelivery";
+    }
+
 
     /**
      * 修改保存发货管理
      */
-    @RequiresPermissions("fmis:newdelivery:edit")
     @Log(title = "发货管理", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
     public AjaxResult editSave(BizProcessData bizProcessData) {
-        String productArrayStr = bizProcessData.getProductParmters();
         int updateReturn = bizProcessDataService.updateBizProcessData(bizProcessData);
-
         Long dataId = bizProcessData.getDataId();
-
-        BizProcessChild removeBizProcuessChild = new BizProcessChild();
-        removeBizProcuessChild.setDataId(dataId);
-        List<BizProcessChild> removeBizProcessChildList = bizProcessChildService.selectBizProcessChildList(removeBizProcuessChild);
-        if (!CollectionUtils.isEmpty(removeBizProcessChildList)) {
-            for (BizProcessChild bizProcessChild : removeBizProcessChildList) {
-                bizProcessChildService.deleteBizProcessChildById(bizProcessChild.getChildId());
-            }
-        }
-
-        if (StringUtils.isNotEmpty(productArrayStr)) {
-            JSONArray productArray = JSONArray.parseArray(productArrayStr);
-            for (int i = 0; i < productArray.size(); i++) {
-                JSONObject json = productArray.getJSONObject(i);
-                BizProcessChild bizProcessChild = JSONObject.parseObject(json.toJSONString(), BizProcessChild.class);
-                if (StringUtils.isNotEmpty(bizProcessChild.getString1())) {
-                    bizProcessChild.setDataId(dataId);
-                    bizProcessChildService.insertBizProcessChild(bizProcessChild);
-                }
-
-            }
-        }
         return toAjax(updateReturn);
     }
 

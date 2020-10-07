@@ -107,6 +107,7 @@
         c.string18, c.string19, c.string20, c.datetime1, c.datetime2, c.datetime3, c.datetime4,
         c.datetime5, c.status, c.del_flag, c.create_by, c.create_time, c.update_by, c.update_time
         from biz_process_child c
+
     </sql>
 
     <select id="selectBizProcessChildInventoryList" parameterType="BizProcessChild" resultMap="BizProcessChildResult">
