@@ -778,7 +778,7 @@ join biz_process_data pd on pc.data_id=pd.data_id
     ,c.string7 as string7
     from biz_data_stestn sn
     join biz_data_steststay ss on ss.stay_id=sn.string6
-    join biz_process_child c on c.string12=ss.stay_id
+    left join biz_process_child c on c.string12=ss.stay_id
     left join sys_user u on sn.create_by=u.user_id
     left join biz_process_data d on d.biz_id='procurement' and d.data_id=ss.string4
     where 1=1

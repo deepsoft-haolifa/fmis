@@ -18,7 +18,7 @@
             <input name="dataId" id="dataId" th:field="*{dataId}" type="hidden">
             <input type="hidden" name="bizEditFlag" id="bizEditFlag" value="1"/>
             <input type="hidden" name="bizId" value="procurement"/>
-            <input type="hidden" name="supplierId" id="supplierId" th:field="*{string1}"/>
+            <input type="hidden" name="supplierId" id="supplierId" />
 
             <div class="form-group">
                 <label class="col-sm-1 control-label">结算单位：</label>
@@ -100,7 +100,8 @@
                 </div>
                 <label class="col-sm-1 control-label">合同金额：</label>
                 <div class="col-sm-2">
-                    <input name="price1" id="price1" readonly class="form-control" type="text" onkeyup="AmountKeyUp(this)">
+                    <input name="price1" id="price1" readonly class="form-control" th:field="*{price1}" type="text" onkeyup="AmountKeyUp(this)">
+                    <input name="price1Copy" id="price1Copy" readonly class="form-control" th:field="*{price1}" type="hidden" >
                 </div>
             </div>
 

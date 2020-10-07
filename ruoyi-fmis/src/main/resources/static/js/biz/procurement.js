@@ -131,11 +131,16 @@ function initExpandRow() {
                 $("#price1").val(totalPrice);
                 //增加的时候 把供应商
                 $("#string6").find("option[value='" + paramterSupplierId + "']").attr("selected",true);
+            } else {
+
             }
         }
-        //calculatePrice();
-
+        if (bizEditFlag == 1) {
+            $("#price1").val($("#price1Copy").val());
+        }
     }, 2000);
+
+
 }
 
 function isDouble (v) {
@@ -309,7 +314,6 @@ function onEditableSave (field, row, oldValue, $el) {
 function calculatePrice () {
     var price1 = 0;
     priceMap.forEach(function (value, key, map) {
-        console.log("-----")
         price1 = FloatAdd(price1,value);
     });
     $("#price1").val(price1);
