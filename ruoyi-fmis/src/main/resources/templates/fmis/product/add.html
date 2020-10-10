@@ -248,11 +248,12 @@
         var specificationArrayDict = null;
         /**
          * 生成产品型号ID
+         * 系列(D或者字典)+驱动形式+连接方式+结构形式+密封材质+阀芯材质-公称压力+阀体材质
          * @param obj
          */
         function generateProductModel () {
             var modelId = "";
-            var string1 = $("#string1").val();
+            var string1 = $("#string1").find("option:selected").text();
             if ($.common.startWith(string1,"D")) {
                 string1 = "D";
             }

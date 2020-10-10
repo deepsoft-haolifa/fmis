@@ -491,9 +491,10 @@ initChildProductTable = function(index, row, $detail) {
             {field : 'levelValue',title : 'levelValue',visible: false},
             {field : 'childId',title : 'childId',visible: false},
 
-            {field : 'contractNo',title : 'contractNo',visible: false},
+            {field : 'contractNo',title : '合同编号',visible: true},
 
             {field : 'procurementId',title : 'childId',visible: false},
+
             {field : 'productName',title : '产品名称',editable: false},
             {field : 'model',title : '型号',editable: false},
             {field : 'productNum',title : '数量',editable: {type: 'text',validate: function(v,r){ return numberValidate(v)}}},
@@ -523,7 +524,8 @@ initChildProductTable = function(index, row, $detail) {
             {field : 'driveForm',title : '驱动形式',editable: false},
             {field : 'connectionType',title : '连接方式',editable: false},
 
-            {field : 'goodsTime',title : '回货时间',editable: false}
+            {field : 'goodsTime',title : '回货时间',editable: false},
+            {field : 'contractSpecial',title : '特殊要求',editable: false}
 
 
         ]
@@ -726,9 +728,10 @@ initChildActuatorTable = function(index, row, $detail) {
             {field : 'actuatorId',title : 'actuatorId',visible: false},
             {field : 'procurementId',title : 'childId',visible: false},
             {field : 'dataId',title : 'dataId',visible: false},
-            {field : 'contractNo',title : 'contractNo',visible: false},
+
             {field : 'levelValue',title : 'levelValue',visible: false},
             {field : 'childId',title : 'childId',visible: false},
+            {field : 'contractNo',title : '合同编号',visible: true},
             {field : 'actuatorName',title : '执行器名称',editable: false},
 
 
@@ -805,7 +808,8 @@ initChildActuatorTable = function(index, row, $detail) {
             {
                 field : 'actuatorExplosionLevel',
                 title : '防爆等级'
-            }
+            },
+            {field : 'contractSpecial',title : '特殊要求',editable: false}
         ]
     });
     $(cur_table).on('uncheck.bs.table check.bs.table check-all.bs.table uncheck-all.bs.table',function(e,rows){
@@ -858,7 +862,7 @@ initChildRef1Table = function(index, row, $detail) {
             {field : 'levelValue',title : 'levelValue',visible: false},
             {field : 'procurementId',title : 'childId',visible: false},
             {field : 'childId',title : 'childId',visible: false},
-            {field : 'contractNo',title : 'contractNo',visible: false},
+            {field : 'contractNo',title : '合同编号',visible: true},
             {field : 'ref1Name',title : '法兰名称',editable: false},
 
             {field : 'productRef1Num',title : '法兰数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
@@ -883,7 +887,8 @@ initChildRef1Table = function(index, row, $detail) {
             {field : 'model',title : '型号'},
             {field : 'ref1Specifications',title : '规格'},
             {field : 'ref1ValvebodyMaterial',title : '材质'},
-            {field : 'ref1MaterialRequire',title : '材质要求'}
+            {field : 'ref1MaterialRequire',title : '材质要求'},
+            {field : 'contractSpecial',title : '特殊要求',editable: false}
         ]
     });
     $(cur_table).on('uncheck.bs.table check.bs.table check-all.bs.table uncheck-all.bs.table',function(e,rows){
@@ -938,7 +943,7 @@ initChildRef2Table = function(index, row, $detail) {
             {field : 'dataId',title : 'dataId',visible: false},
             {field : 'levelValue',title : 'levelValue',visible: false},
             {field : 'childId',title : 'childId',visible: false},
-            {field : 'contractNo',title : 'contractNo',visible: false},
+            {field : 'contractNo',title : '合同编号',visible: true},
             {field : 'ref2Name',title : '螺栓名称',editable: {type: 'text',emptytext: '空',disabled: true}},
 
             {field : 'productRef2Num',title : '螺栓数量',editable: {type: 'text',emptytext: '0',validate: function(v){ return numberValidate(v)}}},
@@ -963,7 +968,8 @@ initChildRef2Table = function(index, row, $detail) {
             {field : 'model',title : '型号'},
             {field : 'ref1Specifications',title : '规格'},
             {field : 'ref1ValvebodyMaterial',title : '材质'},
-            {field : 'ref1MaterialRequire',title : '材质要求'}
+            {field : 'ref1MaterialRequire',title : '材质要求'},
+            {field : 'contractSpecial',title : '特殊要求',editable: false}
         ]
     });
     $(cur_table).on('uncheck.bs.table check.bs.table check-all.bs.table uncheck-all.bs.table',function(e,rows){
@@ -1015,7 +1021,7 @@ initChildPATable = function(index, row, $detail) {
             {field : 'levelValue',title : 'levelValue',visible: false},
             {field : 'procurementId',title : 'childId',visible: false},
             {field : 'childId',title : 'childId',visible: false},
-            {field : 'contractNo',title : 'contractNo',visible: false},
+            {field : 'contractNo',title : '合同编号',visible: true},
             {field : 'pattachmentCount',title : '定位器数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
             {field : 'procurementPrice',title : '采购价',editable: false},
             {field : 'totalPrice',title : '分项金额',editable: false,formatter: function(value, row, index) {
@@ -1102,7 +1108,8 @@ initChildPATable = function(index, row, $detail) {
             {
                 field : 'goodsCategory',
                 title : '商品分类'
-            }
+            },
+            {field : 'contractSpecial',title : '特殊要求',editable: false}
         ]
     });
     $(cur_table).on('uncheck.bs.table check.bs.table check-all.bs.table uncheck-all.bs.table',function(e,rows){
@@ -1154,7 +1161,7 @@ initChildPA1Table = function(index, row, $detail) {
             {field : 'levelValue',title : 'levelValue',visible: false},
             {field : 'procurementId',title : 'childId',visible: false},
             {field : 'childId',title : 'childId',visible: false},
-            {field : 'contractNo',title : 'contractNo',visible: false},
+            {field : 'contractNo',title : '合同编号',visible: true},
             {field : 'pattachment1Count',title : '电磁阀数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
             {field : 'procurementPrice',title : '采购价',editable: false},
             {field : 'totalPrice',title : '分项金额',editable: false,formatter: function(value, row, index) {
@@ -1241,7 +1248,8 @@ initChildPA1Table = function(index, row, $detail) {
             {
                 field : 'goodsCategory',
                 title : '商品分类'
-            }
+            },
+            {field : 'contractSpecial',title : '特殊要求',editable: false}
         ]
     });
     $(cur_table).on('uncheck.bs.table check.bs.table check-all.bs.table uncheck-all.bs.table',function(e,rows){
@@ -1294,7 +1302,7 @@ initChildPA2Table = function(index, row, $detail) {
             {field : 'levelValue',title : 'levelValue',visible: false},
             {field : 'procurementId',title : 'childId',visible: false},
             {field : 'childId',title : 'childId',visible: false},
-            {field : 'contractNo',title : 'contractNo',visible: false},
+            {field : 'contractNo',title : '合同编号',visible: true},
             {field : 'pattachment2Count',title : '回信器数数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
             {field : 'procurementPrice',title : '采购价',editable: false},
             {field : 'totalPrice',title : '分项金额',editable: false,formatter: function(value, row, index) {
@@ -1381,7 +1389,8 @@ initChildPA2Table = function(index, row, $detail) {
             {
                 field : 'goodsCategory',
                 title : '商品分类'
-            }
+            },
+            {field : 'contractSpecial',title : '特殊要求',editable: false}
         ]
     });
     $(cur_table).on('uncheck.bs.table check.bs.table check-all.bs.table uncheck-all.bs.table',function(e,rows){
@@ -1433,7 +1442,7 @@ initChildPA3Table = function(index, row, $detail) {
             {field : 'procurementId',title : 'childId',visible: false},
             {field : 'levelValue',title : 'levelValue',visible: false},
             {field : 'childId',title : 'childId',visible: false},
-            {field : 'contractNo',title : 'contractNo',visible: false},
+            {field : 'contractNo',title : '合同编号',visible: true},
             {field : 'pattachment3Count',title : '气源三连件数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
             {field : 'procurementPrice',title : '采购价',editable: false},
             {field : 'totalPrice',title : '分项金额',editable: false,formatter: function(value, row, index) {
@@ -1520,7 +1529,8 @@ initChildPA3Table = function(index, row, $detail) {
             {
                 field : 'goodsCategory',
                 title : '商品分类'
-            }
+            },
+            {field : 'contractSpecial',title : '特殊要求',editable: false}
         ]
     });
     $(cur_table).on('uncheck.bs.table check.bs.table check-all.bs.table uncheck-all.bs.table',function(e,rows){
@@ -1573,7 +1583,7 @@ initChildPA4Table = function(index, row, $detail) {
             {field : 'levelValue',title : 'levelValue',visible: false},
             {field : 'procurementId',title : 'childId',visible: false},
             {field : 'childId',title : 'childId',visible: false},
-            {field : 'contractNo',title : 'contractNo',visible: false},
+            {field : 'contractNo',title : '合同编号',visible: true},
             {field : 'pattachment4Count',title : '可离合减速器数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
             {field : 'procurementPrice',title : '采购价',editable: false},
             {field : 'totalPrice',title : '分项金额',editable: false,formatter: function(value, row, index) {
@@ -1660,7 +1670,8 @@ initChildPA4Table = function(index, row, $detail) {
             {
                 field : 'goodsCategory',
                 title : '商品分类'
-            }
+            },
+            {field : 'contractSpecial',title : '特殊要求',editable: false}
         ]
     });
     $(cur_table).on('uncheck.bs.table check.bs.table check-all.bs.table uncheck-all.bs.table',function(e,rows){

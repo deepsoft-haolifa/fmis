@@ -26,6 +26,9 @@ public class BizProcessChild extends BaseEntity {
     @Setter
     private String procurementId;
 
+    @Getter
+    @Setter
+    private String contractSpecial;
 
 
     @Getter

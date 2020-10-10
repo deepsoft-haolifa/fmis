@@ -237,7 +237,7 @@
           s.name as supplier,p.procurement_price as productProcurementPrice,pd.string6 as goodsTime,
           ds.product_status as productStatus,ds.actuator_status as actuatorStatus,ds.ref1_status as ref1Status,ds.ref2_status as ref2Status,ds.p_status as pStatus,
           ds.p1_status as p1Status,ds.p2_status as p2Status,ds.p3_status as p3Status,ds.p4_status as p4Status,pc.data_id as dataId,pc.child_id as childId,ds.data_status as dataStatus,
-          ds.string4 as procurementId,p.string2 as levelValue,s.suppliers_id as supplierId,pd.string1 as contractNo
+          ds.string4 as procurementId,p.string2 as levelValue,s.suppliers_id as supplierId,pd.string1 as contractNo,pd.string25 as contractSpecial
     from biz_product p
      join biz_process_child pc on pc.data_id=#{dataId} and pc.string2=p.product_id
      join biz_process_data pd on pc.data_id=pd.data_id
@@ -341,7 +341,7 @@
           pd.string6 as goodsTime,
           ds.product_status as productStatus,ds.actuator_status as actuatorStatus,ds.ref1_status as ref1Status,ds.ref2_status as ref2Status,ds.p_status as pStatus,
           ds.p1_status as p1Status,ds.p2_status as p2Status,ds.p3_status as p3Status,ds.p4_status as p4Status,pc.data_id as dataId,pc.child_id as childId,ds.data_status as dataStatus,
-          ds.string4 as procurementId,a.quality_level as levelValue,s.suppliers_id as supplierId,s.name as supplierName,pd.string1 as contractNo
+          ds.string4 as procurementId,a.quality_level as levelValue,s.suppliers_id as supplierId,s.name as supplierName,pd.string1 as contractNo,pd.string25 as contractSpecial
     from biz_actuator a
     join biz_process_child pc on pc.data_id=#{dataId} and pc.string11=a.actuator_id
     join biz_process_data pd on pc.data_id=pd.data_id
@@ -411,7 +411,7 @@
           pr.material_require as ref1MaterialRequire,s.name as  suppliersName,pr.model,pd.string6 as goodsTime,
           ds.product_status as productStatus,ds.actuator_status as actuatorStatus,ds.ref1_status as ref1Status,ds.ref2_status as ref2Status,ds.p_status as pStatus,
           ds.p1_status as p1Status,ds.p2_status as p2Status,ds.p3_status as p3Status,ds.p4_status as p4Status,pc.data_id as dataId,pc.child_id as childId,ds.data_status as dataStatus,
-          ds.string4 as procurementId,pr.string1 as levelValue,s.suppliers_id as supplierId,s.name as supplierName,pd.string1 as contractNo
+          ds.string4 as procurementId,pr.string1 as levelValue,s.suppliers_id as supplierId,s.name as supplierName,pd.string1 as contractNo,pd.string25 as contractSpecial
     from  biz_product_ref pr
     join biz_process_child pc on pc.data_id=#{dataId} and pr.product_ref_id=pc.string5
     left join biz_data_status ds on ds.child_id=pc.child_id and ds.string2=pr.product_ref_id
@@ -480,7 +480,7 @@ join biz_process_data pd on pc.data_id=pd.data_id
           pr.material_require as ref1MaterialRequire,s.name as  suppliersName,pr.model,pd.string6 as goodsTime,
           ds.product_status as productStatus,ds.actuator_status as actuatorStatus,ds.ref1_status as ref1Status,ds.ref2_status as ref2Status,ds.p_status as pStatus,
           ds.p1_status as p1Status,ds.p2_status as p2Status,ds.p3_status as p3Status,ds.p4_status as p4Status,pc.data_id as dataId,pc.child_id as childId,ds.data_status as dataStatus,
-          ds.string4 as procurementId,pr.string1 as levelValue,s.suppliers_id as supplierId,s.name as supplierName,pd.string1 as contractNo
+          ds.string4 as procurementId,pr.string1 as levelValue,s.suppliers_id as supplierId,s.name as supplierName,pd.string1 as contractNo,pd.string25 as contractSpecial
     from  biz_product_ref pr
     join biz_process_child pc on pc.data_id=#{dataId} and pr.product_ref_id=pc.string8
     left join biz_data_status ds on ds.child_id=pc.child_id and ds.string2=pr.product_ref_id
@@ -553,7 +553,7 @@ join biz_process_data pd on pc.data_id=pd.data_id
          pd.string6 as goodsTime,
           ds.product_status as productStatus,ds.actuator_status as actuatorStatus,ds.ref1_status as ref1Status,ds.ref2_status as ref2Status,ds.p_status as pStatus,
           ds.p1_status as p1Status,ds.p2_status as p2Status,ds.p3_status as p3Status,ds.p4_status as p4Status,pc.data_id as dataId,pc.child_id as childId,ds.data_status as dataStatus,
-          ds.string4 as procurementId,pa.string1 as levelValue,s.suppliers_id as supplierId,s.nick_name as supplierName,pd.string1 as contractNo
+          ds.string4 as procurementId,pa.string1 as levelValue,s.suppliers_id as supplierId,s.nick_name as supplierName,pd.string1 as contractNo,pd.string25 as contractSpecial
     from  biz_product_attachment pa
     join biz_process_child pc on pc.data_id=#{dataId} and pa.attachment_id=pc.pattachment_id
     left join biz_data_status ds on ds.child_id=pc.child_id and ds.string2=pa.attachment_id
@@ -623,7 +623,7 @@ join biz_process_data pd on pc.data_id=pd.data_id
          pd.string6 as goodsTime,
           ds.product_status as productStatus,ds.actuator_status as actuatorStatus,ds.ref1_status as ref1Status,ds.ref2_status as ref2Status,ds.p_status as pStatus,
           ds.p1_status as p1Status,ds.p2_status as p2Status,ds.p3_status as p3Status,ds.p4_status as p4Status,pc.data_id as dataId,pc.child_id as childId,ds.data_status as dataStatus,
-          ds.string4 as procurementId,pa.string1 as levelValue,s.suppliers_id as supplierId,s.nick_name as supplierName,pd.string1 as contractNo
+          ds.string4 as procurementId,pa.string1 as levelValue,s.suppliers_id as supplierId,s.nick_name as supplierName,pd.string1 as contractNo,pd.string25 as contractSpecial
 
     from  biz_product_attachment pa
     join biz_process_child pc on pc.data_id=#{dataId} and pa.attachment_id=pc.pattachment1_id
@@ -660,7 +660,7 @@ join biz_process_data pd on pc.data_id=pd.data_id
          pd.string6 as goodsTime,
           ds.product_status as productStatus,ds.actuator_status as actuatorStatus,ds.ref1_status as ref1Status,ds.ref2_status as ref2Status,ds.p_status as pStatus,
           ds.p1_status as p1Status,ds.p2_status as p2Status,ds.p3_status as p3Status,ds.p4_status as p4Status,pc.data_id as dataId,pc.child_id as childId,ds.data_status as dataStatus,
-          ds.string4 as procurementId,pa.string1 as levelValue,s.suppliers_id as supplierId,s.nick_name as supplierName,pd.string1 as contractNo
+          ds.string4 as procurementId,pa.string1 as levelValue,s.suppliers_id as supplierId,s.nick_name as supplierName,pd.string1 as contractNo,pd.string25 as contractSpecial
 
     from  biz_product_attachment pa
     join biz_process_child pc on pc.data_id=#{dataId} and pa.attachment_id=pc.pattachment2_id
@@ -695,7 +695,7 @@ join biz_process_data pd on pc.data_id=pd.data_id
          pd.string6 as goodsTime,
           ds.product_status as productStatus,ds.actuator_status as actuatorStatus,ds.ref1_status as ref1Status,ds.ref2_status as ref2Status,ds.p_status as pStatus,
           ds.p1_status as p1Status,ds.p2_status as p2Status,ds.p3_status as p3Status,ds.p4_status as p4Status,pc.data_id as dataId,pc.child_id as childId,ds.data_status as dataStatus,
-          ds.string4 as procurementId,pa.string1 as levelValue,s.suppliers_id as supplierId,s.nick_name as supplierName,pd.string1 as contractNo
+          ds.string4 as procurementId,pa.string1 as levelValue,s.suppliers_id as supplierId,s.nick_name as supplierName,pd.string1 as contractNo,pd.string25 as contractSpecial
 
 
     from  biz_product_attachment pa
@@ -732,7 +732,7 @@ join biz_process_data pd on pc.data_id=pd.data_id
          pd.string6 as goodsTime,
           ds.product_status as productStatus,ds.actuator_status as actuatorStatus,ds.ref1_status as ref1Status,ds.ref2_status as ref2Status,ds.p_status as pStatus,
           ds.p1_status as p1Status,ds.p2_status as p2Status,ds.p3_status as p3Status,ds.p4_status as p4Status,pc.data_id as dataId,pc.child_id as childId,ds.data_status as dataStatus,
-          ds.string4 as procurementId,pa.string1 as levelValue,s.suppliers_id as supplierId,s.nick_name as supplierName,pd.string1 as contractNo
+          ds.string4 as procurementId,pa.string1 as levelValue,s.suppliers_id as supplierId,s.nick_name as supplierName,pd.string1 as contractNo,pd.string25 as contractSpecial
     from  biz_product_attachment pa
     join biz_process_child pc on pc.data_id=#{dataId} and pa.attachment_id=pc.pattachment4_id
     left join biz_data_status ds on ds.child_id=pc.child_id and ds.string2=pa.attachment_id

@@ -774,7 +774,7 @@ public class BizProcessDataProcurementController extends BaseController {
             String customerId = bizProcessData.getString2();
             BizCustomer bizCustomer = new BizCustomer();
             if (StringUtils.isNotEmpty(customerId)) {
-                bizCustomer = bizCustomerService.selectBizCustomerById(Long.parseLong(customerId));
+                //bizCustomer = bizCustomerService.selectBizCustomerById(Long.parseLong(customerId));
             }
             SysUser sysUser = sysUserService.selectUserById(Long.parseLong(bizProcessData.getCreateBy()));
 
