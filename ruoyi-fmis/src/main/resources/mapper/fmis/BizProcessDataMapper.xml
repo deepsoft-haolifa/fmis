@@ -359,14 +359,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
     <sql id="selectBizProcessDataVoRefDelivery">
-        select d.data_id, d.biz_data_id, d.biz_id, d.normal_flag, d.flow_status, d.remark, d.price1, d.price2, d.price3,
-        d.price4, d.price5, d.price6, d.price7, d.price8, d.price9, d.price10, d.string1, d.string2,
-        d.string3, d.string4, d.string5, d.string6, d.string7, d.string8, d.string9, d.string10, d.string11,
-        d.string12, d.string13, d.string14, d.string15, d.string16, d.string17, d.string18, d.string19, d.string20,
-        d.datetime1, d.datetime2, d.datetime3, d.datetime4, d.datetime5, d.status, d.del_flag, d.create_by,
-        d.create_time, d.update_by, d.update_time,u.user_name as createByName
-        from biz_process_data d
-        left join sys_user u on d.create_by=u.user_id
+            select d.data_id, d.biz_data_id, d.biz_id, d.normal_flag, d.flow_status, d.remark, d.price1, d.price2, d.price3,
+            d.price4, d.price5, d.price6, d.price7, d.price8, d.price9, d.price10, d.string1, d.string2,
+            d.string3, d.string4, d.string5, d.string6, d.string7, d.string8, d.string9, d.string10, d.string11,
+            d.string12, d.string13, d.string14, d.string15, d.string16, d.string17, d.string18, d.string19, d.string20,
+            d.datetime1, d.datetime2, d.datetime3, d.datetime4, d.datetime5, d.status, d.del_flag, d.create_by,
+            d.create_time, d.update_by, d.update_time,u.user_name as createByName
+            from biz_process_data d
+            left join sys_user u on d.create_by=u.user_id
     </sql>
 
     <select id="selectBizProcessDataListRefDelivery" parameterType="BizProcessData" resultMap="BizProcessDataResult">
@@ -383,7 +383,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createByName != null  and createByName != ''"> and u.user_name like concat('%', #{createByName}, '%')</if>
 
         </where>
-        order by d.create_time
+        order by d.create_time desc
     </select>
 
 

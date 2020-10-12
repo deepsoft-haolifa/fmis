@@ -107,7 +107,7 @@ initChildTestTable = function(index, rows, $detail) {
             {field : 'yesNum',title : '合格数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 150},
             {field : 'noNum',title : '不合格数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 150},
 
-            {field : 'remark',title : '原因',editable: true,width: 300},
+            {field : 'remark',title : '不合格原因',editable: true,width: 300},
             {field : 'createTime',title : '创建时间',width: 200},
             {field : 'createByName',title : '创建人',width: 200}
         ]
