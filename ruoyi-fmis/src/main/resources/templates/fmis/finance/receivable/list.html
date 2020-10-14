@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('应收款项')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            <p>合同编号：</p>
+                            <input type="text" name="string1"/>
+                            <input type="hidden" name="bizId" id="bizId" value="contract"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+
+    var supplierTypeData = [[${@dict.getType('supplier_type')}]];
+    var paymentTypeData = [[${@dict.getType('payment_type')}]];
+    var paymentMethodData = [[${@dict.getType('payment_method')}]];
+
+
+    var prefix = ctx + "fmis/finance/receivable";
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            exportUrl: prefix + "/export",
+            modalName: "应收管理",
+            uniqueId: "saleContractId",
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'saleContractId',
+                    title: 'ID',
+                    visible: false
+                },
+                {
+                    field: 'saleContractNo',
+                    title: '合同编号'
+                },
+                {
+                    field: 'customerName',
+                    title: '客户名称'
+                },
+                {
+                    field: 'supplierName',
+                    title: '供方单位',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(supplierTypeData, value);
+                    }
+                },
+                {
+                    field: 'signTime',
+                    title: '签订日期'
+                },
+
+                {
+                    field: 'deptName',
+                    title: '归属部门'
+                },
+                {
+                    field: 'invoiceType',
+                    title: '发票类别'
+                },
+                {
+                    field: 'deliveryTime',
+                    title: '发货时间'
+                },
+
+                {
+                    field: 'payType',
+                    title: '付款方式',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(paymentTypeData, value);
+                    }
+                },
+                {
+                    field: 'saleQty',
+                    title: '销售总量'
+                },
+                {
+                    field: 'saleContractAmount',
+                    title: '合同总额'
+                },
+
+                {
+                    field: 'payMethod',
+                    title: '款项类别',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(paymentMethodData, value);
+                    }
+                },
+                {
+                    field: 'paidAmount',
+                    title: '已付款额'
+                },
+                {
+                    field: 'invoicedAmount',
+                    title: '已开发票'
+                },
+                {
+                    field: 'deliveryQty',
+                    title: '已发货数'
+                },
+                {
+                    field: 'saleContractStatus',
+                    title: '状态',
+                    align: 'center'
+                },
+                {
+                    title: '操作',
+                    align: 'left',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewExamineDetail(\'' + row.saleContractId + '\')"><i class="fa fa-remove"></i> 详情 </a>');
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(options);
+    });
+
+
+</script>
+</body>
+</html>
