@@ -172,6 +172,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="bizDataId != null "> and biz_data_id = #{bizDataId}</if>
             <if test="string1 != null and string1 != ''"> and q.string1 like concat('%', #{string1}, '%')</if>
             <if test="customerName != null and customerName != ''"> and ct.name like concat('%', #{customerName}, '%')</if>
+
+            <if test="deptName != null and deptName != ''"> and dt1.dept_name like concat('%', #{deptName}, '%')</if>
+
             <!-- 如果是详情，只看有数据 -->
             <if test="bizEditFlag == 2">and ds.string4 = #{dataId} </if>
             <!-- 编辑 只看有数据的 -->
@@ -367,6 +370,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             d.create_time, d.update_by, d.update_time,u.user_name as createByName
             from biz_process_data d
             left join sys_user u on d.create_by=u.user_id
+            left join sys_dept dt on u.dept_id=dt.dept_id
     </sql>
 
     <select id="selectBizProcessDataListRefDelivery" parameterType="BizProcessData" resultMap="BizProcessDataResult">
@@ -381,7 +385,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="string1 != null  and string1 != ''"> and d.string1 like concat('%', #{string1}, '%')</if>
             <if test="string2 != null  and string2 != ''"> and d.string2 like concat('%', #{string2}, '%')</if>
             <if test="createByName != null  and createByName != ''"> and u.user_name like concat('%', #{createByName}, '%')</if>
-
+            ${params.dataScope}
         </where>
         order by d.create_time desc
     </select>

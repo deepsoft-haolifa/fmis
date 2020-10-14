@@ -291,7 +291,7 @@ public class BizProcessDataProcurementController extends BaseController {
             bizProcessData.setPrice1(0D);
             logger.info(ex.getMessage());
         }
-
+        setNormalFlag(bizProcessData,productArrayStr);
         int insertReturn = bizProcessDataService.insertBizProcessData(bizProcessData);
         Long dataId = bizProcessData.getDataId();
         if (StringUtils.isNotEmpty(productArrayStr)) {
@@ -307,7 +307,19 @@ public class BizProcessDataProcurementController extends BaseController {
         setContractNo(bizProcessData,productArrayStr);
         return toAjax(insertReturn);
     }
-
+    public String setNormalFlag (BizProcessData bizProcessData,String productArrayStr) {
+        String normalFlag = "4";
+        Double totalPrice = bizProcessData.getPrice1();
+        if (totalPrice >= 300000) {
+            normalFlag = "4";
+        } else if (totalPrice > 100000) {
+            normalFlag = "3";
+        } else if (totalPrice <= 100000) {
+            normalFlag = "2";
+        }
+        bizProcessData.setNormalFlag(normalFlag);
+        return normalFlag;
+    }
     /**
      * 设置合同号
      * @param bizProcessData
@@ -587,6 +599,7 @@ public class BizProcessDataProcurementController extends BaseController {
     public AjaxResult editSave(BizProcessData bizProcessData) {
 
         String productArrayStr = bizProcessData.getProductParmters();
+        setNormalFlag(bizProcessData,productArrayStr);
         int updateReturn = bizProcessDataService.updateBizProcessData(bizProcessData);
 
         Long dataId = bizProcessData.getDataId();
