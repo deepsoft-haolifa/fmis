@@ -38,6 +38,7 @@ import com.ruoyi.system.service.ISysDeptService;
 import com.ruoyi.system.service.ISysDictDataService;
 import com.ruoyi.system.service.ISysRoleService;
 import com.ruoyi.system.service.ISysUserService;
+import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -904,25 +905,28 @@ public class BizProcessDataProcurementController extends BaseController {
                     //单价
                     table.addCell(PdfUtil.mergeCol(bizProcessChild.getProductProcurementPrice().toString(), 1,textFont));
                     //合计
-                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getProductProcurementPrice().toString(), 1,textFont));
+                    table.addCell(PdfUtil.mergeCol((Integer.parseInt(bizProcessChild.getProductNum()) * bizProcessChild.getProductProcurementPrice()) + "", 1,textFont));
                     //材质
-                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getProductProcurementPrice().toString(), 3,textFont));
+                    table.addCell(PdfUtil.mergeCol("阀体:" + bizProcessChild.getValvebodyMaterial() + ",阀芯:" + bizProcessChild.getValvebodyMaterial()
+                            + ",密封材质:" + bizProcessChild.getSealingMaterial(), 3,textFont));
                     //备注
-                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getProductProcurementPrice().toString(), 3,textFont));
+                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getRemark() == null ? "" : bizProcessChild.getRemark(), 3,textFont));
+                    sumTotalNum = sumTotalNum + Integer.parseInt(bizProcessChild.getProductNum());
+                    sumTotalAmount = sumTotalAmount + Integer.parseInt(bizProcessChild.getProductNum()) * bizProcessChild.getProductProcurementPrice();
                 }
             }
 
 
 
             //金额合计
-            table.addCell(PdfUtil.mergeColRight("合计", 5,textFont));//4
+            table.addCell(PdfUtil.mergeColRight("合计", 6,textFont));//4
             table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(sumTotalNum), 1,textFont));//总数量
-            table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(sumTotalPrice), 1,textFont));//单价
+            table.addCell(PdfUtil.mergeCol("", 1,textFont));//单价
             table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(sumTotalAmount), 1,textFont));//合计
             table.addCell(PdfUtil.mergeCol("", 7,textFont));//备注
 
 
-            table.addCell(PdfUtil.mergeColRight("优惠价", 5,textFont));//4
+            table.addCell(PdfUtil.mergeColRight("优惠价", 6,textFont));//4
             table.addCell(PdfUtil.mergeCol("", 1,textFont));//总数量
             table.addCell(PdfUtil.mergeCol("", 1,textFont));//单价
             table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(string14D), 1,textFont));//合计
@@ -968,7 +972,7 @@ public class BizProcessDataProcurementController extends BaseController {
             table.addCell(PdfUtil.mergeColLeft("付款及运输：" + payRemark, 14,textFont));
             table.addCell(PdfUtil.mergeCol("", 1,textFont));
             //合同签定后5个工作日发货（若未当日回传，发货期则从收到回传之日延后）
-            table.addCell(PdfUtil.mergeColLeft("1、交货周期：" + StringUtils.trim(bizProcessData.getString23()), 14,textFont));
+            table.addCell(PdfUtil.mergeColLeft("1、交货周期：" + DateConvert.formatDate(bizProcessData.getDatetime2()), 14,textFont));
             table.addCell(PdfUtil.mergeCol("", 1,textFont));
             table.addCell(PdfUtil.mergeColLeft("2、收  货  人：" + StringUtils.trim(bizProcessData.getString11()), 14,textFont));
             table.addCell(PdfUtil.mergeCol("", 1,textFont));
