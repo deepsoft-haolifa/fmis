@@ -899,7 +899,7 @@ public class BizProcessDataProcurementController extends BaseController {
                     table.addCell(PdfUtil.mergeCol(bizProcessChild.getNominalPressure(), 1,textFont));
                     table.addCell(PdfUtil.mergeCol(bizProcessChild.getSpecifications(), 1,textFont));
                     //颜色
-                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getSpecifications(), 1,textFont));
+                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getColor(), 1,textFont));
                     //数量
                     table.addCell(PdfUtil.mergeCol(bizProcessChild.getProductNum(), 1,textFont));
                     //单价
@@ -908,7 +908,8 @@ public class BizProcessDataProcurementController extends BaseController {
                     table.addCell(PdfUtil.mergeCol((Integer.parseInt(bizProcessChild.getProductNum()) * bizProcessChild.getProductProcurementPrice()) + "", 1,textFont));
                     //材质
                     table.addCell(PdfUtil.mergeCol("阀体:" + bizProcessChild.getValvebodyMaterial() + ",阀芯:" + bizProcessChild.getValvebodyMaterial()
-                            + ",密封材质:" + bizProcessChild.getSealingMaterial(), 3,textFont));
+                            + ",密封材质:" + bizProcessChild.getSealingMaterial() + ",驱动形式:" + bizProcessChild.getDriveForm()
+                            + ",连接方式:" + bizProcessChild.getConnectionType(), 3,textFont));
                     //备注
                     table.addCell(PdfUtil.mergeCol(bizProcessChild.getRemark() == null ? "" : bizProcessChild.getRemark(), 3,textFont));
                     sumTotalNum = sumTotalNum + Integer.parseInt(bizProcessChild.getProductNum());

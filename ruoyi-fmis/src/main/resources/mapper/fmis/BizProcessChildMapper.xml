@@ -280,7 +280,7 @@
     <!-- 质检 产品列表 (COALESCE(sum(ss.num),0)-COALESCE(sum(sn.string1),0)-COALESCE(sum(sn.string2),0))-->
     <sql id="selectBizTestProductVo">
     select
-          p.price as productPrice,p.product_id as productId,ds.string4 as dataId,ds.child_id as childId,sn.remark,ds.status_id as statusId,
+          bpc.string15 color,p.price as productPrice,p.product_id as productId,ds.string4 as dataId,ds.child_id as childId,sn.remark,ds.status_id as statusId,
           d.name as series, p.model, d1.name as specifications, d2.name as nominalPressure,
           d3.name as connectionType, d6.name as valvebodyMaterial,
           d4.name as sealingMaterial, d5.name as valveElement,
@@ -314,6 +314,7 @@
         left join biz_dict d9 on d9.parent_type='series_type' and d9.dict_id=p.string1
         left join biz_suppliers s on s.suppliers_id=p.supplier
         join sys_dict_data dd on dd.dict_type='product_level' and dd.dict_value=p.string2
+        left join biz_process_child bpc on ds.child_id = bpc.child_id
     where 1=1
     </sql>
     <select id="selectBizTestProductList" parameterType="BizProcessChild" resultMap="BizProcessChildResult">
