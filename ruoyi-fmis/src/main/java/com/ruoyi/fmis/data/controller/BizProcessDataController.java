@@ -1306,7 +1306,7 @@ public class BizProcessDataController extends BaseController {
                     //预付
                     String string8 = StringUtils.trim(bizProcessData.getString8());
                     if (StringUtils.isNotEmpty(string8)) {
-                        String string8Name = dictDataService.selectDictLabel("payment_type",string8);
+                        String string8Name = dictDataService.selectDictLabel("payment_method",string8);
                         payRemark += " : " + string8Name;
                     }
 
