@@ -46,7 +46,7 @@ initChildTestTable = function(index, rows, $detail) {
     var dataId = rows["dataId"];
     var paramterId = rows["productId"];
     var totalNum = rows["productNum"];
-
+    var contractNo = rows["contractNo"];
     if ($.common.isEmpty(paramterId)) {
         paramterId = rows["actuatorId"];
         totalNum = rows["actuatorNum"];
@@ -99,6 +99,7 @@ initChildTestTable = function(index, rows, $detail) {
                 }},
             {field : 'stayNum',title : '数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 150},
             {field : 'orderNo',title : '报检单号',editable: false,width: 200},
+
             {field : 'remark',title : '备注',editable: true,width: 300},
             {field : 'createTime',title : '创建时间',width: 200},
             {field : 'createByName',title : '创建人',width: 200}
@@ -239,6 +240,7 @@ $(function() {
             {field : 'dataId',title : 'dataId',visible: false},
             {field : 'levelValue',title : 'levelValue',visible: false},
             {field : 'childId',title : 'childId',visible: false,width:100},
+            {field : 'contractNo',title : '销售合同号',visible: true,width:100},
             {field : 'statusId',title : 'statusId',visible: false,width:100},
             {field : 'procurementId',title : 'childId',visible: false},
             {field : 'productName',title : '产品名称',editable: false,width: 100},
@@ -253,7 +255,8 @@ $(function() {
             {field : 'sealingMaterial',title : '密封材质',editable: false,width: 100},
             {field : 'driveForm',title : '驱动形式',editable: false,width: 100},
             {field : 'connectionType',title : '连接方式',editable: false,width: 100},
-            {field : 'productProcurementPrice',title : '采购价',editable: false,width: 100}
+            {field : 'productProcurementPrice',title : '采购价',editable: false,width: 100},
+            {field : 'contractSpecial',title : '特殊要求',visible: true,width:100}
         ]
     };
     $("#bootstrap-table").bootstrapTable(options);
@@ -314,6 +317,7 @@ $(function() {
             {field : 'levelValue',title : 'levelValue',visible: false},
             {field : 'childId',title : 'childId',visible: false},
             {field : 'statusId',title : 'statusId',visible: false,width:100},
+            {field : 'contractNo',title : '销售合同号',visible: true,width:100},
             {field : 'actuatorName',title : '执行器名称',editable: false,width: 150},
             {field : 'actuatorPrice',title : '执行器价格',editable: false,width: 100},
             {field : 'actuatorString6',title : '采购价',editable: false,width: 100},
@@ -376,7 +380,8 @@ $(function() {
             {
                 field : 'actuatorExplosionLevel',
                 title : '防爆等级',width: 50
-            }
+            },
+            {field : 'contractSpecial',title : '特殊要求',visible: true,width:100}
         ]
     };
     //$.table.init(options1);
@@ -438,6 +443,7 @@ $(function() {
             {field : 'procurementId',title : 'childId',visible: false},
             {field : 'statusId',title : 'statusId',visible: false,width:100},
             {field : 'childId',title : 'childId',visible: false},
+            {field : 'contractNo',title : '销售合同号',visible: true,width:100},
             {field : 'ref1Name',title : '法兰名称',editable: false,width: 100},
             {field : 'ref1Price',title : '法兰价格',editable: false,width: 100},
             {field : 'ref1String2',title : '采购价',editable: false,width: 100},
@@ -449,7 +455,8 @@ $(function() {
             {field : 'model',title : '型号',width: 100},
             {field : 'ref1Specifications',title : '规格',width: 100},
             {field : 'ref1ValvebodyMaterial',title : '材质',width: 100},
-            {field : 'ref1MaterialRequire',title : '材质要求',width: 300}
+            {field : 'ref1MaterialRequire',title : '材质要求',width: 300},
+            {field : 'contractSpecial',title : '特殊要求',visible: true,width:100}
         ]
     };
     //$.table.init(options1);
@@ -511,6 +518,7 @@ $(function() {
             {field : 'levelValue',title : 'levelValue',visible: false},
             {field : 'childId',title : 'childId',visible: false},
             {field : 'statusId',title : 'statusId',visible: false,width:100},
+            {field : 'contractNo',title : '销售合同号',visible: true,width:100},
             {field : 'ref2Name',title : '螺栓名称',editable: {type: 'text',emptytext: '空',disabled: true},width: 100},
             {field : 'ref2Price',title : '螺栓价格',editable: false,width: 100},
             {field : 'ref1String2',title : '采购价',editable: false,width: 100},
@@ -520,7 +528,8 @@ $(function() {
             {field : 'model',title : '型号',width: 100},
             {field : 'ref1Specifications',title : '规格',width: 100},
             {field : 'ref1ValvebodyMaterial',title : '材质',width: 100},
-            {field : 'ref1MaterialRequire',title : '材质要求',width: 300}
+            {field : 'ref1MaterialRequire',title : '材质要求',width: 300},
+            {field : 'contractSpecial',title : '特殊要求',visible: true,width:100}
         ]
     };
     //$.table.init(options1);
@@ -596,6 +605,7 @@ $(function() {
             {field : 'dataId',title : 'dataId',visible: false},
             {field : 'levelValue',title : 'levelValue',visible: false},
             {field : 'procurementId',title : 'childId',visible: false},
+            {field : 'contractNo',title : '销售合同号',visible: true,width:100},
             {field : 'statusId',title : 'statusId',visible: false,width:100},
             {field : 'childId',title : 'childId',visible: false},
             {field : 'pattachmentPrice',title : '价格',editable: false,width: 100},
@@ -670,7 +680,8 @@ $(function() {
             {
                 field : 'goodsCategory',
                 title : '商品分类',width: 100
-            }
+            },
+            {field : 'contractSpecial',title : '特殊要求',visible: true,width:100}
         ]
     };
     //$.table.init(options1);
