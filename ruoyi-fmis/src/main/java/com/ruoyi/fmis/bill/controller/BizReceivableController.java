@@ -17,29 +17,29 @@
 //import java.util.List;
 //
 ///**
-// * 现金日记账Controller
+// * 往来管理--应收管理
 // *
-// * @author frank
-// * @date 2020-06-25
+// * @author murphy
+// * @date 2020-10-13
 // */
 //@Controller
-//@RequestMapping("/fmis/bill2")
-//public class BizBill2Controller extends BaseController {
-//    private String prefix = "fmis/bill2";
+//@RequestMapping("/fmis/bill/receivable")
+//public class BizReceivableController extends BaseController {
+//    private String prefix = "fmis/bill/receivable";
 //
 //    @Autowired
 //    private IBizBillService bizBillService;
 //
-//    @RequiresPermissions("fmis:bill2:view")
+//    @RequiresPermissions("fmis:bill:receivable:view")
 //    @GetMapping()
 //    public String bill() {
-//        return prefix + "/bill";
+//        return prefix + "/bill/";
 //    }
 //
 //    /**
 //     * 查询现金日记账列表
 //     */
-//    @RequiresPermissions("fmis:bill2:list")
+//    @RequiresPermissions("fmis:bill:list")
 //    @PostMapping("/list")
 //    @ResponseBody
 //    public TableDataInfo list(BizBill bizBill) {
@@ -51,7 +51,7 @@
 //    /**
 //     * 导出现金日记账列表
 //     */
-//    @RequiresPermissions("fmis:bill2:export")
+//    @RequiresPermissions("fmis:bill:export")
 //    @PostMapping("/export")
 //    @ResponseBody
 //    public AjaxResult export(BizBill bizBill) {
@@ -71,7 +71,7 @@
 //    /**
 //     * 新增保存现金日记账
 //     */
-//    @RequiresPermissions("fmis:bill2:add")
+//    @RequiresPermissions("fmis:bill:add")
 //    @Log(title = "现金日记账", businessType = BusinessType.INSERT)
 //    @PostMapping("/add")
 //    @ResponseBody
@@ -92,7 +92,7 @@
 //    /**
 //     * 修改保存现金日记账
 //     */
-//    @RequiresPermissions("fmis:bill2:edit")
+//    @RequiresPermissions("fmis:bill:edit")
 //    @Log(title = "现金日记账", businessType = BusinessType.UPDATE)
 //    @PostMapping("/edit")
 //    @ResponseBody
@@ -103,7 +103,7 @@
 //    /**
 //     * 删除现金日记账
 //     */
-//    @RequiresPermissions("fmis:bill2:remove")
+//    @RequiresPermissions("fmis:bill:remove")
 //    @Log(title = "现金日记账", businessType = BusinessType.DELETE)
 //    @PostMapping( "/remove")
 //    @ResponseBody

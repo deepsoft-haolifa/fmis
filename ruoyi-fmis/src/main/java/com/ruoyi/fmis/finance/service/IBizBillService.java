@@ -1,15 +1,17 @@
-package com.ruoyi.fmis.bill.mapper;
+package com.ruoyi.fmis.finance.service;
 
-import com.ruoyi.fmis.bill.domain.BizBill;
+
+import com.ruoyi.fmis.finance.domain.BizBill;
+
 import java.util.List;
 
 /**
- * 现金日记账Mapper接口
+ * 现金日记账Service接口
  *
  * @author frank
  * @date 2020-06-25
  */
-public interface BizBillMapper {
+public interface IBizBillService {
     /**
      * 查询现金日记账
      *
@@ -43,18 +45,18 @@ public interface BizBillMapper {
     public int updateBizBill(BizBill bizBill);
 
     /**
-     * 删除现金日记账
+     * 批量删除现金日记账
+     *
+     * @param ids 需要删除的数据ID
+     * @return 结果
+     */
+    public int deleteBizBillByIds(String ids);
+
+    /**
+     * 删除现金日记账信息
      *
      * @param billId 现金日记账ID
      * @return 结果
      */
     public int deleteBizBillById(Long billId);
-
-    /**
-     * 批量删除现金日记账
-     *
-     * @param billIds 需要删除的数据ID
-     * @return 结果
-     */
-    public int deleteBizBillByIds(String[] billIds);
 }
