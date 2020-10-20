@@ -1,6 +1,5 @@
 package com.ruoyi.fmis.finance.mapper;
 
-import com.ruoyi.fmis.bill.domain.BizBill;
 import com.ruoyi.fmis.finance.domain.vo.ReceivableReqVo;
 import com.ruoyi.fmis.finance.domain.vo.ReceivableRespVo;
 

@@ -2,7 +2,7 @@ package com.ruoyi.fmis.finance.service.impl;
 
 import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.utils.DateUtils;
-import com.ruoyi.fmis.bill.domain.BizBill;
+import com.ruoyi.fmis.finance.domain.BizBill;
 import com.ruoyi.fmis.finance.mapper.BizBillMapper;
 import com.ruoyi.fmis.finance.service.IBizBillService;
 import com.ruoyi.framework.util.ShiroUtils;

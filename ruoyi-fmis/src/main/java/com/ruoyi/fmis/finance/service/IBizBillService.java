@@ -1,6 +1,7 @@
 package com.ruoyi.fmis.finance.service;
 
-import com.ruoyi.fmis.bill.domain.BizBill;
+
+import com.ruoyi.fmis.finance.domain.BizBill;
 
 import java.util.List;
 

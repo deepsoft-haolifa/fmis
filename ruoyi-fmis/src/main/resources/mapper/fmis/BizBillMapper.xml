@@ -2,15 +2,16 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ruoyi.fmis.bill.mapper.BizBillMapper">
+<mapper namespace="com.ruoyi.fmis.finance.mapper.BizBillMapper">
     
     <resultMap type="BizBill" id="BizBillResult">
         <result property="billId"    column="bill_id"    />
-        <result property="xh"    column="xh"    />
-        <result property="d"    column="d"    />
+        <result property="serialNo"    column="serial_no"    />
+        <result property="operateDate"    column="operate_date"    />
         <result property="certificateNumber"    column="certificate_number"    />
-        <result property="settlementType"    column="settlement_type"    />
-        <result property="clearingBanks"    column="clearing_banks"    />
+        <result property="payWay"    column="pay_way"    />
+        <result property="payAccount"    column="pay_account"    />
+        <result property="payCompany"    column="pay_company"    />
         <result property="preMonthMoney"    column="pre_month_money"    />
         <result property="collectionMoney"    column="collection_money"    />
         <result property="collectionType"    column="collection_type"    />
@@ -19,18 +20,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="balance"    column="balance"    />
         <result property="type"    column="type"    />
         <result property="deptId"    column="dept_id"    />
-        <result property="string1"    column="string1"    />
-        <result property="string2"    column="string2"    />
-        <result property="string3"    column="string3"    />
-        <result property="string4"    column="string4"    />
-        <result property="string5"    column="string5"    />
-        <result property="string6"    column="string6"    />
-        <result property="string7"    column="string7"    />
-        <result property="string8"    column="string8"    />
-        <result property="string9"    column="string9"    />
-        <result property="string10"    column="string10"    />
         <result property="remark"    column="remark"    />
-        <result property="status"    column="status"    />
         <result property="delFlag"    column="del_flag"    />
         <result property="createBy"    column="create_by"    />
         <result property="createTime"    column="create_time"    />
@@ -50,9 +40,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectBizBillVo">
-        select b.bill_id, b.xh, b.d, b.certificate_number, b.settlement_type, b.clearing_banks, b.pre_month_money, b.collection_money, b.collection_type, b.payment, b.payment_type, b.balance,
-        b.type, b.dept_id, b.string1, b.string2, b.string3, b.string4, b.string5, b.string6, b.string7, b.string8, b.string9,
-        b.string10, b.remark, b.status, b.del_flag, b.create_by, b.create_time, b.update_by, b.update_time,
+        select b.bill_id, b.serial_no, b.operate_date, b.certificate_number, b.pay_way, b.pay_account,b.pay_company, b.pre_month_money, b.collection_money, b.collection_type, b.payment, b.payment_type, b.balance,
+        b.type, b.dept_id,  b.remark, b.del_flag, b.create_by, b.create_time, b.update_by, b.update_time,
         d.parent_id, d.dept_name, d.order_num, d.leader, d.status as dept_status,
          u.user_name as createByName,sum(bc.amount) as billAmount
         from biz_bill b
@@ -64,13 +53,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectBizBillList" parameterType="BizBill" resultMap="BizBillResult">
         <include refid="selectBizBillVo"/>
         <where>  
-            <if test="xh != null  and xh != ''"> and b.xh like concat('%', #{xh}, '%')</if>
+            <if test="serial_no != null  and serial_no != ''"> and b.serial_no like concat('%', #{serial_no}, '%')</if>
             <if test="certificateNumber != null  and certificateNumber != ''"> and b.certificate_number = #{certificateNumber}</if>
             <if test="paymentType != null  and paymentType != ''"> and b.payment_type = #{paymentType}</if>
             <if test="collectionType != null  and collectionType != ''"> and b.collection_type = #{collectionType}</if>
             <if test="balance != null "> and b.balance = #{balance}</if>
             <if test="type != null "> and b.type = #{type}</if>
-
+            <if test="payAccount != null and payAccount != ''"> and b.pay_account = #{payAccount}</if>
             <if test="billId != null  and billId != ''"> and b.bill_id = #{billId}</if>
         </where>
     </select>
@@ -79,121 +68,5 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectBizBillVo"/>
         where b.bill_id = #{billId}
     </select>
-        
-    <insert id="insertBizBill" parameterType="BizBill" useGeneratedKeys="true" keyProperty="billId">
-        insert into biz_bill
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="xh != null  and xh != ''">xh,</if>
-            <if test="d != null ">d,</if>
-            <if test="certificateNumber != null  and certificateNumber != ''">certificate_number,</if>
-            <if test="settlementType != null  and settlementType != ''">settlement_type,</if>
-            <if test="clearingBanks != null  and clearingBanks != ''">clearing_banks,</if>
-            <if test="preMonthMoney != null ">pre_month_money,</if>
-            <if test="collectionMoney != null ">collection_money,</if>
-            <if test="collectionType != null  and collectionType != ''">collection_type,</if>
-            <if test="payment != null ">payment,</if>
-            <if test="paymentType != null  and paymentType != ''">payment_type,</if>
-            <if test="balance != null ">balance,</if>
-            <if test="type != null  and type != ''">type,</if>
-            <if test="deptId != null  and deptId != ''">dept_id,</if>
-            <if test="string1 != null  and string1 != ''">string1,</if>
-            <if test="string2 != null  and string2 != ''">string2,</if>
-            <if test="string3 != null  and string3 != ''">string3,</if>
-            <if test="string4 != null  and string4 != ''">string4,</if>
-            <if test="string5 != null  and string5 != ''">string5,</if>
-            <if test="string6 != null  and string6 != ''">string6,</if>
-            <if test="string7 != null  and string7 != ''">string7,</if>
-            <if test="string8 != null  and string8 != ''">string8,</if>
-            <if test="string9 != null  and string9 != ''">string9,</if>
-            <if test="string10 != null  and string10 != ''">string10,</if>
-            <if test="remark != null  and remark != ''">remark,</if>
-            <if test="status != null  and status != ''">status,</if>
-            <if test="delFlag != null  and delFlag != ''">del_flag,</if>
-            <if test="createBy != null  and createBy != ''">create_by,</if>
-            <if test="createTime != null ">create_time,</if>
-            <if test="updateBy != null  and updateBy != ''">update_by,</if>
-            <if test="updateTime != null ">update_time,</if>
-         </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="xh != null  and xh != ''">#{xh},</if>
-            <if test="d != null ">#{d},</if>
-            <if test="certificateNumber != null  and certificateNumber != ''">#{certificateNumber},</if>
-            <if test="settlementType != null  and settlementType != ''">#{settlementType},</if>
-            <if test="clearingBanks != null  and clearingBanks != ''">#{clearingBanks},</if>
-            <if test="preMonthMoney != null ">#{preMonthMoney},</if>
-            <if test="collectionMoney != null ">#{collectionMoney},</if>
-            <if test="collectionType != null  and collectionType != ''">#{collectionType},</if>
-            <if test="payment != null ">#{payment},</if>
-            <if test="paymentType != null  and paymentType != ''">#{paymentType},</if>
-            <if test="balance != null ">#{balance},</if>
-            <if test="type != null  and type != ''">#{type},</if>
-            <if test="deptId != null  and deptId != ''">#{deptId},</if>
-            <if test="string1 != null  and string1 != ''">#{string1},</if>
-            <if test="string2 != null  and string2 != ''">#{string2},</if>
-            <if test="string3 != null  and string3 != ''">#{string3},</if>
-            <if test="string4 != null  and string4 != ''">#{string4},</if>
-            <if test="string5 != null  and string5 != ''">#{string5},</if>
-            <if test="string6 != null  and string6 != ''">#{string6},</if>
-            <if test="string7 != null  and string7 != ''">#{string7},</if>
-            <if test="string8 != null  and string8 != ''">#{string8},</if>
-            <if test="string9 != null  and string9 != ''">#{string9},</if>
-            <if test="string10 != null  and string10 != ''">#{string10},</if>
-            <if test="remark != null  and remark != ''">#{remark},</if>
-            <if test="status != null  and status != ''">#{status},</if>
-            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
-            <if test="createBy != null  and createBy != ''">#{createBy},</if>
-            <if test="createTime != null ">#{createTime},</if>
-            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
-            <if test="updateTime != null ">#{updateTime},</if>
-         </trim>
-    </insert>
-
-    <update id="updateBizBill" parameterType="BizBill">
-        update biz_bill
-        <trim prefix="SET" suffixOverrides=",">
-            <if test="xh != null  and xh != ''">xh = #{xh},</if>
-            <if test="d != null ">d = #{d},</if>
-            <if test="certificateNumber != null  and certificateNumber != ''">certificate_number = #{certificateNumber},</if>
-            <if test="settlementType != null  and settlementType != ''">settlement_type = #{settlementType},</if>
-            <if test="clearingBanks != null  and clearingBanks != ''">clearing_banks = #{clearingBanks},</if>
-            <if test="preMonthMoney != null ">pre_month_money = #{preMonthMoney},</if>
-            <if test="collectionMoney != null ">collection_money = #{collectionMoney},</if>
-            <if test="collectionType != null  and collectionType != ''">collection_type = #{collectionType},</if>
-            <if test="payment != null ">payment = #{payment},</if>
-            <if test="paymentType != null  and paymentType != ''">payment_type = #{paymentType},</if>
-            <if test="balance != null ">balance = #{balance},</if>
-            <if test="type != null  and type != ''">type = #{type},</if>
-            <if test="deptId != null  and deptId != ''">dept_id = #{deptId},</if>
-            <if test="string1 != null  and string1 != ''">string1 = #{string1},</if>
-            <if test="string2 != null  and string2 != ''">string2 = #{string2},</if>
-            <if test="string3 != null  and string3 != ''">string3 = #{string3},</if>
-            <if test="string4 != null  and string4 != ''">string4 = #{string4},</if>
-            <if test="string5 != null  and string5 != ''">string5 = #{string5},</if>
-            <if test="string6 != null  and string6 != ''">string6 = #{string6},</if>
-            <if test="string7 != null  and string7 != ''">string7 = #{string7},</if>
-            <if test="string8 != null  and string8 != ''">string8 = #{string8},</if>
-            <if test="string9 != null  and string9 != ''">string9 = #{string9},</if>
-            <if test="string10 != null  and string10 != ''">string10 = #{string10},</if>
-            <if test="remark != null  and remark != ''">remark = #{remark},</if>
-            <if test="status != null  and status != ''">status = #{status},</if>
-            <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
-            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
-            <if test="createTime != null ">create_time = #{createTime},</if>
-            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
-            <if test="updateTime != null ">update_time = #{updateTime},</if>
-        </trim>
-        where bill_id = #{billId}
-    </update>
-
-    <delete id="deleteBizBillById" parameterType="Long">
-        delete from biz_bill where bill_id = #{billId}
-    </delete>
-
-    <delete id="deleteBizBillByIds" parameterType="String">
-        delete from biz_bill where bill_id in 
-        <foreach item="billId" collection="array" open="(" separator="," close=")">
-            #{billId}
-        </foreach>
-    </delete>
     
 </mapper>
