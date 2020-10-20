@@ -280,7 +280,7 @@
     <!-- 质检 产品列表 (COALESCE(sum(ss.num),0)-COALESCE(sum(sn.string1),0)-COALESCE(sum(sn.string2),0))-->
     <sql id="selectBizTestProductVo">
     select
-          p.price as productPrice,p.product_id as productId,ds.string4 as dataId,ds.child_id as childId,sn.remark,ds.status_id as statusId,
+          bpc.string15 color,p.price as productPrice,p.product_id as productId,ds.string4 as dataId,ds.child_id as childId,sn.remark,ds.status_id as statusId,
           d.name as series, p.model, d1.name as specifications, d2.name as nominalPressure,
           d3.name as connectionType, d6.name as valvebodyMaterial,
           d4.name as sealingMaterial, d5.name as valveElement,
@@ -294,12 +294,13 @@
           ds.data_status as dataStatus,
           p.string2 as levelValue,s.suppliers_id as supplierId,
           COALESCE(sum(sn.string1),0) as yesNum, COALESCE(sum(sn.string2),0) as noNum,ss.num as stayNum,ss.create_time as stayCreateTime,ss.stay_id as stayId,ss.string6 as orderNo,
-          da.string10 as contractNo,da.string12 as procurementNo
+          da1.string1 as contractNo,da.string12 as procurementNo,da1.string25 as contractSpecial
     from biz_product p
-     join biz_data_status ds on   ds.string2=p.product_id and ds.string4=#{dataId} and ds.type=1
+      join biz_data_status ds on   ds.string2=p.product_id and ds.string4=#{dataId} and ds.type=1
      left join biz_data_steststay ss on ss.status_id=ds.status_id
 
      left join biz_process_data da on ss.string4=da.data_id
+     left join biz_process_data da1 on ds.string3=da1.data_id
 
      left join biz_data_stestn sn on sn.status_id=ds.status_id  and sn.string6=ss.stay_id
     left join biz_dict d on  d.parent_id=1 and p.series=d.dict_id
@@ -314,6 +315,7 @@
         left join biz_dict d9 on d9.parent_type='series_type' and d9.dict_id=p.string1
         left join biz_suppliers s on s.suppliers_id=p.supplier
         join sys_dict_data dd on dd.dict_type='product_level' and dd.dict_value=p.string2
+        left join biz_process_child bpc on ds.child_id = bpc.child_id
     where 1=1
     </sql>
     <select id="selectBizTestProductList" parameterType="BizProcessChild" resultMap="BizProcessChildResult">
@@ -323,8 +325,7 @@
         <if test="procurementNo != null">and da.string12 like concat('%', #{procurementNo}, '%')</if>
 
         <if test="queryStatus == 0">and ss.string1 = '0' group by ss.stay_id order by ss.create_time</if>
-        <if test="queryStatus == null">group by p.product_id order by p.string2,p.new_supplier</if>
-
+        <if test="queryStatus == null">group by ds.status_id order by p.string2,p.new_supplier</if>
     </select>
 
 
@@ -378,11 +379,12 @@
           ds.product_status as productStatus,ds.actuator_status as actuatorStatus,
           ds.string4 as procurementId,a.quality_level as levelValue,s.suppliers_id as supplierId,s.name as supplierName,
           COALESCE(sum(sn.string1),0) as yesNum, COALESCE(sum(sn.string2),0) as noNum,(COALESCE(sum(ss.num),0)-COALESCE(sum(sn.string1),0)-COALESCE(sum(sn.string2),0)) as stayNum,ss.create_time as stayCreateTime,ss.stay_id as stayId,ss.string6 as orderNo,
-          da.string10 as contractNo,da.string12 as procurementNo
+          da1.string1 as contractNo,da.string12 as procurementNo,da1.string25 as contractSpecial
           from biz_actuator a
     join biz_data_status ds on   ds.string2=a.actuator_id and ds.string4=#{dataId} and ds.type=2
       left join biz_data_steststay ss on ss.status_id=ds.status_id
       left join biz_process_data da on ss.string4=da.data_id
+      left join biz_process_data da1 on ds.string3=da1.data_id
       left join biz_data_stestn sn on sn.status_id=ds.status_id  and sn.string6=ss.stay_id
     left join biz_suppliers s on s.suppliers_id=a.string10
 
@@ -394,7 +396,7 @@
         <if test="contractNo != null">and da.string10 like concat('%', #{contractNo}, '%')</if>
         <if test="procurementNo != null">and da.string12 like concat('%', #{procurementNo}, '%')</if>
         <if test="queryStatus == 0">and ss.string1 = '0' group by ss.stay_id order by ss.create_time</if>
-        <if test="queryStatus == null">group by a.actuator_id order by a.quality_level,a.string4</if>
+        <if test="queryStatus == null">group by ds.status_id order by a.quality_level,a.string4</if>
     </select>
 
 
@@ -450,11 +452,12 @@ join biz_process_data pd on pc.data_id=pd.data_id
           ds.product_status as productStatus,ds.data_status as dataStatus,
           ds.string4 as procurementId,pr.string1 as levelValue,s.suppliers_id as supplierId,s.name as supplierName,
           COALESCE(sum(sn.string1),0) as yesNum, COALESCE(sum(sn.string2),0) as noNum,(COALESCE(sum(ss.num),0)-COALESCE(sum(sn.string1),0)-COALESCE(sum(sn.string2),0)) as stayNum,ss.create_time as stayCreateTime,ss.stay_id as stayId,ss.string6 as orderNo,
-          da.string10 as contractNo,da.string12 as procurementNo
+          da1.string1 as contractNo,da.string12 as procurementNo,da1.string25 as contractSpecial
           from  biz_product_ref pr
     join biz_data_status ds on   ds.string2=pr.product_ref_id and ds.string4=#{dataId} and ds.type=3
       left join biz_data_steststay ss on ss.status_id=ds.status_id
       left join biz_process_data da on ss.string4=da.data_id
+      left join biz_process_data da1 on ds.string3=da1.data_id
       left join biz_data_stestn sn on sn.status_id=ds.status_id  and sn.string6=ss.stay_id
     left join biz_dict d1 on d1.dict_id=pr.specifications
 	 left join biz_dict d2 on d2.dict_id=pr.valvebody_material
@@ -467,7 +470,7 @@ join biz_process_data pd on pc.data_id=pd.data_id
         <if test="contractNo != null">and da.string10 like concat('%', #{contractNo}, '%')</if>
         <if test="procurementNo != null">and da.string12 like concat('%', #{procurementNo}, '%')</if>
         <if test="queryStatus == 0">and ss.string1 = '0' group by ss.stay_id order by ss.create_time</if>
-        <if test="queryStatus == null">group by pr.product_ref_id order by pr.string1,pr.suppliers_id</if>
+        <if test="queryStatus == null">group by ds.status_id order by pr.string1,pr.suppliers_id</if>
     </select>
 
     <!-- 采购池 螺栓信息 -->
@@ -519,11 +522,12 @@ join biz_process_data pd on pc.data_id=pd.data_id
           ds.data_status as dataStatus,
           ds.string4 as procurementId,pr.string1 as levelValue,s.suppliers_id as supplierId,s.name as supplierName,
           COALESCE(sum(sn.string1),0) as yesNum, COALESCE(sum(sn.string2),0) as noNum,(COALESCE(sum(ss.num),0)-COALESCE(sum(sn.string1),0)-COALESCE(sum(sn.string2),0)) as stayNum,ss.create_time as stayCreateTime,ss.stay_id as stayId,ss.string6 as orderNo,
-          da.string10 as contractNo,da.string12 as procurementNo
+          da1.string1 as contractNo,da.string12 as procurementNo,da1.string25 as contractSpecial
           from  biz_product_ref pr
     join biz_data_status ds on   ds.string2=pr.product_ref_id and ds.string4=#{dataId} and ds.type=4
       left join biz_data_steststay ss on ss.status_id=ds.status_id
       left join biz_process_data da on ss.string4=da.data_id
+      left join biz_process_data da1 on ds.string3=da1.data_id
       left join biz_data_stestn sn on sn.status_id=ds.status_id  and sn.string6=ss.stay_id
     left join biz_dict d1 on d1.dict_id=pr.specifications
 	 left join biz_dict d2 on d2.dict_id=pr.valvebody_material
@@ -536,7 +540,7 @@ join biz_process_data pd on pc.data_id=pd.data_id
         <if test="contractNo != null">and da.string10 like concat('%', #{contractNo}, '%')</if>
         <if test="procurementNo != null">and da.string12 like concat('%', #{procurementNo}, '%')</if>
         <if test="queryStatus == 0">and ss.string1 = '0' group by ss.stay_id order by ss.create_time</if>
-        <if test="queryStatus == null">group by pr.product_ref_id order by pr.string8,pr.suppliers_id</if>
+        <if test="queryStatus == null">group by ds.status_id order by pr.string8,pr.suppliers_id</if>
 
     </select>
 
@@ -589,11 +593,12 @@ join biz_process_data pd on pc.data_id=pd.data_id
          ds.data_status as dataStatus,
           ds.string4 as procurementId,pa.string1 as levelValue,s.suppliers_id as supplierId,s.nick_name as supplierName,
           COALESCE(sum(sn.string1),0) as yesNum, COALESCE(sum(sn.string2),0) as noNum,(COALESCE(sum(ss.num),0)-COALESCE(sum(sn.string1),0)-COALESCE(sum(sn.string2),0)) as stayNum,ss.create_time as stayCreateTime,ss.stay_id as stayId,ss.string6 as orderNo,
-          da.string10 as contractNo,da.string12 as procurementNo
+          da1.string1 as contractNo,da.string12 as procurementNo,da1.string25 as contractSpecial
           from  biz_product_attachment pa
     join biz_data_status ds on   ds.string2=pa.attachment_id and ds.string4=#{dataId} and ds.type > 4
       left join biz_data_steststay ss on ss.status_id=ds.status_id
       left join biz_process_data da on ss.string4=da.data_id
+      left join biz_process_data da1 on ds.string3=da1.data_id
       left join biz_data_stestn sn on sn.status_id=ds.status_id  and sn.string6=ss.stay_id
     left join biz_suppliers s on s.suppliers_id=pa.supplier
     where 1=1
@@ -604,7 +609,7 @@ join biz_process_data pd on pc.data_id=pd.data_id
         <if test="contractNo != null">and da.string10 like concat('%', #{contractNo}, '%')</if>
         <if test="procurementNo != null">and da.string12 like concat('%', #{procurementNo}, '%')</if>
         <if test="queryStatus == 0">and ss.string1 = '0' group by ss.stay_id order by ss.create_time</if>
-        <if test="queryStatus == null">group by pa.attachment_id order by pa.string1</if>
+        <if test="queryStatus == null">group by ds.status_id order by pa.string1</if>
 
     </select>
 

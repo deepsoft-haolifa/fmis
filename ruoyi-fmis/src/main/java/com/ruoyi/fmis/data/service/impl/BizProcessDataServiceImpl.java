@@ -541,6 +541,7 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
         return bizProcessDataMapper.selectBizProcessDataListRefBill(bizProcessData);
     }
     @Override
+    @DataScope(deptAlias = "dt", userAlias = "u")
     public List<BizProcessData> selectBizProcessDataListRefDelivery(BizProcessData bizProcessData) {
         return bizProcessDataMapper.selectBizProcessDataListRefDelivery(bizProcessData);
     }

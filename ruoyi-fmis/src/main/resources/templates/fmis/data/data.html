@@ -25,6 +25,14 @@
                                 <input type="hidden" name="bizId" id="bizId" value="contract"/>
                             </li>
                             <li>
+                                <p>客户名称：</p>
+                                <input type="text" name="customerName"  />
+                            </li>
+                            <li>
+                                <p>归属部门：</p>
+                                <input type="text" name="deptName"  />
+                            </li>
+                            <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
                                 <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
                             </li>
@@ -173,6 +181,10 @@
                     title : '状态',
                     align: 'center'
                 },
+                    {
+                        field : 'createByName',
+                        title : '责任人'
+                    },
                 {
                     field : 'string20',
                     title : '合同文件|流传采购池',
@@ -215,11 +227,13 @@
                         var normalFlag = row.normalFlag;
                         var operationExamineStatus = row.operationExamineStatus;
                         var deliveryStatus = row.string27;
+                        var createBy = row.createBy;
+                        var loginUserId = row.loginUserId;
                         if (flowStatus < 1) {
                             actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="edit(\'' + row.dataId + '\')"><i class="fa fa-edit"></i> 编辑</a> ');
                             actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="remove(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 删除</a>');
                             actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subReport(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 上报</a>');
-                        } else if (flowStatus == normalFlag) {
+                        } else if (flowStatus == normalFlag && createBy == loginUserId) {
                             //已完成
                             actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewInventory(\'' + row.dataId + '\')"><i class="fa fa-edit"></i> 查看库存</a>');
                         } else if (operationExamineStatus == true || operationExamineStatus == "true") {
