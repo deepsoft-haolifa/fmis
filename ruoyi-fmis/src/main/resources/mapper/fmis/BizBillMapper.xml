@@ -27,35 +27,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateBy"    column="update_by"    />
         <result property="updateTime"    column="update_time"    />
         <result property="createByName"    column="createByName"    />
-        <result property="billAmount"    column="billAmount"    />
-        <association property="dept"    column="dept_id" javaType="SysDept" resultMap="deptResult" />
+        <result property="deptName"    column="deptName"    />
     </resultMap>
-    <resultMap id="deptResult" type="SysDept">
-        <id     property="deptId"   column="dept_id"     />
-        <result property="parentId" column="parent_id"   />
-        <result property="deptName" column="dept_name"   />
-        <result property="orderNum" column="order_num"   />
-        <result property="leader"   column="leader"      />
-        <result property="status"   column="dept_status" />
-    </resultMap>
+
 
     <sql id="selectBizBillVo">
         select b.bill_id, b.serial_no, b.operate_date, b.certificate_number, b.pay_way, b.pay_account,b.pay_company, b.pre_month_money, b.collection_money, b.collection_type, b.payment, b.payment_type, b.balance,
         b.type, b.dept_id,  b.remark, b.del_flag, b.create_by, b.create_time, b.update_by, b.update_time,
-        d.parent_id, d.dept_name, d.order_num, d.leader, d.status as dept_status,
-         u.user_name as createByName,sum(bc.amount) as billAmount
+        u.user_name as createByName,d.dept_name as deptName
         from biz_bill b
-        left join sys_dept d on d.dept_id = b.dept_id
         left join sys_user u on u.user_id=b.create_by
-        left join biz_bill_contract bc on bc.bill_id=b.bill_id
+        left join sys_dept d on d.dept_id=b.dept_id
+
     </sql>
 
     <select id="selectBizBillList" parameterType="BizBill" resultMap="BizBillResult">
         <include refid="selectBizBillVo"/>
         <where>
             <if test="serialNo != null  and serialNo != ''"> and serial_no = #{serialNo}</if>
-            <if test="operateDate != null "> and operate_date = #{operateDate}</if>
-            <if test="certificateNumber != null  and certificateNumber != ''"> and certificate_number = #{certificateNumber}</if>
+            <if test="certificateNumber != null  and certificateNumber != ''"> and certificate_number like concat('%', #{certificateNumber}, '%')</if>
             <if test="payWay != null  and payWay != ''"> and pay_way = #{payWay}</if>
             <if test="payAccount != null  and payAccount != ''"> and pay_account = #{payAccount}</if>
             <if test="payCompany != null  and payCompany != ''"> and pay_company = #{payCompany}</if>
@@ -67,6 +57,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="balance != null "> and balance = #{balance}</if>
             <if test="type != null  and type != ''"> and type = #{type}</if>
             <if test="deptId != null  and deptId != ''"> and dept_id = #{deptId}</if>
+            <if test="startOperateDate != null and startOperateDate != ''"> and operate_date >= #{startOperateDate}</if>
+            <if test="endOperateDate != null and endOperateDate != ''"> and operate_date &lt;= #{endOperateDate}</if>
         </where>
     </select>
 

@@ -35,6 +35,7 @@
                 <label class="col-sm-3 control-label">记账类别：</label>
                 <div class="col-sm-8">
                     <select name="type" class="form-control m-b" th:with="type=${@dict.getType('bill_type')}">
+                        <option value="">请选择</option>
                         <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                     </select>
                 </div>
@@ -44,6 +45,7 @@
                 <label class="col-sm-3 control-label">收、付单位：</label>
                 <div class="col-sm-8">
                     <select name="payCompany" class="form-control m-b" th:with="type=${@dict.getType('pay_company')}">
+                        <option value="">请选择</option>
                         <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                     </select>
                 </div>
@@ -54,6 +56,7 @@
                 <label class="col-sm-3 control-label">收、付款账户：</label>
                 <div class="col-sm-8">
                     <select name="payAccount" class="form-control m-b" th:with="type=${@dict.getType('pay_account')}">
+                        <option value="">请选择</option>
                         <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                     </select>
                 </div>
@@ -64,6 +67,7 @@
                 <label class="col-sm-3 control-label">收、付款方式：</label>
                 <div class="col-sm-8">
                     <select name="payWay" class="form-control m-b" th:with="type=${@dict.getType('pay_way')}">
+                        <option value="">请选择</option>
                         <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                     </select>
                 </div>
@@ -85,6 +89,7 @@
                 <label class="col-sm-3 control-label">收款类别：</label>
                 <div class="col-sm-8">
                     <select name="collectionType" class="form-control m-b" th:with="type=${@dict.getType('collection_type1')}">
+                        <option value="">请选择</option>
                         <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                     </select>
                 </div>
@@ -99,6 +104,7 @@
                 <label class="col-sm-3 control-label">付款类别：</label>
                 <div class="col-sm-8">
                     <select name="paymentType" class="form-control m-b" th:with="type=${@dict.getType('payment_type1')}">
+                        <option value="">请选择</option>
                         <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                     </select>
                 </div>

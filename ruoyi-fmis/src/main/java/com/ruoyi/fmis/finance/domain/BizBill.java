@@ -19,13 +19,20 @@ import java.util.Date;
 public class BizBill extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
-    @Getter
     @Setter
-    private Double billAmount;
+    @Getter
+    private String startOperateDate;
+    @Setter
+    @Getter
+    private String endOperateDate;
 
-    @Getter
-    @Setter
-    private SysDept dept;
+//    @Getter
+//    @Setter
+//    private Double billAmount;
+
+//    @Getter
+//    @Setter
+//    private SysDept dept;
     /** ID */
     private Long billId;
 

@@ -9,21 +9,33 @@
         <div class="col-sm-12 search-collapse">
             <form id="formId">
                 <div class="select-list">
-                    <input type="hidden" name="type" value="1"/>
                     <ul>
                         <li>
                             <p>凭证号：</p>
                             <input type="text" name="certificateNumber"/>
                         </li>
                         <li>
-                            <p>付款类别：</p>
-                            <select name="paymentType" th:with="type=${@dict.getType('payment_type1')}">
+                            <p>收付款银行：</p>
+                            <select name="payAccount" th:with="type=${@dict.getType('pay_account')}">
                                 <option value="">所有</option>
                                 <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
                                         th:value="${dict.dictValue}"></option>
                             </select>
                         </li>
-
+                        <li>
+                            <p>记账类别：</p>
+                            <select name="type" th:with="type=${@dict.getType('bill_type')}">
+                                <option value="">所有</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                        th:value="${dict.dictValue}"></option>
+                            </select>
+                        </li>
+                        <li class="select-time">
+                            <p>日期：</p>
+                            <input type="text" class="time-input" style="width: 80px;" id="startOperateDate" placeholder="开始时间" name="startOperateDate"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" style="width: 80px;" id="endOperateDate" placeholder="结束时间" name="endOperateDate"/>
+                        </li>
                         <li>
                             <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
                                     class="fa fa-search"></i>&nbsp;搜索</a>
@@ -151,7 +163,7 @@
                     title: '余额'
                 },
                 {
-                    field: 'dept.deptName',
+                    field: 'deptName',
                     title: '部门'
                 },
                 {
