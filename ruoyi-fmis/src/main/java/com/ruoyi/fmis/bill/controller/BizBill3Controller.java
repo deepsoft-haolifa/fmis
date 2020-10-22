@@ -131,14 +131,12 @@
 //    @PostMapping( "/remove")
 //    @ResponseBody
 //    public AjaxResult remove(String ids) {
-//        return toAjax(bizBillService.deleteBizBillByIds(ids));
+////        return toAjax(bizBillService.deleteBizBillByIds(ids));
 //    }
 //
 //    @PostMapping("/contractList")
 //    @ResponseBody
 //    public TableDataInfo contractList(BizProcessData bizProcessData) {
-//
-//
 //        BizProcessData newBizProcessData = new BizProcessData();
 //        String bizId = bizProcessData.getBizId();
 //        //采购池

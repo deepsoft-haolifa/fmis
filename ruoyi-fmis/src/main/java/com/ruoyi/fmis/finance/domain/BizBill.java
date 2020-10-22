@@ -2,11 +2,7 @@ package com.ruoyi.fmis.finance.domain;
 
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
-import com.ruoyi.system.domain.SysDept;
-import lombok.Getter;
-import lombok.Setter;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import lombok.Data;
 
 import java.util.Date;
 
@@ -16,14 +12,13 @@ import java.util.Date;
  * @author frank
  * @date 2020-06-25
  */
+@Data
 public class BizBill extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
-    @Setter
-    @Getter
+
     private String startOperateDate;
-    @Setter
-    @Getter
+
     private String endOperateDate;
 
 //    @Getter
@@ -92,147 +87,11 @@ public class BizBill extends BaseEntity {
     @Excel(name = "部门ID")
     private String deptId;
 
+    /** 收款合同分解状态；0未完成；1.完成 */
+    private String contractStatus;
+
     /** 删除标志（0代表存在 1代表删除） */
     private String delFlag;
 
-    public void setBillId(Long billId) {
-        this.billId = billId;
-    }
-
-    public Long getBillId() {
-        return billId;
-    }
-    public void setSerialNo(String serialNo) {
-        this.serialNo = serialNo;
-    }
-
-    public String getSerialNo() {
-        return serialNo;
-    }
-    public void setOperateDate(Date operateDate) {
-        this.operateDate = operateDate;
-    }
-
-    public Date getOperateDate() {
-        return operateDate;
-    }
-    public void setCertificateNumber(String certificateNumber) {
-        this.certificateNumber = certificateNumber;
-    }
-
-    public String getCertificateNumber() {
-        return certificateNumber;
-    }
-    public void setPayWay(String payWay) {
-        this.payWay = payWay;
-    }
-
-    public String getPayWay() {
-        return payWay;
-    }
-    public void setPayAccount(String payAccount) {
-        this.payAccount = payAccount;
-    }
-
-    public String getPayAccount() {
-        return payAccount;
-    }
-    public void setPayCompany(String payCompany) {
-        this.payCompany = payCompany;
-    }
-
-    public String getPayCompany() {
-        return payCompany;
-    }
-    public void setPreMonthMoney(Double preMonthMoney) {
-        this.preMonthMoney = preMonthMoney;
-    }
-
-    public Double getPreMonthMoney() {
-        return preMonthMoney;
-    }
-    public void setCollectionMoney(Double collectionMoney) {
-        this.collectionMoney = collectionMoney;
-    }
-
-    public Double getCollectionMoney() {
-        return collectionMoney;
-    }
-    public void setCollectionType(String collectionType) {
-        this.collectionType = collectionType;
-    }
-
-    public String getCollectionType() {
-        return collectionType;
-    }
-    public void setPayment(Double payment) {
-        this.payment = payment;
-    }
-
-    public Double getPayment() {
-        return payment;
-    }
-    public void setPaymentType(String paymentType) {
-        this.paymentType = paymentType;
-    }
-
-    public String getPaymentType() {
-        return paymentType;
-    }
-    public void setBalance(Double balance) {
-        this.balance = balance;
-    }
-
-    public Double getBalance() {
-        return balance;
-    }
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getType() {
-        return type;
-    }
-    public void setDeptId(String deptId) {
-        this.deptId = deptId;
-    }
-
-    public String getDeptId() {
-        return deptId;
-    }
-    public void setDelFlag(String delFlag) {
-        this.delFlag = delFlag;
-    }
-
-    public String getDelFlag() {
-        return delFlag;
-    }
-
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
-                .append("billId", getBillId())
-                .append("serialNo", getSerialNo())
-                .append("operateDate", getOperateDate())
-                .append("certificateNumber", getCertificateNumber())
-                .append("payWay", getPayWay())
-                .append("payAccount", getPayAccount())
-                .append("payCompany", getPayCompany())
-                .append("preMonthMoney", getPreMonthMoney())
-                .append("collectionMoney", getCollectionMoney())
-                .append("collectionType", getCollectionType())
-                .append("payment", getPayment())
-                .append("paymentType", getPaymentType())
-                .append("balance", getBalance())
-                .append("type", getType())
-                .append("deptId", getDeptId())
-                .append("remark", getRemark())
-                .append("delFlag", getDelFlag())
-                .append("createBy", getCreateBy())
-                .append("createTime", getCreateTime())
-                .append("updateBy", getUpdateBy())
-                .append("updateTime", getUpdateTime())
-                .toString();
-    }
 
 }

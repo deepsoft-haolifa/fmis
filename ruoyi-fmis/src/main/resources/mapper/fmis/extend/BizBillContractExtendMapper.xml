@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.fmis.finance.mapper.extend.BizBillContractExtendMapper">
+
+    <sql id="selectBizBillContractVo">
+        select bc.bc_id, bc.bill_id, bc.data_id, bc.amount, bc.book_keeper, bc.remark, bc.create_by, bc.create_time, bc.update_by, bc.update_time,
+        pd.
+        from biz_bill_contract bc
+        inner join biz_process_data  pd on pd.data_id = bc.data_id
+        inner join biz_bill  bb on bb.bill_id = bc.bill_id
+        -- 关联银行记账表，type = 收款，且收款类别是 货款
+        and bb.type = 1 and bb.collection_type=2
+    </sql>
+
+    <select id="selectBizBillContractListVo" parameterType="com.ruoyi.fmis.finance.domain.vo.BizBillContractReqVo" resultType="com.ruoyi.fmis.finance.domain.vo.BizBillContractRespVo">
+        <include refid="selectBizBillContractVo"/>
+        <where>
+            <if test="billId != null "> and bill_id = #{billId}</if>
+            <if test="dataId != null "> and data_id = #{dataId}</if>
+            <if test="amount != null "> and amount = #{amount}</if>
+            <if test="bookKeeper != null  and bookKeeper != ''"> and book_keeper = #{bookKeeper}</if>
+        </where>
+    </select>
+
+    
+</mapper>

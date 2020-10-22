@@ -1,114 +1,157 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('合同收款(合同分解)列表')" />
+    <th:block th:include="include :: header('合同收款(合同分解)列表')"/>
 </head>
 <body class="gray-bg">
-     <div class="container-div">
-        <div class="row">
-            <div class="col-sm-12 search-collapse">
-                <form id="formId">
-                    <div class="select-list">
-                        <ul>
-                            <li>
-                                <p>收款id：</p>
-                                <input type="text" name="billId"/>
-                            </li>
-                            <li>
-                                <p>合同id：</p>
-                                <input type="text" name="dataId"/>
-                            </li>
-                            <li>
-                                <p>收款金额：</p>
-                                <input type="text" name="amount"/>
-                            </li>
-                            <li>
-                                <p>记账员：</p>
-                                <input type="text" name="bookKeeper"/>
-                            </li>
-                            <li>
-                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
-                            </li>
-                        </ul>
-                    </div>
-                </form>
-            </div>
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            <p>凭证号：</p>
+                            <input type="text" name="certificateNumber"/>
+                        </li>
+                        <li>
+                            <p>收付款银行：</p>
+                            <select name="payAccount" th:with="type=${@dict.getType('pay_account')}">
+                                <option value="">所有</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                        th:value="${dict.dictValue}"></option>
+                            </select>
+                        </li>
+                        <li>
+                            <p>记账类别：</p>
+                            <select name="type" th:with="type=${@dict.getType('bill_type')}">
+                                <option value="">所有</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                        th:value="${dict.dictValue}"></option>
+                            </select>
+                        </li>
+                        <li class="select-time">
+                            <p>日期：</p>
+                            <input type="text" class="time-input" style="width: 80px;" id="startOperateDate"
+                                   placeholder="开始时间" name="startOperateDate"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" style="width: 80px;" id="endOperateDate"
+                                   placeholder="结束时间" name="endOperateDate"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
 
-            <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="finance:billContract:add">
-                    <i class="fa fa-plus"></i> 添加
-                </a>
-                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="finance:billContract:edit">
-                    <i class="fa fa-edit"></i> 修改
-                </a>
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="finance:billContract:remove">
-                    <i class="fa fa-remove"></i> 删除
-                </a>
-                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="finance:billContract:export">
-                    <i class="fa fa-download"></i> 导出
-                 </a>
-            </div>
-            <div class="col-sm-12 select-table table-striped">
-                <table id="bootstrap-table"></table>
-            </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
         </div>
     </div>
-    <th:block th:include="include :: footer" />
-    <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('finance:billContract:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('finance:billContract:remove')}]];
-        var prefix = ctx + "finance/billContract";
+</div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('finance:bill:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('finance:bill:remove')}]];
+    var billTypeDatas = [[${@dict.getType('bill_type')}]];
+    var payCompanyDatas = [[${@dict.getType('pay_company')}]];
+    var payAccountDatas = [[${@dict.getType('pay_account')}]];
+    var payWayDatas = [[${@dict.getType('pay_way')}]];
+    var collectionTypeDatas = [[${@dict.getType('collection_type1')}]];
+    var paymentTypeDatas = [[${@dict.getType('payment_type1')}]];
+    var prefix = ctx + "finance/billContract";
 
-        $(function() {
-            var options = {
-                url: prefix + "/list",
-                createUrl: prefix + "/add",
-                updateUrl: prefix + "/edit/{id}",
-                removeUrl: prefix + "/remove",
-                exportUrl: prefix + "/export",
-                modalName: "合同收款(合同分解)",
-                columns: [{
-                    checkbox: true
-                },
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            updateUrl: prefix + "/edit/{id}",
+            modalName: "回款分解",
+            columns: [{
+                checkbox: true
+            },
                 {
-                    field : 'bcId', 
-                    title : 'ID',
+                    field: 'billId',
+                    title: 'ID',
                     visible: false
                 },
                 {
-                    field : 'billId', 
-                    title : '收款id'
+                    field: 'serialNo',
+                    title: '序号'
                 },
                 {
-                    field : 'dataId', 
-                    title : '合同id'
+                    field: 'operateDate',
+                    title: '日期'
                 },
                 {
-                    field : 'amount', 
-                    title : '收款金额'
+                    field: 'certificateNumber',
+                    title: '凭证号'
                 },
                 {
-                    field : 'bookKeeper', 
-                    title : '记账员'
+                    field: 'type',
+                    title: '记账类别',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(billTypeDatas, value);
+                    }
                 },
                 {
-                    field : 'remark', 
-                    title : '备注'
+                    field: 'payCompany',
+                    title: '收、付单位',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(payCompanyDatas, value);
+                    }
+                },
+                {
+                    field: 'payAccount',
+                    title: '收、付款账户',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(payAccountDatas, value);
+                    }
+                },
+                {
+                    field: 'payWay',
+                    title: '收、付款方式',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(payWayDatas, value);
+                    }
+                },
+                {
+                    field: 'collectionMoney',
+                    title: '收款'
+                },
+                {
+                    field: 'deptName',
+                    title: '部门'
+                },
+                {
+                    field: 'createByName',
+                    title: '经办人'
+                },
+                {
+                    field: 'createTime',
+                    title: '创建时间'
+                },
+                {
+                    field: 'remark',
+                    title: '备注'
                 },
                 {
                     title: '操作',
-                    align: 'center',
-                    formatter: function(value, row, index) {
+                    align: 'left',
+                    formatter: function (value, row, index) {
                         var actions = [];
-                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.bcId + '\')"><i class="fa fa-edit"></i> 编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.bcId + '\')"><i class="fa fa-remove"></i> 删除</a>');
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.billId + '\')"><i class="fa fa-edit"></i> 合同分解</a> ');
+                        // actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="edit(\'' + row.billId + '\')"><i class="fa fa-edit"></i> 合同分解</a> ');
                         return actions.join('');
                     }
                 }]
-            };
-            $.table.init(options);
-        });
-    </script>
+        };
+        $.table.init(options);
+    });
+</script>
 </body>
 </html>

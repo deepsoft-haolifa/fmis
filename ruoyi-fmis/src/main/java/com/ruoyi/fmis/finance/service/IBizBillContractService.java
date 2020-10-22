@@ -1,6 +1,7 @@
 package com.ruoyi.fmis.finance.service;
 
 import com.ruoyi.fmis.finance.domain.BizBillContract;
+
 import java.util.List;
 
 /**
@@ -57,4 +58,5 @@ public interface IBizBillContractService {
      * @return 结果
      */
     public int deleteBizBillContractById(Long bcId);
+
 }

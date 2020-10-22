@@ -1,13 +1,15 @@
 package com.ruoyi.fmis.finance.service.impl;
 
-import java.util.List;
+import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.fmis.finance.domain.BizBillContract;
+import com.ruoyi.fmis.finance.mapper.BizBillContractMapper;
+import com.ruoyi.fmis.finance.mapper.extend.BizBillContractExtendMapper;
+import com.ruoyi.fmis.finance.service.IBizBillContractService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.ruoyi.fmis.finance.mapper.BizBillContractMapper;
-import com.ruoyi.fmis.finance.domain.BizBillContract;
-import com.ruoyi.fmis.finance.service.IBizBillContractService;
-import com.ruoyi.common.core.text.Convert;
+
+import java.util.List;
 
 /**
  * 合同收款(合同分解)Service业务层处理
@@ -19,6 +21,10 @@ import com.ruoyi.common.core.text.Convert;
 public class BizBillContractServiceImpl implements IBizBillContractService {
     @Autowired
     private BizBillContractMapper bizBillContractMapper;
+
+    @Autowired
+    private BizBillContractExtendMapper bizBillContractExtendMapper;
+
 
     /**
      * 查询合同收款(合同分解)
