@@ -174,7 +174,7 @@ public class BizCustomerController extends BaseController {
         }
         BizCustomer queryBizCustomer = new BizCustomer();
         queryBizCustomer.setName(name);
-        List<BizCustomer> list = bizCustomerService.selectBizCustomerList(queryBizCustomer);
+        List<BizCustomer> list = bizCustomerService.selectBizCustomerListNoAuth(queryBizCustomer);
         Iterator<BizCustomer> iterator = list.iterator();
         while(iterator.hasNext()){
             BizCustomer o = iterator.next();
@@ -202,7 +202,7 @@ public class BizCustomerController extends BaseController {
         }
         BizCustomer queryBizCustomer = new BizCustomer();
         queryBizCustomer.setContactName(name);
-        List<BizCustomer> list = bizCustomerService.selectBizCustomerList(queryBizCustomer);
+        List<BizCustomer> list = bizCustomerService.selectBizCustomerListNoAuth(queryBizCustomer);
         Iterator<BizCustomer> iterator = list.iterator();
         while(iterator.hasNext()){
             BizCustomer o = iterator.next();
@@ -229,7 +229,7 @@ public class BizCustomerController extends BaseController {
         }
         BizCustomer queryBizCustomer = new BizCustomer();
         queryBizCustomer.setContactPhone(name);
-        List<BizCustomer> list = bizCustomerService.selectBizCustomerList(queryBizCustomer);
+        List<BizCustomer> list = bizCustomerService.selectBizCustomerListNoAuth(queryBizCustomer);
         Iterator<BizCustomer> iterator = list.iterator();
         while(iterator.hasNext()){
             BizCustomer o = iterator.next();

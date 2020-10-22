@@ -850,6 +850,9 @@
             $("#totalNum").val(parseFloat(totalNum).toFixed(0));
 
             var grossPrice = (parseFloat(productTotalPrice) - parseFloat(allTotalCost) - parseFloat(specialExpenses)).toFixed(0);
+            if ("NaN" == grossPrice) {
+                grossPrice = 0;
+            }
             $("#grossPrice").val(grossPrice);
             //毛利率
             $("#price3").val(parseFloat(grossPrice / totalPrice).toFixed(3));//NaN

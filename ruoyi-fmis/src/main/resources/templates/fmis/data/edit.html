@@ -747,6 +747,9 @@
             $("#totalNum").val(parseFloat(totalNum).toFixed(0));
 
             var grossPrice = (parseFloat(productTotalPrice) - parseFloat(allTotalCost) - parseFloat(specialExpenses)).toFixed(0);
+            if ("NaN" == grossPrice) {
+                grossPrice = 0;
+            }
             $("#grossPrice").val(grossPrice);
             $("#price3").val(parseFloat(grossPrice / totalPrice).toFixed(3));
             if ($.common.isEmpty($("#price3").val()) || $.common.isEmpty(grossPrice)
