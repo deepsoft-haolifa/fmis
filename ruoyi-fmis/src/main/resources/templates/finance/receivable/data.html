@@ -32,13 +32,12 @@
 </div>
 <th:block th:include="include :: footer"/>
 <script th:inline="javascript">
-
     var supplierTypeData = [[${@dict.getType('supplier_type')}]];
     var paymentTypeData = [[${@dict.getType('payment_type')}]];
     var paymentMethodData = [[${@dict.getType('payment_method')}]];
 
 
-    var prefix = ctx + "fmis/finance/receivable";
+    var prefix = ctx + "finance/receivable";
     $(function () {
         var options = {
             url: prefix + "/list",
@@ -101,7 +100,6 @@
                     field: 'saleContractAmount',
                     title: '合同总额'
                 },
-
                 {
                     field: 'payMethod',
                     title: '款项类别',
@@ -139,6 +137,13 @@
         $.table.init(options);
     });
 
+    function viewExamineDetail(dataId) {
+        var bizId = $("#bizId").val();
+        var url = ctx + "fmis/data/viewDetail?dataId=" + dataId + "&&bizId=" + bizId;
+        $.modal.openNoEnter("详情", url,$(window).width(),$(window).height(),function(){
+            $.modal.closeAll();
+        });
+    }
 
 </script>
 </body>

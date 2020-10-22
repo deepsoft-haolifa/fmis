@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改付款计划')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-payPlan-edit" th:object="${bizPayPlan}">
+            <input name="payPlanId" th:field="*{payPlanId}" type="hidden">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">申请编号：</label>
+                <div class="col-sm-8">
+                    <input name="applyNo" th:field="*{applyNo}" class="form-control" type="text" readonly>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">申请日期：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="applyDate" th:value="${#dates.format(bizPayPlan.applyDate, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text" readonly>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">合同号：</label>
+                <div class="col-sm-8">
+                    <input name="contractNo" th:field="*{contractNo}" class="form-control" type="text" readonly>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">付款单位：</label>
+                <div class="col-sm-8">
+                    <input name="applyPayCompany" th:field="*{applyPayCompany}" class="form-control" type="text" readonly>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">收款单位：</label>
+                <div class="col-sm-8">
+                    <input name="applyCollectionCompany" th:field="*{applyCollectionCompany}" class="form-control" type="text" readonly>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">付款金额：</label>
+                <div class="col-sm-8">
+                    <input name="applyAmount" th:field="*{applyAmount}" class="form-control" type="text" readonly>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">付款备注：</label>
+                <div class="col-sm-8">
+                    <input name="applyRemark" th:field="*{applyRemark}" class="form-control" type="text" readonly>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">付款方式</label>
+                <div class="col-sm-8">
+                    <select name="payWay" class="form-control m-b" th:with="type=${@dict.getType('pay_way')}">
+                        <option value="">请选择</option>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{payWay}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">付款状态</label>
+                <div class="col-sm-8">
+                    <select name="status" class="form-control m-b" th:with="type=${@dict.getType('pay_status')}">
+                        <option value="">请选择</option>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{status}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">付款日期：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="payDate" th:value="${#dates.format(bizPayPlan.payDate, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script type="text/javascript">
+        var prefix = ctx + "finance/payPlan";
+        $("#form-payPlan-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-payPlan-edit').serialize());
+            }
+        }
+
+        $("input[name='applyDate']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $("input[name='payDate']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+    </script>
+</body>
+</html>

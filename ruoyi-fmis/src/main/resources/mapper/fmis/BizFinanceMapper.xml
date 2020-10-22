@@ -16,7 +16,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         q.price1 saleContractAmount,
         q.string8 payMethod,
         ct.name as customerName,
-        bs.name as suppliersName,
+        q.string3 as supplierName,
         dt1.dept_name as deptName,
         -- 销售总量
         ifnull(sum(bpc.string3),0) saleQty,
@@ -33,7 +33,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         left join biz_data_status ds on ds.string3=q.data_id
 
         left join biz_customer ct on ct.customer_id=q.string2
-        left join biz_suppliers bs on bs.suppliers_id=q.string3
+
 
         left join sys_dept dt1 on q.string22=dt1.dept_id
 

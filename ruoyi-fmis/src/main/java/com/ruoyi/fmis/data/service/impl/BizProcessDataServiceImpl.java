@@ -7,6 +7,7 @@ import java.util.Map;
 
 import com.ruoyi.common.annotation.DataScope;
 import com.ruoyi.common.config.RedisUtil;
+import com.ruoyi.common.constant.GenConstants;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.utils.DateUtils;
@@ -16,6 +17,8 @@ import com.ruoyi.fmis.child.service.IBizProcessChildService;
 import com.ruoyi.fmis.common.BizConstants;
 import com.ruoyi.fmis.common.BizContractLevel;
 import com.ruoyi.fmis.define.service.IBizProcessDefineService;
+import com.ruoyi.fmis.finance.domain.BizPayPlan;
+import com.ruoyi.fmis.finance.service.IBizPayPlanService;
 import com.ruoyi.fmis.flow.domain.BizFlow;
 import com.ruoyi.fmis.flow.mapper.BizFlowMapper;
 import com.ruoyi.fmis.product.domain.BizProduct;
@@ -23,6 +26,8 @@ import com.ruoyi.fmis.product.service.IBizProductService;
 import com.ruoyi.fmis.quotation.domain.BizQuotation;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysRole;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.RandomUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.fmis.data.mapper.BizProcessDataMapper;
@@ -53,6 +58,9 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
 
     @Autowired
     private IBizProcessChildService bizProcessChildService;
+    @Autowired
+    private IBizPayPlanService bizPayPlanService;
+
     /**
      * 查询合同管理
      *
@@ -71,7 +79,7 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
 
 
     @Override
-    public List<BizContractLevel> listLevel (BizProcessData bizProcessData) {
+    public List<BizContractLevel> listLevel(BizProcessData bizProcessData) {
         List<BizContractLevel> bizContractLevels = new ArrayList<>();
         bizProcessData.setLevel("A");
         String editFlag = bizProcessData.getBizEditFlag();
@@ -331,6 +339,7 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
         }
         return bizContractLevels;
     }
+
     @Autowired
     private RedisUtil redisUtil;
     @Autowired
@@ -356,14 +365,14 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
         String pSessionId = bizProcessData.getPSessionId();
 
         if (!CollectionUtils.isEmpty(bizProcessChildList)) {
-            Map<String,String> productNumMap = new HashMap<>();
+            Map<String, String> productNumMap = new HashMap<>();
             for (BizProcessChild bizProcessChild : bizProcessChildList) {
                 String productNum = bizProcessChild.getProductNum();
                 String model = bizProcessChild.getModel();
                 String specifications = bizProcessChild.getSpecifications();
                 String k = model + "_" + specifications;
                 if (!productNumMap.containsKey(k)) {
-                    productNumMap.put(k,productNum);
+                    productNumMap.put(k, productNum);
                 } else {
                     productNum = productNumMap.get(k);
                 }
@@ -397,6 +406,7 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
         }
         return BaseController.getDataTableImpl(bizProcessChildList);
     }
+
     @Override
     public TableDataInfo listLevelActuator(BizProcessData bizProcessData) {
         BizProcessChild queryBizProcessChild = new BizProcessChild();
@@ -412,6 +422,7 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
         List<BizProcessChild> bizProcessChildListActuatorA = bizProcessChildService.selectBizChildActuatorList(queryBizProcessChild);
         return BaseController.getDataTableImpl(bizProcessChildListActuatorA);
     }
+
     @Override
     public TableDataInfo listLevelRef1(BizProcessData bizProcessData) {
         BizProcessChild queryBizProcessChild = new BizProcessChild();
@@ -427,6 +438,7 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
         List<BizProcessChild> bizProcessChildListRefA = bizProcessChildService.selectBizChildRef1List(queryBizProcessChild);
         return BaseController.getDataTableImpl(bizProcessChildListRefA);
     }
+
     @Override
     public TableDataInfo listLevelRef2(BizProcessData bizProcessData) {
         BizProcessChild queryBizProcessChild = new BizProcessChild();
@@ -442,6 +454,7 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
         List<BizProcessChild> bizProcessChildListRefA = bizProcessChildService.selectBizChildRef2List(queryBizProcessChild);
         return BaseController.getDataTableImpl(bizProcessChildListRefA);
     }
+
     @Override
     public TableDataInfo listLevelPA(BizProcessData bizProcessData) {
         BizProcessChild queryBizProcessChild = new BizProcessChild();
@@ -457,6 +470,7 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
         List<BizProcessChild> bizProcessChildListRefA = bizProcessChildService.selectBizChildPAList(queryBizProcessChild);
         return BaseController.getDataTableImpl(bizProcessChildListRefA);
     }
+
     @Override
     public TableDataInfo listLevelPA1(BizProcessData bizProcessData) {
         BizProcessChild queryBizProcessChild = new BizProcessChild();
@@ -472,6 +486,7 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
         List<BizProcessChild> bizProcessChildListRefA = bizProcessChildService.selectBizChildPA1List(queryBizProcessChild);
         return BaseController.getDataTableImpl(bizProcessChildListRefA);
     }
+
     @Override
     public TableDataInfo listLevelPA2(BizProcessData bizProcessData) {
         BizProcessChild queryBizProcessChild = new BizProcessChild();
@@ -487,6 +502,7 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
         List<BizProcessChild> bizProcessChildListRefA = bizProcessChildService.selectBizChildPA2List(queryBizProcessChild);
         return BaseController.getDataTableImpl(bizProcessChildListRefA);
     }
+
     @Override
     public TableDataInfo listLevelPA3(BizProcessData bizProcessData) {
         BizProcessChild queryBizProcessChild = new BizProcessChild();
@@ -502,6 +518,7 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
         List<BizProcessChild> bizProcessChildListRefA = bizProcessChildService.selectBizChildPA3List(queryBizProcessChild);
         return BaseController.getDataTableImpl(bizProcessChildListRefA);
     }
+
     @Override
     public TableDataInfo listLevelPA4(BizProcessData bizProcessData) {
         BizProcessChild queryBizProcessChild = new BizProcessChild();
@@ -517,6 +534,7 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
         List<BizProcessChild> bizProcessChildListRefA = bizProcessChildService.selectBizChildPA4List(queryBizProcessChild);
         return BaseController.getDataTableImpl(bizProcessChildListRefA);
     }
+
     /**
      * 查询合同管理列表
      *
@@ -540,6 +558,7 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
     public List<BizProcessData> selectBizProcessDataListRefBill(BizProcessData bizProcessData) {
         return bizProcessDataMapper.selectBizProcessDataListRefBill(bizProcessData);
     }
+
     @Override
     @DataScope(deptAlias = "dt", userAlias = "u")
     public List<BizProcessData> selectBizProcessDataListRefDelivery(BizProcessData bizProcessData) {
@@ -557,15 +576,17 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
     public List<BizProcessData> selectBizProcessDataVoRefBorrowing(BizProcessData bizProcessData) {
         return bizProcessDataMapper.selectBizProcessDataVoRefBorrowing(bizProcessData);
     }
+
     /**
      * 审批
+     *
      * @param dataId
      * @param status
      * @param remark
      * @return
      */
     @Override
-    public int doExamine(String dataId,String status,String remark,String bizId) {
+    public int doExamine(String dataId, String status, String remark, String bizId) {
 
         Map<String, SysRole> flowMap = bizProcessDefineService.getRoleFlowMap(bizId);
         //Map<String, SysRole> flowAllMap = bizProcessDefineService.getFlowAllMap(bizId);
@@ -598,6 +619,15 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
                 bizProcessData.setString11("3");
             }
         }
+
+        /**
+         * hedong 付款申请，当审批完成，往付款计划表中插入一条数据
+         */
+        if (BizConstants.BIZ_cpayment.equals(bizProcessData.getBizId())
+                && bizProcessData.getFlowStatus().equals(bizProcessData.getNormalFlag())) {
+            this.addPayPlan(bizProcessData);
+        }
+
 
         int updateCount = bizProcessDataMapper.updateBizProcessData(bizProcessData);
         BizFlow bizFlow = new BizFlow();
@@ -700,7 +730,7 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
     /**
      * 上报报价单
      */
-    public void insertFlow (BizProcessData bizProcessData) {
+    public void insertFlow(BizProcessData bizProcessData) {
         BizFlow bizFlow = new BizFlow();
         bizFlow.setCreateTime(DateUtils.getNowDate());
         bizFlow.setCreateBy(ShiroUtils.getUserId().toString());
@@ -712,7 +742,25 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
     }
 
     @Override
-    public Long selectProcurementMaxNo () {
+    public Long selectProcurementMaxNo() {
         return bizProcessDataMapper.selectProcurementMaxNo();
+    }
+
+    /**
+     * 添加付款计划（付款申请流程审批完成）
+     */
+    private void addPayPlan(BizProcessData bizProcessData) {
+        BizPayPlan bizPayPlan = new BizPayPlan();
+        bizPayPlan.setPayDataId(bizProcessData.getDataId());
+        bizPayPlan.setApplyPayCompany(bizProcessData.getString6());
+        bizPayPlan.setApplyCollectionCompany(bizProcessData.getString1());
+        bizPayPlan.setApplyRemark(bizProcessData.getRemark());
+        bizPayPlan.setApplyAmount(bizProcessData.getPrice2());
+        bizPayPlan.setApplyDate(bizProcessData.getDatetime1());
+        bizPayPlan.setContractNo(bizProcessData.getString5());
+        bizPayPlan.setApplyNo("PP" + DateUtils.dateTimeNow() + RandomStringUtils.randomNumeric(3));
+        bizPayPlan.setCreateTime(DateUtils.getNowDate());
+        bizPayPlan.setCreateBy(ShiroUtils.getUserId().toString());
+        bizPayPlanService.insertBizPayPlan(bizPayPlan);
     }
 }

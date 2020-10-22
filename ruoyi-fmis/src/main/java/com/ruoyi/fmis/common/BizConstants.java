@@ -54,6 +54,8 @@ public class BizConstants {
     public static final String BIZ_invoice = "invoice";
 
     public static final String BIZ_newdelivery = "newdelivery";
+    // 付款申请
+    public static final String BIZ_cpayment = "cpayment";
 
     /**
      * 流程上报状态

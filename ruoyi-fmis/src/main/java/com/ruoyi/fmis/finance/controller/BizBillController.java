@@ -23,14 +23,14 @@ import java.util.List;
  * @date 2020-06-25
  */
 @Controller
-@RequestMapping("/fmis/finance/bill")
+@RequestMapping("/finance/bill")
 public class BizBillController extends BaseController {
-    private String prefix = "fmis/finance/bill";
+    private String prefix = "finance/bill";
 
     @Autowired
     private IBizBillService bizBillService;
 
-    @RequiresPermissions("fmis:finance:bill:view")
+    @RequiresPermissions("finance:bill:view")
     @GetMapping()
     public String bill() {
         return prefix + "/bill";
@@ -39,7 +39,7 @@ public class BizBillController extends BaseController {
     /**
      * 查询现金日记账列表
      */
-    @RequiresPermissions("fmis:finance:bill:list")
+    @RequiresPermissions("finance:bill:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(BizBill bizBill) {
@@ -51,7 +51,7 @@ public class BizBillController extends BaseController {
     /**
      * 导出现金日记账列表
      */
-    @RequiresPermissions("fmis:finance:bill:export")
+    @RequiresPermissions("finance:bill:export")
     @PostMapping("/export")
     @ResponseBody
     public AjaxResult export(BizBill bizBill) {
@@ -71,7 +71,7 @@ public class BizBillController extends BaseController {
     /**
      * 新增保存现金日记账
      */
-    @RequiresPermissions("fmis:finance:bill:add")
+    @RequiresPermissions("finance:bill:add")
     @Log(title = "现金日记账", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
@@ -92,7 +92,7 @@ public class BizBillController extends BaseController {
     /**
      * 修改保存现金日记账
      */
-    @RequiresPermissions("fmis:finance:bill:edit")
+    @RequiresPermissions("finance:bill:edit")
     @Log(title = "现金日记账", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
@@ -103,11 +103,14 @@ public class BizBillController extends BaseController {
     /**
      * 删除现金日记账
      */
-    @RequiresPermissions("fmis:finance:bill:remove")
+    @RequiresPermissions("finance:bill:remove")
     @Log(title = "现金日记账", businessType = BusinessType.DELETE)
     @PostMapping( "/remove")
     @ResponseBody
     public AjaxResult remove(String ids) {
         return toAjax(bizBillService.deleteBizBillByIds(ids));
     }
+
+
+
 }

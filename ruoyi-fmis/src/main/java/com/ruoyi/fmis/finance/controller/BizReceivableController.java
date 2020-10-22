@@ -25,23 +25,24 @@ import java.util.List;
  * @date 2020-10-13
  */
 @Controller
-@RequestMapping("/fmis/finance/receivable")
+@RequestMapping("/finance/receivable")
 public class BizReceivableController extends BaseController {
-    private String prefix = "fmis/finance/receivable";
+    private String prefix = "/finance/receivable";
 
 
     @Autowired
     private IBizReceivableService bizReceivableService;
-    @RequiresPermissions("fmis:finance:receivable:view")
+
+    @RequiresPermissions("finance:receivable:view")
     @GetMapping()
-    public String bill() {
+    public String data() {
         return prefix + "/data";
     }
 
     /**
      * 查询应收列表(销售合同列表)
      */
-    @RequiresPermissions("fmis:finance:receivable:list")
+    @RequiresPermissions("finance:receivable:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(ReceivableReqVo reqVo) {
@@ -50,66 +51,4 @@ public class BizReceivableController extends BaseController {
         return getDataTable(list);
     }
 
-//    /**
-//     * 导出现金日记账列表
-//     */
-//    @RequiresPermissions("fmis:bill:export")
-//    @PostMapping("/export")
-//    @ResponseBody
-//    public AjaxResult export(BizBill bizBill) {
-//        List<BizBill> list = bizBillService.selectBizBillList(bizBill);
-//        ExcelUtil<BizBill> util = new ExcelUtil<BizBill>(BizBill.class);
-//        return util.exportExcel(list, "bill");
-//    }
-//
-//    /**
-//     * 新增现金日记账
-//     */
-//    @GetMapping("/add")
-//    public String add() {
-//        return prefix + "/add";
-//    }
-//
-//    /**
-//     * 新增保存现金日记账
-//     */
-//    @RequiresPermissions("fmis:bill:add")
-//    @Log(title = "现金日记账", businessType = BusinessType.INSERT)
-//    @PostMapping("/add")
-//    @ResponseBody
-//    public AjaxResult addSave(BizBill bizBill) {
-//        return toAjax(bizBillService.insertBizBill(bizBill));
-//    }
-//
-//    /**
-//     * 修改现金日记账
-//     */
-//    @GetMapping("/edit/{billId}")
-//    public String edit(@PathVariable("billId") Long billId, ModelMap mmap) {
-//        BizBill bizBill = bizBillService.selectBizBillById(billId);
-//        mmap.put("bizBill", bizBill);
-//        return prefix + "/edit";
-//    }
-//
-//    /**
-//     * 修改保存现金日记账
-//     */
-//    @RequiresPermissions("fmis:bill:edit")
-//    @Log(title = "现金日记账", businessType = BusinessType.UPDATE)
-//    @PostMapping("/edit")
-//    @ResponseBody
-//    public AjaxResult editSave(BizBill bizBill) {
-//        return toAjax(bizBillService.updateBizBill(bizBill));
-//    }
-//
-//    /**
-//     * 删除现金日记账
-//     */
-//    @RequiresPermissions("fmis:bill:remove")
-//    @Log(title = "现金日记账", businessType = BusinessType.DELETE)
-//    @PostMapping( "/remove")
-//    @ResponseBody
-//    public AjaxResult remove(String ids) {
-//        return toAjax(bizBillService.deleteBizBillByIds(ids));
-//    }
 }
