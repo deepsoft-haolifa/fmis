@@ -22,6 +22,7 @@
         <result property="deptId" column="dept_id"/>
         <result property="remark" column="remark"/>
         <result property="delFlag" column="del_flag"/>
+        <result property="contractStatus" column="contract_status"/>
         <result property="createBy" column="create_by"/>
         <result property="createTime" column="create_time"/>
         <result property="updateBy" column="update_by"/>
@@ -32,7 +33,7 @@
 
     <sql id="selectBizBillVo">
         select b.bill_id, b.serial_no, b.operate_date, b.certificate_number, b.pay_way, b.pay_account,b.pay_company, b.pre_month_money, b.collection_money, b.collection_type, b.payment, b.payment_type, b.balance,
-        b.type, b.dept_id,  b.remark, b.del_flag, b.create_by, b.create_time, b.update_by, b.update_time,
+        b.type, b.dept_id,  b.remark, b.contract_status,b.del_flag, b.create_by, b.create_time, b.update_by, b.update_time,
         u.user_name as createByName,d.dept_name as deptName
         from biz_bill b
         left join sys_user u on u.user_id=b.create_by

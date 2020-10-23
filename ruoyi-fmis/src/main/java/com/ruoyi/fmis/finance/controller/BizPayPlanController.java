@@ -123,14 +123,14 @@ public class BizPayPlanController extends BaseController {
         return toAjax(bizPayPlanService.updateBizPayPlan(bizPayPlan));
     }
 
-    /**
-     * 删除付款计划（基于付款申请记录）
-     */
-    @RequiresPermissions("finance:payPlan:remove")
-    @Log(title = "付款计划（基于付款申请记录）", businessType = BusinessType.DELETE)
-    @PostMapping( "/remove")
-    @ResponseBody
-    public AjaxResult remove(String ids) {
-        return toAjax(bizPayPlanService.deleteBizPayPlanByIds(ids));
-    }
+//    /**
+//     * 删除付款计划（基于付款申请记录）
+//     */
+//    @RequiresPermissions("finance:payPlan:remove")
+//    @Log(title = "付款计划（基于付款申请记录）", businessType = BusinessType.DELETE)
+//    @PostMapping( "/remove")
+//    @ResponseBody
+//    public AjaxResult remove(String ids) {
+//        return toAjax(bizPayPlanService.deleteBizPayPlanByIds(ids));
+//    }
 }

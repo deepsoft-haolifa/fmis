@@ -6,10 +6,10 @@ import lombok.Data;
  * @author murphy.he
  **/
 @Data
-public class ReceivableReqVo {
+public class StandAccountReqVo {
 
     /**
-     * 合同编号(销售合同)
+     * 合同编号(采购合同)
      */
-    private String saleContractNo;
+    private String purchaseContractNo;
 }

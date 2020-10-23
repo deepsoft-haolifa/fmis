@@ -68,13 +68,6 @@
                shiro:hasPermission="finance:payPlan:edit">
                 <i class="fa fa-edit"></i> 修改
             </a>
-            <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"
-               shiro:hasPermission="finance:payPlan:remove">
-                <i class="fa fa-remove"></i> 删除
-            </a>
-            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="finance:payPlan:export">
-                <i class="fa fa-download"></i> 导出
-            </a>
         </div>
         <div class="col-sm-12 select-table table-striped">
             <table id="bootstrap-table"></table>
@@ -95,7 +88,7 @@
             updateUrl: prefix + "/edit/{id}",
             removeUrl: prefix + "/remove",
             exportUrl: prefix + "/export",
-            modalName: "付款计划（基于付款申请记录）",
+            modalName: "付款计划",
             columns: [{
                 checkbox: true
             },

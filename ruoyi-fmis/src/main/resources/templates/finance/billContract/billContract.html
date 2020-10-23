@@ -23,11 +23,12 @@
                             </select>
                         </li>
                         <li>
-                            <p>记账类别：</p>
-                            <select name="type" th:with="type=${@dict.getType('bill_type')}">
+                            <p>分解状态：</p>
+                            <select name="contractStatus">
                                 <option value="">所有</option>
-                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
-                                        th:value="${dict.dictValue}"></option>
+                                <option value="0">未完成</option>
+                                <option value="1">完成</option>
+
                             </select>
                         </li>
                         <li class="select-time">
@@ -122,6 +123,21 @@
                 {
                     field: 'collectionMoney',
                     title: '收款'
+                },
+                {
+                    field: 'contractStatus',
+                    title: '分解状态',
+                    formatter: function (value, row, index) {
+                        var actions = '';
+                        var contractStatus = row.contractStatus;
+                        if (contractStatus == "1") {
+                            actions = "完成";
+                        } else if (contractStatus == "0") {
+                            actions = "未完成";
+                        }
+                        return actions;
+                    }
+
                 },
                 {
                     field: 'deptName',

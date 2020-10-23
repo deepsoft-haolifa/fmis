@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.fmis.finance.mapper.BizFinanceMapper">
 
-    <select id="selectReceivableList"  resultType="com.ruoyi.fmis.finance.domain.vo.ReceivableRespVo">
+    <select id="selectReceivableList" resultType="com.ruoyi.fmis.finance.domain.vo.ReceivableRespVo">
         select
         distinct q.data_id saleContractId,
         q.string1 saleContractNo,
@@ -29,17 +29,56 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         from biz_process_data q
         left join sys_user u on q.create_by=u.user_id
         left join sys_dept dt on u.dept_id=dt.dept_id
-
         left join biz_data_status ds on ds.string3=q.data_id
-
         left join biz_customer ct on ct.customer_id=q.string2
-
-
         left join sys_dept dt1 on q.string22=dt1.dept_id
-
-         left join biz_process_child bpc on bpc.data_id=q.data_id
+        left join biz_process_child bpc on bpc.data_id=q.data_id
+        <include refid="ReceivableWhere"></include>
         order by q.create_time desc
     </select>
+
+    <sql id="ReceivableWhere">
+        <where>
+            q.biz_id='contract'
+            <if test="saleContractNo != null and saleContractNo != ''">
+                and q.string1 like concat('%', #{saleContractNo}, '%')
+            </if>
+        </where>
+    </sql>
+
+
+    <select id="selectStandAccountList" resultType="com.ruoyi.fmis.finance.domain.vo.StandAccountRespVo">
+        select
+        distinct q.data_id purchaseContractId,
+        q.string1 chargeCompany,
+        q.string12 purchaseContractNo,
+        q.string2 deptName,
+        q.datetime2 deliveryDate,
+        q.datetime3 outDate,
+        q.price1 as contractAmount,
+        q.string11 as purchaseStatus,
+        q.string20 as payWay,
+        s.name supplierName,
+        -- 到货数量
+        0 arrivalQty,
+        -- 到货货款
+        0 arrivalAmount,
+        -- 已付货款
+        0 as paidAmount
+        from biz_process_data q
+        left join biz_suppliers s on s.suppliers_id=q.string6
+        <include refid="standAccountWhere"></include>
+        order by q.create_time desc
+    </select>
+
+    <sql id="standAccountWhere">
+        <where>
+            q.biz_id='procurement'
+            <if test="purchaseContractNo != null and purchaseContractNo != ''">
+                and q.string12 like concat('%', #{purchaseContractNo}, '%')
+            </if>
+        </where>
+    </sql>
 
 
 </mapper>

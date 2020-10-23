@@ -2,8 +2,10 @@ package com.ruoyi.fmis.finance.service.impl;
 
 import com.ruoyi.fmis.finance.domain.vo.ReceivableReqVo;
 import com.ruoyi.fmis.finance.domain.vo.ReceivableRespVo;
+import com.ruoyi.fmis.finance.domain.vo.StandAccountReqVo;
+import com.ruoyi.fmis.finance.domain.vo.StandAccountRespVo;
 import com.ruoyi.fmis.finance.mapper.BizFinanceMapper;
-import com.ruoyi.fmis.finance.service.IBizReceivableService;
+import com.ruoyi.fmis.finance.service.IBizFinanceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,12 +15,17 @@ import java.util.List;
  * @author murphy.he
  **/
 @Service
-public class BizReceivableServiceImpl implements IBizReceivableService {
+public class BizReceivableServiceImpl implements IBizFinanceService {
     @Autowired
     private BizFinanceMapper bizFinanceMapper;
 
     @Override
     public List<ReceivableRespVo> selectReceivableList(ReceivableReqVo reqVo) {
         return bizFinanceMapper.selectReceivableList(reqVo);
+    }
+
+    @Override
+    public List<StandAccountRespVo> selectStandAccountList(StandAccountReqVo reqVo) {
+        return bizFinanceMapper.selectStandAccountList(reqVo);
     }
 }
