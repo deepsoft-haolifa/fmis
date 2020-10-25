@@ -436,6 +436,22 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils
         }
         return numberStr;
     }
+    public static String getDoubleString(String number1) {
+        String numberStr = "0";
+        try {
+            double number = Double.parseDouble(number1);
+            if (((int) number * 1000) == (int) (number * 1000)) {
+                //如果是一个整数
+                numberStr = String.valueOf((int) number);
+            } else {
+                DecimalFormat df = new DecimalFormat("######0.00");
+                numberStr = df.format(number);
+            }
+        } catch (Exception ex) {
+
+        }
+        return numberStr;
+    }
     public static String getDoubleString0(double number) {
         String numberStr;
         if (((int) number * 1000) == (int) (number * 1000)) {

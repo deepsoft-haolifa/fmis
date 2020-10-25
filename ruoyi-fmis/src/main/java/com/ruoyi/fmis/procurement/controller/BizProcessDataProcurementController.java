@@ -855,11 +855,10 @@ public class BizProcessDataProcurementController extends BaseController {
             //第四行
             table.addCell(PdfUtil.mergeCol("签订日期：", 2,textFont));
             table.addCell(PdfUtil.mergeCol(DateUtils.dateTime(bizProcessData.getCreateTime()), 2,textFont));
-            table.addCell(PdfUtil.mergeCol("", 1,textFont));
-            table.addCell(PdfUtil.mergeCol("", 1,textFont));
+            table.addCell(PdfUtil.mergeCol("", totalColumn - 4,textFont));
 
             //第五行
-            table.addCell(PdfUtil.mergeCol("为保障买卖双方的合法权益，根据《合同法》及有关法律规定，买卖双方经友好协商，一致同意按下列条款签订本合同。", 9,textFont));
+            table.addCell(PdfUtil.mergeCol("为保障买卖双方的合法权益，根据《合同法》及有关法律规定，买卖双方经友好协商，一致同意按下列条款签订本合同。", totalColumn,textFont));
 
             table.addCell(PdfUtil.mergeCol("一、", 1,textFont));
             table.addCell(PdfUtil.mergeColLeft("供货内容：", 14,textFont));
@@ -926,16 +925,16 @@ public class BizProcessDataProcurementController extends BaseController {
             table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(sumTotalAmount), 1,textFont));//合计
             table.addCell(PdfUtil.mergeCol("", 7,textFont));//备注
 
-
+            /*
             table.addCell(PdfUtil.mergeColRight("优惠价", 6,textFont));//4
             table.addCell(PdfUtil.mergeCol("", 1,textFont));//总数量
             table.addCell(PdfUtil.mergeCol("", 1,textFont));//单价
             table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(string14D), 1,textFont));//合计
-            table.addCell(PdfUtil.mergeCol("", 7,textFont));//备注
+            table.addCell(PdfUtil.mergeCol("", 7,textFont));//备注*/
 
 
 
-            table.addCell(PdfUtil.mergeColRight("大写人民币合计", 5,textFont));
+            table.addCell(PdfUtil.mergeColRight("以上价格均为含13%增值税价格", 5,textFont));
             table.addCell(PdfUtil.mergeCol(StringUtils.convert(sumTotalAmount), 3,textFont));//合计
             table.addCell(PdfUtil.mergeCol("", 7,textFont));//备注
 

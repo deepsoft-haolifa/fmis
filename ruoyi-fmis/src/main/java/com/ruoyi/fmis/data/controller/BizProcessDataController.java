@@ -278,6 +278,15 @@ public class BizProcessDataController extends BaseController {
         String dataId = getRequest().getParameter("dataId");
         BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataById(Long.parseLong(dataId));
 
+
+        String bizId = bizProcessData.getBizId();
+        Map<String, SysRole> flowMap = bizProcessDefineService.getRoleFlowMap(bizId);
+        String userFlowStatus = "";
+        if (!CollectionUtils.isEmpty(flowMap)) {
+            userFlowStatus = flowMap.keySet().iterator().next();
+            bizProcessData.setRoleType(userFlowStatus);
+        }
+
         BizProcessChild queryBizProcessChild = new BizProcessChild();
         queryBizProcessChild.setDataId(bizProcessData.getDataId());
         List<BizProcessChild> bizProcessChildList = bizProcessChildService.selectBizProcessChildList(queryBizProcessChild);
@@ -330,6 +339,7 @@ public class BizProcessDataController extends BaseController {
         mmap.put("quotationNames", productNames);
         mmap.put("quotationIds", productIds);
         mmap.put("bizProcessData", bizProcessData);
+        mmap.put("userFlowStatus", userFlowStatus);
         return prefix + "/viewDetail";
     }
 
@@ -1044,6 +1054,7 @@ public class BizProcessDataController extends BaseController {
 
             table.addCell(PdfUtil.mergeCol("签订日期：", 2,textFont));
             table.addCell(PdfUtil.mergeCol(DateUtils.dateTime(bizProcessData.getCreateTime()), 5,textFont));
+
 
             table.addCell(PdfUtil.mergeCol("为保障买卖双方的合法权益，根据《合同法》及有关法律规定，买卖双方经友好协商，一致同意按下列条款签订本合同。", 15,textFont));
 

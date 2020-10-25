@@ -47,7 +47,7 @@ $(function() {
                     if (value == "1") {
                         showText = "采购中";
                     } else if (value == "2") {
-                        showText = "采购完成";
+                        showText = "处理完成";
                     }
                     actions.push($.common.sprintf("<span class='default'>%s</span>", showText));
                     return actions;

@@ -13,6 +13,7 @@ import com.ruoyi.fmis.flow.domain.BizFlow;
 import com.ruoyi.fmis.flow.mapper.BizFlowMapper;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.service.ISysRoleService;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.fmis.quotation.mapper.BizQuotationMapper;
@@ -66,12 +67,22 @@ public class BizQuotationServiceImpl implements IBizQuotationService {
     @Override
     @DataScope(deptAlias = "dt", userAlias = "u")
     public List<BizQuotation> selectBizQuotationFlowList(BizQuotation bizQuotation) {
-        return bizQuotationMapper.selectBizQuotationFlowList(bizQuotation);
+        List<BizQuotation> list = bizQuotationMapper.selectBizQuotationFlowList(bizQuotation);
+        if (CollectionUtils.isNotEmpty(list)) {
+            for (BizQuotation bizQuotation1 : list) {
+                String string9 = bizQuotation1.getString9();
+                String string20 = bizQuotation1.getString20();
+                bizQuotation1.setString9(StringUtils.getDoubleString(string9));
+                bizQuotation1.setString20(StringUtils.getDoubleString(string20));
+            }
+        }
+        return list;
     }
 
     @Override
     public List<BizQuotation> selectBizQuotationProductList(BizQuotation bizQuotation) {
-        return bizQuotationMapper.selectBizQuotationProductList(bizQuotation);
+        List<BizQuotation> list = bizQuotationMapper.selectBizQuotationProductList(bizQuotation);
+        return list;
     }
 
 

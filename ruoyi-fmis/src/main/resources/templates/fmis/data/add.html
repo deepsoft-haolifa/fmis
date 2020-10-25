@@ -198,12 +198,13 @@
         </div>
 
         <div class="form-group" style="margin-bottom: 7px">
-            <label class="col-sm-1 control-label">毛利：</label>
-            <div class="col-sm-2">
-                <input name="grossPrice" id="grossPrice" class="form-control" type="text"  readonly>
+
+            <label class="col-sm-1 control-label" style="display: none">毛利：</label>
+            <div class="col-sm-2" style="display: none">
+                <input name="grossPrice"  id="grossPrice" class="form-control" type="text"  readonly>
             </div>
-            <label class="col-sm-1 control-label">毛利率：</label>
-            <div class="col-sm-2">
+            <label class="col-sm-1 control-label" style="display: none">毛利率：</label>
+            <div class="col-sm-2" style="display: none">
                 <input name="price3" id="price3" class="form-control" type="text"  readonly>
             </div>
             <label class="col-sm-1 control-label">特殊要求：</label>
@@ -351,6 +352,11 @@
             //var productIdsStrs = productIds.split(",");
 
             var data = $.btTable.bootstrapTable('getData');
+
+            if (data.length == 0) {
+                $.modal.alertWarning("产品数据不能为空");
+                return;
+            }
 
             for (var i = 0; i < data.length; i++) {
                 var rowData = data[i];
@@ -837,7 +843,7 @@
                 totalNum += parseFloat(productNum);
 
                 var totalCostPrice = totalCostPriceMap.get("totalCostPrice");
-                allTotalCost =  FloatAdd(totalCostPrice,allTotalCost).toFixed(4);
+                allTotalCost =  FloatAdd(totalCostPrice,allTotalCost).toFixed(2);
             }
             var specialExpenses = $("#string14").val();
             if (isEmpty(specialExpenses)) {
@@ -903,7 +909,7 @@
             pattachmentCoefficient = isEmpty(pattachmentCoefficient) == true ? 0 : parseFloat(pattachmentCoefficient);
             var pattachmentPrice = row["pattachmentPrice"];
             pattachmentPrice = isEmpty(pattachmentPrice) == true ? 0 : parseFloat(pattachmentPrice);
-            var pattachmentSum = parseFloat(pattachmentCount * pattachmentPrice * pattachmentCoefficient).toFixed(4);
+            var pattachmentSum = parseFloat(pattachmentCount * pattachmentPrice * pattachmentCoefficient).toFixed(2);
 
             //附件1
             var pattachment1Count = row["pattachment1Count"];
@@ -912,7 +918,7 @@
             pattachment1Coefficient = isEmpty(pattachment1Coefficient) == true ? 0 : parseFloat(pattachment1Coefficient);
             var pattachment1Price = row["pattachment1Price"];
             pattachment1Price = isEmpty(pattachment1Price) == true ? 0 : parseFloat(pattachment1Price);
-            var pattachment1Sum = parseFloat(pattachment1Count * pattachment1Price * pattachment1Coefficient).toFixed(4);
+            var pattachment1Sum = parseFloat(pattachment1Count * pattachment1Price * pattachment1Coefficient).toFixed(2);
 
             //附件2
             var pattachment2Count = row["pattachment2Count"];
@@ -921,7 +927,7 @@
             pattachment2Coefficient = isEmpty(pattachment2Coefficient) == true ? 0 : parseFloat(pattachment2Coefficient);
             var pattachment2Price = row["pattachment2Price"];
             pattachment2Price = isEmpty(pattachment2Price) == true ? 0 : parseFloat(pattachment2Price);
-            var pattachment2Sum = parseFloat(pattachment2Count * pattachment2Price * pattachment2Coefficient).toFixed(4);
+            var pattachment2Sum = parseFloat(pattachment2Count * pattachment2Price * pattachment2Coefficient).toFixed(2);
 
             //附件3
             var pattachment3Count = row["pattachment3Count"];
@@ -930,7 +936,7 @@
             pattachment3Coefficient = isEmpty(pattachment3Coefficient) == true ? 0 : parseFloat(pattachment3Coefficient);
             var pattachment3Price = row["pattachment3Price"];
             pattachment3Price = isEmpty(pattachment3Price) == true ? 0 : parseFloat(pattachment3Price);
-            var pattachment3Sum = parseFloat(pattachment3Count * pattachment3Price * pattachment3Coefficient).toFixed(4);
+            var pattachment3Sum = parseFloat(pattachment3Count * pattachment3Price * pattachment3Coefficient).toFixed(2);
 
             //附件4
             var pattachment4Count = row["pattachment4Count"];
@@ -939,12 +945,12 @@
             pattachment4Coefficient = isEmpty(pattachment4Coefficient) == true ? 0 : parseFloat(pattachment4Coefficient);
             var pattachment4Price = row["pattachment4Price"];
             pattachment4Price = isEmpty(pattachment4Price) == true ? 0 : parseFloat(pattachment4Price);
-            var pattachment4Sum = parseFloat(pattachment4Count * pattachment4Price * pattachment4Coefficient).toFixed(4);
+            var pattachment4Sum = parseFloat(pattachment4Count * pattachment4Price * pattachment4Coefficient).toFixed(2);
 
-            var productSum = parseFloat(productNum * productPrice * productCoefficient).toFixed(4);
-            var productRef1Sum = parseFloat(productRef1Num * productRef1Price * productRef1Coefficient).toFixed(4);
-            var productRef2Sum = parseFloat(productRef2Num * productRef2Price * productRef2Coefficient).toFixed(4);
-            var actuatorSum = parseFloat(actuatorNum * actuatorCoefficient * actuatorPrice).toFixed(4);
+            var productSum = parseFloat(productNum * productPrice * productCoefficient).toFixed(2);
+            var productRef1Sum = parseFloat(productRef1Num * productRef1Price * productRef1Coefficient).toFixed(2);
+            var productRef2Sum = parseFloat(productRef2Num * productRef2Price * productRef2Coefficient).toFixed(2);
+            var actuatorSum = parseFloat(actuatorNum * actuatorCoefficient * actuatorPrice).toFixed(2);
 
             var string14 = row["string14"];
 
@@ -960,7 +966,7 @@
                 parseFloat(pattachment1Count * pattachment1Price).toFixed(4) +
                 parseFloat(pattachment2Count * pattachment2Price).toFixed(4) +
                 parseFloat(pattachment3Count * pattachment2Price).toFixed(4) +
-                parseFloat(pattachment4Count * pattachment2Price).toFixed(4);
+                parseFloat(pattachment4Count * pattachment2Price).toFixed(2);
             costProce = parseFloat(costProce).toFixed(0);
 
             console.log("totalSum=" + totalSum + " costProce=" + costProce);
@@ -968,29 +974,29 @@
 
 
             var productCostPrice = parsePrice(row["productCostPrice"]);
-            var totalPriceCost = parseFloat(productNum * productCostPrice).toFixed(4);
+            var totalPriceCost = parseFloat(productNum * productCostPrice).toFixed(2);
 
             var actuatorCostPrice = parsePrice(row["actuatorCostPrice"]);
-            var totalActuatorCost = parseFloat(actuatorNum * actuatorCostPrice).toFixed(4);
+            var totalActuatorCost = parseFloat(actuatorNum * actuatorCostPrice).toFixed(2);
 
             var ref1CostPrice = parsePrice(row["ref1CostPrice"]);
-            var totalRef1Cost = parseFloat(productRef1Num * ref1CostPrice).toFixed(4);
+            var totalRef1Cost = parseFloat(productRef1Num * ref1CostPrice).toFixed(2);
             var ref2CostPrice = parsePrice(row["ref2CostPrice"]);
-            var totalRef2Cost = parseFloat(productRef2Num * ref2CostPrice).toFixed(4);
+            var totalRef2Cost = parseFloat(productRef2Num * ref2CostPrice).toFixed(2);
 
             var pattachmentCostPrice = parsePrice(row["pattachmentCostPrice"]);
-            var totalPattachmentCost = parseFloat(pattachmentCount * pattachmentCostPrice).toFixed(4);
+            var totalPattachmentCost = parseFloat(pattachmentCount * pattachmentCostPrice).toFixed(2);
             var pattachment1CostPrice = parsePrice(row["pattachment1CostPrice"]);
-            var totalPattachment1Cost = parseFloat(pattachment1Count * pattachment1CostPrice).toFixed(4);
+            var totalPattachment1Cost = parseFloat(pattachment1Count * pattachment1CostPrice).toFixed(2);
             var pattachment2CostPrice = parsePrice(row["pattachment2CostPrice"]);
-            var totalPattachment2Cost = parseFloat(pattachment2Count * pattachment2CostPrice).toFixed(4);
+            var totalPattachment2Cost = parseFloat(pattachment2Count * pattachment2CostPrice).toFixed(2);
             var pattachment3CostPrice = parsePrice(row["pattachment3CostPrice"]);
-            var totalPattachment3Cost = parseFloat(pattachment3Count * pattachment3CostPrice).toFixed(4);
+            var totalPattachment3Cost = parseFloat(pattachment3Count * pattachment3CostPrice).toFixed(2);
             var pattachment4CostPrice = parsePrice(row["pattachment4CostPrice"]);
-            var totalPattachment4Cost = parseFloat(pattachment4Count * pattachment4CostPrice).toFixed(4);
+            var totalPattachment4Cost = parseFloat(pattachment4Count * pattachment4CostPrice).toFixed(2);
 
             var totalCostPrice = parseFloat(parseFloat(totalPriceCost) + parseFloat(totalActuatorCost) + parseFloat(totalRef1Cost) + parseFloat(totalRef2Cost) + parseFloat(totalPattachmentCost)
-                + parseFloat(totalPattachment1Cost) + parseFloat(totalPattachment2Cost) + parseFloat(totalPattachment3Cost) + parseFloat(totalPattachment4Cost)).toFixed(4);
+                + parseFloat(totalPattachment1Cost) + parseFloat(totalPattachment2Cost) + parseFloat(totalPattachment3Cost) + parseFloat(totalPattachment4Cost)).toFixed(2);
             totalCostPriceMap.set("totalCostPrice",totalCostPrice);
 
             //判断低于销售底价
