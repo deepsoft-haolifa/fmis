@@ -446,7 +446,7 @@ public class BizProcessDataProcurementController extends BaseController {
             }
 
 
-            if (contractCount == bizDataStatusList.size()) {
+            if (contractCount >= bizDataStatusList.size()) {
                 string23 = "2";
             }
             BizProcessData updateBizProcessData = bizProcessDataService.selectBizProcessDataById(Long.parseLong(contractId));
