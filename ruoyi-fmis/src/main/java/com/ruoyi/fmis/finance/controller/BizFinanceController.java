@@ -26,12 +26,11 @@ import java.util.List;
 @Controller
 @RequestMapping("/finance")
 public class BizFinanceController extends BaseController {
-    private String prefix = "/finance";
+    private String prefix = "finance";
 
     @Autowired
     private IBizFinanceService bizFinanceService;
 
-    @RequiresPermissions("finance:receivable:view")
     @GetMapping("/receivable")
     public String receivable() {
         return prefix + "/receivable/receivable";
@@ -50,7 +49,6 @@ public class BizFinanceController extends BaseController {
     }
 
 
-    @RequiresPermissions("finance:standAccount:view")
     @GetMapping("/standAccount")
     public String standAccount() {
         return prefix + "/standAccount/standAccount";
