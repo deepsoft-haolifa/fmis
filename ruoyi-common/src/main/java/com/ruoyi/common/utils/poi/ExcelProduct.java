@@ -223,8 +223,12 @@ public class ExcelProduct<T>
                     if (entry == null) {
                         break;
                     }
-                    Object val = this.getCellValue(row, entry.getKey());
-
+                    Object val = "";
+                    try {
+                        val = this.getCellValue(row, entry.getKey());
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                     // 如果不存在实例则新建.
                     entity = (entity == null ? clazz.newInstance() : entity);
                     // 从map中得到对应列的field.

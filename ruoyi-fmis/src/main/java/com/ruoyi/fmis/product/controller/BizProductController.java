@@ -667,6 +667,9 @@ public class BizProductController extends BaseController {
                     bizProduct.setDriveForm(driveFormId.toString());
                     bizProduct.setPrice(Double.parseDouble(product.getPrice()));
                     bizProduct.setSupplier(bizSuppliers.getSuppliersId().toString());
+                    bizProduct.setColor(product.getColor());
+                    bizProduct.setString4(product.getString4());
+
                     if (existProductMap.containsKey(existKey)) {
                         bizProductService.updateBizProduct(bizProduct);
                         updateCount++;

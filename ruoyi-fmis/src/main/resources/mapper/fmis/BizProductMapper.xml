@@ -42,6 +42,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
         <result property="procurementPrice"    column="procurement_price"    />
         <result property="costPrice"    column="cost_price"    />
+        <result property="color"    column="color"    />
 
     </resultMap>
 
@@ -49,7 +50,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select p.product_id, p.name, d.name as series, p.model, d1.name as specifications, d2.name as nominal_pressure, d3.name as connection_type, d6.name as valvebody_material, p.valve_material, d4.name as sealing_material, d5.name as valve_element, d7.name as drive_form,d8.name as structural_style,
           p.price, s.nick_name as supplier, p.remark, p.status, p.del_flag, p.create_by, p.create_time,
           p.update_by, p.update_time,p.new_supplier,
-          p.medium,p.temperature,p.other,p.string2,p.string3,p.string4,p.string5,p.procurement_price,p.cost_price,d9.name as string1,p.string2,p.string3,p.string4,p.string5
+          p.medium,p.temperature,p.other,p.string2,p.string3,p.string4,p.string5,p.procurement_price,p.cost_price,d9.name as string1,p.string2,p.string3,p.string4,p.string5,p.color
 
         from biz_product p
         left join biz_dict d on  d.parent_id=1 and p.series=d.dict_id
@@ -75,7 +76,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
     <sql id="selectBizProductVo">
-      select product_id, name, series, model, new_supplier,specifications, nominal_pressure, connection_type, valvebody_material, valve_material, sealing_material, valve_element, drive_form, price, supplier, remark, status, del_flag, create_by, create_time, update_by, update_time,structural_style,medium,temperature,other,string1,string2,string3,string4,string5,procurement_price,cost_price from biz_product
+      select product_id, name, series, model, new_supplier,specifications, nominal_pressure, connection_type, valvebody_material, valve_material, sealing_material, valve_element, drive_form, price, supplier, remark, status, del_flag, create_by, create_time, update_by, update_time,structural_style,medium,temperature,other,string1,string2,string3,string4,string5,procurement_price,cost_price,color from biz_product
     </sql>
 
 
@@ -157,6 +158,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
             <if test="procurementPrice != null  and procurementPrice != ''">procurement_price,</if>
             <if test="costPrice != null  and costPrice != ''">cost_price,</if>
+            <if test="color != null  and color != ''">color,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="name != null  and name != ''">#{name},</if>
@@ -193,6 +195,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
             <if test="procurementPrice != null and procurementPrice != ''">#{procurementPrice},</if>
             <if test="costPrice != null and costPrice != ''">#{costPrice},</if>
+            <if test="color != null and color != ''">#{color},</if>
          </trim>
     </insert>
 
@@ -234,7 +237,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
             <if test="procurementPrice != null and procurementPrice != ''">procurement_price = #{procurementPrice},</if>
             <if test="costPrice != null and costPrice != ''">cost_price = #{costPrice},</if>
+            <if test="color != null and color != ''">color = #{color},</if>
         </trim>
+
         where product_id = #{productId}
     </update>
 

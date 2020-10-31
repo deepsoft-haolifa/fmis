@@ -35,6 +35,11 @@ public class BizProduct extends BaseEntity {
 
     @Setter
     @Getter
+    @Excel(name = "颜色")
+    private String color;
+
+    @Setter
+    @Getter
     private String modelEq;
 
     /** 规格 */

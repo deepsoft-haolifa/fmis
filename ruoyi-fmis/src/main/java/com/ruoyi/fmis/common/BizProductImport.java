@@ -51,6 +51,15 @@ public class BizProductImport {
     @Excel(name = "备注")
     private String remark;
 
+    @Excel(name = "颜色")
+    private String color;
+
+    @Excel(name = "好利型号")
+    private String string4;
+
+    @Excel(name = "阀轴材质")
+    private String valveShaft;
+
 
 
 
