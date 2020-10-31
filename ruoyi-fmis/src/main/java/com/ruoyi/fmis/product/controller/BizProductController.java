@@ -311,7 +311,8 @@ public class BizProductController extends BaseController {
                         json.put("msg","第" + (i + 2) + "行 类别=【" + series + "】不存在！");
                         errorArray.add(json);
                         retJson.put("error",errorArray);
-                        break;
+                        //break;
+                        continue;
                     }
                     Long seriesId = seriesBizDict.getDictId();
 
@@ -319,11 +320,24 @@ public class BizProductController extends BaseController {
                     String productLevel = product.getString2();
                     SysDictData levelDict = levelMap.get(productLevel);
                     if (levelDict == null) {
-                        JSONObject json = new JSONObject();
+                        //等级自动增加
+                        SysDictData sysDictData = new SysDictData();
+                        sysDictData.setStatus("0");
+                        sysDictData.setCreateTime(new Date());
+                        sysDictData.setCreateBy("admin");
+                        sysDictData.setDictLabel(productLevel);
+                        sysDictData.setDictType("product_level");
+                        Long code = new Long(levelMap.size() + 1);
+                        sysDictData.setDictCode(code);
+                        sysDictData.setDictSort(code);
+                        sysDictDataService.insertDictData(sysDictData);
+                        levelMap.put(productLevel,sysDictData);
+                        levelDict = levelMap.get(productLevel);
+                        /*JSONObject json = new JSONObject();
                         json.put("msg","第" + (i + 2) + "行 等级=【" + productLevel + "】不存在！");
                         errorArray.add(json);
-                        retJson.put("error",errorArray);
-                        break;
+                        retJson.put("error",errorArray);*/
+                        //break;
                     }
 
                     //系列 string1
