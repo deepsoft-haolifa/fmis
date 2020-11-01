@@ -1054,28 +1054,8 @@ initChildPATable = function(index, row, $detail) {
                 title : '中文规格'
             },
             {
-                field : 'englishName',
-                title : '英文品名'
-            },
-            {
-                field : 'englishSpecifications',
-                title : '英文规格'
-            },
-            {
-                field : 'chinesePackaging',
-                title : '中文包装'
-            },
-            {
-                field : 'englishPackaging',
-                title : '英文包装'
-            },
-            {
                 field : 'chineseUnit',
                 title : '中文单位'
-            },
-            {
-                field : 'englishUnit',
-                title : '英文单位'
             },
             {
                 field : 'pressure',
@@ -1084,18 +1064,6 @@ initChildPATable = function(index, row, $detail) {
             {
                 field : 'material',
                 title : '材质'
-            },
-            {
-                field : 'barCode',
-                title : '条形码'
-            },
-            {
-                field : 'customsBh',
-                title : '海关编码'
-            },
-            {
-                field : 'handlingFee',
-                title : '操作费'
             },
             {
                 field : 'color',
@@ -1194,28 +1162,8 @@ initChildPA1Table = function(index, row, $detail) {
                 title : '中文规格'
             },
             {
-                field : 'englishName',
-                title : '英文品名'
-            },
-            {
-                field : 'englishSpecifications',
-                title : '英文规格'
-            },
-            {
-                field : 'chinesePackaging',
-                title : '中文包装'
-            },
-            {
-                field : 'englishPackaging',
-                title : '英文包装'
-            },
-            {
                 field : 'chineseUnit',
                 title : '中文单位'
-            },
-            {
-                field : 'englishUnit',
-                title : '英文单位'
             },
             {
                 field : 'pressure',
@@ -1224,18 +1172,6 @@ initChildPA1Table = function(index, row, $detail) {
             {
                 field : 'material',
                 title : '材质'
-            },
-            {
-                field : 'barCode',
-                title : '条形码'
-            },
-            {
-                field : 'customsBh',
-                title : '海关编码'
-            },
-            {
-                field : 'handlingFee',
-                title : '操作费'
             },
             {
                 field : 'color',
@@ -1334,22 +1270,7 @@ initChildPA2Table = function(index, row, $detail) {
                 field : 'chineseSpecifications',
                 title : '中文规格'
             },
-            {
-                field : 'englishName',
-                title : '英文品名'
-            },
-            {
-                field : 'englishSpecifications',
-                title : '英文规格'
-            },
-            {
-                field : 'chinesePackaging',
-                title : '中文包装'
-            },
-            {
-                field : 'englishPackaging',
-                title : '英文包装'
-            },
+
             {
                 field : 'chineseUnit',
                 title : '中文单位'
@@ -1366,18 +1287,7 @@ initChildPA2Table = function(index, row, $detail) {
                 field : 'material',
                 title : '材质'
             },
-            {
-                field : 'barCode',
-                title : '条形码'
-            },
-            {
-                field : 'customsBh',
-                title : '海关编码'
-            },
-            {
-                field : 'handlingFee',
-                title : '操作费'
-            },
+
             {
                 field : 'color',
                 title : '颜色'
@@ -1475,28 +1385,8 @@ initChildPA3Table = function(index, row, $detail) {
                 title : '中文规格'
             },
             {
-                field : 'englishName',
-                title : '英文品名'
-            },
-            {
-                field : 'englishSpecifications',
-                title : '英文规格'
-            },
-            {
-                field : 'chinesePackaging',
-                title : '中文包装'
-            },
-            {
-                field : 'englishPackaging',
-                title : '英文包装'
-            },
-            {
                 field : 'chineseUnit',
                 title : '中文单位'
-            },
-            {
-                field : 'englishUnit',
-                title : '英文单位'
             },
             {
                 field : 'pressure',
@@ -1505,18 +1395,6 @@ initChildPA3Table = function(index, row, $detail) {
             {
                 field : 'material',
                 title : '材质'
-            },
-            {
-                field : 'barCode',
-                title : '条形码'
-            },
-            {
-                field : 'customsBh',
-                title : '海关编码'
-            },
-            {
-                field : 'handlingFee',
-                title : '操作费'
             },
             {
                 field : 'color',
@@ -1616,28 +1494,8 @@ initChildPA4Table = function(index, row, $detail) {
                 title : '中文规格'
             },
             {
-                field : 'englishName',
-                title : '英文品名'
-            },
-            {
-                field : 'englishSpecifications',
-                title : '英文规格'
-            },
-            {
-                field : 'chinesePackaging',
-                title : '中文包装'
-            },
-            {
-                field : 'englishPackaging',
-                title : '英文包装'
-            },
-            {
                 field : 'chineseUnit',
                 title : '中文单位'
-            },
-            {
-                field : 'englishUnit',
-                title : '英文单位'
             },
             {
                 field : 'pressure',
@@ -1646,14 +1504,6 @@ initChildPA4Table = function(index, row, $detail) {
             {
                 field : 'material',
                 title : '材质'
-            },
-            {
-                field : 'barCode',
-                title : '条形码'
-            },
-            {
-                field : 'customsBh',
-                title : '海关编码'
             },
             {
                 field : 'handlingFee',
