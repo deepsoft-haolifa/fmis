@@ -666,28 +666,8 @@ $(function() {
                 title : '中文规格',width: 100
             },
             {
-                field : 'englishName',
-                title : '英文品名',width: 100
-            },
-            {
-                field : 'englishSpecifications',
-                title : '英文规格',width: 100
-            },
-            {
-                field : 'chinesePackaging',
-                title : '中文包装',width: 100
-            },
-            {
-                field : 'englishPackaging',
-                title : '英文包装',width: 100
-            },
-            {
                 field : 'chineseUnit',
                 title : '中文单位',width: 100
-            },
-            {
-                field : 'englishUnit',
-                title : '英文单位',width: 100
             },
             {
                 field : 'pressure',
@@ -696,18 +676,6 @@ $(function() {
             {
                 field : 'material',
                 title : '材质',width: 100
-            },
-            {
-                field : 'barCode',
-                title : '条形码',width: 100
-            },
-            {
-                field : 'customsBh',
-                title : '海关编码',width: 100
-            },
-            {
-                field : 'handlingFee',
-                title : '操作费',width: 100
             },
             {
                 field : 'color',

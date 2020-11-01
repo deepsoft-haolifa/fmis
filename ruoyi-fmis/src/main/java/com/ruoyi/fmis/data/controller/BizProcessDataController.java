@@ -130,7 +130,14 @@ public class BizProcessDataController extends BaseController {
         }
         return prefix + "/data";
     }
-
+    @GetMapping("/applyDeliver")
+    public String applyDeliver(ModelMap mmap) {
+        String toDo = getRequest().getParameter("todo");
+        if ("1".equals(toDo)) {
+            mmap.put("todo","1");
+        }
+        return prefix + "/applyDeliver";
+    }
     /**
      * 查询合同管理列表
      */
@@ -271,7 +278,13 @@ public class BizProcessDataController extends BaseController {
         mmap.put("bizProcessData", bizProcessData);
         return prefix + "/viewInventory";
     }
-
+    @GetMapping("/viewDeliver")
+    public String viewDeliver(ModelMap mmap) {
+        String dataId = getRequest().getParameter("dataId");
+        BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataById(Long.parseLong(dataId));
+        mmap.put("bizProcessData", bizProcessData);
+        return prefix + "/viewDeliver";
+    }
 
     @GetMapping("/viewDetail")
     public String viewDetail(ModelMap mmap) {

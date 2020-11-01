@@ -156,7 +156,6 @@ public class BizCustomerController extends BaseController {
     @PostMapping("/add")
     @ResponseBody
     public AjaxResult addSave(BizCustomer bizCustomer) {
-
         return toAjax(bizCustomerService.insertBizCustomer(bizCustomer));
     }
 

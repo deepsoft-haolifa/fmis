@@ -73,7 +73,7 @@ public class BizActuatorImport {
     @Excel(name = "气缸形式")
     private String areaString4;
 
-    @Excel(name = "壳体材质")
+    @Excel(name = "材质")
     private String string5;
 
 
