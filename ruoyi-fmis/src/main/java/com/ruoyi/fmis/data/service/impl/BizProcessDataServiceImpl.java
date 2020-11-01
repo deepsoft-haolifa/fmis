@@ -81,31 +81,31 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
     @Override
     public List<BizContractLevel> listLevel(BizProcessData bizProcessData) {
         List<BizContractLevel> bizContractLevels = new ArrayList<>();
-        bizProcessData.setLevel("A");
+        bizProcessData.setLevel("1");
         String editFlag = bizProcessData.getBizEditFlag();
         if (!CollectionUtils.isEmpty(listLevelProduct(bizProcessData).getRows())) {
             BizContractLevel bizContractLevel = new BizContractLevel();
             bizContractLevel.setLevelTypeName("产品信息A");
             bizContractLevel.setLevelType("11");
-            bizContractLevel.setLevel("A");
+            bizContractLevel.setLevel("1");
             bizContractLevel.setDataId(bizProcessData.getDataId().toString());
             bizContractLevels.add(bizContractLevel);
         }
-        bizProcessData.setLevel("B");
+        bizProcessData.setLevel("2");
         if (!CollectionUtils.isEmpty(listLevelProduct(bizProcessData).getRows())) {
             BizContractLevel bizContractLevel = new BizContractLevel();
             bizContractLevel.setLevelTypeName("产品信息B");
             bizContractLevel.setLevelType("12");
-            bizContractLevel.setLevel("B");
+            bizContractLevel.setLevel("2");
             bizContractLevel.setDataId(bizProcessData.getDataId().toString());
             bizContractLevels.add(bizContractLevel);
         }
-        bizProcessData.setLevel("C");
+        bizProcessData.setLevel("3");
         if (!CollectionUtils.isEmpty(listLevelProduct(bizProcessData).getRows())) {
             BizContractLevel bizContractLevel = new BizContractLevel();
             bizContractLevel.setLevelTypeName("产品信息C");
             bizContractLevel.setLevelType("13");
-            bizContractLevel.setLevel("C");
+            bizContractLevel.setLevel("3");
             bizContractLevel.setDataId(bizProcessData.getDataId().toString());
             bizContractLevels.add(bizContractLevel);
         }

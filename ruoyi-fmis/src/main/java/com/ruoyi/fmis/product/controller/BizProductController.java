@@ -330,6 +330,7 @@ public class BizProductController extends BaseController {
                         Long code = new Long(levelMap.size() + 1);
                         sysDictData.setDictCode(code);
                         sysDictData.setDictSort(code);
+                        sysDictData.setDictValue(code + "");
                         sysDictDataService.insertDictData(sysDictData);
                         levelMap.put(productLevel,sysDictData);
                         levelDict = levelMap.get(productLevel);
