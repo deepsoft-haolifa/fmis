@@ -138,7 +138,7 @@ function initExpandRow() {
         if (bizEditFlag == 1) {
             $("#price1").val($("#price1Copy").val());
         }
-    }, 2000);
+    }, 3000);
 
 
 }
@@ -300,6 +300,7 @@ function onEditableSave (field, row, oldValue, $el) {
 
         priceMap.set("8_" + row.childId + "_" + row.pattachment3Id + "_" + row.dataId + "_" + row.levelValue,price1);
     } else if (field == "pattachment4Count") {
+        columnName1 = "pattachment4Count";
         columnName1 = "pattachment4Count";
         columnName2 = "procurementPrice";
         tableName = "initChildPA4Table_" + row.dataId;
