@@ -19,8 +19,8 @@ import java.util.List;
 /**
  * 现金日记账Controller
  *
- * @author frank
- * @date 2020-06-25
+ * @author murphy.he
+ * @date 2020-11-02
  */
 @Controller
 @RequestMapping("/finance/bill")
@@ -110,7 +110,4 @@ public class BizBillController extends BaseController {
     public AjaxResult remove(String ids) {
         return toAjax(bizBillService.deleteBizBillByIds(ids));
     }
-
-
-
 }

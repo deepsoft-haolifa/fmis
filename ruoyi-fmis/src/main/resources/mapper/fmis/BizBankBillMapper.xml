@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.fmis.finance.mapper.BizBankBillMapper">
+
+    <resultMap type="BizBankBill" id="BizBankBillResult">
+        <result property="billId" column="bill_id"/>
+        <result property="serialNo" column="serial_no"/>
+        <result property="operateDate" column="operate_date"/>
+        <result property="certificateNumber" column="certificate_number"/>
+        <result property="payWay" column="pay_way"/>
+        <result property="payAccount" column="pay_account"/>
+        <result property="payCompany" column="pay_company"/>
+        <result property="preMonthMoney" column="pre_month_money"/>
+        <result property="collectionMoney" column="collection_money"/>
+        <result property="collectionType" column="collection_type"/>
+        <result property="payment" column="payment"/>
+        <result property="paymentType" column="payment_type"/>
+        <result property="balance" column="balance"/>
+        <result property="type" column="type"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="remark" column="remark"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="contractStatus" column="contract_status"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <sql id="selectBizBankBillVo">
+     select b.bill_id, b.serial_no, b.operate_date, b.certificate_number, b.pay_way, b.pay_account,b.pay_company, b.pre_month_money, b.collection_money, b.collection_type, b.payment, b.payment_type, b.balance,
+        b.type, b.dept_id,  b.remark, b.contract_status,b.del_flag, b.create_by, b.create_time, b.update_by, b.update_time,
+        u.user_name as createByName,d.dept_name as deptName
+        from biz_bank_bill b
+        left join sys_user u on u.user_id=b.create_by
+        left join sys_dept d on d.dept_id=b.dept_id
+        </sql>
+
+    <select id="selectBizBankBillList" parameterType="BizBankBill" resultMap="BizBankBillResult">
+        <include refid="selectBizBankBillVo"/>
+        <where>
+            <if test="serialNo != null  and serialNo != ''">and serial_no = #{serialNo}</if>
+            <if test="operateDate != null ">and operate_date = #{operateDate}</if>
+            <if test="certificateNumber != null  and certificateNumber != ''">and certificate_number =
+                #{certificateNumber}
+            </if>
+            <if test="payWay != null  and payWay != ''">and pay_way = #{payWay}</if>
+            <if test="payAccount != null  and payAccount != ''">and pay_account = #{payAccount}</if>
+            <if test="payCompany != null  and payCompany != ''">and pay_company = #{payCompany}</if>
+            <if test="preMonthMoney != null ">and pre_month_money = #{preMonthMoney}</if>
+            <if test="collectionMoney != null ">and collection_money = #{collectionMoney}</if>
+            <if test="collectionType != null  and collectionType != ''">and collection_type = #{collectionType}</if>
+            <if test="payment != null ">and payment = #{payment}</if>
+            <if test="paymentType != null  and paymentType != ''">and payment_type = #{paymentType}</if>
+            <if test="balance != null ">and balance = #{balance}</if>
+            <if test="type != null  and type != ''">and type = #{type}</if>
+            <if test="deptId != null  and deptId != ''">and dept_id = #{deptId}</if>
+            <if test="contractStatus != null  and contractStatus != ''">and contract_status = #{contractStatus}</if>
+        </where>
+    </select>
+
+    <select id="selectBizBankBillById" parameterType="Long" resultMap="BizBankBillResult">
+        <include refid="selectBizBankBillVo"/>
+        where bill_id = #{billId}
+    </select>
+
+    <insert id="insertBizBankBill" parameterType="BizBankBill" useGeneratedKeys="true" keyProperty="billId">
+        insert into biz_bank_bill
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null  and serialNo != ''">serial_no,</if>
+            <if test="operateDate != null ">operate_date,</if>
+            <if test="certificateNumber != null  and certificateNumber != ''">certificate_number,</if>
+            <if test="payWay != null  and payWay != ''">pay_way,</if>
+            <if test="payAccount != null  and payAccount != ''">pay_account,</if>
+            <if test="payCompany != null  and payCompany != ''">pay_company,</if>
+            <if test="preMonthMoney != null ">pre_month_money,</if>
+            <if test="collectionMoney != null ">collection_money,</if>
+            <if test="collectionType != null  and collectionType != ''">collection_type,</if>
+            <if test="payment != null ">payment,</if>
+            <if test="paymentType != null  and paymentType != ''">payment_type,</if>
+            <if test="balance != null ">balance,</if>
+            <if test="type != null  and type != ''">type,</if>
+            <if test="deptId != null  and deptId != ''">dept_id,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag,</if>
+            <if test="contractStatus != null  and contractStatus != ''">contract_status,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null  and serialNo != ''">#{serialNo},</if>
+            <if test="operateDate != null ">#{operateDate},</if>
+            <if test="certificateNumber != null  and certificateNumber != ''">#{certificateNumber},</if>
+            <if test="payWay != null  and payWay != ''">#{payWay},</if>
+            <if test="payAccount != null  and payAccount != ''">#{payAccount},</if>
+            <if test="payCompany != null  and payCompany != ''">#{payCompany},</if>
+            <if test="preMonthMoney != null ">#{preMonthMoney},</if>
+            <if test="collectionMoney != null ">#{collectionMoney},</if>
+            <if test="collectionType != null  and collectionType != ''">#{collectionType},</if>
+            <if test="payment != null ">#{payment},</if>
+            <if test="paymentType != null  and paymentType != ''">#{paymentType},</if>
+            <if test="balance != null ">#{balance},</if>
+            <if test="type != null  and type != ''">#{type},</if>
+            <if test="deptId != null  and deptId != ''">#{deptId},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="contractStatus != null  and contractStatus != ''">#{contractStatus},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateBizBankBill" parameterType="BizBankBill">
+        update biz_bank_bill
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="serialNo != null  and serialNo != ''">serial_no = #{serialNo},</if>
+            <if test="operateDate != null ">operate_date = #{operateDate},</if>
+            <if test="certificateNumber != null  and certificateNumber != ''">certificate_number =
+                #{certificateNumber},
+            </if>
+            <if test="payWay != null  and payWay != ''">pay_way = #{payWay},</if>
+            <if test="payAccount != null  and payAccount != ''">pay_account = #{payAccount},</if>
+            <if test="payCompany != null  and payCompany != ''">pay_company = #{payCompany},</if>
+            <if test="preMonthMoney != null ">pre_month_money = #{preMonthMoney},</if>
+            <if test="collectionMoney != null ">collection_money = #{collectionMoney},</if>
+            <if test="collectionType != null  and collectionType != ''">collection_type = #{collectionType},</if>
+            <if test="payment != null ">payment = #{payment},</if>
+            <if test="paymentType != null  and paymentType != ''">payment_type = #{paymentType},</if>
+            <if test="balance != null ">balance = #{balance},</if>
+            <if test="type != null  and type != ''">type = #{type},</if>
+            <if test="deptId != null  and deptId != ''">dept_id = #{deptId},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
+            <if test="contractStatus != null  and contractStatus != ''">contract_status = #{contractStatus},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+        </trim>
+        where bill_id = #{billId}
+    </update>
+
+    <delete id="deleteBizBankBillById" parameterType="Long">
+        delete from biz_bank_bill where bill_id = #{billId}
+    </delete>
+
+    <delete id="deleteBizBankBillByIds" parameterType="String">
+        delete from biz_bank_bill where bill_id in
+        <foreach item="billId" collection="array" open="(" separator="," close=")">
+            #{billId}
+        </foreach>
+    </delete>
+
+</mapper>

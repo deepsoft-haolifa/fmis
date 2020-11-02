@@ -1,15 +1,13 @@
 package com.ruoyi.fmis.finance.service;
 
-
 import com.ruoyi.fmis.finance.domain.BizBill;
-
 import java.util.List;
 
 /**
  * 现金日记账Service接口
  *
- * @author frank
- * @date 2020-06-25
+ * @author murphy.he
+ * @date 2020-11-02
  */
 public interface IBizBillService {
     /**

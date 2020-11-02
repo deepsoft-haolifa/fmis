@@ -1,196 +1,148 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('银行日记账列表')"/>
+    <th:block th:include="include :: header('现金日记账列表')" />
 </head>
 <body class="gray-bg">
-<div class="container-div">
-    <div class="row">
-        <div class="col-sm-12 search-collapse">
-            <form id="formId">
-                <div class="select-list">
-                    <ul>
-                        <li>
-                            <p>凭证号：</p>
-                            <input type="text" name="certificateNumber"/>
-                        </li>
-                        <li>
-                            <p>收付款银行：</p>
-                            <select name="payAccount" th:with="type=${@dict.getType('pay_account')}">
-                                <option value="">所有</option>
-                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
-                                        th:value="${dict.dictValue}"></option>
-                            </select>
-                        </li>
-                        <li>
-                            <p>记账类别：</p>
-                            <select name="type" th:with="type=${@dict.getType('bill_type')}">
-                                <option value="">所有</option>
-                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
-                                        th:value="${dict.dictValue}"></option>
-                            </select>
-                        </li>
-                        <li class="select-time">
-                            <p>日期：</p>
-                            <input type="text" class="time-input" style="width: 80px;" id="startOperateDate" placeholder="开始时间" name="startOperateDate"/>
-                            <span>-</span>
-                            <input type="text" class="time-input" style="width: 80px;" id="endOperateDate" placeholder="结束时间" name="endOperateDate"/>
-                        </li>
-                        <li>
-                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
-                                    class="fa fa-search"></i>&nbsp;搜索</a>
-                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
-                                    class="fa fa-refresh"></i>&nbsp;重置</a>
-                        </li>
-                    </ul>
-                </div>
-            </form>
-        </div>
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <input type="hidden" name="type" value="1"/>
+                        <ul>
+                            <li>
+                                <p>凭证号：</p>
+                                <input type="text" name="certificateNumber"/>
+                            </li>
+                            <li>
+                                <p>付款类别：</p>
+                                <select name="paymentType" th:with="type=${@dict.getType('payment_type1')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
 
-        <div class="btn-group-sm" id="toolbar" role="group">
-            <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="fmis:finance:bill:add">
-                <i class="fa fa-plus"></i> 添加
-            </a>
-            <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="fmis:finance:bill:edit">
-                <i class="fa fa-edit"></i> 修改
-            </a>
-            <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"
-               shiro:hasPermission="fmis:finance:bill:remove">
-                <i class="fa fa-remove"></i> 删除
-            </a>
-        </div>
-        <div class="col-sm-12 select-table table-striped">
-            <table id="bootstrap-table"></table>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="fmis:bill:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="fmis:bill:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="fmis:bill:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
         </div>
     </div>
-</div>
-<th:block th:include="include :: footer"/>
-<script th:inline="javascript">
-    var editFlag = [[${@permission.hasPermi('fmis:bill:edit')}]];
-    var removeFlag = [[${@permission.hasPermi('fmis:bill:remove')}]];
-    var billTypeDatas = [[${@dict.getType('bill_type')}]];
-    var payCompanyDatas = [[${@dict.getType('pay_company')}]];
-    var payAccountDatas = [[${@dict.getType('pay_account')}]];
-    var payWayDatas = [[${@dict.getType('pay_way')}]];
-    var collectionTypeDatas = [[${@dict.getType('collection_type1')}]];
-    var paymentTypeDatas = [[${@dict.getType('payment_type1')}]];
-    var prefix = ctx + "finance/bill";
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('fmis:bill:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('fmis:bill:remove')}]];
+        var collectionTypeDatas = [[${@dict.getType('collection_type1')}]];
+        var paymentTypeDatas = [[${@dict.getType('payment_type1')}]];
+        var prefix = ctx + "finance/bill";
 
-    $(function () {
-        var options = {
-            url: prefix + "/list",
-            createUrl: prefix + "/add",
-            updateUrl: prefix + "/edit/{id}",
-            removeUrl: prefix + "/remove",
-            exportUrl: prefix + "/export",
-            modalName: "银行日记账",
-            columns: [{
-                checkbox: true
-            },
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "现金日记账",
+                columns: [{
+                    checkbox: true
+                },
                 {
-                    field: 'billId',
-                    title: 'ID',
+                    field : 'billId', 
+                    title : 'ID',
                     visible: false
                 },
                 {
-                    field: 'serialNo',
-                    title: '序号'
+                    field : 'xh', 
+                    title : '序号'
                 },
                 {
-                    field: 'operateDate',
-                    title: '日期'
+                    field : 'd', 
+                    title : '日期'
                 },
                 {
-                    field: 'certificateNumber',
-                    title: '凭证号'
+                    field : 'certificateNumber', 
+                    title : '凭证号'
                 },
                 {
-                    field: 'type',
-                    title: '记账类别',
-                    formatter: function (value, row, index) {
-                        return $.table.selectDictLabel(billTypeDatas, value);
+                    field : 'preMonthMoney', 
+                    title : '上月结转'
+                },
+                {
+                    field : 'collectionMoney', 
+                    title : '收款'
+                },
+                {
+                    field : 'collectionType', 
+                    title : '收款类别',
+                    formatter: function(value, row, index) {
+                       return $.table.selectDictLabel(collectionTypeDatas, value);
                     }
                 },
                 {
-                    field: 'payCompany',
-                    title: '收、付单位',
-                    formatter: function (value, row, index) {
-                        return $.table.selectDictLabel(payCompanyDatas, value);
+                    field : 'payment', 
+                    title : '付款'
+                },
+                {
+                    field : 'paymentType', 
+                    title : '付款类别',
+                    formatter: function(value, row, index) {
+                       return $.table.selectDictLabel(paymentTypeDatas, value);
                     }
                 },
                 {
-                    field: 'payAccount',
-                    title: '收、付款账户',
-                    formatter: function (value, row, index) {
-                        return $.table.selectDictLabel(payAccountDatas, value);
-                    }
+                    field : 'balance', 
+                    title : '余额'
                 },
                 {
-                    field: 'payWay',
-                    title: '收、付款方式',
-                    formatter: function (value, row, index) {
-                        return $.table.selectDictLabel(payWayDatas, value);
-                    }
+                    field : 'dept.deptName',
+                    title : '部门'
                 },
+                    {
+                        field : 'createByName',
+                        title : '经办人'
+                    },
+                    {
+                        field : 'createTime',
+                        title : '创建时间'
+                    },
                 {
-                    field: 'preMonthMoney',
-                    title: '上月结转'
-                },
-                {
-                    field: 'collectionMoney',
-                    title: '收款'
-                },
-                {
-                    field: 'collectionType',
-                    title: '收款类别',
-                    formatter: function (value, row, index) {
-                        return $.table.selectDictLabel(collectionTypeDatas, value);
-                    }
-                },
-                {
-                    field: 'payment',
-                    title: '付款'
-                },
-                {
-                    field: 'paymentType',
-                    title: '付款类别',
-                    formatter: function (value, row, index) {
-                        return $.table.selectDictLabel(paymentTypeDatas, value);
-                    }
-                },
-                {
-                    field: 'balance',
-                    title: '余额'
-                },
-                {
-                    field: 'deptName',
-                    title: '部门'
-                },
-                {
-                    field: 'createByName',
-                    title: '经办人'
-                },
-                {
-                    field: 'createTime',
-                    title: '创建时间'
-                },
-                {
-                    field: 'remark',
-                    title: '备注'
+                    field : 'remark', 
+                    title : '备注'
                 },
                 {
                     title: '操作',
                     align: 'left',
-                    formatter: function (value, row, index) {
+                    formatter: function(value, row, index) {
                         var actions = [];
                         actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.billId + '\')"><i class="fa fa-edit"></i> 编辑</a> ');
                         actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.billId + '\')"><i class="fa fa-remove"></i> 删除</a>');
                         return actions.join('');
                     }
                 }]
-        };
-        $.table.init(options);
-    });
-</script>
+            };
+            $.table.init(options);
+        });
+    </script>
 </body>
 </html>
