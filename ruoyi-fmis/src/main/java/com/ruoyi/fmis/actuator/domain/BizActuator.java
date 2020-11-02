@@ -108,6 +108,9 @@ public class BizActuator extends BaseEntity {
     /** 删除标志（0代表存在 2代表删除） */
     private String delFlag;
 
+    private String color;
+    private String press;
+
     public void setActuatorId(Long actuatorId) {
         this.actuatorId = actuatorId;
     }
@@ -284,6 +287,22 @@ public class BizActuator extends BaseEntity {
         return delFlag;
     }
 
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public String getPress() {
+        return press;
+    }
+
+    public void setPress(String press) {
+        this.press = press;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -317,6 +336,8 @@ public class BizActuator extends BaseEntity {
             .append("createTime", getCreateTime())
             .append("updateBy", getUpdateBy())
             .append("updateTime", getUpdateTime())
+            .append("color", getColor())
+            .append("press", getPress())
             .toString();
     }
 }
