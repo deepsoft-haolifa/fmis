@@ -9,10 +9,10 @@ import com.ruoyi.fmis.common.CommonUtils;
 import com.ruoyi.fmis.data.domain.BizProcessData;
 import com.ruoyi.fmis.data.service.IBizProcessDataService;
 import com.ruoyi.fmis.define.service.IBizProcessDefineService;
-import com.ruoyi.fmis.finance.domain.BizBill;
+import com.ruoyi.fmis.finance.domain.BizBankBill;
 import com.ruoyi.fmis.finance.domain.BizBillContract;
+import com.ruoyi.fmis.finance.service.IBizBankBillService;
 import com.ruoyi.fmis.finance.service.IBizBillContractService;
-import com.ruoyi.fmis.finance.service.IBizBillService;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysRole;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -40,7 +40,7 @@ public class BizBillContractController extends BaseController {
     @Autowired
     private IBizBillContractService bizBillContractService;
     @Autowired
-    private IBizBillService bizBillService;
+    private IBizBankBillService bizBankBillService;
     @Autowired
     private IBizProcessDataService bizProcessDataService;
     @Autowired
@@ -59,11 +59,11 @@ public class BizBillContractController extends BaseController {
     @RequiresPermissions("finance:billContract:list")
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo list(BizBill bizBill) {
+    public TableDataInfo list(BizBankBill bizBankBill) {
         startPage();
-        bizBill.setType("1");
-        bizBill.setCollectionType("2");
-        List<BizBill> list = bizBillService.selectBizBillList(bizBill);
+        bizBankBill.setType("1");
+        bizBankBill.setCollectionType("2");
+        List<BizBankBill> list = bizBankBillService.selectBizBankBillList(bizBankBill);
         return getDataTable(list);
     }
 
@@ -72,8 +72,8 @@ public class BizBillContractController extends BaseController {
      */
     @GetMapping("/edit/{billId}")
     public String edit(@PathVariable("billId") Long billId, ModelMap mmap) {
-        BizBill bizBill = bizBillService.selectBizBillById(billId);
-        mmap.put("bizBill", bizBill);
+        BizBankBill bizBankBill = bizBankBillService.selectBizBankBillById(billId);
+        mmap.put("bizBill", bizBankBill);
         return prefix + "/edit";
     }
 
@@ -185,16 +185,16 @@ public class BizBillContractController extends BaseController {
         query1.setBillId(Long.parseLong(billId));
         List<BizBillContract> bizBillContracts = bizBillContractService.selectBizBillContractList(query1);
         double alreadyAmount = bizBillContracts.stream().mapToDouble(BizBillContract::getAmount).sum();
-        BizBill bizBill = bizBillService.selectBizBillById(Long.parseLong(billId));
-        BizBill updateBill = new BizBill();
-        if (bizBill.getCollectionMoney() <= alreadyAmount) {
+        BizBankBill bizBankBill = bizBankBillService.selectBizBankBillById(Long.parseLong(billId));
+        BizBankBill updateBill = new BizBankBill();
+        if (bizBankBill.getCollectionMoney() <= alreadyAmount) {
             // 将分解状态更改为分解完成
             updateBill.setContractStatus("1");
         } else {
             updateBill.setContractStatus("0");
         }
-        updateBill.setBillId(bizBill.getBillId());
-        bizBillService.updateBizBill(updateBill);
+        updateBill.setBillId(bizBankBill.getBillId());
+        bizBankBillService.updateBizBankBill(updateBill);
         return toAjax(1);
     }
 
@@ -208,9 +208,9 @@ public class BizBillContractController extends BaseController {
             return toAjax(1);
         }
         bizBillContractService.deleteBizBillContractById(Long.parseLong(bcId));
-        BizBill updateBill = new BizBill();
+        BizBankBill updateBill = new BizBankBill();
         updateBill.setBillId(Long.parseLong(billId));
-        bizBillService.updateBizBill(updateBill);
+        bizBankBillService.updateBizBankBill(updateBill);
         updateBill.setContractStatus("0");
         return toAjax(1);
     }

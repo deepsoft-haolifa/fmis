@@ -5,79 +5,88 @@
 <mapper namespace="com.ruoyi.fmis.finance.mapper.BizBillMapper">
 
     <resultMap type="BizBill" id="BizBillResult">
-        <result property="billId" column="bill_id"/>
-        <result property="serialNo" column="serial_no"/>
-        <result property="operateDate" column="operate_date"/>
-        <result property="certificateNumber" column="certificate_number"/>
-        <result property="payWay" column="pay_way"/>
-        <result property="payAccount" column="pay_account"/>
-        <result property="payCompany" column="pay_company"/>
-        <result property="preMonthMoney" column="pre_month_money"/>
-        <result property="collectionMoney" column="collection_money"/>
-        <result property="collectionType" column="collection_type"/>
-        <result property="payment" column="payment"/>
-        <result property="paymentType" column="payment_type"/>
-        <result property="balance" column="balance"/>
-        <result property="type" column="type"/>
-        <result property="deptId" column="dept_id"/>
-        <result property="remark" column="remark"/>
-        <result property="delFlag" column="del_flag"/>
-        <result property="contractStatus" column="contract_status"/>
-        <result property="createBy" column="create_by"/>
-        <result property="createTime" column="create_time"/>
-        <result property="updateBy" column="update_by"/>
-        <result property="updateTime" column="update_time"/>
-        <result property="createByName" column="createByName"/>
-        <result property="deptName" column="deptName"/>
+        <result property="billId"    column="bill_id"    />
+        <result property="xh"    column="xh"    />
+        <result property="d"    column="d"    />
+        <result property="certificateNumber"    column="certificate_number"    />
+        <result property="settlementType"    column="settlement_type"    />
+        <result property="clearingBanks"    column="clearing_banks"    />
+        <result property="preMonthMoney"    column="pre_month_money"    />
+        <result property="collectionMoney"    column="collection_money"    />
+        <result property="collectionType"    column="collection_type"    />
+        <result property="payment"    column="payment"    />
+        <result property="paymentType"    column="payment_type"    />
+        <result property="balance"    column="balance"    />
+        <result property="type"    column="type"    />
+        <result property="deptId"    column="dept_id"    />
+        <result property="string1"    column="string1"    />
+        <result property="string2"    column="string2"    />
+        <result property="string3"    column="string3"    />
+        <result property="string4"    column="string4"    />
+        <result property="string5"    column="string5"    />
+        <result property="string6"    column="string6"    />
+        <result property="string7"    column="string7"    />
+        <result property="string8"    column="string8"    />
+        <result property="string9"    column="string9"    />
+        <result property="string10"    column="string10"    />
+        <result property="remark"    column="remark"    />
+        <result property="status"    column="status"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="createByName"    column="createByName"    />
+        <result property="billAmount"    column="billAmount"    />
+        <association property="dept"    column="dept_id" javaType="SysDept" resultMap="deptResult" />
+    </resultMap>
+    <resultMap id="deptResult" type="SysDept">
+        <id     property="deptId"   column="dept_id"     />
+        <result property="parentId" column="parent_id"   />
+        <result property="deptName" column="dept_name"   />
+        <result property="orderNum" column="order_num"   />
+        <result property="leader"   column="leader"      />
+        <result property="status"   column="dept_status" />
     </resultMap>
 
     <sql id="selectBizBillVo">
-        select b.bill_id, b.serial_no, b.operate_date, b.certificate_number, b.pay_way, b.pay_account,b.pay_company, b.pre_month_money, b.collection_money, b.collection_type, b.payment, b.payment_type, b.balance,
-        b.type, b.dept_id,  b.remark, b.contract_status,b.del_flag, b.create_by, b.create_time, b.update_by, b.update_time,
-        u.user_name as createByName,d.dept_name as deptName
+        select b.bill_id, b.xh, b.d, b.certificate_number, b.settlement_type, b.clearing_banks, b.pre_month_money, b.collection_money, b.collection_type, b.payment, b.payment_type, b.balance,
+        b.type, b.dept_id, b.string1, b.string2, b.string3, b.string4, b.string5, b.string6, b.string7, b.string8, b.string9,
+        b.string10, b.remark, b.status, b.del_flag, b.create_by, b.create_time, b.update_by, b.update_time,
+        d.parent_id, d.dept_name, d.order_num, d.leader, d.status as dept_status,
+         u.user_name as createByName
         from biz_bill b
+        left join sys_dept d on d.dept_id = b.dept_id
         left join sys_user u on u.user_id=b.create_by
-        left join sys_dept d on d.dept_id=b.dept_id
-
     </sql>
 
     <select id="selectBizBillList" parameterType="BizBill" resultMap="BizBillResult">
         <include refid="selectBizBillVo"/>
         <where>
-            <if test="serialNo != null  and serialNo != ''">and serial_no = #{serialNo}</if>
-            <if test="operateDate != null ">and operate_date = #{operateDate}</if>
-            <if test="certificateNumber != null  and certificateNumber != ''">and certificate_number =
-                #{certificateNumber}
-            </if>
-            <if test="payWay != null  and payWay != ''">and pay_way = #{payWay}</if>
-            <if test="payAccount != null  and payAccount != ''">and pay_account = #{payAccount}</if>
-            <if test="payCompany != null  and payCompany != ''">and pay_company = #{payCompany}</if>
-            <if test="preMonthMoney != null ">and pre_month_money = #{preMonthMoney}</if>
-            <if test="collectionMoney != null ">and collection_money = #{collectionMoney}</if>
-            <if test="collectionType != null  and collectionType != ''">and collection_type = #{collectionType}</if>
-            <if test="payment != null ">and payment = #{payment}</if>
-            <if test="paymentType != null  and paymentType != ''">and payment_type = #{paymentType}</if>
-            <if test="balance != null ">and balance = #{balance}</if>
-            <if test="type != null  and type != ''">and type = #{type}</if>
-            <if test="deptId != null  and deptId != ''">and dept_id = #{deptId}</if>
-            <if test="contractStatus != null  and contractStatus != ''">and contract_status = #{contractStatus}</if>
+            <if test="xh != null  and xh != ''"> and b.xh like concat('%', #{xh}, '%')</if>
+            <if test="certificateNumber != null  and certificateNumber != ''"> and b.certificate_number = #{certificateNumber}</if>
+            <if test="paymentType != null  and paymentType != ''"> and b.payment_type = #{paymentType}</if>
+            <if test="collectionType != null  and collectionType != ''"> and b.collection_type = #{collectionType}</if>
+            <if test="balance != null "> and b.balance = #{balance}</if>
+            <if test="type != null "> and b.type = #{type}</if>
+
+            <if test="billId != null  and billId != ''"> and b.bill_id = #{billId}</if>
         </where>
     </select>
 
     <select id="selectBizBillById" parameterType="Long" resultMap="BizBillResult">
         <include refid="selectBizBillVo"/>
-        where bill_id = #{billId}
+        where b.bill_id = #{billId}
     </select>
 
     <insert id="insertBizBill" parameterType="BizBill" useGeneratedKeys="true" keyProperty="billId">
         insert into biz_bill
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="serialNo != null  and serialNo != ''">serial_no,</if>
-            <if test="operateDate != null ">operate_date,</if>
+            <if test="xh != null  and xh != ''">xh,</if>
+            <if test="d != null ">d,</if>
             <if test="certificateNumber != null  and certificateNumber != ''">certificate_number,</if>
-            <if test="payWay != null  and payWay != ''">pay_way,</if>
-            <if test="payAccount != null  and payAccount != ''">pay_account,</if>
-            <if test="payCompany != null  and payCompany != ''">pay_company,</if>
+            <if test="settlementType != null  and settlementType != ''">settlement_type,</if>
+            <if test="clearingBanks != null  and clearingBanks != ''">clearing_banks,</if>
             <if test="preMonthMoney != null ">pre_month_money,</if>
             <if test="collectionMoney != null ">collection_money,</if>
             <if test="collectionType != null  and collectionType != ''">collection_type,</if>
@@ -86,21 +95,30 @@
             <if test="balance != null ">balance,</if>
             <if test="type != null  and type != ''">type,</if>
             <if test="deptId != null  and deptId != ''">dept_id,</if>
+            <if test="string1 != null  and string1 != ''">string1,</if>
+            <if test="string2 != null  and string2 != ''">string2,</if>
+            <if test="string3 != null  and string3 != ''">string3,</if>
+            <if test="string4 != null  and string4 != ''">string4,</if>
+            <if test="string5 != null  and string5 != ''">string5,</if>
+            <if test="string6 != null  and string6 != ''">string6,</if>
+            <if test="string7 != null  and string7 != ''">string7,</if>
+            <if test="string8 != null  and string8 != ''">string8,</if>
+            <if test="string9 != null  and string9 != ''">string9,</if>
+            <if test="string10 != null  and string10 != ''">string10,</if>
             <if test="remark != null  and remark != ''">remark,</if>
+            <if test="status != null  and status != ''">status,</if>
             <if test="delFlag != null  and delFlag != ''">del_flag,</if>
-            <if test="contractStatus != null  and contractStatus != ''">contract_status,</if>
             <if test="createBy != null  and createBy != ''">create_by,</if>
             <if test="createTime != null ">create_time,</if>
             <if test="updateBy != null  and updateBy != ''">update_by,</if>
             <if test="updateTime != null ">update_time,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="serialNo != null  and serialNo != ''">#{serialNo},</if>
-            <if test="operateDate != null ">#{operateDate},</if>
+            <if test="xh != null  and xh != ''">#{xh},</if>
+            <if test="d != null ">#{d},</if>
             <if test="certificateNumber != null  and certificateNumber != ''">#{certificateNumber},</if>
-            <if test="payWay != null  and payWay != ''">#{payWay},</if>
-            <if test="payAccount != null  and payAccount != ''">#{payAccount},</if>
-            <if test="payCompany != null  and payCompany != ''">#{payCompany},</if>
+            <if test="settlementType != null  and settlementType != ''">#{settlementType},</if>
+            <if test="clearingBanks != null  and clearingBanks != ''">#{clearingBanks},</if>
             <if test="preMonthMoney != null ">#{preMonthMoney},</if>
             <if test="collectionMoney != null ">#{collectionMoney},</if>
             <if test="collectionType != null  and collectionType != ''">#{collectionType},</if>
@@ -109,9 +127,19 @@
             <if test="balance != null ">#{balance},</if>
             <if test="type != null  and type != ''">#{type},</if>
             <if test="deptId != null  and deptId != ''">#{deptId},</if>
+            <if test="string1 != null  and string1 != ''">#{string1},</if>
+            <if test="string2 != null  and string2 != ''">#{string2},</if>
+            <if test="string3 != null  and string3 != ''">#{string3},</if>
+            <if test="string4 != null  and string4 != ''">#{string4},</if>
+            <if test="string5 != null  and string5 != ''">#{string5},</if>
+            <if test="string6 != null  and string6 != ''">#{string6},</if>
+            <if test="string7 != null  and string7 != ''">#{string7},</if>
+            <if test="string8 != null  and string8 != ''">#{string8},</if>
+            <if test="string9 != null  and string9 != ''">#{string9},</if>
+            <if test="string10 != null  and string10 != ''">#{string10},</if>
             <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="status != null  and status != ''">#{status},</if>
             <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
-            <if test="contractStatus != null  and contractStatus != ''">#{contractStatus},</if>
             <if test="createBy != null  and createBy != ''">#{createBy},</if>
             <if test="createTime != null ">#{createTime},</if>
             <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
@@ -122,14 +150,11 @@
     <update id="updateBizBill" parameterType="BizBill">
         update biz_bill
         <trim prefix="SET" suffixOverrides=",">
-            <if test="serialNo != null  and serialNo != ''">serial_no = #{serialNo},</if>
-            <if test="operateDate != null ">operate_date = #{operateDate},</if>
-            <if test="certificateNumber != null  and certificateNumber != ''">certificate_number =
-                #{certificateNumber},
-            </if>
-            <if test="payWay != null  and payWay != ''">pay_way = #{payWay},</if>
-            <if test="payAccount != null  and payAccount != ''">pay_account = #{payAccount},</if>
-            <if test="payCompany != null  and payCompany != ''">pay_company = #{payCompany},</if>
+            <if test="xh != null  and xh != ''">xh = #{xh},</if>
+            <if test="d != null ">d = #{d},</if>
+            <if test="certificateNumber != null  and certificateNumber != ''">certificate_number = #{certificateNumber},</if>
+            <if test="settlementType != null  and settlementType != ''">settlement_type = #{settlementType},</if>
+            <if test="clearingBanks != null  and clearingBanks != ''">clearing_banks = #{clearingBanks},</if>
             <if test="preMonthMoney != null ">pre_month_money = #{preMonthMoney},</if>
             <if test="collectionMoney != null ">collection_money = #{collectionMoney},</if>
             <if test="collectionType != null  and collectionType != ''">collection_type = #{collectionType},</if>
@@ -138,9 +163,19 @@
             <if test="balance != null ">balance = #{balance},</if>
             <if test="type != null  and type != ''">type = #{type},</if>
             <if test="deptId != null  and deptId != ''">dept_id = #{deptId},</if>
+            <if test="string1 != null  and string1 != ''">string1 = #{string1},</if>
+            <if test="string2 != null  and string2 != ''">string2 = #{string2},</if>
+            <if test="string3 != null  and string3 != ''">string3 = #{string3},</if>
+            <if test="string4 != null  and string4 != ''">string4 = #{string4},</if>
+            <if test="string5 != null  and string5 != ''">string5 = #{string5},</if>
+            <if test="string6 != null  and string6 != ''">string6 = #{string6},</if>
+            <if test="string7 != null  and string7 != ''">string7 = #{string7},</if>
+            <if test="string8 != null  and string8 != ''">string8 = #{string8},</if>
+            <if test="string9 != null  and string9 != ''">string9 = #{string9},</if>
+            <if test="string10 != null  and string10 != ''">string10 = #{string10},</if>
             <if test="remark != null  and remark != ''">remark = #{remark},</if>
+            <if test="status != null  and status != ''">status = #{status},</if>
             <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
-            <if test="contractStatus != null  and contractStatus != ''">contract_status = #{contractStatus},</if>
             <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
             <if test="createTime != null ">create_time = #{createTime},</if>
             <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>

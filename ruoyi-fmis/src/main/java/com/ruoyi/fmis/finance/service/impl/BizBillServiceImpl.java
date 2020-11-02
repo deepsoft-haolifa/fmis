@@ -1,21 +1,19 @@
 package com.ruoyi.fmis.finance.service.impl;
 
-import com.ruoyi.common.core.text.Convert;
+import java.util.List;
 import com.ruoyi.common.utils.DateUtils;
-import com.ruoyi.fmis.finance.domain.BizBill;
-import com.ruoyi.fmis.finance.mapper.BizBillMapper;
-import com.ruoyi.fmis.finance.service.IBizBillService;
-import com.ruoyi.framework.util.ShiroUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
+import com.ruoyi.fmis.finance.mapper.BizBillMapper;
+import com.ruoyi.fmis.finance.domain.BizBill;
+import com.ruoyi.fmis.finance.service.IBizBillService;
+import com.ruoyi.common.core.text.Convert;
 
 /**
  * 现金日记账Service业务层处理
  *
- * @author frank
- * @date 2020-06-25
+ * @author murphy.he
+ * @date 2020-11-02
  */
 @Service
 public class BizBillServiceImpl implements IBizBillService {
@@ -53,7 +51,6 @@ public class BizBillServiceImpl implements IBizBillService {
     @Override
     public int insertBizBill(BizBill bizBill) {
         bizBill.setCreateTime(DateUtils.getNowDate());
-        bizBill.setCreateBy(ShiroUtils.getUserId().toString());
         return bizBillMapper.insertBizBill(bizBill);
     }
 
@@ -66,7 +63,6 @@ public class BizBillServiceImpl implements IBizBillService {
     @Override
     public int updateBizBill(BizBill bizBill) {
         bizBill.setUpdateTime(DateUtils.getNowDate());
-        bizBill.setUpdateBy(ShiroUtils.getUserId().toString());
         return bizBillMapper.updateBizBill(bizBill);
     }
 

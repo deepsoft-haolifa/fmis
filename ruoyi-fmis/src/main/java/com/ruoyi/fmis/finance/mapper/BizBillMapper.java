@@ -1,15 +1,13 @@
 package com.ruoyi.fmis.finance.mapper;
 
-
 import com.ruoyi.fmis.finance.domain.BizBill;
-
 import java.util.List;
 
 /**
  * 现金日记账Mapper接口
  *
- * @author frank
- * @date 2020-06-25
+ * @author murphy.he
+ * @date 2020-11-02
  */
 public interface BizBillMapper {
     /**
