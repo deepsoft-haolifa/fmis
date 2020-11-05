@@ -26,13 +26,13 @@
                 </div>
             </div>
 
-            <div class="form-group">
-                <label class="col-sm-3 control-label">客户名称：</label>
-                <div class="col-sm-8">
-                    <input name="string4" class="form-control" type="hidden" th:field="*{string2}" >
-                    <input name="customerName" id="customerName" class="form-control" th:field="*{customerName}" type="text" readonly onclick="selectCustomer()" required>
-                </div>
-            </div>
+<!--            <div class="form-group">-->
+<!--                <label class="col-sm-3 control-label">客户名称：</label>-->
+<!--                <div class="col-sm-8">-->
+<!--                    <input name="string4" class="form-control" type="hidden" th:field="*{string2}" >-->
+<!--                    <input name="customerName" id="customerName" class="form-control" th:field="*{customerName}" type="text" readonly onclick="selectCustomer()" required>-->
+<!--                </div>-->
+<!--            </div>-->
 
             <div class="form-group">
                 <label class="col-sm-3 control-label">选择合同：</label>
@@ -66,7 +66,7 @@
                         </div>
 
                         <div class='col-sm-3'>
-                            <input class='form-control' type='text' th:id="'productNum_' + ${qp.string1}" th:value="${qp.price1}"  name='productNum' placeholder='数量' onkeyup="AmountKeyUp(this)"/>
+                            <input class='form-control' type='text' th:id="'productNum_' + ${qp.string12}" th:value="${qp.price1}"  name='productNum' placeholder='数量' onkeyup="AmountKeyUp(this)"/>
                         </div>
 
                         <div class='col-sm-3'>
@@ -108,30 +108,30 @@
             </div>
 
 
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">付款金额：</label>
-                <div class="col-sm-8">
-                    <input name="price2" th:field="*{price2}" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">合同约定付款方式：</label>
-                <div class="col-sm-8">
-                    <input name="string4" th:field="*{string4}" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">采购单号：</label>
-                <div class="col-sm-8">
-                    <input name="string5" th:field="*{string5}" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">付款公司：</label>
-                <div class="col-sm-8">
-                    <input name="string6" th:field="*{string6}" class="form-control" type="text">
-                </div>
-            </div>
+<!--            <div class="form-group">    -->
+<!--                <label class="col-sm-3 control-label">付款金额：</label>-->
+<!--                <div class="col-sm-8">-->
+<!--                    <input name="price2" th:field="*{price2}" class="form-control" type="text">-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="form-group">    -->
+<!--                <label class="col-sm-3 control-label">合同约定付款方式：</label>-->
+<!--                <div class="col-sm-8">-->
+<!--                    <input name="string4" th:field="*{string4}" class="form-control" type="text">-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="form-group">    -->
+<!--                <label class="col-sm-3 control-label">采购单号：</label>-->
+<!--                <div class="col-sm-8">-->
+<!--                    <input name="string5" th:field="*{string5}" class="form-control" type="text">-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="form-group">    -->
+<!--                <label class="col-sm-3 control-label">付款公司：</label>-->
+<!--                <div class="col-sm-8">-->
+<!--                    <input name="string6" th:field="*{string6}" class="form-control" type="text">-->
+<!--                </div>-->
+<!--            </div>-->
             <div class="form-group">    
                 <label class="col-sm-3 control-label">备注：</label>
                 <div class="col-sm-8">
