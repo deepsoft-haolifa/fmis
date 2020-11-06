@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('合同管理列表')" />
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+
+                        <li>
+                            <p>状态：</p>
+                            <select name="queryStatus" class="form-control m-b" >
+                                <option value="0">全部</option>
+                                <option value="1">待办</option>
+                                <option value="2">已办</option>
+                            </select>
+                        </li>
+                        <li>
+                            <p>备用1：</p>
+                            <input type="text" name="string1"/>
+                            <input type="hidden" name="bizId" id="bizId" value="contract"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+
+
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+
+
+
+<div style="display: none" id="prodictDiv">
+
+    <div class="ibox float-e-margins" id="productDiv_paramterProductId">
+        <h5>productHtml</h5>
+
+        <div class='form-group'>
+            <label class='control-label col-sm-3'>合同编号：</label>
+            <div class='col-sm-2'>
+                <input name='productId' id="productId" class='form-control' type='hidden' >
+                <input name='productName' id="productName" value="productShowText" class='form-control' type='text' readonly >
+
+            </div>
+
+            <div class='col-sm-3'>
+                <input class='form-control' type='text' id="productNum"  name='productNum' placeholder='数量' onkeyup="AmountKeyUp(this)"/>
+            </div>
+
+            <div class='col-sm-3'>
+                <input class='form-control' type='text' id="productPrice" name="productPrice"  placeholder='金额' onblur="sumPrice(paramterProductId)" onkeyup="AmountKeyUp(this)"/>
+            </div>
+
+        </div>
+
+        <div class='form-group' >
+            <label class='control-label col-sm-3'>备注：</label>
+
+            <div class='col-sm-5'>
+                <input name='productRemark_paramterProductId' id="productRemark_paramterProductId" class='form-control' type='text'>
+            </div>
+
+            <div class='col-sm-3'>
+                <a class="btn btn-danger btn-sm" onclick="removeProject(paramterProductId)" >
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+            </div>
+        </div>
+
+
+
+    </div>
+    <div class="hr-line-dashed"></div>
+</div>
+
+<th:block th:include="include :: footer" />
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('fmis:data:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('fmis:data:remove')}]];
+    var prefix = ctx + "fmis/data";
+
+    $(function() {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "合同管理",
+            uniqueId: "dataId",
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field : 'dataId',
+                    title : 'ID',
+                    visible: false
+                },
+                {
+                    field : 'dataId',
+                    title : 'ID',
+                    visible: false
+                },
+
+                {
+                    field : 'string1',
+                    title : '合同编号'
+                },
+                {
+                    field : 'customerName',
+                    title : '客户'
+                },
+                {
+                    field : 'datetime1',
+                    title : '签订日期'
+                },
+                {
+                    field : 'string3',
+                    title : '供方'
+                },
+                {
+                    field : 'string4',
+                    title : '签订地点'
+                },
+                {
+                    field : 'string5',
+                    title : '含发票'
+                },
+                {
+                    field : 'string6',
+                    title : '发货时间'
+                },
+                {
+                    field : 'string7',
+                    title : '运输方式'
+                },
+                {
+                    field : 'string8',
+                    title : '付款方式'
+                },
+                {
+                    field : 'string9',
+                    title : '交货地点'
+                },
+                {
+                    field : 'string10',
+                    title : '运费承担'
+                },
+                {
+                    field : 'string11',
+                    title : '收货人'
+                },
+                {
+                    field : 'string12',
+                    title : '收货电话'
+                },
+                {
+                    field : 'price1',
+                    title : '总价'
+                },
+                {
+                    field : 'flowStatusRemark',
+                    title : '状态',
+                    align: 'center'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        var flowStatus = row.flowStatus;
+                        var normalFlag = row.normalFlag;
+                        var operationExamineStatus = row.operationExamineStatus;
+                        if (flowStatus < 1) {
+                            if (flowStatus == "0") {
+                                //已上报
+                            } else {
+                                actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="edit(\'' + row.dataId + '\')"><i class="fa fa-edit"></i> 编辑</a> ');
+                                actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 删除</a>');
+                                actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subReport(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 上报</a>');
+                            }
+                        } else if (flowStatus == normalFlag) {
+                            //已完成
+                        } else if (operationExamineStatus == true || operationExamineStatus == "true") {
+                            //审批
+                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subExamine(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 审批</a>');
+                        }
+                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewExamineHistory(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 审批记录 </a>');
+                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewExamineDetail(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 详情 </a>');
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(options);
+    });
+
+
+
+
+    /* 添加用户-选择用户-提交 */
+    function submitHandler() {
+        var rows = $.table.selectFirstColumns();
+        if (rows.length == 0) {
+            $.modal.alertWarning("请选择一条记录");
+            return;
+        }
+        //$.modal.confirm('确定要关联该产品吗？',
+        //    function() {
+        //0=覆盖 1=追加
+        var productOperationType = parent.$('#form-data-add input[name=productOperationType]').val();
+        if ($.common.isEmpty(productOperationType)) {
+            productOperationType = parent.$('#form-data-edit input[name=productOperationType]').val();
+        }
+        var rowsSel = $('#bootstrap-table').bootstrapTable('getSelections');
+        var productIds = $.table.selectColumns("dataId");
+        var names = $.table.selectColumns("string1");
+        console.log("productIds=" + productIds + "|" + names);
+        var htmlStr = "";
+        if (productOperationType == "1") {
+            //htmlStr = parent.$('#productDiv').html();
+        } else {
+            parent.$('#productDiv').html(htmlStr);
+        }
+        var productIdsStr = "";
+        var productNamesStr = "";
+        var oldProductIds = parent.$('#form-data-add input[name=contractIds]').val();
+        var oldProductNames = parent.$('#form-data-add input[name=contractNames]').val();
+
+        if ($.common.isEmpty(oldProductIds)) {
+            oldProductIds = parent.$('#form-data-edit input[name=contractIds]').val();
+            oldProductNames = parent.$('#form-data-edit input[name=contractNames]').val();
+        }
+        if ($.common.isEmpty(oldProductIds)) {
+            oldProductIds = "";
+            oldProductNames = "";
+        }
+        for(var i = 0; i < productIds.length; i++) {
+            var prodictDivHtml = $("#prodictDiv").html();
+            var productId = productIds[i];
+            var productName = rowsSel[i].string1;
+
+            var productIdsS = oldProductIds.split(",");
+            var productNamesS = oldProductNames.split(",");
+            var isExist = false;
+            if (productOperationType == "1") {
+                for (var j = 0; j < productIdsS.length; j++) {
+                    if (productId == productIdsS[j]) {
+                        isExist = true;
+                        continue;
+                    }
+                }
+            }
+            if (isExist) {
+                continue;
+            }
+
+            console.log("productId=" + productId + " name=" + productName);
+
+            //prodictDivHtml = prodictDivHtml.replace(/productPrice/g,"productPrice_" + productId);
+            //prodictDivHtml = prodictDivHtml.replace(/productValuePrice/g,$.table.selectColumns("price")[i]);
+
+            prodictDivHtml = prodictDivHtml.replace(/productName/g,"productName_" + productId);
+
+            console.log("1productId=" + productId + " name=" + productName);
+
+            prodictDivHtml = prodictDivHtml.replace(/productShowText/g,productName);
+
+
+            prodictDivHtml = prodictDivHtml.replace(/productNum/g,"productNum_" + productId);
+            prodictDivHtml = prodictDivHtml.replace(/productPrice/g,"productPrice_" + productId);
+
+            prodictDivHtml = prodictDivHtml.replace(/productModelShowText/g,$.table.selectColumns("model")[i]);
+
+
+            prodictDivHtml = prodictDivHtml.replace(/paramterProductId/g,productId);
+            //prodictDivHtml = prodictDivHtml.replace(/unitPrice/g,"unitPrice_" + productId);
+            //prodictDivHtml = prodictDivHtml.replace(/totalSum/g,"totalSum_" + productId);
+
+
+            prodictDivHtml = prodictDivHtml.replace(/productHtml/g,productName);
+
+            htmlStr += prodictDivHtml;
+            productIdsStr += productId + ",";
+            productNamesStr += productName + ",";
+            //console.log(htmlStr);
+        }
+        productNamesStr = productNamesStr.substr(0,productNamesStr.length - 1);
+        console.log("productNamesStr=" + productNamesStr);
+        if (productOperationType == "0") {
+            parent.$('#form-data-add input[name=contractIds]').val(productIdsStr);
+            parent.$('#form-data-add input[name=contractNames]').val(productNamesStr);
+
+            parent.$('#form-data-edit input[name=contractIds]').val(productIdsStr);
+            parent.$('#form-data-edit input[name=contractNames]').val(productNamesStr);
+        } else {
+            //追加
+
+            if ($.common.isEmpty(oldProductIds)) {
+                oldProductIds = "";
+                oldProductNames = "";
+            } else {
+                if (!$.common.endWith(oldProductIds,",")) {
+                    oldProductIds += ",";
+                }
+                if (!$.common.endWith(oldProductNames,",")) {
+                    oldProductNames += ",";
+                }
+                var newProductIds = oldProductIds + productIdsStr;
+                var newProductNames = oldProductNames + productNamesStr;
+            }
+            parent.$('#form-data-add input[name=contractIds]').val(newProductIds);
+            parent.$('#form-data-add input[name=contractNames]').val(newProductNames);
+            parent.$('#form-data-edit input[name=contractIds]').val(newProductIds);
+            parent.$('#form-data-edit input[name=contractNames]').val(newProductNames);
+        }
+
+        parent.$('#productDiv').append(htmlStr);
+        $.modal.close();
+    }
+</script>
+</body>
+</html>

@@ -91,4 +91,13 @@ public interface BizProcessChildMapper {
      * @return 结果
      */
     public int deleteBizProcessChildByIds(String[] childIds);
+
+    /**
+     * 批量删除流程
+     *
+     * @param dataIds 需要删除的数据ID
+     * @return 结果
+     */
+    public int deleteBizProcessChildByDataIds(String[] dataIds);
+
 }

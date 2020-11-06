@@ -9,6 +9,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="payDataId"    column="pay_data_id"    />
         <result property="applyNo"    column="apply_no"    />
         <result property="applyDate"    column="apply_date"    />
+        <result property="contractId"    column="contract_id"    />
         <result property="contractNo"    column="contract_no"    />
         <result property="applyPayCompany"    column="apply_pay_company"    />
         <result property="applyCollectionCompany"    column="apply_collection_company"    />
@@ -24,7 +25,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectBizPayPlanVo">
-        select pay_plan_id, pay_data_id, apply_no, apply_date, contract_no, apply_pay_company, apply_collection_company, apply_amount, apply_remark, pay_way, status, pay_date, create_by, create_time, update_by, update_time from biz_pay_plan
+        select pay_plan_id, pay_data_id, apply_no, apply_date, contract_id, contract_no, apply_pay_company, apply_collection_company, apply_amount, apply_remark, pay_way, status, pay_date, create_by, create_time, update_by, update_time from biz_pay_plan
     </sql>
 
     <select id="selectBizPayPlanList" parameterType="BizPayPlan" resultMap="BizPayPlanResult">
@@ -33,6 +34,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="payDataId != null "> and pay_data_id = #{payDataId}</if>
             <if test="applyNo != null  and applyNo != ''"> and apply_no = #{applyNo}</if>
             <if test="applyDate != null "> and apply_date = #{applyDate}</if>
+            <if test="contractId != null  and contractId != ''"> and contract_id = #{contractId}</if>
             <if test="contractNo != null  and contractNo != ''"> and contract_no = #{contractNo}</if>
             <if test="applyPayCompany != null  and applyPayCompany != ''"> and apply_pay_company = #{applyPayCompany}</if>
             <if test="applyCollectionCompany != null  and applyCollectionCompany != ''"> and apply_collection_company = #{applyCollectionCompany}</if>
@@ -55,6 +57,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="payDataId != null ">pay_data_id,</if>
             <if test="applyNo != null  and applyNo != ''">apply_no,</if>
             <if test="applyDate != null ">apply_date,</if>
+            <if test="contractId != null  and contractId != ''">contract_id,</if>
             <if test="contractNo != null  and contractNo != ''">contract_no,</if>
             <if test="applyPayCompany != null  and applyPayCompany != ''">apply_pay_company,</if>
             <if test="applyCollectionCompany != null  and applyCollectionCompany != ''">apply_collection_company,</if>
@@ -72,6 +75,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="payDataId != null ">#{payDataId},</if>
             <if test="applyNo != null  and applyNo != ''">#{applyNo},</if>
             <if test="applyDate != null ">#{applyDate},</if>
+            <if test="contractId != null  and contractId != ''">#{contractId},</if>
             <if test="contractNo != null  and contractNo != ''">#{contractNo},</if>
             <if test="applyPayCompany != null  and applyPayCompany != ''">#{applyPayCompany},</if>
             <if test="applyCollectionCompany != null  and applyCollectionCompany != ''">#{applyCollectionCompany},</if>
@@ -93,6 +97,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="payDataId != null ">pay_data_id = #{payDataId},</if>
             <if test="applyNo != null  and applyNo != ''">apply_no = #{applyNo},</if>
             <if test="applyDate != null ">apply_date = #{applyDate},</if>
+            <if test="contractId != null  and contractId != ''">contract_id = #{contractId},</if>
             <if test="contractNo != null  and contractNo != ''">contract_no = #{contractNo},</if>
             <if test="applyPayCompany != null  and applyPayCompany != ''">apply_pay_company = #{applyPayCompany},</if>
             <if test="applyCollectionCompany != null  and applyCollectionCompany != ''">apply_collection_company = #{applyCollectionCompany},</if>

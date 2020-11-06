@@ -88,4 +88,13 @@ public interface IBizProcessChildService {
      * @return 结果
      */
     public int deleteBizProcessChildById(Long childId);
+
+    /**
+     * 删除流程数据字信息
+     *
+     * @param dataIds 流程数据父ID
+     * @return 结果
+     */
+    public int deleteBizProcessChildByDataIds(String dataIds);
+
 }

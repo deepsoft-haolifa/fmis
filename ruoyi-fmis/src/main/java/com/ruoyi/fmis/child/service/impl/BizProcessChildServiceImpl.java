@@ -178,4 +178,9 @@ public class BizProcessChildServiceImpl implements IBizProcessChildService {
     public int deleteBizProcessChildById(Long childId) {
         return bizProcessChildMapper.deleteBizProcessChildById(childId);
     }
+
+    @Override
+    public int deleteBizProcessChildByDataIds(String dataIds) {
+        return bizProcessChildMapper.deleteBizProcessChildByDataIds(Convert.toStrArray(dataIds));
+    }
 }

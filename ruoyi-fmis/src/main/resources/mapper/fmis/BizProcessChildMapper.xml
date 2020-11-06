@@ -1073,4 +1073,11 @@ join biz_process_data pd on pc.data_id=pd.data_id
         </foreach>
     </delete>
 
+    <delete id="deleteBizProcessChildByDataIds" parameterType="String">
+        delete from biz_process_child where data_id in
+        <foreach item="dataId" collection="array" open="(" separator="," close=")">
+            #{dataId}
+        </foreach>
+    </delete>
+
 </mapper>
