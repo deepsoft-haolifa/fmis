@@ -15,7 +15,9 @@ public interface IBizProcessDataService {
 
 
     public List<BizContractLevel> listLevel (BizProcessData bizProcessData);
+    public List<BizContractLevel> listLevelS (BizProcessData bizProcessData);
     public TableDataInfo listLevelProduct(BizProcessData bizProcessData);
+    public TableDataInfo listLevelProductS(BizProcessData bizProcessData);
     public TableDataInfo listLevelActuator(BizProcessData bizProcessData);
     public TableDataInfo listLevelRef1(BizProcessData bizProcessData);
     public TableDataInfo listLevelRef2(BizProcessData bizProcessData);

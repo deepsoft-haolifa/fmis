@@ -408,6 +408,14 @@ public class BizProcessDataProcurementController extends BaseController {
             List<BizDataStatus> bizDataStatusList = bizDataStatusService.selectBizDataStatusList(bizDataStatus);
             String string23 = "1";
 
+            //计算质检里面合同数
+            Map<String,BizDataStatus> bizDataStatusContractMap = new HashMap<>();
+            if(!CollectionUtils.isEmpty(bizDataStatusList)) {
+                for (BizDataStatus bizDataStatus1 : bizDataStatusList) {
+                    bizDataStatusContractMap.put(bizDataStatus1.getString4(),bizDataStatus1);
+                }
+            }
+
             int contractCount = contractChildList.size();
 
             for (BizProcessChild bizProcessChild1 : contractChildList) {
@@ -446,7 +454,7 @@ public class BizProcessDataProcurementController extends BaseController {
             }
 
 
-            if (contractCount >= bizDataStatusList.size()) {
+            if (contractCount == bizDataStatusContractMap.size()) {
                 string23 = "2";
             }
             BizProcessData updateBizProcessData = bizProcessDataService.selectBizProcessDataById(Long.parseLong(contractId));

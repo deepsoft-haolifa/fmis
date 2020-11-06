@@ -552,7 +552,12 @@ public class BizProcessDataController extends BaseController {
         //@RequestParam String dataId,@RequestParam String dataStatus
         return getDataTable(bizProcessDataService.listLevel(bizProcessData));
     }
-
+    @PostMapping("/listLevelS")
+    @ResponseBody
+    public TableDataInfo listLevelS(BizProcessData bizProcessData) {
+        //@RequestParam String dataId,@RequestParam String dataStatus
+        return getDataTable(bizProcessDataService.listLevelS(bizProcessData));
+    }
 
 
     /**

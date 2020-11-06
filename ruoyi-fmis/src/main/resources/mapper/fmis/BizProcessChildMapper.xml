@@ -237,7 +237,7 @@
           s.name as supplier,p.procurement_price as productProcurementPrice,pd.string6 as goodsTime,
           ds.product_status as productStatus,ds.actuator_status as actuatorStatus,ds.ref1_status as ref1Status,ds.ref2_status as ref2Status,ds.p_status as pStatus,
           ds.p1_status as p1Status,ds.p2_status as p2Status,ds.p3_status as p3Status,ds.p4_status as p4Status,pc.data_id as dataId,pc.child_id as childId,ds.data_status as dataStatus,
-          ds.string4 as procurementId,p.string2 as levelValue,s.suppliers_id as supplierId,pd.string1 as contractNo,pd.string25 as contractSpecial
+          ds.string4 as procurementId,'A' as levelValue,s.suppliers_id as supplierId,pd.string1 as contractNo,pd.string25 as contractSpecial
     from biz_product p
      join biz_process_child pc on pc.data_id=#{dataId} and pc.string2=p.product_id
      join biz_process_data pd on pc.data_id=pd.data_id
@@ -253,12 +253,13 @@
         left join biz_dict d8 on d8.parent_type='structural_type' and d8.dict_id=p.structural_style
         left join biz_dict d9 on d9.parent_type='series_type' and d9.dict_id=p.string1
         left join biz_suppliers s on s.suppliers_id=p.supplier
-        join sys_dict_data dd on dd.dict_type='product_level' and dd.dict_value=p.string2 and p.string2=#{string2}
-    where concat(p.model,p.specifications) in (
+        join sys_dict_data dd on dd.dict_type='product_level' and dd.dict_value=p.string2
+    where <!--concat(p.model,p.specifications) in (
       select concat(p1.model,p1.specifications) from biz_product p1
       join biz_process_child pc1 on pc1.data_id=#{dataId} and pc1.string2=p1.product_id
         <if test="supplierId != null and supplierId != ''">and p1.supplier=#{supplierId} </if>
-    )
+    ) -->
+        1=1
     </sql>
     <select id="selectBizChildProductList" parameterType="BizProcessChild" resultMap="BizProcessChildResult">
         <include refid="selectBizChildProductVo"/>
@@ -271,6 +272,9 @@
         <if test="dataStatus == -1">and ds.data_status is null </if>
 
         <if test="supplierId != null and supplierId != ''">and s.suppliers_id=#{supplierId} </if>
+
+        <!-- 备选产品信息 暂时不做 -->
+        <if test="levelValue == -2"> and </if>
 
         group by p.product_id
         order by p.string2,p.new_supplier,productNum desc
@@ -342,17 +346,21 @@
           pd.string6 as goodsTime,
           ds.product_status as productStatus,ds.actuator_status as actuatorStatus,ds.ref1_status as ref1Status,ds.ref2_status as ref2Status,ds.p_status as pStatus,
           ds.p1_status as p1Status,ds.p2_status as p2Status,ds.p3_status as p3Status,ds.p4_status as p4Status,pc.data_id as dataId,pc.child_id as childId,ds.data_status as dataStatus,
-          ds.string4 as procurementId,a.quality_level as levelValue,s.suppliers_id as supplierId,s.name as supplierName,pd.string1 as contractNo,pd.string25 as contractSpecial
+          ds.string4 as procurementId,'A' as levelValue,s.suppliers_id as supplierId,s.name as supplierName,pd.string1 as contractNo,pd.string25 as contractSpecial
     from biz_actuator a
     join biz_process_child pc on pc.data_id=#{dataId} and pc.string11=a.actuator_id
     join biz_process_data pd on pc.data_id=pd.data_id
     left join biz_suppliers s on s.suppliers_id=a.string10
     left join biz_data_status ds on ds.child_id=pc.child_id and ds.string2=a.actuator_id
-    where a.string1 in (
+    where
+        <!--
+        a.string1 in (
       select a1.string1 from biz_actuator a1
       join biz_process_child pc1 on pc1.data_id=#{dataId} and pc1.string11=a1.actuator_id
         <if test="supplierId != null and supplierId != ''">and a1.string10=#{supplierId} </if>
-    ) and a.quality_level=#{levelLabel}
+    ) and a.quality_level=#{levelLabel}-->
+
+    1=1
     </sql>
     <select id="selectBizChildActuatorList" parameterType="BizProcessChild" resultMap="BizProcessChildResult">
         <include refid="selectBizChildActuatorVo"/>
@@ -413,7 +421,7 @@
           pr.material_require as ref1MaterialRequire,s.name as  suppliersName,pr.model,pd.string6 as goodsTime,
           ds.product_status as productStatus,ds.actuator_status as actuatorStatus,ds.ref1_status as ref1Status,ds.ref2_status as ref2Status,ds.p_status as pStatus,
           ds.p1_status as p1Status,ds.p2_status as p2Status,ds.p3_status as p3Status,ds.p4_status as p4Status,pc.data_id as dataId,pc.child_id as childId,ds.data_status as dataStatus,
-          ds.string4 as procurementId,pr.string1 as levelValue,s.suppliers_id as supplierId,s.name as supplierName,pd.string1 as contractNo,pd.string25 as contractSpecial
+          ds.string4 as procurementId,'A' as levelValue,s.suppliers_id as supplierId,s.name as supplierName,pd.string1 as contractNo,pd.string25 as contractSpecial
     from  biz_product_ref pr
     join biz_process_child pc on pc.data_id=#{dataId} and pr.product_ref_id=pc.string5
     left join biz_data_status ds on ds.child_id=pc.child_id and ds.string2=pr.product_ref_id
@@ -421,11 +429,15 @@ join biz_process_data pd on pc.data_id=pd.data_id
     left join biz_dict d1 on d1.dict_id=pr.specifications
 	 left join biz_dict d2 on d2.dict_id=pr.valvebody_material
 	 left join biz_suppliers s on s.suppliers_id=pr.suppliers_id
-    where concat(pr.name,pr.model,pr.specifications) in (
+    where
+        pr.type=1
+        <!--
+        concat(pr.name,pr.model,pr.specifications) in (
       select concat(p1.name,p1.model,p1.specifications) from biz_product_ref p1
       join biz_process_child pc1 on pc1.data_id=#{dataId} and pc1.string5=p1.product_ref_id
       where p1.type=1 <if test="supplierId != null and supplierId != ''">and p1.suppliers_Id=#{supplierId} </if>
-    ) and pr.type=1 and pr.string1=#{levelLabel}
+    ) and
+        and pr.string1=#{levelLabel} -->
     </sql>
     <select id="selectBizChildRef1List" parameterType="BizProcessChild" resultMap="BizProcessChildResult">
         <include refid="selectBizChildRef1Vo"/>
@@ -483,7 +495,7 @@ join biz_process_data pd on pc.data_id=pd.data_id
           pr.material_require as ref1MaterialRequire,s.name as  suppliersName,pr.model,pd.string6 as goodsTime,
           ds.product_status as productStatus,ds.actuator_status as actuatorStatus,ds.ref1_status as ref1Status,ds.ref2_status as ref2Status,ds.p_status as pStatus,
           ds.p1_status as p1Status,ds.p2_status as p2Status,ds.p3_status as p3Status,ds.p4_status as p4Status,pc.data_id as dataId,pc.child_id as childId,ds.data_status as dataStatus,
-          ds.string4 as procurementId,pr.string1 as levelValue,s.suppliers_id as supplierId,s.name as supplierName,pd.string1 as contractNo,pd.string25 as contractSpecial
+          ds.string4 as procurementId,'A' as levelValue,s.suppliers_id as supplierId,s.name as supplierName,pd.string1 as contractNo,pd.string25 as contractSpecial
     from  biz_product_ref pr
     join biz_process_child pc on pc.data_id=#{dataId} and pr.product_ref_id=pc.string8
     left join biz_data_status ds on ds.child_id=pc.child_id and ds.string2=pr.product_ref_id
@@ -491,11 +503,15 @@ join biz_process_data pd on pc.data_id=pd.data_id
     left join biz_dict d1 on d1.dict_id=pr.specifications
 	 left join biz_dict d2 on d2.dict_id=pr.valvebody_material
 	 left join biz_suppliers s on s.suppliers_id=pr.suppliers_id
-    where concat(pr.name,pr.model,pr.valvebody_material) in (
+    where
+
+        pr.type=2
+        <!--
+        concat(pr.name,pr.model,pr.valvebody_material) in (
       select concat(p1.name,p1.model,p1.valvebody_material) from biz_product_ref p1
       join biz_process_child pc1 on pc1.data_id=#{dataId} and pc1.string8=p1.product_ref_id
       where p1.type=2 <if test="supplierId != null and supplierId != ''">and p1.suppliers_Id=#{supplierId} </if>
-    ) and pr.type=2 and pr.string1=#{levelLabel}
+    ) and  and pr.string1=#{levelLabel} -->
     </sql>
     <select id="selectBizChildRef2List" parameterType="BizProcessChild" resultMap="BizProcessChildResult">
         <include refid="selectBizChildRef2Vo"/>
@@ -557,17 +573,19 @@ join biz_process_data pd on pc.data_id=pd.data_id
          pd.string6 as goodsTime,
           ds.product_status as productStatus,ds.actuator_status as actuatorStatus,ds.ref1_status as ref1Status,ds.ref2_status as ref2Status,ds.p_status as pStatus,
           ds.p1_status as p1Status,ds.p2_status as p2Status,ds.p3_status as p3Status,ds.p4_status as p4Status,pc.data_id as dataId,pc.child_id as childId,ds.data_status as dataStatus,
-          ds.string4 as procurementId,pa.string1 as levelValue,s.suppliers_id as supplierId,s.nick_name as supplierName,pd.string1 as contractNo,pd.string25 as contractSpecial
+          ds.string4 as procurementId,'A' as levelValue,s.suppliers_id as supplierId,s.nick_name as supplierName,pd.string1 as contractNo,pd.string25 as contractSpecial
     from  biz_product_attachment pa
     join biz_process_child pc on pc.data_id=#{dataId} and pa.attachment_id=pc.pattachment_id
     left join biz_data_status ds on ds.child_id=pc.child_id and ds.string2=pa.attachment_id
     join biz_process_data pd on pc.data_id=pd.data_id
     left join biz_suppliers s on s.suppliers_id=pa.supplier
-    where concat(pa.chinese_name,pa.chinese_specifications) in (
+    where pa.type=1
+     <!--
+     concat(pa.chinese_name,pa.chinese_specifications) in (
       select concat(p1.chinese_name,p1.chinese_specifications) from biz_product_attachment p1
       join biz_process_child pc1 on pc1.data_id=#{dataId} and pc1.pattachment_id=p1.attachment_id
       where  p1.type=1
-    ) and  pa.string1=#{levelLabel} and pa.type=1
+    ) and  pa.string1=#{levelLabel} -->
     </sql>
     <select id="selectBizChildPAList" parameterType="BizProcessChild" resultMap="BizProcessChildResult">
         <include refid="selectBizChildPAVo"/>
@@ -628,18 +646,20 @@ join biz_process_data pd on pc.data_id=pd.data_id
          pd.string6 as goodsTime,
           ds.product_status as productStatus,ds.actuator_status as actuatorStatus,ds.ref1_status as ref1Status,ds.ref2_status as ref2Status,ds.p_status as pStatus,
           ds.p1_status as p1Status,ds.p2_status as p2Status,ds.p3_status as p3Status,ds.p4_status as p4Status,pc.data_id as dataId,pc.child_id as childId,ds.data_status as dataStatus,
-          ds.string4 as procurementId,pa.string1 as levelValue,s.suppliers_id as supplierId,s.nick_name as supplierName,pd.string1 as contractNo,pd.string25 as contractSpecial
+          ds.string4 as procurementId,'A' as levelValue,s.suppliers_id as supplierId,s.nick_name as supplierName,pd.string1 as contractNo,pd.string25 as contractSpecial
 
     from  biz_product_attachment pa
     join biz_process_child pc on pc.data_id=#{dataId} and pa.attachment_id=pc.pattachment1_id
     left join biz_data_status ds on ds.child_id=pc.child_id and ds.string2=pa.attachment_id
     join biz_process_data pd on pc.data_id=pd.data_id
     left join biz_suppliers s on s.suppliers_id=pa.supplier
-    where concat(pa.chinese_name,pa.chinese_specifications) in (
+    where pa.type=2
+    <!--
+    concat(pa.chinese_name,pa.chinese_specifications) in (
       select concat(p1.chinese_name,p1.chinese_specifications) from biz_product_attachment p1
       join biz_process_child pc1 on pc1.data_id=#{dataId} and pc1.pattachment1_id=p1.attachment_id
       where  p1.type=2
-    ) and  pa.string1=#{levelLabel} and pa.type=2
+    ) and  pa.string1=#{levelLabel} -->
     </sql>
     <select id="selectBizChildPA1List" parameterType="BizProcessChild" resultMap="BizProcessChildResult">
         <include refid="selectBizChildPA1Vo"/>
@@ -672,11 +692,14 @@ join biz_process_data pd on pc.data_id=pd.data_id
     left join biz_data_status ds on ds.child_id=pc.child_id and ds.string2=pa.attachment_id
     join biz_process_data pd on pc.data_id=pd.data_id
     left join biz_suppliers s on s.suppliers_id=pa.supplier
-    where concat(pa.chinese_name,pa.chinese_specifications) in (
+    where
+    pa.type=3
+    <!--
+    concat(pa.chinese_name,pa.chinese_specifications) in (
       select concat(p1.chinese_name,p1.chinese_specifications) from biz_product_attachment p1
       join biz_process_child pc1 on pc1.data_id=#{dataId} and pc1.pattachment2_id=p1.attachment_id
       where  p1.type=3
-    ) and  pa.string1=#{levelLabel} and pa.type=3
+    ) and  pa.string1=#{levelLabel} -->
     </sql>
     <select id="selectBizChildPA2List" parameterType="BizProcessChild" resultMap="BizProcessChildResult">
         <include refid="selectBizChildPA2Vo"/>
@@ -700,7 +723,7 @@ join biz_process_data pd on pc.data_id=pd.data_id
          pd.string6 as goodsTime,
           ds.product_status as productStatus,ds.actuator_status as actuatorStatus,ds.ref1_status as ref1Status,ds.ref2_status as ref2Status,ds.p_status as pStatus,
           ds.p1_status as p1Status,ds.p2_status as p2Status,ds.p3_status as p3Status,ds.p4_status as p4Status,pc.data_id as dataId,pc.child_id as childId,ds.data_status as dataStatus,
-          ds.string4 as procurementId,pa.string1 as levelValue,s.suppliers_id as supplierId,s.nick_name as supplierName,pd.string1 as contractNo,pd.string25 as contractSpecial
+          ds.string4 as procurementId,'A' as levelValue,s.suppliers_id as supplierId,s.nick_name as supplierName,pd.string1 as contractNo,pd.string25 as contractSpecial
 
 
     from  biz_product_attachment pa
@@ -708,11 +731,13 @@ join biz_process_data pd on pc.data_id=pd.data_id
     left join biz_data_status ds on ds.child_id=pc.child_id and ds.string2=pa.attachment_id
     join biz_process_data pd on pc.data_id=pd.data_id
     left join biz_suppliers s on s.suppliers_id=pa.supplier
-    where concat(pa.chinese_name,pa.chinese_specifications) in (
+    where pa.type=4
+    <!--
+    concat(pa.chinese_name,pa.chinese_specifications) in (
       select concat(p1.chinese_name,p1.chinese_specifications) from biz_product_attachment p1
       join biz_process_child pc1 on pc1.data_id=#{dataId} and pc1.pattachment3_id=p1.attachment_id
       where  p1.type=4
-    ) and  pa.string1=#{levelLabel} and pa.type=4
+    ) and  pa.string1=#{levelLabel} and -->
     </sql>
     <select id="selectBizChildPA3List" parameterType="BizProcessChild" resultMap="BizProcessChildResult">
         <include refid="selectBizChildPA3Vo"/>
@@ -737,17 +762,19 @@ join biz_process_data pd on pc.data_id=pd.data_id
          pd.string6 as goodsTime,
           ds.product_status as productStatus,ds.actuator_status as actuatorStatus,ds.ref1_status as ref1Status,ds.ref2_status as ref2Status,ds.p_status as pStatus,
           ds.p1_status as p1Status,ds.p2_status as p2Status,ds.p3_status as p3Status,ds.p4_status as p4Status,pc.data_id as dataId,pc.child_id as childId,ds.data_status as dataStatus,
-          ds.string4 as procurementId,pa.string1 as levelValue,s.suppliers_id as supplierId,s.nick_name as supplierName,pd.string1 as contractNo,pd.string25 as contractSpecial
+          ds.string4 as procurementId,'A' as levelValue,s.suppliers_id as supplierId,s.nick_name as supplierName,pd.string1 as contractNo,pd.string25 as contractSpecial
     from  biz_product_attachment pa
     join biz_process_child pc on pc.data_id=#{dataId} and pa.attachment_id=pc.pattachment4_id
     left join biz_data_status ds on ds.child_id=pc.child_id and ds.string2=pa.attachment_id
     join biz_process_data pd on pc.data_id=pd.data_id
     left join biz_suppliers s on s.suppliers_id=pa.supplier
-    where concat(pa.chinese_name,pa.chinese_specifications) in (
+    where pa.type=5
+    <!--
+    concat(pa.chinese_name,pa.chinese_specifications) in (
       select concat(p1.chinese_name,p1.chinese_specifications) from biz_product_attachment p1
       join biz_process_child pc1 on pc1.data_id=#{dataId} and pc1.pattachment4_id=p1.attachment_id
       where  p1.type=5
-    ) and  pa.string1=#{levelLabel} and pa.type=5
+    ) and  pa.string1=#{levelLabel} -->
     </sql>
     <select id="selectBizChildPA4List" parameterType="BizProcessChild" resultMap="BizProcessChildResult">
         <include refid="selectBizChildPA4Vo"/>
