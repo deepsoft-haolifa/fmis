@@ -68,15 +68,15 @@
 
             </div>
 
-            <div class='col-sm-3'>
+            <div class='col-sm-2'>
                 <input class='form-control' type='text' id="settlementUnit" name='settlementUnit'
                        value="settlementShowText" placeholder='结算单位'/>
             </div>
-            <div class='col-sm-3'>
+            <div class='col-sm-2'>
                 <input class='form-control' type='text' id="supplierName" name='supplierName'
                        value="supplierShowText" placeholder='供应商'/>
             </div>
-            <div class='col-sm-3'>
+            <div class='col-sm-1'>
                 <input class='form-control' type='text' id="payWay" name='payWay'
                        placeholder='付款方式'/>
             </div>
@@ -84,7 +84,7 @@
             <!--                    <option value="0">请选择</option>-->
             <!--                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>-->
             <!--                </select>-->
-            <div class='col-sm-3'>
+            <div class='col-sm-1'>
                 <input class='form-control' type='text' id="productPrice" name="productPrice" placeholder='金额'
                        onblur="sumPrice(paramterProductId)" onkeyup="AmountKeyUp(this)"/>
             </div>
@@ -351,9 +351,10 @@
 
             prodictDivHtml = prodictDivHtml.replace(/settlementUnit/g, "settlementUnit_" + productId);
             prodictDivHtml = prodictDivHtml.replace(/settlementShowText/g, settlementUnit);
-            prodictDivHtml = prodictDivHtml.replace(/supplierName/g, "supplierName" + productId);
+            prodictDivHtml = prodictDivHtml.replace(/supplierName/g, "supplierName_" + productId);
             prodictDivHtml = prodictDivHtml.replace(/supplierShowText/g, supplierName);
-            prodictDivHtml = prodictDivHtml.replace(/payWay/g, "payWay" + productId);
+            prodictDivHtml = prodictDivHtml.replace(/payWay/g, "payWay_" + productId);
+            prodictDivHtml = prodictDivHtml.replace(/productPrice/g,"productPrice_" + productId);
 
             prodictDivHtml = prodictDivHtml.replace(/productModelShowText/g, $.table.selectColumns("model")[i]);
 

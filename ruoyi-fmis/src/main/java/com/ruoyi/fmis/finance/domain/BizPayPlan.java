@@ -9,8 +9,8 @@ import java.util.Date;
 /**
  * 付款计划（基于付款申请记录）对象 biz_pay_plan
  *
- * @author hedong
- * @date 2020-10-22
+ * @author murphy
+ * @date 2020-11-06
  */
 public class BizPayPlan extends BaseEntity {
     private static final long serialVersionUID = 1L;
@@ -19,7 +19,6 @@ public class BizPayPlan extends BaseEntity {
     private Long payPlanId;
 
     /** 付款申请Id（biz_process_data 里面的data_id） */
-    @Excel(name = "付款申请Id", readConverterExp = "b=iz_process_data,里=面的data_id")
     private Long payDataId;
 
     /** 申请编号 */
@@ -30,8 +29,11 @@ public class BizPayPlan extends BaseEntity {
     @Excel(name = "申请日期", width = 30, dateFormat = "yyyy-MM-dd")
     private Date applyDate;
 
-    /** 合同号 */
-    @Excel(name = "合同号")
+    /** 采购合同ID */
+    private String contractId;
+
+    /** 采购合同号 */
+    @Excel(name = "采购合同号")
     private String contractNo;
 
     /** 付款单位 */
@@ -50,12 +52,11 @@ public class BizPayPlan extends BaseEntity {
     @Excel(name = "付款备注")
     private String applyRemark;
 
-    /** 付款方式;字典：pay_way */
-    @Excel(name = "付款方式;字典：pay_way")
+    /** 付款方式; 字典：pay_way */
     private String payWay;
 
-    /** 0.未付款；1.已付款 */
-    @Excel(name = "0.未付款；1.已付款")
+    /** 付款状态：0.未付；1.已付； 字典：pay_status */
+    @Excel(name = "付款状态")
     private String status;
 
     /** 付款日期 */
@@ -89,6 +90,13 @@ public class BizPayPlan extends BaseEntity {
 
     public Date getApplyDate() {
         return applyDate;
+    }
+    public void setContractId(String contractId) {
+        this.contractId = contractId;
+    }
+
+    public String getContractId() {
+        return contractId;
     }
     public void setContractNo(String contractNo) {
         this.contractNo = contractNo;
@@ -154,6 +162,7 @@ public class BizPayPlan extends BaseEntity {
             .append("payDataId", getPayDataId())
             .append("applyNo", getApplyNo())
             .append("applyDate", getApplyDate())
+            .append("contractId", getContractId())
             .append("contractNo", getContractNo())
             .append("applyPayCompany", getApplyPayCompany())
             .append("applyCollectionCompany", getApplyCollectionCompany())

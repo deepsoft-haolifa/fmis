@@ -750,17 +750,27 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
      * 添加付款计划（付款申请流程审批完成）
      */
     private void addPayPlan(BizProcessData bizProcessData) {
-        BizPayPlan bizPayPlan = new BizPayPlan();
-        bizPayPlan.setPayDataId(bizProcessData.getDataId());
-        bizPayPlan.setApplyPayCompany(bizProcessData.getString6());
-        bizPayPlan.setApplyCollectionCompany(bizProcessData.getString1());
-        bizPayPlan.setApplyRemark(bizProcessData.getRemark());
-        bizPayPlan.setApplyAmount(bizProcessData.getPrice2());
-        bizPayPlan.setApplyDate(bizProcessData.getDatetime1());
-        bizPayPlan.setContractNo(bizProcessData.getString5());
-        bizPayPlan.setApplyNo("PP" + DateUtils.dateTimeNow() + RandomStringUtils.randomNumeric(3));
-        bizPayPlan.setCreateTime(DateUtils.getNowDate());
-        bizPayPlan.setCreateBy(ShiroUtils.getUserId().toString());
-        bizPayPlanService.insertBizPayPlan(bizPayPlan);
+        Long dataId = bizProcessData.getDataId();
+
+        BizProcessChild queryBizProcessChild = new BizProcessChild();
+        queryBizProcessChild.setDataId(dataId);
+        List<BizProcessChild> bizProcessChildList = bizProcessChildService.selectBizProcessChildList(queryBizProcessChild);
+       if(!CollectionUtils.isEmpty(bizProcessChildList)) {
+           for (BizProcessChild child : bizProcessChildList) {
+               BizPayPlan bizPayPlan = new BizPayPlan();
+               bizPayPlan.setPayDataId(dataId);
+               bizPayPlan.setApplyPayCompany(child.getString3());
+               bizPayPlan.setApplyCollectionCompany(bizProcessData.getString1());
+               bizPayPlan.setApplyRemark(child.getRemark());
+               bizPayPlan.setApplyAmount(child.getPrice1());
+               bizPayPlan.setApplyDate(bizProcessData.getDatetime1());
+               bizPayPlan.setContractNo(child.getString2());
+               bizPayPlan.setContractId(child.getString1());
+               bizPayPlan.setApplyNo("PP" + DateUtils.dateTimeNow() + RandomStringUtils.randomNumeric(3));
+               bizPayPlan.setCreateTime(DateUtils.getNowDate());
+               bizPayPlan.setCreateBy(ShiroUtils.getUserId().toString());
+               bizPayPlanService.insertBizPayPlan(bizPayPlan);
+           }
+       }
     }
 }

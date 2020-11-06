@@ -115,9 +115,12 @@
                     for (var i = 0; i < productIdsStrs.length; i++) {
                         var productObj = new Object();
                         var productId = productIdsStrs[i];
-                        productObj["string12"] = productId;
-                        productObj["price1"] = $("#productNum_" + productId).val();
-                        productObj["price2"] = $("#productPrice_" + productId).val();
+                        productObj["string1"] = productId;
+                        productObj["string2"] =  $("#productName_" + productId).val();
+                        productObj["string3"] = $("#settlementUnit_" + productId).val();
+                        productObj["string4"] = $("#supplierName_" + productId).val();
+                        productObj["string5"] = $("#payWay_" + productId).val();
+                        productObj["price1"] = $("#productPrice_" + productId).val();
                         productObj["remark"] = $("#productRemark_" + productId).val();
                         productArray.push(productObj);
                     }

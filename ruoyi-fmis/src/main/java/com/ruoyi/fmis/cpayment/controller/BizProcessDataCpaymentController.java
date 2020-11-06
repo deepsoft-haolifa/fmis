@@ -99,7 +99,7 @@ public class BizProcessDataCpaymentController extends BaseController {
                 } else if ("1".equals(flowStatus)) {
                     flowStatusRemark = "已上报";
                 } else {
-                    SysRole currentSysRole =  CommonUtils.getLikeByMap(flowAllMap,flowStatus.replaceAll("-",""));
+                    SysRole currentSysRole = CommonUtils.getLikeByMap(flowAllMap, flowStatus.replaceAll("-", ""));
                     if (currentSysRole == null) {
                         continue;
                     }
@@ -130,8 +130,9 @@ public class BizProcessDataCpaymentController extends BaseController {
         }
         return getDataTable(list);
     }
+
     @GetMapping("/examineEdit")
-    public String examineEdit( ModelMap mmap) {
+    public String examineEdit(ModelMap mmap) {
         String dataId = getRequest().getParameter("dataId");
         BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataById(Long.parseLong(dataId));
 
@@ -170,7 +171,7 @@ public class BizProcessDataCpaymentController extends BaseController {
         String examineStatus = bizProcessData.getExamineStatus();
         String examineRemark = bizProcessData.getExamineRemark();
         String dataId = bizProcessData.getDataId().toString();
-        return toAjax(bizProcessDataService.doExamine(dataId,examineStatus,examineRemark,bizProcessData.getBizId()));
+        return toAjax(bizProcessDataService.doExamine(dataId, examineStatus, examineRemark, bizProcessData.getBizId()));
     }
 
     @GetMapping("/viewExamineHistory")
@@ -182,6 +183,7 @@ public class BizProcessDataCpaymentController extends BaseController {
         mmap.put("bizTable", bizId);
         return prefix + "/viewExamineHistory";
     }
+
     /**
      * 导出发货管理列表
      */
@@ -250,20 +252,17 @@ public class BizProcessDataCpaymentController extends BaseController {
         String productIds = "";
         if (!CollectionUtils.isEmpty(bizProcessChildList)) {
             for (BizProcessChild bizProcessChild : bizProcessChildList) {
-                String productId = bizProcessChild.getString1();
-                BizProcessData bizProduct = bizProcessDataService.selectBizProcessDataById(Long.parseLong(productId));
-                productNames += bizProduct.getString1() + ",";
-                productIds += bizProduct.getDataId() + ",";
-                bizProcessChild.setBizProcessData(bizProduct);
+                productNames += bizProcessChild.getString2() + ",";
+                productIds += bizProcessChild.getString1() + ",";
             }
             bizProcessData.setBizProcessChildList(bizProcessChildList);
         }
-        String customerId = bizProcessData.getString2();
-        if (StringUtils.isNotEmpty(customerId)) {
-            BizCustomer customer = bizCustomerService.selectBizCustomerById(Long.parseLong(customerId));
-            bizProcessData.setBizCustomer(customer);
-            bizProcessData.setCustomerName(customer.getName());
-        }
+//        String customerId = bizProcessData.getString2();
+//        if (StringUtils.isNotEmpty(customerId)) {
+//            BizCustomer customer = bizCustomerService.selectBizCustomerById(Long.parseLong(customerId));
+//            bizProcessData.setBizCustomer(customer);
+//            bizProcessData.setCustomerName(customer.getName());
+//        }
 
         mmap.put("contractNames", productNames);
         mmap.put("contractIds", productIds);
@@ -314,10 +313,13 @@ public class BizProcessDataCpaymentController extends BaseController {
      */
     @RequiresPermissions("fmis:cpayment:remove")
     @Log(title = "合同管理", businessType = BusinessType.DELETE)
-    @PostMapping( "/remove")
+    @PostMapping("/remove")
     @ResponseBody
     public AjaxResult remove(String ids) {
-        return toAjax(bizProcessDataService.deleteBizProcessDataByIds(ids));
+        // 删除主表流程
+        bizProcessDataService.deleteBizProcessDataByIds(ids);
+        // 删除子表流程
+        return toAjax(bizProcessChildService.deleteBizProcessChildByDataIds(ids));
     }
 
     @PostMapping("/report")
