@@ -871,33 +871,34 @@ public class BizProcessDataProcurementController extends BaseController {
             table.addCell(PdfUtil.mergeCol("一、", 1,textFont));
             table.addCell(PdfUtil.mergeColLeft("供货内容：", 14,textFont));
 
-            //第七行 产品数据开始 bizQuotationProducts
-            table.addCell(PdfUtil.mergeCol("序号", 1,textFont));
-            table.addCell(PdfUtil.mergeCol("产品ID", 1,textFont));
-            table.addCell(PdfUtil.mergeCol("名称", 1,textFont));
-            table.addCell(PdfUtil.mergeCol("压力", 1,textFont));
-            table.addCell(PdfUtil.mergeCol("规格", 1,textFont));
-            table.addCell(PdfUtil.mergeCol("颜色", 1,textFont));
-            table.addCell(PdfUtil.mergeCol("数量", 1,textFont));
-            table.addCell(PdfUtil.mergeCol("单价", 1,textFont));
-            table.addCell(PdfUtil.mergeCol("合计", 1,textFont));
-            table.addCell(PdfUtil.mergeCol("材质", 3,textFont));
-            table.addCell(PdfUtil.mergeCol("备注", 3,textFont));
 
-            Double sumTotalNum = new Double(0);
-            Double sumTotalPrice = new Double(0);
-            Double sumTotalAmount = new Double(0);
-            Double sumTotalNumRef1 = new Double(0);
-            Double sumTotalNumRef2 = new Double(0);
-
-            DecimalFormat data = new DecimalFormat("#");
-            //优惠 string14
-            Double string14D = new Double(0);
-
+            //产品信息
             BizProcessChild queryProductChild = new BizProcessChild();
             queryProductChild.setDataId(bizProcessData.getDataId());
             List<BizProcessChild> bizProductChildList = bizProcessChildService.selectBizTestProductList(queryBizProcessChild);
             if (!CollectionUtils.isEmpty(bizProductChildList)) {
+                //第七行 产品数据开始 bizQuotationProducts
+                table.addCell(PdfUtil.mergeCol("序号", 1,textFont));
+                table.addCell(PdfUtil.mergeCol("产品ID", 1,textFont));
+                table.addCell(PdfUtil.mergeCol("名称", 1,textFont));
+                table.addCell(PdfUtil.mergeCol("压力", 1,textFont));
+                table.addCell(PdfUtil.mergeCol("规格", 1,textFont));
+                table.addCell(PdfUtil.mergeCol("颜色", 1,textFont));
+                table.addCell(PdfUtil.mergeCol("数量", 1,textFont));
+                table.addCell(PdfUtil.mergeCol("单价", 1,textFont));
+                table.addCell(PdfUtil.mergeCol("合计", 1,textFont));
+                table.addCell(PdfUtil.mergeCol("材质", 3,textFont));
+                table.addCell(PdfUtil.mergeCol("备注", 3,textFont));
+
+                Double sumTotalNum = new Double(0);
+                Double sumTotalPrice = new Double(0);
+                Double sumTotalAmount = new Double(0);
+                Double sumTotalNumRef1 = new Double(0);
+                Double sumTotalNumRef2 = new Double(0);
+
+                DecimalFormat data = new DecimalFormat("#");
+                //优惠 string14
+                Double string14D = new Double(0);
                 for (int i = 0; i < bizProductChildList.size(); i++) {
                     BizProcessChild bizProcessChild = bizProductChildList.get(i);
                     table.addCell(PdfUtil.mergeCol("" + (i + 1), 1,textFont));
@@ -922,16 +923,12 @@ public class BizProcessDataProcurementController extends BaseController {
                     sumTotalNum = sumTotalNum + Integer.parseInt(bizProcessChild.getProductNum());
                     sumTotalAmount = sumTotalAmount + Integer.parseInt(bizProcessChild.getProductNum()) * bizProcessChild.getProductProcurementPrice();
                 }
-            }
-
-
-
-            //金额合计
-            table.addCell(PdfUtil.mergeColRight("合计", 6,textFont));//4
-            table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(sumTotalNum), 1,textFont));//总数量
-            table.addCell(PdfUtil.mergeCol("", 1,textFont));//单价
-            table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(sumTotalAmount), 1,textFont));//合计
-            table.addCell(PdfUtil.mergeCol("", 7,textFont));//备注
+                //金额合计
+                table.addCell(PdfUtil.mergeColRight("合计", 6,textFont));//4
+                table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(sumTotalNum), 1,textFont));//总数量
+                table.addCell(PdfUtil.mergeCol("", 1,textFont));//单价
+                table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(sumTotalAmount), 1,textFont));//合计
+                table.addCell(PdfUtil.mergeCol("", 7,textFont));//备注
 
             /*
             table.addCell(PdfUtil.mergeColRight("优惠价", 6,textFont));//4
@@ -942,11 +939,91 @@ public class BizProcessDataProcurementController extends BaseController {
 
 
 
-            table.addCell(PdfUtil.mergeColRight("以上价格均为含13%增值税价格", 5,textFont));
-            table.addCell(PdfUtil.mergeCol(StringUtils.convert(sumTotalAmount), 3,textFont));//合计
-            table.addCell(PdfUtil.mergeCol("", 7,textFont));//备注
+                table.addCell(PdfUtil.mergeColRight("以上价格均为含13%增值税价格", 5,textFont));
+                table.addCell(PdfUtil.mergeCol(StringUtils.convert(sumTotalAmount), 3,textFont));//合计
+                table.addCell(PdfUtil.mergeCol("", 7,textFont));//备注
+            }
 
 
+
+
+
+
+            queryBizProcessChild.setDataId(bizProcessData.getDataId());
+            queryBizProcessChild.setLevelLabel(bizProcessData.getLevel());
+            queryBizProcessChild.setDataStatus(bizProcessData.getDataStatus());
+            queryBizProcessChild.setBizEditFlag(bizProcessData.getBizEditFlag());
+            queryBizProcessChild.setProcurementId(bizProcessData.getProcurementId());
+            String supplierId = bizProcessData.getSupplierId();
+            if (StringUtils.isNotEmpty(supplierId)) {
+                queryBizProcessChild.setSupplierId(supplierId);
+            }
+            List<BizProcessChild> bizProcessChildListRefA = bizProcessChildService.selectBizChildPA1List(queryBizProcessChild);
+
+            //附件信息
+            if (!CollectionUtils.isEmpty(bizProcessChildListRefA)) {
+                //第七行 产品数据开始 bizQuotationProducts
+                table.addCell(PdfUtil.mergeCol("序号", 1,textFont));
+                table.addCell(PdfUtil.mergeCol("名称", 1,textFont));
+                table.addCell(PdfUtil.mergeCol("压力", 1,textFont));
+                table.addCell(PdfUtil.mergeCol("规格", 1,textFont));
+                table.addCell(PdfUtil.mergeCol("颜色", 1,textFont));
+                table.addCell(PdfUtil.mergeCol("数量", 1,textFont));
+                table.addCell(PdfUtil.mergeCol("单价", 1,textFont));
+                table.addCell(PdfUtil.mergeCol("合计", 1,textFont));
+                table.addCell(PdfUtil.mergeCol("材质", 3,textFont));
+                table.addCell(PdfUtil.mergeCol("备注", 4,textFont));
+
+                Double sumTotalNum = new Double(0);
+                Double sumTotalPrice = new Double(0);
+                Double sumTotalAmount = new Double(0);
+                Double sumTotalNumRef1 = new Double(0);
+                Double sumTotalNumRef2 = new Double(0);
+
+                DecimalFormat data = new DecimalFormat("#");
+                //优惠 string14
+                Double string14D = new Double(0);
+                for (int i = 0; i < bizProcessChildListRefA.size(); i++) {
+                    BizProcessChild bizProcessChild = bizProcessChildListRefA.get(i);
+                    table.addCell(PdfUtil.mergeCol("" + (i + 1), 1,textFont));
+                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getChineseName(), 1,textFont));
+                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getNominalPressure(), 1,textFont));
+                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getChineseSpecifications(), 1,textFont));
+                    //颜色
+                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getColor(), 1,textFont));
+                    //数量
+                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getPattachment1Count() + "", 1,textFont));
+                    //单价
+                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getProcurementPrice().toString(), 1,textFont));
+                    //合计
+                    table.addCell(PdfUtil.mergeCol((bizProcessChild.getPattachment1Count() * bizProcessChild.getProcurementPrice()) + "", 1,textFont));
+                    //材质
+                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getMaterial(), 1,textFont));
+                    //备注
+                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getContractSpecial() == null ? "" : bizProcessChild.getContractSpecial(), 3,textFont));
+                    sumTotalNum = sumTotalNum + bizProcessChild.getPattachment1Count();
+                    sumTotalAmount = sumTotalAmount + bizProcessChild.getPattachment1Count() * bizProcessChild.getProductProcurementPrice();
+                }
+                //金额合计
+                table.addCell(PdfUtil.mergeColRight("合计", 6,textFont));//4
+                table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(sumTotalNum), 1,textFont));//总数量
+                table.addCell(PdfUtil.mergeCol("", 1,textFont));//单价
+                table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(sumTotalAmount), 1,textFont));//合计
+                table.addCell(PdfUtil.mergeCol("", 7,textFont));//备注
+
+            /*
+            table.addCell(PdfUtil.mergeColRight("优惠价", 6,textFont));//4
+            table.addCell(PdfUtil.mergeCol("", 1,textFont));//总数量
+            table.addCell(PdfUtil.mergeCol("", 1,textFont));//单价
+            table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(string14D), 1,textFont));//合计
+            table.addCell(PdfUtil.mergeCol("", 7,textFont));//备注*/
+
+
+
+                table.addCell(PdfUtil.mergeColRight("以上价格均为含13%增值税价格", 5,textFont));
+                table.addCell(PdfUtil.mergeCol(StringUtils.convert(sumTotalAmount), 3,textFont));//合计
+                table.addCell(PdfUtil.mergeCol("", 7,textFont));//备注
+            }
 
 
             table.addCell(PdfUtil.mergeCol("二、", 1,textFont));
