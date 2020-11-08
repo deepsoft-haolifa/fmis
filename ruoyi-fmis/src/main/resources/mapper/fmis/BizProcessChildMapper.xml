@@ -603,11 +603,11 @@ join biz_process_data pd on pc.data_id=pd.data_id
     <sql id="selectBizTestPAVo">
     select
       pa.attachment_id as pattachmentId,pa.bh as pattachmentName,ds.string4 as dataId,ds.child_id as childId,sn.remark,ds.status_id as statusId,
-      ds.string1 as pattachmentCount,
+      ifnull(ds.string1,0) as pattachmentCount,
       pa.type as paType, pa.bh, pa.chinese_name as chineseName, pa.chinese_specifications as chineseSpecifications, pa.english_name as englishName,
         pa.english_specifications as englishSpecifications, pa.chinese_packaging as chinesePackaging, pa.english_packaging as englishPackaging,
         pa.chinese_unit as chineseUnit, pa.english_unit as englishUnit, pa.pressure, pa.material, pa.bar_code as barCode, pa.customs_bh as customsBh,
-         pa.handling_fee as handlingFee, pa.color, pa.developer, pa.goods_category as goodsCategory,pa.settlement_price as procurementPrice,s.name as supplierName,
+         pa.handling_fee as handlingFee, pa.color, pa.developer, pa.goods_category as goodsCategory,ifnull(pa.settlement_price,0) as procurementPrice,s.name as supplierName,
          ds.data_status as dataStatus,
           ds.string4 as procurementId,pa.string1 as levelValue,s.suppliers_id as supplierId,s.nick_name as supplierName,
           COALESCE(sum(sn.string1),0) as yesNum, COALESCE(sum(sn.string2),0) as noNum,(COALESCE(sum(ss.num),0)-COALESCE(sum(sn.string1),0)-COALESCE(sum(sn.string2),0)) as stayNum,ss.create_time as stayCreateTime,ss.stay_id as stayId,ss.string6 as orderNo,
