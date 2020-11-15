@@ -36,7 +36,7 @@ public interface BizProcessChildMapper {
     public List<BizProcessChild> selectBizTestActuatorList(BizProcessChild bizProcessChild);
     public List<BizProcessChild> selectBizTestRef1List(BizProcessChild bizProcessChild);
     public List<BizProcessChild> selectBizTestRef2List(BizProcessChild bizProcessChild);
-    public List<BizProcessChild> selectBizTestPAList(BizProcessChild bizProcessChild);selectBizTestChildHistoryList
+    public List<BizProcessChild> selectBizTestPAList(BizProcessChild bizProcessChild);
 
     public List<BizProcessChild> selectBizTestChildList(BizProcessChild bizProcessChild);
 
