@@ -1141,6 +1141,9 @@ public class BizProcessDataController extends BaseController {
                             model = model.substring(1,model.length());
                             model = "D" + appendStr + model;
                         }
+                        if (endRemark.length()>0) {
+                            endRemark += ",";
+                        }
                         endRemark += "执行器";
 
                     }
@@ -1168,7 +1171,7 @@ public class BizProcessDataController extends BaseController {
                 //法兰计算
 
                 Double ref1Total = new Double(0);
-                String ref1Id = bizProduct.getString5();
+                String ref1Id = bizProduct.getProductRef1Id();
                 if (StringUtils.isNotEmpty(ref1Id)) {
                     Double ref1Price = bizProduct.getPrice2();
                     String ref1Num = bizProduct.getString6();
@@ -1176,8 +1179,11 @@ public class BizProcessDataController extends BaseController {
                     if (StringUtils.isNotEmpty(ref1Num) && ref1Price > 0 && StringUtils.isNotEmpty(ref1Coefficient)) {
                         ref1Total = Double.parseDouble(ref1Num) * ref1Price * Double.parseDouble(ref1Coefficient);
                         sumTotalNumRef1 = sumTotalNumRef1 + Double.parseDouble(ref1Num);
-                        endRemark += "法兰";
                     }
+                    if (endRemark.length()>0) {
+                        endRemark += ",";
+                    }
+                    endRemark += "法兰";
                 }
                 //螺栓计算
                 Double ref2Tota = new Double(0);
@@ -1189,8 +1195,11 @@ public class BizProcessDataController extends BaseController {
                     if (StringUtils.isNotEmpty(ref2Num) && ref2Price > 0 && StringUtils.isNotEmpty(ref2Coefficient)) {
                         ref2Tota = Double.parseDouble(ref2Num) * ref2Price * Double.parseDouble(ref2Coefficient);
                         sumTotalNumRef2 = sumTotalNumRef2 + Double.parseDouble(ref2Num);
-                        endRemark += "螺栓";
                     }
+                    if (endRemark.length()>0) {
+                        endRemark += ",";
+                    }
+                    endRemark += "螺栓";
                 }
 
                 //定位器
@@ -1202,8 +1211,12 @@ public class BizProcessDataController extends BaseController {
                     Double coefficient = bizProduct.getPattachmentCoefficient();
                     if (price > 0 && num > 0 && coefficient > 0) {
                         pattachmentIdTotal = price * num * coefficient;
-                        endRemark += "定位器";
+
                     }
+                    if (endRemark.length()>0) {
+                        endRemark += ",";
+                    }
+                    endRemark += "定位器";
                 }
 
                 Double pattachmentId1Total = new Double(0);
@@ -1214,8 +1227,11 @@ public class BizProcessDataController extends BaseController {
                     Double coefficient = bizProduct.getPattachment1Coefficient();
                     if (price > 0 && num > 0 && coefficient > 0) {
                         pattachmentId1Total = price * num * coefficient;
-                        endRemark += "电磁阀";
                     }
+                    if (endRemark.length()>0) {
+                        endRemark += ",";
+                    }
+                    endRemark += "电磁阀";
                 }
 
                 Double pattachmentId2Total = new Double(0);
@@ -1226,8 +1242,11 @@ public class BizProcessDataController extends BaseController {
                     Double coefficient = bizProduct.getPattachment2Coefficient();
                     if (price > 0 && num > 0 && coefficient > 0) {
                         pattachmentId2Total = price * num * coefficient;
-                        endRemark += "回信器数";
                     }
+                    if (endRemark.length()>0) {
+                        endRemark += ",";
+                    }
+                    endRemark += "回信器数";
                 }
 
 
@@ -1239,8 +1258,11 @@ public class BizProcessDataController extends BaseController {
                     Double coefficient = bizProduct.getPattachment3Coefficient();
                     if (price > 0 && num > 0 && coefficient > 0) {
                         pattachmentId3Total = price * num * coefficient;
-                        endRemark += "气源三连件";
                     }
+                    if (endRemark.length()>0) {
+                        endRemark += ",";
+                    }
+                    endRemark += "气源三连件";
                 }
 
                 Double pattachmentId4Total = new Double(0);
@@ -1251,8 +1273,11 @@ public class BizProcessDataController extends BaseController {
                     Double coefficient = bizProduct.getPattachment4Coefficient();
                     if (price > 0 && num > 0 && coefficient > 0) {
                         pattachmentId4Total = price * num * coefficient;
-                        endRemark += "可离合减速器";
                     }
+                    if (endRemark.length()>0) {
+                        endRemark += ",";
+                    }
+                    endRemark += "可离合减速器";
                 }
 
 
@@ -1368,7 +1393,7 @@ public class BizProcessDataController extends BaseController {
             //合同签定后5个工作日发货（若未当日回传，发货期则从收到回传之日延后）
             table.addCell(PdfUtil.mergeColLeft("1、交货周期：" + StringUtils.trim(bizProcessData.getString23()), 14,textFont));
             table.addCell(PdfUtil.mergeCol("", 1,textFont));
-            table.addCell(PdfUtil.mergeColLeft("2、收  货  人：" + StringUtils.trim(bizProcessData.getString11()), 14,textFont));
+            table.addCell(PdfUtil.mergeColLeft("2、收  货  人：" + StringUtils.trim(bizProcessData.getString11()) + " " + StringUtils.trim(bizProcessData.getString12()), 14,textFont));
             table.addCell(PdfUtil.mergeCol("", 1,textFont));
             table.addCell(PdfUtil.mergeColLeft("3、交货地点：" + StringUtils.trim(bizProcessData.getString9()), 14,textFont));
 

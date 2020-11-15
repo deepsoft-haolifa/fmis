@@ -228,10 +228,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 and (q.string23 = '' or q.string23 is null)
             </if>
             <if test="string23 == 1 ">
-                and q.string23 = '1'
+                and (ifnull(q.string23,'0') != 1)
             </if>
             <if test="string23 == 2 ">
-                and q.string23 = '2'
+                and (ifnull(q.string23,'0') = 2)
             </if>
             <if test="string23 == 3 ">
                 and (ifnull(q.string23,'0') != 2)

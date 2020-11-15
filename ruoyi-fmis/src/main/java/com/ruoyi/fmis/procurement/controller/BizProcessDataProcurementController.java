@@ -1025,7 +1025,7 @@ public class BizProcessDataProcurementController extends BaseController {
                     rowNum = rowNum + i + 1;
                     table.addCell(PdfUtil.mergeCol("" + rowNum, 1,textFont));
                     table.addCell(PdfUtil.mergeCol("", 1,textFont));
-                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getPattachmentName(), 1,textFont));
+                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getChineseName(), 1,textFont));
                     table.addCell(PdfUtil.mergeCol("", 1,textFont));
                     table.addCell(PdfUtil.mergeCol(bizProcessChild.getChineseSpecifications(), 1,textFont));
                     //颜色
@@ -1037,9 +1037,9 @@ public class BizProcessDataProcurementController extends BaseController {
                     //合计
                     table.addCell(PdfUtil.mergeCol((bizProcessChild.getPattachmentCount() * bizProcessChild.getProcurementPrice()) + "", 1,textFont));
                     //材质
-                    table.addCell(PdfUtil.mergeCol("", 3,textFont));
+                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getMaterial(), 3,textFont));
                     //备注
-                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getRemark() == null ? "" : bizProcessChild.getRemark(), 3,textFont));
+                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getContractSpecial() == null ? "" : bizProcessChild.getContractSpecial(), 3,textFont));
                     sumTotalNum = sumTotalNum + bizProcessChild.getPattachmentCount();
                     sumTotalAmount = sumTotalAmount + bizProcessChild.getPattachmentCount() * bizProcessChild.getProcurementPrice();
                 }

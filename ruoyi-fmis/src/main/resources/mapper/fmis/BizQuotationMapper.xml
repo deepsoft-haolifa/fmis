@@ -213,7 +213,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
           p.cost_price as productCostPrice,pr1.string3 as ref1CostPrice,pr2.string3 as ref2CostPrice,
           pa.cost_price as pattachmentCostPrice,pa1.cost_price as pattachment1CostPrice,
           pa2.cost_price as pattachment2CostPrice,pa3.cost_price as pattachment3CostPrice,pa4.cost_price as pattachment4CostPrice,
-          (case when ac.string2 = '1' then ifnull(ac.string5,'0') when ac.string2 = '2' then ifnull(ac.string9,'0') end) as actuatorCostPrice
+          (case when ac.string2 = '1' then ifnull(ac.string9,'0') when ac.string2 = '2' then ifnull(ac.string9,'0') end) as actuatorCostPrice
 
 
         from biz_quotation q

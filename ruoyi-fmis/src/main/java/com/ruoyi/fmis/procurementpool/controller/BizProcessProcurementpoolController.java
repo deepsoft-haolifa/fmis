@@ -98,7 +98,7 @@ public class BizProcessProcurementpoolController extends BaseController {
         String bizId = bizProcessData.getBizId();
         //采购池
         newBizProcessData.setBizId(bizId);
-        newBizProcessData.setString13("1");
+        newBizProcessData.setString13(bizProcessData.getString13());
         newBizProcessData.setBizId(BizConstants.BIZ_contract);
         newBizProcessData.setDataStatus(bizProcessData.getDataStatus());
         if (StringUtils.isNotEmpty(bizProcessData.getBizEditFlag())) {

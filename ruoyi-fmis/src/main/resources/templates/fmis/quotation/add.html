@@ -614,6 +614,7 @@
 
             var actuatorCostPrice = parsePrice(row["actuatorCostPrice"]);
             var totalActuatorCost = parseFloat(actuatorNum * actuatorCostPrice).toFixed(2);
+            console.log("actuatorNum"+actuatorNum)
 
             var ref1CostPrice = parsePrice(row["ref1CostPrice"]);
             var totalRef1Cost = parseFloat(productRef1Num * ref1CostPrice).toFixed(2);
@@ -633,6 +634,8 @@
 
             var totalCostPrice = parseFloat(parseFloat(totalPriceCost) + parseFloat(totalActuatorCost) + parseFloat(totalRef1Cost) + parseFloat(totalRef2Cost) + parseFloat(totalPattachmentCost)
                 + parseFloat(totalPattachment1Cost) + parseFloat(totalPattachment2Cost) + parseFloat(totalPattachment3Cost) + parseFloat(totalPattachment4Cost)).toFixed(2);
+            console.log("totalActuatorCost"+totalActuatorCost)
+            console.log("totalPriceCost"+totalPriceCost)
             totalCostPriceMap.set("totalCostPrice",totalCostPrice);
 
             var totalSum = parseFloat(parseFloat(productSum) + parseFloat(productRef1Sum) + parseFloat(productRef2Sum) + parseFloat(actuatorSum)
@@ -676,6 +679,9 @@
                 var rowData = data[i];
                 var price = calculatePrice(rowData);
                 var totalCostPrice = totalCostPriceMap.get("totalCostPrice");
+                console.log("price" + price)
+                console.log("totalCostPrice" + totalCostPrice)
+
                 productTotalPrice = FloatAdd(productTotalPrice,price).toFixed(2);
                 allTotalCost =  FloatAdd(totalCostPrice,allTotalCost).toFixed(2);
             }
@@ -689,6 +695,9 @@
 
             //productTotalPrice 毛利 产品金额-成本价格-特殊费用
             var grossPrice = (parseFloat(productTotalPrice) - parseFloat(allTotalCost) - parseFloat(specialExpenses)).toFixed(2);
+            console.log("1"+productTotalPrice)
+            console.log("2"+allTotalCost)
+            console.log("3"+specialExpenses)
             $("#grossPrice").val(grossPrice);
 
         }
