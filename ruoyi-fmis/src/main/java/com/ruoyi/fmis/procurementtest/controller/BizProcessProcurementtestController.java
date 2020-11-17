@@ -297,7 +297,7 @@ public class BizProcessProcurementtestController extends BaseController {
          * 数量
          */
         BizProcessChild bizProcessChild = bizProcessChildService.selectBizProcessChildById(Long.parseLong(childId));
-        String productId = bizProcessChild.getString2();
+        /*String productId = bizProcessChild.getString2();
         String actuatorId = bizProcessChild.getString11();
         String ref1 = bizProcessChild.getString5();
         String ref2 = bizProcessChild.getString8();
@@ -306,7 +306,7 @@ public class BizProcessProcurementtestController extends BaseController {
         Long pattachmentId1 = bizProcessChild.getPattachment1Id();
         Long pattachmentId2 = bizProcessChild.getPattachment2Id();
         Long pattachmentId3 = bizProcessChild.getPattachment3Id();
-        Long pattachmentId4 = bizProcessChild.getPattachment4Id();
+        Long pattachmentId4 = bizProcessChild.getPattachment4Id();*/
         String type = "0";
 
         BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataById(Long.parseLong(dataId));
@@ -318,10 +318,22 @@ public class BizProcessProcurementtestController extends BaseController {
         insertChild.setString5(bizProcessData.getString10());
         insertChild.setString11(yesNum);
         insertChild.setString12(stayId);
-        if (StringUtils.isNotEmpty(productId)) {
+
+        /**
+         * 查询出biz_data_status表中的type
+         * type=1  产品
+         * type=2 执行器
+         * type=3 法兰
+         * type=4 螺栓
+         * 否则 定位设备
+         */
+        Long sId = bizDataSteststay.getStatusId();
+        BizDataStatus dataStatus = bizDataStatusService.selectBizDataStatusById(sId);
+        String busType = dataStatus.getType();
+        if ("1".equals(busType)) {
             type = "1";
             BizProduct queryBizProduct = new BizProduct();
-            queryBizProduct.setProductId(Long.parseLong(productId));
+            queryBizProduct.setProductId(Long.parseLong(paramterId));
             BizProduct bizProduct = bizProductService.selectBizProductList(queryBizProduct).get(0);
 
             insertChild.setString6(bizProduct.getName());
@@ -329,11 +341,10 @@ public class BizProcessProcurementtestController extends BaseController {
             insertChild.setString8(bizProduct.getSpecifications());
             insertChild.setString9(bizProduct.getString2());
             insertChild.setString10(StringUtils.getDoubleString0(bizProduct.getProcurementPrice()));
-
-        } else if (StringUtils.isNotEmpty(actuatorId)) {
+        } else if ("2".equals(busType)) {
             type = "2";
             BizActuator queryActuator = new BizActuator();
-            queryActuator.setActuatorId(Long.parseLong(actuatorId));
+            queryActuator.setActuatorId(Long.parseLong(paramterId));
             BizActuator bizActuator = bizActuatorService.selectBizActuatorForRefList(queryActuator).get(0);
 
             insertChild.setString6(bizActuator.getName());
@@ -342,11 +353,10 @@ public class BizProcessProcurementtestController extends BaseController {
             insertChild.setString9(bizActuator.getQualityLevel());
             insertChild.setString10(bizActuator.getString6());
 
-        } else if (StringUtils.isNotEmpty(ref1)) {
+        } else if ("3".equals(busType)) {
             type = "3";
-
             BizProductRef queryRef1 = new BizProductRef();
-            queryRef1.setProductRefId(Long.parseLong(ref1));
+            queryRef1.setProductRefId(Long.parseLong(paramterId));
             BizProductRef bizProductRef = bizProductRefService.selectBizProductRefList(queryRef1).get(0);
 
             insertChild.setString6(bizProductRef.getName());
@@ -355,11 +365,11 @@ public class BizProcessProcurementtestController extends BaseController {
             insertChild.setString9(bizProductRef.getString1());
             insertChild.setString10(bizProductRef.getString2());
 
-        } else if (StringUtils.isNotEmpty(ref2)) {
+        } else if ("4".equals(busType)) {
             type = "4";
 
             BizProductRef queryRef1 = new BizProductRef();
-            queryRef1.setProductRefId(Long.parseLong(ref2));
+            queryRef1.setProductRefId(Long.parseLong(paramterId));
             BizProductRef bizProductRef = bizProductRefService.selectBizProductRefList(queryRef1).get(0);
 
             insertChild.setString6(bizProductRef.getName());
@@ -368,10 +378,10 @@ public class BizProcessProcurementtestController extends BaseController {
             insertChild.setString9(bizProductRef.getString1());
             insertChild.setString10(bizProductRef.getString2());
 
-        } else if (pattachmentId != null && pattachmentId > 0L) {
+        } else {
             type = "5";
             BizProductAttachment queryProductAttachment = new BizProductAttachment();
-            queryProductAttachment.setAttachmentId(pattachmentId);
+            queryProductAttachment.setAttachmentId(Long.parseLong(paramterId));
             BizProductAttachment bizProductAttachment = bizProductAttachmentService.selectBizProductAttachmentList(queryProductAttachment).get(0);
 
             insertChild.setString6(bizProductAttachment.getChineseName());
@@ -380,50 +390,6 @@ public class BizProcessProcurementtestController extends BaseController {
             insertChild.setString9(bizProductAttachment.getString1());
             insertChild.setString10(StringUtils.getDoubleString0(bizProductAttachment.getSettlementPrice()));
 
-        } else if (pattachmentId1 != null && pattachmentId1 > 0L) {
-            type = "6";
-            BizProductAttachment queryProductAttachment = new BizProductAttachment();
-            queryProductAttachment.setAttachmentId(pattachmentId1);
-            BizProductAttachment bizProductAttachment = bizProductAttachmentService.selectBizProductAttachmentList(queryProductAttachment).get(0);
-
-            insertChild.setString6(bizProductAttachment.getChineseName());
-            //insertChild.setString7(bizProductAttachment.getModel());
-            insertChild.setString8(bizProductAttachment.getChineseSpecifications());
-            insertChild.setString9(bizProductAttachment.getString1());
-            insertChild.setString10(StringUtils.getDoubleString0(bizProductAttachment.getSettlementPrice()));
-        } else if (pattachmentId2 != null && pattachmentId2 > 0L) {
-            type = "7";
-            BizProductAttachment queryProductAttachment = new BizProductAttachment();
-            queryProductAttachment.setAttachmentId(pattachmentId2);
-            BizProductAttachment bizProductAttachment = bizProductAttachmentService.selectBizProductAttachmentList(queryProductAttachment).get(0);
-
-            insertChild.setString6(bizProductAttachment.getChineseName());
-            //insertChild.setString7(bizProductAttachment.getModel());
-            insertChild.setString8(bizProductAttachment.getChineseSpecifications());
-            insertChild.setString9(bizProductAttachment.getString1());
-            insertChild.setString10(StringUtils.getDoubleString0(bizProductAttachment.getSettlementPrice()));
-        } else if (pattachmentId3 != null && pattachmentId3 > 0L) {
-            type = "8";
-            BizProductAttachment queryProductAttachment = new BizProductAttachment();
-            queryProductAttachment.setAttachmentId(pattachmentId3);
-            BizProductAttachment bizProductAttachment = bizProductAttachmentService.selectBizProductAttachmentList(queryProductAttachment).get(0);
-
-            insertChild.setString6(bizProductAttachment.getChineseName());
-            //insertChild.setString7(bizProductAttachment.getModel());
-            insertChild.setString8(bizProductAttachment.getChineseSpecifications());
-            insertChild.setString9(bizProductAttachment.getString1());
-            insertChild.setString10(StringUtils.getDoubleString0(bizProductAttachment.getSettlementPrice()));
-        } else if (pattachmentId4 != null && pattachmentId4 > 0L) {
-            type = "9";
-            BizProductAttachment queryProductAttachment = new BizProductAttachment();
-            queryProductAttachment.setAttachmentId(pattachmentId4);
-            BizProductAttachment bizProductAttachment = bizProductAttachmentService.selectBizProductAttachmentList(queryProductAttachment).get(0);
-
-            insertChild.setString6(bizProductAttachment.getChineseName());
-            //insertChild.setString7(bizProductAttachment.getModel());
-            insertChild.setString8(bizProductAttachment.getChineseSpecifications());
-            insertChild.setString9(bizProductAttachment.getString1());
-            insertChild.setString10(StringUtils.getDoubleString0(bizProductAttachment.getSettlementPrice()));
         }
         insertChild.setString2(type);
         insertChild.setString3(orderNo);
@@ -439,6 +405,7 @@ public class BizProcessProcurementtestController extends BaseController {
         } else {
             BizProcessChild updateChild = bizProcessChildListExist.get(0);
             updateChild.setString20("1");
+            updateChild.setString12(stayId);
             updateChild.setString11((Integer.parseInt(updateChild.getString11()) + Integer.parseInt(yesNum)) + "");
             updateChild.setUpdateBy(ShiroUtils.getUserId().toString());
             updateChild.setUpdateTime(new Date());
