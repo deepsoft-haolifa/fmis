@@ -382,7 +382,7 @@ public class BizProcessProcurementtestController extends BaseController {
             type = "5";
             BizProductAttachment queryProductAttachment = new BizProductAttachment();
             queryProductAttachment.setAttachmentId(Long.parseLong(paramterId));
-            BizProductAttachment bizProductAttachment = bizProductAttachmentService.selectBizProductAttachmentList(queryProductAttachment).get(0);
+            BizProductAttachment bizProductAttachment = bizProductAttachmentService.selectBizProductAttachmentById(Long.parseLong(paramterId));
 
             insertChild.setString6(bizProductAttachment.getChineseName());
             //insertChild.setString7(bizProductAttachment.getModel());
