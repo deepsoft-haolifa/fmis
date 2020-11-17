@@ -30,6 +30,9 @@ public class BizProcessChild extends BaseEntity {
     @Setter
     private String contractSpecial;
 
+    @Getter
+    @Setter
+    private String costPrice;
 
     @Getter
     @Setter

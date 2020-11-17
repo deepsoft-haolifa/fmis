@@ -11,7 +11,8 @@ function cellStyle (value, row, index) {
 function expandChildTablePromise(dataId,paramterId,childId,tableId) {
     var promise;
     promise = new Promise(function(resolve, reject) {
-        console.log("tableId2=" + tableId);
+        var rowId = $("#" + tableId).bootstrapTable('getRowByUniqueId', paramterId).rowId;
+        console.log("tableId2=" + tableId + " rowId=" + rowId);
         $("#" + tableId).bootstrapTable('expandRow', $("#" + tableId).bootstrapTable('getRowByUniqueId', paramterId).rowId);
         //bootstrap-table-actuator
         //bootstrap-table-ref1
@@ -545,7 +546,7 @@ $(function() {
         id: "bootstrap-table-pa",
         cache: true,
         async: false,
-        detailView: false,
+        detailView: true,
         showSearch: false,
         showRefresh: false,
         showToggle: false,
@@ -608,7 +609,7 @@ $(function() {
             {field : 'contractNo',title : '销售合同号',visible: true,width:100},
             {field : 'statusId',title : 'statusId',visible: false,width:100},
             {field : 'childId',title : 'childId',visible: false},
-            {field : 'pattachmentPrice',title : '价格',editable: false,width: 100},
+            {field : 'costPrice',title : '价格',editable: false,width: 100},
             {field : 'procurementPrice',title : '采购价',editable: false,width: 100},
             {field : 'supplierName',title : '供应商',editable: false,width: 100},
             {field : 'supplierId',title : 'supplierId',visible: false},
