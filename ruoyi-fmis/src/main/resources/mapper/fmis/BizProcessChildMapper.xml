@@ -49,6 +49,8 @@
         <result property="createTime" column="create_time"/>
         <result property="updateBy" column="update_by"/>
         <result property="updateTime" column="update_time"/>
+        <result property="pressure" column="press"/>
+        <result property="color" column="color"/>
     </resultMap>
 
     <sql id="selectBizProcessChildVo">
@@ -378,7 +380,7 @@
     <!-- 质检 执行器信息 -->
     <sql id="selectBizTestActuatorVo">
     select
-      ds.string1 as actuatorNum,sn.remark,
+      ds.string1 as actuatorNum,sn.remark,a.press as pressure,a.color,a.string5,
           a.name as actuatorName,a.price as actuatorPrice,a.actuator_id as actuatorId,ds.string4 as dataId,ds.child_id as childId,ds.status_id as statusId,
           a.brand as actuatorBrand,a.manufacturer as actuatorManufacturer,a.string4 as actuatorString4,
           a.string1 as actuatorString1,a.setup_type as actuatorSetupType,a.output_torque as actuatorOutputTorque,
@@ -822,9 +824,9 @@ join biz_process_data pd on pc.data_id=pd.data_id
     <select id="selectBizTestChildHistoryList" parameterType="BizProcessChild" resultMap="BizProcessChildResult">
         <include refid="selectBizTestChildHistoryVo"/>
 
-        <if test="bjNo != null">and ss.string6 like concat('%', #{bjNo}, '%')</if>
-        <if test="contractNo != null">and d1.string1 like concat('%', #{contractNo}, '%')</if>
-        <if test="procurementNo != null">and d.string1 like concat('%', #{procurementNo}, '%')</if>
+        <if test="bjNo != null and bjNo != ''">and ss.string6 like concat('%', #{bjNo}, '%')</if>
+        <if test="contractNo != null and contractNo != ''">and d1.string1 like concat('%', #{contractNo}, '%')</if>
+        <if test="procurementNo != null and procurementNo != ''">and d.string1 like concat('%', #{procurementNo}, '%')</if>
 
         order by sn.create_time desc
     </select>
