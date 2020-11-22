@@ -688,7 +688,7 @@ join biz_process_data pd on pc.data_id=pd.data_id
          pd.string6 as goodsTime,
           ds.product_status as productStatus,ds.actuator_status as actuatorStatus,ds.ref1_status as ref1Status,ds.ref2_status as ref2Status,ds.p_status as pStatus,
           ds.p1_status as p1Status,ds.p2_status as p2Status,ds.p3_status as p3Status,ds.p4_status as p4Status,pc.data_id as dataId,pc.child_id as childId,ds.data_status as dataStatus,
-          ds.string4 as procurementId,pa.string1 as levelValue,s.suppliers_id as supplierId,s.nick_name as supplierName,pd.string1 as contractNo,pd.string25 as contractSpecial
+          ds.string4 as procurementId,'A' as levelValue,s.suppliers_id as supplierId,s.nick_name as supplierName,pd.string1 as contractNo,pd.string25 as contractSpecial
 
     from  biz_product_attachment pa
     join biz_process_child pc on pc.data_id=#{dataId} and pa.attachment_id=pc.pattachment2_id

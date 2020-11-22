@@ -416,8 +416,8 @@ public class BizProcessDataProcurementController extends BaseController {
                 }
             }
 
-            int contractCount = contractChildList.size();
-
+            int contractSize = contractChildList.size();
+            int contractCount = 0;
             for (BizProcessChild bizProcessChild1 : contractChildList) {
                 String string5 = bizProcessChild1.getProductRef1Id();
                 String string8 = bizProcessChild1.getProductRef2Id();
@@ -1089,7 +1089,12 @@ public class BizProcessDataProcurementController extends BaseController {
             table.addCell(PdfUtil.mergeColLeft("付款及运输：" + payRemark, 14,textFont));
             table.addCell(PdfUtil.mergeCol("", 1,textFont));
             //合同签定后5个工作日发货（若未当日回传，发货期则从收到回传之日延后）
-            table.addCell(PdfUtil.mergeColLeft("1、交货周期：" + DateConvert.formatDate(bizProcessData.getDatetime2()), 14,textFont));
+            Date dateTime2 = bizProcessData.getDatetime2();
+            String dateTime2S = "";
+            if (dateTime2 != null) {
+                dateTime2S = DateConvert.formatDate(bizProcessData.getDatetime2());
+            }
+            table.addCell(PdfUtil.mergeColLeft("1、交货周期：" + dateTime2S, 14,textFont));
             table.addCell(PdfUtil.mergeCol("", 1,textFont));
             table.addCell(PdfUtil.mergeColLeft("2、收  货  人：" + StringUtils.trim(bizProcessData.getString11()), 14,textFont));
             table.addCell(PdfUtil.mergeCol("", 1,textFont));
