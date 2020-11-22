@@ -1089,7 +1089,7 @@ public class BizProcessDataProcurementController extends BaseController {
             table.addCell(PdfUtil.mergeColLeft("付款及运输：" + payRemark, 14,textFont));
             table.addCell(PdfUtil.mergeCol("", 1,textFont));
             //合同签定后5个工作日发货（若未当日回传，发货期则从收到回传之日延后）
-            table.addCell(PdfUtil.mergeColLeft("1、交货周期：" + DateConvert.formatDate(bizProcessData.getDatetime2()), 14,textFont));
+            table.addCell(PdfUtil.mergeColLeft("1、交货周期：" + DateConvert.formatDate(bizProcessData.getDatetime2() == null ? new Date() : bizProcessData.getDatetime2()), 14,textFont));
             table.addCell(PdfUtil.mergeCol("", 1,textFont));
             table.addCell(PdfUtil.mergeColLeft("2、收  货  人：" + StringUtils.trim(bizProcessData.getString11()), 14,textFont));
             table.addCell(PdfUtil.mergeCol("", 1,textFont));
