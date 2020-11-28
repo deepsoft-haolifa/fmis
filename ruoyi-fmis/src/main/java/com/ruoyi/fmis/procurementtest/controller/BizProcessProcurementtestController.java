@@ -398,7 +398,7 @@ public class BizProcessProcurementtestController extends BaseController {
 
         BizProcessChild queryChildExist = new BizProcessChild();
         queryChildExist.setString1(childId);
-        //queryChildExist.setString3(orderNo);
+        queryChildExist.setString3(orderNo);
         List<BizProcessChild> bizProcessChildListExist = bizProcessChildService.selectBizProcessChildList(queryChildExist);
         if (CollectionUtils.isEmpty(bizProcessChildListExist)) {
             bizProcessChildService.insertBizProcessChild(insertChild);
