@@ -400,7 +400,9 @@ public class BizProcessDataController extends BaseController {
     @GetMapping("/selectNewQuotation")
     public String selectNewQuotation(ModelMap mmap) {
         String customerId = getRequest().getParameter("customerId");
+        String string6 = getRequest().getParameter("string6");
         mmap.put("customerId",customerId);
+        mmap.put("string6",string6);
         return prefix + "/selectNewQuotation";
     }
 
@@ -1391,7 +1393,7 @@ public class BizProcessDataController extends BaseController {
             table.addCell(PdfUtil.mergeColLeft("付款及运输：" + payRemark, 14,textFont));
             table.addCell(PdfUtil.mergeCol("", 1,textFont));
             //合同签定后5个工作日发货（若未当日回传，发货期则从收到回传之日延后）
-            table.addCell(PdfUtil.mergeColLeft("1、交货周期：" + StringUtils.trim(bizProcessData.getString23()), 14,textFont));
+            table.addCell(PdfUtil.mergeColLeft("1、交货周期：" + StringUtils.trim(bizProcessData.getString24()), 14,textFont));
             table.addCell(PdfUtil.mergeCol("", 1,textFont));
             table.addCell(PdfUtil.mergeColLeft("2、收  货  人：" + StringUtils.trim(bizProcessData.getString11()) + " " + StringUtils.trim(bizProcessData.getString12()), 14,textFont));
             table.addCell(PdfUtil.mergeCol("", 1,textFont));
@@ -1636,13 +1638,13 @@ public class BizProcessDataController extends BaseController {
                 }
                 List<BizProduct> bizProductList = bizProductService.selectBizProductList(queryBizProduct);
                 if (!CollectionUtils.isEmpty(bizProductList)) {
-                    if (bizProductList.size() > 1) {
+                    /*if (bizProductList.size() > 1) {
                         JSONObject json = new JSONObject();
                         json.put("msg","第" + (i + 1) + "行 查询出多条数据！");
                         errorArray.add(json);
                         i++;
                         continue;
-                    }
+                    }*/
 
                     BizProduct bizProduct = bizProductList.get(0);
                     Long productId = bizProduct.getProductId();

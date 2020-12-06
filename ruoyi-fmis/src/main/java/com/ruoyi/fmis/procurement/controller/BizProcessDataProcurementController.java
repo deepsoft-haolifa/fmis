@@ -32,6 +32,7 @@ import com.ruoyi.fmis.status.service.IBizDataStatusService;
 import com.ruoyi.fmis.suppliers.domain.BizSuppliers;
 import com.ruoyi.fmis.suppliers.service.IBizSuppliersService;
 import com.ruoyi.framework.util.ShiroUtils;
+import com.ruoyi.system.domain.SysDictData;
 import com.ruoyi.system.domain.SysRole;
 import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.service.ISysDeptService;
@@ -428,6 +429,10 @@ public class BizProcessDataProcurementController extends BaseController {
                 Long pattachment2Id = bizProcessChild1.getPattachment2Id();
                 Long pattachment3Id = bizProcessChild1.getPattachment3Id();
                 Long pattachment4Id = bizProcessChild1.getPattachment4Id();
+                String productId = bizProcessChild1.getProductId();
+                if (StringUtils.isNotEmpty(productId)) {
+                    contractCount++;
+                }
                 if (StringUtils.isNotEmpty(string5)) {
                     contractCount++;
                 }
@@ -837,25 +842,26 @@ public class BizProcessDataProcurementController extends BaseController {
 
             // 第一行
             table.addCell(PdfUtil.mergeCol("需方：", 2,textFont));
-            table.addCell(PdfUtil.mergeCol(companyName, 6,textFont));
+            table.addCell(PdfUtil.mergeCol(companyName, 13,textFont));
 
 
-            table.addCell(PdfUtil.mergeCol("", 2,textFont));
-            table.addCell(PdfUtil.mergeCol("", 5,textFont));
+//            table.addCell(PdfUtil.mergeCol("", 2,textFont));
+//            table.addCell(PdfUtil.mergeCol("", 5,textFont));
 
             //第二行
             table.addCell(PdfUtil.mergeCol("供方：", 2,textFont));
             String string6 = bizProcessData.getString6();
             String string6Name = "";
+            BizSuppliers bizSuppliers = null;
             if (StringUtils.isNotEmpty(string6)) {
-                BizSuppliers bizSuppliers = bizSuppliersService.selectBizSuppliersById(Long.parseLong(string6));
+                 bizSuppliers = bizSuppliersService.selectBizSuppliersById(Long.parseLong(string6));
                 if (bizSuppliers != null) {
                     string6Name = bizSuppliers.getName();
                 }
             }
-            table.addCell(PdfUtil.mergeCol(string6Name, 6,textFont));
-            table.addCell(PdfUtil.mergeCol("", 2,textFont));
-            table.addCell(PdfUtil.mergeCol("", 5,textFont));
+            table.addCell(PdfUtil.mergeCol(string6Name, 13,textFont));
+//            table.addCell(PdfUtil.mergeCol("", 2,textFont));
+//            table.addCell(PdfUtil.mergeCol("", 5,textFont));
             //第三行
             table.addCell(PdfUtil.mergeCol("采购合同编号：", 2,textFont));
             table.addCell(PdfUtil.mergeCol(bizProcessData.getString12(), 6,textFont));
@@ -1069,7 +1075,7 @@ public class BizProcessDataProcurementController extends BaseController {
 
             table.addCell(PdfUtil.mergeCol("四、", 1,textFont));
             table.addCell(PdfUtil.mergeColLeft("产品验收标准：按国家标准验收。", 14,textFont));
-            table.addCell(PdfUtil.mergeCol("", 1,textFont));
+            /*table.addCell(PdfUtil.mergeCol("", 1,textFont));
             //电汇结算，款到发货；货物采用纸箱包装，采用市内送货运输，运输费用卖方承担
 
             String payRemark = "";
@@ -1102,48 +1108,80 @@ public class BizProcessDataProcurementController extends BaseController {
             table.addCell(PdfUtil.mergeCol("", 1,textFont));
             table.addCell(PdfUtil.mergeColLeft("2、收  货  人：" + StringUtils.trim(bizProcessData.getString11()), 14,textFont));
             table.addCell(PdfUtil.mergeCol("", 1,textFont));
-            table.addCell(PdfUtil.mergeColLeft("3、交货地点：" + StringUtils.trim(bizProcessData.getString9()), 14,textFont));
+            table.addCell(PdfUtil.mergeColLeft("3、交货地点：" + StringUtils.trim(bizProcessData.getString9()), 14,textFont));*/
 
             table.addCell(PdfUtil.mergeCol("五、", 1,textFont));
-            table.addCell(PdfUtil.mergeColLeft("质量保证按国家标准执行：质保期12个月（自出厂日算起）；质保期内如因产品本身质量问题，卖方予以免费更换。", 14,textFont));
+            table.addCell(PdfUtil.mergeColLeft("质量保证按国家标准执行：质保期18个月（自出厂日算起）；质保期内如因产品本身质量问题，卖方予以免费更换。", 14,textFont));
 
             table.addCell(PdfUtil.mergeCol("六、", 1,textFont));
-            table.addCell(PdfUtil.mergeColLeft("违约责任：合同签订后，买卖双方严格执行双方所签订合同的条款，其中一方不履行或不完全履行合同者应承担相应的法律责任；解决合同纠纷方式：双方协商解决，解决不成由卖方所在北京仲裁委员会仲裁。", 14,textFont));
+            table.addCell(PdfUtil.mergeCol("包装规范：", 2,textFont));
+            table.addCell(PdfUtil.mergeCol(bizProcessData.getString27(), 6,textFont));
+            table.addCell(PdfUtil.mergeCol("运输方式：", 2,textFont));
+            table.addCell(PdfUtil.mergeCol(bizProcessData.getString9(), 5,textFont));
 
             table.addCell(PdfUtil.mergeCol("七、", 1,textFont));
+            table.addCell(PdfUtil.mergeCol("发货日期：", 2,textFont));
+            table.addCell(PdfUtil.mergeCol(bizProcessData.getDatetime3() + "", 6,textFont));
+            table.addCell(PdfUtil.mergeCol("收货信息：", 2,textFont));
+            table.addCell(PdfUtil.mergeCol(bizProcessData.getString28(), 5,textFont));
+            table.addCell(PdfUtil.mergeCol("八、", 1,textFont));
+            table.addCell(PdfUtil.mergeCol("付款方式：", 2,textFont));
+            SysDictData  dictData = new SysDictData();
+            dictData.setDictType("contract_paytype");
+            dictData.setDictValue(bizProcessData.getString20());
+            List<SysDictData> list = dictDataService.selectDictDataList(dictData);
+            SysDictData sysDictData = list.get(0);
+            table.addCell(PdfUtil.mergeCol(sysDictData == null ? "" : sysDictData.getDictLabel(), 6,textFont));
+            table.addCell(PdfUtil.mergeCol("运费承担：", 2,textFont));
+            table.addCell(PdfUtil.mergeCol(bizProcessData.getString26(), 5,textFont));
+
+            table.addCell(PdfUtil.mergeCol("九、", 1,textFont));
+            table.addCell(PdfUtil.mergeColLeft("违约责任：合同签订后，买卖双方严格执行双方所签订合同的条款，其中一方不履行或不完全履行合同者应承担相应的法律责任；解决合同纠纷方式：双方协商解决，解决不成由卖方所在北京仲裁委员会仲裁。", 14,textFont));
+
+            table.addCell(PdfUtil.mergeCol("十、", 1,textFont));
             table.addCell(PdfUtil.mergeColLeft("本合同一式贰份。双方各执一份，双方签字盖章后生效（传真件有效）。", 14,textFont));
 
 
 
 
             table.addCell(PdfUtil.mergeCol("", 1,textFont));
-            table.addCell(PdfUtil.mergeColLeft("单位名称：" + companyName + "", 7,textFont));
-            //table.addCell(PdfUtil.mergeColLeft("单位名称：" + StringUtils.trim(bizCustomer.getName()), 7,textFont));
+//            table.addCell(PdfUtil.mergeColLeft("需方：" , 1,textFont));
+            table.addCell(PdfUtil.mergeColLeft("需方：" + companyName, 7,textFont));
 
-            table.addCell(PdfUtil.mergeCol("", 1,textFont));
-            table.addCell(PdfUtil.mergeColLeft("单位地址：北京大兴区榆垡镇榆顺路6号", 7,textFont));
+//            table.addCell(PdfUtil.mergeCol("供方", 1,textFont));
+            table.addCell(PdfUtil.mergeColLeft( "供方：" + string6Name, 7,textFont));
             //table.addCell(PdfUtil.mergeColLeft("单位地址："  + StringUtils.trim(bizCustomer.getCompanyAddress()), 7,textFont));
 
             table.addCell(PdfUtil.mergeCol("", 1,textFont));
             table.addCell(PdfUtil.mergeColLeft("委托代理人：", 7,textFont));
-            table.addCell(PdfUtil.mergeColLeft("委托代理人：", 7,textFont));
+            table.addCell(PdfUtil.mergeColLeft("委托代理人：" + bizSuppliers.getHumanCapitalMeasure(), 7,textFont));
 
             table.addCell(PdfUtil.mergeCol("", 1,textFont));
             table.addCell(PdfUtil.mergeColLeft("电    话：" + StringUtils.trim(remark6), 7,textFont));
+            table.addCell(PdfUtil.mergeColLeft("电    话：" + bizSuppliers.getTelphone(), 7,textFont));
             //table.addCell(PdfUtil.mergeColLeft("传    真：" + StringUtils.trim(bizCustomer.getFax()), 7,textFont));
 
             table.addCell(PdfUtil.mergeCol("", 1,textFont));
+            table.addCell(PdfUtil.mergeColLeft("传    真：" + StringUtils.trim(remark6), 7,textFont));
+            table.addCell(PdfUtil.mergeColLeft("传    真：" + bizSuppliers.getFax(), 7,textFont));
+
+            table.addCell(PdfUtil.mergeCol("", 1,textFont));
             table.addCell(PdfUtil.mergeColLeft("开户银行：" + StringUtils.trim(remark7), 7,textFont));
+            table.addCell(PdfUtil.mergeColLeft("开户银行：" + "暂时没有", 7,textFont));
             //table.addCell(PdfUtil.mergeColLeft("开户银行：" + StringUtils.trim(bizCustomer.getString11()), 7,textFont));
 
             table.addCell(PdfUtil.mergeCol("", 1,textFont));
             table.addCell(PdfUtil.mergeColLeft("帐    号：" + StringUtils.trim(remark8), 7,textFont));
-            //table.addCell(PdfUtil.mergeColLeft("帐    号：" + StringUtils.trim(bizCustomer.getString12()), 7,textFont));
+//            table.addCell(PdfUtil.mergeColLeft("帐    号：" + StringUtils.trim(remark8), 7,textFont));
+            table.addCell(PdfUtil.mergeColLeft("帐    号：" +  "暂时没有", 7,textFont));
 
             table.addCell(PdfUtil.mergeCol("", 1,textFont));
             table.addCell(PdfUtil.mergeColLeft("税    号："  + StringUtils.trim(remark9), 7,textFont));
-            //table.addCell(PdfUtil.mergeColLeft("税    号：" + StringUtils.trim(bizCustomer.getString13()), 7,textFont));
+            table.addCell(PdfUtil.mergeColLeft("税    号：" + "暂时没有", 7,textFont));
 
+            table.addCell(PdfUtil.mergeCol("", 1,textFont));
+            table.addCell(PdfUtil.mergeColLeft("地    址："  + StringUtils.trim(remark9), 7,textFont));
+            table.addCell(PdfUtil.mergeColLeft("地    址：" + bizSuppliers.getAddress(), 7,textFont));
 
             Paragraph paragraphRemark1 = new Paragraph();
             Font remarkFont1 = PdfUtil.getPdfChineseFont(7, Font.NORMAL);

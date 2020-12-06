@@ -105,7 +105,7 @@
         select c.child_id, c.data_id, c.remark, c.price1, c.price2, c.price3, c.price4,
         c.price5, c.price6, c.price7, c.price8, c.price9, c.price10, c.string1, c.string2,
         c.string3, c.string4, c.string5, c.string6, c.string7, c.string8, c.string9, c.string10,
-        c.string11, c.string12, c.string13, c.string14, c.string15, c.string16, c.string17,
+        sum(c.string11) string11, c.string12, c.string13, c.string14, c.string15, c.string16, c.string17,
         c.string18, c.string19, c.string20, c.datetime1, c.datetime2, c.datetime3, c.datetime4,
         c.datetime5, c.status, c.del_flag, c.create_by, c.create_time, c.update_by, c.update_time
         from biz_process_child c
@@ -130,6 +130,7 @@
             <if test="string5 != null  and string5 != ''"> and c.string5 like concat('%', #{string5}, '%')</if>
             <if test="productName != null  and productName != ''"> and c.string6 like concat('%', #{productName}, '%')</if>
         </where>
+        group by c.string4
         order by c.create_time desc
     </select>
 
@@ -388,7 +389,7 @@
           a.protection_level as actuatorProtectionLevel,a.quality_level as actuatorQualityLevel,a.explosion_level as actuatorExplosionLevel,a.string6 as actuatorString6,
           ds.product_status as productStatus,ds.actuator_status as actuatorStatus,
           ds.string4 as procurementId,a.quality_level as levelValue,s.suppliers_id as supplierId,s.name as supplierName,
-          COALESCE(sum(sn.string1),0) as yesNum, COALESCE(sum(sn.string2),0) as noNum,(COALESCE(sum(ss.num),0)-COALESCE(sum(sn.string1),0)-COALESCE(sum(sn.string2),0)) as stayNum,ss.create_time as stayCreateTime,ss.stay_id as stayId,ss.string6 as orderNo,
+          COALESCE(sum(sn.string1),0) as yesNum, COALESCE(sum(sn.string2),0) as noNum,(COALESCE(ss.num,0)-COALESCE(sum(sn.string1),0)-COALESCE(sum(sn.string2),0)) as stayNum,ss.create_time as stayCreateTime,ss.stay_id as stayId,ss.string6 as orderNo,
           da1.string1 as contractNo,da.string12 as procurementNo,da1.string25 as contractSpecial
           from biz_actuator a
     join biz_data_status ds on   ds.string2=a.actuator_id and ds.string4=#{dataId} and ds.type=2
@@ -465,7 +466,7 @@ join biz_process_data pd on pc.data_id=pd.data_id
           pr.material_require as ref1MaterialRequire,s.name as  suppliersName,pr.model,
           ds.product_status as productStatus,ds.data_status as dataStatus,
           ds.string4 as procurementId,pr.string1 as levelValue,s.suppliers_id as supplierId,s.name as supplierName,
-          COALESCE(sum(sn.string1),0) as yesNum, COALESCE(sum(sn.string2),0) as noNum,(COALESCE(sum(ss.num),0)-COALESCE(sum(sn.string1),0)-COALESCE(sum(sn.string2),0)) as stayNum,ss.create_time as stayCreateTime,ss.stay_id as stayId,ss.string6 as orderNo,
+          COALESCE(sum(sn.string1),0) as yesNum, COALESCE(sum(sn.string2),0) as noNum,(COALESCE(ss.num,0)-COALESCE(sum(sn.string1),0)-COALESCE(sum(sn.string2),0)) as stayNum,ss.create_time as stayCreateTime,ss.stay_id as stayId,ss.string6 as orderNo,
           da1.string1 as contractNo,da.string12 as procurementNo,da1.string25 as contractSpecial
           from  biz_product_ref pr
     join biz_data_status ds on   ds.string2=pr.product_ref_id and ds.string4=#{dataId} and ds.type=3
@@ -539,7 +540,7 @@ join biz_process_data pd on pc.data_id=pd.data_id
           pr.material_require as ref1MaterialRequire,s.name as  suppliersName,pr.model,
           ds.data_status as dataStatus,
           ds.string4 as procurementId,pr.string1 as levelValue,s.suppliers_id as supplierId,s.name as supplierName,
-          COALESCE(sum(sn.string1),0) as yesNum, COALESCE(sum(sn.string2),0) as noNum,(COALESCE(sum(ss.num),0)-COALESCE(sum(sn.string1),0)-COALESCE(sum(sn.string2),0)) as stayNum,ss.create_time as stayCreateTime,ss.stay_id as stayId,ss.string6 as orderNo,
+          COALESCE(sum(sn.string1),0) as yesNum, COALESCE(sum(sn.string2),0) as noNum,(COALESCE(ss.num,0)-COALESCE(sum(sn.string1),0)-COALESCE(sum(sn.string2),0)) as stayNum,ss.create_time as stayCreateTime,ss.stay_id as stayId,ss.string6 as orderNo,
           da1.string1 as contractNo,da.string12 as procurementNo,da1.string25 as contractSpecial
           from  biz_product_ref pr
     join biz_data_status ds on   ds.string2=pr.product_ref_id and ds.string4=#{dataId} and ds.type=4
@@ -612,7 +613,7 @@ join biz_process_data pd on pc.data_id=pd.data_id
          pa.handling_fee as handlingFee, pa.color, pa.developer, pa.goods_category as goodsCategory,ifnull(pa.settlement_price,0) as procurementPrice,s.name as supplierName,
          ds.data_status as dataStatus,
           ds.string4 as procurementId,pa.string1 as levelValue,s.suppliers_id as supplierId,s.nick_name as supplierName,
-          COALESCE(sum(sn.string1),0) as yesNum, COALESCE(sum(sn.string2),0) as noNum,(COALESCE(sum(ss.num),0)-COALESCE(sum(sn.string1),0)-COALESCE(sum(sn.string2),0)) as stayNum,ss.create_time as stayCreateTime,ss.stay_id as stayId,ss.string6 as orderNo,
+          COALESCE(sum(sn.string1),0) as yesNum, COALESCE(sum(sn.string2),0) as noNum,(COALESCE(ss.num,0)-COALESCE(sum(sn.string1),0)-COALESCE(sum(sn.string2),0)) as stayNum,ss.create_time as stayCreateTime,ss.stay_id as stayId,ss.string6 as orderNo,
           da1.string1 as contractNo,da.string12 as procurementNo,da1.string25 as contractSpecial,ifnull(pa.cost_price,0) as costPrice
           from  biz_product_attachment pa
     join biz_data_status ds on   ds.string2=pa.attachment_id and ds.string4=#{dataId} and ds.type > 4
