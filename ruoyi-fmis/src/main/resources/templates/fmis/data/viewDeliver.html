@@ -5,323 +5,291 @@
     <th:block th:include="include :: datetimepicker-css" />
 </head>
 <body class="white-bg">
-    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
-        <form class="form-horizontal m" id="form-data-edit" th:object="${bizProcessData}">
-            <input name="dataId" id="dataId" th:field="*{dataId}" type="hidden">
-            <input type="hidden" name="bizId" value="contract"/>
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-data-edit" th:object="${bizProcessData}">
+        <input name="dataId" id="dataId" th:field="*{dataId}" type="hidden">
+        <input type="hidden" name="bizId" value="contract"/>
 
-            <input id="string1" name="string1" class="form-control" th:field="*{string1}" type="hidden">
-
-
-            <div class="form-group " >
-                <label class="col-sm-1 control-label">编号：</label>
-                <div class="col-sm-2">
-                    <input name="string26" class="form-control" type="text">
-                </div>
-                <label class="col-sm-1 control-label">合同单号：</label>
-                <div class="col-sm-2">
-                    <input name="string27" class="form-control" type="text">
-                </div>
-
-                <label class="col-sm-1 control-label">客户代号：</label>
-                <div class="col-sm-2">
-                    <input name="string4" class="form-control" type="text">
-                </div>
+        <input id="string1" name="string1" class="form-control" th:field="*{string1}" type="hidden">
 
 
+        <div class="form-group " >
+            <label class="col-sm-1 control-label">编号：</label>
+            <div class="col-sm-2">
+                <input name="string26" class="form-control" type="text">
+            </div>
+            <label class="col-sm-1 control-label">合同单号：</label>
+            <div class="col-sm-2">
+                <input name="string27" class="form-control" type="text">
             </div>
 
-            <div class="form-group " >
-
-
-                <label class="col-sm-1 control-label">发货日期：</label>
-                <div class="col-sm-2">
-                    <div class="input-group date">
-                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input name="datetime1" id="datetime1" class="form-control" placeholder="yyyy-MM-dd" type="text">
-                    </div>
-                </div>
-
-                <label class="col-sm-1 control-label">发货地：</label>
-                <div class="col-sm-2">
-                    <input name="string7" class="form-control" type="text">
-                </div>
-
-                <label class="col-sm-1 control-label">收货人：</label>
-                <div class="col-sm-2">
-                    <input name="string8" class="form-control" type="text">
-                </div>
-            </div>
-
-            <div class="form-group " >
-
-                <label class="col-sm-1 control-label">电话：</label>
-                <div class="col-sm-2">
-                    <input name="string9" class="form-control" type="text">
-                </div>
-
-                <label class="col-sm-1 control-label">手机：</label>
-                <div class="col-sm-2">
-                    <input name="string10" class="form-control" type="text">
-                </div>
-
-                <label class="col-sm-1 control-label">运费付费方式：</label>
-                <div class="col-sm-2">
-                    <input name="string12" class="form-control" type="text">
-                </div>
+            <label class="col-sm-1 control-label">客户代号：</label>
+            <div class="col-sm-2">
+                <input name="string4" class="form-control" type="text">
             </div>
 
 
+        </div>
 
-            <div class="form-group " >
-                <label class="col-sm-1 control-label">运输方式：</label>
-                <div class="col-sm-2">
-                    <input name="string14" class="form-control" type="text">
-                </div>
-                <label class="col-sm-1 control-label">件数：</label>
-                <div class="col-sm-2">
-                    <input name="string15" class="form-control" type="text">
-                </div>
+        <div class="form-group " >
 
-                <label class="col-sm-1 control-label">毛重：</label>
-                <div class="col-sm-2">
-                    <input name="string16" class="form-control" type="text">
+
+            <label class="col-sm-1 control-label">发货日期：</label>
+            <div class="col-sm-2">
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input name="datetime1" id="datetime1" class="form-control" placeholder="yyyy-MM-dd" type="text">
                 </div>
             </div>
 
-            <div class="form-group " >
-                <label class="col-sm-1 control-label">净重：</label>
-                <div class="col-sm-2">
-                    <input name="string17" class="form-control" type="text">
-                </div>
-                <label class="col-sm-1 control-label">承运单位：</label>
-                <div class="col-sm-2">
-                    <input name="string18" class="form-control" type="text">
-                </div>
-
-                <label class="col-sm-1 control-label">收费标准：</label>
-                <div class="col-sm-2">
-                    <input name="string19" class="form-control" type="text">
-                </div>
+            <label class="col-sm-1 control-label">发货地：</label>
+            <div class="col-sm-2">
+                <input name="string7" class="form-control" type="text">
             </div>
 
-            <div class="form-group " >
-                <label class="col-sm-1 control-label">其他费用：</label>
-                <div class="col-sm-2">
-                    <input name="string20" class="form-control" type="text">
-                </div>
-                <label class="col-sm-1 control-label">计划费用：</label>
-                <div class="col-sm-2">
-                    <input name="string21" class="form-control" type="text">
-                </div>
-
-                <label class="col-sm-1 control-label">运单号：</label>
-                <div class="col-sm-2">
-                    <input name="string22" class="form-control" type="text">
-                </div>
-            </div>
-
-            <div class="form-group " >
-                <label class="col-sm-1 control-label">实际运费：</label>
-                <div class="col-sm-2">
-                    <input name="string23" class="form-control" type="text">
-                </div>
-                <label class="col-sm-1 control-label">查货电话：</label>
-                <div class="col-sm-2">
-                    <input name="string24" class="form-control" type="text">
-                </div>
-
-                <label class="col-sm-1 control-label">备注：</label>
-                <div class="col-sm-2">
-                    <input name="string25" class="form-control" type="text">
-                </div>
-            </div>
-
-            <div class="form-group " >
-                <label class="col-sm-1 control-label">特殊要求：</label>
-                <div class="col-sm-2">
-                    <input name="string11" class="form-control" type="text">
-                </div>
-
-
-                <label class="col-sm-1 control-label">是否送货：</label>
-                <div class="col-sm-2">
-                    <input name="string13" class="form-control" type="text">
-                </div>
-            </div>
-
-        </form>
-        <div class="form-horizontal" id="productDiv">
-            <div class="row">
-                <div class="col-sm-12 select-table table-striped">
-                    <table id="bootstrap-table" data-use-row-attr-func="true"
-                           data-reorderable-rows="true"></table>
-                </div>
+            <label class="col-sm-1 control-label">收货人：</label>
+            <div class="col-sm-2">
+                <input name="string8" class="form-control" type="text">
             </div>
         </div>
 
+        <div class="form-group " >
+
+            <label class="col-sm-1 control-label">电话：</label>
+            <div class="col-sm-2">
+                <input name="string9" class="form-control" type="text">
+            </div>
+
+            <label class="col-sm-1 control-label">手机：</label>
+            <div class="col-sm-2">
+                <input name="string10" class="form-control" type="text">
+            </div>
+
+            <label class="col-sm-1 control-label">运费付费方式：</label>
+            <div class="col-sm-2">
+                <input name="string12" class="form-control" type="text">
+            </div>
+        </div>
+
+
+
+        <div class="form-group " >
+            <label class="col-sm-1 control-label">运输方式：</label>
+            <div class="col-sm-2">
+                <input name="string14" class="form-control" type="text">
+            </div>
+            <label class="col-sm-1 control-label">件数：</label>
+            <div class="col-sm-2">
+                <input name="string15" class="form-control" type="text">
+            </div>
+
+            <label class="col-sm-1 control-label">毛重：</label>
+            <div class="col-sm-2">
+                <input name="string16" class="form-control" type="text">
+            </div>
+        </div>
+
+        <div class="form-group " >
+            <label class="col-sm-1 control-label">净重：</label>
+            <div class="col-sm-2">
+                <input name="string17" class="form-control" type="text">
+            </div>
+            <label class="col-sm-1 control-label">承运单位：</label>
+            <div class="col-sm-2">
+                <input name="string18" class="form-control" type="text">
+            </div>
+
+            <label class="col-sm-1 control-label">收费标准：</label>
+            <div class="col-sm-2">
+                <input name="string19" class="form-control" type="text">
+            </div>
+        </div>
+
+        <div class="form-group " >
+            <label class="col-sm-1 control-label">其他费用：</label>
+            <div class="col-sm-2">
+                <input name="string20" class="form-control" type="text">
+            </div>
+            <label class="col-sm-1 control-label">计划费用：</label>
+            <div class="col-sm-2">
+                <input name="string21" class="form-control" type="text">
+            </div>
+
+            <label class="col-sm-1 control-label">运单号：</label>
+            <div class="col-sm-2">
+                <input name="string22" class="form-control" type="text">
+            </div>
+        </div>
+
+        <div class="form-group " >
+            <label class="col-sm-1 control-label">实际运费：</label>
+            <div class="col-sm-2">
+                <input name="string23" class="form-control" type="text">
+            </div>
+            <label class="col-sm-1 control-label">查货电话：</label>
+            <div class="col-sm-2">
+                <input name="string24" class="form-control" type="text">
+            </div>
+
+            <label class="col-sm-1 control-label">备注：</label>
+            <div class="col-sm-2">
+                <input name="string25" class="form-control" type="text">
+            </div>
+        </div>
+
+        <div class="form-group " >
+            <label class="col-sm-1 control-label">特殊要求：</label>
+            <div class="col-sm-2">
+                <input name="string11" class="form-control" type="text">
+            </div>
+
+
+            <label class="col-sm-1 control-label">是否送货：</label>
+            <div class="col-sm-2">
+                <input name="string13" class="form-control" type="text">
+            </div>
+        </div>
+
+    </form>
+    <div class="form-horizontal" id="productDiv">
+        <div class="row">
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table" data-use-row-attr-func="true"
+                       data-reorderable-rows="true"></table>
+            </div>
+        </div>
     </div>
-    <th:block th:include="include :: footer" />
-    <th:block th:include="include :: datetimepicker-js" />
-    <th:block th:include="include :: bootstrap-editable-css" />
-    <th:block th:include="include :: bootstrap-table-reorder-js" />
-    <th:block th:include="include :: bootstrap-table-editable-js" />
-    <script type="text/javascript">
-        var prefix = ctx + "fmis/data";
-        $("#form-data-edit").validate({
-            focusCleanup: true
-        });
-        $(function() {
-            alert("2222")
-            var options = {
-                showSearch: false,
-                showRefresh: false,
-                pagination: false,
-                showColumns: false,
-                showToggle: false,
-                useRowAttrFunc: true,
-                uniqueId: "productId",
-                onLoadSuccess: loadSuccess,
-                async: true,
-                url: prefix + "/listProductNoPage",
-                onEditableSave: onEditableSave,
-                onClickCell: onClickCell,
-                onReorderRow: onReorderRow,
-                rowStyle: tableRowStyle,
-                columns: [{
-                    checkbox: true
-                },
-                    {field : 'rowId',title : '序号',visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
 
-                    {field : 'quotationId',title : 'quotationId',visible: false},
-                    {field : 'quotationName',title : '报价单号',editable: false},
-                    {field : 'productId',title : '产品ID',visible: false},
-                    {field : 'productName',title : '产品名称',editable: false},
-                    {field : 'model',title : '型号',editable: false},
-                    {field : 'specifications',title : '规格',editable: false},
-                    {field : 'nominalPressure',title : '压力',editable: false},
-                    {field : 'valvebodyMaterial',title : '阀体',editable: false},
-                    {field : 'valveElement',title : '阀芯',editable: false},
-                    {field : 'sealingMaterial',title : '密封材质',editable: false},
-                    {field : 'driveForm',title : '驱动形式',editable: false},
-                    {field : 'connectionType',title : '连接方式',editable: false},
-                    {field : 'productNum',title : '数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
-                    {field : 'productPrice',title : '单价',editable: false},
-                    {field : 'productCostPrice',title : '产品成本价',editable: false,visible: false},
-                    {field : 'totalPrice',title : '总价',editable: false},
-                    {field : 'string14',title : '优惠',editable: {type: 'text',emptytext: '0',validate: function(v){ return numberValidate(v)}}},
-                    {field : 'productCoefficient',title : '系数',editable: {type: 'text',emptytext: '0',validate: function(v){ return numberValidate(v)}}},
-                    {field : 'actuatorId',title : 'actuatorId',visible: false},
-                    {field : 'actuatorName',title : '执行器名称',editable: false},
-                    {field : 'actuatorPrice',title : '执行器价格',editable: false},
-                    {field : 'actuatorCostPrice',title : '执行器成本价',editable: false,visible: false},
-                    {field : 'actuatorNum',title : '执行器数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
-                    {field : 'actuatorCoefficient',title : '执行器系数',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
+</div>
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: datetimepicker-js" />
+<th:block th:include="include :: bootstrap-editable-css" />
+<th:block th:include="include :: bootstrap-table-reorder-js" />
+<th:block th:include="include :: bootstrap-table-editable-js" />
+<script type="text/javascript">
+    var prefix = ctx + "fmis/child";
+    $("#form-data-edit").validate({
+        focusCleanup: true
+    });
+    $(function() {
+        var options = {
+            showSearch: false,
+            showRefresh: false,
+            pagination: false,
+            showColumns: false,
+            showToggle: false,
+            useRowAttrFunc: true,
+            uniqueId: "childId",
+            async: true,
+            url: prefix + "/selectBizProcessChildInventoryList",
+            //onEditableSave: onEditableSave,
+            //rowStyle: tableRowStyle,
+            queryParams : {
+                "string5": $("#string1").val(),
+                "string7": "1"
+            },
+            columns: [{
+                checkbox: true
+            },
+                {field : 'rowId',title : '序号',visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
 
-                    {field : 'productRef1Id',title : 'ref1Id',visible: false},
-                    {field : 'ref1Name',title : '法兰名称',editable: false},
+                {field : 'childId',title : 'childId',visible: false},
+                {field : 'string3',title : '报检单号',editable: false},
+                {field : 'string4',title : '采购合同号'},
+                {field : 'string5',title : '销售合同号',editable: false},
+                {field : 'string2',title : '类型',formatter: function(value, row, index) {
+                        var actions = [];
+                        if (value == 1) {
+                            actions.push('产品');
+                        } else if (value == 2) {
+                            actions.push('执行器');
+                        } else if (value == 3) {
+                            actions.push('法兰');
+                        } else if (value == 4) {
+                            actions.push('螺栓');
+                        } else if (value == 5) {
+                            actions.push('定位器');
+                        } else if (value == 6) {
+                            actions.push('电磁阀');
+                        } else if (value == 7) {
+                            actions.push('回信器数');
+                        } else if (value == 8) {
+                            actions.push('气源三连件');
+                        } else if (value == 9) {
+                            actions.push('气源三连件');
+                        }
+                        return actions.join('');
+                    }},
+                {field : 'string6',title : '名称',editable: false},
+                {field : 'string7',title : '型号',editable: false},
+                {field : 'string8',title : '规格',editable: false},
+                /*{field : 'string9',title : '等级',editable: false},
+                {field : 'string10',title : '价格',editable: false},*/
+                {field : 'string11',title : '数量',editable: false},
+                {field : 'string16',title : '已发货数量',editable: false},
+                {field : 'string13',title : '发货数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
+                {field : 'string14',title : '状态',formatter: function(value, row, index) {
+                        var actions = [];
+                        if (value == 1) {
+                            actions.push('已发货');
+                        } else{
+                            actions.push('未发货');
+                        }
+                        return actions.join('');
+                    }},
+            ]
+        };
+        $.table.init(options);
 
-                    {field : 'ref1Price',title : '法兰价格',editable: false},
-                    {field : 'ref1CostPrice',title : '法兰成本价',editable: false,visible: false},
-                    {field : 'productRef1Num',title : '法兰数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
-                    {field : 'productRef1Coefficient',title : '法兰系数',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
+    });
 
-                    {field : 'productRef2Id',title : 'ref2Id',visible: false},
-                    {field : 'ref2Name',title : '螺栓名称',editable: {type: 'text',emptytext: '空',disabled: true}},
-                    {field : 'ref2Price',title : '螺栓价格',editable: false},
-                    {field : 'ref2CostPrice',title : '螺栓成本价',editable: false,visible: false},
-                    {field : 'productRef2Num',title : '螺栓数量',editable: {type: 'text',emptytext: '0',validate: function(v){ return numberValidate(v)}}},
-                    {field : 'productRef2Coefficient',title : '螺栓系数',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
-
-
-                    //定位器，电磁阀，回信器数，气源三连件，可离合减速器
-                    {field : 'pattachmentId',title : 'pattachmentId',visible: false},
-                    {field : 'pattachmentName',title : '定位器',editable: true},
-                    {field : 'pattachmentPrice',title : '定位器价格',editable: false},
-                    {field : 'pattachmentCostPrice',title : '成本价',editable: false,visible: false},
-                    {field : 'pattachmentCount',title : '定位器数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
-                    {field : 'pattachmentCoefficient',title : '定位器系数',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
-
-                    {field : 'pattachment1Id',title : 'pattachment1Id',visible: false},
-                    {field : 'pattachment1Name',title : '电磁阀',editable: true},
-                    {field : 'pattachment1Price',title : '电磁阀价格',editable: false},
-                    {field : 'pattachment1CostPrice',title : '成本价',editable: false,visible: false},
-                    {field : 'pattachment1Count',title : '电磁阀数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
-                    {field : 'pattachment1Coefficient',title : '电磁阀系数',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
-
-                    {field : 'pattachment2Id',title : 'pattachment2Id',visible: false},
-                    {field : 'pattachment2Name',title : '回信器数',editable: true},
-                    {field : 'pattachment2Price',title : '回信器数价格',editable: false},
-                    {field : 'pattachment2CostPrice',title : '成本价',editable: false,visible: false},
-                    {field : 'pattachment2Count',title : '回信器数数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
-                    {field : 'pattachment2Coefficient',title : '回信器数系数',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
-
-                    {field : 'pattachment3Id',title : 'pattachment3Id',visible: false},
-                    {field : 'pattachment3Name',title : '气源三连件',editable: true},
-                    {field : 'pattachment3Price',title : '气源三连件价格',editable: false},
-                    {field : 'pattachment3CostPrice',title : '成本价',editable: false,visible: false},
-                    {field : 'pattachment3Count',title : '气源三连件数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
-                    {field : 'pattachment3Coefficient',title : '气源三连件系数',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
-
-                    {field : 'pattachment4Id',title : 'pattachment4Id',visible: false},
-                    {field : 'pattachment4Name',title : '可离合减速器',editable: true},
-                    {field : 'pattachment4Price',title : '可离合减速器价格',editable: false},
-                    {field : 'pattachment4CostPrice',title : '成本价',editable: false,visible: false},
-                    {field : 'pattachment4Count',title : '可离合减速器数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
-                    {field : 'pattachment4Coefficient',title : '可离合减速器系数',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
-                    {field : 'string15',title : '颜色',editable: true},]
-            };
-            $.table.init(options);
-
-        });
-
-        function numberValidate(value) {
-            if (isNaN(value)) {
-                return "必须是数字！";
-            }
+    function numberValidate(value) {
+        if (isNaN(value)) {
+            return "必须是数字！";
         }
+    }
 
-        function submitHandler() {
-            if ($.validate.form()) {
-                var dataObj = $('#form-data-edit').serializeArray();
-                var productArray = new Array();
-                var data = $.btTable.bootstrapTable('getData');
-                if (data.length == 0) {
-                    $.modal.alertWarning("无发货数据");
+    function submitHandler() {
+        if ($.validate.form()) {
+            var dataObj = $('#form-data-edit').serializeArray();
+            var productArray = new Array();
+            var data = $.btTable.bootstrapTable('getData');
+            if (data.length == 0) {
+                $.modal.alertWarning("无发货数据");
+                return;
+            }
+            for (var i = 0; i < data.length; i++) {
+                var rowData = data[i];
+                var num = rowData["string13"];
+                var totalNum = rowData["string11"];
+
+                if (parseFloat(num) > totalNum) {
+                    $.modal.alertWarning("发货数量填写错误");
                     return;
                 }
-                for (var i = 0; i < data.length; i++) {
-                    var rowData = data[i];
-                    var num = rowData["string13"];
-                    var totalNum = rowData["string11"];
 
-                    if (parseFloat(num) > totalNum) {
-                        $.modal.alertWarning("发货数量填写错误");
-                        return;
-                    }
-
-                    if ($.common.isNotEmpty(num) &&  num != "0") {
-                        var productObj = rowData;
-                        productObj["string15"] = rowData["childId"];
-                        productObj["childId"] = "";
-                        productArray.push(productObj);
-                    }
+                if ($.common.isNotEmpty(num) &&  num != "0") {
+                    var productObj = rowData;
+                    productObj["string15"] = rowData["childId"];
+                    productObj["childId"] = "";
+                    productArray.push(productObj);
                 }
-
-
-
-                //console.log("productArray=" + JSON.stringify(productArray));
-                dataObj.push({"name": "productParmters", "value": JSON.stringify(productArray)});
-                $.operate.save(ctx + "fmis/data/saveInventory", dataObj);
             }
+
+
+
+            //console.log("productArray=" + JSON.stringify(productArray));
+            dataObj.push({"name": "productParmters", "value": JSON.stringify(productArray)});
+            $.operate.save(ctx + "fmis/data/saveInventory", dataObj);
         }
-        $("input[name='datetime1']").datetimepicker({
-            format: "yyyy-mm-dd",
-            minView: "month",
-            autoclose: true
-        });
+    }
+    $("input[name='datetime1']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
 
 
-    </script>
+</script>
 </body>
 </html>

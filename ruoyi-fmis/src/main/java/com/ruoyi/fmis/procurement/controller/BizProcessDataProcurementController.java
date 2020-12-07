@@ -31,6 +31,7 @@ import com.ruoyi.fmis.status.domain.BizDataStatus;
 import com.ruoyi.fmis.status.service.IBizDataStatusService;
 import com.ruoyi.fmis.suppliers.domain.BizSuppliers;
 import com.ruoyi.fmis.suppliers.service.IBizSuppliersService;
+import com.ruoyi.fmis.util.Util;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysDictData;
 import com.ruoyi.system.domain.SysRole;
@@ -1157,30 +1158,30 @@ public class BizProcessDataProcurementController extends BaseController {
             table.addCell(PdfUtil.mergeColLeft("委托代理人：" + bizSuppliers.getHumanCapitalMeasure(), 7,textFont));
 
             table.addCell(PdfUtil.mergeCol("", 1,textFont));
-            table.addCell(PdfUtil.mergeColLeft("电    话：" + StringUtils.trim(remark6), 7,textFont));
+            table.addCell(PdfUtil.mergeColLeft("电    话：" + Util.jsonObject.getJSONObject(companyName).getString("phone"), 7,textFont));
             table.addCell(PdfUtil.mergeColLeft("电    话：" + bizSuppliers.getTelphone(), 7,textFont));
             //table.addCell(PdfUtil.mergeColLeft("传    真：" + StringUtils.trim(bizCustomer.getFax()), 7,textFont));
 
             table.addCell(PdfUtil.mergeCol("", 1,textFont));
-            table.addCell(PdfUtil.mergeColLeft("传    真：" + StringUtils.trim(remark6), 7,textFont));
+            table.addCell(PdfUtil.mergeColLeft("传    真：" + "", 7,textFont));
             table.addCell(PdfUtil.mergeColLeft("传    真：" + bizSuppliers.getFax(), 7,textFont));
 
             table.addCell(PdfUtil.mergeCol("", 1,textFont));
-            table.addCell(PdfUtil.mergeColLeft("开户银行：" + StringUtils.trim(remark7), 7,textFont));
+            table.addCell(PdfUtil.mergeColLeft("开户银行：" + Util.jsonObject.getJSONObject(companyName).getString("bank"), 7,textFont));
             table.addCell(PdfUtil.mergeColLeft("开户银行：" + "暂时没有", 7,textFont));
             //table.addCell(PdfUtil.mergeColLeft("开户银行：" + StringUtils.trim(bizCustomer.getString11()), 7,textFont));
 
             table.addCell(PdfUtil.mergeCol("", 1,textFont));
-            table.addCell(PdfUtil.mergeColLeft("帐    号：" + StringUtils.trim(remark8), 7,textFont));
+            table.addCell(PdfUtil.mergeColLeft("帐    号：" + Util.jsonObject.getJSONObject(companyName).getString("bankNo"), 7,textFont));
 //            table.addCell(PdfUtil.mergeColLeft("帐    号：" + StringUtils.trim(remark8), 7,textFont));
             table.addCell(PdfUtil.mergeColLeft("帐    号：" +  "暂时没有", 7,textFont));
 
             table.addCell(PdfUtil.mergeCol("", 1,textFont));
-            table.addCell(PdfUtil.mergeColLeft("税    号："  + StringUtils.trim(remark9), 7,textFont));
+            table.addCell(PdfUtil.mergeColLeft("税    号："  + Util.jsonObject.getJSONObject(companyName).getString("faxNo"), 7,textFont));
             table.addCell(PdfUtil.mergeColLeft("税    号：" + "暂时没有", 7,textFont));
 
             table.addCell(PdfUtil.mergeCol("", 1,textFont));
-            table.addCell(PdfUtil.mergeColLeft("地    址："  + StringUtils.trim(remark9), 7,textFont));
+            table.addCell(PdfUtil.mergeColLeft("地    址："  + Util.jsonObject.getJSONObject(companyName).getString("address"), 7,textFont));
             table.addCell(PdfUtil.mergeColLeft("地    址：" + bizSuppliers.getAddress(), 7,textFont));
 
             Paragraph paragraphRemark1 = new Paragraph();
