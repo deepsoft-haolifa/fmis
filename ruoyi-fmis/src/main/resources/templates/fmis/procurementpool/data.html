@@ -78,6 +78,7 @@
 
          <input type="hidden" id="string3_parent" name="string3_parent"/>
          <input type="hidden" id="deptName_parent" name="deptName_parent"/>
+         <input type="hidden" id="parentDataId" name="parentDataId"/>
     </div>
     <th:block th:include="include :: footer" />
      <th:block th:include="include :: bootstrap-editable-css" />
@@ -130,7 +131,12 @@
                 var jsonData = {"id" : value,"num" : num};
                 datas.push(jsonData);
             })
-            var url = ctx + "fmis/procurement/add";
+            var dataId = "";
+            haoliMap.forEach(function (value, key, map) {
+                dataId = key;
+            })
+            console.log("dataId=" + dataId);
+            var url = ctx + "fmis/procurement/addpool/"+dataId;
             $("#numJsonValue").val(JSON.stringify(datas));
 
             $.modal.openFull("审批", url);

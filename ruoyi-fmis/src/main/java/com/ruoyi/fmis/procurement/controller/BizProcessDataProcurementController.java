@@ -33,6 +33,7 @@ import com.ruoyi.fmis.suppliers.domain.BizSuppliers;
 import com.ruoyi.fmis.suppliers.service.IBizSuppliersService;
 import com.ruoyi.fmis.util.Util;
 import com.ruoyi.framework.util.ShiroUtils;
+import com.ruoyi.system.domain.SysDept;
 import com.ruoyi.system.domain.SysDictData;
 import com.ruoyi.system.domain.SysRole;
 import com.ruoyi.system.domain.SysUser;
@@ -245,8 +246,20 @@ public class BizProcessDataProcurementController extends BaseController {
         mmap.put("bizTable", bizId);
         return prefix + "/viewExamineHistory";
     }
-
-
+    /**
+     * 新增合同管理
+     */
+    @GetMapping("/addpool/{dataId}")
+    public String addpool(@PathVariable("dataId") Long dataId, ModelMap mmap) {
+        mmap.put("suppliers",bizSuppliersService.selectAllList());
+        BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataById(dataId);
+        mmap.put("bizProcessData", bizProcessData);
+        String string1 = dictDataService.selectDictLabel("supplier_type", bizProcessData.getString3());
+        SysDept sysDept =  sysDeptService.selectDeptById(bizProcessData.getString22() == null ? 1 : Long.parseLong(bizProcessData.getString22()));
+        bizProcessData.setString1(string1);
+        bizProcessData.setString2(sysDept.getDeptName());
+        return prefix + "/add";
+    }
     /**
      * 新增合同管理
      */

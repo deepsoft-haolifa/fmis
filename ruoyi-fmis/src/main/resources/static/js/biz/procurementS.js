@@ -95,6 +95,7 @@ var overAllIds = new Array();  //全局数组
 var numberMap = new Map();
 var priceMap = new Map();
 var supplierMap = new Map();
+var haoliMap = new Map();
 var string3_parent = "";
 var deptName_parent = "";
 /**
@@ -147,9 +148,6 @@ function initExpandRow() {
                 $("#price1").val(totalPrice);
                 //增加的时候 把供应商
                 $("#string6").find("option[value='" + paramterSupplierId + "']").attr("selected",true);
-
-                $("#string1").val(parent.$('#string3_parent').val());
-                $("#string2").val(parent.$('#deptName_parent').val());
 
             } else {
 
@@ -554,7 +552,7 @@ initChildProductTable = function(index, row, $detail) {
     });
     $(cur_table).on('uncheck.bs.table check.bs.table check-all.bs.table uncheck-all.bs.table',function(e,rows){
         var datas = $.isArray(rows) ? rows : [rows];
-        examine(e.type,datas,1);
+        examine(e.type,datas,1,row["dataId"]);
     });
 };
 
@@ -594,7 +592,7 @@ function setTableValueById (tableId,jsonValue,id,idx) {
     }
 }
 
-function examine(type,datas,typeIndex){
+function examine(type,datas,typeIndex,id){
     if(type.indexOf('uncheck')==-1){
         $.each(datas,function(i,v){
             // 添加时，判断一行或多行的 id 是否已经在数组里 不存则添加　
@@ -681,6 +679,7 @@ function examine(type,datas,typeIndex){
             supplierMap.set(v.supplierId,typeIndex + "_" + v.childId + "_" + dataId + "_" + v.dataId + "_" + v.levelValue);
             string3_parent = v.string3;
             deptName_parent = v.deptName;
+            haoliMap.set(id,id);
         });
     }else{
         $.each(datas,function(i,v){
@@ -707,6 +706,7 @@ function examine(type,datas,typeIndex){
             overAllIds.splice(overAllIds.indexOf(typeIndex + "_" + v.childId + "_" + dataId + "_" + v.dataId + "_" + v.levelValue),1);    //删除取消选中行
             supplierMap.delete(v.supplierId);
             priceMap.delete(typeIndex + "_" + v.childId + "_" + dataId+ "_" + v.dataId + "_" + v.levelValue);
+            haoliMap.set(dataId,dataId);
         });
     }
 }
@@ -917,7 +917,7 @@ initChildRef1Table = function(index, row, $detail) {
     });
     $(cur_table).on('uncheck.bs.table check.bs.table check-all.bs.table uncheck-all.bs.table',function(e,rows){
         var datas = $.isArray(rows) ? rows : [rows];
-        examine(e.type,datas,3);
+        examine(e.type,datas,3,row["dataId"]);
     });
 };
 
@@ -998,7 +998,7 @@ initChildRef2Table = function(index, row, $detail) {
     });
     $(cur_table).on('uncheck.bs.table check.bs.table check-all.bs.table uncheck-all.bs.table',function(e,rows){
         var datas = $.isArray(rows) ? rows : [rows];
-        examine(e.type,datas,4);
+        examine(e.type,datas,4,row["dataId"]);
     });
 };
 
@@ -1106,7 +1106,7 @@ initChildPATable = function(index, row, $detail) {
     });
     $(cur_table).on('uncheck.bs.table check.bs.table check-all.bs.table uncheck-all.bs.table',function(e,rows){
         var datas = $.isArray(rows) ? rows : [rows];
-        examine(e.type,datas,5);
+        examine(e.type,datas,5,row["dataId"]);
     });
 };
 
@@ -1214,7 +1214,7 @@ initChildPA1Table = function(index, row, $detail) {
     });
     $(cur_table).on('uncheck.bs.table check.bs.table check-all.bs.table uncheck-all.bs.table',function(e,rows){
         var datas = $.isArray(rows) ? rows : [rows];
-        examine(e.type,datas,6);
+        examine(e.type,datas,6,row["dataId"]);
     });
 };
 
@@ -1329,7 +1329,7 @@ initChildPA2Table = function(index, row, $detail) {
     });
     $(cur_table).on('uncheck.bs.table check.bs.table check-all.bs.table uncheck-all.bs.table',function(e,rows){
         var datas = $.isArray(rows) ? rows : [rows];
-        examine(e.type,datas,7);
+        examine(e.type,datas,7,row["dataId"]);
     });
 };
 
@@ -1437,7 +1437,7 @@ initChildPA3Table = function(index, row, $detail) {
     });
     $(cur_table).on('uncheck.bs.table check.bs.table check-all.bs.table uncheck-all.bs.table',function(e,rows){
         var datas = $.isArray(rows) ? rows : [rows];
-        examine(e.type,datas,8);
+        examine(e.type,datas,8,row["dataId"]);
     });
 };
 
@@ -1550,7 +1550,7 @@ initChildPA4Table = function(index, row, $detail) {
     });
     $(cur_table).on('uncheck.bs.table check.bs.table check-all.bs.table uncheck-all.bs.table',function(e,rows){
         var datas = $.isArray(rows) ? rows : [rows];
-        examine(e.type,datas,9);
+        examine(e.type,datas,9,row["dataId"]);
     });
 };
 
