@@ -75,6 +75,11 @@ $(function() {
                 }
             },
             {
+                field : 'deptName',
+                title : '归属部门',
+                visible: false
+            },
+            {
                 field : 'string6',
                 title : '发货时间'
             }/*,
@@ -90,7 +95,8 @@ var overAllIds = new Array();  //全局数组
 var numberMap = new Map();
 var priceMap = new Map();
 var supplierMap = new Map();
-
+var string3_parent = "";
+var deptName_parent = "";
 /**
  * 展开父子表
  */
@@ -141,6 +147,10 @@ function initExpandRow() {
                 $("#price1").val(totalPrice);
                 //增加的时候 把供应商
                 $("#string6").find("option[value='" + paramterSupplierId + "']").attr("selected",true);
+
+                $("#string1").val(parent.$('#string3_parent').val());
+                $("#string2").val(parent.$('#deptName_parent').val());
+
             } else {
 
             }
@@ -669,6 +679,8 @@ function examine(type,datas,typeIndex){
 
             console.log("checked supplierId=" + v.supplierId);
             supplierMap.set(v.supplierId,typeIndex + "_" + v.childId + "_" + dataId + "_" + v.dataId + "_" + v.levelValue);
+            string3_parent = v.string3;
+            deptName_parent = v.deptName;
         });
     }else{
         $.each(datas,function(i,v){

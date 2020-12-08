@@ -76,7 +76,8 @@
 
          <input type="hidden" id="totalPrice" name="totalPrice"/>
 
-
+         <input type="hidden" id="string3_parent" name="string3_parent"/>
+         <input type="hidden" id="deptName_parent" name="deptName_parent"/>
     </div>
     <th:block th:include="include :: footer" />
      <th:block th:include="include :: bootstrap-editable-css" />
@@ -108,7 +109,10 @@
             })
             console.log("paramterSupplierId=" + paramterSupplierId);
             $("#paramterSupplierId").val(paramterSupplierId);
-
+            $("#string3_parent").val(string3_parent);
+            $("#deptName_parent").val(deptName_parent);
+            console.log("string3_parent=" + string3_parent);
+            console.log("deptName_parent=" + deptName_parent);
             var price1 = 0;
             priceMap.forEach(function (value, key, map) {
                 price1 = FloatAdd(price1,value);
