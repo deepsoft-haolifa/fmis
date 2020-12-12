@@ -225,6 +225,9 @@ public class BizProcessProcurementtestController extends BaseController {
         queryBizProcessChild.setChildId(bizProcessData.getChildId());
         queryBizProcessChild.setStayId(bizProcessData.getStayId());
         List<BizProcessChild> bizProcessChildList = bizProcessChildService.selectBizTestChildList(queryBizProcessChild);
+        for (BizProcessChild bizProcessChild : bizProcessChildList) {
+            bizProcessChild.setContractNo(bizProcessData.getContractNo());
+        }
         return getDataTable(bizProcessChildList);
     }
 
@@ -257,6 +260,7 @@ public class BizProcessProcurementtestController extends BaseController {
         String yesNum = getRequest().getParameter("yesNum");
         String noNum = getRequest().getParameter("noNum");
         String statusId = getRequest().getParameter("statusId");
+        String contractNo = getRequest().getParameter("contractNo");
 
         BizDataStestn bizDataStestn = new BizDataStestn();
 
@@ -316,6 +320,10 @@ public class BizProcessProcurementtestController extends BaseController {
         insertChild.setString1(childId);
         insertChild.setString4(bizProcessData.getString12());
         insertChild.setString5(bizProcessData.getString10());
+        if (!StringUtils.isEmpty(contractNo)) {
+            insertChild.setString5(bizProcessData.getString10());
+        }
+
         insertChild.setString11(yesNum);
         insertChild.setString12(stayId);
 

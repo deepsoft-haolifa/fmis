@@ -25,19 +25,21 @@ function FloatAdd(arg1,arg2){
     m=Math.pow(10,Math.max(r1,r2));
     return (arg1*m+arg2*m)/m;
 }
-function addTest(dataId,paramterId,childId,stayId,tableId) {
-    expandChildTablePromise(dataId,paramterId,childId,stayId,tableId).then(function () {
+function addTest(dataId,contractNo,paramterId,childId,stayId,tableId) {
+    expandChildTablePromise(dataId,contractNo,paramterId,childId,stayId,tableId).then(function () {
         var rowData = {
             testId: 0,
             yesNum: 0,
             noNum: 0,
             stayId: stayId,
+            contractNo: contractNo,
             remark: "",
             createTime: "",
             createByName: ""
         };
         setTimeout(function () {
             console.log("promise 2." + paramterId);
+            console.log("contractNo 2." + contractNo);
             $("#initChildTestTableId_" + stayId).bootstrapTable('append', rowData);
             console.log("promise 4." + paramterId);
         },500)
@@ -72,10 +74,11 @@ initChildTestTable = function(index, rows, $detail) {
     console.log("paramterId=" + paramterId + " stayNum=" + stayNum);
     var childId = rows["childId"];
     var statusId = rows["statusId"];
+    var contractNo = rows["contractNo"];
     var stayId = rows["stayId"];
     var initChildTestTableId = "initChildTestTableId_" + stayId;
     var cur_table = $detail.html('<table style="table-layout:fixed" id=' + initChildTestTableId + ' data-cache="true"></table>').find('table');
-
+    console.log("contractNo=" + contractNo);
     $(cur_table).bootstrapTable({
         url: ctx + "fmis/procurementtest/selectBizTestChildList",
         method: 'post',
@@ -93,14 +96,16 @@ initChildTestTable = function(index, rows, $detail) {
             "dataId": dataId,
             "childId": childId,
             "stayId": stayId,
+            "contractNo": contractNo,
             "statusId": statusId
         },columns: [
             {field : 'rowId',title : '序号',width: 50,visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
             {field : 'testId',title : 'id',visible: false},
-            {field : 'statusId',title : 'statusId',visible: false},
+            {field : 'statusId',title : 'statusId',visible: true},
+            {field : 'contractNo',title : 'contractNo',visible: true},
             {field : 'saveTest',title : '操作',width: 200,visible: true,formatter: function(value, row, index) {
                     var actions = [];
-                    actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="saveTest(' + row.rowId + "," + childId + "," + paramterId + "," + dataId + "," + statusId + "," + stayId + "," + stayNum + ')"><i class="fa fa-save"></i> 保存</a>');
+                    actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="saveTest(' + row.rowId + "," + childId + "," + paramterId + "," + dataId + "," + contractNo + "," + statusId + "," + stayId + "," + stayNum + ')"><i class="fa fa-save"></i> 保存</a>');
                     //actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="removeTest(' + row.rowId + "," + childId + "," + paramterId + "," + dataId + "," + stayId  + ')"><i class="fa fa-remove"></i> 删除</a>');
                     return actions.join('');
                 }},
@@ -113,12 +118,8 @@ initChildTestTable = function(index, rows, $detail) {
         ]
     });
 };
-
-
-
-function saveTest (rowId,childId,paramterId,dataId,statusId,stayId,stayNum) {
+function saveTest (rowId,childId,paramterId,dataId,contractNo,statusId,stayId,stayNum) {
     //dataId,paramterId,childId,remark,testId,yesNum,noNum
-
     var rows = $("#initChildTestTableId_" + stayId).bootstrapTable('getData');
     var row;
     for (var i = 0; i < rows.length; i++) {
@@ -134,7 +135,12 @@ function saveTest (rowId,childId,paramterId,dataId,statusId,stayId,stayNum) {
         var r = rows[i];
         var yesNum = r.yesNum;
         var noNum = r.noNum;
-        totalNum = parseFloat(FloatAdd(totalNum,FloatAdd(yesNum,noNum))).toFixed(0);
+        var id = r.testId;
+        console.log("id=" + id);
+        if ($.common.isEmpty(id) || id == 0) {
+            totalNum = parseFloat(FloatAdd(totalNum,FloatAdd(yesNum,noNum))).toFixed(0);
+        }
+
     }
     console.log("totalNum=" + totalNum + " totalNumAll=" + stayNum);
     if (parseInt(totalNum) > parseInt(stayNum)) {
@@ -153,10 +159,11 @@ function saveTest (rowId,childId,paramterId,dataId,statusId,stayId,stayNum) {
 
     console.log("yesNum=" + yesNum + " remark=" + remark);
     var url = ctx + "fmis/procurementtest/saveTest?dataId=" + dataId + "&paramterId=" + paramterId + "&childId=" + childId + "&remark=" + remark + "&testId=" + testId +
-        "&yesNum=" + yesNum + "&noNum=" + noNum + "&statusId=" + statusId + "&stayId=" + stayId;
+        "&yesNum=" + yesNum + "&noNum=" + noNum + "&statusId=" + statusId + "&stayId=" + stayId + "&contractNo=" + contractNo;
     $.operate.saveModal(url,'',function(){
         //$.table.refresh();
         $("#initChildTestTableId_" + stayId).bootstrapTable('refresh');
+
     });
 }
 function removeTest (rowId,childId,paramterId,dataId,stayId) {
@@ -236,7 +243,7 @@ $(function() {
             {field : 'rowId',title : '序号3',width: 50,visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
             {field : 'addTest',title : '操作',visible: true,formatter: function(value, row, index) {
                     var actions = [];
-                    actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="addTest(' + row.dataId + "," + row.productId +  "," + row.childId +  "," + row.stayId + ",'bootstrap-table'" + ')"><i class="fa fa-add"></i> 添加</a>');
+                    actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="addTest(' + row.dataId + ","+ row.contractNo + ","+ row.contractNo + "," + row.productId +  "," + row.childId +  "," + row.stayId + ",'bootstrap-table'" + ')"><i class="fa fa-add"></i> 添加</a>');
                     return actions.join('');
                 }},
             {field : 'stayId',title : 'stayId',visible: false},
@@ -321,7 +328,7 @@ $(function() {
             {field : 'rowId',title : '序号',width: 50,visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
             {field : 'addTest',title : '操作',visible: true,formatter: function(value, row, index) {
                     var actions = [];
-                    actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="addTest(' + row.dataId + "," + row.actuatorId +  "," + row.childId + "," + row.stayId + ",'bootstrap-table-actuator'" + ')"><i class="fa fa-add"></i> 添加</a>');
+                    actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="addTest(' + row.dataId + ","+ row.contractNo + "," + row.actuatorId +  "," + row.childId + "," + row.stayId + ",'bootstrap-table-actuator'" + ')"><i class="fa fa-add"></i> 添加</a>');
                     return actions.join('');
                 }},
             {field : 'actuatorNum',title : '执行器数量',editable: false,width: 100,visible: false},
@@ -452,7 +459,7 @@ $(function() {
             {field : 'rowId',title : '序号',width: 50,visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
             {field : 'addTest',title : '操作',visible: true,formatter: function(value, row, index) {
                     var actions = [];
-                    actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="addTest(' + row.dataId + "," + row.productRef1Id +  "," + row.childId + "," + row.stayId  + ",'bootstrap-table-ref1'" + ')"><i class="fa fa-add"></i> 添加</a>');
+                    actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="addTest(' + row.dataId + ","+ row.contractNo + "," + row.productRef1Id +  "," + row.childId + "," + row.stayId  + ",'bootstrap-table-ref1'" + ')"><i class="fa fa-add"></i> 添加</a>');
                     return actions.join('');
                 }},
             {field : 'productRef1Num',title : '法兰数量',editable: false,width: 100,visible: false},
@@ -532,7 +539,7 @@ $(function() {
             {field : 'rowId',title : '序号',width: 50,visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
             {field : 'addTest',title : '操作',visible: true,formatter: function(value, row, index) {
                     var actions = [];
-                    actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="addTest(' + row.dataId + "," + row.productRef2Id +  "," + row.childId + "," + row.stayId + ",'bootstrap-table-ref2'" + ')"><i class="fa fa-add"></i> 添加</a>');
+                    actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="addTest(' + row.dataId + ","+ row.contractNo + "," + row.productRef2Id +  "," + row.childId + "," + row.stayId + ",'bootstrap-table-ref2'" + ')"><i class="fa fa-add"></i> 添加</a>');
                     return actions.join('');
                 }},
             {field : 'productRef2Num',title : '螺栓数量',editable: false,width: 100,visible: false},
@@ -628,7 +635,7 @@ $(function() {
                 }},
             {field : 'addTest',title : '操作',visible: true,formatter: function(value, row, index) {
                     var actions = [];
-                    actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="addTest(' + row.dataId + "," + row.pattachmentId +  "," + row.childId + "," + row.stayId + ",'bootstrap-table-pa'" + ')"><i class="fa fa-add"></i> 添加</a>');
+                    actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="addTest(' + row.dataId + ","+ row.contractNo + "," + row.pattachmentId +  "," + row.childId + "," + row.stayId + ",'bootstrap-table-pa'" + ')"><i class="fa fa-add"></i> 添加</a>');
                     return actions.join('');
                 }},
             {field : 'pattachmentCount',title : '数量',editable: false,width: 100,visible: false},

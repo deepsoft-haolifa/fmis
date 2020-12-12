@@ -768,7 +768,7 @@ public class BizProcessDataProcurementController extends BaseController {
             Font boldFont = PdfUtil.getPdfChineseFont(11,Font.BOLD);
             //二级标题
             Font titleFont = PdfUtil.getPdfChineseFont(15,Font.BOLD);
-            String companyName = "北京好利阀业集团有限公司";
+            String companyName = bizProcessData.getString1();
             Paragraph paragraph0 = new Paragraph("    " + companyName + "    如无问题，请尽快回传及付款，以免影响交货期！回传电话：010-67171220。", textFont);
             paragraph0.setAlignment(Paragraph.ALIGN_CENTER);
 
@@ -1080,7 +1080,7 @@ public class BizProcessDataProcurementController extends BaseController {
 
             //特殊要求
             table.addCell(PdfUtil.mergeCol("二、", 1,textFont));
-            table.addCell(PdfUtil.mergeColLeft("特殊要求：" + StringUtils.trim(bizProcessData.getString25()), 14,textFont));
+            table.addCell(PdfUtil.mergeColLeft("特殊要求：" + StringUtils.trim(bizProcessData.getString29()), 14,textFont));
 
 
             table.addCell(PdfUtil.mergeCol("三、", 1,textFont));
@@ -1135,7 +1135,13 @@ public class BizProcessDataProcurementController extends BaseController {
 
             table.addCell(PdfUtil.mergeCol("七、", 1,textFont));
             table.addCell(PdfUtil.mergeCol("发货日期：", 2,textFont));
-            table.addCell(PdfUtil.mergeCol(bizProcessData.getDatetime3() + "", 6,textFont));
+            String strDateFormat = "yyyy-MM-dd HH:mm:ss";
+            SimpleDateFormat sdf = new SimpleDateFormat(strDateFormat);
+            String date = "";
+            if (bizProcessData.getDatetime3() != null) {
+                date = sdf.format(bizProcessData.getDatetime3());
+            }
+            table.addCell(PdfUtil.mergeCol(date, 6,textFont));
             table.addCell(PdfUtil.mergeCol("收货信息：", 2,textFont));
             table.addCell(PdfUtil.mergeCol(bizProcessData.getString28(), 5,textFont));
             table.addCell(PdfUtil.mergeCol("八、", 1,textFont));
@@ -1212,7 +1218,6 @@ public class BizProcessDataProcurementController extends BaseController {
             paragraphRemark1.add(Chunk.NEWLINE);
             paragraphRemark1.setAlignment(Paragraph.ALIGN_RIGHT);*/
 
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
             Paragraph datePar = new Paragraph("打印日期：" + sdf.format(new Date()), PdfUtil.getPdfChineseFont());
             datePar.setAlignment(Element.ALIGN_RIGHT);
             datePar.setSpacingBefore(20);
