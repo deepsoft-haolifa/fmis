@@ -321,7 +321,7 @@ public class BizProcessProcurementtestController extends BaseController {
         insertChild.setString4(bizProcessData.getString12());
         insertChild.setString5(bizProcessData.getString10());
         if (!StringUtils.isEmpty(contractNo)) {
-            insertChild.setString5(bizProcessData.getString10());
+            insertChild.setString5(contractNo);
         }
 
         insertChild.setString11(yesNum);
