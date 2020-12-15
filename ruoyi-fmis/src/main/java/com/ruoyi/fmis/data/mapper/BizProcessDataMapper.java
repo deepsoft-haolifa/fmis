@@ -30,6 +30,7 @@ public interface BizProcessDataMapper {
 
 
     public List<BizProcessData> selectBizProcessDataListRef(BizProcessData bizProcessData);
+    public List<BizProcessData> selectBizProcessDataListXs(BizProcessData bizProcessData);
 
     public List<BizProcessData> selectBizProcessDataListRefBill(BizProcessData bizProcessData);
 

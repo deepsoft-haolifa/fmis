@@ -37,7 +37,7 @@ $(function() {
                 field : 'string1',
                 title : '合同编号'
             },
-            {
+           {
                 field : 'string23',
                 title : '采购状态',
                 formatter: function(value, row, index) {
@@ -55,7 +55,7 @@ $(function() {
             },
             {
                 field : 'datetime1',
-                title : '签订日期'
+                title : '签订日期11'
             },
             {
                 field : 'string3',

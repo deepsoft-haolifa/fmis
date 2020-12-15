@@ -48,14 +48,14 @@ $(function() {
                 title : '合同编号'
             },
             {
-                field : 'string23',
-                title : '采购状态',
+                field : 'string30',
+                title : '处理状态',
                 formatter: function(value, row, index) {
                     var actions = [];
-                    var v = row["string23"];
-                    var showText = "未采购";
+                    var v = row["string30"];
+                    var showText = "未处理";
                     if (value == "1") {
-                        showText = "采购中";
+                        showText = "部分处理";
                     } else if (value == "2") {
                         showText = "处理完成";
                     }
@@ -95,6 +95,7 @@ var overAllIds = new Array();  //全局数组
 var numberMap = new Map();
 var priceMap = new Map();
 var supplierMap = new Map();
+//为了带过去销售合同中的供方以及归属单位
 var haoliMap = new Map();
 var string3_parent = "";
 var deptName_parent = "";
@@ -593,6 +594,7 @@ function setTableValueById (tableId,jsonValue,id,idx) {
 }
 
 function examine(type,datas,typeIndex,id){
+    console.log("type:" + type)
     if(type.indexOf('uncheck')==-1){
         $.each(datas,function(i,v){
             // 添加时，判断一行或多行的 id 是否已经在数组里 不存则添加　
@@ -602,6 +604,8 @@ function examine(type,datas,typeIndex,id){
             var columnName1 = "";
             var columnName2 = "";
             var tableName = "";
+            console.log("typeIndex:" + typeIndex)
+            console.log("v:" + v)
             if (typeIndex == 1) {
                 dataId = v.productId;
                 num = v.productNum;
@@ -683,6 +687,8 @@ function examine(type,datas,typeIndex,id){
         });
     }else{
         $.each(datas,function(i,v){
+            console.log("typeIndex:" + typeIndex)
+            console.log("v:" + v)
             var dataId = "";
             if (typeIndex == 1) {
                 dataId = v.productId;
@@ -706,7 +712,8 @@ function examine(type,datas,typeIndex,id){
             overAllIds.splice(overAllIds.indexOf(typeIndex + "_" + v.childId + "_" + dataId + "_" + v.dataId + "_" + v.levelValue),1);    //删除取消选中行
             supplierMap.delete(v.supplierId);
             priceMap.delete(typeIndex + "_" + v.childId + "_" + dataId+ "_" + v.dataId + "_" + v.levelValue);
-            haoliMap.set(dataId,dataId);
+            console("id:"+id)
+            haoliMap.set(id,id);
         });
     }
 }
@@ -838,7 +845,7 @@ initChildActuatorTable = function(index, row, $detail) {
     });
     $(cur_table).on('uncheck.bs.table check.bs.table check-all.bs.table uncheck-all.bs.table',function(e,rows){
         var datas = $.isArray(rows) ? rows : [rows];
-        examine(e.type,datas,2);
+        examine(e.type,datas,2,row["dataId"]);
     });
 };
 

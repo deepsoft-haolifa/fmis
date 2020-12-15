@@ -18,6 +18,7 @@
                         <ul>
                             <input type="hidden" id="productsJsonParamter" value=""/>
                             <input type="hidden" id="bizEditFlag" value="-1"/>
+                            <input type="hidden" id="dataStatus" value="-1"/>
 
                             <li>
                                 <p>合同号：</p>
@@ -31,14 +32,15 @@
 
                             <li>
                                 <p>处理状态：</p>
-                                <select name="dataStatus" id="dataStatus" class="form-control m-b" >
+                                <select name="string30" id="dataStatus" class="form-control m-b" >
                                     <option value="">请选择</option>
-                                    <option selected value="-1">未处理</option>
-                                    <option value="1">已处理</option>
+                                    <option selected value="0">未处理</option>
+                                    <option value="1">部分处理</option>
+                                    <option value="2">已处理</option>
                                 </select>
                             </li>
 
-                            <li>
+                            <!--<li>
                                 <p>采购状态：</p>
                                 <select name="string23" id="string23" class="form-control m-b" >
                                     <option value="">请选择</option>
@@ -47,7 +49,7 @@
                                     <option value="2">处理完成</option>
                                     <option selected value="3">未完成采购</option>
                                 </select>
-                            </li>
+                            </li>-->
 
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
@@ -139,7 +141,7 @@
             var url = ctx + "fmis/procurement/addpool/"+dataId;
             $("#numJsonValue").val(JSON.stringify(datas));
 
-            $.modal.openFull("审批", url);
+            $.modal.openFull("创建采购合同", url);
         }
     </script>
      <script th:src="@{/js/biz/procurementS.js}"></script>

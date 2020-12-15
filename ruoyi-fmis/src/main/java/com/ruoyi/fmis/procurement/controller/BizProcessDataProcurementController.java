@@ -1,31 +1,29 @@
 package com.ruoyi.fmis.procurement.controller;
 
-import java.io.FileOutputStream;
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.List;
-
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.ruoyi.common.annotation.Log;
+import com.ruoyi.common.core.controller.BaseController;
+import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.core.page.TableDataInfo;
+import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.itextpdf.PdfUtil;
 import com.ruoyi.common.utils.itextpdf.TextWaterMarkPdfPageEvent;
-import com.ruoyi.fmis.actuator.domain.BizActuator;
 import com.ruoyi.fmis.child.domain.BizProcessChild;
 import com.ruoyi.fmis.child.service.IBizProcessChildService;
-import com.ruoyi.fmis.common.BizConstants;
 import com.ruoyi.fmis.common.CommonUtils;
 import com.ruoyi.fmis.customer.domain.BizCustomer;
 import com.ruoyi.fmis.customer.service.IBizCustomerService;
+import com.ruoyi.fmis.data.domain.BizProcessData;
+import com.ruoyi.fmis.data.service.IBizProcessDataService;
 import com.ruoyi.fmis.define.service.IBizProcessDefineService;
-import com.ruoyi.fmis.product.domain.BizProduct;
 import com.ruoyi.fmis.product.service.IBizProductService;
 import com.ruoyi.fmis.status.domain.BizDataStatus;
 import com.ruoyi.fmis.status.service.IBizDataStatusService;
@@ -41,29 +39,21 @@ import com.ruoyi.system.service.ISysDeptService;
 import com.ruoyi.system.service.ISysDictDataService;
 import com.ruoyi.system.service.ISysRoleService;
 import com.ruoyi.system.service.ISysUserService;
-import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import com.ruoyi.common.annotation.Log;
-import com.ruoyi.common.enums.BusinessType;
-import com.ruoyi.fmis.data.domain.BizProcessData;
-import com.ruoyi.fmis.data.service.IBizProcessDataService;
-import com.ruoyi.common.core.controller.BaseController;
-import com.ruoyi.common.core.domain.AjaxResult;
-import com.ruoyi.common.utils.poi.ExcelUtil;
-import com.ruoyi.common.core.page.TableDataInfo;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.FileOutputStream;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.List;
 
 /**
  * 合同管理Controller
@@ -310,18 +300,79 @@ public class BizProcessDataProcurementController extends BaseController {
         setNormalFlag(bizProcessData,productArrayStr);
         int insertReturn = bizProcessDataService.insertBizProcessData(bizProcessData);
         Long dataId = bizProcessData.getDataId();
+        List<String> dataIds = new ArrayList<>();
         if (StringUtils.isNotEmpty(productArrayStr)) {
             JSONArray productArray = JSONArray.parseArray(productArrayStr);
             for (int i = 0; i < productArray.size(); i++) {
                 JSONObject json = productArray.getJSONObject(i);
                 BizDataStatus bizDataStatus = JSONObject.parseObject(json.toJSONString(), BizDataStatus.class);
+                dataIds.add(bizDataStatus.getString3());
                 bizDataStatus.setString4(bizProcessData.getDataId().toString());
                 bizDataStatusService.insertBizDataStatus(bizDataStatus);
             }
         }
-        setPurchasingStatus(bizProcessData,productArrayStr);
+
+        setPurchasingStatus(bizProcessData, productArrayStr);
+        /**
+         * 更新销售合同是否已经采购
+         */
+        for (String string : dataIds) {
+            BizProcessData bizProcessData2 = bizProcessDataService.selectBizProcessDataById(Long.parseLong(string));
+            BizProcessData bizProcessData1 = new BizProcessData();
+            bizProcessData1.setBizId("procurement");
+            bizProcessData1.setString3(bizProcessData2.getString1());
+            List<BizProcessData> list = bizProcessDataService.selectBizProcessDataList(bizProcessData1);
+            setXSStatus(dataIds, list.size());
+        }
+
         setContractNo(bizProcessData,productArrayStr);
         return toAjax(insertReturn);
+    }
+    public void setXSStatus(List<String> list, int size) {
+        //合并采购合同的处理listLevelS
+        for (String string : list) {
+            BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataById(Long.parseLong(string));
+            BizProcessChild queryBizProcessChild = new BizProcessChild();
+            queryBizProcessChild.setDataId(Long.parseLong(string));
+            List<BizProcessChild> bizProcessChildList = bizProcessChildService.selectBizProcessChildList(queryBizProcessChild);
+            int count = 0;
+            for (BizProcessChild bizProcessChild : bizProcessChildList) {
+                //产品
+                if(!StringUtils.isEmpty(bizProcessChild.getString2())) {
+                    count ++;
+                }
+                //螺栓
+                if(!StringUtils.isEmpty(bizProcessChild.getString8())) {
+                    count ++;
+                }
+                //执行器
+                if(!StringUtils.isEmpty(bizProcessChild.getString11())) {
+                    count ++;
+                }
+                if(bizProcessChild.getPattachment1Id() != null) {
+                    count ++;
+                }
+                if(bizProcessChild.getPattachment2Id() != null) {
+                    count ++;
+                }
+                if(bizProcessChild.getPattachment3Id() != null) {
+                    count ++;
+                }
+                if(bizProcessChild.getPattachment4Id() != null) {
+                    count ++;
+                }
+            }
+            if (size + 1 < count) {
+                bizProcessData.setString30("1");
+                bizProcessDataService.updateBizProcessData(bizProcessData);
+            }
+            if (size + 1 == count) {
+                bizProcessData.setString30("2");
+                bizProcessDataService.updateBizProcessData(bizProcessData);
+            }
+        }
+
+
     }
     public String setNormalFlag (BizProcessData bizProcessData,String productArrayStr) {
         String normalFlag = "4";
@@ -386,7 +437,7 @@ public class BizProcessDataProcurementController extends BaseController {
 
         BizProcessChild queryBizProcessChild = new BizProcessChild();
         queryBizProcessChild.setDataId(bizProcessData.getDataId());
-        List<BizProcessChild> bizProcessChildList = bizProcessChildService.selectBizChildProductList(queryBizProcessChild);
+//        List<BizProcessChild> bizProcessChildList = bizProcessChildService.selectBizChildProductList(queryBizProcessChild);
 
         JSONArray productArray = JSONArray.parseArray(productArrayStr);
 

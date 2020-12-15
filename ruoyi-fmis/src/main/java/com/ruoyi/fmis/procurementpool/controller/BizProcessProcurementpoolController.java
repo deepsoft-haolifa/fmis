@@ -97,21 +97,21 @@ public class BizProcessProcurementpoolController extends BaseController {
         BizProcessData newBizProcessData = new BizProcessData();
         String bizId = bizProcessData.getBizId();
         //采购池
-        newBizProcessData.setBizId(bizId);
         newBizProcessData.setString13("1");
         newBizProcessData.setBizId(BizConstants.BIZ_contract);
-        newBizProcessData.setDataStatus(bizProcessData.getDataStatus());
-        if (StringUtils.isNotEmpty(bizProcessData.getBizEditFlag())) {
-            newBizProcessData.setBizEditFlag(bizProcessData.getBizEditFlag());
-            newBizProcessData.setDataId(bizProcessData.getDataId());
+        newBizProcessData.setString30(bizProcessData.getString30());
+        newBizProcessData.setDataStatus("-1");
+        bizProcessData.setDataStatus("-1");
+        if (bizProcessData.getDataStatus().equals("1")) {
+            newBizProcessData.setDataStatus("-1");
+            bizProcessData.setDataStatus("-1");
         }
-
-        if (StringUtil.isNotEmpty(bizProcessData.getString23())) {
-            newBizProcessData.setString23(bizProcessData.getString23());
+        if (bizProcessData.getDataStatus().equals("2")) {
+            newBizProcessData.setDataStatus("1");
+            bizProcessData.setDataStatus("1");
         }
-
         //startPage();
-        List<BizProcessData> list = bizProcessDataService.selectBizProcessDataListRef(newBizProcessData);
+        List<BizProcessData> list = bizProcessDataService.selectBizProcessDataListXs(newBizProcessData);
 
 
         List<BizProcessData> newList = new ArrayList<>();

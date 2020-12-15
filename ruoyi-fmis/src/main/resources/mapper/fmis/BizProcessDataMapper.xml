@@ -112,7 +112,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="price10 != null "> and price10 = #{price10}</if>
             <if test="string1 != null  and string1 != ''"> and string1 = #{string1}</if>
             <if test="string2 != null  and string2 != ''"> and string2 = #{string2}</if>
-            <if test="string3 != null  and string3 != ''"> and string3 = #{string3}</if>
+            <if test="string3 != null  and string3 != ''"> and string3 like concat('%', #{string3}, '%')</if>
             <if test="string4 != null  and string4 != ''"> and string4 = #{string4}</if>
             <if test="string5 != null  and string5 != ''"> and string5 = #{string5}</if>
             <if test="string6 != null  and string6 != ''"> and string6 = #{string6}</if>
@@ -317,7 +317,32 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     </select>
 
+    <select id="selectBizProcessDataListXs" parameterType="BizProcessData" resultMap="BizProcessDataResult">
+        <include refid="selectBizProcessDataVoRef"/>
+        <where>
+            1=1 and q.flow_status=q.normal_flag
 
+            <if test="bizId != null  and bizId != ''"> and biz_id = #{bizId}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="string13 != null  and string13 != ''"> and q.string13 = #{string13}</if>
+
+            <if test="string30 == 0 ">
+                and (q.string30 = '' or q.string30 is null)
+            </if>
+            <if test="string30 == 1 ">
+                and q.string30 = #{string30}
+            </if>
+            <if test="string30 == 2 ">
+                and q.string30 = #{string30}
+            </if>
+            <if test="string30 == 3 ">
+                and (ifnull(q.string30,'0') != 2)
+            </if>
+        </where>
+
+        order by q.create_time desc
+
+    </select>
 
 
     <!-- 拆解合同分账start -->

@@ -45,6 +45,13 @@ public interface IBizProcessDataService {
 
     public List<BizProcessData> selectBizProcessDataListRef(BizProcessData bizProcessData);
 
+    /**
+     * 查看销售合同中是否已经开始采购
+     * @param bizProcessData
+     * @return
+     */
+    public List<BizProcessData> selectBizProcessDataListXs(BizProcessData bizProcessData);
+
     public List<BizProcessData> selectBizProcessDataListRefBill(BizProcessData bizProcessData);
 
     public List<BizProcessData> selectBizProcessDataListRefDelivery(BizProcessData bizProcessData);
