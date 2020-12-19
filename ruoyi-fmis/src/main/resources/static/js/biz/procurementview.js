@@ -4,7 +4,7 @@ var prefixPool = ctx + "fmis/data";
 
 
 
-function expandChildTablePromise(dataId,paramterId,childId,stayId,tableId) {
+function expandChildTablePromise(dataId,contractNo,paramterId,childId,stayId,tableId) {
     var promise;
     promise = new Promise(function(resolve, reject) {
         console.log("tableId2=" + tableId);
@@ -101,11 +101,11 @@ initChildTestTable = function(index, rows, $detail) {
         },columns: [
             {field : 'rowId',title : '序号',width: 50,visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
             {field : 'testId',title : 'id',visible: false},
-            {field : 'statusId',title : 'statusId',visible: true},
-            {field : 'contractNo',title : 'contractNo',visible: true},
+            {field : 'statusId',title : 'statusId',visible: false},
+            {field : 'contractNo',title : 'contractNo',visible: false},
             {field : 'saveTest',title : '操作',width: 200,visible: true,formatter: function(value, row, index) {
                     var actions = [];
-                    actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="saveTest(' + row.rowId + "," + childId + "," + paramterId + "," + dataId + "," + contractNo + "," + statusId + "," + stayId + "," + stayNum + ')"><i class="fa fa-save"></i> 保存</a>');
+                    actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="saveTest(' + row.rowId + "," + childId + "," + paramterId + "," + dataId + ",'" + contractNo + "'," + statusId + "," + stayId + "," + stayNum + ')"><i class="fa fa-save"></i> 保存</a>');
                     //actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="removeTest(' + row.rowId + "," + childId + "," + paramterId + "," + dataId + "," + stayId  + ')"><i class="fa fa-remove"></i> 删除</a>');
                     return actions.join('');
                 }},
@@ -243,7 +243,7 @@ $(function() {
             {field : 'rowId',title : '序号3',width: 50,visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
             {field : 'addTest',title : '操作',visible: true,formatter: function(value, row, index) {
                     var actions = [];
-                    actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="addTest(' + row.dataId + ","+ row.contractNo + ","+ row.contractNo + "," + row.productId +  "," + row.childId +  "," + row.stayId + ",'bootstrap-table'" + ')"><i class="fa fa-add"></i> 添加</a>');
+                    actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="addTest(' + row.dataId + ",'"+ row.contractNo + "'," + row.productId +  "," + row.childId +  "," + row.stayId + ",'bootstrap-table'" + ')"><i class="fa fa-add"></i> 添加</a>');
                     return actions.join('');
                 }},
             {field : 'stayId',title : 'stayId',visible: false},
@@ -328,7 +328,7 @@ $(function() {
             {field : 'rowId',title : '序号',width: 50,visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
             {field : 'addTest',title : '操作',visible: true,formatter: function(value, row, index) {
                     var actions = [];
-                    actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="addTest(' + row.dataId + ","+ row.contractNo + "," + row.actuatorId +  "," + row.childId + "," + row.stayId + ",'bootstrap-table-actuator'" + ')"><i class="fa fa-add"></i> 添加</a>');
+                    actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="addTest(' + row.dataId + ",'"+ row.contractNo + "'," + row.actuatorId +  "," + row.childId + "," + row.stayId + ",'bootstrap-table-actuator'" + ')"><i class="fa fa-add"></i> 添加</a>');
                     return actions.join('');
                 }},
             {field : 'actuatorNum',title : '执行器数量',editable: false,width: 100,visible: false},
@@ -459,7 +459,7 @@ $(function() {
             {field : 'rowId',title : '序号',width: 50,visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
             {field : 'addTest',title : '操作',visible: true,formatter: function(value, row, index) {
                     var actions = [];
-                    actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="addTest(' + row.dataId + ","+ row.contractNo + "," + row.productRef1Id +  "," + row.childId + "," + row.stayId  + ",'bootstrap-table-ref1'" + ')"><i class="fa fa-add"></i> 添加</a>');
+                    actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="addTest(' + row.dataId + ",'"+ row.contractNo + "'," + row.productRef1Id +  "," + row.childId + "," + row.stayId  + ",'bootstrap-table-ref1'" + ')"><i class="fa fa-add"></i> 添加</a>');
                     return actions.join('');
                 }},
             {field : 'productRef1Num',title : '法兰数量',editable: false,width: 100,visible: false},
@@ -539,7 +539,7 @@ $(function() {
             {field : 'rowId',title : '序号',width: 50,visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
             {field : 'addTest',title : '操作',visible: true,formatter: function(value, row, index) {
                     var actions = [];
-                    actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="addTest(' + row.dataId + ","+ row.contractNo + "," + row.productRef2Id +  "," + row.childId + "," + row.stayId + ",'bootstrap-table-ref2'" + ')"><i class="fa fa-add"></i> 添加</a>');
+                    actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="addTest(' + row.dataId + ",'"+ row.contractNo + "'," + row.productRef2Id +  "," + row.childId + "," + row.stayId + ",'bootstrap-table-ref2'" + ')"><i class="fa fa-add"></i> 添加</a>');
                     return actions.join('');
                 }},
             {field : 'productRef2Num',title : '螺栓数量',editable: false,width: 100,visible: false},
@@ -635,7 +635,7 @@ $(function() {
                 }},
             {field : 'addTest',title : '操作',visible: true,formatter: function(value, row, index) {
                     var actions = [];
-                    actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="addTest(' + row.dataId + ","+ row.contractNo + "," + row.pattachmentId +  "," + row.childId + "," + row.stayId + ",'bootstrap-table-pa'" + ')"><i class="fa fa-add"></i> 添加</a>');
+                    actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="addTest(' + row.dataId + ",'"+ row.contractNo + "'," + row.pattachmentId +  "," + row.childId + "," + row.stayId + ",'bootstrap-table-pa'" + ')"><i class="fa fa-add"></i> 添加</a>');
                     return actions.join('');
                 }},
             {field : 'pattachmentCount',title : '数量',editable: false,width: 100,visible: false},

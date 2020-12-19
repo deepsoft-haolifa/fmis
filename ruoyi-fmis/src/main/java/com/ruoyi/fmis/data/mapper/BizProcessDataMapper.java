@@ -27,6 +27,7 @@ public interface BizProcessDataMapper {
      * @return 合同管理集合
      */
     public List<BizProcessData> selectBizProcessDataList(BizProcessData bizProcessData);
+    public List<BizProcessData> selectBizProcessDataListCg(BizProcessData bizProcessData);
 
 
     public List<BizProcessData> selectBizProcessDataListRef(BizProcessData bizProcessData);

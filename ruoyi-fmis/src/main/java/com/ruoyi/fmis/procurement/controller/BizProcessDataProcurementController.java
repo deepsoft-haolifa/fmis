@@ -301,6 +301,8 @@ public class BizProcessDataProcurementController extends BaseController {
         int insertReturn = bizProcessDataService.insertBizProcessData(bizProcessData);
         Long dataId = bizProcessData.getDataId();
         List<String> dataIds = new ArrayList<>();
+        //此次合并数量
+        int count = 0;
         if (StringUtils.isNotEmpty(productArrayStr)) {
             JSONArray productArray = JSONArray.parseArray(productArrayStr);
             for (int i = 0; i < productArray.size(); i++) {
@@ -309,6 +311,7 @@ public class BizProcessDataProcurementController extends BaseController {
                 dataIds.add(bizDataStatus.getString3());
                 bizDataStatus.setString4(bizProcessData.getDataId().toString());
                 bizDataStatusService.insertBizDataStatus(bizDataStatus);
+                count++;
             }
         }
 
@@ -321,14 +324,14 @@ public class BizProcessDataProcurementController extends BaseController {
             BizProcessData bizProcessData1 = new BizProcessData();
             bizProcessData1.setBizId("procurement");
             bizProcessData1.setString3(bizProcessData2.getString1());
-            List<BizProcessData> list = bizProcessDataService.selectBizProcessDataList(bizProcessData1);
-            setXSStatus(dataIds, list.size());
+            List<BizProcessData> list = bizProcessDataService.selectBizProcessDataListCg(bizProcessData1);
+            setXSStatus(dataIds, list.size(), count);
         }
 
         setContractNo(bizProcessData,productArrayStr);
         return toAjax(insertReturn);
     }
-    public void setXSStatus(List<String> list, int size) {
+    public void setXSStatus(List<String> list, int size, int num) {
         //合并采购合同的处理listLevelS
         for (String string : list) {
             BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataById(Long.parseLong(string));
@@ -362,11 +365,11 @@ public class BizProcessDataProcurementController extends BaseController {
                     count ++;
                 }
             }
-            if (size + 1 < count) {
+            if (size + num < count) {
                 bizProcessData.setString30("1");
                 bizProcessDataService.updateBizProcessData(bizProcessData);
             }
-            if (size + 1 == count) {
+            if (size + num == count) {
                 bizProcessData.setString30("2");
                 bizProcessDataService.updateBizProcessData(bizProcessData);
             }

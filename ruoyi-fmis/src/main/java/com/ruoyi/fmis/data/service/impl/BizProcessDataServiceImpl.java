@@ -728,7 +728,10 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
     public List<BizProcessData> selectBizProcessDataList(BizProcessData bizProcessData) {
         return bizProcessDataMapper.selectBizProcessDataList(bizProcessData);
     }
-
+    @Override
+    public List<BizProcessData> selectBizProcessDataListCg(BizProcessData bizProcessData) {
+        return bizProcessDataMapper.selectBizProcessDataListCg(bizProcessData);
+    }
 
     @Override
     @DataScope(deptAlias = "dt", userAlias = "u")

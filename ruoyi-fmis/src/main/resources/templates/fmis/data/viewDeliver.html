@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" >
 <head>
-    <th:block th:include="include :: header('查看库存')" />
+    <th:block th:include="include :: header('发货申请')" />
     <th:block th:include="include :: datetimepicker-css" />
 </head>
 <body class="white-bg">
@@ -167,7 +167,7 @@
 <th:block th:include="include :: bootstrap-table-reorder-js" />
 <th:block th:include="include :: bootstrap-table-editable-js" />
 <script type="text/javascript">
-    var prefix = ctx + "fmis/child";
+    var prefix = ctx + "fmis/data";
     $("#form-data-edit").validate({
         focusCleanup: true
     });
@@ -181,7 +181,7 @@
             useRowAttrFunc: true,
             uniqueId: "childId",
             async: true,
-            url: prefix + "/selectBizProcessChildInventoryList",
+            url: prefix + "/listProductNoPageFH",
             //onEditableSave: onEditableSave,
             //rowStyle: tableRowStyle,
             queryParams : {
@@ -193,8 +193,7 @@
             },
                 {field : 'rowId',title : '序号',visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
 
-                {field : 'childId',title : 'childId',visible: false},
-                {field : 'string3',title : '报检单号',editable: false},
+                {field : 'quotationName',title : '报检单号',editable: false},
                 {field : 'string4',title : '采购合同号'},
                 {field : 'string5',title : '销售合同号',editable: false},
                 {field : 'string2',title : '类型',formatter: function(value, row, index) {
@@ -226,23 +225,114 @@
                 /*{field : 'string9',title : '等级',editable: false},
                 {field : 'string10',title : '价格',editable: false},*/
                 {field : 'string11',title : '数量',editable: false},
-                {field : 'string16',title : '已发货数量',editable: false},
-                {field : 'string13',title : '发货数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
-                {field : 'string14',title : '状态',formatter: function(value, row, index) {
-                        var actions = [];
-                        if (value == 1) {
-                            actions.push('已发货');
-                        } else{
-                            actions.push('未发货');
-                        }
-                        return actions.join('');
-                    }},
+                {field : 'string13',title : '发货数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}}
             ]
         };
         $.table.init(options);
 
     });
+    $(function() {
+        var options = {
+            showSearch: false,
+            showRefresh: false,
+            pagination: false,
+            showColumns: false,
+            showToggle: false,
+            useRowAttrFunc: true,
+            uniqueId: "productId",
+            onLoadSuccess: loadSuccess,
+            async: true,
+            url: prefix + "/listProductNoPage",
+            onEditableSave: onEditableSave,
+            onClickCell: onClickCell,
+            onReorderRow: onReorderRow,
+            rowStyle: tableRowStyle,
+            columns: [{
+                checkbox: true
+            },
+                {field : 'rowId',title : '序号',visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
 
+                {field : 'quotationId',title : 'quotationId',visible: false},
+                {field : 'quotationName',title : '报价单号',editable: false},
+                {field : 'productId',title : '产品ID',visible: false},
+                {field : 'productName',title : '产品名称',editable: false},
+                {field : 'model',title : '型号',editable: false},
+                {field : 'specifications',title : '规格',editable: false},
+                {field : 'nominalPressure',title : '压力',editable: false},
+                {field : 'valvebodyMaterial',title : '阀体',editable: false},
+                {field : 'valveElement',title : '阀芯',editable: false},
+                {field : 'sealingMaterial',title : '密封材质',editable: false},
+                {field : 'driveForm',title : '驱动形式',editable: false},
+                {field : 'connectionType',title : '连接方式',editable: false},
+                {field : 'productNum',title : '数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
+                {field : 'productPrice',title : '单价',editable: false},
+                {field : 'productCostPrice',title : '产品成本价',editable: false,visible: false},
+                {field : 'totalPrice',title : '总价',editable: false},
+                {field : 'string14',title : '优惠',editable: {type: 'text',emptytext: '0',validate: function(v){ return numberValidate(v)}}},
+                {field : 'productCoefficient',title : '系数',editable: {type: 'text',emptytext: '0',validate: function(v){ return numberValidate(v)}}},
+                {field : 'actuatorId',title : 'actuatorId',visible: false},
+                {field : 'actuatorName',title : '执行器名称',editable: false},
+                {field : 'actuatorPrice',title : '执行器价格',editable: false},
+                {field : 'actuatorCostPrice',title : '执行器成本价',editable: false,visible: false},
+                {field : 'actuatorNum',title : '执行器数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
+                {field : 'actuatorCoefficient',title : '执行器系数',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
+
+                {field : 'productRef1Id',title : 'ref1Id',visible: false},
+                {field : 'ref1Name',title : '法兰名称',editable: false},
+
+                {field : 'ref1Price',title : '法兰价格',editable: false},
+                {field : 'ref1CostPrice',title : '法兰成本价',editable: false,visible: false},
+                {field : 'productRef1Num',title : '法兰数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
+                {field : 'productRef1Coefficient',title : '法兰系数',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
+
+                {field : 'productRef2Id',title : 'ref2Id',visible: false},
+                {field : 'ref2Name',title : '螺栓名称',editable: {type: 'text',emptytext: '空',disabled: true}},
+                {field : 'ref2Price',title : '螺栓价格',editable: false},
+                {field : 'ref2CostPrice',title : '螺栓成本价',editable: false,visible: false},
+                {field : 'productRef2Num',title : '螺栓数量',editable: {type: 'text',emptytext: '0',validate: function(v){ return numberValidate(v)}}},
+                {field : 'productRef2Coefficient',title : '螺栓系数',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
+
+
+                //定位器，电磁阀，回信器数，气源三连件，可离合减速器
+                {field : 'pattachmentId',title : 'pattachmentId',visible: false},
+                {field : 'pattachmentName',title : '定位器',editable: true},
+                {field : 'pattachmentPrice',title : '定位器价格',editable: false},
+                {field : 'pattachmentCostPrice',title : '成本价',editable: false,visible: false},
+                {field : 'pattachmentCount',title : '定位器数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
+                {field : 'pattachmentCoefficient',title : '定位器系数',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
+
+                {field : 'pattachment1Id',title : 'pattachment1Id',visible: false},
+                {field : 'pattachment1Name',title : '电磁阀',editable: true},
+                {field : 'pattachment1Price',title : '电磁阀价格',editable: false},
+                {field : 'pattachment1CostPrice',title : '成本价',editable: false,visible: false},
+                {field : 'pattachment1Count',title : '电磁阀数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
+                {field : 'pattachment1Coefficient',title : '电磁阀系数',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
+
+                {field : 'pattachment2Id',title : 'pattachment2Id',visible: false},
+                {field : 'pattachment2Name',title : '回信器数',editable: true},
+                {field : 'pattachment2Price',title : '回信器数价格',editable: false},
+                {field : 'pattachment2CostPrice',title : '成本价',editable: false,visible: false},
+                {field : 'pattachment2Count',title : '回信器数数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
+                {field : 'pattachment2Coefficient',title : '回信器数系数',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
+
+                {field : 'pattachment3Id',title : 'pattachment3Id',visible: false},
+                {field : 'pattachment3Name',title : '气源三连件',editable: true},
+                {field : 'pattachment3Price',title : '气源三连件价格',editable: false},
+                {field : 'pattachment3CostPrice',title : '成本价',editable: false,visible: false},
+                {field : 'pattachment3Count',title : '气源三连件数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
+                {field : 'pattachment3Coefficient',title : '气源三连件系数',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
+
+                {field : 'pattachment4Id',title : 'pattachment4Id',visible: false},
+                {field : 'pattachment4Name',title : '可离合减速器',editable: true},
+                {field : 'pattachment4Price',title : '可离合减速器价格',editable: false},
+                {field : 'pattachment4CostPrice',title : '成本价',editable: false,visible: false},
+                {field : 'pattachment4Count',title : '可离合减速器数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
+                {field : 'pattachment4Coefficient',title : '可离合减速器系数',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
+                {field : 'string15',title : '颜色',editable: true},]
+        };
+        $.table.init(options);
+
+    });
     function numberValidate(value) {
         if (isNaN(value)) {
             return "必须是数字！";

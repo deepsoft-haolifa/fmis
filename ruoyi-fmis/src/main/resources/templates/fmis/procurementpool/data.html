@@ -32,11 +32,11 @@
 
                             <li>
                                 <p>处理状态：</p>
-                                <select name="string30" id="dataStatus" class="form-control m-b" >
+                                <select name="string30" id="string30" class="form-control m-b"  onchange="changeV()">
                                     <option value="">请选择</option>
-                                    <option selected value="0">未处理</option>
-                                    <option value="1">部分处理</option>
-                                    <option value="2">已处理</option>
+                                    <option selected value="0">未完成处理</option>
+                                    <!--<option value="1">部分处理</option>-->
+                                    <option value="2">已完成处理</option>
                                 </select>
                             </li>
 
@@ -142,6 +142,13 @@
             $("#numJsonValue").val(JSON.stringify(datas));
 
             $.modal.openFull("创建采购合同", url);
+        }
+        function  changeV() {
+            console.log("string30:" + $("#string30").val())
+            if ($("#string30").val() == 2) {
+                $("#dataStatus").val(2);
+            }
+            console.log("dataStatus:" + $("#dataStatus").val())
         }
     </script>
      <script th:src="@{/js/biz/procurementS.js}"></script>

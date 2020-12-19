@@ -43,6 +43,13 @@ public interface IBizProcessDataService {
      */
     public List<BizProcessData> selectBizProcessDataList(BizProcessData bizProcessData);
 
+    /**
+     * 看采购合同购买的产品项
+     * @param bizProcessData
+     * @return
+     */
+    public List<BizProcessData> selectBizProcessDataListCg(BizProcessData bizProcessData);
+
     public List<BizProcessData> selectBizProcessDataListRef(BizProcessData bizProcessData);
 
     /**

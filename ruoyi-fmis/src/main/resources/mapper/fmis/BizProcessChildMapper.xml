@@ -160,7 +160,7 @@
           s.name as supplier, p.new_supplier,
           p.medium,p.temperature,p.other,d9.name as productString1,
           p.string2 as productString2,ac.name as actuatorName,pc.string14,pc.string15,
-          dd.dict_label as levelLabel,
+          /*dd.dict_label as levelLabel,*/
 
 
 
@@ -205,7 +205,7 @@
         left join biz_product_attachment pa3 on pa3.attachment_id=pc.pattachment3_id
         left join biz_product_attachment pa4 on pa4.attachment_id=pc.pattachment4_id
 
-        left join sys_dict_data dd on dd.dict_type='product_level' and dd.dict_value=p.string2
+        /*left join sys_dict_data dd on dd.dict_type='product_level' and dd.dict_value=p.string2*/
 
     </sql>
     <!-- 流程状态0=未上报  1=销售员上报  2=销售经理同意 -2=销售经理不同意 3=区域经理同意 -3=区域经理不同意 4=副总同意 -4=副总不同意 5=老总同意 -5=老总不同意 -->
@@ -236,7 +236,7 @@
           s.name as supplierName,
           p.medium,p.temperature,p.other,d9.name as productString1,
           p.string2 as productString2,
-          dd.dict_label as levelLabel,(case when ds.data_status='1' then ds.string1 else sum(pc.string3) end) as productNum,p.name as productName,
+          /*dd.dict_label as levelLabel,*/(case when ds.data_status='1' then ds.string1 else sum(pc.string3) end) as productNum,p.name as productName,
           s.name as supplier,p.procurement_price as productProcurementPrice,pd.string6 as goodsTime,
           ds.product_status as productStatus,ds.actuator_status as actuatorStatus,ds.ref1_status as ref1Status,ds.ref2_status as ref2Status,ds.p_status as pStatus,
           ds.p1_status as p1Status,ds.p2_status as p2Status,ds.p3_status as p3Status,ds.p4_status as p4Status,pc.data_id as dataId,pc.child_id as childId,ds.data_status as dataStatus,
@@ -256,7 +256,7 @@
         left join biz_dict d8 on d8.parent_type='structural_type' and d8.dict_id=p.structural_style
         left join biz_dict d9 on d9.parent_type='series_type' and d9.dict_id=p.string1
         left join biz_suppliers s on s.suppliers_id=p.supplier
-        join sys_dict_data dd on dd.dict_type='product_level' and dd.dict_value=p.string2
+        /*join sys_dict_data dd on dd.dict_type='product_level' and dd.dict_value=p.string2*/
     where <!--concat(p.model,p.specifications) in (
       select concat(p1.model,p1.specifications) from biz_product p1
       join biz_process_child pc1 on pc1.data_id=#{dataId} and pc1.string2=p1.product_id
@@ -295,7 +295,7 @@
           s.name as supplierName,
           p.medium,p.temperature,p.other,d9.name as productString1,
           p.string2 as productString2,
-          dd.dict_label as levelLabel,ds.string1 as productNum,p.name as productName,
+          ds.string1 as productNum,p.name as productName,
           s.name as supplier,p.procurement_price as productProcurementPrice,
           ds.product_status as productStatus,
           ds.data_status as dataStatus,
@@ -321,7 +321,6 @@
         left join biz_dict d8 on d8.parent_type='structural_type' and d8.dict_id=p.structural_style
         left join biz_dict d9 on d9.parent_type='series_type' and d9.dict_id=p.string1
         left join biz_suppliers s on s.suppliers_id=p.supplier
-        join sys_dict_data dd on dd.dict_type='product_level' and dd.dict_value=p.string2
         left join biz_process_child bpc on ds.child_id = bpc.child_id
     where 1=1
     </sql>
