@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('科目列表')" />
+    <th:block th:include="include :: header('费用科目列表')" />
 </head>
 <body class="gray-bg">
      <div class="container-div">
@@ -14,19 +14,16 @@
                                 <p>名称：</p>
                                 <input type="text" name="name"/>
                             </li>
-                            <!--
-                            <li class="select-time">
-                                <p>日期：</p>
-                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginD]"/>
-                                <span>-</span>
-                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endD]"/>
-                            </li> -->
                             <li>
                                 <p>科目类别：</p>
                                 <select name="type" th:with="type=${@dict.getType('subjects_type')}">
                                     <option value="">所有</option>
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                                 </select>
+                            </li>
+                            <li>
+                                <p>代码：</p>
+                                <input type="text" name="code"/>
                             </li>
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
@@ -47,7 +44,9 @@
                 <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="fmis:subjects:remove">
                     <i class="fa fa-remove"></i> 删除
                 </a>
-
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="fmis:subjects:export">
+                    <i class="fa fa-download"></i> 导出
+                 </a>
             </div>
             <div class="col-sm-12 select-table table-striped">
                 <table id="bootstrap-table"></table>
@@ -68,7 +67,7 @@
                 updateUrl: prefix + "/edit/{id}",
                 removeUrl: prefix + "/remove",
                 exportUrl: prefix + "/export",
-                modalName: "科目",
+                modalName: "费用科目",
                 columns: [{
                     checkbox: true
                 },
@@ -82,22 +81,27 @@
                     title : '名称'
                 },
                 {
-                    field : 'd', 
-                    title : '日期',
-                    formatter: function(value, row, index) {
-                        return new Date(value).Format("yyyy-MM");
-                    }
-                },
-                {
-                    field : 'type', 
+                    field : 'type',
                     title : '科目类别',
                     formatter: function(value, row, index) {
-                       return $.table.selectDictLabel(typeDatas, value);
+                        return $.table.selectDictLabel(typeDatas, value);
                     }
                 },
                 {
-                    field : 'amount', 
-                    title : '费用'
+                    field : 'parentId', 
+                    title : '父科目'
+                },
+                {
+                    field : 'level', 
+                    title : '级别'
+                },
+                {
+                    field : 'code', 
+                    title : '代码'
+                },
+                {
+                    field : 'remark', 
+                    title : '备注'
                 },
                 {
                     title: '操作',

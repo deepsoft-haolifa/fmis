@@ -1,13 +1,18 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" >
 <head>
-    <th:block th:include="include :: header('修改科目')" />
-    <th:block th:include="include :: datetimepicker-css" />
+    <th:block th:include="include :: header('修改费用科目')" />
 </head>
 <body class="white-bg">
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
         <form class="form-horizontal m" id="form-subjects-edit" th:object="${bizSubjects}">
             <input name="subjectsId" th:field="*{subjectsId}" type="hidden">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">父科目：</label>
+                <div class="col-sm-8">
+                    <input name="parentId" th:field="*{parentId}" class="form-control" type="text" required>
+                </div>
+            </div>
             <div class="form-group">    
                 <label class="col-sm-3 control-label">名称：</label>
                 <div class="col-sm-8">
@@ -15,32 +20,28 @@
                 </div>
             </div>
             <div class="form-group">    
-                <label class="col-sm-3 control-label">日期：</label>
-                <div class="col-sm-8">
-                    <div class="input-group date">
-                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input name="d" th:value="${#dates.format(bizSubjects.d, 'yyyy-MM')}" class="form-control" placeholder="yyyy-MM" type="text">
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">科目类别：</label>
+                <label class="col-sm-3 control-label">科目类别</label>
                 <div class="col-sm-8">
                     <select name="type" class="form-control m-b" th:with="type=${@dict.getType('subjects_type')}">
                         <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{type}"></option>
                     </select>
                 </div>
             </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">费用：</label>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">级别：</label>
                 <div class="col-sm-8">
-                    <input name="amount" th:field="*{amount}" class="form-control" type="text">
+                    <input name="level" th:field="*{level}" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">代码：</label>
+                <div class="col-sm-8">
+                    <input name="code" th:field="*{code}" class="form-control" type="text" required>
                 </div>
             </div>
         </form>
     </div>
     <th:block th:include="include :: footer" />
-    <th:block th:include="include :: datetimepicker-js" />
     <script type="text/javascript">
         var prefix = ctx + "fmis/subjects";
         $("#form-subjects-edit").validate({
@@ -52,16 +53,6 @@
                 $.operate.save(prefix + "/edit", $('#form-subjects-edit').serialize());
             }
         }
-
-        $("input[name='d']").datetimepicker({
-            format: "yyyy-mm",
-            weekStart: 1,
-            autoclose: true,
-            startView: 3,
-            minView: 3,
-            forceParse: false,
-            autoclose: true
-        });
     </script>
 </body>
 </html>

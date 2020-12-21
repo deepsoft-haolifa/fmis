@@ -1,29 +1,27 @@
-package com.ruoyi.fmis.web.controller.fmis;
+package com.ruoyi.fmis.subjects.controller;
 
-import java.util.List;
+import com.ruoyi.common.annotation.Log;
+import com.ruoyi.common.core.controller.BaseController;
+import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.core.page.TableDataInfo;
+import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.fmis.subjects.domain.BizSubjects;
+import com.ruoyi.fmis.subjects.service.IBizSubjectsService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import com.ruoyi.common.annotation.Log;
-import com.ruoyi.common.enums.BusinessType;
-import com.ruoyi.fmis.subjects.domain.BizSubjects;
-import com.ruoyi.fmis.subjects.service.IBizSubjectsService;
-import com.ruoyi.common.core.controller.BaseController;
-import com.ruoyi.common.core.domain.AjaxResult;
-import com.ruoyi.common.utils.poi.ExcelUtil;
-import com.ruoyi.common.core.page.TableDataInfo;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
 
 /**
- * 科目Controller
+ * 费用科目Controller
  *
- * @author frank
- * @date 2020-06-28
+ * @author hedong
+ * @date 2020-12-20
  */
 @Controller
 @RequestMapping("/fmis/subjects")
@@ -40,7 +38,7 @@ public class BizSubjectsController extends BaseController {
     }
 
     /**
-     * 查询科目列表
+     * 查询费用科目列表
      */
     @RequiresPermissions("fmis:subjects:list")
     @PostMapping("/list")
@@ -52,7 +50,7 @@ public class BizSubjectsController extends BaseController {
     }
 
     /**
-     * 导出科目列表
+     * 导出费用科目列表
      */
     @RequiresPermissions("fmis:subjects:export")
     @PostMapping("/export")
@@ -64,7 +62,7 @@ public class BizSubjectsController extends BaseController {
     }
 
     /**
-     * 新增科目
+     * 新增费用科目
      */
     @GetMapping("/add")
     public String add() {
@@ -72,10 +70,10 @@ public class BizSubjectsController extends BaseController {
     }
 
     /**
-     * 新增保存科目
+     * 新增保存费用科目
      */
     @RequiresPermissions("fmis:subjects:add")
-    @Log(title = "科目", businessType = BusinessType.INSERT)
+    @Log(title = "费用科目", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
     public AjaxResult addSave(BizSubjects bizSubjects) {
@@ -83,7 +81,7 @@ public class BizSubjectsController extends BaseController {
     }
 
     /**
-     * 修改科目
+     * 修改费用科目
      */
     @GetMapping("/edit/{subjectsId}")
     public String edit(@PathVariable("subjectsId") Long subjectsId, ModelMap mmap) {
@@ -93,10 +91,10 @@ public class BizSubjectsController extends BaseController {
     }
 
     /**
-     * 修改保存科目
+     * 修改保存费用科目
      */
     @RequiresPermissions("fmis:subjects:edit")
-    @Log(title = "科目", businessType = BusinessType.UPDATE)
+    @Log(title = "费用科目", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
     public AjaxResult editSave(BizSubjects bizSubjects) {
@@ -104,10 +102,10 @@ public class BizSubjectsController extends BaseController {
     }
 
     /**
-     * 删除科目
+     * 删除费用科目
      */
     @RequiresPermissions("fmis:subjects:remove")
-    @Log(title = "科目", businessType = BusinessType.DELETE)
+    @Log(title = "费用科目", businessType = BusinessType.DELETE)
     @PostMapping( "/remove")
     @ResponseBody
     public AjaxResult remove(String ids) {
