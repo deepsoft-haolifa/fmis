@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ruoyi.fmis.mapper.BizSubjectsMapper">
+<mapper namespace="com.ruoyi.fmis.subjects.mapper.BizSubjectsMapper">
     
     <resultMap type="BizSubjects" id="BizSubjectsResult">
         <result property="subjectsId"    column="subjects_id"    />

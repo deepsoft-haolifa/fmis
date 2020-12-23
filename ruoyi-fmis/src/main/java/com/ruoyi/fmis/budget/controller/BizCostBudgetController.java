@@ -75,7 +75,7 @@ public class BizCostBudgetController extends BaseController {
      */
     @GetMapping("/add")
     public String add(ModelMap mmap) {
-        mmap.put("subjects",bizSubjectsService.selectBizSubjectsAll());
+        mmap.put("subjects",bizSubjectsService.selectBizSubjectsList(new BizSubjects()));
         return prefix + "/add";
     }
 
@@ -98,7 +98,7 @@ public class BizCostBudgetController extends BaseController {
         BizCostBudget bizCostBudget = bizCostBudgetService.selectBizCostBudgetById(budgetId);
         mmap.put("bizCostBudget", bizCostBudget);
 
-        List<BizSubjects> suppliersList = bizSubjectsService.selectBizSubjectsAll();
+        List<BizSubjects> suppliersList = bizSubjectsService.selectBizSubjectsList(new BizSubjects());
         for (BizSubjects subjects : suppliersList) {
             Long supplierId = subjects.getSubjectsId();
             if (Long.compare(supplierId,bizCostBudget.getSubjectsId()) == 0) {

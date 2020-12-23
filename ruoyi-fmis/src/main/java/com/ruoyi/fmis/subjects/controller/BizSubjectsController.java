@@ -8,6 +8,7 @@ import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.fmis.subjects.domain.BizSubjects;
 import com.ruoyi.fmis.subjects.service.IBizSubjectsService;
+import com.ruoyi.system.domain.SysUser;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -65,7 +66,9 @@ public class BizSubjectsController extends BaseController {
      * 新增费用科目
      */
     @GetMapping("/add")
-    public String add() {
+    public String add(ModelMap mmap) {
+        List<BizSubjects> parentBizSubjects =bizSubjectsService.selectBizSubjectsListContainWu();
+        mmap.put("parentList", parentBizSubjects);
         return prefix + "/add";
     }
 
@@ -85,6 +88,8 @@ public class BizSubjectsController extends BaseController {
      */
     @GetMapping("/edit/{subjectsId}")
     public String edit(@PathVariable("subjectsId") Long subjectsId, ModelMap mmap) {
+        List<BizSubjects> parentBizSubjects =bizSubjectsService.selectBizSubjectsListContainWu();
+        mmap.put("parentList", parentBizSubjects);
         BizSubjects bizSubjects = bizSubjectsService.selectBizSubjectsById(subjectsId);
         mmap.put("bizSubjects", bizSubjects);
         return prefix + "/edit";
@@ -106,7 +111,7 @@ public class BizSubjectsController extends BaseController {
      */
     @RequiresPermissions("fmis:subjects:remove")
     @Log(title = "费用科目", businessType = BusinessType.DELETE)
-    @PostMapping( "/remove")
+    @PostMapping("/remove")
     @ResponseBody
     public AjaxResult remove(String ids) {
         return toAjax(bizSubjectsService.deleteBizSubjectsByIds(ids));

@@ -1,5 +1,7 @@
 package com.ruoyi.fmis.subjects.domain;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
@@ -13,6 +15,10 @@ import com.ruoyi.common.core.domain.BaseEntity;
  */
 public class BizSubjects extends BaseEntity {
     private static final long serialVersionUID = 1L;
+
+    @Getter
+    @Setter
+    private boolean flag;
 
     /** ID */
     private Long subjectsId;
@@ -67,6 +73,14 @@ public class BizSubjects extends BaseEntity {
     public Long getParentId() {
         return parentId;
     }
+    public void setParentName(String parentName) {
+        this.parentName = parentName;
+    }
+
+    public String getParentName() {
+        return parentName;
+    }
+
     public void setType(String type) {
         this.type = type;
     }

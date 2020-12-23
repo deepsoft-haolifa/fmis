@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 费用科目Service业务层处理
@@ -40,7 +42,25 @@ public class BizSubjectsServiceImpl implements IBizSubjectsService {
      */
     @Override
     public List<BizSubjects> selectBizSubjectsList(BizSubjects bizSubjects) {
-        return bizSubjectsMapper.selectBizSubjectsList(bizSubjects);
+        List<BizSubjects> parentList = this.selectBizSubjectsListContainWu();
+        Map<Long, String> parentMap = parentList.stream().collect(Collectors.toMap(BizSubjects::getSubjectsId, BizSubjects::getName));
+        List<BizSubjects> bizSubjectsList = bizSubjectsMapper.selectBizSubjectsList(bizSubjects);
+        bizSubjectsList.stream().forEach(e -> {
+            e.setParentName(parentMap.get(e.getParentId()));
+        });
+        return bizSubjectsList;
+    }
+
+    @Override
+    public List<BizSubjects> selectBizSubjectsListContainWu() {
+        List<BizSubjects> bizSubjects = bizSubjectsMapper.selectBizSubjectsList(new BizSubjects() {{
+            setParentId(0L);
+        }});
+        bizSubjects.add(0, new BizSubjects() {{
+            setSubjectsId(0L);
+            setName("无");
+        }});
+        return bizSubjects;
     }
 
     /**

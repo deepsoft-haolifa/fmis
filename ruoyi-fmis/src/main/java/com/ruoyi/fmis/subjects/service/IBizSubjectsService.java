@@ -28,6 +28,14 @@ public interface IBizSubjectsService {
     public List<BizSubjects> selectBizSubjectsList(BizSubjects bizSubjects);
 
     /**
+     * 查询费用科目列表(下拉包括无)
+     *
+     * @return 费用科目集合
+     */
+    public List<BizSubjects> selectBizSubjectsListContainWu();
+
+
+    /**
      * 新增费用科目
      *
      * @param bizSubjects 费用科目
