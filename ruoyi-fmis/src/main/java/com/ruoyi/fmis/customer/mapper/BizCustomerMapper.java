@@ -62,4 +62,6 @@ public interface BizCustomerMapper {
 
 
     public Long selectCustomerFileNumber();
+
+    public List<BizCustomer> selectCustomerAll();
 }

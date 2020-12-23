@@ -1,6 +1,7 @@
 package com.ruoyi.fmis.customer.service;
 
 import com.ruoyi.fmis.customer.domain.BizCustomer;
+
 import java.util.List;
 
 /**
@@ -30,6 +31,7 @@ public interface IBizCustomerService {
     public List<BizCustomer> selectBizCustomerListNoAuth(BizCustomer bizCustomer);
 
     public List<BizCustomer> selectBizCustomerSelfList(BizCustomer bizCustomer);
+
     /**
      * 新增客户
      *
@@ -65,5 +67,10 @@ public interface IBizCustomerService {
     /**
      * 更新客户类别任务
      */
-    public void updateCustomerLeverJob ();
+    public void updateCustomerLeverJob();
+
+    /**
+     * 所有客户列表
+     */
+    public List<BizCustomer> selectCustomerAll();
 }

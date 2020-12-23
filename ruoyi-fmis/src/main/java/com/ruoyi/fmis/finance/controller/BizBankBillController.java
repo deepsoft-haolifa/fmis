@@ -6,6 +6,8 @@ import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.fmis.customer.domain.BizCustomer;
+import com.ruoyi.fmis.customer.service.IBizCustomerService;
 import com.ruoyi.fmis.finance.domain.BizBankBill;
 import com.ruoyi.fmis.finance.service.IBizBankBillService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -29,6 +31,9 @@ public class BizBankBillController extends BaseController {
 
     @Autowired
     private IBizBankBillService bizBankBillService;
+
+    @Autowired
+    private IBizCustomerService customerService;
 
     @RequiresPermissions("finance:bankBill:view")
     @GetMapping()
@@ -61,42 +66,95 @@ public class BizBankBillController extends BaseController {
     }
 
     /**
-     * 新增银行日记账
+     * 新增银行日记账（收款）
      */
-    @GetMapping("/add")
-    public String add() {
-        return prefix + "/add";
+    @GetMapping("/addCollect")
+    public String addCollect(ModelMap mmap) {
+        // 收款单的付款单位--客户管理
+        List<BizCustomer> customerList = customerService.selectCustomerAll();
+        mmap.put("customerList", customerList);
+        return prefix + "/addCollect";
     }
 
     /**
-     * 新增保存银行日记账
+     * 新增保存银行日记账（收款）
      */
-    @RequiresPermissions("finance:bankBill:add")
-    @Log(title = "银行日记账", businessType = BusinessType.INSERT)
-    @PostMapping("/add")
+    @RequiresPermissions("finance:bankBill:addCollect")
+    @Log(title = "银行日记账（收款）", businessType = BusinessType.INSERT)
+    @PostMapping("/addCollect")
     @ResponseBody
-    public AjaxResult addSave(BizBankBill bizBankBill) {
+    public AjaxResult addCollectSave(BizBankBill bizBankBill) {
         return toAjax(bizBankBillService.insertBizBankBill(bizBankBill));
     }
 
     /**
-     * 修改银行日记账
+     * 修改银行日记账（收款）
+     */
+    @GetMapping("/editCollect/{billId}")
+    public String editCollect(@PathVariable("billId") Long billId, ModelMap mmap) {
+        BizBankBill bizBankBill = bizBankBillService.selectBizBankBillById(billId);
+        mmap.put("bizBill", bizBankBill);
+        // 收款单的付款单位--客户管理
+        List<BizCustomer> customerList = customerService.selectCustomerAll();
+        mmap.put("customerList", customerList);
+
+        return prefix + "/editCollect";
+    }
+
+    /**
+     * 修改保存银行日记账（收款）
+     */
+    @RequiresPermissions("finance:bankBill:edit")
+    @Log(title = "银行日记账", businessType = BusinessType.UPDATE)
+    @PostMapping("/editCollect")
+    @ResponseBody
+    public AjaxResult editCollectSave(BizBankBill bizBankBill) {
+        return toAjax(bizBankBillService.updateBizBankBill(bizBankBill));
+    }
+    /**
+     * 新增银行日记账（付款）
+     */
+    @GetMapping("/addPay")
+    public String addPay(ModelMap mmap) {
+        // 收款单的付款单位--客户管理
+        List<BizCustomer> customerList = customerService.selectCustomerAll();
+        mmap.put("customerList", customerList);
+        return prefix + "/addPay";
+    }
+
+    /**
+     * 新增保存银行日记账（付款）
+     */
+    @RequiresPermissions("finance:bankBill:addPay")
+    @Log(title = "银行日记账（付款）", businessType = BusinessType.INSERT)
+    @PostMapping("/addPay")
+    @ResponseBody
+    public AjaxResult addPaySave(BizBankBill bizBankBill) {
+        return toAjax(bizBankBillService.insertBizBankBill(bizBankBill));
+    }
+
+    /**
+     * 修改银行日记账（付款）
      */
     @GetMapping("/edit/{billId}")
     public String edit(@PathVariable("billId") Long billId, ModelMap mmap) {
         BizBankBill bizBankBill = bizBankBillService.selectBizBankBillById(billId);
         mmap.put("bizBill", bizBankBill);
-        return prefix + "/edit";
+        // 收款单的付款单位--客户管理
+        List<BizCustomer> customerList = customerService.selectCustomerAll();
+        mmap.put("customerList", customerList);
+
+        return prefix + "/editPay";
     }
 
     /**
-     * 修改保存银行日记账
+     * 修改保存银行日记账（付款）
      */
-    @RequiresPermissions("finance:bankBill:edit")
+    @RequiresPermissions("finance:bankBill:editPay")
     @Log(title = "银行日记账", businessType = BusinessType.UPDATE)
-    @PostMapping("/edit")
+    @PostMapping("/editPay")
     @ResponseBody
-    public AjaxResult editSave(BizBankBill bizBankBill) {
+    public AjaxResult editPaySave(BizBankBill bizBankBill) {
         return toAjax(bizBankBillService.updateBizBankBill(bizBankBill));
     }
 
@@ -105,12 +163,11 @@ public class BizBankBillController extends BaseController {
      */
     @RequiresPermissions("finance:bankBill:remove")
     @Log(title = "银行日记账", businessType = BusinessType.DELETE)
-    @PostMapping( "/remove")
+    @PostMapping("/remove")
     @ResponseBody
     public AjaxResult remove(String ids) {
         return toAjax(bizBankBillService.deleteBizBankBillByIds(ids));
     }
-
 
 
 }

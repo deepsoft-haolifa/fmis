@@ -43,9 +43,13 @@ public class BizBankBill extends BaseEntity {
     @Excel(name = "收付款账户")
     private String payAccount;
 
-    /** 收付款单位 */
-    @Excel(name = "收付款单位")
+    /** 付款单位 */
+    @Excel(name = "付款单位")
     private String payCompany;
+
+    /** 付款单位 */
+    @Excel(name = "收款单位")
+    private String collectCompany;
 
     /** 上月结转 */
     @Excel(name = "上月结转")

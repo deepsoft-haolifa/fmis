@@ -416,4 +416,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         file_number is not null and file_number like concat('HL-',YEAR(NOW()),'-%') and length(file_number)=12
     </select>
 
+
+    <select id="selectCustomerAll"  resultMap="BizCustomerResult">
+        <include refid="selectBizCustomerVo"/>
+    </select>
+
 </mapper>

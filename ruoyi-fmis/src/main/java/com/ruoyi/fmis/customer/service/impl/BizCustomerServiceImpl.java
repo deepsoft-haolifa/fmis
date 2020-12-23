@@ -36,6 +36,7 @@ public class BizCustomerServiceImpl implements IBizCustomerService {
 
     @Autowired
     private BizProcessDataMapper bizProcessDataMapper;
+
     /**
      * 查询客户
      *
@@ -58,6 +59,7 @@ public class BizCustomerServiceImpl implements IBizCustomerService {
     public List<BizCustomer> selectBizCustomerList(BizCustomer bizCustomer) {
         return bizCustomerMapper.selectBizCustomerList(bizCustomer);
     }
+
     @Override
     public List<BizCustomer> selectBizCustomerListNoAuth(BizCustomer bizCustomer) {
         return bizCustomerMapper.selectBizCustomerList(bizCustomer);
@@ -67,6 +69,7 @@ public class BizCustomerServiceImpl implements IBizCustomerService {
     public List<BizCustomer> selectBizCustomerSelfList(BizCustomer bizCustomer) {
         return bizCustomerMapper.selectBizCustomerSelfList(bizCustomer);
     }
+
     /**
      * 新增客户
      *
@@ -125,7 +128,7 @@ public class BizCustomerServiceImpl implements IBizCustomerService {
      * 更新客户类别任务
      */
     @Override
-    public void updateCustomerLeverJob () {
+    public void updateCustomerLeverJob() {
         BizProcessData queryBizProcessData = new BizProcessData();
         queryBizProcessData.setBizId(BizConstants.BIZ_contract);
         queryBizProcessData.setRoleType("0");
@@ -148,7 +151,7 @@ public class BizCustomerServiceImpl implements IBizCustomerService {
                             //非无效客户
                             if (!"5".equals(customerLevel)) {
                                 bizCustomer.setCustomerLevel("1");
-                                if (DateUtils.getDatePoorDay(now,recordDateD) >= 365) {
+                                if (DateUtils.getDatePoorDay(now, recordDateD) >= 365) {
                                     bizCustomer.setCustomerLevel("2");
                                 }
                                 bizCustomerMapper.updateBizCustomer(bizCustomer);
@@ -161,4 +164,12 @@ public class BizCustomerServiceImpl implements IBizCustomerService {
         }
     }
 
+    /**
+     * 获取客户列表（all）
+     *
+     */
+    @Override
+    public List<BizCustomer> selectCustomerAll() {
+        return bizCustomerMapper.selectCustomerAll();
+    }
 }
