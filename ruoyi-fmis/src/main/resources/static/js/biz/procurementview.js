@@ -137,9 +137,10 @@ function saveTest (rowId,childId,paramterId,dataId,contractNo,statusId,stayId,st
         var noNum = r.noNum;
         var id = r.testId;
         console.log("id=" + id);
-        if ($.common.isEmpty(id) || id == 0) {
+        totalNum = parseFloat(FloatAdd(totalNum,FloatAdd(yesNum,noNum))).toFixed(0);
+        /*if ($.common.isEmpty(id) || id == 0) {
             totalNum = parseFloat(FloatAdd(totalNum,FloatAdd(yesNum,noNum))).toFixed(0);
-        }
+        }*/
 
     }
     console.log("totalNum=" + totalNum + " totalNumAll=" + stayNum);
@@ -700,5 +701,3 @@ $(function() {
     };
     $("#bootstrap-table-pa").bootstrapTable(options4);
 });
-
-

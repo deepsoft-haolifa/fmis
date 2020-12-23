@@ -301,6 +301,8 @@ public class BizProcessDataProcurementController extends BaseController {
         int insertReturn = bizProcessDataService.insertBizProcessData(bizProcessData);
         Long dataId = bizProcessData.getDataId();
         List<String> dataIds = new ArrayList<>();
+        //合并的是同一个合同还是不同合同的
+        Map<String,Integer> dataIdCount = new HashMap<>();
         //此次合并数量
         int count = 0;
         if (StringUtils.isNotEmpty(productArrayStr)) {
@@ -311,7 +313,12 @@ public class BizProcessDataProcurementController extends BaseController {
                 dataIds.add(bizDataStatus.getString3());
                 bizDataStatus.setString4(bizProcessData.getDataId().toString());
                 bizDataStatusService.insertBizDataStatus(bizDataStatus);
-                count++;
+                if (dataIdCount.containsKey(bizDataStatus.getString3())) {
+                    int idCount =  dataIdCount.get(bizDataStatus.getString3()) + 1;
+                    dataIdCount.put(bizDataStatus.getString3(), idCount);
+                } else {
+                    dataIdCount.put(bizDataStatus.getString3(), 1);
+                }
             }
         }
 
@@ -325,7 +332,7 @@ public class BizProcessDataProcurementController extends BaseController {
             bizProcessData1.setBizId("procurement");
             bizProcessData1.setString3(bizProcessData2.getString1());
             List<BizProcessData> list = bizProcessDataService.selectBizProcessDataListCg(bizProcessData1);
-            setXSStatus(dataIds, list.size(), count);
+            setXSStatus(dataIds, list.size(), dataIdCount.get(string));
         }
 
         setContractNo(bizProcessData,productArrayStr);
@@ -922,7 +929,7 @@ public class BizProcessDataProcurementController extends BaseController {
             String string6Name = "";
             BizSuppliers bizSuppliers = null;
             if (StringUtils.isNotEmpty(string6)) {
-                 bizSuppliers = bizSuppliersService.selectBizSuppliersById(Long.parseLong(string6));
+                bizSuppliers = bizSuppliersService.selectBizSuppliersById(Long.parseLong(string6));
                 if (bizSuppliers != null) {
                     string6Name = bizSuppliers.getName();
                 }
