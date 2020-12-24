@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.fmis.data.mapper.BizProcessDataMapper">
-    
+
     <resultMap type="BizProcessData" id="BizProcessDataResult">
         <result property="dataId"    column="data_id"    />
         <result property="bizDataId"    column="biz_data_id"    />
@@ -95,7 +95,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectBizProcessDataList" parameterType="BizProcessData" resultMap="BizProcessDataResult">
         <include refid="selectBizProcessDataVo"/>
-        <where>  
+        <where>
             <if test="bizDataId != null "> and biz_data_id = #{bizDataId}</if>
             <if test="bizId != null  and bizId != ''"> and biz_id = #{bizId}</if>
             <if test="normalFlag != null  and normalFlag != ''"> and normal_flag = #{normalFlag}</if>
@@ -195,7 +195,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="datetime5 != null "> and datetime5 = #{datetime5}</if>
             <if test="status != null  and status != ''"> and status = #{status}</if>
         </where>
-         group  by q.data_id
+        group  by q.data_id
     </select>
 
 
@@ -770,7 +770,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectBizProcessDataVo"/>
         where data_id = #{dataId}
     </select>
-        
+
     <insert id="insertBizProcessData" parameterType="BizProcessData" useGeneratedKeys="true" keyProperty="dataId">
         insert into biz_process_data
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -845,7 +845,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null ">create_time,</if>
             <if test="updateBy != null  and updateBy != ''">update_by,</if>
             <if test="updateTime != null ">update_time,</if>
-         </trim>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="bizDataId != null ">#{bizDataId},</if>
             <if test="bizId != null  and bizId != ''">#{bizId},</if>
@@ -918,7 +918,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null ">#{createTime},</if>
             <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
             <if test="updateTime != null ">#{updateTime},</if>
-         </trim>
+        </trim>
     </insert>
 
     <update id="updateBizProcessData" parameterType="BizProcessData">
@@ -1003,7 +1003,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteBizProcessDataByIds" parameterType="String">
-        delete from biz_process_data where data_id in 
+        delete from biz_process_data where data_id in
         <foreach item="dataId" collection="array" open="(" separator="," close=")">
             #{dataId}
         </foreach>
