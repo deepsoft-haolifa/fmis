@@ -28,7 +28,7 @@
             <div class="col-sm-8">
                 <div class="input-group date">
                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                    <input name="operateDate" th:value="${#dates.format(operateDate, 'yyyy-MM-dd')}"
+                    <input name="operateDate" th:value="${#dates.format(bizBill.operateDate, 'yyyy-MM-dd')}"
                            class="form-control" placeholder="yyyy-MM-dd" type="text">
                 </div>
             </div>
@@ -67,7 +67,7 @@
                 <select name="payCompany" class="form-control m-b">
                     <option value="">请选择</option>
                     <option th:each="customer : ${customerList}" th:text="${customer.name}"
-                            th:value="${customer.name}" th:field="*{payCompany}"></option>
+                            th:value="${customer.customerId}" th:field="*{payCompany}"></option>
                 </select>
             </div>
         </div>
@@ -132,7 +132,7 @@
 </div>
 <th:block th:include="include :: footer"/>
 <th:block th:include="include :: datetimepicker-js"/>
-<th:block th:include="include :: select2-css"/>
+<th:block th:include="include :: select2-js"/>
 <script type="text/javascript">
     var prefix = ctx + "finance/bankBill";
     $("#form-bill-edit").validate({

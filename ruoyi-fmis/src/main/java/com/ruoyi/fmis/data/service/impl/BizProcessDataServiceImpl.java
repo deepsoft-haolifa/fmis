@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.ruoyi.common.annotation.DataScope;
 import com.ruoyi.common.config.RedisUtil;
@@ -79,8 +80,9 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
 
     /**
      * 类别查询
-     *  产品信息
-     *  备选产品信息
+     * 产品信息
+     * 备选产品信息
+     *
      * @param bizProcessData
      * @return
      */
@@ -461,6 +463,7 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
 
     /**
      * 查询产品信息
+     *
      * @param bizProcessData
      * @return
      */
@@ -728,6 +731,7 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
     public List<BizProcessData> selectBizProcessDataList(BizProcessData bizProcessData) {
         return bizProcessDataMapper.selectBizProcessDataList(bizProcessData);
     }
+
     @Override
     public List<BizProcessData> selectBizProcessDataListCg(BizProcessData bizProcessData) {
         return bizProcessDataMapper.selectBizProcessDataListCg(bizProcessData);
@@ -744,9 +748,13 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
     public List<BizProcessData> selectBizProcessDataListXs(BizProcessData bizProcessData) {
         return bizProcessDataMapper.selectBizProcessDataListXs(bizProcessData);
     }
+
     @Override
     public List<BizProcessData> selectBizProcessDataListRefBill(BizProcessData bizProcessData) {
-        return bizProcessDataMapper.selectBizProcessDataListRefBill(bizProcessData);
+        // 如果已付金额=合同金额，则不显示
+        List<BizProcessData> list = bizProcessDataMapper.selectBizProcessDataListRefBill(bizProcessData);
+        list = list.stream().filter(e -> !e.getBillAmount().equals(e.getPrice1())).collect(Collectors.toList());
+        return list;
     }
 
     @Override
@@ -945,22 +953,22 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
         BizProcessChild queryBizProcessChild = new BizProcessChild();
         queryBizProcessChild.setDataId(dataId);
         List<BizProcessChild> bizProcessChildList = bizProcessChildService.selectBizProcessChildList(queryBizProcessChild);
-       if(!CollectionUtils.isEmpty(bizProcessChildList)) {
-           for (BizProcessChild child : bizProcessChildList) {
-               BizPayPlan bizPayPlan = new BizPayPlan();
-               bizPayPlan.setPayDataId(dataId);
-               bizPayPlan.setApplyPayCompany(child.getString3());
-               bizPayPlan.setApplyCollectionCompany(bizProcessData.getString1());
-               bizPayPlan.setApplyRemark(child.getRemark());
-               bizPayPlan.setApplyAmount(child.getPrice1());
-               bizPayPlan.setApplyDate(bizProcessData.getDatetime1());
-               bizPayPlan.setContractNo(child.getString2());
-               bizPayPlan.setContractId(child.getString1());
-               bizPayPlan.setApplyNo("PP" + DateUtils.dateTimeNow() + RandomStringUtils.randomNumeric(3));
-               bizPayPlan.setCreateTime(DateUtils.getNowDate());
-               bizPayPlan.setCreateBy(ShiroUtils.getUserId().toString());
-               bizPayPlanService.insertBizPayPlan(bizPayPlan);
-           }
-       }
+        if (!CollectionUtils.isEmpty(bizProcessChildList)) {
+            for (BizProcessChild child : bizProcessChildList) {
+                BizPayPlan bizPayPlan = new BizPayPlan();
+                bizPayPlan.setPayDataId(dataId);
+                bizPayPlan.setApplyPayCompany(child.getString3());
+                bizPayPlan.setApplyCollectionCompany(bizProcessData.getString1());
+                bizPayPlan.setApplyRemark(child.getRemark());
+                bizPayPlan.setApplyAmount(child.getPrice1());
+                bizPayPlan.setApplyDate(bizProcessData.getDatetime1());
+                bizPayPlan.setContractNo(child.getString2());
+                bizPayPlan.setContractId(child.getString1());
+                bizPayPlan.setApplyNo("PP" + DateUtils.dateTimeNow() + RandomStringUtils.randomNumeric(3));
+                bizPayPlan.setCreateTime(DateUtils.getNowDate());
+                bizPayPlan.setCreateBy(ShiroUtils.getUserId().toString());
+                bizPayPlanService.insertBizPayPlan(bizPayPlan);
+            }
+        }
     }
 }

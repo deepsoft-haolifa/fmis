@@ -1,7 +1,15 @@
 package com.ruoyi.fmis.finance.service.impl;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.fmis.customer.domain.BizCustomer;
+import com.ruoyi.fmis.customer.service.IBizCustomerService;
+import com.ruoyi.framework.util.ShiroUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.fmis.finance.mapper.BizBankBillMapper;
@@ -19,6 +27,8 @@ import com.ruoyi.common.core.text.Convert;
 public class BizBankBillServiceImpl implements IBizBankBillService {
     @Autowired
     private BizBankBillMapper bizBankBillMapper;
+    @Autowired
+    private IBizCustomerService customerService;
 
     /**
      * 查询银行日记账
@@ -39,7 +49,19 @@ public class BizBankBillServiceImpl implements IBizBankBillService {
      */
     @Override
     public List<BizBankBill> selectBizBankBillList(BizBankBill bizBankBill) {
-        return bizBankBillMapper.selectBizBankBillList(bizBankBill);
+        List<BizBankBill> bizBankBills = bizBankBillMapper.selectBizBankBillList(bizBankBill);
+        // 如果是记账是收款；需要转义一下表中的付款单位，也就是客户的名称
+        Set<String> customerIdSet = bizBankBills.stream().filter(e -> "1".equals(e.getType())).map(BizBankBill::getPayCompany).collect(Collectors.toSet());
+        List<BizCustomer> bizCustomers = customerService.selectCustomerAll(customerIdSet);
+        if (CollectionUtils.isNotEmpty(bizCustomers)) {
+            Map<Long, String> customerMap = bizCustomers.stream().collect(Collectors.toMap(BizCustomer::getCustomerId, BizCustomer::getName));
+            bizBankBills.forEach(e -> {
+                if ("1".equals(e.getType())) {
+                    e.setPayCompany(customerMap.get(Long.valueOf(e.getPayCompany())));
+                }
+            });
+        }
+        return bizBankBills;
     }
 
     /**
@@ -51,6 +73,7 @@ public class BizBankBillServiceImpl implements IBizBankBillService {
     @Override
     public int insertBizBankBill(BizBankBill bizBankBill) {
         bizBankBill.setCreateTime(DateUtils.getNowDate());
+        bizBankBill.setCreateBy(ShiroUtils.getUserId().toString());
         return bizBankBillMapper.insertBizBankBill(bizBankBill);
     }
 
@@ -63,6 +86,7 @@ public class BizBankBillServiceImpl implements IBizBankBillService {
     @Override
     public int updateBizBankBill(BizBankBill bizBankBill) {
         bizBankBill.setUpdateTime(DateUtils.getNowDate());
+        bizBankBill.setUpdateBy(ShiroUtils.getUserId().toString());
         return bizBankBillMapper.updateBizBankBill(bizBankBill);
     }
 

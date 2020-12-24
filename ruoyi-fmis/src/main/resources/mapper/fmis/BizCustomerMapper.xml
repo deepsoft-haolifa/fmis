@@ -1,62 +1,62 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.fmis.customer.mapper.BizCustomerMapper">
-    
+
     <resultMap type="BizCustomer" id="BizCustomerResult">
-        <result property="customerId"    column="customer_id"    />
-        <result property="recordDate"    column="record_date"    />
-        <result property="companyCode"    column="company_code"    />
-        <result property="area"    column="area"    />
-        <result property="recordCode"    column="record_code"    />
-        <result property="ownerUserId"    column="owner_user_id"    />
-        <result property="name"    column="name"    />
-        <result property="projectAme"    column="project_ame"    />
-        <result property="contactName"    column="contact_name"    />
-        <result property="contactPosition"    column="contact_position"    />
-        <result property="contactPhone"    column="contact_phone"    />
-        <result property="contactEmail"    column="contact_email"    />
-        <result property="brand"    column="brand"    />
-        <result property="info"    column="info"    />
-        <result property="productInfo"    column="product_info"    />
-        <result property="remark"    column="remark"    />
-        <result property="status"    column="status"    />
-        <result property="delFlag"    column="del_flag"    />
-        <result property="createBy"    column="create_by"    />
-        <result property="createTime"    column="create_time"    />
-        <result property="updateBy"    column="update_by"    />
-        <result property="updateTime"    column="update_time"    />
+        <result property="customerId" column="customer_id"/>
+        <result property="recordDate" column="record_date"/>
+        <result property="companyCode" column="company_code"/>
+        <result property="area" column="area"/>
+        <result property="recordCode" column="record_code"/>
+        <result property="ownerUserId" column="owner_user_id"/>
+        <result property="name" column="name"/>
+        <result property="projectAme" column="project_ame"/>
+        <result property="contactName" column="contact_name"/>
+        <result property="contactPosition" column="contact_position"/>
+        <result property="contactPhone" column="contact_phone"/>
+        <result property="contactEmail" column="contact_email"/>
+        <result property="brand" column="brand"/>
+        <result property="info" column="info"/>
+        <result property="productInfo" column="product_info"/>
+        <result property="remark" column="remark"/>
+        <result property="status" column="status"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
 
-        <result property="areaCode"    column="area_code"    />
-        <result property="source"    column="source"    />
-        <result property="recordType"    column="record_type"    />
-        <result property="recordNum"    column="record_num"    />
-        <result property="telephone"    column="telephone"    />
-        <result property="fax"    column="fax"    />
-        <result property="companyAddress"    column="company_address"    />
-        <result property="deptId"    column="dept_id"    />
+        <result property="areaCode" column="area_code"/>
+        <result property="source" column="source"/>
+        <result property="recordType" column="record_type"/>
+        <result property="recordNum" column="record_num"/>
+        <result property="telephone" column="telephone"/>
+        <result property="fax" column="fax"/>
+        <result property="companyAddress" column="company_address"/>
+        <result property="deptId" column="dept_id"/>
 
-        <result property="customerLevel"    column="customer_level"    />
-        <result property="codeName"    column="code_name"    />
-        <result property="industryDivision"    column="industry_division"    />
-        <result property="allocationDate"    column="allocation_date"    />
-        <result property="assignNumber"    column="assign_number"    />
-        <result property="fileNumber"    column="file_number"    />
-        <result property="filePaths"    column="file_paths"    />
+        <result property="customerLevel" column="customer_level"/>
+        <result property="codeName" column="code_name"/>
+        <result property="industryDivision" column="industry_division"/>
+        <result property="allocationDate" column="allocation_date"/>
+        <result property="assignNumber" column="assign_number"/>
+        <result property="fileNumber" column="file_number"/>
+        <result property="filePaths" column="file_paths"/>
 
-        <result property="newStatus"    column="new_status"    />
+        <result property="newStatus" column="new_status"/>
 
-        <result property="string1"    column="string1"    />
-        <result property="string2"    column="string2"    />
-        <result property="string3"    column="string3"    />
-        <result property="string4"    column="string4"    />
-        <result property="string5"    column="string5"    />
-        <result property="string6"    column="string6"    />
-        <result property="string7"    column="string7"    />
-        <result property="string8"    column="string8"    />
-        <result property="string9"    column="string9"    />
-        <result property="string10"    column="string10"    />
+        <result property="string1" column="string1"/>
+        <result property="string2" column="string2"/>
+        <result property="string3" column="string3"/>
+        <result property="string4" column="string4"/>
+        <result property="string5" column="string5"/>
+        <result property="string6" column="string6"/>
+        <result property="string7" column="string7"/>
+        <result property="string8" column="string8"/>
+        <result property="string9" column="string9"/>
+        <result property="string10" column="string10"/>
     </resultMap>
 
     <sql id="selectBizCustomerVo">
@@ -68,11 +68,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </sql>
 
     <sql id="selectBizCustomerDictVo">
-        select c.customer_id, c.record_date, c.company_code, c.area, c.record_code, u.user_name as owner_user_id, c.name, c.project_ame, c.contact_name, c.contact_position, c.contact_phone, c.contact_email,
-        c.brand, c.info, c.product_info, c.remark, c.status, c.del_flag, c.create_by, c.create_time, c.update_by, c.update_time,
-        c.area_code,c.source,c.record_type,c.record_num,c.telephone,c.fax,c.company_address,c.dept_id,dt.dept_name deptName,
+        select c.customer_id, c.record_date, c.company_code, c.area, c.record_code, u.user_name as owner_user_id,
+        c.name, c.project_ame, c.contact_name, c.contact_position, c.contact_phone, c.contact_email,
+        c.brand, c.info, c.product_info, c.remark, c.status, c.del_flag, c.create_by, c.create_time, c.update_by,
+        c.update_time,
+        c.area_code,c.source,c.record_type,c.record_num,c.telephone,c.fax,c.company_address,c.dept_id,dt.dept_name
+        deptName,
         c.customer_level,c.code_name,c.industry_division,c.allocation_date,c.assign_number,c.file_number,c.file_paths,c.new_status,
-        ad.code_name as areaCodeName,c.string1,c.string2,c.string3,c.string4,c.string5,c.string6,c.string7,c.string8,c.string9,c.string10,
+        ad.code_name as
+        areaCodeName,c.string1,c.string2,c.string3,c.string4,c.string5,c.string6,c.string7,c.string8,c.string9,c.string10,
         c.string11,c.string12,c.string13,c.string14,c.string15,c.string16,c.string17,c.string18,c.string19,c.string20
 
         from biz_customer c
@@ -93,43 +97,46 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectBizCustomerList" parameterType="BizCustomer" resultMap="BizCustomerResult">
         <include refid="selectBizCustomerDictVo"/>
-            <if test="recordDate != null and recordDate != ''"> and c.record_date = #{recordDate}</if>
-            <if test="companyCode != null  and companyCode != ''"> and c.company_code like concat('%', #{companyCode}, '%')</if>
-            <if test="area != null  and area != ''"> and c.area = #{area}</if>
-            <if test="recordCode != null  and recordCode != ''"> and c.record_code like concat('%', #{recordCode}, '%')</if>
+        <if test="recordDate != null and recordDate != ''">and c.record_date = #{recordDate}</if>
+        <if test="companyCode != null  and companyCode != ''">and c.company_code like concat('%', #{companyCode}, '%')
+        </if>
+        <if test="area != null  and area != ''">and c.area = #{area}</if>
+        <if test="recordCode != null  and recordCode != ''">and c.record_code like concat('%', #{recordCode}, '%')</if>
 
-            <if test="name != null  and name != ''"> and c.name like concat('%', #{name}, '%')</if>
-            <if test="projectAme != null  and projectAme != ''"> and c.project_ame like concat('%', #{projectAme}, '%') </if>
-            <if test="contactName != null  and contactName != ''"> and c.contact_name like concat('%', #{contactName}, '%')</if>
-            <if test="contactPosition != null  and contactPosition != ''"> and c.contact_position = #{contactPosition}</if>
-            <if test="contactPhone != null  and contactPhone != ''"> and c.contact_phone = #{contactPhone}</if>
-            <if test="contactEmail != null  and contactEmail != ''"> and c.contact_email = #{contactEmail}</if>
-            <if test="brand != null  and brand != ''"> and c.brand = #{brand}</if>
-            <if test="info != null  and info != ''"> and c.info = #{info}</if>
-            <if test="productInfo != null  and productInfo != ''"> and c.product_info like concat('%', #{productInfo}, '%')</if>
-            <if test="status != null  and status != ''"> and c.status = #{status}</if>
+        <if test="name != null  and name != ''">and c.name like concat('%', #{name}, '%')</if>
+        <if test="projectAme != null  and projectAme != ''">and c.project_ame like concat('%', #{projectAme}, '%')</if>
+        <if test="contactName != null  and contactName != ''">and c.contact_name like concat('%', #{contactName}, '%')
+        </if>
+        <if test="contactPosition != null  and contactPosition != ''">and c.contact_position = #{contactPosition}</if>
+        <if test="contactPhone != null  and contactPhone != ''">and c.contact_phone = #{contactPhone}</if>
+        <if test="contactEmail != null  and contactEmail != ''">and c.contact_email = #{contactEmail}</if>
+        <if test="brand != null  and brand != ''">and c.brand = #{brand}</if>
+        <if test="info != null  and info != ''">and c.info = #{info}</if>
+        <if test="productInfo != null  and productInfo != ''">and c.product_info like concat('%', #{productInfo}, '%')
+        </if>
+        <if test="status != null  and status != ''">and c.status = #{status}</if>
 
-            <if test="customerLevel != null  and customerLevel != ''"> and c.customer_level = #{customerLevel}</if>
-            <if test="codeName != null  and codeName != ''"> and c.code_name like concat('%', #{codeName}, '%')</if>
-            <if test="industryDivision != null  and industryDivision != ''"> and c.industry_division = #{industryDivision}</if>
-            <if test="source != null  and source != ''"> and c.source = #{source}</if>
-            <if test="areaCode != null  and areaCode != ''"> and c.area_code = #{areaCode}</if>
-            <if test="ownerUserId != null  and ownerUserId != ''"> and u.user_name like concat('%', #{ownerUserId}, '%')</if>
-        <if test="deptName != null  and deptName != ''"> and dt.dept_name like concat('%', #{deptName}, '%')</if>
+        <if test="customerLevel != null  and customerLevel != ''">and c.customer_level = #{customerLevel}</if>
+        <if test="codeName != null  and codeName != ''">and c.code_name like concat('%', #{codeName}, '%')</if>
+        <if test="industryDivision != null  and industryDivision != ''">and c.industry_division = #{industryDivision}
+        </if>
+        <if test="source != null  and source != ''">and c.source = #{source}</if>
+        <if test="areaCode != null  and areaCode != ''">and c.area_code = #{areaCode}</if>
+        <if test="ownerUserId != null  and ownerUserId != ''">and u.user_name like concat('%', #{ownerUserId}, '%')</if>
+        <if test="deptName != null  and deptName != ''">and dt.dept_name like concat('%', #{deptName}, '%')</if>
 
-          <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+        <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
             AND date_format(c.allocation_date,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
-          </if>
-          <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+        </if>
+        <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
             AND date_format(c.allocation_date,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
-          </if>
+        </if>
 
-            <if test="assignNumber != null  and assignNumber != ''"> and c.assign_number = #{assignNumber}</if>
-            <if test="fileNumber != null  and fileNumber != ''"> and c.file_number like concat('%', #{fileNumber}, '%')</if>
-            <if test="recordType != null  and recordType != ''"> and c.record_type = #{recordType}</if>
+        <if test="assignNumber != null  and assignNumber != ''">and c.assign_number = #{assignNumber}</if>
+        <if test="fileNumber != null  and fileNumber != ''">and c.file_number like concat('%', #{fileNumber}, '%')</if>
+        <if test="recordType != null  and recordType != ''">and c.record_type = #{recordType}</if>
         order by c.create_time desc
     </select>
-
 
 
     <sql id="selectBizCustomerDictSelfVo">
@@ -157,29 +164,33 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectBizCustomerSelfList" parameterType="BizCustomer" resultMap="BizCustomerResult">
         <include refid="selectBizCustomerDictSelfVo"/>
-        <if test="recordDate != null and recordDate != ''"> and c.record_date = #{recordDate}</if>
-        <if test="companyCode != null  and companyCode != ''"> and c.company_code like concat('%', #{companyCode}, '%')</if>
-        <if test="area != null  and area != ''"> and c.area = #{area}</if>
-        <if test="recordCode != null  and recordCode != ''"> and c.record_code like concat('%', #{recordCode}, '%')</if>
+        <if test="recordDate != null and recordDate != ''">and c.record_date = #{recordDate}</if>
+        <if test="companyCode != null  and companyCode != ''">and c.company_code like concat('%', #{companyCode}, '%')
+        </if>
+        <if test="area != null  and area != ''">and c.area = #{area}</if>
+        <if test="recordCode != null  and recordCode != ''">and c.record_code like concat('%', #{recordCode}, '%')</if>
 
-        <if test="name != null  and name != ''"> and c.name like concat('%', #{name}, '%')</if>
-        <if test="projectAme != null  and projectAme != ''"> and c.project_ame like concat('%', #{projectAme}, '%') </if>
-        <if test="contactName != null  and contactName != ''"> and c.contact_name like concat('%', #{contactName}, '%')</if>
-        <if test="contactPosition != null  and contactPosition != ''"> and c.contact_position = #{contactPosition}</if>
-        <if test="contactPhone != null  and contactPhone != ''"> and c.contact_phone = #{contactPhone}</if>
-        <if test="contactEmail != null  and contactEmail != ''"> and c.contact_email = #{contactEmail}</if>
-        <if test="brand != null  and brand != ''"> and c.brand = #{brand}</if>
-        <if test="info != null  and info != ''"> and c.info = #{info}</if>
-        <if test="productInfo != null  and productInfo != ''"> and c.product_info like concat('%', #{productInfo}, '%')</if>
-        <if test="status != null  and status != ''"> and c.status = #{status}</if>
+        <if test="name != null  and name != ''">and c.name like concat('%', #{name}, '%')</if>
+        <if test="projectAme != null  and projectAme != ''">and c.project_ame like concat('%', #{projectAme}, '%')</if>
+        <if test="contactName != null  and contactName != ''">and c.contact_name like concat('%', #{contactName}, '%')
+        </if>
+        <if test="contactPosition != null  and contactPosition != ''">and c.contact_position = #{contactPosition}</if>
+        <if test="contactPhone != null  and contactPhone != ''">and c.contact_phone = #{contactPhone}</if>
+        <if test="contactEmail != null  and contactEmail != ''">and c.contact_email = #{contactEmail}</if>
+        <if test="brand != null  and brand != ''">and c.brand = #{brand}</if>
+        <if test="info != null  and info != ''">and c.info = #{info}</if>
+        <if test="productInfo != null  and productInfo != ''">and c.product_info like concat('%', #{productInfo}, '%')
+        </if>
+        <if test="status != null  and status != ''">and c.status = #{status}</if>
 
-        <if test="customerLevel != null  and customerLevel != ''"> and c.customer_level = #{customerLevel}</if>
-        <if test="codeName != null  and codeName != ''"> and c.code_name like concat('%', #{codeName}, '%')</if>
-        <if test="industryDivision != null  and industryDivision != ''"> and c.industry_division = #{industryDivision}</if>
-        <if test="source != null  and source != ''"> and c.source = #{source}</if>
-        <if test="areaCode != null  and areaCode != ''"> and c.area_code = #{areaCode}</if>
-        <if test="ownerUserId != null  and ownerUserId != ''"> and u.user_name like concat('%', #{ownerUserId}, '%')</if>
-        <if test="deptName != null  and deptName != ''"> and dt.dept_name like concat('%', #{deptName}, '%')</if>
+        <if test="customerLevel != null  and customerLevel != ''">and c.customer_level = #{customerLevel}</if>
+        <if test="codeName != null  and codeName != ''">and c.code_name like concat('%', #{codeName}, '%')</if>
+        <if test="industryDivision != null  and industryDivision != ''">and c.industry_division = #{industryDivision}
+        </if>
+        <if test="source != null  and source != ''">and c.source = #{source}</if>
+        <if test="areaCode != null  and areaCode != ''">and c.area_code = #{areaCode}</if>
+        <if test="ownerUserId != null  and ownerUserId != ''">and u.user_name like concat('%', #{ownerUserId}, '%')</if>
+        <if test="deptName != null  and deptName != ''">and dt.dept_name like concat('%', #{deptName}, '%')</if>
 
         <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
             AND date_format(c.allocation_date,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
@@ -188,18 +199,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             AND date_format(c.allocation_date,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
         </if>
 
-        <if test="assignNumber != null  and assignNumber != ''"> and c.assign_number = #{assignNumber}</if>
-        <if test="fileNumber != null  and fileNumber != ''"> and c.file_number like concat('%', #{fileNumber}, '%')</if>
-        <if test="recordType != null  and recordType != ''"> and c.record_type = #{recordType}</if>
+        <if test="assignNumber != null  and assignNumber != ''">and c.assign_number = #{assignNumber}</if>
+        <if test="fileNumber != null  and fileNumber != ''">and c.file_number like concat('%', #{fileNumber}, '%')</if>
+        <if test="recordType != null  and recordType != ''">and c.record_type = #{recordType}</if>
         order by c.create_time desc
     </select>
 
-    
+
     <select id="selectBizCustomerById" parameterType="Long" resultMap="BizCustomerResult">
         <include refid="selectBizCustomerVo"/>
         where customer_id = #{customerId}
     </select>
-        
+
     <insert id="insertBizCustomer" parameterType="BizCustomer" useGeneratedKeys="true" keyProperty="customerId">
         insert into biz_customer
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -264,7 +275,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="string18 != null  and string18 != ''">string18,</if>
             <if test="string19 != null  and string19 != ''">string19,</if>
             <if test="string20 != null  and string20 != ''">string20,</if>
-         </trim>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="recordDate != null ">#{recordDate},</if>
             <if test="companyCode != null  and companyCode != ''">#{companyCode},</if>
@@ -327,7 +338,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="string18 != null  and string18 != ''">#{string18},</if>
             <if test="string19 != null  and string19 != ''">#{string19},</if>
             <if test="string20 != null  and string20 != ''">#{string20},</if>
-         </trim>
+        </trim>
     </insert>
 
     <update id="updateBizCustomer" parameterType="BizCustomer">
@@ -404,14 +415,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteBizCustomerByIds" parameterType="String">
-        delete from biz_customer where customer_id in 
+        delete from biz_customer where customer_id in
         <foreach item="customerId" collection="array" open="(" separator="," close=")">
             #{customerId}
         </foreach>
     </delete>
 
 
-    <select id="selectCustomerFileNumber"  resultType="Long">
+    <select id="selectCustomerFileNumber" resultType="Long">
         select (max(CONVERT(right(file_number,4),UNSIGNED INTEGER)) + 1) as fileNumber from biz_customer where
         file_number is not null and file_number like concat('HL-',YEAR(NOW()),'-%') and length(file_number)=12
     </select>
@@ -419,6 +430,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectCustomerAll"  resultMap="BizCustomerResult">
         <include refid="selectBizCustomerVo"/>
+        <if test="customerIds!=null and customerIds.size>0">
+            where customer_id in
+            <foreach item="customerId" collection="customerIds" open="(" separator="," close=")">
+                #{customerId}
+            </foreach>
+        </if>
     </select>
 
 </mapper>

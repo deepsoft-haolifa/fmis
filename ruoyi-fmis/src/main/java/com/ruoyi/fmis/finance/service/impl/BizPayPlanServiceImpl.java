@@ -2,6 +2,7 @@ package com.ruoyi.fmis.finance.service.impl;
 
 import java.util.List;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.framework.util.ShiroUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.fmis.finance.mapper.BizPayPlanMapper;
@@ -51,6 +52,8 @@ public class BizPayPlanServiceImpl implements IBizPayPlanService {
     @Override
     public int insertBizPayPlan(BizPayPlan bizPayPlan) {
         bizPayPlan.setCreateTime(DateUtils.getNowDate());
+        bizPayPlan.setCreateBy(ShiroUtils.getUserId().toString());
+
         return bizPayPlanMapper.insertBizPayPlan(bizPayPlan);
     }
 
@@ -63,6 +66,8 @@ public class BizPayPlanServiceImpl implements IBizPayPlanService {
     @Override
     public int updateBizPayPlan(BizPayPlan bizPayPlan) {
         bizPayPlan.setUpdateTime(DateUtils.getNowDate());
+        bizPayPlan.setUpdateBy(ShiroUtils.getUserId().toString());
+
         return bizPayPlanMapper.updateBizPayPlan(bizPayPlan);
     }
 

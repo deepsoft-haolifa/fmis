@@ -71,7 +71,7 @@ public class BizBankBillController extends BaseController {
     @GetMapping("/addCollect")
     public String addCollect(ModelMap mmap) {
         // 收款单的付款单位--客户管理
-        List<BizCustomer> customerList = customerService.selectCustomerAll();
+        List<BizCustomer> customerList = customerService.selectCustomerAll(null);
         mmap.put("customerList", customerList);
         return prefix + "/addCollect";
     }
@@ -95,7 +95,7 @@ public class BizBankBillController extends BaseController {
         BizBankBill bizBankBill = bizBankBillService.selectBizBankBillById(billId);
         mmap.put("bizBill", bizBankBill);
         // 收款单的付款单位--客户管理
-        List<BizCustomer> customerList = customerService.selectCustomerAll();
+        List<BizCustomer> customerList = customerService.selectCustomerAll(null);
         mmap.put("customerList", customerList);
 
         return prefix + "/editCollect";
@@ -116,9 +116,6 @@ public class BizBankBillController extends BaseController {
      */
     @GetMapping("/addPay")
     public String addPay(ModelMap mmap) {
-        // 收款单的付款单位--客户管理
-        List<BizCustomer> customerList = customerService.selectCustomerAll();
-        mmap.put("customerList", customerList);
         return prefix + "/addPay";
     }
 
@@ -140,10 +137,6 @@ public class BizBankBillController extends BaseController {
     public String edit(@PathVariable("billId") Long billId, ModelMap mmap) {
         BizBankBill bizBankBill = bizBankBillService.selectBizBankBillById(billId);
         mmap.put("bizBill", bizBankBill);
-        // 收款单的付款单位--客户管理
-        List<BizCustomer> customerList = customerService.selectCustomerAll();
-        mmap.put("customerList", customerList);
-
         return prefix + "/editPay";
     }
 

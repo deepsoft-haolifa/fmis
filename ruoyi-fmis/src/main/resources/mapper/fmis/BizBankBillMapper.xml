@@ -37,7 +37,7 @@
         from biz_bank_bill b
         left join sys_user u on u.user_id=b.create_by
         left join sys_dept d on d.dept_id=b.dept_id
-        </sql>
+    </sql>
 
     <select id="selectBizBankBillList" parameterType="BizBankBill" resultMap="BizBankBillResult">
         <include refid="selectBizBankBillVo"/>
@@ -101,7 +101,7 @@
             <if test="payWay != null  and payWay != ''">#{payWay},</if>
             <if test="payAccount != null  and payAccount != ''">#{payAccount},</if>
             <if test="payCompany != null  and payCompany != ''">#{payCompany},</if>
-            <if test="collectCompany != null  and collectCompany != ''">#{collect_company},</if>
+            <if test="collectCompany != null  and collectCompany != ''">#{collectCompany},</if>
             <if test="preMonthMoney != null ">#{preMonthMoney},</if>
             <if test="collectionMoney != null ">#{collectionMoney},</if>
             <if test="collectionType != null  and collectionType != ''">#{collectionType},</if>

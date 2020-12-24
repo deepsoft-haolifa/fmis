@@ -34,6 +34,7 @@
         left join sys_dept dt1 on q.string22=dt1.dept_id
         left join biz_process_child bpc on bpc.data_id=q.data_id
         <include refid="ReceivableWhere"></include>
+        group by q.data_id
         order by q.create_time desc
     </select>
 

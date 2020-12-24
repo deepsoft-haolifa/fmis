@@ -81,62 +81,14 @@ public class BizBillContractController extends BaseController {
     @PostMapping("/contractList")
     @ResponseBody
     public TableDataInfo contractList(BizProcessData bizProcessData) {
-        BizProcessData newBizProcessData = new BizProcessData();
-        String bizId = bizProcessData.getBizId();
+        // 获取银行日记账中 收款 中的付款单位，未付款的完成采购订单
+        Long billId = bizProcessData.getBillId();
+        BizBankBill bizBankBill = bizBankBillService.selectBizBankBillById(billId);
         //采购池
-        newBizProcessData.setBizId(bizId);
-        newBizProcessData.setString13("1");
+        BizProcessData newBizProcessData = new BizProcessData();
+        newBizProcessData.setString2(bizBankBill.getPayCompany());
         newBizProcessData.setBizId(BizConstants.BIZ_contract);
-        if (StringUtils.isNotEmpty(bizProcessData.getBizEditFlag())) {
-            newBizProcessData.setBizEditFlag(bizProcessData.getBizEditFlag());
-            newBizProcessData.setDataId(bizProcessData.getDataId());
-        }
-        //startPage();
         List<BizProcessData> list = bizProcessDataService.selectBizProcessDataListRefBill(newBizProcessData);
-
-        Map<String, SysRole> flowMap = bizProcessDefineService.getRoleFlowMap(bizId);
-        Map<String, SysRole> flowAllMap = bizProcessDefineService.getFlowAllMap(bizId);
-        if (!CollectionUtils.isEmpty(flowMap)) {
-            //计算流程描述
-            for (BizProcessData data : list) {
-                String flowStatus = data.getFlowStatus();
-                //结束标识
-                String normalFlag = data.getNormalFlag();
-                String flowStatusRemark = "待上报";
-                if ("-2".equals(flowStatus)) {
-                    flowStatusRemark = "待上报";
-                } else if ("1".equals(flowStatus)) {
-                    flowStatusRemark = "已上报";
-                } else {
-                    SysRole currentSysRole = CommonUtils.getLikeByMap(flowAllMap, flowStatus.replaceAll("-", ""));
-                    if (currentSysRole == null) {
-                        continue;
-                    }
-                    if (flowStatus.equals(normalFlag)) {
-                        flowStatusRemark = currentSysRole.getRoleName() + "已完成";
-                    } else if (flowStatus.startsWith("-")) {
-                        //不同意标识
-                        flowStatusRemark = currentSysRole.getRoleName() + "不同意";
-                    } else {
-                        flowStatusRemark = currentSysRole.getRoleName() + "同意";
-                    }
-                }
-                data.setFlowStatusRemark(flowStatusRemark);
-                //计算是否可以审批
-                int flowStatusInt = Integer.parseInt(flowStatus);
-                data.setOperationExamineStatus(false);
-                if (flowStatusInt > 0) {
-                    if (!flowStatus.equals(normalFlag)) {
-                        String userFlowStatus = flowMap.keySet().iterator().next();
-                        int userFlowStatusInt = Integer.parseInt(userFlowStatus);
-                        if (userFlowStatusInt == flowStatusInt + 1) {
-                            data.setOperationExamineStatus(true);
-                        }
-
-                    }
-                }
-            }
-        }
         return getDataTable(list);
     }
 
@@ -161,7 +113,21 @@ public class BizBillContractController extends BaseController {
         String remark = getRequest().getParameter("remark");
         String amount = getRequest().getParameter("amount");
 
-        //TODO 判断合同的金额是否够分
+        //判断合同的金额是否够分
+        // 1. 查询合同的总价
+        BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataById(Long.parseLong(dataId));
+        Double price1 = bizProcessData.getPrice1();
+        // 2. 查询该合同已经分解的金额
+        BizBillContract query = new BizBillContract();
+        query.setDataId(Long.parseLong(dataId));
+        List<BizBillContract> bizBillContractList = bizBillContractService.selectBizBillContractList(query);
+        double dataAmount = bizBillContractList.stream().mapToDouble(BizBillContract::getAmount).sum();
+        double v = dataAmount + Double.parseDouble(amount);
+        logger.info("add contract v:{},dataAmount:{},dataId:{}", v, dataAmount, dataId);
+        if (v > price1) {
+            return error("此合同的已付金额+这次分解的金额 大于合同金额");
+        }
+
 
         BizBillContract bizBillContract = new BizBillContract();
         if (!"0".equals(bcId) && StringUtils.isNotEmpty(bcId)) {

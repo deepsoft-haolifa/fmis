@@ -3,6 +3,7 @@ package com.ruoyi.fmis.finance.service;
 import com.ruoyi.fmis.finance.domain.BizBillContract;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * 合同收款(合同分解)Service接口
@@ -18,6 +19,8 @@ public interface IBizBillContractService {
      * @return 合同收款(合同分解)
      */
     public BizBillContract selectBizBillContractById(Long bcId);
+
+    public List<BizBillContract> selectBizBillContractByDataIds(Set<Long> dataIds);
 
     /**
      * 查询合同收款(合同分解)列表

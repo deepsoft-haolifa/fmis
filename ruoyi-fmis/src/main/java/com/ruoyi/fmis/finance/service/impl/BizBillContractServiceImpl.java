@@ -6,10 +6,12 @@ import com.ruoyi.fmis.finance.domain.BizBillContract;
 import com.ruoyi.fmis.finance.mapper.BizBillContractMapper;
 import com.ruoyi.fmis.finance.mapper.extend.BizBillContractExtendMapper;
 import com.ruoyi.fmis.finance.service.IBizBillContractService;
+import com.ruoyi.framework.util.ShiroUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * 合同收款(合同分解)Service业务层处理
@@ -37,6 +39,11 @@ public class BizBillContractServiceImpl implements IBizBillContractService {
         return bizBillContractMapper.selectBizBillContractById(bcId);
     }
 
+    @Override
+    public List<BizBillContract> selectBizBillContractByDataIds(Set<Long> dataIds) {
+        return bizBillContractMapper.selectBizBillContractByDataIds(dataIds);
+    }
+
     /**
      * 查询合同收款(合同分解)列表
      *
@@ -57,6 +64,7 @@ public class BizBillContractServiceImpl implements IBizBillContractService {
     @Override
     public int insertBizBillContract(BizBillContract bizBillContract) {
         bizBillContract.setCreateTime(DateUtils.getNowDate());
+        bizBillContract.setCreateBy(ShiroUtils.getUserId().toString());
         return bizBillContractMapper.insertBizBillContract(bizBillContract);
     }
 
@@ -69,6 +77,8 @@ public class BizBillContractServiceImpl implements IBizBillContractService {
     @Override
     public int updateBizBillContract(BizBillContract bizBillContract) {
         bizBillContract.setUpdateTime(DateUtils.getNowDate());
+        bizBillContract.setUpdateBy(ShiroUtils.getUserId().toString());
+
         return bizBillContractMapper.updateBizBillContract(bizBillContract);
     }
 

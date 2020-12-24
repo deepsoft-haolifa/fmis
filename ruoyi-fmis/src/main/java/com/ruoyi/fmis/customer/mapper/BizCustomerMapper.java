@@ -1,7 +1,10 @@
 package com.ruoyi.fmis.customer.mapper;
 
 import com.ruoyi.fmis.customer.domain.BizCustomer;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
+import java.util.Set;
 
 /**
  * 客户Mapper接口
@@ -63,5 +66,5 @@ public interface BizCustomerMapper {
 
     public Long selectCustomerFileNumber();
 
-    public List<BizCustomer> selectCustomerAll();
+    public List<BizCustomer> selectCustomerAll(@Param("customerIds") Set<String> customerIds);
 }

@@ -62,7 +62,7 @@
                 <select name="payCompany" class="form-control m-b">
                     <option value="">请选择</option>
                     <option th:each="customer : ${customerList}" th:text="${customer.name}"
-                            th:value="${customer.name}"></option>
+                            th:value="${customer.customerId}"></option>
                 </select>
             </div>
         </div>

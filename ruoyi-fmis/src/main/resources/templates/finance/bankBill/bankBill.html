@@ -32,9 +32,11 @@
                         </li>
                         <li class="select-time">
                             <p>日期：</p>
-                            <input type="text" class="time-input" style="width: 80px;" id="startOperateDate" placeholder="开始时间" name="startOperateDate"/>
+                            <input type="text" class="time-input" style="width: 80px;" id="startOperateDate"
+                                   placeholder="开始时间" name="startOperateDate"/>
                             <span>-</span>
-                            <input type="text" class="time-input" style="width: 80px;" id="endOperateDate" placeholder="结束时间" name="endOperateDate"/>
+                            <input type="text" class="time-input" style="width: 80px;" id="endOperateDate"
+                                   placeholder="结束时间" name="endOperateDate"/>
                         </li>
                         <li>
                             <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
@@ -98,6 +100,13 @@
                     title: '序号'
                 },
                 {
+                    field: 'type',
+                    title: '记账类别',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(billTypeDatas, value);
+                    }
+                },
+                {
                     field: 'operateDate',
                     title: '日期'
                 },
@@ -106,15 +115,12 @@
                     title: '凭证号'
                 },
                 {
-                    field: 'type',
-                    title: '记账类别',
-                    formatter: function (value, row, index) {
-                        return $.table.selectDictLabel(billTypeDatas, value);
-                    }
+                    field: 'collectCompany',
+                    title: '收款单位'
                 },
                 {
                     field: 'payCompany',
-                    title: '收、付单位'
+                    title: '付款单位'
                 },
                 {
                     field: 'payAccount',
@@ -130,14 +136,7 @@
                         return $.table.selectDictLabel(payWayDatas, value);
                     }
                 },
-                {
-                    field: 'preMonthMoney',
-                    title: '上月结转'
-                },
-                {
-                    field: 'collectionMoney',
-                    title: '收款'
-                },
+
                 {
                     field: 'collectionType',
                     title: '收款类别',
@@ -146,8 +145,8 @@
                     }
                 },
                 {
-                    field: 'payment',
-                    title: '付款'
+                    field: 'collectionMoney',
+                    title: '收款'
                 },
                 {
                     field: 'paymentType',
@@ -157,12 +156,24 @@
                     }
                 },
                 {
+                    field: 'payment',
+                    title: '付款'
+                },
+
+                {
+                    field: 'preMonthMoney',
+                    title: '上月结转'
+                },
+                {
                     field: 'balance',
                     title: '余额'
                 },
                 {
                     field: 'deptName',
                     title: '部门'
+                },{
+                    field: 'createByName',
+                    title: '经办人'
                 },
                 {
                     field: 'createTime',
@@ -177,9 +188,13 @@
                     align: 'left',
                     formatter: function (value, row, index) {
                         var actions = [];
-                        if(row.type)
-                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="editCollectUrl(\'' + row.billId + '\')"><i class="fa fa-edit"></i> 编辑收款</a> ');
-                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="editPayUrl(\'' + row.billId + '\')"><i class="fa fa-edit"></i> 编辑付款</a> ');
+                        var type = row.type;
+                        if (type == 1) {
+                            actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="editCollectUrl(\'' + row.billId + '\')"><i class="fa fa-edit"></i> 编辑收款</a> ');
+                        }
+                        if (type == 2) {
+                            actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="editPayUrl(\'' + row.billId + '\')"><i class="fa fa-edit"></i> 编辑付款</a> ');
+                        }
                         actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.billId + '\')"><i class="fa fa-remove"></i> 删除</a>');
                         return actions.join('');
                     }
@@ -189,15 +204,18 @@
     });
 
     function addCollectUrl() {
-        $.modal.open("添加收款" , $.table._option.createUrlCollect);
+        $.modal.open("添加收款", $.table._option.createUrlCollect);
     }
+
     function addPayUrl() {
         $.modal.open("添加付款", $.table._option.createUrlPay);
     }
-    function editCollectUrl(id){
+
+    function editCollectUrl(id) {
         $.modal.open("修改收款" + $.table._option.modalName, $.table._option.updateUrlCollect.replace("{id}", id))
     }
-    function editPayUrl(id){
+
+    function editPayUrl(id) {
         $.modal.open("修改付款" + $.table._option.modalName, $.table._option.updateUrlPay.replace("{id}", id))
     }
 </script>

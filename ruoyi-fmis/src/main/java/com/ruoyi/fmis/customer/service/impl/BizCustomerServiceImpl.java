@@ -4,6 +4,7 @@ import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import com.ruoyi.common.annotation.DataScope;
 import com.ruoyi.common.utils.DateUtils;
@@ -166,10 +167,9 @@ public class BizCustomerServiceImpl implements IBizCustomerService {
 
     /**
      * 获取客户列表（all）
-     *
      */
     @Override
-    public List<BizCustomer> selectCustomerAll() {
-        return bizCustomerMapper.selectCustomerAll();
+    public List<BizCustomer> selectCustomerAll(Set<String> customerIdSet) {
+        return bizCustomerMapper.selectCustomerAll(customerIdSet);
     }
 }

@@ -3,6 +3,7 @@ package com.ruoyi.fmis.customer.service;
 import com.ruoyi.fmis.customer.domain.BizCustomer;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * 客户Service接口
@@ -72,5 +73,5 @@ public interface IBizCustomerService {
     /**
      * 所有客户列表
      */
-    public List<BizCustomer> selectCustomerAll();
+    public List<BizCustomer> selectCustomerAll(Set<String> customerIdSet);
 }

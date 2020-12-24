@@ -1,7 +1,10 @@
 package com.ruoyi.fmis.finance.mapper;
 
 import com.ruoyi.fmis.finance.domain.BizBillContract;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
+import java.util.Set;
 
 /**
  * 合同收款(合同分解)Mapper接口
@@ -18,6 +21,7 @@ public interface BizBillContractMapper {
      */
     public BizBillContract selectBizBillContractById(Long bcId);
 
+    public List<BizBillContract> selectBizBillContractByDataIds(@Param("dataIds") Set<Long> dataIds);
     /**
      * 查询合同收款(合同分解)列表
      *

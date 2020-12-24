@@ -5,6 +5,7 @@ import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.fmis.subjects.domain.BizSubjects;
 import com.ruoyi.fmis.subjects.mapper.BizSubjectsMapper;
 import com.ruoyi.fmis.subjects.service.IBizSubjectsService;
+import com.ruoyi.framework.util.ShiroUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -72,6 +73,7 @@ public class BizSubjectsServiceImpl implements IBizSubjectsService {
     @Override
     public int insertBizSubjects(BizSubjects bizSubjects) {
         bizSubjects.setCreateTime(DateUtils.getNowDate());
+        bizSubjects.setCreateBy(ShiroUtils.getUserId().toString());
         return bizSubjectsMapper.insertBizSubjects(bizSubjects);
     }
 
@@ -84,6 +86,7 @@ public class BizSubjectsServiceImpl implements IBizSubjectsService {
     @Override
     public int updateBizSubjects(BizSubjects bizSubjects) {
         bizSubjects.setUpdateTime(DateUtils.getNowDate());
+        bizSubjects.setUpdateBy(ShiroUtils.getUserId().toString());
         return bizSubjectsMapper.updateBizSubjects(bizSubjects);
     }
 
