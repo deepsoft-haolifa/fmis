@@ -106,6 +106,10 @@
                 $.modal.alertWarning("请选择同一个供应商的数据");
                 return;
             }
+            if (guishudanwei.size != 1) {
+                $.modal.alertWarning("多个归属单位不能合并");
+                return;
+            }
             var paramterSupplierId = "";
             supplierMap.forEach(function (value, key, map) {
                 paramterSupplierId = key;
@@ -136,6 +140,7 @@
             var dataId = "";
             haoliMap.forEach(function (value, key, map) {
                 dataId = key;
+                console.log("dataId:----" + dataId)
             })
             console.log("dataId=" + dataId);
             var url = ctx + "fmis/procurement/addpool/"+dataId;

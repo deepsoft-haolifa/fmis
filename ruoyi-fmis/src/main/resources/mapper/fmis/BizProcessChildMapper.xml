@@ -6,6 +6,7 @@
 
     <resultMap type="BizProcessChild" id="BizProcessChildResult">
         <result property="childId" column="child_id"/>
+        <result property="guishudanwei" column="guishudanwei"/>
         <result property="dataId" column="data_id"/>
         <result property="remark" column="remark"/>
         <result property="price1" column="price1"/>
@@ -227,7 +228,7 @@
 
     <!-- 采购池产品信息 -->
     <sql id="selectBizChildProductVo">
-        select
+        select pd.string3 guishudanwei,
         p.price as productPrice,p.product_id as productId,
         d.name as series, p.model, d1.name as specifications, d2.name as nominalPressure,
         d3.name as connectionType, d6.name as valvebodyMaterial,
@@ -337,7 +338,7 @@
 
     <!-- 采购池 执行器信息 -->
     <sql id="selectBizChildActuatorVo">
-        select
+        select pd.string3 guishudanwei,
         (case when ds.data_status='1' then ds.string1 else sum(pc.string12) end) as actuatorNum,
         pc.string13 as actuatorCoefficient,
         a.name as actuatorName,a.price as actuatorPrice,a.actuator_id as actuatorId,
@@ -414,7 +415,7 @@
 
     <!-- 采购池 法兰信息 -->
     <sql id="selectBizChildRef1Vo">
-        select
+        select pd.string3 guishudanwei,
         pr.product_ref_id as productRef1Id,
         (case when ds.data_status='1' then ds.string1 else sum(pc.string6) end)  as productRef1Num,
         pc.string7 as productRef1Coefficient,
@@ -489,7 +490,7 @@
 
     <!-- 采购池 螺栓信息 -->
     <sql id="selectBizChildRef2Vo">
-        select
+        select pd.string3 guishudanwei,
         pr.product_ref_id as productRef2Id,
         (case when ds.data_status='1' then ds.string1 else sum(pc.string9) end) as productRef2Num,
         pc.string7 as productRef1Coefficient,pr.name as ref2Name,pr.price as ref2Price,
@@ -564,7 +565,7 @@
 
     <!-- 定位器 -->
     <sql id="selectBizChildPAVo">
-        select
+        select pd.string3 guishudanwei,
         pa.attachment_id as pattachmentId,pa.bh as pattachmentName, pc.pattachment_price as pattachmentPrice,
         (case when ds.data_status='1' then ds.string1 else sum(pc.pattachment_count) end) as pattachmentCount,
         pc.pattachment_coefficient as pattachmentCoefficient,
@@ -637,7 +638,7 @@
 
     <!-- 电磁阀-->
     <sql id="selectBizChildPA1Vo">
-        select
+        select pd.string3 guishudanwei,
         pa.attachment_id as pattachment1Id,pa.bh as pattachment1Name, pc.pattachment1_price as pattachment1Price,
         (case when ds.data_status='1' then ds.string1 else sum(pc.pattachment1_count) end) as pattachment1Count,
         pc.pattachment1_coefficient as pattachment1Coefficient,
@@ -677,7 +678,7 @@
 
     <!-- 回信器数 -->
     <sql id="selectBizChildPA2Vo">
-        select
+        select pd.string3 guishudanwei,
         pa.attachment_id as pattachment2Id,pa.bh as pattachment2Name, pc.pattachment2_price as pattachment2Price,
         (case when ds.data_status='1' then ds.string1 else sum(pc.pattachment2_count) end) as pattachment2Count,
         pc.pattachment2_coefficient as pattachment2Coefficient,
@@ -714,7 +715,7 @@
     </select>
     <!-- 气源三连件 -->
     <sql id="selectBizChildPA3Vo">
-        select
+        select pd.string3 guishudanwei,
         pa.attachment_id as pattachment3Id,pa.bh as pattachment3Name,
         pc.pattachment3_price as pattachment3Price,
         (case when ds.data_status='1' then ds.string1 else sum(pc.pattachment3_count) end) as pattachment3Count,
@@ -754,7 +755,7 @@
     </select>
     <!-- 可离合减速器 -->
     <sql id="selectBizChildPA4Vo">
-        select
+        select pd.string3 guishudanwei,
         pa.attachment_id as pattachment4Id,pa.bh as pattachment4Name, pc.pattachment4_price as pattachment4Price,
         (case when ds.data_status='1' then ds.string1 else sum(pc.pattachment4_count) end) as pattachment4Count,
         pc.pattachment4_coefficient as pattachment4Coefficient,

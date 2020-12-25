@@ -97,6 +97,7 @@ var priceMap = new Map();
 var supplierMap = new Map();
 //为了带过去销售合同中的供方以及归属单位
 var haoliMap = new Map();
+var guishudanwei = new Map();
 var string3_parent = "";
 var deptName_parent = "";
 /**
@@ -599,6 +600,7 @@ function examine(type,datas,typeIndex,id){
         $.each(datas,function(i,v){
             // 添加时，判断一行或多行的 id 是否已经在数组里 不存则添加　
             var dataId = "";
+            var guishu = "";
             var num = "0";
             var price = 0;
             var columnName1 = "";
@@ -684,6 +686,7 @@ function examine(type,datas,typeIndex,id){
             string3_parent = v.string3;
             deptName_parent = v.deptName;
             haoliMap.set(id,id);
+            guishudanwei.set(v.guishudanwei,v.guishudanwei);
         });
     }else{
         $.each(datas,function(i,v){
@@ -711,8 +714,9 @@ function examine(type,datas,typeIndex,id){
             }
             overAllIds.splice(overAllIds.indexOf(typeIndex + "_" + v.childId + "_" + dataId + "_" + v.dataId + "_" + v.levelValue),1);    //删除取消选中行
             supplierMap.delete(v.supplierId);
+            guishudanwei.delete(v.guishudanwei);
             priceMap.delete(typeIndex + "_" + v.childId + "_" + dataId+ "_" + v.dataId + "_" + v.levelValue);
-            console("id:"+id)
+            console.log("id:"+id)
             haoliMap.set(id,id);
         });
     }

@@ -221,6 +221,9 @@ public class BizProcessChild extends BaseEntity {
     private String color;
     @Getter
     @Setter
+    private String guishudanwei;
+    @Getter
+    @Setter
     private String developer;
     @Getter
     @Setter

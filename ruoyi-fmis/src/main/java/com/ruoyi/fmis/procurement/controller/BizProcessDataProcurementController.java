@@ -298,6 +298,7 @@ public class BizProcessDataProcurementController extends BaseController {
             logger.info(ex.getMessage());
         }
         setNormalFlag(bizProcessData,productArrayStr);
+        //添加采购合同
         int insertReturn = bizProcessDataService.insertBizProcessData(bizProcessData);
         Long dataId = bizProcessData.getDataId();
         List<String> dataIds = new ArrayList<>();
@@ -310,8 +311,8 @@ public class BizProcessDataProcurementController extends BaseController {
             for (int i = 0; i < productArray.size(); i++) {
                 JSONObject json = productArray.getJSONObject(i);
                 BizDataStatus bizDataStatus = JSONObject.parseObject(json.toJSONString(), BizDataStatus.class);
-                dataIds.add(bizDataStatus.getString3());
-                bizDataStatus.setString4(bizProcessData.getDataId().toString());
+                dataIds.add(bizDataStatus.getString3());//销售id
+                bizDataStatus.setString4(bizProcessData.getDataId().toString());//采购id
                 bizDataStatusService.insertBizDataStatus(bizDataStatus);
                 if (dataIdCount.containsKey(bizDataStatus.getString3())) {
                     int idCount =  dataIdCount.get(bizDataStatus.getString3()) + 1;
@@ -332,54 +333,52 @@ public class BizProcessDataProcurementController extends BaseController {
             bizProcessData1.setBizId("procurement");
             bizProcessData1.setString3(bizProcessData2.getString1());
             List<BizProcessData> list = bizProcessDataService.selectBizProcessDataListCg(bizProcessData1);
-            setXSStatus(dataIds, list.size(), dataIdCount.get(string));
+            setXSStatus(string, list.size(), dataIdCount.get(string));
         }
 
         setContractNo(bizProcessData,productArrayStr);
         return toAjax(insertReturn);
     }
-    public void setXSStatus(List<String> list, int size, int num) {
+    public void setXSStatus(String string, int size, int num) {
         //合并采购合同的处理listLevelS
-        for (String string : list) {
-            BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataById(Long.parseLong(string));
-            BizProcessChild queryBizProcessChild = new BizProcessChild();
-            queryBizProcessChild.setDataId(Long.parseLong(string));
-            List<BizProcessChild> bizProcessChildList = bizProcessChildService.selectBizProcessChildList(queryBizProcessChild);
-            int count = 0;
-            for (BizProcessChild bizProcessChild : bizProcessChildList) {
-                //产品
-                if(!StringUtils.isEmpty(bizProcessChild.getString2())) {
-                    count ++;
-                }
-                //螺栓
-                if(!StringUtils.isEmpty(bizProcessChild.getString8())) {
-                    count ++;
-                }
-                //执行器
-                if(!StringUtils.isEmpty(bizProcessChild.getString11())) {
-                    count ++;
-                }
-                if(bizProcessChild.getPattachment1Id() != null) {
-                    count ++;
-                }
-                if(bizProcessChild.getPattachment2Id() != null) {
-                    count ++;
-                }
-                if(bizProcessChild.getPattachment3Id() != null) {
-                    count ++;
-                }
-                if(bizProcessChild.getPattachment4Id() != null) {
-                    count ++;
-                }
+        BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataById(Long.parseLong(string));
+        BizProcessChild queryBizProcessChild = new BizProcessChild();
+        queryBizProcessChild.setDataId(Long.parseLong(string));
+        List<BizProcessChild> bizProcessChildList = bizProcessChildService.selectBizProcessChildList(queryBizProcessChild);
+        int count = 0;
+        for (BizProcessChild bizProcessChild : bizProcessChildList) {
+            //产品
+            if(!StringUtils.isEmpty(bizProcessChild.getString2())) {
+                count ++;
             }
-            if (size + num < count) {
-                bizProcessData.setString30("1");
-                bizProcessDataService.updateBizProcessData(bizProcessData);
+            //螺栓
+            if(!StringUtils.isEmpty(bizProcessChild.getString8())) {
+                count ++;
             }
-            if (size + num == count) {
-                bizProcessData.setString30("2");
-                bizProcessDataService.updateBizProcessData(bizProcessData);
+            //执行器
+            if(!StringUtils.isEmpty(bizProcessChild.getString11())) {
+                count ++;
             }
+            if(bizProcessChild.getPattachment1Id() != null) {
+                count ++;
+            }
+            if(bizProcessChild.getPattachment2Id() != null) {
+                count ++;
+            }
+            if(bizProcessChild.getPattachment3Id() != null) {
+                count ++;
+            }
+            if(bizProcessChild.getPattachment4Id() != null) {
+                count ++;
+            }
+        }
+        if (size + num < count) {
+            bizProcessData.setString30("1");
+            bizProcessDataService.updateBizProcessData(bizProcessData);
+        }
+        if (size + num == count) {
+            bizProcessData.setString30("2");
+            bizProcessDataService.updateBizProcessData(bizProcessData);
         }
 
 
