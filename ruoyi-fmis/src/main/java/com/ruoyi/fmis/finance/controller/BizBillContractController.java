@@ -113,7 +113,8 @@ public class BizBillContractController extends BaseController {
         String remark = getRequest().getParameter("remark");
         String amount = getRequest().getParameter("amount");
 
-        //判断合同的金额是否够分
+
+        //一.判断合同的金额是否够分
         // 1. 查询合同的总价
         BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataById(Long.parseLong(dataId));
         Double price1 = bizProcessData.getPrice1();
@@ -126,6 +127,21 @@ public class BizBillContractController extends BaseController {
         logger.info("add contract v:{},dataAmount:{},dataId:{}", v, dataAmount, dataId);
         if (v > price1) {
             return error("此合同的已付金额+这次分解的金额 大于合同金额");
+        }
+
+        //二.判断银行日记账的金额是否够分
+        // 1. 查询银行日记账的总价
+        BizBankBill bizBankBill = bizBankBillService.selectBizBankBillById(Long.parseLong(billId));
+        Double collectionMoney = bizBankBill.getCollectionMoney();
+        // 2. 查询该合同已经分解的金额
+        BizBillContract query1 = new BizBillContract();
+        query1.setBillId(Long.parseLong(billId));
+        List<BizBillContract> bizBillContracts = bizBillContractService.selectBizBillContractList(query1);
+        double alreadyAmount = bizBillContracts.stream().mapToDouble(BizBillContract::getAmount).sum();
+        double totalAmount = alreadyAmount + Double.parseDouble(amount);
+        logger.info("add contract totalAmount:{},dataAmount:{},billId:{}", totalAmount, alreadyAmount, billId);
+        if (totalAmount > collectionMoney) {
+            return error("已分配金额+这次分解的金额 大于此笔收款金额");
         }
 
 
@@ -147,13 +163,8 @@ public class BizBillContractController extends BaseController {
         }
 
         //判断合同分解是否完成
-        BizBillContract query1 = new BizBillContract();
-        query1.setBillId(Long.parseLong(billId));
-        List<BizBillContract> bizBillContracts = bizBillContractService.selectBizBillContractList(query1);
-        double alreadyAmount = bizBillContracts.stream().mapToDouble(BizBillContract::getAmount).sum();
-        BizBankBill bizBankBill = bizBankBillService.selectBizBankBillById(Long.parseLong(billId));
         BizBankBill updateBill = new BizBankBill();
-        if (bizBankBill.getCollectionMoney() <= alreadyAmount) {
+        if (totalAmount >= collectionMoney) {
             // 将分解状态更改为分解完成
             updateBill.setContractStatus("1");
         } else {

@@ -34,6 +34,14 @@ public interface IBizSubjectsService {
      */
     public List<BizSubjects> selectBizSubjectsListContainWu();
 
+    /**
+     * 查询费用科目列表(不包含父级科目)
+     *
+     * @param bizSubjects 费用科目
+     * @return 费用科目集合
+     */
+    public List<BizSubjects> selectBizSubjectsListNoParent(BizSubjects bizSubjects);
+
 
     /**
      * 新增费用科目

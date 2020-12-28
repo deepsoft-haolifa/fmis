@@ -64,6 +64,12 @@ public class BizSubjectsServiceImpl implements IBizSubjectsService {
         return bizSubjects;
     }
 
+    @Override
+    public List<BizSubjects> selectBizSubjectsListNoParent(BizSubjects bizSubjects) {
+        List<BizSubjects> bizSubjectList = bizSubjectsMapper.selectBizSubjectsList(bizSubjects);
+        return bizSubjectList.stream().filter(e->e.getParentId()>0).collect(Collectors.toList());
+    }
+
     /**
      * 新增费用科目
      *

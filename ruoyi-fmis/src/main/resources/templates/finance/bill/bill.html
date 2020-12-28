@@ -85,10 +85,6 @@
                     title : '凭证号'
                 },
                 {
-                    field : 'preMonthMoney', 
-                    title : '上月结转'
-                },
-                {
                     field : 'collectionMoney', 
                     title : '收款'
                 },
@@ -109,10 +105,6 @@
                     formatter: function(value, row, index) {
                        return $.table.selectDictLabel(paymentTypeDatas, value);
                     }
-                },
-                {
-                    field : 'balance', 
-                    title : '余额'
                 },
                 {
                     field : 'dept.deptName',
