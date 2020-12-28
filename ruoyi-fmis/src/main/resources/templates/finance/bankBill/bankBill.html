@@ -50,14 +50,14 @@
         </div>
 
         <div class="btn-group-sm" id="toolbar" role="group">
-            <a class="btn btn-success" onclick="addCollectUrl()" shiro:hasPermission="fmis:finance:bill:addCollect">
+            <a class="btn btn-success" onclick="addCollectUrl()" shiro:hasPermission="fmis:finance:bill:bank:addCollect">
                 <i class="fa fa-plus"></i> 添加收款
             </a>
-            <a class="btn btn-success" onclick="addPayUrl()" shiro:hasPermission="fmis:finance:bill:addPay">
+            <a class="btn btn-success" onclick="addPayUrl()" shiro:hasPermission="fmis:finance:bill:bank:addPay">
                 <i class="fa fa-plus"></i> 添加付款
             </a>
             <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"
-               shiro:hasPermission="fmis:finance:bill:remove">
+               shiro:hasPermission="fmis:finance:bill:bank:remove">
                 <i class="fa fa-remove"></i> 删除
             </a>
         </div>
