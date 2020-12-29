@@ -1,6 +1,8 @@
 package com.ruoyi.fmis.budget.service;
 
 import com.ruoyi.fmis.budget.domain.BizCostBudget;
+import com.ruoyi.fmis.subjects.domain.BizSubjects;
+
 import java.util.List;
 
 /**
@@ -57,4 +59,12 @@ public interface IBizCostBudgetService {
      * @return 结果
      */
     public int deleteBizCostBudgetById(Long budgetId);
+
+    /**
+     * 批量删除费用预算
+     *
+     * @param deptId 部门ID
+     * @return 结果
+     */
+    public List<BizSubjects> selectByDeptId(Long deptId);
 }

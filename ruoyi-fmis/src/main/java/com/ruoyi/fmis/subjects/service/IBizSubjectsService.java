@@ -74,4 +74,5 @@ public interface IBizSubjectsService {
      * @return 结果
      */
     public int deleteBizSubjectsById(Long subjectsId);
+
 }

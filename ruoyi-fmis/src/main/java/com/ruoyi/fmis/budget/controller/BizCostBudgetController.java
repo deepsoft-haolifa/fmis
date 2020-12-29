@@ -131,4 +131,13 @@ public class BizCostBudgetController extends BaseController {
     public AjaxResult remove(String ids) {
         return toAjax(bizCostBudgetService.deleteBizCostBudgetByIds(ids));
     }
+
+    /**
+     * 根据部门Id获取费用预算项目
+     */
+    @PostMapping( "/selectByDeptId")
+    @ResponseBody
+    public List<BizSubjects> selectByDeptId(Long deptId) {
+        return bizCostBudgetService.selectByDeptId(deptId);
+    }
 }

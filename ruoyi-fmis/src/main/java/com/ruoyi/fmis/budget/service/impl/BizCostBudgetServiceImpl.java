@@ -1,7 +1,13 @@
 package com.ruoyi.fmis.budget.service.impl;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.fmis.subjects.domain.BizSubjects;
+import com.ruoyi.fmis.subjects.service.IBizSubjectsService;
+import com.ruoyi.fmis.subjects.service.impl.BizSubjectsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.fmis.budget.mapper.BizCostBudgetMapper;
@@ -19,6 +25,8 @@ import com.ruoyi.common.core.text.Convert;
 public class BizCostBudgetServiceImpl implements IBizCostBudgetService {
     @Autowired
     private BizCostBudgetMapper bizCostBudgetMapper;
+    @Autowired
+    private IBizSubjectsService bizSubjectsService;
 
     /**
      * 查询费用预算
@@ -86,5 +94,17 @@ public class BizCostBudgetServiceImpl implements IBizCostBudgetService {
     @Override
     public int deleteBizCostBudgetById(Long budgetId) {
         return bizCostBudgetMapper.deleteBizCostBudgetById(budgetId);
+    }
+
+    @Override
+    public List<BizSubjects> selectByDeptId(Long deptId) {
+        BizCostBudget bizCostBudget = new BizCostBudget();
+        if (deptId != null && deptId > 0L) {
+            bizCostBudget.setDeptId(deptId);
+        }
+        List<BizCostBudget> budgets = bizCostBudgetMapper.selectBizCostBudgetList(bizCostBudget);
+        Set<Long> subjectsIdSet = budgets.stream().map(BizCostBudget::getSubjectsId).collect(Collectors.toSet());
+        List<BizSubjects> bizSubjects = bizSubjectsService.selectBizSubjectsListNoParent(new BizSubjects());
+        return bizSubjects.stream().filter(e -> subjectsIdSet.contains(e.getSubjectsId())).collect(Collectors.toList());
     }
 }

@@ -31,6 +31,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateBy"    column="update_by"    />
         <result property="updateTime"    column="update_time"    />
         <result property="createByName"    column="createByName"    />
+        <result property="subjectsName"    column="subjectsName"    />
         <association property="dept"    column="dept_id" javaType="SysDept" resultMap="deptResult" />
     </resultMap>
 
@@ -47,10 +48,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select b.budget_id, b.name, b.d, b.y, b.m, b.dept_id, b.subjects_id, b.amount, b.string1, b.string2, b.string3, b.string4, b.string5, b.string6, b.string7, b.string8,
         b.string9, b.string10, b.remark, b.status, b.del_flag, b.create_by, b.create_time, b.update_by, b.update_time,
         d.parent_id, d.dept_name, d.order_num, d.leader, d.status as dept_status,
-        u.user_name as createByName
+        u.user_name as createByName,s.name as subjectName
         from biz_cost_budget b
         left join sys_dept d on d.dept_id = b.dept_id
         left join sys_user u on u.user_id=b.create_by
+        left join biz_subjects s on s.subjects_id=b.subjects_id
     </sql>
 
     <select id="selectBizCostBudgetList" parameterType="BizCostBudget" resultMap="BizCostBudgetResult">

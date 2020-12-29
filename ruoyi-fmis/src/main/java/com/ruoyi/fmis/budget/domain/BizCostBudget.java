@@ -22,6 +22,9 @@ public class BizCostBudget extends BaseEntity {
     @Getter
     @Setter
     private SysDept dept;
+    @Getter
+    @Setter
+    private String subjectsName;
     /** ID */
     private Long budgetId;
 
