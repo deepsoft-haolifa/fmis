@@ -79,6 +79,7 @@
         where b.bill_id = #{billId}
     </select>
 
+
     <insert id="insertBizBill" parameterType="BizBill" useGeneratedKeys="true" keyProperty="billId">
         insert into biz_bill
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -194,5 +195,7 @@
             #{billId}
         </foreach>
     </delete>
-
+    <select id="getLastRecord" resultType="com.ruoyi.fmis.finance.domain.BizBill">
+        select * from biz_bill order by bill_id desc limit 1
+    </select>
 </mapper>

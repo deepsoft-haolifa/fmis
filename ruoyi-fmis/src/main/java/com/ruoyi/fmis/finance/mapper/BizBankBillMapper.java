@@ -57,4 +57,10 @@ public interface BizBankBillMapper {
      * @return 结果
      */
     public int deleteBizBankBillByIds(String[] billIds);
+
+    /**
+     * 获取最新一条数据
+     * @return
+     */
+    BizBankBill getLastRecord();
 }

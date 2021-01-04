@@ -1,5 +1,6 @@
 package com.ruoyi.fmis.finance.service.impl;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -8,6 +9,7 @@ import java.util.stream.Collectors;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.fmis.customer.domain.BizCustomer;
 import com.ruoyi.fmis.customer.service.IBizCustomerService;
+import com.ruoyi.fmis.finance.service.IBizBillAmountService;
 import com.ruoyi.framework.util.ShiroUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,8 @@ public class BizBankBillServiceImpl implements IBizBankBillService {
     private BizBankBillMapper bizBankBillMapper;
     @Autowired
     private IBizCustomerService customerService;
+    @Autowired
+    private IBizBillAmountService bizBillAmountService;
 
     /**
      * 查询银行日记账
@@ -74,6 +78,32 @@ public class BizBankBillServiceImpl implements IBizBankBillService {
     public int insertBizBankBill(BizBankBill bizBankBill) {
         bizBankBill.setCreateTime(DateUtils.getNowDate());
         bizBankBill.setCreateBy(ShiroUtils.getUserId().toString());
+
+        // 设置上月结转
+        bizBankBill.setPreMonthMoney(bizBillAmountService.getPreMonthAmount(1).doubleValue());
+
+        // 设置余额 start
+        // 查找最新一条记录的余额
+        BigDecimal lastBalance = BigDecimal.ZERO;
+        BizBankBill lastRecord = bizBankBillMapper.getLastRecord();
+        if (lastRecord != null) {
+            lastBalance = BigDecimal.valueOf(lastRecord.getBalance());
+        }
+        // 收款，上次余额 + 本次收款
+        if (bizBankBill.getType().equals(1)) {
+            Double collectionMoney = bizBankBill.getCollectionMoney();
+            double abs = Math.abs(collectionMoney);
+            BigDecimal add = BigDecimal.valueOf(abs).add(lastBalance);
+            bizBankBill.setBalance(add.doubleValue());
+        } else if (bizBankBill.getType().equals(2)) {
+            // 付款 , 上次余额 - 本次付款
+            Double payment = bizBankBill.getPayment();
+            double abs = Math.abs(payment);
+            BigDecimal subtract = lastBalance.subtract(BigDecimal.valueOf(abs));
+            bizBankBill.setBalance(subtract.doubleValue());
+        }
+        // 设置余额 end
+
         return bizBankBillMapper.insertBizBankBill(bizBankBill);
     }
 

@@ -1,54 +1,54 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.fmis.budget.mapper.BizCostBudgetMapper">
-    
+
     <resultMap type="BizCostBudget" id="BizCostBudgetResult">
-        <result property="budgetId"    column="budget_id"    />
-        <result property="name"    column="name"    />
-        <result property="d"    column="d"    />
-        <result property="y"    column="y"    />
-        <result property="m"    column="m"    />
-        <result property="deptId"    column="dept_id"    />
-        <result property="subjectsId"    column="subjects_id"    />
-        <result property="amount"    column="amount"    />
-        <result property="string1"    column="string1"    />
-        <result property="string2"    column="string2"    />
-        <result property="string3"    column="string3"    />
-        <result property="string4"    column="string4"    />
-        <result property="string5"    column="string5"    />
-        <result property="string6"    column="string6"    />
-        <result property="string7"    column="string7"    />
-        <result property="string8"    column="string8"    />
-        <result property="string9"    column="string9"    />
-        <result property="string10"    column="string10"    />
-        <result property="remark"    column="remark"    />
-        <result property="status"    column="status"    />
-        <result property="delFlag"    column="del_flag"    />
-        <result property="createBy"    column="create_by"    />
-        <result property="createTime"    column="create_time"    />
-        <result property="updateBy"    column="update_by"    />
-        <result property="updateTime"    column="update_time"    />
-        <result property="createByName"    column="createByName"    />
-        <result property="subjectsName"    column="subjectsName"    />
-        <association property="dept"    column="dept_id" javaType="SysDept" resultMap="deptResult" />
+        <result property="budgetId" column="budget_id"/>
+        <result property="name" column="name"/>
+        <result property="d" column="d"/>
+        <result property="y" column="y"/>
+        <result property="m" column="m"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="subjectsId" column="subjects_id"/>
+        <result property="amount" column="amount"/>
+        <result property="string1" column="string1"/>
+        <result property="string2" column="string2"/>
+        <result property="string3" column="string3"/>
+        <result property="string4" column="string4"/>
+        <result property="string5" column="string5"/>
+        <result property="string6" column="string6"/>
+        <result property="string7" column="string7"/>
+        <result property="string8" column="string8"/>
+        <result property="string9" column="string9"/>
+        <result property="string10" column="string10"/>
+        <result property="remark" column="remark"/>
+        <result property="status" column="status"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="createByName" column="createByName"/>
+        <result property="subjectsName" column="subjectsName"/>
+        <association property="dept" column="dept_id" javaType="SysDept" resultMap="deptResult"/>
     </resultMap>
 
     <resultMap id="deptResult" type="SysDept">
-        <id     property="deptId"   column="dept_id"     />
-        <result property="parentId" column="parent_id"   />
-        <result property="deptName" column="dept_name"   />
-        <result property="orderNum" column="order_num"   />
-        <result property="leader"   column="leader"      />
-        <result property="status"   column="dept_status" />
+        <id property="deptId" column="dept_id"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="deptName" column="dept_name"/>
+        <result property="orderNum" column="order_num"/>
+        <result property="leader" column="leader"/>
+        <result property="status" column="dept_status"/>
     </resultMap>
 
     <sql id="selectBizCostBudgetVo">
         select b.budget_id, b.name, b.d, b.y, b.m, b.dept_id, b.subjects_id, b.amount, b.string1, b.string2, b.string3, b.string4, b.string5, b.string6, b.string7, b.string8,
         b.string9, b.string10, b.remark, b.status, b.del_flag, b.create_by, b.create_time, b.update_by, b.update_time,
         d.parent_id, d.dept_name, d.order_num, d.leader, d.status as dept_status,
-        u.user_name as createByName,s.name as subjectName
+        u.user_name as createByName,s.name as subjectsName
         from biz_cost_budget b
         left join sys_dept d on d.dept_id = b.dept_id
         left join sys_user u on u.user_id=b.create_by
@@ -57,17 +57,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectBizCostBudgetList" parameterType="BizCostBudget" resultMap="BizCostBudgetResult">
         <include refid="selectBizCostBudgetVo"/>
-        <where>  
-            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
-            <if test="amount != null "> and amount = #{amount}</if>
+        <where>
+            <if test="name != null  and name != ''">and name like concat('%', #{name}, '%')</if>
+            <if test="y != null  and y != ''">and y=#{y}</if>
+            <if test="m != null  and m != ''">and m=#{m}</if>
+            <if test="subjectsId != null  and subjectsId != ''">and b.subjects_id=#{subjectsId}</if>
+            <if test="amount != null ">and amount = #{amount}</if>
         </where>
     </select>
-    
+
     <select id="selectBizCostBudgetById" parameterType="Long" resultMap="BizCostBudgetResult">
         <include refid="selectBizCostBudgetVo"/>
         where budget_id = #{budgetId}
     </select>
-        
+
     <insert id="insertBizCostBudget" parameterType="BizCostBudget" useGeneratedKeys="true" keyProperty="budgetId">
         insert into biz_cost_budget
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -95,7 +98,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null ">create_time,</if>
             <if test="updateBy != null  and updateBy != ''">update_by,</if>
             <if test="updateTime != null ">update_time,</if>
-         </trim>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="name != null  and name != ''">#{name},</if>
             <if test="d != null ">#{d},</if>
@@ -121,7 +124,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null ">#{createTime},</if>
             <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
             <if test="updateTime != null ">#{updateTime},</if>
-         </trim>
+        </trim>
     </insert>
 
     <update id="updateBizCostBudget" parameterType="BizCostBudget">
@@ -160,10 +163,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteBizCostBudgetByIds" parameterType="String">
-        delete from biz_cost_budget where budget_id in 
+        delete from biz_cost_budget where budget_id in
         <foreach item="budgetId" collection="array" open="(" separator="," close=")">
             #{budgetId}
         </foreach>
     </delete>
-    
+
 </mapper>

@@ -57,4 +57,6 @@ public interface BizBillMapper {
      * @return 结果
      */
     public int deleteBizBillByIds(String[] billIds);
+
+    BizBill getLastRecord();
 }

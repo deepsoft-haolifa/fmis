@@ -42,7 +42,8 @@ public class BizCostBudgetController extends BaseController {
 
     @RequiresPermissions("fmis:budget:view")
     @GetMapping()
-    public String budget() {
+    public String budget(ModelMap mmap) {
+        mmap.put("subjects",bizSubjectsService.selectBizSubjectsListNoParent(new BizSubjects()));
         return prefix + "/budget";
     }
 

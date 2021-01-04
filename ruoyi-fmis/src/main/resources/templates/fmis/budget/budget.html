@@ -2,6 +2,7 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <th:block th:include="include :: header('费用预算列表')"/>
+    <th:block th:include="include :: datetimepicker-css" />
 </head>
 <body class="gray-bg">
 <div class="container-div">
@@ -13,6 +14,21 @@
                         <li>
                             <p>名称：</p>
                             <input type="text" name="name"/>
+                        </li>
+                        <li>
+                            <p>年：</p>
+                            <input name="y" class="form-control" placeholder="yyyy" type="text">
+                        </li>
+                        <li>
+                            <p>月：</p>
+                            <input name="m" class="form-control" placeholder="MM" type="text">
+                        </li>
+                        <li>
+                            <p>费用科目：</p>
+                            <select name="subjectsId" id="subjectsId" class="form-control select2-multiple"> <!--multiple-->
+                                <option value="">请选择</option>
+                                <option th:each="subject:${subjects}" th:value="${subject.subjectsId}" th:text="${subject.name}"></option>
+                            </select>
                         </li>
                         <li>
                             <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
@@ -44,6 +60,8 @@
     </div>
 </div>
 <th:block th:include="include :: footer"/>
+<th:block th:include="include :: datetimepicker-js" />
+
 <script th:inline="javascript">
     var editFlag = [[${@permission.hasPermi('fmis:budget:edit')}]];
     var removeFlag = [[${@permission.hasPermi('fmis:budget:remove')}]];
@@ -105,6 +123,26 @@
                 }]
         };
         $.table.init(options);
+    });
+
+    $("input[name='y']").datetimepicker({
+        format: "yyyy",
+        weekStart: 1,
+        autoclose: true,
+        startView: 4,
+        minView: 4,
+        forceParse: false,
+        autoclose: true
+    });
+
+    $("input[name='m']").datetimepicker({
+        format: "mm",
+        weekStart: 1,
+        autoclose: true,
+        startView: 3,
+        minView: 3,
+        forceParse: false,
+        autoclose: true
     });
 </script>
 </body>
