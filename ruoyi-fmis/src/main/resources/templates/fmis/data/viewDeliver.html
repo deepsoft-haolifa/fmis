@@ -171,7 +171,7 @@
     $("#form-data-edit").validate({
         focusCleanup: true
     });
-    $(function() {
+    /*$(function() {
         var options = {
             showSearch: false,
             showRefresh: false,
@@ -179,7 +179,7 @@
             showColumns: false,
             showToggle: false,
             useRowAttrFunc: true,
-            uniqueId: "childId",
+            uniqueId: "productId",
             async: true,
             url: prefix + "/listProductNoPageFH",
             //onEditableSave: onEditableSave,
@@ -222,15 +222,15 @@
                 {field : 'string6',title : '名称',editable: false},
                 {field : 'string7',title : '型号',editable: false},
                 {field : 'string8',title : '规格',editable: false},
-                /*{field : 'string9',title : '等级',editable: false},
-                {field : 'string10',title : '价格',editable: false},*/
+                /!*{field : 'string9',title : '等级',editable: false},
+                {field : 'string10',title : '价格',editable: false},*!/
                 {field : 'string11',title : '数量',editable: false},
                 {field : 'string13',title : '发货数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}}
             ]
         };
         $.table.init(options);
 
-    });
+    });*/
     $(function() {
         var options = {
             showSearch: false,
@@ -242,7 +242,7 @@
             uniqueId: "productId",
             onLoadSuccess: loadSuccess,
             async: true,
-            url: prefix + "/listProductNoPage",
+            url: prefix + "/listProductNoPageFH",
             onEditableSave: onEditableSave,
             onClickCell: onClickCell,
             onReorderRow: onReorderRow,
@@ -378,7 +378,44 @@
         minView: "month",
         autoclose: true
     });
+    function loadSuccess() {
+        /*calculateTotalPrice();
 
+        payTypeChange();*/
+    }
+    function onEditableSave (field, row, oldValue, $el) {
+        //alert("字段名：" + field + "，当前值：" + row[field]  + "，旧值：" + oldValue);
+        if (field == "productNum"  || field == "productRef1Num"
+            || field == "productRef2Num" || field == "actuatorNum" || field == "pattachmentPrice" || field == "pattachment1Price" || field == "pattachment2Price" || field == "pattachment3Price" || field == "pattachment4Price"
+            || field == "pattachmentCount" || field == "pattachment1Count" || field == "pattachment2Count" || field == "pattachment3Count" || field == "pattachment4Count"
+            || field == "pattachmentCoefficient" || field == "pattachment1Coefficient" || field == "pattachment2Coefficient" || field == "pattachment3Coefficient"
+            || field == "pattachment4Coefficient" || field == "string14") {
+            // calculateTotalPrice();
+        }
+    }
+    function onReorderRow(data) {
+        for (var i = 0; i < data.length; i++) {
+            //$("#columns_sort_" + data[i].columnId).val(i+1);
+        }
+    }
+
+    function onClickCell(field, value, row, $element){
+        var idx = $element.parent().data('index');
+        console.log("row.index=" + idx + "--" + row.productId);
+        var productId = row.productId;
+
+    }
+    // 设置 BootStrap Table 行样式
+    function tableRowStyle(row, index) {
+        if (!isEmpty(row.error)){
+            //style={css:{'color':'#ed5565'}};
+            return {classes:'danger'};
+        }
+        return {css:{}};
+    }
+    function isEmpty(v) {
+        return $.common.isEmpty(v);
+    }
 
 </script>
 </body>

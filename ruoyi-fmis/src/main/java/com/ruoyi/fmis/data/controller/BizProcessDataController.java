@@ -282,7 +282,67 @@ public class BizProcessDataController extends BaseController {
     public String viewDeliver(ModelMap mmap) {
         String dataId = getRequest().getParameter("dataId");
         BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataById(Long.parseLong(dataId));
+        String bizId = bizProcessData.getBizId();
+        Map<String, SysRole> flowMap = bizProcessDefineService.getRoleFlowMap(bizId);
+        String userFlowStatus = "";
+        if (!CollectionUtils.isEmpty(flowMap)) {
+            userFlowStatus = flowMap.keySet().iterator().next();
+            bizProcessData.setRoleType(userFlowStatus);
+        }
+
+        BizProcessChild queryBizProcessChild = new BizProcessChild();
+        queryBizProcessChild.setDataId(bizProcessData.getDataId());
+        List<BizProcessChild> bizProcessChildList = bizProcessChildService.selectBizProcessChildList(queryBizProcessChild);
+        String productNames = "";
+        String productIds = "";
+        if (!CollectionUtils.isEmpty(bizProcessChildList)) {
+            for (BizProcessChild bizProcessChild : bizProcessChildList) {
+                String productId = bizProcessChild.getString2();
+                String otherId = bizProcessChild.getString1() + "-" + productId;
+
+                bizProcessChild.setParamterId(otherId);
+
+                productIds += otherId + ",";
+                String quotationId = bizProcessChild.getString1();
+                if (StringUtils.isNotEmpty(quotationId)) {
+                    BizQuotation bizQuotation = bizQuotationService.selectBizQuotationById(Long.parseLong(quotationId));
+                    productNames += bizQuotation.getString1() + ",";
+                    bizProcessChild.setBizQuotation(bizQuotation);
+
+                }
+
+                BizProduct bizProduct = null;
+                BizProduct queryBizProduct = new BizProduct();
+                queryBizProduct.setProductId(Long.parseLong(productId));
+                List<BizProduct> bizProductList = bizProductService.selectBizProductList(queryBizProduct);
+                if (!CollectionUtils.isEmpty(bizProductList)) {
+                    bizProduct = bizProductList.get(0);
+                }
+
+                bizProcessChild.setBizProduct(bizProduct);
+                String ref1Id = bizProcessChild.getString5();
+                if (StringUtils.isNotEmpty(ref1Id)) {
+                    bizProcessChild.setRef1(bizProductRefService.selectBizProductRefById(Long.parseLong(ref1Id)));
+                }
+                String ref2Id = bizProcessChild.getString8();
+                if (StringUtils.isNotEmpty(ref2Id)) {
+                    bizProcessChild.setRef2(bizProductRefService.selectBizProductRefById(Long.parseLong(ref2Id)));
+                }
+                String actuatorId = bizProcessChild.getString11();
+                if (StringUtils.isNotEmpty(actuatorId)) {
+                    bizProcessChild.setBizActuator(bizActuatorService.selectBizActuatorById(Long.parseLong(actuatorId)));
+                }
+            }
+            bizProcessData.setBizProcessChildList(bizProcessChildList);
+        }
+        String customerId = bizProcessData.getString2();
+        if (StringUtils.isNotEmpty(customerId)) {
+            bizProcessData.setBizCustomer(bizCustomerService.selectBizCustomerById(Long.parseLong(customerId)));
+        }
+        mmap.put("quotationNames", productNames);
+        mmap.put("quotationIds", productIds);
         mmap.put("bizProcessData", bizProcessData);
+        mmap.put("userFlowStatus", userFlowStatus);
         return prefix + "/viewDeliver";
     }
 
@@ -484,7 +544,18 @@ public class BizProcessDataController extends BaseController {
         return getDataTable(bizProcessChildList);
     }
 
-
+    /**
+     * 查询报价单产品
+     * @return
+     */
+    @PostMapping("/listProductNoPageFH")
+    @ResponseBody
+    public TableDataInfo listProductNoPageFH(BizProcessData bizProcessData) {
+        BizProcessChild queryBizProcessChild = new BizProcessChild();
+        queryBizProcessChild.setDataId(bizProcessData.getDataId());
+        List<BizProcessChild> bizProcessChildList = bizProcessChildService.selectBizQuotationProductList(queryBizProcessChild);
+        return getDataTable(bizProcessChildList);
+    }
     @PostMapping("/listProductChild")
     @ResponseBody
     public TableDataInfo listProductChild(BizProcessData bizProcessData) {
