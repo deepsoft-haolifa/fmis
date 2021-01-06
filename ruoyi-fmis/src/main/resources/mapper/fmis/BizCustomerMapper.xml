@@ -437,8 +437,5 @@
             </foreach>
         </if>
     </select>
-    <select id="selectBizCustomerListAndTrack" resultType="com.ruoyi.fmis.customer.domain.BizCustomerTrackVo">
-        select a.*,b.feedback,b.create_time as feedbackDate from biz_customer a left join biz_customer_track b on a.customer_id=b.customer_id
-    </select>
 
 </mapper>
