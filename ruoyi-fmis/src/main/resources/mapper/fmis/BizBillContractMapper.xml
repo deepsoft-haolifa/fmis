@@ -39,10 +39,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectBizBillContractByDataIds" parameterType="Long" resultMap="BizBillContractResult">
         <include refid="selectBizBillContractVo"/>
-        where data_id in
-        <foreach item="dataId" collection="dataIds" open="(" separator="," close=")">
-            #{dataId}
-        </foreach>
+        <if test="data_id != null ">
+            where data_id in
+            <foreach item="dataId" collection="dataIds" open="(" separator="," close=")">
+                #{dataId}
+            </foreach>
+        </if>
     </select>
         
     <insert id="insertBizBillContract" parameterType="BizBillContract" useGeneratedKeys="true" keyProperty="bcId">
