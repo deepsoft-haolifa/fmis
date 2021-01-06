@@ -39,7 +39,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectBizBillContractByDataIds" parameterType="Long" resultMap="BizBillContractResult">
         <include refid="selectBizBillContractVo"/>
-        <if test="data_id != null ">
+        <if test="dataIds != null and dataIds.size()>0">
             where data_id in
             <foreach item="dataId" collection="dataIds" open="(" separator="," close=")">
                 #{dataId}
