@@ -1,6 +1,9 @@
 package com.ruoyi.fmis.customertrack.controller;
 
 import java.util.List;
+
+import com.ruoyi.fmis.customer.domain.BizCustomer;
+import com.ruoyi.fmis.customertrack.domain.BizCustomerTrackVo;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,11 +36,44 @@ public class BizCustomerTrackController extends BaseController {
     @Autowired
     private IBizCustomerTrackService bizCustomerTrackService;
 
+
+    @RequiresPermissions("fmis:customerList:view")
+    @GetMapping("/customer-list")
+    public String customerlist() {
+        return prefix + "/customer";
+    }
+
+    /**
+     * 查询客户列表（关联了客户跟踪信息）
+     */
+    @RequiresPermissions("fmis:customerList:list")
+    @PostMapping("/customer-list")
+    @ResponseBody
+    public TableDataInfo customerList(BizCustomer bizCustomer) {
+        startPage();
+        List<BizCustomerTrackVo> list = bizCustomerTrackService.selectBizCustomerListAndTrack(bizCustomer);
+        return getDataTable(list);
+    }
+
     @RequiresPermissions("fmis:customertrack:view")
-    @GetMapping()
-    public String customertrack() {
+    @GetMapping("/track-list/{customerId}")
+    public String customerTrack(@PathVariable("customerId") Long customerId, ModelMap mmap) {
+        mmap.put("customerId", customerId);
         return prefix + "/customertrack";
     }
+
+    /**
+     * 查询客户追踪列表
+     */
+    @RequiresPermissions("fmis:customertrack:list")
+    @PostMapping("/track-list")
+    @ResponseBody
+    public TableDataInfo trackList(BizCustomerTrack bizCustomerTrack) {
+        startPage();
+        List<BizCustomerTrack> list = bizCustomerTrackService.selectBizCustomerTrackListAs(bizCustomerTrack);
+        return getDataTable(list);
+    }
+
 
     /**
      * 选择客户
@@ -47,17 +83,6 @@ public class BizCustomerTrackController extends BaseController {
         return prefix + "/selectCustomer";
     }
 
-    /**
-     * 查询客户追踪列表
-     */
-    @RequiresPermissions("fmis:customertrack:list")
-    @PostMapping("/list")
-    @ResponseBody
-    public TableDataInfo list(BizCustomerTrack bizCustomerTrack) {
-        startPage();
-        List<BizCustomerTrack> list = bizCustomerTrackService.selectBizCustomerTrackListAs(bizCustomerTrack);
-        return getDataTable(list);
-    }
 
     /**
      * 导出客户追踪列表
@@ -74,8 +99,10 @@ public class BizCustomerTrackController extends BaseController {
     /**
      * 新增客户追踪
      */
-    @GetMapping("/add")
-    public String add() {
+    @GetMapping("/add/{customerId}/{customerName}")
+    public String add(@PathVariable("customerId") Long customerId, @PathVariable("customerName") String customerName,ModelMap mmap) {
+        mmap.put("customerId", customerId);
+        mmap.put("customerName", customerName);
         return prefix + "/add";
     }
 
@@ -118,7 +145,7 @@ public class BizCustomerTrackController extends BaseController {
      */
     @RequiresPermissions("fmis:customertrack:remove")
     @Log(title = "客户追踪", businessType = BusinessType.DELETE)
-    @PostMapping( "/remove")
+    @PostMapping("/remove")
     @ResponseBody
     public AjaxResult remove(String ids) {
         return toAjax(bizCustomerTrackService.deleteBizCustomerTrackByIds(ids));

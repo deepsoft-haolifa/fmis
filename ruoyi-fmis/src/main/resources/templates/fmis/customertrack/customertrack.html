@@ -1,192 +1,115 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('客户追踪列表')" />
+    <th:block th:include="include :: header('客户追踪详情列表')"/>
 </head>
 <body class="gray-bg">
-     <div class="container-div">
-        <div class="row">
-            <div class="col-sm-12 search-collapse">
-                <form id="formId">
-                    <div class="select-list">
-                        <ul>
-                            <li>
-                                <p>客户名称：</p>
-                                <input type="text" name="customerName"/>
-                            </li>
-                            <li>
-                                <p>客户代号：</p>
-                                <input type="text" name="codeName"/>
-                            </li>
-                            <li>
-                                <p>合同待执行：</p>
-                                <input type="text" name="contractExecuted"/>
-                            </li>
-                            <li>
-                                <p>成单状态：</p>
-                                <select name="singleState" th:with="type=${@dict.getType('customer_single_state')}">
-                                    <option value="">所有</option>
-                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                                </select>
-                            </li>
-
-                            <li>
-                                <p>合同待执行：</p>
-                                <input type="text" name="contractExecuted"/>
-                            </li>
-                            <li>
-                                <p>报价待追踪：</p>
-                                <input type="text" name="offerTracked"/>
-                            </li>
-                            <li>
-                                <p>email：</p>
-                                <input type="text" name="email"/>
-                            </li>
-                            <li class="select-time">
-                                <p>闭环时间：</p>
-                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginClosedloopTime]"/>
-                                <span>-</span>
-                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endClosedloopTime]"/>
-                            </li>
-                            <li>
-                                <p>联系人：</p>
-                                <input type="text" name="contacts"/>
-                            </li>
-                            <li>
-                                <p>电话：</p>
-                                <input type="text" name="contactPhone"/>
-                            </li>
-                            <li>
-                                <p>传真：</p>
-                                <input type="text" name="fax"/>
-                            </li>
-                            <li>
-                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
-                            </li>
-                        </ul>
-                    </div>
-                </form>
-            </div>
-
-            <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="fmis:customertrack:add">
-                    <i class="fa fa-plus"></i> 添加
-                </a>
-                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="fmis:customertrack:edit">
-                    <i class="fa fa-edit"></i> 修改
-                </a>
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="fmis:customertrack:remove">
-                    <i class="fa fa-remove"></i> 删除
-                </a>
-                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="fmis:customertrack:export">
-                    <i class="fa fa-download"></i> 导出
-                 </a>
-            </div>
-            <div class="col-sm-12 select-table table-striped">
-                <table id="bootstrap-table"></table>
-            </div>
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <input name="customerId" th:field="*{customerId}" type="hidden">
         </div>
     </div>
-    <th:block th:include="include :: footer" />
-    <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('fmis:customertrack:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('fmis:customertrack:remove')}]];
-        var singleStateDatas = [[${@dict.getType('customer_single_state')}]];
-        var reportpriceStateDatas = [[${@dict.getType('customer_reportprice_state')}]];
-        var prefix = ctx + "fmis/customertrack";
+</div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('fmis:customertrack:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('fmis:customertrack:remove')}]];
+    var singleStateDatas = [[${@dict.getType('customer_single_state')}]];
+    var reportpriceStateDatas = [[${@dict.getType('customer_reportprice_state')}]];
+    var prefix = ctx + "fmis/customertrack";
 
-        $(function() {
-            var options = {
-                url: prefix + "/list",
-                createUrl: prefix + "/add",
-                updateUrl: prefix + "/edit/{id}",
-                removeUrl: prefix + "/remove",
-                exportUrl: prefix + "/export",
-                modalName: "客户追踪",
-                columns: [{
-                    checkbox: true
-                },
+    $(function () {
+        var customerId = $("#customerId").value();
+        var options = {
+            url: prefix + "/list?customerId=" + customerId,
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            modalName: "客户追踪",
+            columns: [{
+                checkbox: true
+            },
                 {
-                    field : 'trackId', 
-                    title : 'ID',
+                    field: 'trackId',
+                    title: 'ID',
                     visible: false
                 },
                 {
-                    field : 'customerName',
-                    title : '客户名称'
+                    field: 'customerName',
+                    title: '客户名称'
                 },
                 {
-                    field : 'codeName',
-                    title : '客户代号'
+                    field: 'codeName',
+                    title: '客户代号'
                 },
                 {
-                    field : 'singleState', 
-                    title : '成单状态',
-                    formatter: function(value, row, index) {
-                       return $.table.selectDictLabel(singleStateDatas, value);
+                    field: 'singleState',
+                    title: '成单状态',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(singleStateDatas, value);
                     }
                 },
                 {
-                    field : 'reportpriceState', 
-                    title : '报价状态',
-                    formatter: function(value, row, index) {
-                       return $.table.selectDictLabel(reportpriceStateDatas, value);
+                    field: 'reportpriceState',
+                    title: '报价状态',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(reportpriceStateDatas, value);
                     }
                 },
                 {
-                    field : 'contractExecuted', 
-                    title : '合同待执行'
+                    field: 'contractExecuted',
+                    title: '合同待执行'
                 },
                 {
-                    field : 'offerTracked', 
-                    title : '报价待追踪'
+                    field: 'offerTracked',
+                    title: '报价待追踪'
                 },
                 {
-                    field : 'orderNumber', 
-                    title : '订货次数'
+                    field: 'orderNumber',
+                    title: '订货次数'
                 },
                 {
-                    field : 'feedback', 
-                    title : '追踪反馈'
+                    field: 'feedback',
+                    title: '追踪反馈'
                 },
                 {
-                    field : 'remark', 
-                    title : '备注'
+                    field: 'remark',
+                    title: '备注'
                 },
                 {
-                    field : 'email', 
-                    title : 'email'
+                    field: 'email',
+                    title: 'email'
                 },
                 {
-                    field : 'closedloopTime', 
-                    title : '闭环时间'
+                    field: 'closedloopTime',
+                    title: '闭环时间'
                 },
                 {
-                    field : 'contacts', 
-                    title : '联系人'
+                    field: 'contacts',
+                    title: '联系人'
                 },
                 {
-                    field : 'contactPhone', 
-                    title : '电话'
+                    field: 'contactPhone',
+                    title: '电话'
                 },
                 {
-                    field : 'fax', 
-                    title : '传真'
+                    field: 'fax',
+                    title: '传真'
                 },
                 {
                     title: '操作',
                     align: 'left',
-                    formatter: function(value, row, index) {
+                    formatter: function (value, row, index) {
                         var actions = [];
                         actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.trackId + '\')"><i class="fa fa-edit"></i> 编辑</a> ');
                         actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.trackId + '\')"><i class="fa fa-remove"></i> 删除</a>');
                         return actions.join('');
                     }
                 }]
-            };
-            $.table.init(options);
-        });
-    </script>
+        };
+        $.table.init(options);
+    });
+</script>
 </body>
 </html>

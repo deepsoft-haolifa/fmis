@@ -1,6 +1,9 @@
 package com.ruoyi.fmis.customertrack.service;
 
+import com.ruoyi.fmis.customer.domain.BizCustomer;
 import com.ruoyi.fmis.customertrack.domain.BizCustomerTrack;
+import com.ruoyi.fmis.customertrack.domain.BizCustomerTrackVo;
+
 import java.util.List;
 
 /**
@@ -10,6 +13,14 @@ import java.util.List;
  * @date 2020-04-29
  */
 public interface IBizCustomerTrackService {
+
+    /**
+     * 查询客户列表（包含客户追踪）
+     * @param bizCustomer
+     * @return
+     */
+    List<BizCustomerTrackVo> selectBizCustomerListAndTrack(BizCustomer bizCustomer);
+
     /**
      * 查询客户追踪
      *
@@ -25,8 +36,10 @@ public interface IBizCustomerTrackService {
      * @return 客户追踪集合
      */
     public List<BizCustomerTrack> selectBizCustomerTrackList(BizCustomerTrack bizCustomerTrack);
+
+
     /**
-     * 查询客户追踪列表
+     * 查询客户列表
      *
      * @param bizCustomerTrack 客户追踪
      * @return 客户追踪集合

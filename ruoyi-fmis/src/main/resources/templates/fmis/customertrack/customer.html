@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('客户跟踪')"/>
+    <th:block th:include="include :: datetimepicker-css"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            <p>客户区域：</p>
+                            <select name="area" class="form-control" th:with="type=${@dict.getType('customer_area')}">
+                                <option value="">全部</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                        th:value="${dict.dictValue}"></option>
+                            </select>
+                        </li>
+                        <li>
+                            <p>客户类别：</p>
+                            <select name="customerLevel" class="form-control"
+                                    th:with="type=${@dict.getType('customer_level')}">
+                                <option value="">全部</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                        th:value="${dict.dictValue}"></option>
+                            </select>
+                        </li>
+                        <li>
+                            <p>客户名称：</p>
+                            <input name="name" class="form-control" type="text">
+                        </li>
+                        <li>
+                            <p>客户代号：</p>
+                            <input name="codeName" class="form-control" type="text">
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: datetimepicker-js"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('fmis:customer:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('fmis:customer:remove')}]];
+    var areaDatas = [[${@dict.getType('customer_area')}]];
+    var customerLevelDatas = [[${@dict.getType('customer_level')}]];
+    var industryDivisionDatas = [[${@dict.getType('industry_division')}]];
+
+    var sourceDatas = [[${@dict.getType('customer_source')}]];
+    var companycodeDatas = [[${@dict.getType('customer_company_code')}]];
+    var brandDatas = [[${@dict.getType('customer_brand')}]];
+
+    var recordTypeDatas = [[${@dict.getType('customer_record_type')}]];
+    var prefix = ctx + "fmis/customertrack";
+
+    $(function () {
+        var options = {
+            url: prefix + "/customer-list",
+            modalName: "客户",
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'customerId',
+                    title: '客户ID',
+                    visible: false
+                },
+                {
+                    field: 'area',
+                    title: '客户区域',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(areaDatas, value);
+                    }
+                },
+                {
+                    field: 'areaCodeName',
+                    title: '区域代码'
+                },
+                {
+                    field: 'customerLevel',
+                    title: '客户类别',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(customerLevelDatas, value);
+                    }
+                },
+                {
+                    field: 'name',
+                    title: '客户名称'
+                },
+                {
+                    field: 'codeName',
+                    title: '客户代号'
+                },
+                {
+                    field: 'source',
+                    title: '客户来源',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(sourceDatas, value);
+                    }
+                },
+                {
+                    field: 'areaCode',
+                    title: '客户所属商务公司代码',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(companycodeDatas, value);
+                    }
+                },
+                {
+                    field: 'ownerUserId',
+                    title: '业务负责人'
+                },
+                {
+                    field: 'deptName',
+                    title: '隶属部门'
+                },
+
+                {
+                    field: 'productInfo',
+                    title: '主要产品'
+                },
+                {
+                    field: 'fax',
+                    title: '联系传真'
+                },
+                {
+                    field: 'telephone',
+                    title: '联系电话'
+                },
+                {
+                    field: 'companyAddress',
+                    title: '公司地址'
+                },
+                {
+                    field: 'feedback',
+                    title: '追踪反馈'
+                }, {
+                    field: 'updateTime',
+                    title: '反馈时间'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + addFlag + '" href="javascript:void(0)" onclick="addTrack(\'' + row.customerId + '\',\'' + row.name + '\')"><i class="fa fa-edit"></i> 添加追踪</a> ');
+                        actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="viewExamineDetail(\'' + row.customerId + '\')"><i class="fa fa-edit"></i> 详情</a>');
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(options);
+    });
+
+    function addTrack(customerId, customerName) {
+        var url = prefix + "/add/" + customerId + "/" + customerName;
+        $.modal.openNoEnter("详情", url, $(window).width(), $(window).height(), function () {
+            $.modal.closeAll();
+        });
+    }
+
+    function viewExamineDetail(dataId) {
+        var url = prefix + "/detail/" + dataId;
+        $.modal.openNoEnter("详情", url, $(window).width(), $(window).height(), function () {
+            $.modal.closeAll();
+        });
+    }
+
+    $("input[name='recordDate']").datetimepicker({
+        format: "yyyy-mm",
+        minView: "year",
+        startView: "year",
+        autoclose: true
+    });
+
+    function openImportExcel() {
+        var url = prefix + "/upload";
+        var widthNum = this.innerWidth - 50;
+        var heigthNum = this.innerHeight - 50;
+        $.modal.open("导入客户", url, widthNum, heigthNum, function (index, layero) {
+            var iframeWin = layero.find('iframe')[0];
+            iframeWin.contentWindow.submitHandler(index, layero);
+            appendTable();
+            calculateTotalPrice();
+        });
+    }
+</script>
+</body>
+</html>

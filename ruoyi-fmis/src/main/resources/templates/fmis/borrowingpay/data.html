@@ -1,115 +1,121 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('借款管理列表')" />
+    <th:block th:include="include :: header('借款管理列表')"/>
 </head>
 <body class="gray-bg">
-     <div class="container-div">
-        <div class="row">
-            <div class="col-sm-12 search-collapse">
-                <form id="formId">
-                    <input type="hidden" name="bizId" id="bizId" value="borrowing"/>
-                    <div class="select-list">
-                        <ul>
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <input type="hidden" name="bizId" id="bizId" value="borrowing"/>
+                <div class="select-list">
+                    <ul>
 
-                        </ul>
-                    </div>
-                </form>
-            </div>
+                    </ul>
+                </div>
+            </form>
+        </div>
 
-            <div class="btn-group-sm" id="toolbar" role="group">
-
-
+        <div class="btn-group-sm" id="toolbar" role="group">
 
 
-            </div>
-            <div class="col-sm-12 select-table table-striped">
-                <table id="bootstrap-table"></table>
-            </div>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
         </div>
     </div>
-    <th:block th:include="include :: footer" />
-    <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('fmis:borrowing:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('fmis:borrowing:remove')}]];
-        var prefix = ctx + "fmis/borrowingpay";
+</div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('fmis:borrowing:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('fmis:borrowing:remove')}]];
+    var prefix = ctx + "fmis/borrowingpay";
 
-        var capitalPropertyDatas = [[${@dict.getType('capital_property')}]];
+    var capitalPropertyDatas = [[${@dict.getType('capital_property')}]];
 
-        $(function() {
-            var options = {
-                url: prefix + "/list",
-                createUrl: prefix + "/add",
-                updateUrl: prefix + "/edit/{id}",
-                removeUrl: prefix + "/remove",
-                exportUrl: prefix + "/export",
-                uniqueId: "dataId",
-                modalName: "借款管理",
-                columns: [{
-                    checkbox: true
-                },
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            uniqueId: "dataId",
+            modalName: "借款管理",
+            columns: [{
+                checkbox: true
+            },
                 {
-                    field : 'dataId', 
-                    title : 'ID',
+                    field: 'dataId',
+                    title: 'ID',
                     visible: false
                 },
 
                 {
-                    field : 'deptName',
-                    title : '借款单位'
+                    field: 'deptName',
+                    title: '借款单位'
                 },
                 {
-                    field : 'deptName1',
-                    title : '付款公司'
+                    field: 'deptName1',
+                    title: '付款公司'
                 },
                 {
-                    field : 'datetime1',
-                    title : '借款日期'
+                    field: 'datetime1',
+                    title: '借款日期'
                 },
                 {
-                    field : 'string3',
-                    title : '用途'
+                    field: 'string3',
+                    title: '用途'
                 },
                 {
-                    field : 'createByName',
-                    title : '借款人'
+                    field: 'createByName',
+                    title: '借款人'
                 },
                 {
-                    field : 'string4',
-                    title : '资金性质',
-                    formatter: function(value, row, index) {
+                    field: 'string4',
+                    title: '资金性质',
+                    formatter: function (value, row, index) {
                         return $.table.selectDictLabel(capitalPropertyDatas, value);
                     }
                 },
                 {
-                    field : 'string5',
-                    title : '户名'
+                    field: 'string5',
+                    title: '户名'
                 },
                 {
-                    field : 'string6',
-                    title : '卡号'
+                    field: 'string6',
+                    title: '卡号'
                 },
                 {
-                    field : 'strin7',
-                    title : '开户行'
+                    field: 'string7',
+                    title: '开户行'
                 },
                 {
-                    field : 'price1',
-                    title : '借款金额'
+                    field: 'price1',
+                    title: '借款金额'
                 },
                 {
-                    field : 'datetime2',
-                    title : '预计还款日期'
+                    field: 'datetime2',
+                    title: '预计还款日期'
                 },
                 {
-                    field : 'flowStatusRemark',
-                    title : '状态',
-                    align: 'center'
+                    field: 'string11',
+                    title: '付款状态',
+                    formatter: function (value, row, index) {
+                        var string11 = row.string11;
+                        if (string11 === "1") {
+                            return "已付款";
+                        } else {
+                            return "未付款";
+                        }
+                    }
+
                 },
                 {
                     title: '操作',
                     align: 'center',
-                    formatter: function(value, row, index) {
+                    formatter: function (value, row, index) {
                         var actions = [];
                         var string12 = row.string12;
                         if (!$.common.isEmpty(string12)) {
@@ -132,68 +138,72 @@
                         return actions.join('');
                     }
                 }]
-            };
-            $.table.init(options);
+        };
+        $.table.init(options);
+    });
+
+    function uploadFile(dataId) {
+        var url = prefix + "/upload?dataId=" + dataId;
+        $.modal.openNoEnter("上传附件", url, $(window).width() - 50, $(window).height() - 50, function () {
+            $.modal.closeAll();
+            $.table.refresh();
         });
-        function uploadFile (dataId) {
-            var url = prefix + "/upload?dataId=" + dataId;
-            $.modal.openNoEnter("上传附件", url,$(window).width() - 50,$(window).height() - 50,function(){
-                $.modal.closeAll();
+    }
+
+    function add() {
+        var url = prefix + "/add";
+        $.modal.openFull("增加", url);
+    }
+
+    function edit(id) {
+        if ($.common.isEmpty(id) && $.table._option.type == table_type.bootstrapTreeTable) {
+            var row = $.bttTable.bootstrapTreeTable('getSelections')[0];
+            if ($.common.isEmpty(row)) {
+                $.modal.alertWarning("请至少选择一条记录");
+                return;
+            }
+
+
+            var url = $.table._option.updateUrl.replace("{id}", row[$.table._option.uniqueId]);
+            $.modal.openFull("修改" + $.table._option.modalName, url);
+        } else {
+            var row = $('#bootstrap-table').bootstrapTable("getRowByUniqueId", id);
+            if (row == null) {
+                row = $('#bootstrap-table').bootstrapTable('getSelections')[0];
+            }
+            if (row != null) {
+                var flowStatus = row.flowStatus;
+
+            }
+            $.modal.openFull("修改" + $.table._option.modalName, $.operate.editUrl(id));
+        }
+    }
+
+    function viewExamineHistory(dataId) {
+        var bizId = $("#bizId").val();
+        var url = prefix + "/viewExamineHistory?dataId=" + dataId + "&&bizId=" + bizId;
+        $.modal.openNoEnter("审批记录", url, '', '', function () {
+            $.modal.closeAll();
+        });
+    }
+
+    function viewDetail(dataId) {
+        var bizId = $("#bizId").val();
+        var url = prefix + "/viewDetail?dataId=" + dataId + "&&bizId=" + bizId;
+        $.modal.openNoEnter("详情", url, $(window).width(), $(window).height(), function () {
+            $.modal.closeAll();
+        });
+    }
+
+    function pay(dataId) {
+        $.modal.confirm("确定放款吗？", function () {
+            console.log(dataId + "--dataId");
+            var url = prefix + "/pay?dataId=" + dataId;
+            $.operate.saveModal(url, '', function () {
                 $.table.refresh();
             });
-        }
-        function add() {
-            var url = prefix + "/add";
-            $.modal.openFull("增加", url);
-        }
-        function edit(id) {
-            if($.common.isEmpty(id) && $.table._option.type == table_type.bootstrapTreeTable) {
-                var row = $.bttTable.bootstrapTreeTable('getSelections')[0];
-                if ($.common.isEmpty(row)) {
-                    $.modal.alertWarning("请至少选择一条记录");
-                    return;
-                }
-
-
-                var url = $.table._option.updateUrl.replace("{id}", row[$.table._option.uniqueId]);
-                $.modal.openFull("修改" + $.table._option.modalName, url);
-            } else {
-                var row = $('#bootstrap-table').bootstrapTable("getRowByUniqueId",id);
-                if (row == null) {
-                    row = $('#bootstrap-table').bootstrapTable('getSelections')[0];
-                }
-                if (row != null) {
-                    var flowStatus = row.flowStatus;
-
-                }
-                $.modal.openFull("修改" + $.table._option.modalName, $.operate.editUrl(id));
-            }
-        }
-
-        function viewExamineHistory(dataId) {
-            var bizId = $("#bizId").val();
-            var url = prefix + "/viewExamineHistory?dataId=" + dataId + "&&bizId=" + bizId;
-            $.modal.openNoEnter("审批记录", url,'','',function(){
-                $.modal.closeAll();
-            });
-        }
-
-        function viewDetail(dataId) {
-            var bizId = $("#bizId").val();
-            var url = prefix + "/viewDetail?dataId=" + dataId + "&&bizId=" + bizId;
-            $.modal.openNoEnter("详情", url,$(window).width(),$(window).height(),function(){
-                $.modal.closeAll();
-            });
-        }
-        function pay(dataId) {
-            $.modal.confirm("确定放款吗？", function() {
-                console.log(dataId + "--dataId");
-                var url = prefix + "/pay?dataId=" + dataId;
-                $.operate.saveModal(url,'',function(){
-                    $.table.refresh();
-                });
-            });
-        }
-    </script>
+        });
+    }
+</script>
 </body>
 </html>
