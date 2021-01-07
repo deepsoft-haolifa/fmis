@@ -163,7 +163,7 @@
     </delete>
 
     <select id="getLastRecord" resultMap="BizBankBillResult">
-        select * from biz_bank_bill order by id desc limit 1;
+        select * from biz_bank_bill order by bill_id desc limit 1;
     </select>
 
 </mapper>

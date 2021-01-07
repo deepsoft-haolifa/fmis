@@ -98,11 +98,11 @@ public class BizBillAmountServiceImpl implements IBizBillAmountService {
         bizBillAmount.setType(type);
         LocalDateTime now = LocalDateTime.now();
         bizBillAmount.setYear(String.valueOf(now.getYear()));
-        bizBillAmount.setMonth(String.valueOf(now.getMonth()));
+        bizBillAmount.setMonth(String.valueOf(now.getMonthValue()));
         List<BizBillAmount> bizBillAmountList = bizBillAmountMapper.selectBizBillAmountList(bizBillAmount);
         if (CollectionUtils.isEmpty(bizBillAmountList)) {
             return BigDecimal.ZERO;
         }
-        return bizBillAmountList.get(0).getPreAmount();
+        return bizBillAmountList.get(0).getNextAmount();
     }
 }

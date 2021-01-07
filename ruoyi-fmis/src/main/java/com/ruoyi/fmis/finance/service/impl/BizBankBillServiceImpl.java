@@ -90,12 +90,12 @@ public class BizBankBillServiceImpl implements IBizBankBillService {
             lastBalance = BigDecimal.valueOf(lastRecord.getBalance());
         }
         // 收款，上次余额 + 本次收款
-        if (bizBankBill.getType().equals(1)) {
+        if (bizBankBill.getType().equals("1")) {
             Double collectionMoney = bizBankBill.getCollectionMoney();
             double abs = Math.abs(collectionMoney);
             BigDecimal add = BigDecimal.valueOf(abs).add(lastBalance);
             bizBankBill.setBalance(add.doubleValue());
-        } else if (bizBankBill.getType().equals(2)) {
+        } else if (bizBankBill.getType().equals("2")) {
             // 付款 , 上次余额 - 本次付款
             Double payment = bizBankBill.getPayment();
             double abs = Math.abs(payment);
