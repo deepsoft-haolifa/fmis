@@ -7,7 +7,9 @@
 <div class="container-div">
     <div class="row">
         <div class="col-sm-12 search-collapse">
-            <input name="customerId" th:field="*{customerId}" type="hidden">
+            <form id="formId">
+                <input type="hidden" name="customerId" id="customerId" th:value="${customerId}"/>
+            </form>
         </div>
     </div>
 </div>
@@ -20,16 +22,10 @@
     var prefix = ctx + "fmis/customertrack";
 
     $(function () {
-        var customerId = $("#customerId").value();
         var options = {
-            url: prefix + "/list?customerId=" + customerId,
-            createUrl: prefix + "/add",
-            updateUrl: prefix + "/edit/{id}",
-            removeUrl: prefix + "/remove",
+            url: prefix + "/track-list",
             modalName: "客户追踪",
-            columns: [{
-                checkbox: true
-            },
+            columns: [
                 {
                     field: 'trackId',
                     title: 'ID',

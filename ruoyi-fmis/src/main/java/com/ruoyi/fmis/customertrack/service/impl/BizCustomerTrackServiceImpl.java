@@ -48,15 +48,16 @@ public class BizCustomerTrackServiceImpl implements IBizCustomerTrackService {
             bizCustomers.forEach(cu -> {
                 BizCustomerTrackVo vo = new BizCustomerTrackVo();
                 BeanUtils.copyProperties(cu, vo);
-
                 List<BizCustomerTrack> customerTracks = bizCustomerTrackMapper.selectBizCustomerTrackList(new BizCustomerTrack() {{
                     setCustomerId(cu.getCustomerId());
                 }});
-                // 找出最新一条跟踪记录
-                List<BizCustomerTrack> tracks = customerTracks.stream().sorted(Comparator.comparing(BizCustomerTrack::getTrackId).reversed()).collect(Collectors.toList());
-                BizCustomerTrack bizCustomerTrack = tracks.get(0);
-                vo.setFeedback(bizCustomerTrack.getFeedback());
-                vo.setFeedbackDate(bizCustomerTrack.getCreateTime());
+                if (!CollectionUtils.isEmpty(customerTracks)) {
+                    // 找出最新一条跟踪记录
+                    List<BizCustomerTrack> tracks = customerTracks.stream().sorted(Comparator.comparing(BizCustomerTrack::getTrackId).reversed()).collect(Collectors.toList());
+                    BizCustomerTrack bizCustomerTrack = tracks.get(0);
+                    vo.setFeedback(bizCustomerTrack.getFeedback());
+                    vo.setFeedbackDate(bizCustomerTrack.getCreateTime());
+                }
                 list.add(vo);
             });
         }

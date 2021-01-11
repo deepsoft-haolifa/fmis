@@ -54,8 +54,8 @@
 <th:block th:include="include :: footer"/>
 <th:block th:include="include :: datetimepicker-js"/>
 <script th:inline="javascript">
-    var editFlag = [[${@permission.hasPermi('fmis:customer:edit')}]];
-    var removeFlag = [[${@permission.hasPermi('fmis:customer:remove')}]];
+    var addFlag = [[${@permission.hasPermi('fmis:customertrack:add')}]];
+    var viewFlag = [[${@permission.hasPermi('fmis:customertrack:list')}]];
     var areaDatas = [[${@dict.getType('customer_area')}]];
     var customerLevelDatas = [[${@dict.getType('customer_level')}]];
     var industryDivisionDatas = [[${@dict.getType('industry_division')}]];
@@ -71,9 +71,7 @@
         var options = {
             url: prefix + "/customer-list",
             modalName: "客户",
-            columns: [{
-                checkbox: true
-            },
+            columns: [
                 {
                     field: 'customerId',
                     title: '客户ID',
@@ -157,7 +155,7 @@
                     formatter: function (value, row, index) {
                         var actions = [];
                         actions.push('<a class="btn btn-success btn-xs ' + addFlag + '" href="javascript:void(0)" onclick="addTrack(\'' + row.customerId + '\',\'' + row.name + '\')"><i class="fa fa-edit"></i> 添加追踪</a> ');
-                        actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="viewExamineDetail(\'' + row.customerId + '\')"><i class="fa fa-edit"></i> 详情</a>');
+                        actions.push('<a class="btn btn-success btn-xs ' + viewFlag + '" href="javascript:void(0)" onclick="viewTrackList(\'' + row.customerId + '\')"><i class="fa fa-edit"></i> 追踪详情</a> ');
                         return actions.join('');
                     }
                 }]
@@ -167,14 +165,14 @@
 
     function addTrack(customerId, customerName) {
         var url = prefix + "/add/" + customerId + "/" + customerName;
-        $.modal.openNoEnter("详情", url, $(window).width(), $(window).height(), function () {
+        $.modal.open("新增", url, $(window).width(), $(window).height(), function () {
             $.modal.closeAll();
         });
     }
 
-    function viewExamineDetail(dataId) {
-        var url = prefix + "/detail/" + dataId;
-        $.modal.openNoEnter("详情", url, $(window).width(), $(window).height(), function () {
+    function viewTrackList(customerId) {
+        var url = prefix + "/track-list/" + customerId;
+        $.modal.openTab("追踪列表", url, $(window).width(), $(window).height(), function () {
             $.modal.closeAll();
         });
     }
@@ -186,17 +184,6 @@
         autoclose: true
     });
 
-    function openImportExcel() {
-        var url = prefix + "/upload";
-        var widthNum = this.innerWidth - 50;
-        var heigthNum = this.innerHeight - 50;
-        $.modal.open("导入客户", url, widthNum, heigthNum, function (index, layero) {
-            var iframeWin = layero.find('iframe')[0];
-            iframeWin.contentWindow.submitHandler(index, layero);
-            appendTable();
-            calculateTotalPrice();
-        });
-    }
 </script>
 </body>
 </html>

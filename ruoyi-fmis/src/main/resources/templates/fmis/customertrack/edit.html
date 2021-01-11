@@ -11,8 +11,8 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">客户名称：</label>
                 <div class="col-sm-8">
-                    <input name="customerName" id="customerName" th:field="*{customerName}" class="form-control" type="text" readonly onclick="selectCustomer()" required>
-                    <input name="customerId" id="customerId" class="form-control" type="hidden" th:field="*{customerId}">
+                    <input name="customerName" id="customerName" th:value="*{customerName}" class="form-control" type="text" readonly>
+                    <input name="customerId" id="customerId" class="form-control" type="hidden" th:value="*{customerId}">
                 </div>
             </div>
             <div class="form-group">    
