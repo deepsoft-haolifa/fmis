@@ -61,13 +61,16 @@
         q.string20 as payWay,
         s.name supplierName,
         -- 到货数量
-        0 arrivalQty,
+        ifnull(stn.arrivalQty,0) arrivalQty,
         -- 到货货款
         0 arrivalAmount,
         -- 已付货款
-        0 as paidAmount
+        ifnull(p.paidAmount,0) paidAmount
         from biz_process_data q
         left join biz_suppliers s on s.suppliers_id=q.string6
+        left join (select contract_id,sum(apply_amount) as paidAmount  from biz_pay_plan where status=1 group by contract_id) p on p.contract_id=q.data_id
+        left join (select string4,sum(string1) as arrivalQty from biz_data_stestn  group by string4) stn on stn.string4=q.data_id
+
         <include refid="standAccountWhere"></include>
         order by q.create_time desc
     </select>

@@ -61,6 +61,7 @@
             <if test="deptId != null  and deptId != ''">and dept_id = #{deptId}</if>
             <if test="contractStatus != null  and contractStatus != ''">and contract_status = #{contractStatus}</if>
         </where>
+        order by b.create_time desc
     </select>
 
     <select id="selectBizBankBillById" parameterType="Long" resultMap="BizBankBillResult">
