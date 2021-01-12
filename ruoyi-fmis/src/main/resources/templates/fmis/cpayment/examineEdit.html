@@ -14,39 +14,24 @@
             <div class="col-sm-8">
                 <div class="input-group date">
                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                    <input name="datetime1" th:value="${#dates.format(bizProcessData.datetime1, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    <input name="datetime1" th:value="${#dates.format(bizProcessData.datetime1, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text" readonly>
                 </div>
             </div>
         </div>
 
         <div class="form-group">
-            <label class="col-sm-3 control-label">收款单位：</label>
-            <div class="col-sm-8">
-                <input name="string1" th:field="*{string1}" class="form-control" type="text">
-            </div>
-        </div>
-
-<!--        <div class="form-group">-->
-<!--            <label class="col-sm-3 control-label">客户名称：</label>-->
-<!--            <div class="col-sm-8">-->
-<!--                <input name="string4" class="form-control" type="hidden" th:field="*{string2}" >-->
-<!--                <input name="customerName" id="customerName" class="form-control" th:field="*{customerName}" type="text" readonly onclick="selectCustomer()" required>-->
-<!--            </div>-->
-<!--        </div>-->
-
-        <div class="form-group">
             <label class="col-sm-3 control-label">选择合同：</label>
             <div class="col-sm-6">
                 <input name="contractIds" id="contractIds" th:value="${contractIds}" class="form-control" type="hidden" >
-                <input name="contractNames" id="contractNames" th:value="${contractNames}" class="form-control" type="text" readonly onclick="selectContract(0)" required>
+                <input name="contractNames" id="contractNames" th:value="${contractNames}" class="form-control" type="text" readonly required>
             </div>
 
-            <div class="col-sm-3">
-                <a class="btn btn-success btn-sm" onclick="selectContract(1)" >
-                    <i class="fa fa"></i> 追加
-                    <input type="hidden" id="productOperationType" name="productOperationType" value="0">
-                </a>
-            </div>
+<!--            <div class="col-sm-3">-->
+<!--                <a class="btn btn-success btn-sm" onclick="selectContract(1)" >-->
+<!--                    <i class="fa fa"></i> 追加-->
+<!--                    <input type="hidden" id="productOperationType" name="productOperationType" value="0">-->
+<!--                </a>-->
+<!--            </div>-->
         </div>
 
 
@@ -66,18 +51,18 @@
                     </div>
 
                     <div class='col-sm-2'>
-                        <input class='form-control' type='text' th:id="'settlementUnit_' + ${qp.string1}" th:value="${qp.string3}"  name='settlementUnit' placeholder='结算单位' />
+                        <input class='form-control' type='text' th:id="'settlementUnit_' + ${qp.string1}" th:value="${qp.string3}"  name='settlementUnit' placeholder='结算单位' readonly />
                     </div>
                     <div class='col-sm-2'>
-                        <input class='form-control' type='text' th:id="'supplierName_' + ${qp.string1}" th:value="${qp.string4}"  name='supplierName' placeholder='供应商' />
+                        <input class='form-control' type='text' th:id="'supplierName_' + ${qp.string1}" th:value="${qp.string4}"  name='supplierName' placeholder='供应商' readonly/>
                     </div>
 
                     <div class='col-sm-1'>
-                        <input class='form-control' type='text' th:id="'payWay_' + ${qp.string1}" th:value="${qp.string5}"  name='payWay' placeholder='付款方式' />
+                        <input class='form-control' type='text' th:id="'payWay_' + ${qp.string1}" th:value="${qp.string5}"  name='payWay' placeholder='付款方式' readonly/>
                     </div>
 
                     <div class='col-sm-1'>
-                        <input class='form-control' type='text' th:id="'productPrice_' + ${qp.string1}" th:value="${qp.price1}"  name='productPrice' placeholder='金额' />
+                        <input class='form-control' type='text' th:id="'productPrice_' + ${qp.string1}" th:value="${qp.price1}"  name='productPrice' placeholder='金额' readonly/>
                     </div>
 
                 </div>
@@ -89,14 +74,14 @@
                     <label class='control-label col-sm-3'>备注：</label>
 
                     <div class='col-sm-5'>
-                        <input th:id="'productRemark_' + ${qp.string1}" th:value="${qp.remark}"  class='form-control' type='text'>
+                        <input th:id="'productRemark_' + ${qp.string1}" th:value="${qp.remark}"  class='form-control' type='text' readonly>
                     </div>
 
-                    <div class='col-sm-3' >
-                        <a class="btn btn-danger btn-xs" th:onclick="removeProject([[${qp.string1}]]);" >
-                            <i class="fa fa-remove"></i> 删除
-                        </a>
-                    </div>
+<!--                    <div class='col-sm-3' >-->
+<!--                        <a class="btn btn-danger btn-xs" th:onclick="removeProject([[${qp.string1}]]);" >-->
+<!--                            <i class="fa fa-remove"></i> 删除-->
+<!--                        </a>-->
+<!--                    </div>-->
                 </div>
 
 
@@ -111,7 +96,7 @@
         <div class="form-group">
             <label class="col-sm-3 control-label">总计：</label>
             <div class="col-sm-8">
-                <input name="price1" th:field="*{price1}" class="form-control" type="text">
+                <input name="price1" th:field="*{price1}" class="form-control" type="text" readonly>
             </div>
         </div>
 
@@ -143,7 +128,7 @@
         <div class="form-group">
             <label class="col-sm-3 control-label">备注：</label>
             <div class="col-sm-8">
-                <input name="string20" th:field="*{remark}" class="form-control" type="text">
+                <input name="string20" th:field="*{remark}" class="form-control" type="text" readonly>
             </div>
         </div>
 

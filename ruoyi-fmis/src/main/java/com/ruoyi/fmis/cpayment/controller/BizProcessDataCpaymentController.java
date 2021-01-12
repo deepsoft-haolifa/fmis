@@ -27,8 +27,10 @@ import org.springframework.ui.ModelMap;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * 发货管理Controller
@@ -145,7 +147,7 @@ public class BizProcessDataCpaymentController extends BaseController {
             for (BizProcessChild bizProcessChild : bizProcessChildList) {
                 String productId = bizProcessChild.getString1();
                 BizProcessData bizProduct = bizProcessDataService.selectBizProcessDataById(Long.parseLong(productId));
-                productNames += bizProduct.getString1() + ",";
+                productNames += bizProduct.getString2() + ",";
                 productIds += bizProduct.getDataId() + ",";
                 bizProcessChild.setBizProcessData(bizProduct);
             }
@@ -222,17 +224,31 @@ public class BizProcessDataCpaymentController extends BaseController {
             }
         }
         String productArrayStr = bizProcessData.getProductParmters();
+        if (StringUtils.isEmpty(productArrayStr)) {
+            return error("付款申请详情为空，不能申请");
+        }
+        String payCompanyStr = "";
+        JSONArray productArray = JSONArray.parseArray(productArrayStr);
+        for (int i = 0; i < productArray.size(); i++) {
+            JSONObject json = productArray.getJSONObject(i);
+            // 结算单位，结算单位一直才能提交
+            String string3 = json.getString("string3");
+            if (StringUtils.isNotEmpty(string3)) {
+                if ("" != payCompanyStr && !payCompanyStr.equals(string3)) {
+                    return error("只能是同一个付款单位才能申请");
+                }
+                payCompanyStr = string3;
+            }
+        }
+        bizProcessData.setString1(payCompanyStr);
         int insertReturn = bizProcessDataService.insertBizProcessData(bizProcessData);
         Long dataId = bizProcessData.getDataId();
-        if (StringUtils.isNotEmpty(productArrayStr)) {
-            JSONArray productArray = JSONArray.parseArray(productArrayStr);
-            for (int i = 0; i < productArray.size(); i++) {
-                JSONObject json = productArray.getJSONObject(i);
-                BizProcessChild bizProcessChild = JSONObject.parseObject(json.toJSONString(), BizProcessChild.class);
-                if (StringUtils.isNotEmpty(bizProcessChild.getString1())) {
-                    bizProcessChild.setDataId(dataId);
-                    bizProcessChildService.insertBizProcessChild(bizProcessChild);
-                }
+        for (int i = 0; i < productArray.size(); i++) {
+            JSONObject json = productArray.getJSONObject(i);
+            BizProcessChild bizProcessChild = JSONObject.parseObject(json.toJSONString(), BizProcessChild.class);
+            if (StringUtils.isNotEmpty(bizProcessChild.getString1())) {
+                bizProcessChild.setDataId(dataId);
+                bizProcessChildService.insertBizProcessChild(bizProcessChild);
             }
         }
         return toAjax(insertReturn);

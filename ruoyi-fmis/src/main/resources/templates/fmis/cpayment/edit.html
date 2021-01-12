@@ -19,12 +19,12 @@
                 </div>
             </div>
 
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">收款单位：</label>
-                <div class="col-sm-8">
-                    <input name="string1" th:field="*{string1}" class="form-control" type="text">
-                </div>
-            </div>
+<!--            <div class="form-group">    -->
+<!--                <label class="col-sm-3 control-label">收款单位：</label>-->
+<!--                <div class="col-sm-8">-->
+<!--                    <input name="string1" th:field="*{string1}" class="form-control" type="text">-->
+<!--                </div>-->
+<!--            </div>-->
 
 <!--            <div class="form-group">-->
 <!--                <label class="col-sm-3 control-label">客户名称：</label>-->
@@ -62,7 +62,7 @@
                         <div class='col-sm-2'>
                             <input th:id="'qpId_' + ${qp.dataId}" class='form-control' type='hidden' th:value="${qp.dataId}">
                             <input th:id="'productId_' + ${qp.string1}" class='form-control' type='hidden' th:value="${qp.string1}">
-                            <input name='productName' id="productName" th:value="${qp.string2}" value="productShowText" class='form-control' type='text' readonly >
+                            <input class='form-control'  type='text'  th:id="'productName_' + ${qp.string1}" th:value="${qp.string2}" name='productName' readonly >
                         </div>
 
                         <div class='col-sm-2'>
@@ -174,9 +174,10 @@
                     var productObj = new Object();
                     var productId = productIdsStrs[i];
                     productObj["string1"] = productId;
-                    productObj["string2"] = $("#settlementUnit_" + productId).val();
-                    productObj["string3"] = $("#supplierName_" + productId).val();
-                    productObj["string4"] = $("#payWay_" + productId).val();
+                    productObj["string2"] =  $("#productName_" + productId).val();
+                    productObj["string3"] = $("#settlementUnit_" + productId).val();
+                    productObj["string4"] = $("#supplierName_" + productId).val();
+                    productObj["string5"] = $("#payWay_" + productId).val();
                     productObj["price1"] = $("#productPrice_" + productId).val();
                     productObj["remark"] = $("#productRemark_" + productId).val();
                     productArray.push(productObj);

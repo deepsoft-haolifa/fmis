@@ -958,7 +958,7 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
                 BizPayPlan bizPayPlan = new BizPayPlan();
                 bizPayPlan.setPayDataId(dataId);
                 bizPayPlan.setApplyPayCompany(child.getString3());
-                bizPayPlan.setApplyCollectionCompany(bizProcessData.getString1());
+                bizPayPlan.setApplyCollectionCompany(child.getString4());
                 bizPayPlan.setApplyRemark(child.getRemark());
                 bizPayPlan.setApplyAmount(child.getPrice1());
                 bizPayPlan.setApplyDate(bizProcessData.getDatetime1());
