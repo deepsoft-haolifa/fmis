@@ -55,6 +55,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="contactPhone != null  and contactPhone != ''"> and contact_phone = #{contactPhone}</if>
             <if test="fax != null  and fax != ''"> and fax = #{fax}</if>
         </where>
+    order by track_id desc
     </select>
 
 
@@ -85,6 +86,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="customerName != null  and customerName != ''"> and c.name like concat('%', #{customerName}, '%')</if>
             <if test="codeName != null  and codeName != ''"> and c.code_name like concat('%', #{codeName}, '%')</if>
         </where>
+        order by t.track_id desc
     </select>
     
     <select id="selectBizCustomerTrackById" parameterType="Long" resultMap="BizCustomerTrackResult">

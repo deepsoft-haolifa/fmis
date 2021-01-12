@@ -22,8 +22,18 @@ public class BizCustomer extends BaseEntity {
 
     /** 客户ID */
     private Long customerId;
-
-
+    @Setter
+    @Getter
+    /**
+     * 追踪反馈
+     */
+    private String feedback;
+    @Setter
+    @Getter
+    /**
+     * 反馈时间
+     */
+    private Date feedbackDate;
 
     @Setter
     @Getter

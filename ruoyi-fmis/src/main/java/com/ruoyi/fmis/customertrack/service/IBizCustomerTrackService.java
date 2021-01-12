@@ -19,7 +19,7 @@ public interface IBizCustomerTrackService {
      * @param bizCustomer
      * @return
      */
-    List<BizCustomerTrackVo> selectBizCustomerListAndTrack(BizCustomer bizCustomer);
+    List<BizCustomer> selectBizCustomerListAndTrack(BizCustomer bizCustomer);
 
     /**
      * 查询客户追踪

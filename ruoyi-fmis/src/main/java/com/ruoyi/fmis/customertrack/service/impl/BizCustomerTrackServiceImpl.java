@@ -41,13 +41,10 @@ public class BizCustomerTrackServiceImpl implements IBizCustomerTrackService {
      */
     @Override
     @DataScope(deptAlias = "dt", userAlias = "u")
-    public List<BizCustomerTrackVo> selectBizCustomerListAndTrack(BizCustomer bizCustomer) {
-        List<BizCustomerTrackVo> list = new ArrayList<>();
+    public List<BizCustomer> selectBizCustomerListAndTrack(BizCustomer bizCustomer) {
         List<BizCustomer> bizCustomers = bizCustomerMapper.selectBizCustomerList(bizCustomer);
         if (!CollectionUtils.isEmpty(bizCustomers)) {
             bizCustomers.forEach(cu -> {
-                BizCustomerTrackVo vo = new BizCustomerTrackVo();
-                BeanUtils.copyProperties(cu, vo);
                 List<BizCustomerTrack> customerTracks = bizCustomerTrackMapper.selectBizCustomerTrackList(new BizCustomerTrack() {{
                     setCustomerId(cu.getCustomerId());
                 }});
@@ -55,13 +52,16 @@ public class BizCustomerTrackServiceImpl implements IBizCustomerTrackService {
                     // 找出最新一条跟踪记录
                     List<BizCustomerTrack> tracks = customerTracks.stream().sorted(Comparator.comparing(BizCustomerTrack::getTrackId).reversed()).collect(Collectors.toList());
                     BizCustomerTrack bizCustomerTrack = tracks.get(0);
-                    vo.setFeedback(bizCustomerTrack.getFeedback());
-                    vo.setFeedbackDate(bizCustomerTrack.getCreateTime());
+                    cu.setFeedback(bizCustomerTrack.getFeedback());
+                    if (bizCustomerTrack.getUpdateTime() != null) {
+                        cu.setFeedbackDate(bizCustomerTrack.getUpdateTime());
+                    } else {
+                        cu.setFeedbackDate(bizCustomerTrack.getCreateTime());
+                    }
                 }
-                list.add(vo);
             });
         }
-        return list;
+        return bizCustomers;
     }
 
     /**

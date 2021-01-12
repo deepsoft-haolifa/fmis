@@ -165,16 +165,12 @@
 
     function addTrack(customerId, customerName) {
         var url = prefix + "/add/" + customerId + "/" + customerName;
-        $.modal.open("新增", url, $(window).width(), $(window).height(), function () {
-            $.modal.closeAll();
-        });
+        $.modal.open("新增", url);
     }
 
     function viewTrackList(customerId) {
         var url = prefix + "/track-list/" + customerId;
-        $.modal.openTab("追踪列表", url, $(window).width(), $(window).height(), function () {
-            $.modal.closeAll();
-        });
+        $.modal.openTab("追踪列表", url);
     }
 
     $("input[name='recordDate']").datetimepicker({

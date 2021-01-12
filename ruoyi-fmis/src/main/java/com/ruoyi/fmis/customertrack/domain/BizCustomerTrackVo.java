@@ -11,9 +11,9 @@ import java.util.Date;
  *
  * @author murphy.he
  **/
-@EqualsAndHashCode(callSuper = true)
 @Data
 public class BizCustomerTrackVo extends BizCustomer {
+    private static final long serialVersionUID = 1L;
 
     /**
      * 追踪反馈

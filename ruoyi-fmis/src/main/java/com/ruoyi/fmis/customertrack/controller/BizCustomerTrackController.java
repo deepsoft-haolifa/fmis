@@ -51,7 +51,7 @@ public class BizCustomerTrackController extends BaseController {
     @ResponseBody
     public TableDataInfo customerList(BizCustomer bizCustomer) {
         startPage();
-        List<BizCustomerTrackVo> list = bizCustomerTrackService.selectBizCustomerListAndTrack(bizCustomer);
+        List<BizCustomer> list = bizCustomerTrackService.selectBizCustomerListAndTrack(bizCustomer);
         return getDataTable(list);
     }
 
@@ -65,11 +65,13 @@ public class BizCustomerTrackController extends BaseController {
     /**
      * 查询客户追踪列表
      */
-    @RequiresPermissions("fmis:customertrack:list")
-    @PostMapping("/track-list")
+    @RequiresPermissions("fmis:customertrack:view")
+    @PostMapping("/track-list/{customerId}")
     @ResponseBody
-    public TableDataInfo trackList(BizCustomerTrack bizCustomerTrack) {
+    public TableDataInfo trackList(@PathVariable("customerId") Long customerId) {
         startPage();
+        BizCustomerTrack bizCustomerTrack=new BizCustomerTrack();
+        bizCustomerTrack.setCustomerId(customerId);
         List<BizCustomerTrack> list = bizCustomerTrackService.selectBizCustomerTrackListAs(bizCustomerTrack);
         return getDataTable(list);
     }

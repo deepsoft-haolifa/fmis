@@ -11,6 +11,9 @@
                 <input type="hidden" name="customerId" id="customerId" th:value="${customerId}"/>
             </form>
         </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
     </div>
 </div>
 <th:block th:include="include :: footer"/>
@@ -19,11 +22,15 @@
     var removeFlag = [[${@permission.hasPermi('fmis:customertrack:remove')}]];
     var singleStateDatas = [[${@dict.getType('customer_single_state')}]];
     var reportpriceStateDatas = [[${@dict.getType('customer_reportprice_state')}]];
-    var prefix = ctx + "fmis/customertrack";
+    var prefix = ctx + "fmis/customertrack"
 
     $(function () {
+       var customer_id= $("#customerId").val();
+       console.log(customer_id);
         var options = {
-            url: prefix + "/track-list",
+            url: prefix + "/track-list/"+customer_id,
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
             modalName: "客户追踪",
             columns: [
                 {
