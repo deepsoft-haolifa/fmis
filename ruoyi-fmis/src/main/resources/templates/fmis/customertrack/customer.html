@@ -55,7 +55,7 @@
 <th:block th:include="include :: datetimepicker-js"/>
 <script th:inline="javascript">
     var addFlag = [[${@permission.hasPermi('fmis:customertrack:add')}]];
-    var viewFlag = [[${@permission.hasPermi('fmis:customertrack:list')}]];
+    var viewFlag = [[${@permission.hasPermi('fmis:customertrack:view')}]];
     var areaDatas = [[${@dict.getType('customer_area')}]];
     var customerLevelDatas = [[${@dict.getType('customer_level')}]];
     var industryDivisionDatas = [[${@dict.getType('industry_division')}]];

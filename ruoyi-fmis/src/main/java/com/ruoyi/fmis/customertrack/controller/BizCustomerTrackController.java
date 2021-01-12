@@ -46,7 +46,7 @@ public class BizCustomerTrackController extends BaseController {
     /**
      * 查询客户列表（关联了客户跟踪信息）
      */
-    @RequiresPermissions("fmis:customerList:list")
+    @RequiresPermissions("fmis:customerList:view")
     @PostMapping("/customer-list")
     @ResponseBody
     public TableDataInfo customerList(BizCustomer bizCustomer) {
