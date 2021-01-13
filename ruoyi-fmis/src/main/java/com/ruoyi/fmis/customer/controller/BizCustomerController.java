@@ -4,11 +4,13 @@ import java.util.*;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.PageHelper;
 import com.ruoyi.common.config.Global;
 import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.poi.ExcelProduct;
+import com.ruoyi.common.utils.security.PermissionUtils;
 import com.ruoyi.fmis.chistory.domain.BizCustomerHistory;
 import com.ruoyi.fmis.chistory.service.IBizCustomerHistoryService;
 import com.ruoyi.fmis.common.BizConstants;
@@ -20,6 +22,7 @@ import com.ruoyi.fmis.suppliers.domain.BizSuppliers;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysDept;
 import com.ruoyi.system.domain.SysDictData;
+import com.ruoyi.system.domain.SysRole;
 import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.service.ISysDeptService;
 import com.ruoyi.system.service.ISysDictDataService;
@@ -89,7 +92,8 @@ public class BizCustomerController extends BaseController {
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(BizCustomer bizCustomer) {
-        startPage();
+//        startPage();
+        PageHelper.startPage(1, 10, "");
         List<BizCustomer> list = bizCustomerService.selectBizCustomerList(bizCustomer);
         return getDataTable(list);
     }
@@ -210,6 +214,31 @@ public class BizCustomerController extends BaseController {
             }
         }
         if (CollectionUtil.isEmpty(list) || list.size() == 0) {
+            return BizConstants.VALIDATE_IS_NOT_EXIST;
+        }
+        return BizConstants.VALIDATE_IS_EXIST;
+    }
+    @PostMapping("/checkCount")
+    @ResponseBody
+    public String checkCount(BizCustomer bizCustomer)
+    {
+//        startPage();
+        PageHelper.startPage(1, 50, "");
+        Map<String, Object> map =  new HashMap<>();
+        Long id = (Long) PermissionUtils.getPrincipalProperty("userId");
+        map.put("dataScope"," AND (u.user_id = " + id + ")");
+        bizCustomer.setParams(map);
+        List<BizCustomer> list = bizCustomerService.selectBizCustomerListNoAuth(bizCustomer);
+        List<SysRole> roles = (List<SysRole> ) PermissionUtils.getPrincipalProperty("roles");
+
+        boolean flag = false;
+        for (SysRole sysRole : roles) {
+            if (sysRole.getRoleKey().equals("admin")) {
+                flag = true;
+                break;
+            }
+        }
+        if (list.size() < 10 || flag) {
             return BizConstants.VALIDATE_IS_NOT_EXIST;
         }
         return BizConstants.VALIDATE_IS_EXIST;

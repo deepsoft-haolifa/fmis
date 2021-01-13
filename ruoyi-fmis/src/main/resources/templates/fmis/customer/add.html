@@ -373,6 +373,30 @@
                         }
                     }
                 },
+                areaCode:{
+                    required: true,
+                    remote: {
+                        url: prefix + "/checkCount",
+                        type: "post",
+                        dataType: "json",
+                        async: false,
+                        data: {
+                            areaCode : function() {
+                                return $.common.trim($("#areaCode").val());
+                            },
+                            status : 0,
+                            customerId : 0
+                        },
+                        dataFilter: function(data, type) {
+                            var validateUnique = $.validate.unique(data);
+                            console.log("validateUnique:"+validateUnique)
+                            if (!validateUnique) {
+                                alert("只允许最多添加50个客户")
+                            }
+                            return validateUnique;
+                        }
+                    }
+                },
                 contactPhone:{
                     required: true,
                     remote: {
@@ -389,6 +413,7 @@
                         },
                         dataFilter: function(data, type) {
                             var validateUnique = $.validate.unique(data);
+
                             return validateUnique;
                         }
                     }
@@ -401,6 +426,9 @@
                 },"contactName": {
                     required: icon + "请填写联系人姓名",
                     remote: icon + "联系人姓名重复"
+                },"areaCode": {
+                    required: icon + "最多添加五十个客户",
+                    remote: icon + "最多添加五十个客户"
                 },"contactPhone": {
                     required: icon + "请填写联系人电话",
                     remote: icon + "联系人电话重复"
