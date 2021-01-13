@@ -141,4 +141,12 @@ public class BizBankBillServiceImpl implements IBizBankBillService {
     public int deleteBizBankBillById(Long billId) {
         return bizBankBillMapper.deleteBizBankBillById(billId);
     }
+
+    @Override
+    public boolean existsByCertificateNumber(String certificateNumber) {
+        List<BizBankBill> bizBankBills = bizBankBillMapper.selectBizBankBillList(new BizBankBill() {{
+            setCertificateNumber(certificateNumber);
+        }});
+        return CollectionUtils.isNotEmpty(bizBankBills);
+    }
 }

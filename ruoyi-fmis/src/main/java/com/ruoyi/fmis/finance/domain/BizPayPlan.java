@@ -19,6 +19,7 @@ public class BizPayPlan extends BaseEntity {
     private Long payPlanId;
 
     /** 付款申请Id（biz_process_data 里面的data_id） */
+    @Excel(name = "付款申请Id", readConverterExp = "b=iz_process_data,里=面的data_id")
     private Long payDataId;
 
     /** 申请编号 */
@@ -30,6 +31,7 @@ public class BizPayPlan extends BaseEntity {
     private Date applyDate;
 
     /** 采购合同ID */
+    @Excel(name = "采购合同ID")
     private String contractId;
 
     /** 采购合同号 */
@@ -53,15 +55,24 @@ public class BizPayPlan extends BaseEntity {
     private String applyRemark;
 
     /** 付款方式; 字典：pay_way */
+    @Excel(name = "付款方式; 字典：pay_way")
     private String payWay;
 
+    /** 付款类型: 默认是货款 */
+    @Excel(name = "付款类型: 默认是货款")
+    private String paymentType;
+
     /** 付款状态：0.未付；1.已付； 字典：pay_status */
-    @Excel(name = "付款状态")
+    @Excel(name = "付款状态：0.未付；1.已付； 字典：pay_status")
     private String status;
 
     /** 付款日期 */
     @Excel(name = "付款日期", width = 30, dateFormat = "yyyy-MM-dd")
     private Date payDate;
+
+    /** 记账方式;字典：booking_type */
+    @Excel(name = "记账方式;字典：booking_type")
+    private String bookingType;
 
     public void setPayPlanId(Long payPlanId) {
         this.payPlanId = payPlanId;
@@ -140,6 +151,13 @@ public class BizPayPlan extends BaseEntity {
     public String getPayWay() {
         return payWay;
     }
+    public void setPaymentType(String paymentType) {
+        this.paymentType = paymentType;
+    }
+
+    public String getPaymentType() {
+        return paymentType;
+    }
     public void setStatus(String status) {
         this.status = status;
     }
@@ -154,27 +172,36 @@ public class BizPayPlan extends BaseEntity {
     public Date getPayDate() {
         return payDate;
     }
+    public void setBookingType(String bookingType) {
+        this.bookingType = bookingType;
+    }
+
+    public String getBookingType() {
+        return bookingType;
+    }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("payPlanId", getPayPlanId())
-            .append("payDataId", getPayDataId())
-            .append("applyNo", getApplyNo())
-            .append("applyDate", getApplyDate())
-            .append("contractId", getContractId())
-            .append("contractNo", getContractNo())
-            .append("applyPayCompany", getApplyPayCompany())
-            .append("applyCollectionCompany", getApplyCollectionCompany())
-            .append("applyAmount", getApplyAmount())
-            .append("applyRemark", getApplyRemark())
-            .append("payWay", getPayWay())
-            .append("status", getStatus())
-            .append("payDate", getPayDate())
-            .append("createBy", getCreateBy())
-            .append("createTime", getCreateTime())
-            .append("updateBy", getUpdateBy())
-            .append("updateTime", getUpdateTime())
-            .toString();
+                .append("payPlanId", getPayPlanId())
+                .append("payDataId", getPayDataId())
+                .append("applyNo", getApplyNo())
+                .append("applyDate", getApplyDate())
+                .append("contractId", getContractId())
+                .append("contractNo", getContractNo())
+                .append("applyPayCompany", getApplyPayCompany())
+                .append("applyCollectionCompany", getApplyCollectionCompany())
+                .append("applyAmount", getApplyAmount())
+                .append("applyRemark", getApplyRemark())
+                .append("payWay", getPayWay())
+                .append("paymentType", getPaymentType())
+                .append("status", getStatus())
+                .append("payDate", getPayDate())
+                .append("bookingType", getBookingType())
+                .append("createBy", getCreateBy())
+                .append("createTime", getCreateTime())
+                .append("updateBy", getUpdateBy())
+                .append("updateTime", getUpdateTime())
+                .toString();
     }
 }

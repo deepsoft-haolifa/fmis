@@ -12,6 +12,7 @@ import com.ruoyi.common.utils.bean.BeanUtils;
 import com.ruoyi.fmis.customer.domain.BizCustomer;
 import com.ruoyi.fmis.customer.mapper.BizCustomerMapper;
 import com.ruoyi.fmis.customertrack.domain.BizCustomerTrackVo;
+import com.ruoyi.framework.util.ShiroUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.fmis.customertrack.mapper.BizCustomerTrackMapper;
@@ -106,6 +107,8 @@ public class BizCustomerTrackServiceImpl implements IBizCustomerTrackService {
     @Override
     public int insertBizCustomerTrack(BizCustomerTrack bizCustomerTrack) {
         bizCustomerTrack.setCreateTime(DateUtils.getNowDate());
+        bizCustomerTrack.setUpdateTime(DateUtils.getNowDate());
+        bizCustomerTrack.setCreateBy(ShiroUtils.getUserId().toString());
         return bizCustomerTrackMapper.insertBizCustomerTrack(bizCustomerTrack);
     }
 
@@ -118,6 +121,7 @@ public class BizCustomerTrackServiceImpl implements IBizCustomerTrackService {
     @Override
     public int updateBizCustomerTrack(BizCustomerTrack bizCustomerTrack) {
         bizCustomerTrack.setUpdateTime(DateUtils.getNowDate());
+        bizCustomerTrack.setUpdateBy(ShiroUtils.getUserId().toString());
         return bizCustomerTrackMapper.updateBizCustomerTrack(bizCustomerTrack);
     }
 

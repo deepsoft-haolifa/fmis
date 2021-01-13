@@ -1,10 +1,15 @@
 package com.ruoyi.fmis.finance.controller;
 
+import java.util.Date;
 import java.util.List;
 
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.fmis.data.domain.BizProcessData;
 import com.ruoyi.fmis.data.service.IBizProcessDataService;
+import com.ruoyi.fmis.finance.domain.BizBankBill;
+import com.ruoyi.fmis.finance.domain.BizBill;
+import com.ruoyi.fmis.finance.service.IBizBankBillService;
+import com.ruoyi.fmis.finance.service.IBizBillService;
 import com.ruoyi.framework.util.ShiroUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -40,6 +45,10 @@ public class BizPayPlanController extends BaseController {
     private IBizPayPlanService bizPayPlanService;
     @Autowired
     private IBizProcessDataService bizProcessDataService;
+    @Autowired
+    private IBizBillService bizBillService;
+    @Autowired
+    private IBizBankBillService bizBankBillService;
 
     @RequiresPermissions("finance:payPlan:view")
     @GetMapping()
@@ -108,6 +117,9 @@ public class BizPayPlanController extends BaseController {
     @GetMapping("/edit/{payPlanId}")
     public String edit(@PathVariable("payPlanId") Long payPlanId, ModelMap mmap) {
         BizPayPlan bizPayPlan = bizPayPlanService.selectBizPayPlanById(payPlanId);
+        if (bizPayPlan.getPayDate() == null) {
+            bizPayPlan.setPayDate(new Date());
+        }
         mmap.put("bizPayPlan", bizPayPlan);
         return prefix + "/edit";
     }
@@ -120,7 +132,43 @@ public class BizPayPlanController extends BaseController {
     @PostMapping("/edit")
     @ResponseBody
     public AjaxResult editSave(BizPayPlan bizPayPlan) {
-        return toAjax(bizPayPlanService.updateBizPayPlan(bizPayPlan));
+        int payPlan = bizPayPlanService.updateBizPayPlan(bizPayPlan);
+        // 已付款状态之后；
+        if (payPlan > 0 && "1".equals(bizPayPlan.getStatus())) {
+            String bookingType = bizPayPlan.getBookingType();
+            if ("1".equals(bookingType)) {
+                // 添加现金日记账
+                if (!bizBillService.existsByCertificateNumber(bizPayPlan.getApplyNo())) {
+                    BizBill bizBill = new BizBill();
+                    bizBill.setType("1");
+                    bizBill.setCertificateNumber(bizPayPlan.getApplyNo());
+                    bizBill.setD(bizPayPlan.getPayDate());
+                    bizBill.setPaymentType(bizPayPlan.getPaymentType());
+                    bizBill.setPayment(bizPayPlan.getApplyAmount());
+                    bizBill.setRemark(bizPayPlan.getApplyRemark());
+                    bizBill.setString1(bizPayPlan.getApplyPayCompany());
+                    bizBill.setString2(bizPayPlan.getApplyCollectionCompany());
+                    bizBillService.insertBizBill(bizBill);
+                }
+            } else if ("2".equals(bookingType)) {
+                // 添加银行日记账
+                if (!bizBankBillService.existsByCertificateNumber(bizPayPlan.getApplyNo())) {
+                    BizBankBill bizBankBill = new BizBankBill();
+                    bizBankBill.setType("2");
+                    bizBankBill.setCertificateNumber(bizPayPlan.getApplyNo());
+                    bizBankBill.setOperateDate(bizPayPlan.getPayDate());
+                    bizBankBill.setPayWay(bizPayPlan.getPayWay());
+                    bizBankBill.setPaymentType(bizPayPlan.getPaymentType());
+                    bizBankBill.setPayment(bizPayPlan.getApplyAmount());
+                    bizBankBill.setRemark(bizPayPlan.getApplyRemark());
+                    bizBankBill.setPayCompany(bizPayPlan.getApplyPayCompany());
+                    bizBankBill.setCollectCompany(bizPayPlan.getApplyCollectionCompany());
+                    bizBankBillService.insertBizBankBill(bizBankBill);
+                }
+
+            }
+        }
+        return toAjax(payPlan);
     }
 
 //    /**

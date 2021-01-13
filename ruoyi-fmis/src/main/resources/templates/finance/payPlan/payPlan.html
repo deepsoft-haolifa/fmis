@@ -81,6 +81,7 @@
     var prefix = ctx + "finance/payPlan";
     var payWayDatas = [[${@dict.getType('pay_way')}]];
     var payStatusDatas = [[${@dict.getType('pay_status')}]];
+    var bookingTypeDict = [[${@dict.getType('booking_type')}]];
     $(function () {
         var options = {
             url: prefix + "/list",
@@ -142,6 +143,13 @@
                 {
                     field: 'payDate',
                     title: '付款日期'
+                },
+                {
+                    field: 'bookingType',
+                    title: '记账方式',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(bookingTypeDict, value);
+                    }
                 },
                 {
                     title: '操作',

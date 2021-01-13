@@ -961,6 +961,7 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
                 bizPayPlan.setApplyCollectionCompany(child.getString4());
                 bizPayPlan.setApplyRemark(child.getRemark());
                 bizPayPlan.setApplyAmount(child.getPrice1());
+                bizPayPlan.setPaymentType("2");// 货款
                 bizPayPlan.setApplyDate(bizProcessData.getDatetime1());
                 bizPayPlan.setContractNo(child.getString2());
                 bizPayPlan.setContractId(child.getString1());

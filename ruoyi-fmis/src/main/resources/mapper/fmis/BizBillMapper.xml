@@ -72,6 +72,7 @@
 
             <if test="billId != null  and billId != ''"> and b.bill_id = #{billId}</if>
         </where>
+        order by bill_id desc
     </select>
 
     <select id="selectBizBillById" parameterType="Long" resultMap="BizBillResult">

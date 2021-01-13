@@ -53,6 +53,16 @@
                     <input name="applyRemark" th:field="*{applyRemark}" class="form-control" type="text" readonly>
                 </div>
             </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">付款类型：</label>
+                <div class="col-sm-8">
+                    <select name="paymentType" class="form-control m-b"
+                            th:with="type=${@dict.getType('payment_type1')}" readonly>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"
+                                th:field="*{paymentType}"></option>
+                    </select>
+                </div>
+            </div>
             <div class="form-group">    
                 <label class="col-sm-3 control-label">付款方式</label>
                 <div class="col-sm-8">
@@ -78,6 +88,15 @@
                         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                         <input name="payDate" th:value="${#dates.format(bizPayPlan.payDate, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
                     </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">记账类型：</label>
+                <div class="col-sm-8">
+                    <select name="bookingType" class="form-control m-b" th:with="type=${@dict.getType('booking_type')}" required>
+                        <option value="">请选择</option>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{bookingType}"></option>
+                    </select>
                 </div>
             </div>
         </form>

@@ -67,7 +67,6 @@ public class BizPayPlanServiceImpl implements IBizPayPlanService {
     public int updateBizPayPlan(BizPayPlan bizPayPlan) {
         bizPayPlan.setUpdateTime(DateUtils.getNowDate());
         bizPayPlan.setUpdateBy(ShiroUtils.getUserId().toString());
-
         return bizPayPlanMapper.updateBizPayPlan(bizPayPlan);
     }
 

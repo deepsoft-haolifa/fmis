@@ -57,4 +57,8 @@ public interface IBizBankBillService {
      * @return 结果
      */
     public int deleteBizBankBillById(Long billId);
+
+
+    public boolean existsByCertificateNumber(String certificateNumber);
+
 }

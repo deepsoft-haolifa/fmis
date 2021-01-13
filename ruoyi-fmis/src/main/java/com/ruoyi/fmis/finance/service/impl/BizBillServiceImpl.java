@@ -1,19 +1,19 @@
 package com.ruoyi.fmis.finance.service.impl;
 
-import java.math.BigDecimal;
-import java.util.List;
-
+import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
-import com.ruoyi.fmis.finance.domain.BizBankBill;
+import com.ruoyi.fmis.finance.domain.BizBill;
+import com.ruoyi.fmis.finance.mapper.BizBillMapper;
 import com.ruoyi.fmis.finance.service.IBizBillAmountService;
+import com.ruoyi.fmis.finance.service.IBizBillService;
 import com.ruoyi.framework.util.ShiroUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.ruoyi.fmis.finance.mapper.BizBillMapper;
-import com.ruoyi.fmis.finance.domain.BizBill;
-import com.ruoyi.fmis.finance.service.IBizBillService;
-import com.ruoyi.common.core.text.Convert;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * 现金日记账Service业务层处理
@@ -124,5 +124,13 @@ public class BizBillServiceImpl implements IBizBillService {
     @Override
     public int deleteBizBillById(Long billId) {
         return bizBillMapper.deleteBizBillById(billId);
+    }
+
+    @Override
+    public boolean existsByCertificateNumber(String certificateNumber) {
+            List<BizBill> bizBills = bizBillMapper.selectBizBillList(new BizBill() {{
+            setCertificateNumber(certificateNumber);
+        }});
+        return CollectionUtils.isNotEmpty(bizBills);
     }
 }
