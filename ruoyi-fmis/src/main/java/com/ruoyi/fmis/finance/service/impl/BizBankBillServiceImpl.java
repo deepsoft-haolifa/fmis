@@ -1,23 +1,25 @@
 package com.ruoyi.fmis.finance.service.impl;
 
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-
+import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.fmis.customer.domain.BizCustomer;
 import com.ruoyi.fmis.customer.service.IBizCustomerService;
+import com.ruoyi.fmis.finance.domain.BizBankBill;
+import com.ruoyi.fmis.finance.mapper.BizBankBillMapper;
+import com.ruoyi.fmis.finance.service.IBizBankBillService;
 import com.ruoyi.fmis.finance.service.IBizBillAmountService;
 import com.ruoyi.framework.util.ShiroUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.ruoyi.fmis.finance.mapper.BizBankBillMapper;
-import com.ruoyi.fmis.finance.domain.BizBankBill;
-import com.ruoyi.fmis.finance.service.IBizBankBillService;
-import com.ruoyi.common.core.text.Convert;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * 银行日记账Service业务层处理
@@ -54,6 +56,9 @@ public class BizBankBillServiceImpl implements IBizBankBillService {
     @Override
     public List<BizBankBill> selectBizBankBillList(BizBankBill bizBankBill) {
         List<BizBankBill> bizBankBills = bizBankBillMapper.selectBizBankBillList(bizBankBill);
+        if (CollectionUtils.isEmpty(bizBankBills)) {
+            return new ArrayList<>();
+        }
         // 如果是记账是收款；需要转义一下表中的付款单位，也就是客户的名称
         Set<String> customerIdSet = bizBankBills.stream().filter(e -> "1".equals(e.getType())).map(BizBankBill::getPayCompany).collect(Collectors.toSet());
         List<BizCustomer> bizCustomers = customerService.selectCustomerAll(customerIdSet);
@@ -61,7 +66,9 @@ public class BizBankBillServiceImpl implements IBizBankBillService {
             Map<Long, String> customerMap = bizCustomers.stream().collect(Collectors.toMap(BizCustomer::getCustomerId, BizCustomer::getName));
             bizBankBills.forEach(e -> {
                 if ("1".equals(e.getType())) {
-                    e.setPayCompany(customerMap.get(Long.valueOf(e.getPayCompany())));
+                    if (StringUtils.isNotEmpty(e.getPayCompany())) {
+                        e.setPayCompany(customerMap.get(Long.valueOf(e.getPayCompany())));
+                    }
                 }
             });
         }
