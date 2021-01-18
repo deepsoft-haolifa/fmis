@@ -965,6 +965,7 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
                 bizPayPlan.setApplyDate(bizProcessData.getDatetime1());
                 bizPayPlan.setContractNo(child.getString2());
                 bizPayPlan.setContractId(child.getString1());
+                bizPayPlan.setContractPayWay(child.getString5());
                 bizPayPlan.setApplyNo("PP" + DateUtils.dateTimeNow() + RandomStringUtils.randomNumeric(3));
                 bizPayPlan.setCreateTime(DateUtils.getNowDate());
                 bizPayPlan.setCreateBy(ShiroUtils.getUserId().toString());

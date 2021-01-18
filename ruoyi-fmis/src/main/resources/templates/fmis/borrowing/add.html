@@ -22,13 +22,14 @@
             </div>
 
             <div class="form-group">
-                <label class="col-sm-3 control-label">付款公司：</label>
+                <label class="col-sm-3 control-label">付款单位：</label>
                 <div class="col-sm-8">
-                    <input name="string10" id="string10" class="form-control" type="hidden">
-                    <div class="input-group">
-                        <input name="deptName1" onclick="selectDeptTree1()" id="treeName1" type="text" placeholder="请选择部门" class="form-control" required>
-                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                    </div>
+                    <select name="string10" class="form-control m-b"
+                            th:with="type=${@dict.getType('pay_company')}">
+                        <option value="">请选择</option>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                th:value="${dict.dictLabel}"></option>
+                    </select>
                 </div>
             </div>
 

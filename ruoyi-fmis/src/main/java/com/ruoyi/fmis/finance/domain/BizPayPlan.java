@@ -14,7 +14,6 @@ import java.util.Date;
  */
 public class BizPayPlan extends BaseEntity {
     private static final long serialVersionUID = 1L;
-
     /** ID */
     private Long payPlanId;
 
@@ -37,6 +36,10 @@ public class BizPayPlan extends BaseEntity {
     /** 采购合同号 */
     @Excel(name = "采购合同号")
     private String contractNo;
+
+    /** 采购合同付款方式 */
+    @Excel(name = "采购合同付款方式")
+    private String contractPayWay;
 
     /** 付款单位 */
     @Excel(name = "付款单位")
@@ -116,6 +119,13 @@ public class BizPayPlan extends BaseEntity {
     public String getContractNo() {
         return contractNo;
     }
+    public void setContractPayWay(String contractPayWay) {
+        this.contractPayWay = contractPayWay;
+    }
+
+    public String getContractPayWay() {
+        return contractPayWay;
+    }
     public void setApplyPayCompany(String applyPayCompany) {
         this.applyPayCompany = applyPayCompany;
     }
@@ -189,6 +199,7 @@ public class BizPayPlan extends BaseEntity {
                 .append("applyDate", getApplyDate())
                 .append("contractId", getContractId())
                 .append("contractNo", getContractNo())
+                .append("contractPayWay", getContractPayWay())
                 .append("applyPayCompany", getApplyPayCompany())
                 .append("applyCollectionCompany", getApplyCollectionCompany())
                 .append("applyAmount", getApplyAmount())

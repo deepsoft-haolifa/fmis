@@ -15,21 +15,17 @@
                 <div class="col-sm-8">
                     <input name="string1" id="string1" th:field="*{string1}" class="form-control" type="hidden">
                     <div class="input-group">
-                        <input class="form-control" type="text" name="deptName" onclick="selectDeptTree()" id="treeName" th:field="*{deptName}" required>
+                        <input class="form-control" type="text" name="deptName" readonly id="treeName" th:field="*{deptName}" required>
                         <span class="input-group-addon"><i class="fa fa-search"></i></span>
                     </div>
                 </div>
             </div>
 
             <div class="form-group">
-                <label class="col-sm-3 control-label">付款公司：</label>
+                <label class="col-sm-3 control-label">付款单位：</label>
 
                 <div class="col-sm-8">
-                    <input name="string10" id="string10" th:field="*{string10}" class="form-control" type="hidden">
-                    <div class="input-group">
-                        <input class="form-control" type="text" name="deptName1" onclick="selectDeptTree1()" id="treeName1" th:field="*{deptName1}" required>
-                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                    </div>
+                    <input name="string10" id="string10" th:field="*{string10}" readonly class="form-control" type="text">
                 </div>
             </div>
 
@@ -38,21 +34,21 @@
 
                 <div class="input-group date">
                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                    <input name="datetime1" th:value="${#dates.format(bizProcessData.datetime1, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    <input name="datetime1" th:value="${#dates.format(bizProcessData.datetime1, 'yyyy-MM-dd')}" readonly class="form-control" placeholder="yyyy-MM-dd" type="text">
                 </div>
             </div>
 
             <div class="form-group">
                 <label class="col-sm-3 control-label">用   途：</label>
                 <div class="col-sm-8">
-                    <input name="string3" th:field="*{string3}" class="form-control" type="text">
+                    <input name="string3" th:field="*{string3}" readonly class="form-control" type="text">
                 </div>
             </div>
 
             <div class="form-group">
                 <label class="col-sm-3 control-label">资金性质：</label>
                 <div class="col-sm-8">
-                    <select name="string4" class="form-control m-b" th:with="type=${@dict.getType('capital_property')}">
+                    <select name="string4" disabled class="form-control m-b" th:with="type=${@dict.getType('capital_property')}">
                         <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{string4}"></option>
                     </select>
                 </div>
@@ -61,28 +57,28 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">户名：</label>
                 <div class="col-sm-8">
-                    <input name="string5" th:field="*{string5}" class="form-control" type="text">
+                    <input name="string5" th:field="*{string5}" readonly class="form-control" type="text">
                 </div>
             </div>
 
             <div class="form-group">
                 <label class="col-sm-3 control-label">卡号：</label>
                 <div class="col-sm-8">
-                    <input name="string6" th:field="*{string6}" class="form-control" type="text">
+                    <input name="string6" th:field="*{string6}" readonly class="form-control" type="text">
                 </div>
             </div>
 
             <div class="form-group">
                 <label class="col-sm-3 control-label">开户行：</label>
                 <div class="col-sm-8">
-                    <input name="string7" th:field="*{string7}" class="form-control" type="text">
+                    <input name="string7" th:field="*{string7}" readonly class="form-control" type="text">
                 </div>
             </div>
 
             <div class="form-group">
                 <label class="col-sm-3 control-label">借款金额：</label>
                 <div class="col-sm-8">
-                    <input name="price1" th:field="*{price1}" class="form-control" type="text">
+                    <input name="price1" th:field="*{price1}" readonly class="form-control" type="text">
                 </div>
             </div>
 
@@ -90,11 +86,37 @@
                 <label class="col-sm-3 control-label">预计还款日期：</label>
                 <div class="input-group date">
                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                    <input name="datetime2" th:value="${#dates.format(bizProcessData.datetime2, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    <input name="datetime2" th:value="${#dates.format(bizProcessData.datetime2, 'yyyy-MM-dd')}" readonly class="form-control" placeholder="yyyy-MM-dd" type="text">
                 </div>
             </div>
 
-
+            <div class="form-group">
+                <label class="col-sm-3 control-label">付款状态</label>
+                <div class="col-sm-8">
+                    <select name="string1" class="form-control m-b" th:with="type=${@dict.getType('pay_status')}">
+                        <option value="">请选择</option>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{string11}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">付款日期：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="datetime3" th:value="${#dates.format(bizProcessData.datetime3, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">记账类型：</label>
+                <div class="col-sm-8">
+                    <select name="string12" class="form-control m-b" th:with="type=${@dict.getType('booking_type')}" required>
+                        <option value="">请选择</option>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{string12}"></option>
+                    </select>
+                </div>
+            </div>
 
         </form>
     </div>
@@ -106,52 +128,9 @@
             focusCleanup: true
         });
 
-
-
-        function selectDeptTree() {
-            var treeId = $("#string1").val();
-            var deptId = $.common.isEmpty(treeId) ? "100" : $("#string1").val();
-            var url = ctx + "system/dept/selectDeptTree/" + deptId;
-            var options = {
-                title: '选择部门',
-                width: "380",
-                url: url,
-                callBack: doSubmit
-            };
-            $.modal.openOptions(options);
-        }
-        function doSubmit(index, layero){
-            var tree = layero.find("iframe")[0].contentWindow.$._tree;
-            var body = layer.getChildFrame('body', index);
-            $("#string1").val(body.find('#treeId').val());
-            $("#treeName").val(body.find('#treeName').val());
-            layer.close(index);
-        }
-
-        function selectDeptTree1() {
-            var treeId = $("#string10").val();
-            var deptId = $.common.isEmpty(treeId) ? "100" : $("#string10").val();
-            var url = ctx + "system/dept/selectDeptTree/" + deptId;
-            var options = {
-                title: '选择部门',
-                width: "380",
-                url: url,
-                callBack: doSubmit1
-            };
-            $.modal.openOptions(options);
-        }
-        function doSubmit1(index, layero){
-            var tree = layero.find("iframe")[0].contentWindow.$._tree;
-            var body = layer.getChildFrame('body', index);
-            $("#string10").val(body.find('#treeId').val());
-            $("#treeName1").val(body.find('#treeName').val());
-            layer.close(index);
-        }
-
         function submitHandler() {
             if ($.validate.form()) {
-                var dataObj = $('#form-data-edit').serializeArray();
-                $.operate.save(prefix + "/edit", dataObj);
+                $.operate.save(prefix + "/doExamine", $('#form-data-edit').serialize());
             }
         }
 
@@ -167,6 +146,23 @@
             autoclose: true
         });
 
+        $("input[name='datetime3']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $("input[name='datetime4']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $("input[name='datetime5']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
     </script>
 </body>
 </html>

@@ -13,6 +13,10 @@ import com.ruoyi.fmis.common.BizConstants;
 import com.ruoyi.fmis.common.CommonUtils;
 import com.ruoyi.fmis.customer.service.IBizCustomerService;
 import com.ruoyi.fmis.define.service.IBizProcessDefineService;
+import com.ruoyi.fmis.finance.domain.BizBankBill;
+import com.ruoyi.fmis.finance.domain.BizBill;
+import com.ruoyi.fmis.finance.service.IBizBankBillService;
+import com.ruoyi.fmis.finance.service.IBizBillService;
 import com.ruoyi.fmis.product.domain.BizProduct;
 import com.ruoyi.fmis.product.service.IBizProductService;
 import com.ruoyi.framework.util.ShiroUtils;
@@ -63,10 +67,10 @@ public class BizProcessDataBorrowingPayController extends BaseController {
 
 
     @Autowired
-    private IBizProductService bizProductService;
+    private IBizBankBillService bizBankBillService;
 
     @Autowired
-    private IBizCustomerService bizCustomerService;
+    private IBizBillService bizBillService;
 
     @RequiresPermissions("fmis:borrowingpay:view")
     @GetMapping()
@@ -110,7 +114,7 @@ public class BizProcessDataBorrowingPayController extends BaseController {
                 } else if ("1".equals(flowStatus)) {
                     flowStatusRemark = "已上报";
                 } else {
-                    SysRole currentSysRole =  CommonUtils.getLikeByMap(flowAllMap,flowStatus.replaceAll("-",""));
+                    SysRole currentSysRole = CommonUtils.getLikeByMap(flowAllMap, flowStatus.replaceAll("-", ""));
                     if (currentSysRole == null) {
                         continue;
                     }
@@ -178,62 +182,9 @@ public class BizProcessDataBorrowingPayController extends BaseController {
         mmap.put("bizTable", bizId);
         return prefix + "/viewExamineHistory";
     }
-    /**
-     * 导出合同管理列表
-     */
-    @RequiresPermissions("fmis:borrowingpay:export")
-    @PostMapping("/export")
-    @ResponseBody
-    public AjaxResult export(BizProcessData bizProcessData) {
-        List<BizProcessData> list = bizProcessDataService.selectBizProcessDataList(bizProcessData);
-        ExcelUtil<BizProcessData> util = new ExcelUtil<BizProcessData>(BizProcessData.class);
-        return util.exportExcel(list, "data");
-    }
 
     /**
-     * 新增合同管理
-     */
-    @GetMapping("/add")
-    public String add() {
-        return prefix + "/add";
-    }
-
-    /**
-     * 新增保存合同管理
-     */
-    @RequiresPermissions("fmis:borrowingpay:add")
-    @Log(title = "合同管理", businessType = BusinessType.INSERT)
-    @PostMapping("/add")
-    @ResponseBody
-    public AjaxResult addSave(BizProcessData bizProcessData) {
-        bizProcessData.setFlowStatus("0");
-
-
-        Map<String, SysRole> flowMap = bizProcessDefineService.getRoleFlowMap(bizProcessData.getBizId());
-        String lastRoleKey = "";
-        for (String key : flowMap.keySet()) {
-            lastRoleKey = key;
-        }
-
-        if (!"1".equals(lastRoleKey)) {
-            bizProcessData.setFlowStatus(lastRoleKey + "0");
-        }
-
-
-        Map<String, SysRole> flowAllMap = bizProcessDefineService.getFlowAllMap(bizProcessData.getBizId());
-        if (!CollectionUtils.isEmpty(flowAllMap)) {
-            for (String key : flowAllMap.keySet()) {
-                bizProcessData.setNormalFlag(key);
-            }
-        }
-
-        int insertReturn = bizProcessDataService.insertBizProcessData(bizProcessData);
-
-        return toAjax(insertReturn);
-    }
-
-    /**
-     * 修改合同管理
+     * 放款
      */
     @GetMapping("/edit/{dataId}")
     public String edit(@PathVariable("dataId") Long dataId, ModelMap mmap) {
@@ -247,36 +198,45 @@ public class BizProcessDataBorrowingPayController extends BaseController {
      * 修改保存合同管理
      */
     @RequiresPermissions("fmis:borrowingpay:edit")
-    @Log(title = "合同管理", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
     public AjaxResult editSave(BizProcessData bizProcessData) {
 
-        String productArrayStr = bizProcessData.getProductParmters();
         int updateReturn = bizProcessDataService.updateBizProcessData(bizProcessData);
+        // 已付款状态之后；
 
-        Long dataId = bizProcessData.getDataId();
-
-        BizProcessChild removeBizProcuessChild = new BizProcessChild();
-        removeBizProcuessChild.setDataId(dataId);
-        List<BizProcessChild> removeBizProcessChildList = bizProcessChildService.selectBizProcessChildList(removeBizProcuessChild);
-        if (!CollectionUtils.isEmpty(removeBizProcessChildList)) {
-            for (BizProcessChild bizProcessChild : removeBizProcessChildList) {
-                bizProcessChildService.deleteBizProcessChildById(bizProcessChild.getChildId());
-            }
-        }
-
-        if (StringUtils.isNotEmpty(productArrayStr)) {
-            JSONArray productArray = JSONArray.parseArray(productArrayStr);
-            for (int i = 0; i < productArray.size(); i++) {
-                JSONObject json = productArray.getJSONObject(i);
-                BizProcessChild bizProcessChild = JSONObject.parseObject(json.toJSONString(), BizProcessChild.class);
-                if (StringUtils.isNotEmpty(bizProcessChild.getString1())) {
-                    bizProcessChild.setDataId(dataId);
-                    bizProcessChildService.insertBizProcessChild(bizProcessChild);
-                }
-
-            }
+        if (updateReturn > 0 && "1".equals(bizProcessData.getString11())) {
+            String bookingType = bizProcessData.getString12();
+//            if ("1".equals(bookingType)) {
+//                // 添加现金日记账
+//                if (!bizBillService.existsByCertificateNumber(bizProcessData.getString2())) {
+//                    BizBill bizBill = new BizBill();
+//                    bizBill.setType("1");
+//                    bizBill.setCertificateNumber(bizProcessData.getString2());
+//                    bizBill.setD(bizProcessData.getDatetime3());
+//                    bizBill.setPaymentType(bizPayPlan.getPaymentType());
+//                    bizBill.setPayment(bizPayPlan.getApplyAmount());
+//                    bizBill.setRemark(bizPayPlan.getApplyRemark());
+//                    bizBill.setString1(bizPayPlan.getApplyPayCompany());
+//                    bizBill.setString2(bizPayPlan.getApplyCollectionCompany());
+//                    bizBillService.insertBizBill(bizBill);
+//                }
+//            } else if ("2".equals(bookingType)) {
+//                // 添加银行日记账
+//                if (!bizBankBillService.existsByCertificateNumber(bizPayPlan.getApplyNo())) {
+//                    BizBankBill bizBankBill = new BizBankBill();
+//                    bizBankBill.setType("2");
+//                    bizBankBill.setCertificateNumber(bizPayPlan.getApplyNo());
+//                    bizBankBill.setOperateDate(bizPayPlan.getPayDate());
+//                    bizBankBill.setPayWay(bizPayPlan.getPayWay());
+//                    bizBankBill.setPaymentType(bizPayPlan.getPaymentType());
+//                    bizBankBill.setPayment(bizPayPlan.getApplyAmount());
+//                    bizBankBill.setRemark(bizPayPlan.getApplyRemark());
+//                    bizBankBill.setPayCompany(bizPayPlan.getApplyPayCompany());
+//                    bizBankBill.setCollectCompany(bizPayPlan.getApplyCollectionCompany());
+//                    bizBankBillService.insertBizBankBill(bizBankBill);
+//                }
+//            }
         }
 
         return toAjax(updateReturn);
@@ -287,7 +247,7 @@ public class BizProcessDataBorrowingPayController extends BaseController {
      */
     @RequiresPermissions("fmis:borrowingpay:remove")
     @Log(title = "合同管理", businessType = BusinessType.DELETE)
-    @PostMapping( "/remove")
+    @PostMapping("/remove")
     @ResponseBody
     public AjaxResult remove(String ids) {
         return toAjax(bizProcessDataService.deleteBizProcessDataByIds(ids));
@@ -300,13 +260,18 @@ public class BizProcessDataBorrowingPayController extends BaseController {
         BizProcessData bizQuotation = bizProcessDataService.selectBizProcessDataById(Long.parseLong(dataId));
         return toAjax(bizProcessDataService.subReportBizQuotationBorrowing(bizQuotation));
     }
+
     @PostMapping("/pay")
     @ResponseBody
     public AjaxResult pay() {
         String dataId = getRequest().getParameter("dataId");
         BizProcessData bizQuotation = bizProcessDataService.selectBizProcessDataById(Long.parseLong(dataId));
         bizQuotation.setString11("1");
-        return toAjax(bizProcessDataService.updateBizProcessData(bizQuotation));
+        int i = bizProcessDataService.updateBizProcessData(bizQuotation);
+        if (i > 0) {
+
+        }
+        return toAjax(i);
     }
 
 }

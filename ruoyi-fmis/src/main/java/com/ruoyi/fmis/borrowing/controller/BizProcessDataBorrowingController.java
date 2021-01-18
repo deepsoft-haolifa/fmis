@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.fmis.child.domain.BizProcessChild;
 import com.ruoyi.fmis.child.service.IBizProcessChildService;
@@ -17,6 +18,7 @@ import com.ruoyi.fmis.product.service.IBizProductService;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysRole;
 import com.ruoyi.system.service.ISysRoleService;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -222,7 +224,7 @@ public class BizProcessDataBorrowingController extends BaseController {
                 bizProcessData.setNormalFlag(key);
             }
         }
-
+        bizProcessData.setString2("BP" + DateUtils.dateTimeNow() + RandomStringUtils.randomNumeric(3));
         int insertReturn = bizProcessDataService.insertBizProcessData(bizProcessData);
 
         return toAjax(insertReturn);

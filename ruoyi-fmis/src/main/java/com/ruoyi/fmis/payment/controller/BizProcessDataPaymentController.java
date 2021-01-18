@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.fmis.child.domain.BizProcessChild;
 import com.ruoyi.fmis.child.service.IBizProcessChildService;
@@ -17,6 +18,8 @@ import com.ruoyi.fmis.product.service.IBizProductService;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysRole;
 import com.ruoyi.system.service.ISysRoleService;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -76,6 +79,7 @@ public class BizProcessDataPaymentController extends BaseController {
 
     /**
      * 查询报价单产品
+     *
      * @return
      */
     @PostMapping("/listChild")
@@ -123,7 +127,7 @@ public class BizProcessDataPaymentController extends BaseController {
                 } else if ("1".equals(flowStatus)) {
                     flowStatusRemark = "已上报";
                 } else {
-                    SysRole currentSysRole =  CommonUtils.getLikeByMap(flowAllMap,flowStatus.replaceAll("-",""));
+                    SysRole currentSysRole = CommonUtils.getLikeByMap(flowAllMap, flowStatus.replaceAll("-", ""));
                     if (currentSysRole == null) {
                         continue;
                     }
@@ -154,6 +158,7 @@ public class BizProcessDataPaymentController extends BaseController {
         }
         return getDataTable(list);
     }
+
     @GetMapping("/examineEdit")
     public String examineEdit(ModelMap mmap) {
         String dataId = getRequest().getParameter("dataId");
@@ -192,7 +197,7 @@ public class BizProcessDataPaymentController extends BaseController {
         String examineStatus = bizProcessData.getExamineStatus();
         String examineRemark = bizProcessData.getExamineRemark();
         String dataId = bizProcessData.getDataId().toString();
-        return toAjax(bizProcessDataService.doExamine(dataId,examineStatus,examineRemark,bizProcessData.getBizId()));
+        return toAjax(bizProcessDataService.doExamine(dataId, examineStatus, examineRemark, bizProcessData.getBizId()));
     }
 
     @GetMapping("/viewExamineHistory")
@@ -204,6 +209,7 @@ public class BizProcessDataPaymentController extends BaseController {
         mmap.put("bizTable", bizId);
         return prefix + "/viewExamineHistory";
     }
+
     /**
      * 导出合同管理列表
      */
@@ -220,7 +226,9 @@ public class BizProcessDataPaymentController extends BaseController {
      * 新增合同管理
      */
     @GetMapping("/add")
-    public String add() {
+    public String add(ModelMap mmap) {
+//        mmap.put("deptId", ShiroUtils.getSysUser().getDeptId());
+//        mmap.put("deptName", ShiroUtils.getSysUser().getDeptName());
         return prefix + "/add";
     }
 
@@ -257,6 +265,7 @@ public class BizProcessDataPaymentController extends BaseController {
                 bizProcessData.setNormalFlag(key);
             }
         }
+        bizProcessData.setString2("FP" + DateUtils.dateTimeNow() + RandomStringUtils.randomNumeric(3));
         int insertReturn = bizProcessDataService.insertBizProcessData(bizProcessData);
         Long dataId = bizProcessData.getDataId();
         String productArrayStr = bizProcessData.getProductParmters();
@@ -294,6 +303,7 @@ public class BizProcessDataPaymentController extends BaseController {
         mmap.put("bizProcessData", bizProcessData);
         return prefix + "/edit1";
     }
+
     /**
      * 修改保存合同管理
      */
@@ -336,7 +346,7 @@ public class BizProcessDataPaymentController extends BaseController {
      */
     @RequiresPermissions("fmis:payment:remove")
     @Log(title = "合同管理", businessType = BusinessType.DELETE)
-    @PostMapping( "/remove")
+    @PostMapping("/remove")
     @ResponseBody
     public AjaxResult remove(String ids) {
         return toAjax(bizProcessDataService.deleteBizProcessDataByIds(ids));

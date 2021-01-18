@@ -7,6 +7,7 @@ import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.fmis.child.domain.BizProcessChild;
@@ -20,6 +21,7 @@ import com.ruoyi.fmis.define.service.IBizProcessDefineService;
 import com.ruoyi.fmis.product.service.IBizProductService;
 import com.ruoyi.system.domain.SysRole;
 import com.ruoyi.system.service.ISysRoleService;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -241,6 +243,7 @@ public class BizProcessDataCpaymentController extends BaseController {
             }
         }
         bizProcessData.setString1(payCompanyStr);
+        bizProcessData.setString2("CP" + DateUtils.dateTimeNow() + RandomStringUtils.randomNumeric(3));
         int insertReturn = bizProcessDataService.insertBizProcessData(bizProcessData);
         Long dataId = bizProcessData.getDataId();
         for (int i = 0; i < productArray.size(); i++) {

@@ -28,8 +28,8 @@
 </div>
 <th:block th:include="include :: footer"/>
 <script th:inline="javascript">
-    var editFlag = [[${@permission.hasPermi('fmis:borrowing:edit')}]];
-    var removeFlag = [[${@permission.hasPermi('fmis:borrowing:remove')}]];
+    var editFlag = [[${@permission.hasPermi('fmis:borrowingpay:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('fmis:borrowingpay:remove')}]];
     var prefix = ctx + "fmis/borrowingpay";
 
     var capitalPropertyDatas = [[${@dict.getType('capital_property')}]];
@@ -57,8 +57,8 @@
                     title: '借款单位'
                 },
                 {
-                    field: 'deptName1',
-                    title: '付款公司'
+                    field: 'string10',
+                    title: '付款单位'
                 },
                 {
                     field: 'datetime1',
@@ -128,7 +128,7 @@
 
                         var string11 = row.string11;
                         if ($.common.isEmpty(string11)) {
-                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="pay(\'' + row.dataId + '\')"><i class="fa fa-street-view"></i> 放款</a>');
+                            actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.dataId + '\')"><i class="fa fa-edit"></i> 放款</a> ');
                         } else {
                             actions.push('<i class="fa fa-street-view">已放款</i>');
 
@@ -196,12 +196,10 @@
     }
 
     function pay(dataId) {
-        $.modal.confirm("确定放款吗？", function () {
-            console.log(dataId + "--dataId");
-            var url = prefix + "/pay?dataId=" + dataId;
-            $.operate.saveModal(url, '', function () {
-                $.table.refresh();
-            });
+        var bizId = $("#bizId").val();
+        var url = prefix + "/viewDetail?dataId=" + dataId + "&&bizId=" + bizId;
+        $.modal.openNoEnter("放款", url, $(window).width(), $(window).height(), function () {
+            $.modal.closeAll();
         });
     }
 </script>
