@@ -25,6 +25,7 @@ public interface BizProcessChildMapper {
      * @return 流程数据字集合
      */
     public List<BizProcessChild> selectBizProcessChildList(BizProcessChild bizProcessChild);
+    public List<BizProcessChild> selectBizProcessChildListForKuCun(BizProcessChild bizProcessChild);
 
     public List<BizProcessChild> selectBizProcessChildInventoryList(BizProcessChild bizProcessChild);
 

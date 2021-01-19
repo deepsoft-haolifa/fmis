@@ -29,6 +29,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -306,12 +307,79 @@ public class BizProcessDataNewDeliveryController extends BaseController {
     public AjaxResult saveOutbound(String childId) {
 
         BizProcessChild child = bizProcessChildService.selectBizProcessChildById(Long.parseLong(childId));
+
+        //查看库存够不够 够减去 不够提示库存不够
+
+        BizProcessChild bizProcessChild = new BizProcessChild();
+        String string15  = "";
+        //产品
+        if (child.getString2().equals("1")) {
+            bizProcessChild.setString7(child.getString7());
+            bizProcessChild.setString5(child.getString5());
+            bizProcessChild.setString8(child.getString8());
+            List<BizProcessChild> inventoryChilds = bizProcessChildService.selectBizProcessChildListForKuCun(bizProcessChild);
+            bizProcessChild.setString13(child.getString13());
+            if (inventoryChilds == null || inventoryChilds.size() == 0) {
+                return error("库存不够，请检查库存");
+            }
+
+            BizProcessChild inventoryChild = inventoryChilds.get(0);
+
+            if (StringUtils.toLong(inventoryChild.getString11()) < StringUtils.toLong(bizProcessChild.getString13())) {
+                return error("库存不够，请检查库存");
+            }
+            string15 = inventoryChild.getChildId() + "";
+            String string16 = inventoryChild.getString16();
+            inventoryChild.setString16(StringUtils.toLong(string16) + StringUtils.toLong(bizProcessChild.getString13()) + "");
+            //inventoryChild 之前的报检的数据
+            //bizProcessChild发货的数据
+            inventoryChild.setString11((StringUtils.toLong(inventoryChild.getString11()) - StringUtils.toLong(bizProcessChild.getString13())) + "");
+            inventoryChild.setUpdateTime(new Date());
+            inventoryChild.setUpdateBy(ShiroUtils.getUserId() + "");
+            inventoryChild.setString14("1");
+            bizProcessChildService.updateBizProcessChild(inventoryChild);
+
+        } else {
+            if (StringUtils.toLong(child.getString2()) < 5) {
+                bizProcessChild.setString7(child.getString7());
+            } else {
+                bizProcessChild.setString8(child.getString8());
+            }
+            if (StringUtils.toLong(child.getString2()) == 3) {
+                bizProcessChild.setString8(child.getString8());
+            }
+
+            bizProcessChild.setString5(child.getString5());
+            List<BizProcessChild> inventoryChilds = bizProcessChildService.selectBizProcessChildListForKuCun(bizProcessChild);
+            bizProcessChild.setString13(child.getString13());
+            if (inventoryChilds == null || inventoryChilds.size() == 0) {
+                return error("库存不够，请检查库存");
+            }
+            BizProcessChild inventoryChild = inventoryChilds.get(0);
+            String string13  = child.getString13();
+            if (string13.contains(".")) {
+                string13 =  new BigDecimal(Double.parseDouble(string13)).longValue() + "";
+            }
+            if (StringUtils.toLong(inventoryChild.getString11()) < StringUtils.toLong(string13)) {
+                return error("库存不够，请检查库存");
+            }
+
+            string15 = inventoryChild.getChildId() + "";
+            String string16 = inventoryChild.getString16();
+            inventoryChild.setString16(StringUtils.toLong(string16) + StringUtils.toLong(string13) + "");
+            inventoryChild.setString11((StringUtils.toLong(inventoryChild.getString11()) - StringUtils.toLong(string13)) + "");
+            inventoryChild.setUpdateTime(new Date());
+            inventoryChild.setUpdateBy(ShiroUtils.getUserId() + "");
+            inventoryChild.setString14("1");
+            bizProcessChildService.updateBizProcessChild(inventoryChild);
+        }
+        //出库的是哪个库存里面的
+        child.setString15(string15);
         child.setUpdateBy(ShiroUtils.getUserId().toString());
         child.setUpdateTime(new Date());
         child.setString19("1");
         return toAjax(bizProcessChildService.updateBizProcessChild(child));
     }
-
 
     /**
      * 删除发货管理

@@ -41,6 +41,16 @@ public class BizProcessChildServiceImpl implements IBizProcessChildService {
     public List<BizProcessChild> selectBizProcessChildList(BizProcessChild bizProcessChild) {
         return bizProcessChildMapper.selectBizProcessChildList(bizProcessChild);
     }
+    /**
+     * 查询流程数据字列表
+     *
+     * @param bizProcessChild 查询存库
+     * @return 流程数据字
+     */
+    @Override
+    public List<BizProcessChild> selectBizProcessChildListForKuCun(BizProcessChild bizProcessChild) {
+        return bizProcessChildMapper.selectBizProcessChildListForKuCun(bizProcessChild);
+    }
 
     @Override
     public List<BizProcessChild> selectBizProcessChildInventoryList(BizProcessChild bizProcessChild){

@@ -92,8 +92,8 @@ public class BizCustomerController extends BaseController {
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(BizCustomer bizCustomer) {
-//        startPage();
-        PageHelper.startPage(1, 10, "");
+        startPage();
+//        PageHelper.startPage(1, 10, "");
         List<BizCustomer> list = bizCustomerService.selectBizCustomerList(bizCustomer);
         return getDataTable(list);
     }
@@ -177,7 +177,7 @@ public class BizCustomerController extends BaseController {
         }
         BizCustomer queryBizCustomer = new BizCustomer();
         queryBizCustomer.setName(name);
-        List<BizCustomer> list = bizCustomerService.selectBizCustomerListNoAuth(queryBizCustomer);
+        List<BizCustomer> list = bizCustomerService.selectBizCustomerListByName(queryBizCustomer);
         Iterator<BizCustomer> iterator = list.iterator();
         while(iterator.hasNext()){
             BizCustomer o = iterator.next();
@@ -204,7 +204,8 @@ public class BizCustomerController extends BaseController {
             return BizConstants.VALIDATE_IS_EXIST;
         }
         BizCustomer queryBizCustomer = new BizCustomer();
-        queryBizCustomer.setContactName(name);
+        //为了保证唯一也就是 废弃判断的方法
+        queryBizCustomer.setContactName(name + System.currentTimeMillis());
         List<BizCustomer> list = bizCustomerService.selectBizCustomerListNoAuth(queryBizCustomer);
         Iterator<BizCustomer> iterator = list.iterator();
         while(iterator.hasNext()){
@@ -222,8 +223,10 @@ public class BizCustomerController extends BaseController {
     @ResponseBody
     public String checkCount(BizCustomer bizCustomer)
     {
+        //屏蔽对50的限制，限制话注释return 放开下面的注释部分
+        return BizConstants.VALIDATE_IS_NOT_EXIST;
 //        startPage();
-        PageHelper.startPage(1, 50, "");
+       /* PageHelper.startPage(1, 50, "");
         Map<String, Object> map =  new HashMap<>();
         Long id = (Long) PermissionUtils.getPrincipalProperty("userId");
         map.put("dataScope"," AND (u.user_id = " + id + ")");
@@ -238,10 +241,10 @@ public class BizCustomerController extends BaseController {
                 break;
             }
         }
-        if (list.size() < 10 || flag) {
+        if (list.size() < 50 || flag) {
             return BizConstants.VALIDATE_IS_NOT_EXIST;
         }
-        return BizConstants.VALIDATE_IS_EXIST;
+        return BizConstants.VALIDATE_IS_EXIST;*/
     }
 
     @PostMapping("/checkContactPhone")

@@ -239,7 +239,7 @@
             showColumns: false,
             showToggle: false,
             useRowAttrFunc: true,
-            uniqueId: "productId",
+            uniqueId: "childId",
             onLoadSuccess: loadSuccess,
             async: true,
             url: prefix + "/listProductNoPageFH",
@@ -248,11 +248,18 @@
             onReorderRow: onReorderRow,
             rowStyle: tableRowStyle,
             columns: [{
-                checkbox: true
+                formatter: function(value, row, index) {
+                    if (row.string20 == 1) {
+                        return {checkbox: false};
+                    } else {
+                        return {checkbox: true};
+                    }
+                }
             },
                 {field : 'rowId',title : '序号',visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
-
+                {field : 'childId',title : 'childId',visible: true},
                 {field : 'quotationId',title : 'quotationId',visible: false},
+                {field : 'string20',title : 'string20',visible: false},
                 {field : 'quotationName',title : '报价单号',editable: false},
                 {field : 'productId',title : '产品ID',visible: false},
                 {field : 'productName',title : '产品名称',editable: false},
@@ -342,34 +349,18 @@
     function submitHandler() {
         if ($.validate.form()) {
             var dataObj = $('#form-data-edit').serializeArray();
-            var productArray = new Array();
-            var data = $.btTable.bootstrapTable('getData');
+            // var data = $.btTable.selectColumns('getData');
+            var data = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
             if (data.length == 0) {
-                $.modal.alertWarning("无发货数据");
+                $.modal.alertWarning("请至少选择一条记录");
                 return;
             }
-            for (var i = 0; i < data.length; i++) {
-                var rowData = data[i];
-                var num = rowData["string13"];
-                var totalNum = rowData["string11"];
-
-                if (parseFloat(num) > totalNum) {
-                    $.modal.alertWarning("发货数量填写错误");
-                    return;
-                }
-
-                if ($.common.isNotEmpty(num) &&  num != "0") {
-                    var productObj = rowData;
-                    productObj["string15"] = rowData["childId"];
-                    productObj["childId"] = "";
-                    productArray.push(productObj);
-                }
-            }
+            console.log("data=" + data);
 
 
 
-            //console.log("productArray=" + JSON.stringify(productArray));
-            dataObj.push({"name": "productParmters", "value": JSON.stringify(productArray)});
+            // console.log("productArray=" + JSON.stringify(productArray));
+            dataObj.push({"name": "productParmters", "value": data});
             $.operate.save(ctx + "fmis/data/saveInventory", dataObj);
         }
     }
