@@ -11,7 +11,12 @@
                 <input type="hidden" name="bizId" id="bizId" value="borrowing"/>
                 <div class="select-list">
                     <ul>
-
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
                     </ul>
                 </div>
             </form>
@@ -33,6 +38,7 @@
     var prefix = ctx + "fmis/borrowingpay";
 
     var capitalPropertyDatas = [[${@dict.getType('capital_property')}]];
+    var bookingTypeDict = [[${@dict.getType('booking_type')}]];
 
     $(function () {
         var options = {
@@ -51,7 +57,10 @@
                     title: 'ID',
                     visible: false
                 },
-
+                {
+                    field: 'string2',
+                    title: '编号'
+                },
                 {
                     field: 'deptName',
                     title: '借款单位'
@@ -113,25 +122,34 @@
 
                 },
                 {
+                    field: 'datetime3',
+                    title: '付款日期'
+                },
+                {
+                    field: 'string13',
+                    title: '记账方式',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(bookingTypeDict, value);
+                    }
+                },
+                {
                     title: '操作',
                     align: 'center',
                     formatter: function (value, row, index) {
                         var actions = [];
-                        var string12 = row.string12;
-                        if (!$.common.isEmpty(string12)) {
-                            string12 = fileUrlStart + string12;
-                            actions.push('<a class="btn btn-success btn-xs" target="_blank" href="' + string12 + '" ><i class="fa fa-edit"></i>查看附件</a>');
-
-                        }
-
-                        actions.push('<a class="btn btn-success btn-xs"  href="#" onclick="uploadFile(\'' + row.dataId + '\')" ><i class="fa fa-edit"></i>上传附件</a> ');
+                        // var string12 = row.string12;
+                        // if (!$.common.isEmpty(string12)) {
+                        //     string12 = fileUrlStart + string12;
+                        //     actions.push('<a class="btn btn-success btn-xs" target="_blank" href="' + string12 + '" ><i class="fa fa-edit"></i>查看附件</a>');
+                        //
+                        // }
+                        // actions.push('<a class="btn btn-success btn-xs"  href="#" onclick="uploadFile(\'' + row.dataId + '\')" ><i class="fa fa-edit"></i>上传附件</a> ');
 
                         var string11 = row.string11;
-                        if ($.common.isEmpty(string11)) {
-                            actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.dataId + '\')"><i class="fa fa-edit"></i> 放款</a> ');
-                        } else {
+                        if (string11 === "1"){
                             actions.push('<i class="fa fa-street-view">已放款</i>');
-
+                        } else {
+                            actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.dataId + '\')"><i class="fa fa-edit"></i> 放款</a> ');
                         }
                         actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewExamineHistory(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 审批记录 </a>');
                         actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewDetail(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 详情 </a>');

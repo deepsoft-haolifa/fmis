@@ -8,6 +8,7 @@
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
         <form class="form-horizontal m" id="form-data-edit" th:object="${bizProcessData}">
             <input name="dataId" th:field="*{dataId}" type="hidden">
+            <input name="string2" th:field="*{string2}" type="hidden">
             <input type="hidden" name="bizId" value="borrowing"/>
 
             <div class="form-group">
@@ -93,7 +94,7 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">付款状态</label>
                 <div class="col-sm-8">
-                    <select name="string1" class="form-control m-b" th:with="type=${@dict.getType('pay_status')}">
+                    <select name="string11" class="form-control m-b" th:with="type=${@dict.getType('pay_status')}">
                         <option value="">请选择</option>
                         <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{string11}"></option>
                     </select>
@@ -111,9 +112,9 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">记账类型：</label>
                 <div class="col-sm-8">
-                    <select name="string12" class="form-control m-b" th:with="type=${@dict.getType('booking_type')}" required>
+                    <select name="string13" class="form-control m-b" th:with="type=${@dict.getType('booking_type')}" required>
                         <option value="">请选择</option>
-                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{string12}"></option>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{string13}"></option>
                     </select>
                 </div>
             </div>
@@ -123,14 +124,14 @@
     <th:block th:include="include :: footer" />
     <th:block th:include="include :: datetimepicker-js" />
     <script type="text/javascript">
-        var prefix = ctx + "fmis/borrowing";
+        var prefix = ctx + "fmis/borrowingpay";
         $("#form-data-edit").validate({
             focusCleanup: true
         });
 
         function submitHandler() {
             if ($.validate.form()) {
-                $.operate.save(prefix + "/doExamine", $('#form-data-edit').serialize());
+                $.operate.save(prefix + "/edit", $('#form-data-edit').serialize());
             }
         }
 

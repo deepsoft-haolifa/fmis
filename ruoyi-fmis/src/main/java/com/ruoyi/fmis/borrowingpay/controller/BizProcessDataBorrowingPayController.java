@@ -206,37 +206,39 @@ public class BizProcessDataBorrowingPayController extends BaseController {
         // 已付款状态之后；
 
         if (updateReturn > 0 && "1".equals(bizProcessData.getString11())) {
-            String bookingType = bizProcessData.getString12();
-//            if ("1".equals(bookingType)) {
-//                // 添加现金日记账
-//                if (!bizBillService.existsByCertificateNumber(bizProcessData.getString2())) {
-//                    BizBill bizBill = new BizBill();
-//                    bizBill.setType("1");
-//                    bizBill.setCertificateNumber(bizProcessData.getString2());
-//                    bizBill.setD(bizProcessData.getDatetime3());
-//                    bizBill.setPaymentType(bizPayPlan.getPaymentType());
-//                    bizBill.setPayment(bizPayPlan.getApplyAmount());
-//                    bizBill.setRemark(bizPayPlan.getApplyRemark());
-//                    bizBill.setString1(bizPayPlan.getApplyPayCompany());
-//                    bizBill.setString2(bizPayPlan.getApplyCollectionCompany());
-//                    bizBillService.insertBizBill(bizBill);
-//                }
-//            } else if ("2".equals(bookingType)) {
-//                // 添加银行日记账
-//                if (!bizBankBillService.existsByCertificateNumber(bizPayPlan.getApplyNo())) {
-//                    BizBankBill bizBankBill = new BizBankBill();
-//                    bizBankBill.setType("2");
-//                    bizBankBill.setCertificateNumber(bizPayPlan.getApplyNo());
-//                    bizBankBill.setOperateDate(bizPayPlan.getPayDate());
-//                    bizBankBill.setPayWay(bizPayPlan.getPayWay());
-//                    bizBankBill.setPaymentType(bizPayPlan.getPaymentType());
-//                    bizBankBill.setPayment(bizPayPlan.getApplyAmount());
-//                    bizBankBill.setRemark(bizPayPlan.getApplyRemark());
-//                    bizBankBill.setPayCompany(bizPayPlan.getApplyPayCompany());
-//                    bizBankBill.setCollectCompany(bizPayPlan.getApplyCollectionCompany());
-//                    bizBankBillService.insertBizBankBill(bizBankBill);
-//                }
-//            }
+            String bookingType = bizProcessData.getString13();
+            if ("1".equals(bookingType)) {
+                // 添加现金日记账
+                if (!bizBillService.existsByCertificateNumber(bizProcessData.getString2())) {
+                    BizBill bizBill = new BizBill();
+                    bizBill.setType("1");
+                    bizBill.setDeptId(bizProcessData.getString1());
+                    bizBill.setCertificateNumber(bizProcessData.getString2());
+                    bizBill.setD(bizProcessData.getDatetime3());
+                    bizBill.setPaymentType("3");
+                    bizBill.setPayment(bizProcessData.getPrice1());
+                    bizBill.setRemark(bizProcessData.getRemark());
+                    bizBill.setString1(bizProcessData.getString10());
+                    bizBill.setString2(bizProcessData.getString5());
+                    bizBillService.insertBizBill(bizBill);
+                }
+            } else if ("2".equals(bookingType)) {
+                // 添加银行日记账
+                if (!bizBankBillService.existsByCertificateNumber(bizProcessData.getString2())) {
+                    BizBankBill bizBankBill = new BizBankBill();
+                    bizBankBill.setType("2");
+                    bizBankBill.setDeptId(bizProcessData.getString1());
+                    bizBankBill.setCertificateNumber(bizProcessData.getString2());
+                    bizBankBill.setOperateDate(bizProcessData.getDatetime3());
+                    bizBankBill.setPayAccount(bizProcessData.getString7());
+                    bizBankBill.setPaymentType("3");
+                    bizBankBill.setPayment(bizProcessData.getPrice1());
+                    bizBankBill.setRemark(bizProcessData.getRemark());
+                    bizBankBill.setPayCompany(bizProcessData.getString10());
+                    bizBankBill.setCollectCompany(bizProcessData.getString5());
+                    bizBankBillService.insertBizBankBill(bizBankBill);
+                }
+            }
         }
 
         return toAjax(updateReturn);
