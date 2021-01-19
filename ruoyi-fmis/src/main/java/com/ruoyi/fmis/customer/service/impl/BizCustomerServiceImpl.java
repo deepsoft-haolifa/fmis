@@ -60,7 +60,17 @@ public class BizCustomerServiceImpl implements IBizCustomerService {
     public List<BizCustomer> selectBizCustomerList(BizCustomer bizCustomer) {
         return bizCustomerMapper.selectBizCustomerList(bizCustomer);
     }
-
+    /**
+     * 查询客户列表
+     *
+     * @param bizCustomer 客户
+     * @return 客户
+     */
+    @Override
+    @DataScope(deptAlias = "dt", userAlias = "u")
+    public List<BizCustomer> selectBizCustomerListByName(BizCustomer bizCustomer) {
+        return bizCustomerMapper.selectBizCustomerListByName(bizCustomer);
+    }
     @Override
     public List<BizCustomer> selectBizCustomerListNoAuth(BizCustomer bizCustomer) {
         return bizCustomerMapper.selectBizCustomerList(bizCustomer);

@@ -32,6 +32,8 @@ import com.ruoyi.fmis.customer.domain.BizCustomer;
 import com.ruoyi.fmis.customer.service.IBizCustomerService;
 import com.ruoyi.fmis.define.service.IBizProcessDefineService;
 import com.ruoyi.fmis.dict.service.IBizDictService;
+import com.ruoyi.fmis.pattachment.domain.BizProductAttachment;
+import com.ruoyi.fmis.pattachment.service.IBizProductAttachmentService;
 import com.ruoyi.fmis.product.domain.BizProduct;
 import com.ruoyi.fmis.product.service.IBizProductService;
 import com.ruoyi.fmis.productref.domain.BizProductRef;
@@ -116,6 +118,8 @@ public class BizProcessDataController extends BaseController {
 
     @Autowired
     private ISysDictDataService dictDataService;
+    @Autowired
+    private IBizProductAttachmentService bizProductAttachmentService;
 
     @Autowired
     private RedisUtil redisUtil;
@@ -292,7 +296,7 @@ public class BizProcessDataController extends BaseController {
 
         BizProcessChild queryBizProcessChild = new BizProcessChild();
         queryBizProcessChild.setDataId(bizProcessData.getDataId());
-        List<BizProcessChild> bizProcessChildList = bizProcessChildService.selectBizProcessChildList(queryBizProcessChild);
+        List<BizProcessChild> bizProcessChildList = bizProcessChildService.selectBizProcessChildListForKuCun(queryBizProcessChild);
         String productNames = "";
         String productIds = "";
         if (!CollectionUtils.isEmpty(bizProcessChildList)) {
@@ -709,7 +713,12 @@ public class BizProcessDataController extends BaseController {
     @ResponseBody
     @Transactional
     public AjaxResult saveInventory(BizProcessData bizProcessData) {
+        BizProcessChild queryBizProcessChild = new BizProcessChild();
+        queryBizProcessChild.setDataId(bizProcessData.getDataId());
+        List<BizProcessChild> bizProcessChildList = bizProcessChildService.selectBizQuotationProductList(queryBizProcessChild);
+
         String productArrayStr = bizProcessData.getProductParmters();
+        String[] childs = productArrayStr.split(",");
         String string1 = bizProcessData.getString1();
         String string2 = DateUtils.dateTimeNow();//发货通知单号
         //BizProcessData newData = new BizProcessData();
@@ -717,12 +726,233 @@ public class BizProcessDataController extends BaseController {
         bizProcessData.setString2(string2);
         bizProcessData.setBizId(BizConstants.BIZ_newdelivery);
         bizProcessData.setNormalFlag("4");
-        bizProcessData.setFlowStatus("1");
-
+        bizProcessData.setFlowStatus("2");
 
 
         int insertReturn = bizProcessDataService.insertBizProcessData(bizProcessData);
-        if (StringUtils.isNotEmpty(productArrayStr)) {
+
+        //自动上报
+        bizProcessDataService.doExamine(bizProcessData.getDataId() + "","1","销售员上报",bizProcessData.getBizId());
+
+        for (BizProcessChild bizProcessChild : bizProcessChildList) {
+            if (!Arrays.asList(childs).contains(bizProcessChild.getChildId() + "")) {
+                continue;
+            }
+            //已申请发货
+            bizProcessChild.setString20("1");
+            bizProcessChildService.updateBizProcessChild(bizProcessChild);
+            String childId = bizProcessChild.getChildId() + "";
+            bizProcessChild.setDataId(bizProcessData.getDataId());
+            bizProcessChild.setChildId(null);
+            bizProcessChild.setString14("0");
+            //setDataId 销售合同id String1 合同子表中的id，sting2 类型 1=产品 2=执行器 3=法兰 4=螺栓 5=定位器 6=电磁阀 7=回信器数 8=气源三连件 9=可离合减速器
+            //string3 报检单号 string4 采购合同 string5 销售合同 string6 各种名称 string7 型号 string8规格 string13 出库数量 string11 string15 报检合格数的id也就是库存id
+
+            /*if ("1".equals(busType)) {
+                type = "1";
+                BizProduct queryBizProduct = new BizProduct();
+                queryBizProduct.setProductId(Long.parseLong(paramterId));
+                BizProduct bizProduct = bizProductService.selectBizProductList(queryBizProduct).get(0);
+
+                insertChild.setString6(bizProduct.getName());
+                insertChild.setString7(bizProduct.getModel());
+                insertChild.setString8(bizProduct.getSpecifications());
+                insertChild.setString9(bizProduct.getString2());
+                insertChild.setString10(StringUtils.getDoubleString0(bizProduct.getProcurementPrice()));
+            } else if ("2".equals(busType)) {
+                type = "2";
+                BizActuator queryActuator = new BizActuator();
+                queryActuator.setActuatorId(Long.parseLong(paramterId));
+                BizActuator bizActuator = bizActuatorService.selectBizActuatorForRefList(queryActuator).get(0);
+
+                insertChild.setString6(bizActuator.getName());
+                insertChild.setString7(bizActuator.getString1());
+                //insertChild.setString8(bizProduct.getSpecifications());
+                insertChild.setString9(bizActuator.getQualityLevel());
+                insertChild.setString10(bizActuator.getString6());
+
+            } else if ("3".equals(busType)) {
+                type = "3";
+                BizProductRef queryRef1 = new BizProductRef();
+                queryRef1.setProductRefId(Long.parseLong(paramterId));
+                BizProductRef bizProductRef = bizProductRefService.selectBizProductRefList(queryRef1).get(0);
+
+                insertChild.setString6(bizProductRef.getName());
+                insertChild.setString7(bizProductRef.getModel());
+                insertChild.setString8(bizProductRef.getSpecifications());
+                insertChild.setString9(bizProductRef.getString1());
+                insertChild.setString10(bizProductRef.getString2());
+
+            } else if ("4".equals(busType)) {
+                type = "4";
+
+                BizProductRef queryRef1 = new BizProductRef();
+                queryRef1.setProductRefId(Long.parseLong(paramterId));
+                BizProductRef bizProductRef = bizProductRefService.selectBizProductRefList(queryRef1).get(0);
+
+                insertChild.setString6(bizProductRef.getName());
+                insertChild.setString7(bizProductRef.getModel());
+                insertChild.setString8(bizProductRef.getSpecifications());
+                insertChild.setString9(bizProductRef.getString1());
+                insertChild.setString10(bizProductRef.getString2());
+
+            } else {
+                type = "5";
+                BizProductAttachment queryProductAttachment = new BizProductAttachment();
+                queryProductAttachment.setAttachmentId(Long.parseLong(paramterId));
+                BizProductAttachment bizProductAttachment = bizProductAttachmentService.selectBizProductAttachmentById(Long.parseLong(paramterId));
+
+                insertChild.setString6(bizProductAttachment.getChineseName());
+                //insertChild.setString7(bizProductAttachment.getModel());
+                insertChild.setString8(bizProductAttachment.getChineseSpecifications());
+                insertChild.setString9(bizProductAttachment.getString1());
+                insertChild.setString10(StringUtils.getDoubleString0(bizProductAttachment.getSettlementPrice()));
+
+            }*/
+
+
+
+            //产品
+            if (StringUtils.toLong(bizProcessChild.getProductNum()) != 0) {
+                BizProcessChild bizProcessChild1 = new BizProcessChild();
+                bizProcessChild1.setDataId(bizProcessChild.getDataId());
+                bizProcessChild1.setString2("1");
+                bizProcessChild1.setString5(bizProcessChild.getContractNo());
+                bizProcessChild1.setString6(bizProcessChild.getProductName());
+                bizProcessChild1.setString7(bizProcessChild.getModel());
+                bizProcessChild1.setString8(bizProcessChild.getSpecifications());
+                bizProcessChild1.setString13(bizProcessChild.getProductNum());
+                bizProcessChild1.setString15(childId);
+                bizProcessChildService.insertBizProcessChild(bizProcessChild1);
+            }
+            //执行器
+            if (StringUtils.toLong(bizProcessChild.getActuatorNum()) != 0) {
+                BizActuator queryActuator = new BizActuator();
+                queryActuator.setActuatorId(Long.parseLong(bizProcessChild.getActuatorId()));
+                BizActuator bizActuator = bizActuatorService.selectBizActuatorForRefList(queryActuator).get(0);
+                BizProcessChild bizProcessChild1 = new BizProcessChild();
+                bizProcessChild1.setDataId(bizProcessChild.getDataId());
+                bizProcessChild1.setString2("2");
+                bizProcessChild1.setString5(bizProcessChild.getContractNo());
+                bizProcessChild1.setString6(bizProcessChild.getActuatorName());
+                //执行器id
+                bizProcessChild1.setString7(bizActuator.getString1());
+                bizProcessChild1.setString13(bizProcessChild.getActuatorNum());
+                bizProcessChild1.setString15(childId);
+                bizProcessChildService.insertBizProcessChild(bizProcessChild1);
+            }
+
+            //法兰
+            if (bizProcessChild.getProductRef1Num() != 0) {
+                BizProductRef queryRef1 = new BizProductRef();
+                queryRef1.setProductRefId(Long.parseLong(bizProcessChild.getProductRef1Id()));
+                BizProductRef bizProductRef = bizProductRefService.selectBizProductRefList(queryRef1).get(0);
+                BizProcessChild bizProcessChild1 = new BizProcessChild();
+                bizProcessChild1.setDataId(bizProcessChild.getDataId());
+                bizProcessChild1.setString2("3");
+                bizProcessChild1.setString5(bizProcessChild.getContractNo());
+                bizProcessChild1.setString6(bizProcessChild.getRef1Name());
+                bizProcessChild1.setString7(bizProductRef.getModel());
+                bizProcessChild1.setString8(bizProductRef.getSpecifications());
+                bizProcessChild1.setString13(bizProcessChild.getProductRef1Num() + "");
+                bizProcessChild1.setString15(childId);
+                bizProcessChildService.insertBizProcessChild(bizProcessChild1);
+            }
+
+            //螺栓
+            if (bizProcessChild.getProductRef2Num() != 0) {
+                BizProductRef queryRef1 = new BizProductRef();
+                queryRef1.setProductRefId(Long.parseLong(bizProcessChild.getProductRef1Id()));
+                BizProductRef bizProductRef = bizProductRefService.selectBizProductRefList(queryRef1).get(0);
+                BizProcessChild bizProcessChild1 = new BizProcessChild();
+                bizProcessChild1.setDataId(bizProcessChild.getDataId());
+                bizProcessChild1.setString2("4");
+                bizProcessChild1.setString5(bizProcessChild.getContractNo());
+                bizProcessChild1.setString6(bizProcessChild.getRef1Name());
+                bizProcessChild1.setString7(bizProductRef.getModel());
+                bizProcessChild1.setString8(bizProductRef.getSpecifications());
+                bizProcessChild1.setString13(bizProcessChild.getProductRef1Num() + "");
+                bizProcessChild1.setString15(childId);
+                bizProcessChildService.insertBizProcessChild(bizProcessChild1);
+            }
+
+            //定位器
+            if (bizProcessChild.getPattachmentCount() != null && bizProcessChild.getPattachmentCount() != 0) {
+                BizProductAttachment bizProductAttachment = bizProductAttachmentService.selectBizProductAttachmentById(bizProcessChild.getPattachmentId());
+
+                BizProcessChild bizProcessChild1 = new BizProcessChild();
+                bizProcessChild1.setDataId(bizProcessChild.getDataId());
+                bizProcessChild1.setString2("5");
+                bizProcessChild1.setString5(bizProcessChild.getContractNo());
+                bizProcessChild1.setString6(bizProductAttachment.getChineseName());
+                bizProcessChild1.setString8(bizProductAttachment.getChineseSpecifications());
+                bizProcessChild1.setString13(bizProcessChild.getPattachmentCount() + "");
+                bizProcessChild1.setString15(childId);
+                bizProcessChildService.insertBizProcessChild(bizProcessChild1);
+            }
+
+            //电磁阀
+            if (bizProcessChild.getPattachment1Count() != null && bizProcessChild.getPattachment1Count() != 0) {
+                BizProductAttachment bizProductAttachment = bizProductAttachmentService.selectBizProductAttachmentById(bizProcessChild.getPattachment1Id());
+
+                BizProcessChild bizProcessChild1 = new BizProcessChild();
+                bizProcessChild1.setDataId(bizProcessChild.getDataId());
+                bizProcessChild1.setString2("6");
+                bizProcessChild1.setString5(bizProcessChild.getContractNo());
+                bizProcessChild1.setString6(bizProductAttachment.getChineseName());
+                bizProcessChild1.setString8(bizProductAttachment.getChineseSpecifications());
+                bizProcessChild1.setString13(bizProcessChild.getPattachment1Count() + "");
+                bizProcessChild1.setString15(childId);
+                bizProcessChildService.insertBizProcessChild(bizProcessChild1);
+            }
+
+            //回信器数
+            if (bizProcessChild.getPattachment2Count() != null &&bizProcessChild.getPattachment2Count() != 0) {
+                BizProductAttachment bizProductAttachment = bizProductAttachmentService.selectBizProductAttachmentById(bizProcessChild.getPattachment2Id());
+
+                BizProcessChild bizProcessChild1 = new BizProcessChild();
+                bizProcessChild1.setDataId(bizProcessChild.getDataId());
+                bizProcessChild1.setString2("7");
+                bizProcessChild1.setString5(bizProcessChild.getContractNo());
+                bizProcessChild1.setString6(bizProductAttachment.getChineseName());
+                bizProcessChild1.setString8(bizProductAttachment.getChineseSpecifications());
+                bizProcessChild1.setString13(bizProcessChild.getPattachment2Count() + "");
+                bizProcessChild1.setString15(childId);
+                bizProcessChildService.insertBizProcessChild(bizProcessChild1);
+            }
+
+            //气源三连件
+            if (bizProcessChild.getPattachment3Count() != null && bizProcessChild.getPattachment3Count() != 0) {
+                BizProductAttachment bizProductAttachment = bizProductAttachmentService.selectBizProductAttachmentById(bizProcessChild.getPattachment3Id());
+
+                BizProcessChild bizProcessChild1 = new BizProcessChild();
+                bizProcessChild1.setDataId(bizProcessChild.getDataId());
+                bizProcessChild1.setString2("8");
+                bizProcessChild1.setString5(bizProcessChild.getContractNo());
+                bizProcessChild1.setString6(bizProductAttachment.getChineseName());
+                bizProcessChild1.setString8(bizProductAttachment.getChineseSpecifications());
+                bizProcessChild1.setString13(bizProcessChild.getPattachment3Count() + "");
+                bizProcessChild1.setString15(childId);
+                bizProcessChildService.insertBizProcessChild(bizProcessChild1);
+            }
+//            可离合减速器
+            if (bizProcessChild.getPattachment4Count() != null && bizProcessChild.getPattachment4Count() != 0) {
+                BizProductAttachment bizProductAttachment = bizProductAttachmentService.selectBizProductAttachmentById(bizProcessChild.getPattachment4Id());
+
+                BizProcessChild bizProcessChild1 = new BizProcessChild();
+                bizProcessChild1.setDataId(bizProcessChild.getDataId());
+                bizProcessChild1.setString2("9");
+                bizProcessChild1.setString5(bizProcessChild.getContractNo());
+                bizProcessChild1.setString6(bizProductAttachment.getChineseName());
+                bizProcessChild1.setString8(bizProductAttachment.getChineseSpecifications());
+                bizProcessChild1.setString13(bizProcessChild.getPattachment4Count() + "");
+                bizProcessChild1.setString15(childId);
+                bizProcessChildService.insertBizProcessChild(bizProcessChild1);
+            }
+
+        }
+
+      /*  if (StringUtils.isNotEmpty(productArrayStr)) {
             JSONArray productArray = JSONArray.parseArray(productArrayStr);
             for (int i = 0; i < productArray.size(); i++) {
                 JSONObject json = productArray.getJSONObject(i);
@@ -739,6 +969,8 @@ public class BizProcessDataController extends BaseController {
 
                     String string16 = inventoryChild.getString16();
                     inventoryChild.setString16(StringUtils.toLong(string16) + StringUtils.toLong(bizProcessChild.getString13()) + "");
+                    //inventoryChild 之前的报检的数据
+                    //bizProcessChild发货的数据
                     inventoryChild.setString11((StringUtils.toLong(inventoryChild.getString11()) - StringUtils.toLong(bizProcessChild.getString13())) + "");
                     inventoryChild.setUpdateTime(new Date());
                     inventoryChild.setUpdateBy(ShiroUtils.getUserId() + "");
@@ -746,7 +978,7 @@ public class BizProcessDataController extends BaseController {
                     bizProcessChildService.updateBizProcessChild(inventoryChild);
                 }
             }
-        }
+        }*/
         return toAjax(insertReturn);
     }
 

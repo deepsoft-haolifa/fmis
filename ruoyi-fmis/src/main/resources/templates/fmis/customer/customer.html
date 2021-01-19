@@ -348,10 +348,13 @@
                         title : '开票资料',
                         align: 'center',
                         formatter: function(value, row, index) {
-                            var filePaths = fileUrlStart + value;
-                            var actions = [];
-                            actions.push('<a class="btn btn-success btn-xs" target="_blank" href="' + filePaths + '" ><i class="fa fa-edit"></i>查看</a>');
-                            return actions.join('');
+                            if (value.length > 0) {
+                                var filePaths = fileUrlStart + value;
+                                var actions = [];
+                                actions.push('<a class="btn btn-success btn-xs" target="_blank" href="' + filePaths + '" ><i class="fa fa-edit"></i>查看</a>');
+                                return actions.join('');
+                            }
+
                         }
                     },
 

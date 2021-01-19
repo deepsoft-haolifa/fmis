@@ -28,6 +28,7 @@ public interface BizCustomerMapper {
      * @return 客户集合
      */
     public List<BizCustomer> selectBizCustomerList(BizCustomer bizCustomer);
+    public List<BizCustomer> selectBizCustomerListByName(BizCustomer bizCustomer);
 
     public List<BizCustomer> selectBizCustomerSelfList(BizCustomer bizCustomer);
 
