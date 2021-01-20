@@ -868,7 +868,7 @@
 
         <if test="bjNo != null and bjNo != ''">and ss.string6 like concat('%', #{bjNo}, '%')</if>
         <if test="contractNo != null and contractNo != ''">and d1.string1 like concat('%', #{contractNo}, '%')</if>
-        <if test="procurementNo != null and procurementNo != ''">and d.string1 like concat('%', #{procurementNo}, '%')</if>
+        <if test="procurementNo != null and procurementNo != ''">and d.string12 like concat('%', #{procurementNo}, '%')</if>
 
         order by sn.create_time desc
     </select>
@@ -1106,7 +1106,15 @@
         </trim>
         where child_id = #{childId}
     </update>
+    <update id="updateBizProcessChildFH" parameterType="BizProcessChild">
+        update biz_process_child
+        <trim prefix="SET" suffixOverrides=",">
 
+            <if test="string20 != null  and string20 != ''">string20 = #{string20},</if>
+
+        </trim>
+        where child_id = #{childId}
+    </update>
     <delete id="deleteBizProcessChildById" parameterType="Long">
         delete from biz_process_child where child_id = #{childId}
     </delete>

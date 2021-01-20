@@ -73,6 +73,7 @@ public interface IBizProcessChildService {
      * @return 结果
      */
     public int updateBizProcessChild(BizProcessChild bizProcessChild);
+    public int updateBizProcessChildFH(BizProcessChild bizProcessChild);
 
     /**
      * 批量删除流程数据字

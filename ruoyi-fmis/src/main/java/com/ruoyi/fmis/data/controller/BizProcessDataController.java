@@ -740,7 +740,7 @@ public class BizProcessDataController extends BaseController {
             }
             //已申请发货
             bizProcessChild.setString20("1");
-            bizProcessChildService.updateBizProcessChild(bizProcessChild);
+            bizProcessChildService.updateBizProcessChildFH(bizProcessChild);
             String childId = bizProcessChild.getChildId() + "";
             bizProcessChild.setDataId(bizProcessData.getDataId());
             bizProcessChild.setChildId(null);

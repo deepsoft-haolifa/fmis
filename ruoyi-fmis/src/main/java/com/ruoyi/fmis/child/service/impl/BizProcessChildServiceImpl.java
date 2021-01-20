@@ -166,7 +166,16 @@ public class BizProcessChildServiceImpl implements IBizProcessChildService {
         bizProcessChild.setUpdateTime(DateUtils.getNowDate());
         return bizProcessChildMapper.updateBizProcessChild(bizProcessChild);
     }
-
+    /**
+     * 修改流程发货状态
+     *
+     * @return 结果
+     */
+    @Override
+    public int updateBizProcessChildFH(BizProcessChild bizProcessChild) {
+        bizProcessChild.setUpdateTime(DateUtils.getNowDate());
+        return bizProcessChildMapper.updateBizProcessChildFH(bizProcessChild);
+    }
     /**
      * 删除流程数据字对象
      *

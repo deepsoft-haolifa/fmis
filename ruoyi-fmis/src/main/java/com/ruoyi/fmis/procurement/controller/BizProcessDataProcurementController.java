@@ -115,7 +115,18 @@ public class BizProcessDataProcurementController extends BaseController {
     public TableDataInfo list(BizProcessData bizProcessData) {
 
         String bizId = bizProcessData.getBizId();
+        if (!StringUtils.isEmpty(bizProcessData.getString6())) {
+            BizSuppliers bizSuppliers = new BizSuppliers();
+            bizSuppliers.setName(bizProcessData.getString6());
+            List<BizSuppliers> suppliers =  bizSuppliersService.selectBizSuppliersList(bizSuppliers);
+            if (suppliers != null && suppliers.size() > 0) {
+                bizSuppliers = suppliers.get(0);
+                bizProcessData.setString6(bizSuppliers.getSuppliersId() + "");
+            } else {
+                bizProcessData.setString6("");
+            }
 
+        }
 
         Map<String, SysRole> flowMap = bizProcessDefineService.getRoleFlowMap(bizId);
         String userFlowStatus = "";

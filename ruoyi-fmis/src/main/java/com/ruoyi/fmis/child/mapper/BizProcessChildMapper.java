@@ -76,6 +76,13 @@ public interface BizProcessChildMapper {
      * @return 结果
      */
     public int updateBizProcessChild(BizProcessChild bizProcessChild);
+    /**
+     * 修改发货
+     *
+     * @param bizProcessChild 流程数据字
+     * @return 结果
+     */
+    public int updateBizProcessChildFH(BizProcessChild bizProcessChild);
 
     /**
      * 删除流程数据字
