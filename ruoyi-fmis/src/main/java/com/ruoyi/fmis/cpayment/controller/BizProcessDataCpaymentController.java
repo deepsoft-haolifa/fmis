@@ -87,13 +87,13 @@ public class BizProcessDataCpaymentController extends BaseController {
         if (!CollectionUtils.isEmpty(flowMap)) {
             //计算流程描述
             for (BizProcessData data : list) {
-                //获取客户名称
-                String customerId = data.getString2();
-                if (StringUtils.isNotEmpty(customerId)) {
-                    BizCustomer customer = bizCustomerService.selectBizCustomerById(Long.parseLong(customerId));
-                    data.setBizCustomer(customer);
-                    data.setCustomerName(customer.getName());
-                }
+//                //获取客户名称
+//                String customerId = data.getString2();
+//                if (StringUtils.isNotEmpty(customerId)) {
+//                    BizCustomer customer = bizCustomerService.selectBizCustomerById(Long.parseLong(customerId));
+//                    data.setBizCustomer(customer);
+//                    data.setCustomerName(customer.getName());
+//                }
                 String flowStatus = data.getFlowStatus();
                 //结束标识
                 String normalFlag = data.getNormalFlag();
