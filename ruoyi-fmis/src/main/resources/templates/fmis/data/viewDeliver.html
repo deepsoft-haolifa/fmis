@@ -248,11 +248,14 @@
             onReorderRow: onReorderRow,
             rowStyle: tableRowStyle,
             columns: [{
+                checkbox : true,
+                width : 50,
                 formatter: function(value, row, index) {
-                    if (row.string20 == 1) {
-                        return {checkbox: false};
-                    } else {
-                        return {checkbox: true};
+                    console.log(row.string20)
+                    if(row.string20 == 1){//如果已经操作禁止选择
+                        return { disabled : true}
+                    }else{
+
                     }
                 }
             },

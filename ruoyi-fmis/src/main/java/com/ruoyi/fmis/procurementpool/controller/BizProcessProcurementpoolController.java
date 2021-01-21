@@ -101,6 +101,7 @@ public class BizProcessProcurementpoolController extends BaseController {
         newBizProcessData.setBizId(BizConstants.BIZ_contract);
         newBizProcessData.setString30(bizProcessData.getString30());
         newBizProcessData.setDataStatus("-1");
+        newBizProcessData.setString1(bizProcessData.getString1());
         bizProcessData.setDataStatus("-1");
         if (bizProcessData.getDataStatus().equals("1")) {
             newBizProcessData.setDataStatus("-1");
