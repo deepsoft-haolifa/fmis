@@ -63,6 +63,10 @@ public interface IBizProcessDataService {
 
     public List<BizProcessData> selectBizProcessDataListRefDelivery(BizProcessData bizProcessData);
 
+    public List<BizProcessData> selectBizProcessDataListRefCPayment(BizProcessData bizProcessData);
+
+    public List<BizProcessData> selectBizProcessDataListRefPayment(BizProcessData bizProcessData);
+    public BizProcessData selectBizProcessDataPaymentById(Long dataId);
 
     public List<BizProcessData> selectBizProcessDataListRefProcurement(BizProcessData bizProcessData);
 

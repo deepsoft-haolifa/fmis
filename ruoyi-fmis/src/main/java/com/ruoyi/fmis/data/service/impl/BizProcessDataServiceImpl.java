@@ -1,9 +1,6 @@
 package com.ruoyi.fmis.data.service.impl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import com.ruoyi.common.annotation.DataScope;
@@ -763,6 +760,22 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
         return bizProcessDataMapper.selectBizProcessDataListRefDelivery(bizProcessData);
     }
 
+    @Override
+    @DataScope(deptAlias = "dt", userAlias = "u")
+    public List<BizProcessData> selectBizProcessDataListRefCPayment(BizProcessData bizProcessData) {
+        return bizProcessDataMapper.selectBizProcessDataListRefCPayment(bizProcessData);
+    }
+
+    @Override
+    @DataScope(deptAlias = "dt", userAlias = "u")
+    public List<BizProcessData> selectBizProcessDataListRefPayment(BizProcessData bizProcessData) {
+        return bizProcessDataMapper.selectBizProcessDataListRefPayment(bizProcessData);
+    }
+
+    @Override
+    public BizProcessData selectBizProcessDataPaymentById(Long dataId) {
+        return bizProcessDataMapper.selectBizProcessDataPaymentById(dataId);
+    }
 
     @Override
     public List<BizProcessData> selectBizProcessDataListRefProcurement(BizProcessData bizProcessData) {
@@ -800,7 +813,13 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
 
         String flowStatus = "";
         if (!CollectionUtils.isEmpty(flowMap)) {
-            String currentUserFlowStatus = flowMap.keySet().iterator().next();
+            String currentUserFlowStatus = "";
+            if (flowMap.size() > 1) {
+                currentUserFlowStatus = flowMap.keySet().stream().filter(e -> Integer.parseInt(e) > Integer.parseInt(bizProcessData.getFlowStatus())).findFirst().orElse("");
+            } else {
+                currentUserFlowStatus = flowMap.keySet().iterator().next();
+            }
+
             if (status.equals("1")) {
                 flowStatus = currentUserFlowStatus;
             } else {

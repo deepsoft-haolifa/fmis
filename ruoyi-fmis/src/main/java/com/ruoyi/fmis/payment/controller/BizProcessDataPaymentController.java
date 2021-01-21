@@ -40,7 +40,7 @@ import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
 
 /**
- * 借款
+ * 费用报销-申请
  *
  * @author frank
  * @date 2020-05-05
@@ -54,21 +54,10 @@ public class BizProcessDataPaymentController extends BaseController {
     private IBizProcessDataService bizProcessDataService;
 
     @Autowired
-    private ISysRoleService sysRoleService;
-
-    @Autowired
     private IBizProcessDefineService bizProcessDefineService;
-
 
     @Autowired
     private IBizProcessChildService bizProcessChildService;
-
-
-    @Autowired
-    private IBizProductService bizProductService;
-
-    @Autowired
-    private IBizCustomerService bizCustomerService;
 
     @RequiresPermissions("fmis:payment:view")
     @GetMapping()
@@ -77,22 +66,9 @@ public class BizProcessDataPaymentController extends BaseController {
     }
 
 
-    /**
-     * 查询报价单产品
-     *
-     * @return
-     */
-    @PostMapping("/listChild")
-    @ResponseBody
-    public TableDataInfo listChild(BizProcessData bizProcessData) {
-        BizProcessChild queryBizProcessChild = new BizProcessChild();
-        queryBizProcessChild.setDataId(bizProcessData.getDataId());
-        List<BizProcessChild> bizProcessChildList = bizProcessChildService.selectBizProcessChildList(queryBizProcessChild);
-        return getDataTable(bizProcessChildList);
-    }
 
     /**
-     * 查询合同管理列表
+     * 查询报销申请列表
      */
     @RequiresPermissions("fmis:payment:list")
     @PostMapping("/list")
@@ -111,7 +87,7 @@ public class BizProcessDataPaymentController extends BaseController {
         }
 
         startPage();
-        List<BizProcessData> list = bizProcessDataService.selectBizProcessDataVoRefBorrowing(bizProcessData);
+        List<BizProcessData> list = bizProcessDataService.selectBizProcessDataListRefPayment(bizProcessData);
 
         Map<String, SysRole> flowAllMap = bizProcessDefineService.getFlowAllMap(bizId);
         if (!CollectionUtils.isEmpty(flowMap)) {
@@ -159,10 +135,23 @@ public class BizProcessDataPaymentController extends BaseController {
         return getDataTable(list);
     }
 
+    /**
+     * 查询报价单产品
+     *
+     * @return
+     */
+    @PostMapping("/listChild")
+    @ResponseBody
+    public TableDataInfo listChild(BizProcessData bizProcessData) {
+        BizProcessChild queryBizProcessChild = new BizProcessChild();
+        queryBizProcessChild.setDataId(bizProcessData.getDataId());
+        List<BizProcessChild> bizProcessChildList = bizProcessChildService.selectBizProcessChildList(queryBizProcessChild);
+        return getDataTable(bizProcessChildList);
+    }
     @GetMapping("/examineEdit")
     public String examineEdit(ModelMap mmap) {
         String dataId = getRequest().getParameter("dataId");
-        BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataBorrowingById(Long.parseLong(dataId));
+        BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataPaymentById(Long.parseLong(dataId));
         mmap.put("bizProcessData", bizProcessData);
         return prefix + "/examineEdit";
     }
@@ -186,7 +175,7 @@ public class BizProcessDataPaymentController extends BaseController {
     @GetMapping("/viewDetail1")
     public String viewDetail1(ModelMap mmap) {
         String dataId = getRequest().getParameter("dataId");
-        BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataBorrowingById(Long.parseLong(dataId));
+        BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataPaymentById(Long.parseLong(dataId));
         mmap.put("bizProcessData", bizProcessData);
         return prefix + "/viewDetail1";
     }
@@ -211,18 +200,6 @@ public class BizProcessDataPaymentController extends BaseController {
     }
 
     /**
-     * 导出合同管理列表
-     */
-    @RequiresPermissions("fmis:payment:export")
-    @PostMapping("/export")
-    @ResponseBody
-    public AjaxResult export(BizProcessData bizProcessData) {
-        List<BizProcessData> list = bizProcessDataService.selectBizProcessDataList(bizProcessData);
-        ExcelUtil<BizProcessData> util = new ExcelUtil<BizProcessData>(BizProcessData.class);
-        return util.exportExcel(list, "data");
-    }
-
-    /**
      * 新增合同管理
      */
     @GetMapping("/add")
@@ -241,7 +218,7 @@ public class BizProcessDataPaymentController extends BaseController {
      * 新增保存合同管理
      */
     @RequiresPermissions("fmis:payment:add")
-    @Log(title = "合同管理", businessType = BusinessType.INSERT)
+    @Log(title = "差旅报销添加", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
     public AjaxResult addSave(BizProcessData bizProcessData) {
@@ -277,7 +254,6 @@ public class BizProcessDataPaymentController extends BaseController {
                 BizProcessChild bizProcessChild = JSONObject.parseObject(json.toJSONString(), BizProcessChild.class);
                 bizProcessChild.setDataId(dataId);
                 bizProcessChildService.insertBizProcessChild(bizProcessChild);
-
             }
         }
         return toAjax(insertReturn);
@@ -288,7 +264,7 @@ public class BizProcessDataPaymentController extends BaseController {
      */
     @GetMapping("/edit/{dataId}")
     public String edit(@PathVariable("dataId") Long dataId, ModelMap mmap) {
-        BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataBorrowingById(dataId);
+        BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataPaymentById(dataId);
 
         mmap.put("bizProcessData", bizProcessData);
         return prefix + "/edit";
@@ -299,7 +275,7 @@ public class BizProcessDataPaymentController extends BaseController {
      */
     @GetMapping("/edit1/{dataId}")
     public String edit1(@PathVariable("dataId") Long dataId, ModelMap mmap) {
-        BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataBorrowingById(dataId);
+        BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataPaymentById(dataId);
         mmap.put("bizProcessData", bizProcessData);
         return prefix + "/edit1";
     }

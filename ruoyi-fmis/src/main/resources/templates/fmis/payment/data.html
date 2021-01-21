@@ -1,102 +1,139 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('报销管理列表')" />
+    <th:block th:include="include :: header('报销申请列表')"/>
 </head>
 <body class="gray-bg">
-     <div class="container-div">
-        <div class="row">
-            <div class="col-sm-12 search-collapse">
-                <form id="formId">
-                    <input type="hidden" name="bizId" id="bizId" value="payment"/>
-                    <div class="select-list">
-                        <ul>
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <input type="hidden" name="bizId" id="bizId" value="payment"/>
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            <p>类型：</p>
+                            <select name="string1" class="form-control m-b">
+                                <option value="">全部</option>
+                                <option value="1">差旅报销</option>
+                                <option value="2">费用报销</option>
+                            </select>
+                        </li>
+                        <li>
+                            <p>编号：</p>
+                            <input type="text" name="string2"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
 
-                            <li>
-                                <p>状态：</p>
-                                <select name="queryStatus" class="form-control m-b" >
-                                    <option value="0">全部</option>
-                                    <option value="1">待办</option>
-                                    <option value="2">已办</option>
-                                </select>
-                            </li>
-                            <li>
-                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
-                            </li>
-                        </ul>
-                    </div>
-                </form>
-            </div>
-
-            <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="add()" shiro:hasPermission="fmis:payment:add">
-                    <i class="fa fa-plus"></i> 添加差旅报销
-                </a>
-                <a class="btn btn-success" onclick="add1()" shiro:hasPermission="fmis:payment:add">
-                    <i class="fa fa-plus"></i> 添加费用报销
-                </a>
-            </div>
-            <div class="col-sm-12 select-table table-striped">
-                <table id="bootstrap-table"></table>
-            </div>
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-success" onclick="add()" shiro:hasPermission="fmis:payment:add">
+                <i class="fa fa-plus"></i> 添加差旅报销
+            </a>
+            <a class="btn btn-success" onclick="add1()" shiro:hasPermission="fmis:payment:add">
+                <i class="fa fa-plus"></i> 添加费用报销
+            </a>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
         </div>
     </div>
-    <th:block th:include="include :: footer" />
-    <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('fmis:payment:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('fmis:payment:remove')}]];
-        var prefix = ctx + "fmis/payment";
+</div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('fmis:payment:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('fmis:payment:remove')}]];
+    var prefix = ctx + "fmis/payment";
 
-        var capitalPropertyDatas = [[${@dict.getType('capital_property')}]];
+    var capitalPropertyDatas = [[${@dict.getType('capital_property')}]];
 
-        $(function() {
-            var options = {
-                url: prefix + "/list",
-                createUrl: prefix + "/add",
-                updateUrl: prefix + "/edit/{id}",
-                removeUrl: prefix + "/remove",
-                exportUrl: prefix + "/export",
-                uniqueId: "dataId",
-                modalName: "报销管理",
-                columns: [{
-                    checkbox: true
-                },
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            uniqueId: "dataId",
+            modalName: "报销管理",
+            columns: [{
+                checkbox: true
+            },
                 {
-                    field : 'dataId', 
-                    title : 'ID',
+                    field: 'dataId',
+                    title: 'ID',
                     visible: false
                 },
-                    {
-                        field : 'string1',
-                        title : '类型',formatter: function(value, row, index) {
-                            if (value == 2) {
-                                return "费用报销";
-                            }
-                            return "差旅费报销";
+                {
+                    field: 'string2',
+                    title: '编号'
+                },
+                {
+                    field: 'string1',
+                    title: '类型', formatter: function (value, row, index) {
+                        if (value === 2) {
+                            return "费用报销";
                         }
-                    },
-                {
-                    field : 'datetime1',
-                    title : '报销日期'
+                        return "差旅费报销";
+                    }
                 },
                 {
-                    field : 'remark',
-                    title : '备注'
+                    field: 'datetime1',
+                    title: '报销日期'
                 },
                 {
-                    field : 'createByName',
-                    title : '报销人'
+                    field: 'string3',
+                    title: '收款账户'
                 },
                 {
-                    field : 'flowStatusRemark',
-                    title : '状态',
+                    field: 'string4',
+                    title: '收款账号'
+                },
+                {
+                    field: 'string5',
+                    title: '开户行'
+                },
+                {
+                    field: 'deptName',
+                    title: '报销部门'
+                },
+                {
+                    field: 'remark',
+                    title: '备注'
+                },
+                {
+                    field: 'createByName',
+                    title: '报销人'
+                },
+                {
+                    field: 'string11',
+                    title: '付款状态',
+                    formatter: function (value, row, index) {
+                        var string11 = row.string11;
+                        if (string11 === "1") {
+                            return "已付款";
+                        } else {
+                            return "未付款";
+                        }
+                    }
+                },
+                {
+                    field: 'flowStatusRemark',
+                    title: '审批节点',
                     align: 'center'
                 },
                 {
                     title: '操作',
                     align: 'center',
-                    formatter: function(value, row, index) {
+                    formatter: function (value, row, index) {
                         var actions = [];
                         var flowStatus = row.flowStatus;
                         var normalFlag = row.normalFlag;
@@ -120,72 +157,76 @@
                         return actions.join('');
                     }
                 }]
-            };
-            $.table.init(options);
+        };
+        $.table.init(options);
+    });
+
+    function add() {
+        var url = prefix + "/add";
+        $.modal.openFull("增加", url);
+    }
+
+    function add1() {
+        var url = prefix + "/add1";
+        $.modal.openFull("增加", url);
+    }
+
+    function edit(id, type) {
+
+        var row = $('#bootstrap-table').bootstrapTable("getRowByUniqueId", id);
+        if (row == null) {
+            row = $('#bootstrap-table').bootstrapTable('getSelections')[0];
+        }
+        if (row != null) {
+            var flowStatus = row.flowStatus;
+
+        }
+        console.log("type=" + type);
+        var editUrl = $.operate.editUrl(id);
+        if (type == 2) {
+            editUrl = prefix + "/edit1/" + id;
+        }
+        $.modal.openFull("修改" + $.table._option.modalName, editUrl);
+    }
+
+    function viewExamineHistory(dataId) {
+        var bizId = $("#bizId").val();
+        var url = prefix + "/viewExamineHistory?dataId=" + dataId + "&&bizId=" + bizId;
+        $.modal.openNoEnter("审批记录", url, '', '', function () {
+            $.modal.closeAll();
         });
+    }
 
-        function add() {
-            var url = prefix + "/add";
-            $.modal.openFull("增加", url);
+    function subExamine(dataId, type) {
+        var url = prefix + "/examineEdit?dataId=" + dataId;
+        if (type == 2) {
+            url = prefix + "/examineEdit1?dataId=" + dataId;
         }
-        function add1() {
-            var url = prefix + "/add1";
-            $.modal.openFull("增加", url);
+        $.modal.openFull("审批", url);
+    }
+
+
+    function viewDetail(dataId, type) {
+        var bizId = $("#bizId").val();
+        var url = prefix + "/viewDetail?dataId=" + dataId + "&&bizId=" + bizId;
+        console.log("viewDetail type=" + type);
+        if (type == 2) {
+            url = prefix + "/viewDetail1?dataId=" + dataId + "&&bizId=" + bizId;
         }
-        function edit(id,type) {
+        $.modal.openNoEnter("详情", url, $(window).width(), $(window).height(), function () {
+            $.modal.closeAll();
+        });
+    }
 
-            var row = $('#bootstrap-table').bootstrapTable("getRowByUniqueId",id);
-            if (row == null) {
-                row = $('#bootstrap-table').bootstrapTable('getSelections')[0];
-            }
-            if (row != null) {
-                var flowStatus = row.flowStatus;
-
-            }
-            console.log("type=" + type);
-            var editUrl = $.operate.editUrl(id);
-            if (type == 2) {
-                editUrl = prefix + "/edit1/" + id;
-            }
-            $.modal.openFull("修改" + $.table._option.modalName, editUrl);
-        }
-
-        function viewExamineHistory(dataId) {
-            var bizId = $("#bizId").val();
-            var url = prefix + "/viewExamineHistory?dataId=" + dataId + "&&bizId=" + bizId;
-            $.modal.openNoEnter("审批记录", url,'','',function(){
-                $.modal.closeAll();
+    function subReport(dataId) {
+        $.modal.confirm("确定上报该条信息吗？", function () {
+            console.log(dataId + "--dataId");
+            var url = prefix + "/report?dataId=" + dataId;
+            $.operate.saveModal(url, '', function () {
+                $.table.refresh();
             });
-        }
-        function subExamine(dataId,type) {
-            var url = prefix + "/examineEdit?dataId=" + dataId;
-            if (type == 2) {
-                url = prefix + "/examineEdit1?dataId=" + dataId;
-            }
-            $.modal.openFull("审批", url);
-        }
-
-
-        function viewDetail(dataId,type) {
-            var bizId = $("#bizId").val();
-            var url = prefix + "/viewDetail?dataId=" + dataId + "&&bizId=" + bizId;
-            console.log("viewDetail type=" + type);
-            if (type == 2) {
-                url = prefix + "/viewDetail1?dataId=" + dataId + "&&bizId=" + bizId;
-            }
-            $.modal.openNoEnter("详情", url,$(window).width(),$(window).height(),function(){
-                $.modal.closeAll();
-            });
-        }
-        function subReport(dataId) {
-            $.modal.confirm("确定上报该条信息吗？", function() {
-                console.log(dataId + "--dataId");
-                var url = prefix + "/report?dataId=" + dataId;
-                $.operate.saveModal(url,'',function(){
-                    $.table.refresh();
-                });
-            });
-        }
-    </script>
+        });
+    }
+</script>
 </body>
 </html>

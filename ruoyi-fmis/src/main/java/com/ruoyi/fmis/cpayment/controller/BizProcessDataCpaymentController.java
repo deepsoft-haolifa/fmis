@@ -80,7 +80,7 @@ public class BizProcessDataCpaymentController extends BaseController {
         String bizId = bizProcessData.getBizId();
 
         startPage();
-        List<BizProcessData> list = bizProcessDataService.selectBizProcessDataListRefDelivery(bizProcessData);
+        List<BizProcessData> list = bizProcessDataService.selectBizProcessDataListRefCPayment(bizProcessData);
 
         Map<String, SysRole> flowMap = bizProcessDefineService.getRoleFlowMap(bizId);
         Map<String, SysRole> flowAllMap = bizProcessDefineService.getFlowAllMap(bizId);
@@ -243,7 +243,6 @@ public class BizProcessDataCpaymentController extends BaseController {
             }
         }
         bizProcessData.setString1(payCompanyStr);
-        bizProcessData.setString2("CP" + DateUtils.dateTimeNow() + RandomStringUtils.randomNumeric(3));
         int insertReturn = bizProcessDataService.insertBizProcessData(bizProcessData);
         Long dataId = bizProcessData.getDataId();
         for (int i = 0; i < productArray.size(); i++) {

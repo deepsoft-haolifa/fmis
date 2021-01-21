@@ -43,12 +43,40 @@ public interface BizProcessDataMapper {
     public List<BizProcessData> selectBizProcessDataListRefDelivery(BizProcessData bizProcessData);
 
     /**
+     * 付款申请查询
+     * @param bizProcessData
+     * @return
+     */
+    public List<BizProcessData> selectBizProcessDataListRefCPayment(BizProcessData bizProcessData);
+
+    /**
+     * 报销申请列表查询
+     * @param bizProcessData
+     * @return
+     */
+    public List<BizProcessData> selectBizProcessDataListRefPayment(BizProcessData bizProcessData);
+
+
+    /**
+     * 报销详情查询
+     * @param dataId
+     * @return
+     */
+    public BizProcessData selectBizProcessDataPaymentById(Long dataId);
+
+
+    /**
      * 采购管理查询
      * @param bizProcessData
      * @return
      */
     public List<BizProcessData> selectBizProcessDataListRefProcurement(BizProcessData bizProcessData);
 
+    /**
+     * 借款申请
+     * @param bizProcessData
+     * @return
+     */
     public List<BizProcessData> selectBizProcessDataVoRefBorrowing(BizProcessData bizProcessData);
 
     /**

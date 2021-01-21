@@ -56,6 +56,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		</if>
 		<!-- 数据范围过滤 -->
 		${params.dataScope}
+		order by r.role_sort asc
 	</select>
 
 	<select id="selectRolesByUserId" parameterType="Long" resultMap="SysRoleResult">
