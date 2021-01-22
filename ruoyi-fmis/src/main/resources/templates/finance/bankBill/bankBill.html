@@ -50,14 +50,14 @@
         </div>
 
         <div class="btn-group-sm" id="toolbar" role="group">
-            <a class="btn btn-success" onclick="addCollectUrl()" shiro:hasPermission="fmis:finance:bill:bank:addCollect">
+            <a class="btn btn-success" onclick="addCollectUrl()" shiro:hasPermission="finance:bankBill:addCollect">
                 <i class="fa fa-plus"></i> 添加收款
             </a>
-            <a class="btn btn-success" onclick="addPayUrl()" shiro:hasPermission="fmis:finance:bill:bank:addPay">
+            <a class="btn btn-success" onclick="addPayUrl()" shiro:hasPermission="	finance:bankBill:addPay">
                 <i class="fa fa-plus"></i> 添加付款
             </a>
             <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"
-               shiro:hasPermission="fmis:finance:bill:bank:remove">
+               shiro:hasPermission="finance:bankBill:remove">
                 <i class="fa fa-remove"></i> 删除
             </a>
         </div>
@@ -68,8 +68,9 @@
 </div>
 <th:block th:include="include :: footer"/>
 <script th:inline="javascript">
-    var editFlag = [[${@permission.hasPermi('fmis:bill:edit')}]];
-    var removeFlag = [[${@permission.hasPermi('fmis:bill:remove')}]];
+    var editCollectFlag = [[${@permission.hasPermi('finance:bankBill:edit')}]];
+    var editPayFlag = [[${@permission.hasPermi('finance:bankBill:editPay')}]];
+    var removeFlag = [[${@permission.hasPermi('finance:bankBill:remove')}]];
     var billTypeDatas = [[${@dict.getType('bill_type')}]];
     var payAccountDatas = [[${@dict.getType('pay_account')}]];
     var payWayDatas = [[${@dict.getType('pay_way')}]];
@@ -190,10 +191,10 @@
                         var actions = [];
                         var type = row.type;
                         if (type == 1) {
-                            actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="editCollectUrl(\'' + row.billId + '\')"><i class="fa fa-edit"></i> 编辑收款</a> ');
+                            actions.push('<a class="btn btn-success btn-xs ' + editCollectFlag + '" href="javascript:void(0)" onclick="editCollectUrl(\'' + row.billId + '\')"><i class="fa fa-edit"></i> 编辑收款</a> ');
                         }
                         if (type == 2) {
-                            actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="editPayUrl(\'' + row.billId + '\')"><i class="fa fa-edit"></i> 编辑付款</a> ');
+                            actions.push('<a class="btn btn-success btn-xs ' + editPayFlag + '" href="javascript:void(0)" onclick="editPayUrl(\'' + row.billId + '\')"><i class="fa fa-edit"></i> 编辑付款</a> ');
                         }
                         actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.billId + '\')"><i class="fa fa-remove"></i> 删除</a>');
                         return actions.join('');

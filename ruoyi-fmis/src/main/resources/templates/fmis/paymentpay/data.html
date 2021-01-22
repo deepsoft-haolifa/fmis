@@ -33,15 +33,6 @@
                 </div>
             </form>
         </div>
-
-        <div class="btn-group-sm" id="toolbar" role="group">
-            <a class="btn btn-success" onclick="add()" shiro:hasPermission="fmis:payment:add">
-                <i class="fa fa-plus"></i> 添加差旅报销
-            </a>
-            <a class="btn btn-success" onclick="add1()" shiro:hasPermission="fmis:payment:add">
-                <i class="fa fa-plus"></i> 添加费用报销
-            </a>
-        </div>
         <div class="col-sm-12 select-table table-striped">
             <table id="bootstrap-table"></table>
         </div>
@@ -51,17 +42,12 @@
 <script th:inline="javascript">
     var editFlag = [[${@permission.hasPermi('fmis:payment:edit')}]];
     var removeFlag = [[${@permission.hasPermi('fmis:payment:remove')}]];
-    var prefix = ctx + "fmis/payment";
-
-    var capitalPropertyDatas = [[${@dict.getType('capital_property')}]];
+    var prefix = ctx + "fmis/paymentpay";
 
     $(function () {
         var options = {
             url: prefix + "/list",
-            createUrl: prefix + "/add",
             updateUrl: prefix + "/edit/{id}",
-            removeUrl: prefix + "/remove",
-            exportUrl: prefix + "/export",
             uniqueId: "dataId",
             modalName: "报销管理",
             columns: [{
@@ -102,16 +88,16 @@
                     title: '开户行'
                 },
                 {
+                    field: 'price1',
+                    title: '报销金额'
+                },
+                {
                     field: 'deptName',
                     title: '报销部门'
                 },
                 {
                     field: 'remark',
                     title: '备注'
-                },
-                {
-                    field: 'price1',
-                    title: '报销金额'
                 },
                 {
                     field: 'createByName',
@@ -130,32 +116,11 @@
                     }
                 },
                 {
-                    field: 'flowStatusRemark',
-                    title: '审批节点',
-                    align: 'center'
-                },
-                {
                     title: '操作',
                     align: 'center',
                     formatter: function (value, row, index) {
                         var actions = [];
-                        var flowStatus = row.flowStatus;
-                        var normalFlag = row.normalFlag;
-                        var operationExamineStatus = row.operationExamineStatus;
-                        var createBy = row.createBy;
-                        var loginUserId = row.loginUserId;
                         var type = row.string1;
-                        console.log("loginUserId=" + loginUserId + " createBy=" + createBy + " flowStatus=" + flowStatus);
-                        if (flowStatus < 1 || (flowStatus > 10 && createBy == loginUserId)) {
-                            actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="edit(\'' + row.dataId + '\',\'' + type + '\')"><i class="fa fa-edit"></i> 编辑</a> ');
-                            actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 删除</a>');
-                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subReport(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 上报</a>');
-                        } else if (flowStatus == normalFlag) {
-                            //已完成
-                        } else if (operationExamineStatus == true || operationExamineStatus == "true") {
-                            //审批
-                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subExamine(\'' + row.dataId + '\',\'' + type + '\')"><i class="fa fa-remove"></i> 审批</a>');
-                        }
                         actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewExamineHistory(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 审批记录 </a>');
                         actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewDetail(\'' + row.dataId + '\',\'' + type + '\')"><i class="fa fa-remove"></i> 详情 </a>');
                         return actions.join('');
@@ -165,15 +130,6 @@
         $.table.init(options);
     });
 
-    function add() {
-        var url = prefix + "/add";
-        $.modal.openFull("增加", url);
-    }
-
-    function add1() {
-        var url = prefix + "/add1";
-        $.modal.openFull("增加", url);
-    }
 
     function edit(id, type) {
 

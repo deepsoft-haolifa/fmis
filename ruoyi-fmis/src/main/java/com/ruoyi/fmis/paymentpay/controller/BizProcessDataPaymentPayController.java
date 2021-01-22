@@ -45,9 +45,6 @@ public class BizProcessDataPaymentPayController extends BaseController {
     private IBizProcessDataService bizProcessDataService;
 
     @Autowired
-    private IBizProcessDefineService bizProcessDefineService;
-
-    @Autowired
     private IBizProcessChildService bizProcessChildService;
 
 
@@ -74,70 +71,15 @@ public class BizProcessDataPaymentPayController extends BaseController {
     }
 
     /**
-     * 查询合同管理列表
+     * 查询审核完成的报销单
      */
     @RequiresPermissions("fmis:paymentpay:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(BizProcessData bizProcessData) {
-
-        String bizId = bizProcessData.getBizId();
-
-        Map<String, SysRole> flowMap = bizProcessDefineService.getRoleFlowMap(bizId);
-        String userFlowStatus = "";
-        if (!CollectionUtils.isEmpty(flowMap)) {
-            for (String key : flowMap.keySet()) {
-                userFlowStatus = key;
-            }
-            bizProcessData.setRoleType(userFlowStatus);
-        }
-
+        bizProcessData.setRoleType("0");
         startPage();
-        List<BizProcessData> list = bizProcessDataService.selectBizProcessDataVoRefBorrowing(bizProcessData);
-
-        Map<String, SysRole> flowAllMap = bizProcessDefineService.getFlowAllMap(bizId);
-        if (!CollectionUtils.isEmpty(flowMap)) {
-            //计算流程描述
-            for (BizProcessData data : list) {
-                String flowStatus = data.getFlowStatus();
-                //结束标识
-                String normalFlag = data.getNormalFlag();
-                data.setLoginUserId(ShiroUtils.getUserId().toString());
-                String flowStatusRemark = "待上报";
-                if ("-2".equals(flowStatus)) {
-                    flowStatusRemark = "待上报";
-                } else if ("1".equals(flowStatus)) {
-                    flowStatusRemark = "已上报";
-                } else {
-                    SysRole currentSysRole = CommonUtils.getLikeByMap(flowAllMap, flowStatus.replaceAll("-", ""));
-                    if (currentSysRole == null) {
-                        continue;
-                    }
-                    if (flowStatus.equals(normalFlag)) {
-                        flowStatusRemark = currentSysRole.getRoleName() + "已完成";
-                    } else if (flowStatus.startsWith("-")) {
-                        //不同意标识
-                        flowStatusRemark = currentSysRole.getRoleName() + "不同意";
-                    } else {
-                        flowStatusRemark = currentSysRole.getRoleName() + "同意";
-                    }
-                }
-                data.setFlowStatusRemark(flowStatusRemark);
-                //计算是否可以审批
-                int flowStatusInt = Integer.parseInt(flowStatus);
-                data.setOperationExamineStatus(false);
-                if (flowStatusInt > 0) {
-                    if (!flowStatus.equals(normalFlag)) {
-                        //String userFlowStatus = flowMap.keySet().iterator().next();
-                        int userFlowStatusInt = Integer.parseInt(userFlowStatus);
-                        if (userFlowStatusInt == flowStatusInt + 1) {
-                            data.setOperationExamineStatus(true);
-                        }
-
-                    }
-                }
-            }
-        }
+        List<BizProcessData> list = bizProcessDataService.selectBizProcessDataListRefPayment(bizProcessData);
         return getDataTable(list);
     }
 

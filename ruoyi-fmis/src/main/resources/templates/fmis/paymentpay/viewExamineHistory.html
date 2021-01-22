@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('流程记录')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+
+            <form id="formId">
+                <input type="hidden" name="bizId" id="bizId" th:value="${bizId}"/>
+                <input type="hidden" name="bizTable" id="bizTable" th:value="${bizTable}"/>
+            </form>
+
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('fmis:procurement:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('fmis:procurement:remove')}]];
+        var prefix = ctx + "fmis/flow";
+
+        $(function() {
+            var options = {
+                url: prefix + "/listView",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "流程记录",
+                showSearch: false,
+                striped: true,
+
+
+                columns: [{
+                    checkbox: false
+                },
+                {
+                    field : 'flowId', 
+                    title : 'ID',
+                    visible: false
+                },
+                {
+                    field : 'examineUserName',
+                    title : '审核人'
+                },
+                    {
+                        field : 'roleNames',
+                        title : '角色'
+                    },
+                {
+                    field : 'flowStatus', 
+                    title : '操作类型',
+                    formatter: function(value, row, index) {
+                        var actions = '';
+                        var flowStatus = row.flowStatus;
+                        if (flowStatus == "0") {
+                            actions = '上报';
+                        } else if (flowStatus == "1") {
+                            actions = '同意';
+                        } else if (flowStatus == "-1") {
+                            actions = '不同意';
+                        }
+                        return actions;
+                    }
+                },
+                {
+                    field : 'remark', 
+                    title : '备注'
+                },
+                {
+                    field : 'createTime',
+                    title : '操作时间'
+                }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

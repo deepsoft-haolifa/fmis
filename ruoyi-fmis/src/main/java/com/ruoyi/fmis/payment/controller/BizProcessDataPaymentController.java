@@ -1,5 +1,6 @@
 package com.ruoyi.fmis.payment.controller;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -64,7 +65,6 @@ public class BizProcessDataPaymentController extends BaseController {
     public String data() {
         return prefix + "/data";
     }
-
 
 
     /**
@@ -148,6 +148,7 @@ public class BizProcessDataPaymentController extends BaseController {
         List<BizProcessChild> bizProcessChildList = bizProcessChildService.selectBizProcessChildList(queryBizProcessChild);
         return getDataTable(bizProcessChildList);
     }
+
     @GetMapping("/examineEdit")
     public String examineEdit(ModelMap mmap) {
         String dataId = getRequest().getParameter("dataId");
@@ -223,29 +224,44 @@ public class BizProcessDataPaymentController extends BaseController {
     @ResponseBody
     public AjaxResult addSave(BizProcessData bizProcessData) {
         bizProcessData.setFlowStatus("0");
-
-
         Map<String, SysRole> flowMap = bizProcessDefineService.getRoleFlowMap(bizProcessData.getBizId());
         String lastRoleKey = "";
         for (String key : flowMap.keySet()) {
             lastRoleKey = key;
         }
-
         if (!"1".equals(lastRoleKey)) {
             bizProcessData.setFlowStatus(lastRoleKey + "0");
         }
-
-
         Map<String, SysRole> flowAllMap = bizProcessDefineService.getFlowAllMap(bizProcessData.getBizId());
         if (!CollectionUtils.isEmpty(flowAllMap)) {
             for (String key : flowAllMap.keySet()) {
                 bizProcessData.setNormalFlag(key);
             }
         }
+
+        // 获取总价格
+        BigDecimal totalPrice = BigDecimal.ZERO;
+        String productArrayStr = bizProcessData.getProductParmters();
+        if (StringUtils.isNotEmpty(productArrayStr)) {
+            JSONArray productArray = JSONArray.parseArray(productArrayStr);
+            for (int i = 0; i < productArray.size(); i++) {
+                JSONObject json = productArray.getJSONObject(i);
+                BizProcessChild bizProcessChild = JSONObject.parseObject(json.toJSONString(), BizProcessChild.class);
+                if (bizProcessChild.getPrice1() != null && bizProcessChild.getPrice1() > 0) {
+                    totalPrice = totalPrice.add(new BigDecimal(bizProcessChild.getPrice1()));
+                }
+                if (bizProcessChild.getPrice2() != null && bizProcessChild.getPrice2() > 0) {
+                    totalPrice = totalPrice.add(new BigDecimal(bizProcessChild.getPrice2()));
+                }
+                if (bizProcessChild.getPrice3() != null && bizProcessChild.getPrice3() > 0) {
+                    totalPrice = totalPrice.add(new BigDecimal(bizProcessChild.getPrice3()));
+                }
+            }
+        }
+        bizProcessData.setPrice1(totalPrice.doubleValue());
         bizProcessData.setString2("FP" + DateUtils.dateTimeNow() + RandomStringUtils.randomNumeric(3));
         int insertReturn = bizProcessDataService.insertBizProcessData(bizProcessData);
         Long dataId = bizProcessData.getDataId();
-        String productArrayStr = bizProcessData.getProductParmters();
 
         if (StringUtils.isNotEmpty(productArrayStr)) {
             JSONArray productArray = JSONArray.parseArray(productArrayStr);
@@ -290,6 +306,25 @@ public class BizProcessDataPaymentController extends BaseController {
     public AjaxResult editSave(BizProcessData bizProcessData) {
 
         String productArrayStr = bizProcessData.getProductParmters();
+        // 获取总价格
+        BigDecimal totalPrice = BigDecimal.ZERO;
+        if (StringUtils.isNotEmpty(productArrayStr)) {
+            JSONArray productArray = JSONArray.parseArray(productArrayStr);
+            for (int i = 0; i < productArray.size(); i++) {
+                JSONObject json = productArray.getJSONObject(i);
+                BizProcessChild bizProcessChild = JSONObject.parseObject(json.toJSONString(), BizProcessChild.class);
+                if (bizProcessChild.getPrice1() != null && bizProcessChild.getPrice1() > 0) {
+                    totalPrice = totalPrice.add(new BigDecimal(bizProcessChild.getPrice1()));
+                }
+                if (bizProcessChild.getPrice2() != null && bizProcessChild.getPrice2() > 0) {
+                    totalPrice = totalPrice.add(new BigDecimal(bizProcessChild.getPrice2()));
+                }
+                if (bizProcessChild.getPrice3() != null && bizProcessChild.getPrice3() > 0) {
+                    totalPrice = totalPrice.add(new BigDecimal(bizProcessChild.getPrice3()));
+                }
+            }
+        }
+        bizProcessData.setPrice1(totalPrice.doubleValue());
         int updateReturn = bizProcessDataService.updateBizProcessData(bizProcessData);
 
         Long dataId = bizProcessData.getDataId();
