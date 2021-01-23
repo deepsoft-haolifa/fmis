@@ -39,11 +39,6 @@ $(function() {
                 visible: false
             },
             {
-                field : 'dataId',
-                title : 'ID',
-                visible: false
-            },
-            {
                 field : 'string1',
                 title : '合同编号'
             },
@@ -108,10 +103,11 @@ function initExpandRow() {
     setTimeout(function () {
         var repeartMap = new Map();
 
-        console.log("loadingModalFmis show...")
+        console.log("loadingModalFmis show..." + overAllIds.length)
         var initOver = false;
         for (var i = 0; i < overAllIds.length; i++) {
             var pathId = overAllIds[i];
+            console.log(pathId)
             var pathIds = pathId.split("_");
             var type = pathIds[0];//类型
             var childId = pathIds[1];//合同子数据ID
