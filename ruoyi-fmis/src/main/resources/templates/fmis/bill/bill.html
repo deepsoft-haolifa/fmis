@@ -33,13 +33,13 @@
                 </div>
 
                 <div class="btn-group-sm" id="toolbar" role="group">
-                    <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="fmis:bill:add">
+                    <a class="btn btn-success" onclick="add()" shiro:hasPermission="fmis:bill:add">
                         <i class="fa fa-plus"></i> 添加
                     </a>
-                    <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="fmis:bill:edit">
+                    <a class="btn btn-primary single disabled" onclick="edit()" shiro:hasPermission="fmis:bill:edit">
                         <i class="fa fa-edit"></i> 修改
                     </a>
-                    <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="fmis:bill:remove">
+                    <a class="btn btn-danger multiple disabled" onclick="removeAll()" shiro:hasPermission="fmis:bill:remove">
                         <i class="fa fa-remove"></i> 删除
                     </a>
                 </div>

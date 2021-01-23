@@ -1258,21 +1258,21 @@ public class BizProcessDataProcurementController extends BaseController {
 
             table.addCell(PdfUtil.mergeCol("", 1,textFont));
             table.addCell(PdfUtil.mergeColLeft("开户银行：" + Util.jsonObject.getJSONObject(companyName).getString("bank"), 7,textFont));
-            table.addCell(PdfUtil.mergeColLeft("开户银行：" + "暂时没有", 7,textFont));
+            table.addCell(PdfUtil.mergeColLeft("开户银行：" + bizSuppliers.getBank() == null ? "": bizSuppliers.getBank(), 7,textFont));
             //table.addCell(PdfUtil.mergeColLeft("开户银行：" + StringUtils.trim(bizCustomer.getString11()), 7,textFont));
 
             table.addCell(PdfUtil.mergeCol("", 1,textFont));
             table.addCell(PdfUtil.mergeColLeft("帐    号：" + Util.jsonObject.getJSONObject(companyName).getString("bankNo"), 7,textFont));
 //            table.addCell(PdfUtil.mergeColLeft("帐    号：" + StringUtils.trim(remark8), 7,textFont));
-            table.addCell(PdfUtil.mergeColLeft("帐    号：" +  "暂时没有", 7,textFont));
+            table.addCell(PdfUtil.mergeColLeft("帐    号：" +  bizSuppliers.getBankNo() == null ? "" : bizSuppliers.getBankNo(), 7,textFont));
 
             table.addCell(PdfUtil.mergeCol("", 1,textFont));
             table.addCell(PdfUtil.mergeColLeft("税    号："  + Util.jsonObject.getJSONObject(companyName).getString("faxNo"), 7,textFont));
-            table.addCell(PdfUtil.mergeColLeft("税    号：" + "暂时没有", 7,textFont));
+            table.addCell(PdfUtil.mergeColLeft("税    号：" + bizSuppliers.getTaxNumber() == null ? "":bizSuppliers.getTaxNumber(), 7,textFont));
 
             table.addCell(PdfUtil.mergeCol("", 1,textFont));
             table.addCell(PdfUtil.mergeColLeft("地    址："  + Util.jsonObject.getJSONObject(companyName).getString("address"), 7,textFont));
-            table.addCell(PdfUtil.mergeColLeft("地    址：" + bizSuppliers.getAddress(), 7,textFont));
+            table.addCell(PdfUtil.mergeColLeft("地    址：" + bizSuppliers.getAddress() == null ? "":bizSuppliers.getAddress(), 7,textFont));
 
             Paragraph paragraphRemark1 = new Paragraph();
             Font remarkFont1 = PdfUtil.getPdfChineseFont(7, Font.NORMAL);

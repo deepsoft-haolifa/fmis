@@ -92,6 +92,16 @@ public class BizSuppliers extends BaseEntity {
     /** 代号 */
     @Excel(name = "代号")
     private String nickName;
+
+    /** 开户行 */
+    @Excel(name = "开户行")
+    private String bank;
+    /** 银行帐号 */
+    @Excel(name = "银行帐号")
+    private String bankNo;
+    /** 税号 */
+    @Excel(name = "税号")
+    private String taxNumber;
     public void setNickName(String nickName) {
         this.nickName = nickName;
     }
@@ -212,6 +222,30 @@ public class BizSuppliers extends BaseEntity {
         return delFlag;
     }
 
+    public String getBank() {
+        return bank;
+    }
+
+    public void setBank(String bank) {
+        this.bank = bank;
+    }
+
+    public String getBankNo() {
+        return bankNo;
+    }
+
+    public void setBankNo(String bankNo) {
+        this.bankNo = bankNo;
+    }
+
+    public String getTaxNumber() {
+        return taxNumber;
+    }
+
+    public void setTaxNumber(String taxNumber) {
+        this.taxNumber = taxNumber;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -237,6 +271,9 @@ public class BizSuppliers extends BaseEntity {
             .append("updateBy", getUpdateBy())
             .append("updateTime", getUpdateTime())
             .append("nickName", getNickName())
+            .append("bank", getBank())
+            .append("bankNo", getBankNo())
+            .append("taxNumber", getTaxNumber())
             .toString();
     }
 }
