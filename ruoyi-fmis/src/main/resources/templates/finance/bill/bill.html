@@ -36,10 +36,10 @@
         </div>
 
         <div class="btn-group-sm" id="toolbar" role="group">
-            <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="fmis:bill:add">
+            <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="finance:bill:add">
                 <i class="fa fa-plus"></i> 添加
             </a>
-            <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="fmis:bill:edit">
+            <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="finance:bill:edit">
                 <i class="fa fa-edit"></i> 修改
             </a>
             <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"
@@ -54,8 +54,8 @@
 </div>
 <th:block th:include="include :: footer"/>
 <script th:inline="javascript">
-    var editFlag = [[${@permission.hasPermi('fmis:bill:edit')}]];
-    var removeFlag = [[${@permission.hasPermi('fmis:bill:remove')}]];
+    var editFlag = [[${@permission.hasPermi('finance:bill:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('finance:bill:remove')}]];
     var collectionTypeDatas = [[${@dict.getType('collection_type1')}]];
     var paymentTypeDatas = [[${@dict.getType('payment_type1')}]];
     var prefix = ctx + "finance/bill";
