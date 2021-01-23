@@ -68,7 +68,7 @@
 </div>
 <th:block th:include="include :: footer"/>
 <script th:inline="javascript">
-    var editCollectFlag = [[${@permission.hasPermi('finance:bankBill:edit')}]];
+    var editCollectFlag = [[${@permission.hasPermi('finance:bankBill:editCollect')}]];
     var editPayFlag = [[${@permission.hasPermi('finance:bankBill:editPay')}]];
     var removeFlag = [[${@permission.hasPermi('finance:bankBill:remove')}]];
     var billTypeDatas = [[${@dict.getType('bill_type')}]];

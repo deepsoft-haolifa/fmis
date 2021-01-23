@@ -104,7 +104,7 @@ public class BizBankBillController extends BaseController {
     /**
      * 修改保存银行日记账（收款）
      */
-    @RequiresPermissions("finance:bankBill:edit")
+    @RequiresPermissions("finance:bankBill:editCollect")
     @Log(title = "银行日记账", businessType = BusinessType.UPDATE)
     @PostMapping("/editCollect")
     @ResponseBody
@@ -133,8 +133,8 @@ public class BizBankBillController extends BaseController {
     /**
      * 修改银行日记账（付款）
      */
-    @GetMapping("/edit/{billId}")
-    public String edit(@PathVariable("billId") Long billId, ModelMap mmap) {
+    @GetMapping("/editPay/{billId}")
+    public String editPay(@PathVariable("billId") Long billId, ModelMap mmap) {
         BizBankBill bizBankBill = bizBankBillService.selectBizBankBillById(billId);
         mmap.put("bizBill", bizBankBill);
         return prefix + "/editPay";

@@ -25,6 +25,7 @@ import com.ruoyi.system.service.ISysRoleService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -200,6 +201,7 @@ public class BizProcessDataBorrowingPayController extends BaseController {
     @RequiresPermissions("fmis:borrowingpay:edit")
     @PostMapping("/edit")
     @ResponseBody
+    @Transactional(rollbackFor = Exception.class)
     public AjaxResult editSave(BizProcessData bizProcessData) {
 
         int updateReturn = bizProcessDataService.updateBizProcessData(bizProcessData);

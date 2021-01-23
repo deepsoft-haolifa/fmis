@@ -1,40 +1,29 @@
 package com.ruoyi.fmis.paymentpay.controller;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
-import com.ruoyi.common.utils.DateUtils;
-import com.ruoyi.common.utils.StringUtils;
-import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.fmis.child.domain.BizProcessChild;
 import com.ruoyi.fmis.child.service.IBizProcessChildService;
-import com.ruoyi.fmis.common.CommonUtils;
-import com.ruoyi.fmis.customer.service.IBizCustomerService;
 import com.ruoyi.fmis.data.domain.BizProcessData;
 import com.ruoyi.fmis.data.service.IBizProcessDataService;
-import com.ruoyi.fmis.define.service.IBizProcessDefineService;
-import com.ruoyi.fmis.product.service.IBizProductService;
-import com.ruoyi.framework.util.ShiroUtils;
-import com.ruoyi.system.domain.SysRole;
-import com.ruoyi.system.service.ISysRoleService;
-import org.apache.commons.lang3.RandomStringUtils;
+import com.ruoyi.fmis.finance.domain.BizBankBill;
+import com.ruoyi.fmis.finance.domain.BizBill;
+import com.ruoyi.fmis.finance.service.IBizBankBillService;
+import com.ruoyi.fmis.finance.service.IBizBillService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * 费用报销-付款
- *
  */
 @Controller
 @RequestMapping("/fmis/paymentpay")
@@ -47,6 +36,11 @@ public class BizProcessDataPaymentPayController extends BaseController {
     @Autowired
     private IBizProcessChildService bizProcessChildService;
 
+    @Autowired
+    private IBizBankBillService bizBankBillService;
+
+    @Autowired
+    private IBizBillService bizBillService;
 
 
     @RequiresPermissions("fmis:paymentpay:view")
@@ -84,11 +78,10 @@ public class BizProcessDataPaymentPayController extends BaseController {
     }
 
 
-
     @GetMapping("/viewDetail")
     public String viewDetail(ModelMap mmap) {
         String dataId = getRequest().getParameter("dataId");
-        BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataBorrowingById(Long.parseLong(dataId));
+        BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataPaymentById(Long.parseLong(dataId));
         mmap.put("bizProcessData", bizProcessData);
         return prefix + "/viewDetail";
     }
@@ -96,7 +89,7 @@ public class BizProcessDataPaymentPayController extends BaseController {
     @GetMapping("/viewDetail1")
     public String viewDetail1(ModelMap mmap) {
         String dataId = getRequest().getParameter("dataId");
-        BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataBorrowingById(Long.parseLong(dataId));
+        BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataPaymentById(Long.parseLong(dataId));
         mmap.put("bizProcessData", bizProcessData);
         return prefix + "/viewDetail1";
     }
@@ -110,10 +103,9 @@ public class BizProcessDataPaymentPayController extends BaseController {
         return prefix + "/viewExamineHistory";
     }
 
-    @GetMapping("/edit")
-    public String edit(ModelMap mmap) {
-        String dataId = getRequest().getParameter("dataId");
-        BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataBorrowingById(Long.parseLong(dataId));
+    @GetMapping("/edit/{dataId}")
+    public String edit(@PathVariable("dataId") Long dataId, ModelMap mmap) {
+        BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataPaymentById(dataId);
         mmap.put("bizProcessData", bizProcessData);
         return prefix + "/edit";
     }
@@ -126,33 +118,44 @@ public class BizProcessDataPaymentPayController extends BaseController {
     @Log(title = "报销付款", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
+    @Transactional(rollbackFor = Exception.class)
     public AjaxResult editSave(BizProcessData bizProcessData) {
-
-        String productArrayStr = bizProcessData.getProductParmters();
         int updateReturn = bizProcessDataService.updateBizProcessData(bizProcessData);
-
-        Long dataId = bizProcessData.getDataId();
-
-        BizProcessChild removeBizProcuessChild = new BizProcessChild();
-        removeBizProcuessChild.setDataId(dataId);
-        List<BizProcessChild> removeBizProcessChildList = bizProcessChildService.selectBizProcessChildList(removeBizProcuessChild);
-        if (!CollectionUtils.isEmpty(removeBizProcessChildList)) {
-            for (BizProcessChild bizProcessChild : removeBizProcessChildList) {
-                bizProcessChildService.deleteBizProcessChildById(bizProcessChild.getChildId());
+        if (updateReturn > 0 && "1".equals(bizProcessData.getString11())) {
+            String bookingType = bizProcessData.getString13();
+            if ("1".equals(bookingType)) {
+                // 添加现金日记账
+                if (!bizBillService.existsByCertificateNumber(bizProcessData.getString2())) {
+                    BizBill bizBill = new BizBill();
+                    bizBill.setType("1");
+                    bizBill.setDeptId(bizProcessData.getString6());
+                    bizBill.setCertificateNumber(bizProcessData.getString2());
+                    bizBill.setD(bizProcessData.getDatetime3());
+                    bizBill.setPaymentType("1");// 费用报销
+                    bizBill.setPayment(bizProcessData.getPrice1());
+                    bizBill.setRemark(bizProcessData.getRemark());
+//                    bizBill.setString1(bizProcessData.getString10());
+                    bizBill.setString2(bizProcessData.getString3());
+                    bizBillService.insertBizBill(bizBill);
+                }
+            } else if ("2".equals(bookingType)) {
+                // 添加银行日记账
+                if (!bizBankBillService.existsByCertificateNumber(bizProcessData.getString2())) {
+                    BizBankBill bizBankBill = new BizBankBill();
+                    bizBankBill.setType("2");
+                    bizBankBill.setDeptId(bizProcessData.getString6());
+                    bizBankBill.setCertificateNumber(bizProcessData.getString2());
+                    bizBankBill.setOperateDate(bizProcessData.getDatetime3());
+                    bizBankBill.setPayAccount(bizProcessData.getString4());
+                    bizBankBill.setPaymentType("1");
+                    bizBankBill.setPayment(bizProcessData.getPrice1());
+                    bizBankBill.setRemark(bizProcessData.getRemark());
+//                    bizBankBill.setPayCompany(bizProcessData.getString10());
+                    bizBankBill.setCollectCompany(bizProcessData.getString3());
+                    bizBankBillService.insertBizBankBill(bizBankBill);
+                }
             }
         }
-
-        if (StringUtils.isNotEmpty(productArrayStr)) {
-            JSONArray productArray = JSONArray.parseArray(productArrayStr);
-            for (int i = 0; i < productArray.size(); i++) {
-                JSONObject json = productArray.getJSONObject(i);
-                BizProcessChild bizProcessChild = JSONObject.parseObject(json.toJSONString(), BizProcessChild.class);
-                bizProcessChild.setDataId(dataId);
-                bizProcessChildService.insertBizProcessChild(bizProcessChild);
-
-            }
-        }
-
         return toAjax(updateReturn);
     }
 

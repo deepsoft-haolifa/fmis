@@ -50,6 +50,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="payDate != null "> and pay_date = #{payDate}</if>
             <if test="bookingType != null  and bookingType != ''"> and booking_type = #{bookingType}</if>
         </where>
+        order by pay_plan_id desc
     </select>
 
     <select id="selectBizPayPlanById" parameterType="Long" resultMap="BizPayPlanResult">

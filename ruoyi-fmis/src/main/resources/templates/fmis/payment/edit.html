@@ -235,26 +235,6 @@
             layer.close(index);
         }
 
-        function selectDeptTree1() {
-            var treeId = $("#string10").val();
-            var deptId = $.common.isEmpty(treeId) ? "100" : $("#string10").val();
-            var url = ctx + "system/dept/selectDeptTree/" + deptId;
-            var options = {
-                title: '选择部门',
-                width: "380",
-                url: url,
-                callBack: doSubmit1
-            };
-            $.modal.openOptions(options);
-        }
-        function doSubmit1(index, layero){
-            var tree = layero.find("iframe")[0].contentWindow.$._tree;
-            var body = layer.getChildFrame('body', index);
-            $("#string10").val(body.find('#treeId').val());
-            $("#treeName1").val(body.find('#treeName').val());
-            layer.close(index);
-        }
-
         function submitHandler() {
             if ($.validate.form()) {
                 var dataObj = $('#form-data-edit').serializeArray();

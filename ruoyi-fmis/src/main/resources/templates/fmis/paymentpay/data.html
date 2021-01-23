@@ -40,8 +40,7 @@
 </div>
 <th:block th:include="include :: footer"/>
 <script th:inline="javascript">
-    var editFlag = [[${@permission.hasPermi('fmis:payment:edit')}]];
-    var removeFlag = [[${@permission.hasPermi('fmis:payment:remove')}]];
+    var editFlag = [[${@permission.hasPermi('fmis:paymentpay:edit')}]];
     var prefix = ctx + "fmis/paymentpay";
 
     $(function () {
@@ -121,6 +120,12 @@
                     formatter: function (value, row, index) {
                         var actions = [];
                         var type = row.string1;
+                        var string11 = row.string11;
+                        if (string11 === "1"){
+                            actions.push('<i class="fa fa-street-view">已放款</i>');
+                        } else {
+                            actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.dataId + '\')"><i class="fa fa-edit"></i> 放款</a> ');
+                        }
                         actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewExamineHistory(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 审批记录 </a>');
                         actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewDetail(\'' + row.dataId + '\',\'' + type + '\')"><i class="fa fa-remove"></i> 详情 </a>');
                         return actions.join('');
