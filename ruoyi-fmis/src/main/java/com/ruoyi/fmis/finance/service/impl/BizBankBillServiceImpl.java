@@ -156,4 +156,9 @@ public class BizBankBillServiceImpl implements IBizBankBillService {
         }});
         return CollectionUtils.isNotEmpty(bizBankBills);
     }
+
+    @Override
+    public BizBankBill getLastData(String date) {
+        return null;
+    }
 }

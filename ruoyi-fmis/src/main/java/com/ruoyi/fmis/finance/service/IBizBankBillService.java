@@ -61,4 +61,9 @@ public interface IBizBankBillService {
 
     public boolean existsByCertificateNumber(String certificateNumber);
 
+    /**
+     * 获取最新一条数据
+     * @return
+     */
+    public BizBankBill getLastData(String date);
 }

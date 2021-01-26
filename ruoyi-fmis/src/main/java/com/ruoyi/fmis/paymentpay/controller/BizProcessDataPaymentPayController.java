@@ -134,7 +134,7 @@ public class BizProcessDataPaymentPayController extends BaseController {
                     bizBill.setPaymentType("1");// 费用报销
                     bizBill.setPayment(bizProcessData.getPrice1());
                     bizBill.setRemark(bizProcessData.getRemark());
-//                    bizBill.setString1(bizProcessData.getString10());
+                    bizBill.setString1(bizProcessData.getString10());
                     bizBill.setString2(bizProcessData.getString3());
                     bizBillService.insertBizBill(bizBill);
                 }
@@ -150,7 +150,7 @@ public class BizProcessDataPaymentPayController extends BaseController {
                     bizBankBill.setPaymentType("1");
                     bizBankBill.setPayment(bizProcessData.getPrice1());
                     bizBankBill.setRemark(bizProcessData.getRemark());
-//                    bizBankBill.setPayCompany(bizProcessData.getString10());
+                    bizBankBill.setPayCompany(bizProcessData.getString10());
                     bizBankBill.setCollectCompany(bizProcessData.getString3());
                     bizBankBillService.insertBizBankBill(bizBankBill);
                 }

@@ -67,4 +67,10 @@ public interface IBizBillAmountService {
      * @return
      */
     public BigDecimal getPreMonthAmount(Integer type);
+
+
+    /**
+     * 获取上个月
+     */
+    void updateBillAmountJob();
 }
