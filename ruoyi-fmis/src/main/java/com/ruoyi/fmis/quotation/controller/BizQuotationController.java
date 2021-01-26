@@ -152,6 +152,8 @@ public class BizQuotationController extends BaseController {
             bizProcessData.setRoleType(userFlowStatus);
         }
         bizProcessData.setQueryStatus("1");
+        //临时用userId
+        bizProcessData.setString30(ShiroUtils.getUserId() + "");
         List<BizProcessData> list = bizProcessDataService.selectBizProcessDataListRef(bizProcessData);
         result.put("contractNum", list.size());
 
@@ -185,6 +187,8 @@ public class BizQuotationController extends BaseController {
             bizQuotation.setString2(roleType + "");
         }
 
+        //临时用userId
+        bizQuotation.setString20(ShiroUtils.getUserId() + "");
 
         startPage();
         List<BizQuotation> list = bizQuotationService.selectBizQuotationFlowList(bizQuotation);
@@ -880,6 +884,7 @@ public class BizQuotationController extends BaseController {
                 normalFlag = "2";
             }
         }
+
         bizQuotation.setNormalFlag(normalFlag);
 
         /**
@@ -887,13 +892,20 @@ public class BizQuotationController extends BaseController {
          *
          * 1=销售 2=销售经理 3=区域经理 4=副总 5=总经理
          */
-        /*int roleType = sysRoleService.getRoleType(ShiroUtils.getUserId());
+        int roleType = sysRoleService.getRoleType(ShiroUtils.getUserId());
         if (roleType > 1) {
             if (normalFlag.equals(roleType + "")) {
-                bizQuotation.setNormalFlag(normalFlag);
+//                bizQuotation.setNormalFlag(normalFlag);
                 bizQuotation.setFlowStatus(normalFlag);
+            } else {
+                bizQuotation.setFlowStatus(roleType + "");
             }
-        }*/
+        }
+        //如果高级别创建的不需要再高级别审批的直接同意
+        if (roleType >=  Integer.parseInt(normalFlag)) {
+            bizQuotation.setFlowStatus(roleType + "");
+            bizQuotation.setNormalFlag(roleType + "");
+        }
         return normalFlag;
     }
 

@@ -178,6 +178,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
             </if>
         </where>
+        or q.`create_by` = #{string20}
         order by q.create_time desc
     </select>
 
@@ -286,8 +287,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="freight != null ">freight,</if>
             <if test="leadTime != null  and leadTime != ''">lead_time,</if>
             <if test="reportProject != null  and reportProject != ''">report_project,</if>
-            <if test="flowStatus != null  and flowStatus != ''">flow_status,</if>
             <if test="normalFlag != null  and normalFlag != ''">normal_flag,</if>
+            <if test="flowStatus != null  and flowStatus != ''">flow_status,</if>
+
             <if test="remark != null  and remark != ''">remark,</if>
             <if test="string1 != null  and string1 != ''">string1,</if>
             <if test="string2 != null  and string2 != ''">string2,</if>

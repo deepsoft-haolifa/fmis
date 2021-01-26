@@ -369,7 +369,7 @@
                 and q.flow_status=q.normal_flag
             </if>
         </where>
-
+         or (q.`create_by` = #{string30} and biz_id = #{bizId})
         order by q.create_time desc
 
     </select>

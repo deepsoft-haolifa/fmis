@@ -165,6 +165,8 @@ public class BizProcessDataController extends BaseController {
             bizProcessData.setRoleType(userFlowStatus);
         }
         startPage();
+        //临时用userId
+        bizProcessData.setString30(ShiroUtils.getUserId() + "");
         List<BizProcessData> list = bizProcessDataService.selectBizProcessDataListRef(bizProcessData);
 
 
@@ -1127,6 +1129,25 @@ public class BizProcessDataController extends BaseController {
             }
         }
         bizProcessData.setNormalFlag(normalFlag);
+        /**
+         * normalFlag 先把除报价员的权限范围做了
+         *
+         * 1=销售 2=销售经理 3=区域经理 4=副总 5=总经理
+         */
+        int roleType = sysRoleService.getRoleType(ShiroUtils.getUserId());
+        if (roleType > 1) {
+            if (normalFlag.equals(roleType + "")) {
+//                bizQuotation.setNormalFlag(normalFlag);
+                bizProcessData.setFlowStatus(normalFlag);
+            } else {
+                bizProcessData.setFlowStatus(roleType + "");
+            }
+        }
+        //如果高级别创建的不需要再高级别审批的直接同意
+        if (roleType >=  Integer.parseInt(normalFlag)) {
+            bizProcessData.setFlowStatus(roleType + "");
+            bizProcessData.setNormalFlag(roleType + "");
+        }
         return normalFlag;
     }
     /**
