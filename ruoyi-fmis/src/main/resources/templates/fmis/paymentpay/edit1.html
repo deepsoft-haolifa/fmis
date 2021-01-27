@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:include="include :: header('费用报销详情')"/>
+    <th:block th:include="include :: header('费用报销放款')"/>
     <th:block th:include="include :: datetimepicker-css"/>
 </head>
 <body class="white-bg">
@@ -10,6 +10,7 @@
         <input name="dataId" th:field="*{dataId}" type="hidden">
         <input type="hidden" name="bizId" value="payment"/>
         <input type="hidden" name="string1" value="2"/>
+        <input type="hidden" name="string2" th:field="*{string2}"/>
 
 
         <div class="form-group">
@@ -42,14 +43,19 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-3 control-label">部门：</label>
+            <label class="col-sm-3 control-label">报销部门：</label>
             <div class="col-sm-8">
                 <input name="string6" id="string6" th:field="*{string6}" readonly class="form-control" type="hidden">
                 <div class="input-group">
-                    <input class="form-control" type="text" name="deptName" onclick="selectDeptTree()" id="treeName"
-                           th:field="*{deptName}" required>
+                    <input class="form-control" type="text" name="deptName" onclick="selectDeptTree()" id="treeName" th:field="*{deptName}" readonly required>
                     <span class="input-group-addon"><i class="fa fa-search"></i></span>
                 </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">报销金额：</label>
+            <div class="col-sm-8">
+                <input name="price1" class="form-control" readonly th:field="*{price1}" type="text">
             </div>
         </div>
         <div class="form-group">
@@ -58,7 +64,57 @@
                 <input name="remark" class="form-control" readonly th:field="*{remark}" type="text">
             </div>
         </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">付款单位：</label>
+            <div class="col-sm-8">
+                <select name="string10" class="form-control m-b" th:with="type=${@dict.getType('pay_company')}" required>
+                    <option value="">请选择</option>
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"
+                            th:field="*{string10}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">付款账户：</label>
+            <div class="col-sm-8">
+                <select name="string12" class="form-control m-b"
+                        th:with="type=${@dict.getType('pay_account')}" required>
+                    <option value="">请选择</option>
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{string12}"></option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">付款状态</label>
+            <div class="col-sm-8">
+                <select name="string11" class="form-control m-b" th:with="type=${@dict.getType('pay_status')}" required>
+                    <option value="">请选择</option>
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{string11}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">付款日期：</label>
+            <div class="col-sm-8">
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input name="datetime3" th:value="${#dates.format(bizProcessData.datetime3, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">记账类型：</label>
+            <div class="col-sm-8">
+                <select name="string13" class="form-control m-b" th:with="type=${@dict.getType('booking_type')}" required>
+                    <option value="">请选择</option>
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{string13}"></option>
+                </select>
+            </div>
+        </div>
+
     </form>
+
     <div class="col-sm-12 select-table table-striped">
         <table id="bootstrap-table" class="text-nowrap"></table>
     </div>
@@ -68,7 +124,7 @@
 <th:block th:include="include :: bootstrap-editable-css"/>
 <th:block th:include="include :: bootstrap-table-editable-js"/>
 <script th:inline="javascript">
-    var prefix = ctx + "fmis/payment";
+    var prefix = ctx + "fmis/paymentpay";
     $("#form-data-edit").validate({
         focusCleanup: true
     });
@@ -131,7 +187,6 @@
         $.table.init(options);
     });
 
-
     function selectDeptTree() {
         var treeId = $("#string6").val();
         var deptId = $.common.isEmpty(treeId) ? "100" : $("#string6").val();
@@ -156,22 +211,7 @@
 
     function submitHandler() {
         if ($.validate.form()) {
-            var dataObj = $('#form-data-edit').serializeArray();
-
-            var productArray = new Array();
-            var data = $.btTable.bootstrapTable('getData');
-
-            for (var i = 0; i < data.length; i++) {
-                var rowData = data[i];
-                var productObj = new Object();
-                //productObj["string1"] = rowData["quotationId"];
-                var price1 = rowData["price1"];
-                if (price1 > 0) {
-                    productArray.push(rowData);
-                }
-            }
-            dataObj.push({"name": "productParmters", "value": JSON.stringify(productArray)});
-            $.operate.save(prefix + "/edit1", dataObj);
+            $.operate.save(prefix + "/edit1", $('#form-data-edit').serialize());
         }
     }
 
@@ -182,6 +222,11 @@
     });
 
     $("input[name='datetime2']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+    $("input[name='datetime3']").datetimepicker({
         format: "yyyy-mm-dd",
         minView: "month",
         autoclose: true

@@ -64,7 +64,7 @@
                 {
                     field: 'string1',
                     title: '类型', formatter: function (value, row, index) {
-                        if (value === 2) {
+                        if (value === "2") {
                             return "费用报销";
                         }
                         return "差旅费报销";
@@ -124,7 +124,7 @@
                         if (string11 === "1"){
                             actions.push('<i class="fa fa-street-view">已放款</i>');
                         } else {
-                            actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.dataId + '\')"><i class="fa fa-edit"></i> 放款</a> ');
+                            actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="editPay(\'' + row.dataId + '\',\'' + type + '\')""><i class="fa fa-edit"></i> 放款</a> ');
                         }
                         actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewExamineHistory(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 审批记录 </a>');
                         actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewDetail(\'' + row.dataId + '\',\'' + type + '\')"><i class="fa fa-remove"></i> 详情 </a>');
@@ -136,24 +136,6 @@
     });
 
 
-    function edit(id, type) {
-
-        var row = $('#bootstrap-table').bootstrapTable("getRowByUniqueId", id);
-        if (row == null) {
-            row = $('#bootstrap-table').bootstrapTable('getSelections')[0];
-        }
-        if (row != null) {
-            var flowStatus = row.flowStatus;
-
-        }
-        console.log("type=" + type);
-        var editUrl = $.operate.editUrl(id);
-        if (type == 2) {
-            editUrl = prefix + "/edit1/" + id;
-        }
-        $.modal.openFull("修改" + $.table._option.modalName, editUrl);
-    }
-
     function viewExamineHistory(dataId) {
         var bizId = $("#bizId").val();
         var url = prefix + "/viewExamineHistory?dataId=" + dataId + "&&bizId=" + bizId;
@@ -162,9 +144,18 @@
         });
     }
 
+    function editPay(dataId, type) {
+        console.log(type)
+        var url = prefix + "/edit/" + dataId;
+        if (type === "2") {
+            url = prefix + "/edit1/" + dataId;
+        }
+        $.modal.openFull("放款", url);
+    }
+
     function subExamine(dataId, type) {
         var url = prefix + "/examineEdit?dataId=" + dataId;
-        if (type == 2) {
+        if (type === "2") {
             url = prefix + "/examineEdit1?dataId=" + dataId;
         }
         $.modal.openFull("审批", url);
@@ -174,22 +165,11 @@
     function viewDetail(dataId, type) {
         var bizId = $("#bizId").val();
         var url = prefix + "/viewDetail?dataId=" + dataId + "&&bizId=" + bizId;
-        console.log("viewDetail type=" + type);
-        if (type == 2) {
+        if (type === "2") {
             url = prefix + "/viewDetail1?dataId=" + dataId + "&&bizId=" + bizId;
         }
         $.modal.openNoEnter("详情", url, $(window).width(), $(window).height(), function () {
             $.modal.closeAll();
-        });
-    }
-
-    function subReport(dataId) {
-        $.modal.confirm("确定上报该条信息吗？", function () {
-            console.log(dataId + "--dataId");
-            var url = prefix + "/report?dataId=" + dataId;
-            $.operate.saveModal(url, '', function () {
-                $.table.refresh();
-            });
         });
     }
 </script>

@@ -1,8 +1,11 @@
 package com.ruoyi.fmis.payment.controller;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -16,6 +19,8 @@ import com.ruoyi.fmis.customer.service.IBizCustomerService;
 import com.ruoyi.fmis.define.service.IBizProcessDefineService;
 import com.ruoyi.fmis.product.domain.BizProduct;
 import com.ruoyi.fmis.product.service.IBizProductService;
+import com.ruoyi.fmis.subjects.domain.BizSubjects;
+import com.ruoyi.fmis.subjects.service.IBizSubjectsService;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysRole;
 import com.ruoyi.system.service.ISysRoleService;
@@ -59,6 +64,8 @@ public class BizProcessDataPaymentController extends BaseController {
 
     @Autowired
     private IBizProcessChildService bizProcessChildService;
+    @Autowired
+    private IBizSubjectsService bizSubjectsService;
 
     @RequiresPermissions("fmis:payment:view")
     @GetMapping()
@@ -160,7 +167,7 @@ public class BizProcessDataPaymentController extends BaseController {
     @GetMapping("/examineEdit1")
     public String examineEdit1(ModelMap mmap) {
         String dataId = getRequest().getParameter("dataId");
-        BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataBorrowingById(Long.parseLong(dataId));
+        BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataPaymentById(Long.parseLong(dataId));
         mmap.put("bizProcessData", bizProcessData);
         return prefix + "/examineEdit1";
     }
@@ -211,7 +218,10 @@ public class BizProcessDataPaymentController extends BaseController {
     }
 
     @GetMapping("/add1")
-    public String add1() {
+    public String add1(ModelMap mmap) {
+        List<BizSubjects> bizSubjects = bizSubjectsService.selectBizSubjectsListNoParent(new BizSubjects());
+        List<String> subjectNameList = Optional.ofNullable(bizSubjects).orElse(new ArrayList<>()).stream().map(BizSubjects::getName).collect(Collectors.toList());
+        mmap.put("subjects", subjectNameList);
         return prefix + "/add1";
     }
 
@@ -275,6 +285,60 @@ public class BizProcessDataPaymentController extends BaseController {
         return toAjax(insertReturn);
     }
 
+
+    /**
+     * 新增保存合同管理
+     */
+    @RequiresPermissions("fmis:payment:add")
+    @Log(title = "费用报销添加", businessType = BusinessType.INSERT)
+    @PostMapping("/add1")
+    @ResponseBody
+    public AjaxResult addSave1(BizProcessData bizProcessData) {
+        bizProcessData.setFlowStatus("0");
+        Map<String, SysRole> flowMap = bizProcessDefineService.getRoleFlowMap(bizProcessData.getBizId());
+        String lastRoleKey = "";
+        for (String key : flowMap.keySet()) {
+            lastRoleKey = key;
+        }
+        if (!"1".equals(lastRoleKey)) {
+            bizProcessData.setFlowStatus(lastRoleKey + "0");
+        }
+        Map<String, SysRole> flowAllMap = bizProcessDefineService.getFlowAllMap(bizProcessData.getBizId());
+        if (!CollectionUtils.isEmpty(flowAllMap)) {
+            for (String key : flowAllMap.keySet()) {
+                bizProcessData.setNormalFlag(key);
+            }
+        }
+
+        // 获取总价格
+        BigDecimal totalPrice = BigDecimal.ZERO;
+        String productArrayStr = bizProcessData.getProductParmters();
+        if (StringUtils.isNotEmpty(productArrayStr)) {
+            JSONArray productArray = JSONArray.parseArray(productArrayStr);
+            for (int i = 0; i < productArray.size(); i++) {
+                JSONObject json = productArray.getJSONObject(i);
+                BizProcessChild bizProcessChild = JSONObject.parseObject(json.toJSONString(), BizProcessChild.class);
+                if (bizProcessChild.getPrice1() != null && bizProcessChild.getPrice1() > 0) {
+                    totalPrice = totalPrice.add(new BigDecimal(bizProcessChild.getPrice1()));
+                }
+            }
+        }
+        bizProcessData.setPrice1(totalPrice.doubleValue());
+        bizProcessData.setString2("FP" + DateUtils.dateTimeNow() + RandomStringUtils.randomNumeric(3));
+        int insertReturn = bizProcessDataService.insertBizProcessData(bizProcessData);
+        Long dataId = bizProcessData.getDataId();
+
+        if (StringUtils.isNotEmpty(productArrayStr)) {
+            JSONArray productArray = JSONArray.parseArray(productArrayStr);
+            for (int i = 0; i < productArray.size(); i++) {
+                JSONObject json = productArray.getJSONObject(i);
+                BizProcessChild bizProcessChild = JSONObject.parseObject(json.toJSONString(), BizProcessChild.class);
+                bizProcessChild.setDataId(dataId);
+                bizProcessChildService.insertBizProcessChild(bizProcessChild);
+            }
+        }
+        return toAjax(insertReturn);
+    }
     /**
      * 修改合同管理
      */
@@ -300,7 +364,7 @@ public class BizProcessDataPaymentController extends BaseController {
      * 修改保存合同管理
      */
     @RequiresPermissions("fmis:payment:edit")
-    @Log(title = "合同管理", businessType = BusinessType.UPDATE)
+    @Log(title = "报销管理", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
     public AjaxResult editSave(BizProcessData bizProcessData) {
@@ -351,12 +415,60 @@ public class BizProcessDataPaymentController extends BaseController {
 
         return toAjax(updateReturn);
     }
+    /**
+     * 修改保存合同管理
+     */
+    @RequiresPermissions("fmis:payment:edit")
+    @Log(title = "报销管理", businessType = BusinessType.UPDATE)
+    @PostMapping("/edit1")
+    @ResponseBody
+    public AjaxResult editSave1(BizProcessData bizProcessData) {
 
+        String productArrayStr = bizProcessData.getProductParmters();
+        // 获取总价格
+        BigDecimal totalPrice = BigDecimal.ZERO;
+        if (StringUtils.isNotEmpty(productArrayStr)) {
+            JSONArray productArray = JSONArray.parseArray(productArrayStr);
+            for (int i = 0; i < productArray.size(); i++) {
+                JSONObject json = productArray.getJSONObject(i);
+                BizProcessChild bizProcessChild = JSONObject.parseObject(json.toJSONString(), BizProcessChild.class);
+                if (bizProcessChild.getPrice1() != null && bizProcessChild.getPrice1() > 0) {
+                    totalPrice = totalPrice.add(new BigDecimal(bizProcessChild.getPrice1()));
+                }
+            }
+        }
+        bizProcessData.setPrice1(totalPrice.doubleValue());
+        int updateReturn = bizProcessDataService.updateBizProcessData(bizProcessData);
+
+        Long dataId = bizProcessData.getDataId();
+
+        BizProcessChild removeBizProcuessChild = new BizProcessChild();
+        removeBizProcuessChild.setDataId(dataId);
+        List<BizProcessChild> removeBizProcessChildList = bizProcessChildService.selectBizProcessChildList(removeBizProcuessChild);
+        if (!CollectionUtils.isEmpty(removeBizProcessChildList)) {
+            for (BizProcessChild bizProcessChild : removeBizProcessChildList) {
+                bizProcessChildService.deleteBizProcessChildById(bizProcessChild.getChildId());
+            }
+        }
+
+        if (StringUtils.isNotEmpty(productArrayStr)) {
+            JSONArray productArray = JSONArray.parseArray(productArrayStr);
+            for (int i = 0; i < productArray.size(); i++) {
+                JSONObject json = productArray.getJSONObject(i);
+                BizProcessChild bizProcessChild = JSONObject.parseObject(json.toJSONString(), BizProcessChild.class);
+                bizProcessChild.setDataId(dataId);
+                bizProcessChildService.insertBizProcessChild(bizProcessChild);
+
+            }
+        }
+
+        return toAjax(updateReturn);
+    }
     /**
      * 删除合同管理
      */
     @RequiresPermissions("fmis:payment:remove")
-    @Log(title = "合同管理", businessType = BusinessType.DELETE)
+    @Log(title = "报销管理", businessType = BusinessType.DELETE)
     @PostMapping("/remove")
     @ResponseBody
     public AjaxResult remove(String ids) {

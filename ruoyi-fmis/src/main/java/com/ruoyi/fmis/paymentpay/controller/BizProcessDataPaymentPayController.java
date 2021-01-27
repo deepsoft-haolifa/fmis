@@ -111,11 +111,9 @@ public class BizProcessDataPaymentPayController extends BaseController {
     }
 
 
-    /**
-     * 修改保存合同管理
-     */
+
     @RequiresPermissions("fmis:paymentpay:edit")
-    @Log(title = "报销付款", businessType = BusinessType.UPDATE)
+    @Log(title = "差旅报销付款", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
     @Transactional(rollbackFor = Exception.class)
@@ -146,11 +144,11 @@ public class BizProcessDataPaymentPayController extends BaseController {
                     bizBankBill.setDeptId(bizProcessData.getString6());
                     bizBankBill.setCertificateNumber(bizProcessData.getString2());
                     bizBankBill.setOperateDate(bizProcessData.getDatetime3());
-                    bizBankBill.setPayAccount(bizProcessData.getString4());
                     bizBankBill.setPaymentType("1");
                     bizBankBill.setPayment(bizProcessData.getPrice1());
                     bizBankBill.setRemark(bizProcessData.getRemark());
                     bizBankBill.setPayCompany(bizProcessData.getString10());
+                    bizBankBill.setPayAccount(bizProcessData.getString12());
                     bizBankBill.setCollectCompany(bizProcessData.getString3());
                     bizBankBillService.insertBizBankBill(bizBankBill);
                 }
@@ -159,5 +157,59 @@ public class BizProcessDataPaymentPayController extends BaseController {
         return toAjax(updateReturn);
     }
 
+
+    @GetMapping("/edit1/{dataId}")
+    public String edit1(@PathVariable("dataId") Long dataId, ModelMap mmap) {
+        BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataPaymentById(dataId);
+        mmap.put("bizProcessData", bizProcessData);
+        return prefix + "/edit1";
+    }
+
+
+
+    @RequiresPermissions("fmis:paymentpay:edit")
+    @Log(title = "费用报销付款", businessType = BusinessType.UPDATE)
+    @PostMapping("/edit1")
+    @ResponseBody
+    @Transactional(rollbackFor = Exception.class)
+    public AjaxResult editSave1(BizProcessData bizProcessData) {
+        int updateReturn = bizProcessDataService.updateBizProcessData(bizProcessData);
+        if (updateReturn > 0 && "1".equals(bizProcessData.getString11())) {
+            String bookingType = bizProcessData.getString13();
+            if ("1".equals(bookingType)) {
+                // 添加现金日记账
+                if (!bizBillService.existsByCertificateNumber(bizProcessData.getString2())) {
+                    BizBill bizBill = new BizBill();
+                    bizBill.setType("1");
+                    bizBill.setDeptId(bizProcessData.getString6());
+                    bizBill.setCertificateNumber(bizProcessData.getString2());
+                    bizBill.setD(bizProcessData.getDatetime3());
+                    bizBill.setPaymentType("1");// 费用报销
+                    bizBill.setPayment(bizProcessData.getPrice1());
+                    bizBill.setRemark(bizProcessData.getRemark());
+                    bizBill.setString1(bizProcessData.getString10());
+                    bizBill.setString2(bizProcessData.getString3());
+                    bizBillService.insertBizBill(bizBill);
+                }
+            } else if ("2".equals(bookingType)) {
+                // 添加银行日记账
+                if (!bizBankBillService.existsByCertificateNumber(bizProcessData.getString2())) {
+                    BizBankBill bizBankBill = new BizBankBill();
+                    bizBankBill.setType("2");
+                    bizBankBill.setDeptId(bizProcessData.getString6());
+                    bizBankBill.setCertificateNumber(bizProcessData.getString2());
+                    bizBankBill.setOperateDate(bizProcessData.getDatetime3());
+                    bizBankBill.setPaymentType("1");
+                    bizBankBill.setPayment(bizProcessData.getPrice1());
+                    bizBankBill.setRemark(bizProcessData.getRemark());
+                    bizBankBill.setPayCompany(bizProcessData.getString10());
+                    bizBankBill.setPayAccount(bizProcessData.getString12());
+                    bizBankBill.setCollectCompany(bizProcessData.getString3());
+                    bizBankBillService.insertBizBankBill(bizBankBill);
+                }
+            }
+        }
+        return toAjax(updateReturn);
+    }
 
 }

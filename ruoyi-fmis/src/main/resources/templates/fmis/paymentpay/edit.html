@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" >
 <head>
-    <th:block th:include="include :: header('修改借款管理')" />
+    <th:block th:include="include :: header('差旅报销放款')" />
     <th:block th:include="include :: datetimepicker-css" />
 </head>
 <body class="white-bg">
@@ -65,10 +65,20 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">付款单位：</label>
                 <div class="col-sm-8">
-                    <select name="string10" class="form-control m-b" th:with="type=${@dict.getType('pay_company')}">
+                    <select name="string10" class="form-control m-b" th:with="type=${@dict.getType('pay_company')}" required>
                         <option value="">请选择</option>
                         <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"
                                 th:field="*{string10}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">付款账户：</label>
+                <div class="col-sm-8">
+                    <select name="string12" class="form-control m-b"
+                            th:with="type=${@dict.getType('pay_account')}" required>
+                        <option value="">请选择</option>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{string12}"></option>
                     </select>
                 </div>
             </div>

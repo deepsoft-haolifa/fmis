@@ -79,7 +79,7 @@
                 {
                     field: 'string1',
                     title: '类型', formatter: function (value, row, index) {
-                        if (value === 2) {
+                        if (value === "2") {
                             return "费用报销";
                         }
                         return "差旅费报销";
@@ -187,7 +187,7 @@
         }
         console.log("type=" + type);
         var editUrl = $.operate.editUrl(id);
-        if (type == 2) {
+        if (type === "2") {
             editUrl = prefix + "/edit1/" + id;
         }
         $.modal.openFull("修改" + $.table._option.modalName, editUrl);
@@ -203,7 +203,7 @@
 
     function subExamine(dataId, type) {
         var url = prefix + "/examineEdit?dataId=" + dataId;
-        if (type == 2) {
+        if (type === "2") {
             url = prefix + "/examineEdit1?dataId=" + dataId;
         }
         $.modal.openFull("审批", url);
@@ -214,7 +214,7 @@
         var bizId = $("#bizId").val();
         var url = prefix + "/viewDetail?dataId=" + dataId + "&&bizId=" + bizId;
         console.log("viewDetail type=" + type);
-        if (type == 2) {
+        if (type === "2") {
             url = prefix + "/viewDetail1?dataId=" + dataId + "&&bizId=" + bizId;
         }
         $.modal.openNoEnter("详情", url, $(window).width(), $(window).height(), function () {
