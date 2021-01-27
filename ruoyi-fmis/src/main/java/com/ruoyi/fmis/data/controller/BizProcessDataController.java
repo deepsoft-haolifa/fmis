@@ -134,6 +134,14 @@ public class BizProcessDataController extends BaseController {
         }
         return prefix + "/data";
     }
+    @GetMapping("/produce")
+    public String produce(ModelMap mmap) {
+        String toDo = getRequest().getParameter("todo");
+        if ("1".equals(toDo)) {
+            mmap.put("todo","1");
+        }
+        return prefix + "/dataProduce";
+    }
     @GetMapping("/applyDeliver")
     public String applyDeliver(ModelMap mmap) {
         String toDo = getRequest().getParameter("todo");
@@ -149,6 +157,82 @@ public class BizProcessDataController extends BaseController {
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(BizProcessData bizProcessData) {
+
+        String toDo = getRequest().getParameter("todo");
+        if ("1".equals(toDo)) {
+            bizProcessData.setQueryStatus("1");
+        }
+
+
+
+        String bizId = bizProcessData.getBizId();
+        Map<String, SysRole> flowMap = bizProcessDefineService.getRoleFlowMap(bizId);
+        String userFlowStatus = "";
+        if (!CollectionUtils.isEmpty(flowMap)) {
+            userFlowStatus = flowMap.keySet().iterator().next();
+            bizProcessData.setRoleType(userFlowStatus);
+        }
+        startPage();
+        //临时用userId
+        bizProcessData.setString30(ShiroUtils.getUserId() + "");
+        bizProcessData.setRoleType("0");//表示可以查看所有的
+        List<BizProcessData> list = bizProcessDataService.selectBizProcessDataListRef(bizProcessData);
+
+
+        Map<String, SysRole> flowAllMap = bizProcessDefineService.getFlowAllMap(bizId);
+        if (!CollectionUtils.isEmpty(flowMap)) {
+            //计算流程描述
+            for (BizProcessData data : list) {
+                String flowStatus = data.getFlowStatus();
+                //结束标识
+                String normalFlag = data.getNormalFlag();
+                String flowStatusRemark = "待上报";
+                data.setLoginUserId(ShiroUtils.getUserId().toString());
+                if ("0".equals(flowStatus)) {
+                    flowStatusRemark = "待上报";
+                } else if ("1".equals(flowStatus)) {
+                    flowStatusRemark = "已上报";
+                } else {
+                    SysRole currentSysRole =  CommonUtils.getLikeByMap(flowAllMap,flowStatus.replaceAll("-",""));
+                    if (currentSysRole == null) {
+                        continue;
+                    }
+                    if (flowStatus.equals(normalFlag)) {
+                        flowStatusRemark = currentSysRole.getRoleName() + "已完成";
+                    } else if (flowStatus.startsWith("-")) {
+                        //不同意标识
+                        flowStatusRemark = currentSysRole.getRoleName() + "不同意";
+                    } else {
+                        flowStatusRemark = currentSysRole.getRoleName() + "同意";
+                    }
+                }
+                data.setFlowStatusRemark(flowStatusRemark);
+
+                //计算是否可以审批
+                int flowStatusInt = Integer.parseInt(flowStatus);
+                data.setOperationExamineStatus(false);
+                if (flowStatusInt > 0) {
+                    if (!flowStatus.equals(normalFlag)) {
+                        userFlowStatus = flowMap.keySet().iterator().next();
+                        int userFlowStatusInt = Integer.parseInt(userFlowStatus);
+                        if (userFlowStatusInt == flowStatusInt + 1) {
+                            data.setOperationExamineStatus(true);
+                        }
+
+                    }
+                }
+            }
+        }
+        return getDataTable(list);
+    }
+
+    /**
+     * 查询合同管理列表
+     */
+    //@RequiresPermissions("fmis:data:listForProduce")
+    @PostMapping("/listForProduce")
+    @ResponseBody
+    public TableDataInfo listForProduce(BizProcessData bizProcessData) {
 
         String toDo = getRequest().getParameter("todo");
         if ("1".equals(toDo)) {
@@ -1260,10 +1344,16 @@ public class BizProcessDataController extends BaseController {
 
     public AjaxResult createPdf (HttpServletRequest request, HttpServletResponse response, BizProcessData bizProcessDataParamter) {
         String id = "";
+
         if (bizProcessDataParamter == null) {
             id = request.getParameter("id");
         } else {
-            id = bizProcessDataParamter.getDataId().toString();
+            if (bizProcessDataParamter.getDataId() != null) {
+                id = bizProcessDataParamter.getDataId().toString();
+            } else {
+                id = request.getParameter("id");
+            }
+
         }
 
 
@@ -1502,7 +1592,7 @@ public class BizProcessDataController extends BaseController {
                     Double ref1Price = bizProduct.getPrice2();
                     String ref1Num = bizProduct.getString6();
                     String ref1Coefficient = bizProduct.getProductRef1Coefficient();
-                    if (StringUtils.isNotEmpty(ref1Num) && ref1Price > 0 && StringUtils.isNotEmpty(ref1Coefficient)) {
+                    if (StringUtils.isNotEmpty(ref1Num) && ref1Price!= null && ref1Price > 0 && StringUtils.isNotEmpty(ref1Coefficient)) {
                         ref1Total = Double.parseDouble(ref1Num) * ref1Price * Double.parseDouble(ref1Coefficient);
                         sumTotalNumRef1 = sumTotalNumRef1 + Double.parseDouble(ref1Num);
                     }
@@ -1662,7 +1752,11 @@ public class BizProcessDataController extends BaseController {
 
             table.addCell(PdfUtil.mergeCol("二、", 1,textFont));
             table.addCell(PdfUtil.mergeColLeft("特殊要求：" + StringUtils.trim(bizProcessData.getString25()), 14,textFont));
+           if (bizProcessDataParamter != null && bizProcessDataParamter.getString26() != null) {
+               table.addCell(PdfUtil.mergeCol("", 1,textFont));
+               table.addCell(PdfUtil.mergeColLeft("生产要求：" + StringUtils.trim(bizProcessData.getString26()), 14,textFont));
 
+           }
 
             table.addCell(PdfUtil.mergeCol("三、", 1,textFont));
             table.addCell(PdfUtil.mergeColLeft("产品执行标准；好利阀业有限公司生产标准，符合国家及行业标准；产品提供安装使用说明书，产品合格证；产品标识：好利标牌", 14,textFont));
@@ -1822,7 +1916,12 @@ public class BizProcessDataController extends BaseController {
     }
 
 
-
+    @GetMapping("/viewPdfProduce")
+    public void viewPdfProduce(HttpServletRequest request,HttpServletResponse response) {
+        BizProcessData bizProcessData = new BizProcessData();
+        bizProcessData.setString26("1");//生产单
+        createPdf(request,response,bizProcessData);
+    }
     @PostMapping("/selectBizTestProductList")
     @ResponseBody
     public TableDataInfo selectBizTestProductList(BizProcessData bizProcessData) {
