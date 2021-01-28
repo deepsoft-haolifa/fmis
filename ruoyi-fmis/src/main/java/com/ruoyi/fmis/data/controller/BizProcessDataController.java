@@ -175,7 +175,7 @@ public class BizProcessDataController extends BaseController {
         startPage();
         //临时用userId
         bizProcessData.setString30(ShiroUtils.getUserId() + "");
-        bizProcessData.setRoleType("0");//表示可以查看所有的
+
         List<BizProcessData> list = bizProcessDataService.selectBizProcessDataListRef(bizProcessData);
 
 
@@ -251,6 +251,7 @@ public class BizProcessDataController extends BaseController {
         startPage();
         //临时用userId
         bizProcessData.setString30(ShiroUtils.getUserId() + "");
+        bizProcessData.setRoleType("0");//表示可以查看所有的
         List<BizProcessData> list = bizProcessDataService.selectBizProcessDataListRef(bizProcessData);
 
 
@@ -1752,9 +1753,9 @@ public class BizProcessDataController extends BaseController {
 
             table.addCell(PdfUtil.mergeCol("二、", 1,textFont));
             table.addCell(PdfUtil.mergeColLeft("特殊要求：" + StringUtils.trim(bizProcessData.getString25()), 14,textFont));
-           if (bizProcessDataParamter != null && bizProcessDataParamter.getString26() != null) {
+           if (bizProcessDataParamter != null && bizProcessDataParamter.getString27() != null) {
                table.addCell(PdfUtil.mergeCol("", 1,textFont));
-               table.addCell(PdfUtil.mergeColLeft("生产要求：" + StringUtils.trim(bizProcessData.getString26()), 14,textFont));
+               table.addCell(PdfUtil.mergeColLeft("生产要求：" + StringUtils.trim(bizProcessData.getString27()), 14,textFont));
 
            }
 
@@ -1919,7 +1920,7 @@ public class BizProcessDataController extends BaseController {
     @GetMapping("/viewPdfProduce")
     public void viewPdfProduce(HttpServletRequest request,HttpServletResponse response) {
         BizProcessData bizProcessData = new BizProcessData();
-        bizProcessData.setString26("1");//生产单
+        bizProcessData.setString27("1");//生产单
         createPdf(request,response,bizProcessData);
     }
     @PostMapping("/selectBizTestProductList")

@@ -246,7 +246,13 @@
             window.open("../../pdfjs/web/viewer.html?file="+ viewUrl + "?id%3D" + row.dataId);
             $.modal.closeLoading();
         }
-
+        function viewExamineDetail(dataId) {
+            var bizId = $("#bizId").val();
+            var url = prefix + "/viewDetail?dataId=" + dataId + "&&bizId=" + bizId;
+            $.modal.openNoEnter("详情", url,$(window).width(),$(window).height(),function(){
+                $.modal.closeAll();
+            });
+        }
     </script>
 </body>
 </html>
