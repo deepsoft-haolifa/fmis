@@ -66,7 +66,7 @@ public interface IBizBillAmountService {
      *
      * @return
      */
-    public BigDecimal getPreMonthAmount(Integer type);
+    public Double getPreMonthAmount(Integer type,String payCompany,String payAccount);
 
 
     /**

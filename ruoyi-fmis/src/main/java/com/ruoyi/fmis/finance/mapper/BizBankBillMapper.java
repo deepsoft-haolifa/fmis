@@ -1,6 +1,8 @@
 package com.ruoyi.fmis.finance.mapper;
 
 import com.ruoyi.fmis.finance.domain.BizBankBill;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 
 /**
@@ -62,5 +64,5 @@ public interface BizBankBillMapper {
      * 获取最新一条数据
      * @return
      */
-    BizBankBill getLastRecord();
+    BizBankBill getLastRecord(@Param("companyQuery") String companyQuery, @Param("accountQuery") String accountQuery);
 }

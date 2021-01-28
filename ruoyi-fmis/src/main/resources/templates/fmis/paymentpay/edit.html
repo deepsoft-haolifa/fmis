@@ -63,7 +63,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label">付款单位：</label>
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>付款单位：</label>
                 <div class="col-sm-8">
                     <select name="string10" class="form-control m-b" th:with="type=${@dict.getType('pay_company')}" required>
                         <option value="">请选择</option>
@@ -73,7 +73,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label">付款账户：</label>
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>付款账户：</label>
                 <div class="col-sm-8">
                     <select name="string12" class="form-control m-b"
                             th:with="type=${@dict.getType('pay_account')}" required>
@@ -84,7 +84,7 @@
             </div>
 
             <div class="form-group">
-                <label class="col-sm-3 control-label">付款状态</label>
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>付款状态</label>
                 <div class="col-sm-8">
                     <select name="string11" class="form-control m-b" th:with="type=${@dict.getType('pay_status')}" required>
                         <option value="">请选择</option>
@@ -102,7 +102,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label">记账类型：</label>
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>记账类型：</label>
                 <div class="col-sm-8">
                     <select name="string13" class="form-control m-b" th:with="type=${@dict.getType('booking_type')}" required>
                         <option value="">请选择</option>

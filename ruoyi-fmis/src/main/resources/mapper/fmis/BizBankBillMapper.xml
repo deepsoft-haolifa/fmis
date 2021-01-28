@@ -6,6 +6,8 @@
 
     <resultMap type="BizBankBill" id="BizBankBillResult">
         <result property="billId" column="bill_id"/>
+        <result property="company"    column="company"    />
+        <result property="account"    column="account"    />
         <result property="serialNo" column="serial_no"/>
         <result property="operateDate" column="operate_date"/>
         <result property="certificateNumber" column="certificate_number"/>
@@ -31,7 +33,7 @@
     </resultMap>
 
     <sql id="selectBizBankBillVo">
-     select b.bill_id, b.serial_no, b.operate_date, b.certificate_number, b.pay_way, b.pay_account,b.pay_company,b.collect_company, b.pre_month_money, b.collection_money, b.collection_type, b.payment, b.payment_type, b.balance,
+     select b.bill_id, b.company,b.account,b.serial_no, b.operate_date, b.certificate_number, b.pay_way, b.pay_account,b.pay_company,b.collect_company, b.pre_month_money, b.collection_money, b.collection_type, b.payment, b.payment_type, b.balance,
         b.type, b.dept_id,  b.remark, b.contract_status,b.del_flag, b.create_by, b.create_time, b.update_by, b.update_time,
         u.user_name as createByName,d.dept_name as deptName
         from biz_bank_bill b
@@ -43,6 +45,8 @@
         <include refid="selectBizBankBillVo"/>
         <where>
             <if test="serialNo != null  and serialNo != ''">and serial_no = #{serialNo}</if>
+            <if test="company != null  and company != ''">and company = #{company}</if>
+            <if test="account != null  and account != ''">and account = #{account}</if>
             <if test="operateDate != null ">and operate_date = #{operateDate}</if>
             <if test="certificateNumber != null  and certificateNumber != ''">and certificate_number =
                 #{certificateNumber}
@@ -73,6 +77,8 @@
         insert into biz_bank_bill
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="serialNo != null  and serialNo != ''">serial_no,</if>
+            <if test="company != null  and company != ''">company,</if>
+            <if test="account != null  and account != ''">account,</if>
             <if test="operateDate != null ">operate_date,</if>
             <if test="certificateNumber != null  and certificateNumber != ''">certificate_number,</if>
             <if test="payWay != null  and payWay != ''">pay_way,</if>
@@ -97,6 +103,8 @@
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="serialNo != null  and serialNo != ''">#{serialNo},</if>
+            <if test="company != null  and company != ''">#{company},</if>
+            <if test="account != null  and account != ''">#{account},</if>
             <if test="operateDate != null ">#{operateDate},</if>
             <if test="certificateNumber != null  and certificateNumber != ''">#{certificateNumber},</if>
             <if test="payWay != null  and payWay != ''">#{payWay},</if>
@@ -124,6 +132,8 @@
     <update id="updateBizBankBill" parameterType="BizBankBill">
         update biz_bank_bill
         <trim prefix="SET" suffixOverrides=",">
+            <if test="company != null  and company != ''">company=#{company},</if>
+            <if test="account != null  and account != ''">account=#{account},</if>
             <if test="serialNo != null  and serialNo != ''">serial_no = #{serialNo},</if>
             <if test="operateDate != null ">operate_date = #{operateDate},</if>
             <if test="certificateNumber != null  and certificateNumber != ''">certificate_number =
@@ -164,7 +174,16 @@
     </delete>
 
     <select id="getLastRecord" resultMap="BizBankBillResult">
-        select * from biz_bank_bill order by bill_id desc limit 1;
+        select * from biz_bank_bill
+        <where>
+            <if test="companyQuery != null and companyQuery != ''">
+                and company = #{companyQuery}
+            </if>
+            <if test="accountQuery != null and accountQuery != ''">
+                and account = #{accountQuery}
+            </if>
+        </where>
+        order by bill_id desc limit 1;
     </select>
 
 </mapper>

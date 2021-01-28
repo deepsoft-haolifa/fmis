@@ -14,6 +14,7 @@ import java.util.Date;
  */
 public class BizPayPlan extends BaseEntity {
     private static final long serialVersionUID = 1L;
+
     /** ID */
     private Long payPlanId;
 
@@ -41,8 +42,8 @@ public class BizPayPlan extends BaseEntity {
     @Excel(name = "采购合同付款方式")
     private String contractPayWay;
 
-    /** 付款单位 */
-    @Excel(name = "付款单位")
+    /** 申请付款单位 */
+    @Excel(name = "申请付款单位")
     private String applyPayCompany;
 
     /** 收款单位 */
@@ -56,6 +57,14 @@ public class BizPayPlan extends BaseEntity {
     /** 付款备注 */
     @Excel(name = "付款备注")
     private String applyRemark;
+
+    /** 付款单位 */
+    @Excel(name = "付款单位")
+    private String payCompany;
+
+    /** 付款账号 */
+    @Excel(name = "付款账号")
+    private String payAccount;
 
     /** 付款方式; 字典：pay_way */
     @Excel(name = "付款方式; 字典：pay_way")
@@ -73,8 +82,8 @@ public class BizPayPlan extends BaseEntity {
     @Excel(name = "付款日期", width = 30, dateFormat = "yyyy-MM-dd")
     private Date payDate;
 
-    /** 记账方式;字典：booking_type */
-    @Excel(name = "记账方式;字典：booking_type")
+    /** 付款状态：0.未付；1.已付； 字典：pay_status */
+    @Excel(name = "付款状态：0.未付；1.已付； 字典：pay_status")
     private String bookingType;
 
     public void setPayPlanId(Long payPlanId) {
@@ -154,6 +163,20 @@ public class BizPayPlan extends BaseEntity {
     public String getApplyRemark() {
         return applyRemark;
     }
+    public void setPayCompany(String payCompany) {
+        this.payCompany = payCompany;
+    }
+
+    public String getPayCompany() {
+        return payCompany;
+    }
+    public void setPayAccount(String payAccount) {
+        this.payAccount = payAccount;
+    }
+
+    public String getPayAccount() {
+        return payAccount;
+    }
     public void setPayWay(String payWay) {
         this.payWay = payWay;
     }
@@ -204,6 +227,8 @@ public class BizPayPlan extends BaseEntity {
                 .append("applyCollectionCompany", getApplyCollectionCompany())
                 .append("applyAmount", getApplyAmount())
                 .append("applyRemark", getApplyRemark())
+                .append("payCompany", getPayCompany())
+                .append("payAccount", getPayAccount())
                 .append("payWay", getPayWay())
                 .append("paymentType", getPaymentType())
                 .append("status", getStatus())

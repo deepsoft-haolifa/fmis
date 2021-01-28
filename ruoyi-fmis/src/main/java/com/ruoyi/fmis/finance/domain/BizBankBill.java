@@ -23,6 +23,14 @@ public class BizBankBill extends BaseEntity {
     /** ID */
     private Long billId;
 
+    /** 公司（收款是收款公司，付款是付款公司） */
+    @Excel(name = "公司", readConverterExp = "收款是收款公司，付款是付款公司")
+    private String company;
+
+    /** 账户（公司下面的某个银行)用来计算余额 */
+    @Excel(name = "账户", readConverterExp = "账户（公司下面的某个银行)用来计算余额")
+    private String account;
+
     /** 序号 */
     @Excel(name = "序号")
     private String serialNo;

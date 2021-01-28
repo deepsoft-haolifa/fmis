@@ -79,9 +79,7 @@ public class BizProcessDataBorrowingPayController extends BaseController {
         return prefix + "/data";
     }
 
-    /**
-     * 查询合同管理列表
-     */
+
     @RequiresPermissions("fmis:borrowingpay:list")
     @PostMapping("/list")
     @ResponseBody
@@ -232,11 +230,11 @@ public class BizProcessDataBorrowingPayController extends BaseController {
                     bizBankBill.setDeptId(bizProcessData.getString1());
                     bizBankBill.setCertificateNumber(bizProcessData.getString2());
                     bizBankBill.setOperateDate(bizProcessData.getDatetime3());
-                    bizBankBill.setPayAccount(bizProcessData.getString7());
                     bizBankBill.setPaymentType("3");
                     bizBankBill.setPayment(bizProcessData.getPrice1());
                     bizBankBill.setRemark(bizProcessData.getRemark());
                     bizBankBill.setPayCompany(bizProcessData.getString10());
+                    bizBankBill.setPayAccount(bizProcessData.getString12());
                     bizBankBill.setCollectCompany(bizProcessData.getString5());
                     bizBankBillService.insertBizBankBill(bizBankBill);
                 }

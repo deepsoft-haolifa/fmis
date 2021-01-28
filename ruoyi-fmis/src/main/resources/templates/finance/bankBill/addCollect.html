@@ -39,9 +39,9 @@
         </div>
 
         <div class="form-group">
-            <label class="col-sm-3 control-label">收款单位：</label>
+            <label class="col-sm-3 control-label"><span style="color: red; ">*</span>收款单位：</label>
             <div class="col-sm-8">
-                <select name="collectCompany" class="form-control m-b" th:with="type=${@dict.getType('pay_company')}">
+                <select name="collectCompany" class="form-control m-b" th:with="type=${@dict.getType('pay_company')}" required>
                     <option value="">请选择</option>
                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                 </select>
@@ -67,16 +67,16 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-3 control-label">收款账户：</label>
+            <label class="col-sm-3 control-label"><span style="color: red; ">*</span>收款账户：</label>
             <div class="col-sm-8">
-                <select name="payAccount" class="form-control m-b" th:with="type=${@dict.getType('pay_account')}">
+                <select name="payAccount" class="form-control m-b" th:with="type=${@dict.getType('pay_account')}" required>
                     <option value="">请选择</option>
                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                 </select>
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-3 control-label">收款：</label>
+            <label class="col-sm-3 control-label"><span style="color: red; ">*</span>收款：</label>
             <div class="col-sm-8">
                 <input name="collectionMoney" class="form-control" type="text" required>
             </div>

@@ -146,7 +146,7 @@ public class BizPayPlanController extends BaseController {
                     bizBill.setPaymentType(bizPayPlan.getPaymentType());
                     bizBill.setPayment(bizPayPlan.getApplyAmount());
                     bizBill.setRemark(bizPayPlan.getApplyRemark());
-                    bizBill.setString1(bizPayPlan.getApplyPayCompany());
+                    bizBill.setString1(bizPayPlan.getPayCompany());
                     bizBill.setString2(bizPayPlan.getApplyCollectionCompany());
                     bizBillService.insertBizBill(bizBill);
                 }
@@ -161,7 +161,8 @@ public class BizPayPlanController extends BaseController {
                     bizBankBill.setPaymentType(bizPayPlan.getPaymentType());
                     bizBankBill.setPayment(bizPayPlan.getApplyAmount());
                     bizBankBill.setRemark(bizPayPlan.getApplyRemark());
-                    bizBankBill.setPayCompany(bizPayPlan.getApplyPayCompany());
+                    bizBankBill.setPayCompany(bizPayPlan.getPayCompany());
+                    bizBankBill.setPayAccount(bizPayPlan.getPayAccount());
                     bizBankBill.setCollectCompany(bizPayPlan.getApplyCollectionCompany());
                     bizBankBillService.insertBizBankBill(bizBankBill);
                 }

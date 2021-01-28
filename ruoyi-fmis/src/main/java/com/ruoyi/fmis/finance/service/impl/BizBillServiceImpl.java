@@ -62,7 +62,7 @@ public class BizBillServiceImpl implements IBizBillService {
         bizBill.setCreateBy(ShiroUtils.getUserId().toString());
 
         // 设置上月结转
-        bizBill.setPreMonthMoney(bizBillAmountService.getPreMonthAmount(2).doubleValue());
+        bizBill.setPreMonthMoney(bizBillAmountService.getPreMonthAmount(2, null, null));
 
         // 设置余额 start
         // 查找最新一条记录的余额
@@ -128,7 +128,7 @@ public class BizBillServiceImpl implements IBizBillService {
 
     @Override
     public boolean existsByCertificateNumber(String certificateNumber) {
-            List<BizBill> bizBills = bizBillMapper.selectBizBillList(new BizBill() {{
+        List<BizBill> bizBills = bizBillMapper.selectBizBillList(new BizBill() {{
             setCertificateNumber(certificateNumber);
         }});
         return CollectionUtils.isNotEmpty(bizBills);

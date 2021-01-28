@@ -83,17 +83,26 @@ public class BizBankBillServiceImpl implements IBizBankBillService {
      */
     @Override
     public int insertBizBankBill(BizBankBill bizBankBill) {
+        // 设置公司和账户，用来统计余额
+        if (bizBankBill.getType().equals("1")) {
+            bizBankBill.setCompany(bizBankBill.getCollectCompany());
+            bizBankBill.setAccount(bizBankBill.getPayAccount());
+        }else if (bizBankBill.getType().equals("2")) {
+            bizBankBill.setCompany(bizBankBill.getPayCompany());
+            bizBankBill.setAccount(bizBankBill.getPayAccount());
+        }
         bizBankBill.setCreateTime(DateUtils.getNowDate());
         bizBankBill.setCreateBy(ShiroUtils.getUserId().toString());
-
+        String companyQuery = bizBankBill.getCompany();
+        String accountQuery = bizBankBill.getAccount();
         // 设置上月结转
-        bizBankBill.setPreMonthMoney(bizBillAmountService.getPreMonthAmount(1).doubleValue());
+        bizBankBill.setPreMonthMoney(bizBillAmountService.getPreMonthAmount(1, companyQuery, accountQuery));
 
         // 设置余额 start
         // 查找最新一条记录的余额
         BigDecimal lastBalance = BigDecimal.ZERO;
-        BizBankBill lastRecord = bizBankBillMapper.getLastRecord();
-        if (lastRecord != null) {
+        BizBankBill lastRecord = bizBankBillMapper.getLastRecord(companyQuery, accountQuery);
+        if (null != lastRecord) {
             lastBalance = BigDecimal.valueOf(lastRecord.getBalance());
         }
         // 收款，上次余额 + 本次收款

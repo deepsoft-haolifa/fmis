@@ -3,12 +3,14 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.fmis.finance.mapper.BizBillAmountMapper">
-    
+
     <resultMap type="BizBillAmount" id="BizBillAmountResult">
         <result property="id"    column="id"    />
         <result property="year"    column="year"    />
         <result property="month"    column="month"    />
         <result property="type"    column="type"    />
+        <result property="company"    column="company"    />
+        <result property="account"    column="account"    />
         <result property="preAmount"    column="pre_amount"    />
         <result property="nextAmount"    column="next_amount"    />
         <result property="createBy"    column="create_by"    />
@@ -18,49 +20,55 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectBizBillAmountVo">
-        select id, year, month, type, pre_amount, next_amount, create_by, create_time, update_by, update_time from biz_bill_amount
+        select id, year, month, type, company, account, pre_amount, next_amount, create_by, create_time, update_by, update_time from biz_bill_amount
     </sql>
 
     <select id="selectBizBillAmountList" parameterType="BizBillAmount" resultMap="BizBillAmountResult">
         <include refid="selectBizBillAmountVo"/>
-        <where>  
+        <where>
             <if test="year != null  and year != ''"> and year = #{year}</if>
             <if test="month != null  and month != ''"> and month = #{month}</if>
             <if test="type != null "> and type = #{type}</if>
+            <if test="company != null  and company != ''"> and company = #{company}</if>
+            <if test="account != null  and account != ''"> and account = #{account}</if>
             <if test="preAmount != null "> and pre_amount = #{preAmount}</if>
             <if test="nextAmount != null "> and next_amount = #{nextAmount}</if>
         </where>
     </select>
-    
+
     <select id="selectBizBillAmountById" parameterType="Long" resultMap="BizBillAmountResult">
         <include refid="selectBizBillAmountVo"/>
         where id = #{id}
     </select>
-        
+
     <insert id="insertBizBillAmount" parameterType="BizBillAmount" useGeneratedKeys="true" keyProperty="id">
         insert into biz_bill_amount
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="year != null  and year != ''">year,</if>
             <if test="month != null  and month != ''">month,</if>
             <if test="type != null ">type,</if>
+            <if test="company != null  and company != ''">company,</if>
+            <if test="account != null  and account != ''">account,</if>
             <if test="preAmount != null ">pre_amount,</if>
             <if test="nextAmount != null ">next_amount,</if>
             <if test="createBy != null  and createBy != ''">create_by,</if>
             <if test="createTime != null ">create_time,</if>
             <if test="updateBy != null  and updateBy != ''">update_by,</if>
             <if test="updateTime != null ">update_time,</if>
-         </trim>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="year != null  and year != ''">#{year},</if>
             <if test="month != null  and month != ''">#{month},</if>
             <if test="type != null ">#{type},</if>
+            <if test="company != null  and company != ''">#{company},</if>
+            <if test="account != null  and account != ''">#{account},</if>
             <if test="preAmount != null ">#{preAmount},</if>
             <if test="nextAmount != null ">#{nextAmount},</if>
             <if test="createBy != null  and createBy != ''">#{createBy},</if>
             <if test="createTime != null ">#{createTime},</if>
             <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
             <if test="updateTime != null ">#{updateTime},</if>
-         </trim>
+        </trim>
     </insert>
 
     <update id="updateBizBillAmount" parameterType="BizBillAmount">
@@ -69,6 +77,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="year != null  and year != ''">year = #{year},</if>
             <if test="month != null  and month != ''">month = #{month},</if>
             <if test="type != null ">type = #{type},</if>
+            <if test="company != null  and company != ''">company = #{company},</if>
+            <if test="account != null  and account != ''">account = #{account},</if>
             <if test="preAmount != null ">pre_amount = #{preAmount},</if>
             <if test="nextAmount != null ">next_amount = #{nextAmount},</if>
             <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
@@ -84,10 +94,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteBizBillAmountByIds" parameterType="String">
-        delete from biz_bill_amount where id in 
+        delete from biz_bill_amount where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>
     </delete>
-    
+
 </mapper>

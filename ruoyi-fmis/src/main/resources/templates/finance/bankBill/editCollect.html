@@ -41,7 +41,7 @@
         </div>
 
         <div class="form-group">
-            <label class="col-sm-3 control-label">收款单位：</label>
+            <label class="col-sm-3 control-label"><span style="color: red; ">*</span>收款单位：</label>
             <div class="col-sm-8">
                 <select name="collectCompany" class="form-control m-b"
                         th:with="type=${@dict.getType('pay_company')}">
@@ -72,7 +72,7 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-3 control-label">收款账户：</label>
+            <label class="col-sm-3 control-label"><span style="color: red; ">*</span>收款账户：</label>
             <div class="col-sm-8">
                 <select name="payAccount" class="form-control m-b" th:with="type=${@dict.getType('pay_account')}">
                     <option value="">请选择</option>
@@ -82,7 +82,7 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-3 control-label">收款：</label>
+            <label class="col-sm-3 control-label"><span style="color: red; ">*</span>收款：</label>
             <div class="col-sm-8">
                 <input name="collectionMoney" th:field="*{collectionMoney}" class="form-control" type="text">
             </div>

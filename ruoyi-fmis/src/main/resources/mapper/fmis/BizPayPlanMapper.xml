@@ -16,6 +16,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="applyCollectionCompany"    column="apply_collection_company"    />
         <result property="applyAmount"    column="apply_amount"    />
         <result property="applyRemark"    column="apply_remark"    />
+        <result property="payCompany"    column="pay_company"    />
+        <result property="payAccount"    column="pay_account"    />
         <result property="payWay"    column="pay_way"    />
         <result property="paymentType"    column="payment_type"    />
         <result property="status"    column="status"    />
@@ -28,7 +30,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectBizPayPlanVo">
-        select pay_plan_id, pay_data_id, apply_no, apply_date, contract_id, contract_no, contract_pay_way, apply_pay_company, apply_collection_company, apply_amount, apply_remark, pay_way, payment_type, status, pay_date, booking_type, create_by, create_time, update_by, update_time from biz_pay_plan
+        select pay_plan_id, pay_data_id, apply_no, apply_date, contract_id, contract_no, contract_pay_way, apply_pay_company, apply_collection_company, apply_amount, apply_remark, pay_company, pay_account, pay_way, payment_type, status, pay_date, booking_type, create_by, create_time, update_by, update_time from biz_pay_plan
     </sql>
 
     <select id="selectBizPayPlanList" parameterType="BizPayPlan" resultMap="BizPayPlanResult">
@@ -44,13 +46,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="applyCollectionCompany != null  and applyCollectionCompany != ''"> and apply_collection_company = #{applyCollectionCompany}</if>
             <if test="applyAmount != null "> and apply_amount = #{applyAmount}</if>
             <if test="applyRemark != null  and applyRemark != ''"> and apply_remark = #{applyRemark}</if>
+            <if test="payCompany != null  and payCompany != ''"> and pay_company = #{payCompany}</if>
+            <if test="payAccount != null  and payAccount != ''"> and pay_account = #{payAccount}</if>
             <if test="payWay != null  and payWay != ''"> and pay_way = #{payWay}</if>
             <if test="paymentType != null  and paymentType != ''"> and payment_type = #{paymentType}</if>
             <if test="status != null  and status != ''"> and status = #{status}</if>
             <if test="payDate != null "> and pay_date = #{payDate}</if>
             <if test="bookingType != null  and bookingType != ''"> and booking_type = #{bookingType}</if>
         </where>
-        order by pay_plan_id desc
+        order by payDataId desc
     </select>
 
     <select id="selectBizPayPlanById" parameterType="Long" resultMap="BizPayPlanResult">
@@ -71,6 +75,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="applyCollectionCompany != null  and applyCollectionCompany != ''">apply_collection_company,</if>
             <if test="applyAmount != null ">apply_amount,</if>
             <if test="applyRemark != null  and applyRemark != ''">apply_remark,</if>
+            <if test="payCompany != null  and payCompany != ''">pay_company,</if>
+            <if test="payAccount != null  and payAccount != ''">pay_account,</if>
             <if test="payWay != null  and payWay != ''">pay_way,</if>
             <if test="paymentType != null  and paymentType != ''">payment_type,</if>
             <if test="status != null  and status != ''">status,</if>
@@ -92,6 +98,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="applyCollectionCompany != null  and applyCollectionCompany != ''">#{applyCollectionCompany},</if>
             <if test="applyAmount != null ">#{applyAmount},</if>
             <if test="applyRemark != null  and applyRemark != ''">#{applyRemark},</if>
+            <if test="payCompany != null  and payCompany != ''">#{payCompany},</if>
+            <if test="payAccount != null  and payAccount != ''">#{payAccount},</if>
             <if test="payWay != null  and payWay != ''">#{payWay},</if>
             <if test="paymentType != null  and paymentType != ''">#{paymentType},</if>
             <if test="status != null  and status != ''">#{status},</if>
@@ -117,6 +125,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="applyCollectionCompany != null  and applyCollectionCompany != ''">apply_collection_company = #{applyCollectionCompany},</if>
             <if test="applyAmount != null ">apply_amount = #{applyAmount},</if>
             <if test="applyRemark != null  and applyRemark != ''">apply_remark = #{applyRemark},</if>
+            <if test="payCompany != null  and payCompany != ''">pay_company = #{payCompany},</if>
+            <if test="payAccount != null  and payAccount != ''">pay_account = #{payAccount},</if>
             <if test="payWay != null  and payWay != ''">pay_way = #{payWay},</if>
             <if test="paymentType != null  and paymentType != ''">payment_type = #{paymentType},</if>
             <if test="status != null  and status != ''">status = #{status},</if>

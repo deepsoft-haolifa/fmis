@@ -188,7 +188,7 @@ public class BizProcessDataPaymentPayController extends BaseController {
                     bizBill.setPayment(bizProcessData.getPrice1());
                     bizBill.setRemark(bizProcessData.getRemark());
                     bizBill.setString1(bizProcessData.getString10());
-                    bizBill.setString2(bizProcessData.getString3());
+                    bizBill.setString2(bizProcessData.getString5());
                     bizBillService.insertBizBill(bizBill);
                 }
             } else if ("2".equals(bookingType)) {
@@ -204,7 +204,7 @@ public class BizProcessDataPaymentPayController extends BaseController {
                     bizBankBill.setRemark(bizProcessData.getRemark());
                     bizBankBill.setPayCompany(bizProcessData.getString10());
                     bizBankBill.setPayAccount(bizProcessData.getString12());
-                    bizBankBill.setCollectCompany(bizProcessData.getString3());
+                    bizBankBill.setCollectCompany(bizProcessData.getString5());
                     bizBankBillService.insertBizBankBill(bizBankBill);
                 }
             }

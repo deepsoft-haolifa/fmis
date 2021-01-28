@@ -31,13 +31,21 @@ public class BizBillAmount extends BaseEntity {
     @Excel(name = "1.银行日记账；2.现金日记账")
     private Integer type;
 
+    /** 公司 */
+    @Excel(name = "公司")
+    private String company;
+
+    /** 账户 */
+    @Excel(name = "账户")
+    private String account;
+
     /** 上个月期初金额（上一条记录的期初金额） */
     @Excel(name = "上个月期初金额", readConverterExp = "上=一条记录的期初金额")
-    private BigDecimal preAmount;
+    private Double preAmount;
 
     /** 本月期初金额（记账中最新一条记录的余额） */
     @Excel(name = "本月期初金额", readConverterExp = "记=账中最新一条记录的余额")
-    private BigDecimal nextAmount;
+    private Double nextAmount;
 
     public void setId(Long id) {
         this.id = id;
@@ -67,34 +75,50 @@ public class BizBillAmount extends BaseEntity {
     public Integer getType() {
         return type;
     }
-    public void setPreAmount(BigDecimal preAmount) {
+    public void setCompany(String company) {
+        this.company = company;
+    }
+
+    public String getCompany() {
+        return company;
+    }
+    public void setAccount(String account) {
+        this.account = account;
+    }
+
+    public String getAccount() {
+        return account;
+    }
+    public void setPreAmount(Double preAmount) {
         this.preAmount = preAmount;
     }
 
-    public BigDecimal getPreAmount() {
+    public Double getPreAmount() {
         return preAmount;
     }
-    public void setNextAmount(BigDecimal nextAmount) {
+    public void setNextAmount(Double nextAmount) {
         this.nextAmount = nextAmount;
     }
 
-    public BigDecimal getNextAmount() {
+    public Double getNextAmount() {
         return nextAmount;
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("id", getId())
-            .append("year", getYear())
-            .append("month", getMonth())
-            .append("type", getType())
-            .append("preAmount", getPreAmount())
-            .append("nextAmount", getNextAmount())
-            .append("createBy", getCreateBy())
-            .append("createTime", getCreateTime())
-            .append("updateBy", getUpdateBy())
-            .append("updateTime", getUpdateTime())
-            .toString();
+                .append("id", getId())
+                .append("year", getYear())
+                .append("month", getMonth())
+                .append("type", getType())
+                .append("company", getCompany())
+                .append("account", getAccount())
+                .append("preAmount", getPreAmount())
+                .append("nextAmount", getNextAmount())
+                .append("createBy", getCreateBy())
+                .append("createTime", getCreateTime())
+                .append("updateBy", getUpdateBy())
+                .append("updateTime", getUpdateTime())
+                .toString();
     }
 }
