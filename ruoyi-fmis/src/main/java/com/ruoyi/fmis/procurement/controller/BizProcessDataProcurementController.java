@@ -359,15 +359,15 @@ public class BizProcessDataProcurementController extends BaseController {
         int count = 0;
         for (BizProcessChild bizProcessChild : bizProcessChildList) {
             //产品
-            if(!StringUtils.isEmpty(bizProcessChild.getString2())) {
+            if(!StringUtils.isEmpty(bizProcessChild.getString2()) && !bizProcessChild.getString2().equals("0")) {
                 count ++;
             }
             //螺栓
-            if(!StringUtils.isEmpty(bizProcessChild.getString8())) {
+            if(!StringUtils.isEmpty(bizProcessChild.getString8()) && !bizProcessChild.getString8().equals("0")) {
                 count ++;
             }
             //执行器
-            if(!StringUtils.isEmpty(bizProcessChild.getString11())) {
+            if(!StringUtils.isEmpty(bizProcessChild.getString11()) && !bizProcessChild.getString11().equals("0")) {
                 count ++;
             }
             if(bizProcessChild.getPattachment1Id() != null) {
