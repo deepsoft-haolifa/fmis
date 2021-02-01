@@ -51,6 +51,7 @@ public interface IBizProcessDataService {
     public List<BizProcessData> selectBizProcessDataListCg(BizProcessData bizProcessData);
 
     public List<BizProcessData> selectBizProcessDataListRef(BizProcessData bizProcessData);
+    public List<BizProcessData> selectBizProcessDataListRefLiu(BizProcessData bizProcessData);
 
     /**
      * 查看销售合同中是否已经开始采购

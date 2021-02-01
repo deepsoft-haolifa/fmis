@@ -739,7 +739,11 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
     public List<BizProcessData> selectBizProcessDataListRef(BizProcessData bizProcessData) {
         return bizProcessDataMapper.selectBizProcessDataListRef(bizProcessData);
     }
-
+    @Override
+    @DataScope(deptAlias = "dt", userAlias = "u")
+    public List<BizProcessData> selectBizProcessDataListRefLiu(BizProcessData bizProcessData) {
+        return bizProcessDataMapper.selectBizProcessDataListRefLiu(bizProcessData);
+    }
     @Override
     @DataScope(deptAlias = "dt", userAlias = "u")
     public List<BizProcessData> selectBizProcessDataListXs(BizProcessData bizProcessData) {

@@ -362,6 +362,10 @@ public class BizProcessDataProcurementController extends BaseController {
             if(!StringUtils.isEmpty(bizProcessChild.getString2()) && !bizProcessChild.getString2().equals("0")) {
                 count ++;
             }
+            //法兰
+            if(!StringUtils.isEmpty(bizProcessChild.getString5()) && !bizProcessChild.getString5().equals("0")) {
+                count ++;
+            }
             //螺栓
             if(!StringUtils.isEmpty(bizProcessChild.getString8()) && !bizProcessChild.getString8().equals("0")) {
                 count ++;
@@ -370,6 +374,7 @@ public class BizProcessDataProcurementController extends BaseController {
             if(!StringUtils.isEmpty(bizProcessChild.getString11()) && !bizProcessChild.getString11().equals("0")) {
                 count ++;
             }
+            //附件1 2 3 4
             if(bizProcessChild.getPattachment1Id() != null) {
                 count ++;
             }

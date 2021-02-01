@@ -142,6 +142,14 @@ public class BizProcessDataController extends BaseController {
         }
         return prefix + "/dataProduce";
     }
+    @GetMapping("/liuzhuan")
+    public String liuzhuan(ModelMap mmap) {
+        String toDo = getRequest().getParameter("todo");
+        if ("1".equals(toDo)) {
+            mmap.put("todo","1");
+        }
+        return prefix + "/dataLiu";
+    }
     @GetMapping("/applyDeliver")
     public String applyDeliver(ModelMap mmap) {
         String toDo = getRequest().getParameter("todo");
@@ -223,6 +231,20 @@ public class BizProcessDataController extends BaseController {
                 }
             }
         }
+        return getDataTable(list);
+    }
+    /**
+     * 已流转的合同
+     */
+    //@RequiresPermissions("fmis:data:list")
+    @PostMapping("/listLiu")
+    @ResponseBody
+    public TableDataInfo listLiu(BizProcessData bizProcessData) {
+
+        bizProcessData.setBizId("contract");
+        bizProcessData.setString13("2");
+        List<BizProcessData> list = bizProcessDataService.selectBizProcessDataListRefLiu(bizProcessData);
+
         return getDataTable(list);
     }
 
@@ -1253,17 +1275,26 @@ public class BizProcessDataController extends BaseController {
         BizProcessData bizQuotation = bizProcessDataService.selectBizProcessDataById(Long.parseLong(dataId));
         return toAjax(bizProcessDataService.subReportBizQuotation(bizQuotation));
     }
-
+    //流转到合同审理员
     @PostMapping("/goPool")
     @ResponseBody
     public AjaxResult goPool() {
+        String dataId = getRequest().getParameter("dataId");
+        BizProcessData bizQuotation = bizProcessDataService.selectBizProcessDataById(Long.parseLong(dataId));
+        bizQuotation.setString13("2");
+        bizQuotation.setUpdateBy(ShiroUtils.getUserId().toString());
+        return toAjax(bizProcessDataService.updateBizProcessData(bizQuotation));
+    }
+    //流转到采购池
+    @PostMapping("/goPoolLiu")
+    @ResponseBody
+    public AjaxResult goPoolLiu() {
         String dataId = getRequest().getParameter("dataId");
         BizProcessData bizQuotation = bizProcessDataService.selectBizProcessDataById(Long.parseLong(dataId));
         bizQuotation.setString13("1");
         bizQuotation.setUpdateBy(ShiroUtils.getUserId().toString());
         return toAjax(bizProcessDataService.updateBizProcessData(bizQuotation));
     }
-
     @PostMapping("/uploadUrl")
     @ResponseBody
     public AjaxResult uploadUrl() {
@@ -1735,14 +1766,13 @@ public class BizProcessDataController extends BaseController {
             table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(sumTotalAmount), 1,textFont));//合计
             table.addCell(PdfUtil.mergeCol("", 7,textFont));//备注
 
-
-            table.addCell(PdfUtil.mergeColRight("优惠价", 5,textFont));//4
-            table.addCell(PdfUtil.mergeCol("", 1,textFont));//总数量
-            table.addCell(PdfUtil.mergeCol("", 1,textFont));//单价
-            table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(string14D), 1,textFont));//合计
-            table.addCell(PdfUtil.mergeCol("", 7,textFont));//备注
-
-
+            if (string14D > 0) {
+                table.addCell(PdfUtil.mergeColRight("优惠价", 5,textFont));//4
+                table.addCell(PdfUtil.mergeCol("", 1,textFont));//总数量
+                table.addCell(PdfUtil.mergeCol("", 1,textFont));//单价
+                table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(string14D), 1,textFont));//合计
+                table.addCell(PdfUtil.mergeCol("", 7,textFont));//备注
+            }
 
             table.addCell(PdfUtil.mergeColRight("大写人民币合计", 5,textFont));
             table.addCell(PdfUtil.mergeCol(StringUtils.convert(sumTotalAmount), 3,textFont));//合计
