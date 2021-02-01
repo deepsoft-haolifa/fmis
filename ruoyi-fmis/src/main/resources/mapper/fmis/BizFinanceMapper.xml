@@ -19,22 +19,23 @@
         q.string3 as supplierName,
         dt1.dept_name as deptName,
         -- 销售总量
-        ifnull(sum(bpc.string3),0) saleQty,
+        ifnull(bpc.saleQty,0) saleQty,
         -- 已付款项
-        0 paidAmount,
+        ifnull(bbc.paidAmount,0) paidAmount,
          -- 已开发票
          0 invoicedAmount,
          -- 已发货数
-        0 deliveryQty
+        ifnull(bpc1.deliveryQty,0) deliveryQty,
         from biz_process_data q
         left join sys_user u on q.create_by=u.user_id
         left join sys_dept dt on u.dept_id=dt.dept_id
         left join biz_data_status ds on ds.string3=q.data_id
         left join biz_customer ct on ct.customer_id=q.string2
         left join sys_dept dt1 on q.string22=dt1.dept_id
-        left join biz_process_child bpc on bpc.data_id=q.data_id
+        left join (select data_id,sum(string3) saleQty from biz_process_child group by data_id) bpc ON bpc.data_id = q.data_id
+        left join (select data_id,sum(string16) deliveryQty from biz_process_child group by data_id) bpc1 ON bpc1.data_id = q.data_id
+        left join (select data_id,sum(amount) as paidAmount  from biz_bill_contract group by data_id) bbc on bbc.data_id=q.data_id
         <include refid="ReceivableWhere"></include>
-        group by q.data_id
         order by q.create_time desc
     </select>
 

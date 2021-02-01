@@ -29,15 +29,6 @@ public class BizReceivableServiceImpl implements IBizFinanceService {
     @Override
     public List<ReceivableRespVo> selectReceivableList(ReceivableReqVo reqVo) {
         List<ReceivableRespVo> receivableRespVos = bizFinanceMapper.selectReceivableList(reqVo);
-        // 设置已付总额
-        Set<Long> dataIdSet = receivableRespVos.stream().map(ReceivableRespVo::getSaleContractId).collect(Collectors.toSet());
-        List<BizBillContract> bizBillContracts = bizBillContractService.selectBizBillContractByDataIds(dataIdSet);
-
-        Map<Long, Double> doubleMap = bizBillContracts.stream().collect(Collectors.groupingBy(BizBillContract::getDataId, Collectors.summingDouble(BizBillContract::getAmount)));
-
-        receivableRespVos.forEach(e -> {
-            e.setPaidAmount(doubleMap.get(e.getSaleContractId()));
-        });
         return receivableRespVos;
     }
 
