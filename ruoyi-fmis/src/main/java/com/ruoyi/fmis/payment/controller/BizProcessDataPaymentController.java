@@ -1,16 +1,16 @@
 package com.ruoyi.fmis.payment.controller;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.fmis.budget.domain.BizCostBudget;
+import com.ruoyi.fmis.budget.service.IBizCostBudgetService;
 import com.ruoyi.fmis.child.domain.BizProcessChild;
 import com.ruoyi.fmis.child.service.IBizProcessChildService;
 import com.ruoyi.fmis.common.BizConstants;
@@ -29,6 +29,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -66,6 +67,8 @@ public class BizProcessDataPaymentController extends BaseController {
     private IBizProcessChildService bizProcessChildService;
     @Autowired
     private IBizSubjectsService bizSubjectsService;
+    @Autowired
+    private IBizCostBudgetService bizCostBudgetService;
 
     @RequiresPermissions("fmis:payment:view")
     @GetMapping()
@@ -232,6 +235,7 @@ public class BizProcessDataPaymentController extends BaseController {
     @Log(title = "差旅报销添加", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
+    @Transactional(rollbackFor = Exception.class)
     public AjaxResult addSave(BizProcessData bizProcessData) {
         bizProcessData.setFlowStatus("0");
         Map<String, SysRole> flowMap = bizProcessDefineService.getRoleFlowMap(bizProcessData.getBizId());
@@ -293,6 +297,7 @@ public class BizProcessDataPaymentController extends BaseController {
     @Log(title = "费用报销添加", businessType = BusinessType.INSERT)
     @PostMapping("/add1")
     @ResponseBody
+    @Transactional(rollbackFor = Exception.class)
     public AjaxResult addSave1(BizProcessData bizProcessData) {
         bizProcessData.setFlowStatus("0");
         Map<String, SysRole> flowMap = bizProcessDefineService.getRoleFlowMap(bizProcessData.getBizId());
@@ -319,7 +324,35 @@ public class BizProcessDataPaymentController extends BaseController {
                 JSONObject json = productArray.getJSONObject(i);
                 BizProcessChild bizProcessChild = JSONObject.parseObject(json.toJSONString(), BizProcessChild.class);
                 if (bizProcessChild.getPrice1() != null && bizProcessChild.getPrice1() > 0) {
-                    totalPrice = totalPrice.add(new BigDecimal(bizProcessChild.getPrice1()));
+                    Date date = bizProcessChild.getDatetime1();
+                    String subjectId = bizProcessChild.getString2();
+                    if (date == null || StringUtils.isEmpty(subjectId)) {
+                        return error("报销项日期/科目 是必填项");
+                    }
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(date);
+                    int year = calendar.get(Calendar.YEAR);
+                    int month = calendar.get(Calendar.MONTH) + 1;
+                    // 判断此科目的费用是否够
+                    List<BizCostBudget> bizCostBudgets = bizCostBudgetService.selectBizCostBudgetList(new BizCostBudget() {{
+                        setDeptId(Long.parseLong(bizProcessData.getString6()));
+                        setSubjectsId(Long.parseLong(subjectId));
+                        setY(String.valueOf(year));
+                        setM(String.valueOf(month));
+                    }});
+                    double totalAmount = bizCostBudgets.stream().mapToDouble(BizCostBudget::getAmount).sum();
+                    // 获取已经报销的费用
+                    calendar.add(Calendar.MONTH, 0);
+                    calendar.set(Calendar.DAY_OF_MONTH, 1);
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                    String firstDay = format.format(calendar.getTime());
+                    calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+                    String lastDay = format.format(calendar.getTime());
+                    double paymentedPrice = bizProcessChildService.selectPaymentedPrice(subjectId, bizProcessData.getString6(), firstDay, lastDay);
+                    if (totalAmount < paymentedPrice + bizProcessChild.getPrice1()) {
+                        return error("【" + bizProcessChild.getString3() + " 】此科目预算报销的金额不足，请确认");
+                    }
+                    totalPrice = totalPrice.add(BigDecimal.valueOf(bizProcessChild.getPrice1()));
                 }
             }
         }
@@ -339,6 +372,25 @@ public class BizProcessDataPaymentController extends BaseController {
         }
         return toAjax(insertReturn);
     }
+
+    public static void main(String[] args) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH) + 1;
+        calendar.add(Calendar.MONTH, 0);
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        String firstDay = format.format(calendar.getTime());
+        calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+        String lastDay = format.format(calendar.getTime());
+
+        System.out.println(year);
+        System.out.println(month);
+        System.out.println(firstDay);
+        System.out.println(lastDay);
+    }
+
     /**
      * 修改合同管理
      */
@@ -415,6 +467,7 @@ public class BizProcessDataPaymentController extends BaseController {
 
         return toAjax(updateReturn);
     }
+
     /**
      * 修改保存合同管理
      */
@@ -464,6 +517,7 @@ public class BizProcessDataPaymentController extends BaseController {
 
         return toAjax(updateReturn);
     }
+
     /**
      * 删除合同管理
      */

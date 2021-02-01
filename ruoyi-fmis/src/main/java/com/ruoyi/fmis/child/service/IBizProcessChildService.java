@@ -1,6 +1,7 @@
 package com.ruoyi.fmis.child.service;
 
 import com.ruoyi.fmis.child.domain.BizProcessChild;
+
 import java.util.List;
 
 /**
@@ -25,6 +26,7 @@ public interface IBizProcessChildService {
      * @return 流程数据字集合
      */
     public List<BizProcessChild> selectBizProcessChildList(BizProcessChild bizProcessChild);
+
     public List<BizProcessChild> selectBizProcessChildListForKuCun(BizProcessChild bizProcessChild);
 
     public List<BizProcessChild> selectBizProcessChildInventoryList(BizProcessChild bizProcessChild);
@@ -48,16 +50,24 @@ public interface IBizProcessChildService {
     public List<BizProcessChild> selectBizChildPAList(BizProcessChild bizProcessChild);
 
     public List<BizProcessChild> selectBizChildPA1List(BizProcessChild bizProcessChild);
+
     public List<BizProcessChild> selectBizChildPA2List(BizProcessChild bizProcessChild);
+
     public List<BizProcessChild> selectBizChildPA3List(BizProcessChild bizProcessChild);
+
     public List<BizProcessChild> selectBizChildPA4List(BizProcessChild bizProcessChild);
 
 
     public List<BizProcessChild> selectBizTestProductList(BizProcessChild bizProcessChild);
+
     public List<BizProcessChild> selectBizTestActuatorList(BizProcessChild bizProcessChild);
+
     public List<BizProcessChild> selectBizTestRef1List(BizProcessChild bizProcessChild);
+
     public List<BizProcessChild> selectBizTestRef2List(BizProcessChild bizProcessChild);
+
     public List<BizProcessChild> selectBizTestPAList(BizProcessChild bizProcessChild);
+
     /**
      * 新增流程数据字
      *
@@ -73,6 +83,7 @@ public interface IBizProcessChildService {
      * @return 结果
      */
     public int updateBizProcessChild(BizProcessChild bizProcessChild);
+
     public int updateBizProcessChildFH(BizProcessChild bizProcessChild);
 
     /**
@@ -98,5 +109,12 @@ public interface IBizProcessChildService {
      * @return 结果
      */
     public int deleteBizProcessChildByDataIds(String dataIds);
+
+    /**
+     * 获取某段时间内的费用报销费用
+     *
+     * @return
+     */
+    public double selectPaymentedPrice(String subjectId, String deptId, String startDate, String endDate);
 
 }

@@ -25,7 +25,7 @@
          -- 已开发票
          0 invoicedAmount,
          -- 已发货数
-        ifnull(bpc1.deliveryQty,0) deliveryQty,
+        ifnull(bpc1.deliveryQty,0) deliveryQty
         from biz_process_data q
         left join sys_user u on q.create_by=u.user_id
         left join sys_dept dt on u.dept_id=dt.dept_id
