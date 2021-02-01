@@ -400,14 +400,14 @@ public class BizProcessDataProcurementController extends BaseController {
 
     }
     public String setNormalFlag (BizProcessData bizProcessData,String productArrayStr) {
-        String normalFlag = "4";
+        String normalFlag = "5";
         Double totalPrice = bizProcessData.getPrice1();
         if (totalPrice >= 300000) {
-            normalFlag = "4";
+            normalFlag = "5";
         } else if (totalPrice > 100000) {
-            normalFlag = "3";
+            normalFlag = "4";
         } else if (totalPrice <= 100000) {
-            normalFlag = "2";
+            normalFlag = "3";
         }
         bizProcessData.setNormalFlag(normalFlag);
         return normalFlag;
