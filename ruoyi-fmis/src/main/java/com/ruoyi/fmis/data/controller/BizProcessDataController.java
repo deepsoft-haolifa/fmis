@@ -5,6 +5,7 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
+import java.util.function.Supplier;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -41,8 +42,11 @@ import com.ruoyi.fmis.productref.service.IBizProductRefService;
 import com.ruoyi.fmis.quotation.domain.BizQuotation;
 import com.ruoyi.fmis.quotation.service.IBizQuotationService;
 import com.ruoyi.fmis.quotationproduct.domain.BizQuotationProduct;
+import com.ruoyi.fmis.suppliers.domain.BizSuppliers;
 import com.ruoyi.fmis.suppliers.service.IBizSuppliersService;
+import com.ruoyi.fmis.util.Util;
 import com.ruoyi.framework.util.ShiroUtils;
+import com.ruoyi.system.domain.SysDictData;
 import com.ruoyi.system.domain.SysRole;
 import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.service.ISysDeptService;
@@ -1375,6 +1379,8 @@ public class BizProcessDataController extends BaseController {
 
     @Autowired
     private ISysDeptService sysDeptService;
+    @Autowired
+    private ISysDictDataService sysDictDataService;
 
     /**
      * 导出合同
@@ -1399,8 +1405,10 @@ public class BizProcessDataController extends BaseController {
             }
 
         }
-
-
+        boolean isSchengchan = false;
+        if (bizProcessDataParamter != null && bizProcessDataParamter.getString27() != null) {
+            isSchengchan = true;
+        }
         BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataById(Long.parseLong(id));
         //产品信息
         BizProcessChild queryBizProcessChild = new BizProcessChild();
@@ -1433,35 +1441,49 @@ public class BizProcessDataController extends BaseController {
             //二级标题
             Font titleFont = PdfUtil.getPdfChineseFont(15,Font.BOLD);
             String companyName = "北京好利阀业集团有限公司";
-            Paragraph paragraph0 = new Paragraph("    " + companyName + "    如无问题，请尽快回传及付款，以免影响交货期！回传电话：010-67171220。", textFont);
-            paragraph0.setAlignment(Paragraph.ALIGN_CENTER);
-
-            Paragraph paragraph = new Paragraph("产品购销合同", titleFont);
-            paragraph.setAlignment(Paragraph.ALIGN_CENTER);
-            if (bizProcessDataParamter != null) {
-                writer.setPageEvent(new TextWaterMarkPdfPageEvent("北京好利"));
+            if (!StringUtils.isEmpty(bizProcessData.getString3()) && !bizProcessData.getString3().equals("0")) {
+                companyName = sysDictDataService.selectDictLabel("supplier_type", bizProcessData.getString3());
             }
-            //Paragraph paragraph1 = new Paragraph("报价单", textFont);
-            //paragraph1.setAlignment(Paragraph.ALIGN_CENTER);
-            //空行
-            Paragraph blankRow = new Paragraph(18f, " ");
-
-
-            //添加副标题
+            Paragraph paragraph0 = new Paragraph("", textFont);
+            Paragraph paragraph = new Paragraph("", titleFont);
             Font simheiMiddle = textFont;
+            Paragraph pSubtitle = new Paragraph("", simheiMiddle);
             PdfPTable tbSubtitle = new PdfPTable(1);
             PdfPCell cellSubtitle = new PdfPCell();
-            Paragraph pSubtitle = new Paragraph("Beijing HAOLIFA Valve Group Co.,LTD", simheiMiddle);
-            pSubtitle.setAlignment(Paragraph.ALIGN_CENTER);
-            cellSubtitle.addElement(pSubtitle);
-            cellSubtitle.setPaddingBottom(5);
-            cellSubtitle.setBorderWidthTop(0);
-            cellSubtitle.setBorderWidthLeft(0);
-            cellSubtitle.setBorderWidthRight(0);
-            cellSubtitle.setBorderWidthBottom(2);
-            cellSubtitle.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
-            tbSubtitle.addCell(cellSubtitle);
-            tbSubtitle.setHorizontalAlignment(Paragraph.ALIGN_CENTER);
+            if (!isSchengchan) {
+                paragraph0 = new Paragraph("    " + companyName + "    如无问题，请尽快回传及付款，以免影响交货期！回传电话：010-67171220。", textFont);
+                paragraph0.setAlignment(Paragraph.ALIGN_CENTER);
+                paragraph = new Paragraph("产品购销合同", titleFont);
+                paragraph.setAlignment(Paragraph.ALIGN_CENTER);
+                if (bizProcessDataParamter != null) {
+                    writer.setPageEvent(new TextWaterMarkPdfPageEvent("北京好利"));
+                }
+                //Paragraph paragraph1 = new Paragraph("报价单", textFont);
+                //paragraph1.setAlignment(Paragraph.ALIGN_CENTER);
+                //空行
+                Paragraph blankRow = new Paragraph(18f, " ");
+
+
+                //添加副标题
+
+                tbSubtitle = new PdfPTable(1);
+
+                pSubtitle = new Paragraph("Beijing HAOLIFA Valve Group Co.,LTD", simheiMiddle);
+                pSubtitle.setAlignment(Paragraph.ALIGN_CENTER);
+                cellSubtitle.addElement(pSubtitle);
+                cellSubtitle.setPaddingBottom(5);
+                cellSubtitle.setBorderWidthTop(0);
+                cellSubtitle.setBorderWidthLeft(0);
+                cellSubtitle.setBorderWidthRight(0);
+                cellSubtitle.setBorderWidthBottom(2);
+                cellSubtitle.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+                tbSubtitle.addCell(cellSubtitle);
+                tbSubtitle.setHorizontalAlignment(Paragraph.ALIGN_CENTER);
+            }
+
+
+
+
 
 
             //总列数
@@ -1604,7 +1626,7 @@ public class BizProcessDataController extends BaseController {
                         if (endRemark.length()>0) {
                             endRemark += ",";
                         }
-                        endRemark += "执行器";
+                        endRemark += "执行器" + " " + bizActuator.getName();
 
                     }
                 }
@@ -1632,7 +1654,7 @@ public class BizProcessDataController extends BaseController {
 
                 Double ref1Total = new Double(0);
                 String ref1Id = bizProduct.getProductRef1Id();
-                if (StringUtils.isNotEmpty(ref1Id)) {
+                if (StringUtils.isNotEmpty(ref1Id) && !ref1Id.trim().equals("0")) {
                     Double ref1Price = bizProduct.getPrice2();
                     String ref1Num = bizProduct.getString6();
                     String ref1Coefficient = bizProduct.getProductRef1Coefficient();
@@ -1751,9 +1773,16 @@ public class BizProcessDataController extends BaseController {
                 //总单价
                 Double productTotalPrice = Double.valueOf(totalAmount / Double.parseDouble(productNum));
                 sumTotalPrice = sumTotalPrice + productTotalPrice;
-                table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(productTotalPrice), 1,textFont));//单价
+                if (!isSchengchan) {
+                    table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(productTotalPrice), 1,textFont));//单价
 
-                table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(totalAmount), 1,textFont));//合计
+                    table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(totalAmount), 1,textFont));//合计
+                } else {
+                    table.addCell(PdfUtil.mergeCol("", 1,textFont));//单价
+
+                    table.addCell(PdfUtil.mergeCol("", 1,textFont));//合计
+                }
+
 
 
 
@@ -1774,20 +1803,42 @@ public class BizProcessDataController extends BaseController {
             //金额合计
             table.addCell(PdfUtil.mergeColRight("合计", 5,textFont));//4
             table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(sumTotalNum), 1,textFont));//总数量
-            table.addCell(PdfUtil.mergeCol("", 1,textFont));//单价
-            table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(sumTotalAmount), 1,textFont));//合计
-            table.addCell(PdfUtil.mergeCol("", 7,textFont));//备注
-
-            if (string14D > 0) {
-                table.addCell(PdfUtil.mergeColRight("优惠价", 5,textFont));//4
-                table.addCell(PdfUtil.mergeCol("", 1,textFont));//总数量
+            if (!isSchengchan) {
                 table.addCell(PdfUtil.mergeCol("", 1,textFont));//单价
-                table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(string14D), 1,textFont));//合计
+                table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(sumTotalAmount), 1,textFont));//合计
+                table.addCell(PdfUtil.mergeCol("", 7,textFont));//备注
+            } else {
+                table.addCell(PdfUtil.mergeCol("", 1,textFont));//单价
+                table.addCell(PdfUtil.mergeCol("", 1,textFont));//合计
                 table.addCell(PdfUtil.mergeCol("", 7,textFont));//备注
             }
 
+
+            if (string14D > 0) {
+                if (!isSchengchan) {
+                    table.addCell(PdfUtil.mergeColRight("优惠价", 5,textFont));//4
+                    table.addCell(PdfUtil.mergeCol("", 1,textFont));//总数量
+                    table.addCell(PdfUtil.mergeCol("", 1,textFont));//单价
+                    table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(string14D), 1,textFont));//合计
+                    table.addCell(PdfUtil.mergeCol("", 7,textFont));//备注
+                } else {
+                    table.addCell(PdfUtil.mergeColRight("优惠价", 5,textFont));//4
+                    table.addCell(PdfUtil.mergeCol("", 1,textFont));//总数量
+                    table.addCell(PdfUtil.mergeCol("", 1,textFont));//单价
+                    table.addCell(PdfUtil.mergeCol("", 1,textFont));//合计
+                    table.addCell(PdfUtil.mergeCol("", 7,textFont));//备注
+                }
+
+
+            }
+
             table.addCell(PdfUtil.mergeColRight("大写人民币合计", 5,textFont));
-            table.addCell(PdfUtil.mergeCol(StringUtils.convert(sumTotalAmount), 3,textFont));//合计
+            if (!isSchengchan) {
+                table.addCell(PdfUtil.mergeCol(StringUtils.convert(sumTotalAmount), 3,textFont));//合计
+            } else {
+                table.addCell(PdfUtil.mergeCol("", 3,textFont));//合计
+            }
+
             table.addCell(PdfUtil.mergeCol("", 7,textFont));//备注
 
 
@@ -1859,6 +1910,8 @@ public class BizProcessDataController extends BaseController {
             table.addCell(PdfUtil.mergeColLeft("2、收  货  人：" + StringUtils.trim(bizProcessData.getString11()) + " " + StringUtils.trim(bizProcessData.getString12()), 14,textFont));
             table.addCell(PdfUtil.mergeCol("", 1,textFont));
             table.addCell(PdfUtil.mergeColLeft("3、交货地点：" + StringUtils.trim(bizProcessData.getString9()), 14,textFont));
+            table.addCell(PdfUtil.mergeCol("", 1,textFont));
+            table.addCell(PdfUtil.mergeColLeft("3、运费承担：" + StringUtils.trim(bizProcessData.getString10()), 14,textFont));
 
             table.addCell(PdfUtil.mergeCol("五、", 1,textFont));
             table.addCell(PdfUtil.mergeColLeft("质量保证按国家标准执行：质保期12个月（自出厂日算起）；质保期内如因产品本身质量问题，卖方予以免费更换。", 14,textFont));
@@ -1868,62 +1921,66 @@ public class BizProcessDataController extends BaseController {
 
             table.addCell(PdfUtil.mergeCol("七、", 1,textFont));
             table.addCell(PdfUtil.mergeColLeft("本合同一式贰份。双方各执一份，双方签字盖章后生效（传真件有效）。", 14,textFont));
-
-
-
-
-            table.addCell(PdfUtil.mergeCol("", 1,textFont));
-            table.addCell(PdfUtil.mergeColLeft("单位名称：" + companyName + "", 7,textFont));
-            table.addCell(PdfUtil.mergeColLeft("单位名称：" + StringUtils.trim(bizCustomer.getName()), 7,textFont));
-
-            table.addCell(PdfUtil.mergeCol("", 1,textFont));
-            table.addCell(PdfUtil.mergeColLeft("单位地址：北京大兴区榆垡镇榆顺路6号", 7,textFont));
-            table.addCell(PdfUtil.mergeColLeft("单位地址："  + StringUtils.trim(bizCustomer.getCompanyAddress()), 7,textFont));
-
-            table.addCell(PdfUtil.mergeCol("", 1,textFont));
-            table.addCell(PdfUtil.mergeColLeft("委托代理人：", 7,textFont));
-            table.addCell(PdfUtil.mergeColLeft("委托代理人：", 7,textFont));
-
-            table.addCell(PdfUtil.mergeCol("", 1,textFont));
-            table.addCell(PdfUtil.mergeColLeft("电    话：" + StringUtils.trim(remark6), 7,textFont));
-            table.addCell(PdfUtil.mergeColLeft("传    真：" + StringUtils.trim(bizCustomer.getFax()), 7,textFont));
-
-            table.addCell(PdfUtil.mergeCol("", 1,textFont));
-            table.addCell(PdfUtil.mergeColLeft("开户银行：" + StringUtils.trim(remark7), 7,textFont));
-            table.addCell(PdfUtil.mergeColLeft("开户银行：" + StringUtils.trim(bizCustomer.getString11()), 7,textFont));
-
-            table.addCell(PdfUtil.mergeCol("", 1,textFont));
-            table.addCell(PdfUtil.mergeColLeft("帐    号：" + StringUtils.trim(remark8), 7,textFont));
-            table.addCell(PdfUtil.mergeColLeft("帐    号：" + StringUtils.trim(bizCustomer.getString12()), 7,textFont));
-
-            table.addCell(PdfUtil.mergeCol("", 1,textFont));
-            table.addCell(PdfUtil.mergeColLeft("税    号："  + StringUtils.trim(remark9), 7,textFont));
-            table.addCell(PdfUtil.mergeColLeft("税    号：" + StringUtils.trim(bizCustomer.getString13()), 7,textFont));
-
-
             Paragraph paragraphRemark1 = new Paragraph();
-            Font remarkFont1 = PdfUtil.getPdfChineseFont(7, Font.NORMAL);
-            paragraphRemark1.add(new Chunk("总经理销售及投诉电话：" + StringUtils.trim(remark10), remarkFont1));
-            paragraphRemark1.setAlignment(Paragraph.ALIGN_RIGHT);
-
-            /*paragraphRemark1.add(new Chunk(remark1, remarkFont1));
-            paragraphRemark1.add(Chunk.NEWLINE);
-            paragraphRemark1.add(new Chunk(remark2, remarkFont1));
-            paragraphRemark1.add(Chunk.NEWLINE);
-            paragraphRemark1.add(new Chunk(remark3, remarkFont1));
-            paragraphRemark1.add(Chunk.NEWLINE);
-            paragraphRemark1.add(new Chunk(remark4, remarkFont1));
-            paragraphRemark1.add(Chunk.NEWLINE);
-            paragraphRemark1.setAlignment(Paragraph.ALIGN_RIGHT);*/
-
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
             Paragraph datePar = new Paragraph("打印日期：" + sdf.format(new Date()), PdfUtil.getPdfChineseFont());
-            datePar.setAlignment(Element.ALIGN_RIGHT);
-            datePar.setSpacingBefore(20);
+            if (!isSchengchan) {
+                table.addCell(PdfUtil.mergeCol("", 1,textFont));
+                table.addCell(PdfUtil.mergeColLeft("单位名称：" + companyName + "", 7,textFont));
+                table.addCell(PdfUtil.mergeColLeft("单位名称：" + StringUtils.trim(bizCustomer.getName()), 7,textFont));
+
+                table.addCell(PdfUtil.mergeCol("", 1,textFont));
+                table.addCell(PdfUtil.mergeColLeft("单位地址：" + Util.jsonObject.getJSONObject(companyName).getString("address"), 7,textFont));
+                table.addCell(PdfUtil.mergeColLeft("单位地址："  + StringUtils.trim(bizCustomer.getCompanyAddress()), 7,textFont));
+
+                table.addCell(PdfUtil.mergeCol("", 1,textFont));
+                table.addCell(PdfUtil.mergeColLeft("委托代理人：", 7,textFont));
+                table.addCell(PdfUtil.mergeColLeft("委托代理人：", 7,textFont));
+
+                table.addCell(PdfUtil.mergeCol("", 1,textFont));
+                table.addCell(PdfUtil.mergeColLeft("电    话：" + Util.jsonObject.getJSONObject(companyName).getString("phone"), 7,textFont));
+                table.addCell(PdfUtil.mergeColLeft("电    话：" + StringUtils.trim(bizCustomer.getFax()), 7,textFont));
+
+                table.addCell(PdfUtil.mergeCol("", 1,textFont));
+                table.addCell(PdfUtil.mergeColLeft("开户银行：" + Util.jsonObject.getJSONObject(companyName).getString("bank"), 7,textFont));
+                table.addCell(PdfUtil.mergeColLeft("开户银行：" + StringUtils.trim(bizCustomer.getString11()), 7,textFont));
+
+                table.addCell(PdfUtil.mergeCol("", 1,textFont));
+                table.addCell(PdfUtil.mergeColLeft("帐    号：" + Util.jsonObject.getJSONObject(companyName).getString("bankNo"), 7,textFont));
+                table.addCell(PdfUtil.mergeColLeft("帐    号：" + StringUtils.trim(bizCustomer.getString12()), 7,textFont));
+
+                table.addCell(PdfUtil.mergeCol("", 1,textFont));
+                table.addCell(PdfUtil.mergeColLeft("税    号："  + Util.jsonObject.getJSONObject(companyName).getString("faxNo"), 7,textFont));
+                table.addCell(PdfUtil.mergeColLeft("税    号：" + StringUtils.trim(bizCustomer.getString13()), 7,textFont));
+
+
+
+                Font remarkFont1 = PdfUtil.getPdfChineseFont(7, Font.NORMAL);
+                paragraphRemark1.add(new Chunk("总经理销售及投诉电话：" + StringUtils.trim(remark10), remarkFont1));
+                paragraphRemark1.setAlignment(Paragraph.ALIGN_RIGHT);
+
+                /*paragraphRemark1.add(new Chunk(remark1, remarkFont1));
+                paragraphRemark1.add(Chunk.NEWLINE);
+                paragraphRemark1.add(new Chunk(remark2, remarkFont1));
+                paragraphRemark1.add(Chunk.NEWLINE);
+                paragraphRemark1.add(new Chunk(remark3, remarkFont1));
+                paragraphRemark1.add(Chunk.NEWLINE);
+                paragraphRemark1.add(new Chunk(remark4, remarkFont1));
+                paragraphRemark1.add(Chunk.NEWLINE);
+                paragraphRemark1.setAlignment(Paragraph.ALIGN_RIGHT);*/
+
+
+                datePar.setAlignment(Element.ALIGN_RIGHT);
+                datePar.setSpacingBefore(20);
+            }
+
+
+
 
 
 
             document.open();
+
             document.add(paragraph0);
             document.add(paragraph);
             //document.add(blankRow);
