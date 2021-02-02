@@ -4,96 +4,96 @@
     <th:block th:include="include :: header('合同管理列表')" />
 </head>
 <body class="gray-bg">
-     <div class="container-div">
-        <div class="row">
-            <div class="col-sm-12 search-collapse">
-                <form id="formId">
-                    <div class="select-list">
-                        <ul>
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
 
-                            <li>
-                                <p>状态：</p>
-                                <select name="queryStatus" id="queryStatus" class="form-control m-b" >
-                                    <option value="0">全部</option>
-                                    <option value="1">待办</option>
-                                    <option value="2">已办</option>
-                                </select>
-                            </li>
-                            <li>
-                                <p>合同编号：</p>
-                                <input type="text" name="string1"/>
-                                <input type="hidden" name="bizId" id="bizId" value="contract"/>
-                            </li>
-                            <li>
-                                <p>客户名称：</p>
-                                <input type="text" name="customerName"  />
-                            </li>
-                            <li>
-                                <p>归属部门：</p>
-                                <input type="text" name="deptName"  />
-                            </li>
-                            <li>
-                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
-                            </li>
-                        </ul>
-                    </div>
-                </form>
-            </div>
+                        <li>
+                            <p>状态：</p>
+                            <select name="queryStatus" id="queryStatus" class="form-control m-b" >
+                                <option value="0">全部</option>
+                                <option value="1">待办</option>
+                                <option value="2">已办</option>
+                            </select>
+                        </li>
+                        <li>
+                            <p>合同编号：</p>
+                            <input type="text" name="string1"/>
+                            <input type="hidden" name="bizId" id="bizId" value="contract"/>
+                        </li>
+                        <li>
+                            <p>客户名称：</p>
+                            <input type="text" name="customerName"  />
+                        </li>
+                        <li>
+                            <p>归属部门：</p>
+                            <input type="text" name="deptName"  />
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
 
-            <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="add()" shiro:hasPermission="fmis:data:add">
-                    <i class="fa fa-plus"></i> 添加
-                </a>
-                <a class="btn btn-primary single disabled" onclick="edit()" shiro:hasPermission="fmis:data:edit">
-                    <i class="fa fa-edit"></i> 修改
-                </a>
-                <a class="btn btn-danger multiple disabled" onclick="remove()" shiro:hasPermission="fmis:data:remove">
-                    <i class="fa fa-remove"></i> 删除
-                </a>
-                <a class="btn btn-warning" onclick="exportPdf()" shiro:hasPermission="fmis:data:export">
-                    <i class="fa fa-download"></i> 生成合同
-                </a>
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-success" onclick="add()" shiro:hasPermission="fmis:data:add">
+                <i class="fa fa-plus"></i> 添加
+            </a>
+            <a class="btn btn-primary single disabled" onclick="edit()" shiro:hasPermission="fmis:data:edit">
+                <i class="fa fa-edit"></i> 修改
+            </a>
+            <a class="btn btn-danger multiple disabled" onclick="remove()" shiro:hasPermission="fmis:data:remove">
+                <i class="fa fa-remove"></i> 删除
+            </a>
+            <a class="btn btn-warning" onclick="exportPdf()" shiro:hasPermission="fmis:data:export">
+                <i class="fa fa-download"></i> 生成合同
+            </a>
 
-                <a class="btn btn-success" onclick="viewPdf()">
-                    <i class="fa fa-street-view"></i> 预览合同
-                </a>
-            </div>
-            <div class="col-sm-12 select-table table-striped">
-                <table id="bootstrap-table"></table>
-            </div>
+            <a class="btn btn-success" onclick="viewPdf()">
+                <i class="fa fa-street-view"></i> 预览合同
+            </a>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
         </div>
     </div>
-    <th:block th:include="include :: footer" />
-    <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('fmis:data:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('fmis:data:remove')}]];
+</div>
+<th:block th:include="include :: footer" />
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('fmis:data:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('fmis:data:remove')}]];
 
-        var supplierTypeData = [[${@dict.getType('supplier_type')}]];
-        var paymentTypeData = [[${@dict.getType('payment_type')}]];
-        var transportTypeData = [[${@dict.getType('transport_type')}]];
+    var supplierTypeData = [[${@dict.getType('supplier_type')}]];
+    var paymentTypeData = [[${@dict.getType('payment_type')}]];
+    var transportTypeData = [[${@dict.getType('transport_type')}]];
 
 
 
-        var prefix = ctx + "fmis/data";
-        var dotoType = [[${todo}]];
-        if (dotoType == "1") {
-            $("#queryStatus").val("1");
-        }
-        $(function() {
-            var options = {
-                url: prefix + "/list",
-                createUrl: prefix + "/add",
-                updateUrl: prefix + "/edit/{id}",
-                removeUrl: prefix + "/remove",
-                exportUrl: prefix + "/export",
-                modalName: "合同管理",
-                uniqueId: "dataId",
-                columns: [{
-                    checkbox: true
-                },
+    var prefix = ctx + "fmis/data";
+    var dotoType = [[${todo}]];
+    if (dotoType == "1") {
+        $("#queryStatus").val("1");
+    }
+    $(function() {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "合同管理",
+            uniqueId: "dataId",
+            columns: [{
+                checkbox: true
+            },
                 {
-                    field : 'dataId', 
+                    field : 'dataId',
                     title : 'ID',
                     visible: false
                 },
@@ -164,16 +164,16 @@
                     field : 'string12',
                     title : '收货电话'
                 },
-                    {
-                        field : 'deptName',
-                        title : '归属部门'
-                    },
+                {
+                    field : 'deptName',
+                    title : '归属部门'
+                },
                 {
                     field : 'price1',
                     title : '总价'
                 },
 
-                    /**{
+                /**{
                         field : 'price2',
                         title : '毛利'
                     },**/
@@ -182,10 +182,10 @@
                     title : '状态',
                     align: 'center'
                 },
-                    {
-                        field : 'createByName',
-                        title : '责任人'
-                    },
+                {
+                    field : 'createByName',
+                    title : '责任人'
+                },
                 {
                     field : 'string20',
                     title : '合同文件|流传采购池',
@@ -203,8 +203,11 @@
                             if (!$.common.isEmpty(string20)) {
                                 string20 = fileUrlStart + string20;
                                 actions.push('<a class="btn btn-success btn-xs" target="_blank" href="' + string20 + '" ><i class="fa fa-edit"></i>查看</a>');
-                                if (createBy == loginUserId && string13 != 2 && string13 != 1) {
+                                if (createBy == loginUserId && string13 != 2 && string13 != 1 && string13 != 0) {
                                     actions.push('<a class="btn btn-success btn-xs"  href="#" onclick="goPool(' + dataId + ')" ><i class="fa fa-edit"></i>流转</a> ');
+                                }
+                                if (loginUserId == createBy && string13 == "0") {
+                                    actions.push('<a class="btn btn-success btn-xs"  href="#" onclick="uploadFile(' + dataId + ')" ><i class="fa fa-edit"></i>上传合同</a> ');
                                 }
                             } else {
                                 if (loginUserId == createBy) {
@@ -236,7 +239,7 @@
                             actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subReport(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 上报</a>');
                         } else if (flowStatus == normalFlag && createBy == loginUserId) {
                             //已完成
-                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewInventory(\'' + row.dataId + '\')"><i class="fa fa-edit"></i> 查看库存</a>');
+                            // actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewInventory(\'' + row.dataId + '\')"><i class="fa fa-edit"></i> 查看库存</a>');
                         } else if (operationExamineStatus == true || operationExamineStatus == "true") {
                             //审批
                             actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subExamine(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 审批</a>');
@@ -246,206 +249,206 @@
                         return actions.join('');
                     }
                 }]
-            };
-            $.table.init(options);
-        });
+        };
+        $.table.init(options);
+    });
 
-        function uploadFile (dataId) {
-            var url = prefix + "/upload?dataId=" + dataId;
-            $.modal.openNoEnter("上传合同", url,$(window).width() - 50,$(window).height() - 50,function(){
-                $.modal.closeAll();
-                $.table.refresh();
+    function uploadFile (dataId) {
+        var url = prefix + "/upload?dataId=" + dataId;
+        $.modal.openNoEnter("上传合同", url,$(window).width() - 50,$(window).height() - 50,function(){
+            $.modal.closeAll();
+            $.table.refresh();
+        });
+    }
+    function remove(id) {
+        if($.common.isEmpty(id)) {
+            var row = $('#bootstrap-table').bootstrapTable('getSelections')[0];
+            if ($.common.isEmpty(row)) {
+                $.modal.alertWarning("请至少选择一条记录");
+                return;
+            }
+
+            var rowss = $('#bootstrap-table').bootstrapTable('getSelections');
+            for (var i = 0; i < rowss.length; i++) {
+                row = rowss[i];
+                var flowStatus = row.flowStatus;
+                if (flowStatus > 0) {
+                    $.modal.alertWarning("已上报数据不能删除");
+                    return;
+                }
+            }
+            var rows = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
+            $.modal.confirm("确认要删除选中的" + rows.length + "条数据吗?", function() {
+                var url = $.table._option.removeUrl;
+                var data = { "ids": rows.join() };
+                $.operate.submit(url, "post", "json", data);
+            });
+        } else {
+            var row = $('#bootstrap-table').bootstrapTable("getRowByUniqueId",id);
+            if (row == null) {
+                row = $('#bootstrap-table').bootstrapTable('getSelections')[0];
+            }
+            if (row != null) {
+                var flowStatus = row.flowStatus;
+                if (flowStatus > 0) {
+                    $.modal.alertWarning("已上报数据不能删除");
+                    return;
+                }
+            }
+            $.modal.confirm("确定删除该条" + $.table._option.modalName + "信息吗？", function() {
+                var url = $.common.isEmpty(id) ? $.table._option.removeUrl : $.table._option.removeUrl.replace("{id}", id);
+                if($.table._option.type == table_type.bootstrapTreeTable) {
+                    $.operate.get(url);
+                } else {
+                    var data = { "ids": id };
+                    $.operate.submit(url, "post", "json", data);
+                }
             });
         }
-        function remove(id) {
-            if($.common.isEmpty(id)) {
-                var row = $('#bootstrap-table').bootstrapTable('getSelections')[0];
-                if ($.common.isEmpty(row)) {
-                    $.modal.alertWarning("请至少选择一条记录");
-                    return;
-                }
-
-                var rowss = $('#bootstrap-table').bootstrapTable('getSelections');
-                for (var i = 0; i < rowss.length; i++) {
-                    row = rowss[i];
-                    var flowStatus = row.flowStatus;
-                    if (flowStatus > 0) {
-                        $.modal.alertWarning("已上报数据不能删除");
-                        return;
-                    }
-                }
-                var rows = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
-                $.modal.confirm("确认要删除选中的" + rows.length + "条数据吗?", function() {
-                    var url = $.table._option.removeUrl;
-                    var data = { "ids": rows.join() };
-                    $.operate.submit(url, "post", "json", data);
-                });
-            } else {
-                var row = $('#bootstrap-table').bootstrapTable("getRowByUniqueId",id);
-                if (row == null) {
-                    row = $('#bootstrap-table').bootstrapTable('getSelections')[0];
-                }
-                if (row != null) {
-                    var flowStatus = row.flowStatus;
-                    if (flowStatus > 0) {
-                        $.modal.alertWarning("已上报数据不能删除");
-                        return;
-                    }
-                }
-                $.modal.confirm("确定删除该条" + $.table._option.modalName + "信息吗？", function() {
-                    var url = $.common.isEmpty(id) ? $.table._option.removeUrl : $.table._option.removeUrl.replace("{id}", id);
-                    if($.table._option.type == table_type.bootstrapTreeTable) {
-                        $.operate.get(url);
-                    } else {
-                        var data = { "ids": id };
-                        $.operate.submit(url, "post", "json", data);
-                    }
-                });
+    }
+    function add() {
+        var url = prefix + "/add";
+        $.modal.openFull("增加", url);
+    }
+    function edit(id) {
+        if($.common.isEmpty(id) && $.table._option.type == table_type.bootstrapTreeTable) {
+            var row = $.bttTable.bootstrapTreeTable('getSelections')[0];
+            if ($.common.isEmpty(row)) {
+                $.modal.alertWarning("请至少选择一条记录");
+                return;
             }
-        }
-        function add() {
-            var url = prefix + "/add";
-            $.modal.openFull("增加", url);
-        }
-        function edit(id) {
-            if($.common.isEmpty(id) && $.table._option.type == table_type.bootstrapTreeTable) {
-                var row = $.bttTable.bootstrapTreeTable('getSelections')[0];
-                if ($.common.isEmpty(row)) {
-                    $.modal.alertWarning("请至少选择一条记录");
-                    return;
-                }
+            var flowStatus = row.flowStatus;
+            if (flowStatus > 0) {
+                $.modal.alertWarning("已上报数据不能修改");
+                return;
+            }
+
+            var url = $.table._option.updateUrl.replace("{id}", row[$.table._option.uniqueId]);
+            $.modal.openFull("修改" + $.table._option.modalName, url);
+        } else {
+            var row = $('#bootstrap-table').bootstrapTable("getRowByUniqueId",id);
+            if (row == null) {
+                row = $('#bootstrap-table').bootstrapTable('getSelections')[0];
+            }
+            if (row != null) {
                 var flowStatus = row.flowStatus;
                 if (flowStatus > 0) {
                     $.modal.alertWarning("已上报数据不能修改");
                     return;
                 }
-
-                var url = $.table._option.updateUrl.replace("{id}", row[$.table._option.uniqueId]);
-                $.modal.openFull("修改" + $.table._option.modalName, url);
-            } else {
-                var row = $('#bootstrap-table').bootstrapTable("getRowByUniqueId",id);
-                if (row == null) {
-                    row = $('#bootstrap-table').bootstrapTable('getSelections')[0];
-                }
-                if (row != null) {
-                    var flowStatus = row.flowStatus;
-                    if (flowStatus > 0) {
-                        $.modal.alertWarning("已上报数据不能修改");
-                        return;
-                    }
-                }
-                $.modal.openFull("修改" + $.table._option.modalName, $.operate.editUrl(id));
             }
+            $.modal.openFull("修改" + $.table._option.modalName, $.operate.editUrl(id));
         }
-        function viewExamineHistory(dataId) {
-            var bizId = $("#bizId").val();
-            var url = prefix + "/viewExamineHistory?dataId=" + dataId + "&&bizId=" + bizId;
-            $.modal.openNoEnter("审批记录", url,'','',function(){
-                $.modal.closeAll();
+    }
+    function viewExamineHistory(dataId) {
+        var bizId = $("#bizId").val();
+        var url = prefix + "/viewExamineHistory?dataId=" + dataId + "&&bizId=" + bizId;
+        $.modal.openNoEnter("审批记录", url,'','',function(){
+            $.modal.closeAll();
+        });
+    }
+
+    function viewExamineDetail(dataId) {
+        var bizId = $("#bizId").val();
+        var url = prefix + "/viewDetail?dataId=" + dataId + "&&bizId=" + bizId;
+        $.modal.openNoEnter("详情", url,$(window).width(),$(window).height(),function(){
+            $.modal.closeAll();
+        });
+    }
+
+    function subExamine(dataId) {
+        var url = prefix + "/examineEdit?dataId=" + dataId;
+        $.modal.openFull("审批", url);
+    }
+
+    function viewInventory(dataId) {
+        var url = prefix + "/viewInventory?dataId=" + dataId;
+        $.modal.openFullBtnName("查看库存", url,null,null,"申请发货");
+    }
+
+    function subReport(dataId) {
+        $.modal.confirm("确定上报该条信息吗？", function() {
+            console.log(dataId + "--dataId");
+            var url = prefix + "/report?dataId=" + dataId;
+            $.operate.saveModal(url,'',function(){
+                $.table.refresh();
             });
+        });
+    }
+    function goPool(dataId) {
+        var row = $('#bootstrap-table').bootstrapTable("getRowByUniqueId",dataId);
+        var string20 = row.string20;//文件路径
+        if ($.common.isEmpty(string20)) {
+            $.modal.alertWarning("合同未上传不能流转至采购池！");
+            return;
         }
-
-        function viewExamineDetail(dataId) {
-            var bizId = $("#bizId").val();
-            var url = prefix + "/viewDetail?dataId=" + dataId + "&&bizId=" + bizId;
-            $.modal.openNoEnter("详情", url,$(window).width(),$(window).height(),function(){
-                $.modal.closeAll();
+        $.modal.confirm("确定流转该条信息吗？", function() {
+            console.log(dataId + "--dataId");
+            var url = prefix + "/goPool?dataId=" + dataId;
+            $.operate.saveModal(url,'',function(){
+                $.table.refresh();
             });
+        });
+    }
+
+    function exportPdf(formId) {
+
+        var row = $('#bootstrap-table').bootstrapTable('getSelections')[0];
+        var rows = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
+        if ($.common.isEmpty(row) || rows.length != 1) {
+            $.modal.alertWarning("请选择一条记录");
+            return;
         }
-
-        function subExamine(dataId) {
-            var url = prefix + "/examineEdit?dataId=" + dataId;
-            $.modal.openFull("审批", url);
+        var flowStatus = row.flowStatus;
+        var normalFlag = row.normalFlag;
+        if (flowStatus == "0" || flowStatus != normalFlag) {
+            $.modal.alertWarning("请等待审批结束后生成！");
+            return;
         }
-
-        function viewInventory(dataId) {
-            var url = prefix + "/viewInventory?dataId=" + dataId;
-            $.modal.openFullBtnName("查看库存", url,null,null,"申请发货");
-        }
-
-        function subReport(dataId) {
-            $.modal.confirm("确定上报该条信息吗？", function() {
-                console.log(dataId + "--dataId");
-                var url = prefix + "/report?dataId=" + dataId;
-                $.operate.saveModal(url,'',function(){
-                    $.table.refresh();
-                });
-            });
-        }
-        function goPool(dataId) {
-            var row = $('#bootstrap-table').bootstrapTable("getRowByUniqueId",dataId);
-            var string20 = row.string20;//文件路径
-            if ($.common.isEmpty(string20)) {
-                $.modal.alertWarning("合同未上传不能流转至采购池！");
-                return;
-            }
-            $.modal.confirm("确定流转该条信息吗？", function() {
-                console.log(dataId + "--dataId");
-                var url = prefix + "/goPool?dataId=" + dataId;
-                $.operate.saveModal(url,'',function(){
-                    $.table.refresh();
-                });
-            });
-        }
-
-        function exportPdf(formId) {
-
-            var row = $('#bootstrap-table').bootstrapTable('getSelections')[0];
-            var rows = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
-            if ($.common.isEmpty(row) || rows.length != 1) {
-                $.modal.alertWarning("请选择一条记录");
-                return;
-            }
-            var flowStatus = row.flowStatus;
-            var normalFlag = row.normalFlag;
-            /*if (flowStatus == "0" || flowStatus != normalFlag) {
-                $.modal.alertWarning("请等待审批结束后生成！");
-                return;
-            }*/
-            $.modal.confirm("确定生成合同吗？", function() {
-                var currentId = $.common.isEmpty(formId) ? $('form').attr('id') : formId;
-                console.log("currentId=" + currentId);
-                $.modal.loading("正在导出数据，请稍后...");
-                var paramsJson = $("#" + currentId).serializeArray();
-                paramsJson.push({"name": "dataId", "value": row.dataId});
-                $.post($.table._option.exportUrl, paramsJson, function(result) {
-                    if (result.code == web_status.SUCCESS) {
-                        window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;
-                    } else if (result.code == web_status.WARNING) {
-                        $.modal.alertWarning(result.msg)
-                    } else {
-                        $.modal.alertError(result.msg);
-                    }
-                    $.modal.closeLoading();
-                });
-            });
-        }
-
-        /**
-         * 预览报价单
-         * @param formId
-         */
-        function viewPdf(formId) {
-
-            var row = $('#bootstrap-table').bootstrapTable('getSelections')[0];
-            var rows = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
-            if ($.common.isEmpty(row) || rows.length != 1) {
-                $.modal.alertWarning("请选择一条记录");
-                return;
-            }
-
+        $.modal.confirm("确定生成合同吗？", function() {
             var currentId = $.common.isEmpty(formId) ? $('form').attr('id') : formId;
             console.log("currentId=" + currentId);
             $.modal.loading("正在导出数据，请稍后...");
             var paramsJson = $("#" + currentId).serializeArray();
             paramsJson.push({"name": "dataId", "value": row.dataId});
-            paramsJson.push({"name": "status", "value": "1"});
-            var viewUrl = prefix + "/viewPdf";
-            console.log(row.dataId + "--row.dataId");
-            window.open("../pdfjs/web/viewer.html?file="+ viewUrl + "?id%3D" + row.dataId);
-            $.modal.closeLoading();
+            $.post($.table._option.exportUrl, paramsJson, function(result) {
+                if (result.code == web_status.SUCCESS) {
+                    window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;
+                } else if (result.code == web_status.WARNING) {
+                    $.modal.alertWarning(result.msg)
+                } else {
+                    $.modal.alertError(result.msg);
+                }
+                $.modal.closeLoading();
+            });
+        });
+    }
+
+    /**
+     * 预览报价单
+     * @param formId
+     */
+    function viewPdf(formId) {
+
+        var row = $('#bootstrap-table').bootstrapTable('getSelections')[0];
+        var rows = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
+        if ($.common.isEmpty(row) || rows.length != 1) {
+            $.modal.alertWarning("请选择一条记录");
+            return;
         }
 
-    </script>
+        var currentId = $.common.isEmpty(formId) ? $('form').attr('id') : formId;
+        console.log("currentId=" + currentId);
+        $.modal.loading("正在导出数据，请稍后...");
+        var paramsJson = $("#" + currentId).serializeArray();
+        paramsJson.push({"name": "dataId", "value": row.dataId});
+        paramsJson.push({"name": "status", "value": "1"});
+        var viewUrl = prefix + "/viewPdf";
+        console.log(row.dataId + "--row.dataId");
+        window.open("../pdfjs/web/viewer.html?file="+ viewUrl + "?id%3D" + row.dataId);
+        $.modal.closeLoading();
+    }
+
+</script>
 </body>
 </html>

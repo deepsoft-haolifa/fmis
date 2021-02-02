@@ -1295,6 +1295,16 @@ public class BizProcessDataController extends BaseController {
         bizQuotation.setUpdateBy(ShiroUtils.getUserId().toString());
         return toAjax(bizProcessDataService.updateBizProcessData(bizQuotation));
     }
+    //回退到重新上传合同
+    @PostMapping("/unPoolLiu")
+    @ResponseBody
+    public AjaxResult unPoolLiu() {
+        String dataId = getRequest().getParameter("dataId");
+        BizProcessData bizQuotation = bizProcessDataService.selectBizProcessDataById(Long.parseLong(dataId));
+        bizQuotation.setString13("0");
+        bizQuotation.setUpdateBy(ShiroUtils.getUserId().toString());
+        return toAjax(bizProcessDataService.updateBizProcessData(bizQuotation));
+    }
     @PostMapping("/uploadUrl")
     @ResponseBody
     public AjaxResult uploadUrl() {
@@ -1302,6 +1312,8 @@ public class BizProcessDataController extends BaseController {
         String url = getRequest().getParameter("url");
         BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataById(Long.parseLong(dataId));
         bizProcessData.setString20(url);
+        //做为流转状态的标示
+        bizProcessData.setString13("4");
         return toAjax(bizProcessDataService.updateBizProcessData(bizProcessData));
     }
 

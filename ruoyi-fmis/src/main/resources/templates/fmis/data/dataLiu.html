@@ -196,10 +196,14 @@
                                 actions.push('<a class="btn btn-success btn-xs" target="_blank" href="' + string20 + '" ><i class="fa fa-edit"></i>查看</a>');
                                 if (string13 == 2) {
                                     actions.push('<a class="btn btn-success btn-xs"  href="#" onclick="goPool(' + dataId + ')" ><i class="fa fa-edit"></i>流转</a> ');
+                                    actions.push('<a class="btn btn-success btn-xs"  href="#" onclick="unPool(' + dataId + ')" ><i class="fa fa-edit"></i>回退</a> ');
                                 }
                             }
                             if (!$.common.isEmpty(string13) && (string13 == "1" || string13 == 1)) {
                                 actions.push('<span class=\'default\'>已审核</span>');
+                            }
+                            if (!$.common.isEmpty(string13) && (string13 == "0" || string13 == 0)) {
+                                actions.push('<span class=\'default\'>已回退</span>');
                             }
                         }
 
@@ -218,7 +222,15 @@
                 });
             });
         }
-
+        function unPool(dataId) {
+            $.modal.confirm("确定回退该条信息吗？", function() {
+                console.log(dataId + "--dataId");
+                var url = prefix + "/unPoolLiu?dataId=" + dataId;
+                $.operate.saveModal(url,'',function(){
+                    $.table.refresh();
+                });
+            });
+        }
         function exportPdf(formId) {
 
             var row = $('#bootstrap-table').bootstrapTable('getSelections')[0];
