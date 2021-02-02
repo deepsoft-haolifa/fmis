@@ -101,6 +101,7 @@
     // 设置费用科目的选择框
     var subjectList = $("#subjects").val();
     console.log(subjectList)
+    console.log($("#string6").val())
 
     function deptBudget() {
         var deptId = $("#string6").val();
@@ -112,6 +113,7 @@
             }
         });
     }
+    console.log(subjectList)
 
 
     function add() {
@@ -167,9 +169,8 @@
                     field: 'string2',
                     title: '费用科目',
                     visible: true,
-                    editable: true,
-                    // editable: {type: 'select', title: '费用科目', source: subjectList},
-                    width: 200
+                    // editable: true,
+                    editable: {type: 'select', title: '费用科目',source:subjectList, width: 200}
                 },
                 {field: 'remark', title: '摘要', editable: true, width: 200},
                 {

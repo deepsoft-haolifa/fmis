@@ -202,4 +202,9 @@ public class BizProcessChildServiceImpl implements IBizProcessChildService {
     public int deleteBizProcessChildByDataIds(String dataIds) {
         return bizProcessChildMapper.deleteBizProcessChildByDataIds(Convert.toStrArray(dataIds));
     }
+
+    @Override
+    public double selectPaymentedPrice(String subjectId, String deptId, String startDate, String endDate) {
+        return 0;
+    }
 }
