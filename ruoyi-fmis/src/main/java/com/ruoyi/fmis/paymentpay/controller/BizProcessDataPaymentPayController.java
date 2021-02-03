@@ -5,21 +5,27 @@ import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.fmis.child.domain.BizProcessChild;
 import com.ruoyi.fmis.child.service.IBizProcessChildService;
 import com.ruoyi.fmis.data.domain.BizProcessData;
 import com.ruoyi.fmis.data.service.IBizProcessDataService;
 import com.ruoyi.fmis.finance.domain.BizBankBill;
 import com.ruoyi.fmis.finance.domain.BizBill;
+import com.ruoyi.fmis.finance.domain.BizPayPlan;
 import com.ruoyi.fmis.finance.service.IBizBankBillService;
 import com.ruoyi.fmis.finance.service.IBizBillService;
+import com.ruoyi.fmis.paymentpay.bean.PaymentPayExportVo;
+import com.ruoyi.fmis.util.BeanUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -77,6 +83,17 @@ public class BizProcessDataPaymentPayController extends BaseController {
         return getDataTable(list);
     }
 
+    @RequiresPermissions("fmis:paymentpay:export")
+    @PostMapping("/export")
+    @ResponseBody
+    public AjaxResult export(BizProcessData bizProcessData) {
+        bizProcessData.setRoleType("0");
+        List<BizProcessData> list = bizProcessDataService.selectBizProcessDataListRefPayment(bizProcessData);
+        List<PaymentPayExportVo> exportList = BeanUtil.copyProperties(list, PaymentPayExportVo.class);
+        ExcelUtil<PaymentPayExportVo> util = new ExcelUtil<PaymentPayExportVo>(PaymentPayExportVo.class);
+        return util.exportExcel(exportList, "报销支付");
+    }
+
 
     @GetMapping("/viewDetail")
     public String viewDetail(ModelMap mmap) {
@@ -109,7 +126,6 @@ public class BizProcessDataPaymentPayController extends BaseController {
         mmap.put("bizProcessData", bizProcessData);
         return prefix + "/edit";
     }
-
 
 
     @RequiresPermissions("fmis:paymentpay:edit")
@@ -164,7 +180,6 @@ public class BizProcessDataPaymentPayController extends BaseController {
         mmap.put("bizProcessData", bizProcessData);
         return prefix + "/edit1";
     }
-
 
 
     @RequiresPermissions("fmis:paymentpay:edit")

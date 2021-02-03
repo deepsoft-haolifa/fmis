@@ -1,10 +1,7 @@
 package com.ruoyi.fmis.finance.service.impl;
 
 import com.ruoyi.fmis.finance.domain.BizBillContract;
-import com.ruoyi.fmis.finance.domain.vo.ReceivableReqVo;
-import com.ruoyi.fmis.finance.domain.vo.ReceivableRespVo;
-import com.ruoyi.fmis.finance.domain.vo.StandAccountReqVo;
-import com.ruoyi.fmis.finance.domain.vo.StandAccountRespVo;
+import com.ruoyi.fmis.finance.domain.vo.*;
 import com.ruoyi.fmis.finance.mapper.BizFinanceMapper;
 import com.ruoyi.fmis.finance.service.IBizBillContractService;
 import com.ruoyi.fmis.finance.service.IBizFinanceService;
@@ -33,7 +30,17 @@ public class BizReceivableServiceImpl implements IBizFinanceService {
     }
 
     @Override
+    public List<ReceivableSummaryRespVo> selectReceivableSummaryList(ReceivableReqVo reqVo) {
+        return null;
+    }
+
+    @Override
     public List<StandAccountRespVo> selectStandAccountList(StandAccountReqVo reqVo) {
         return bizFinanceMapper.selectStandAccountList(reqVo);
+    }
+
+    @Override
+    public List<StandAccountSummaryRespVo> selectStandAccountSummaryList(ReceivableReqVo reqVo) {
+        return null;
     }
 }

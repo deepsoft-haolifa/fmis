@@ -33,6 +33,11 @@
                 </div>
             </form>
         </div>
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="fmis:paymentpay:export">
+                <i class="fa fa-download"></i> 导出
+            </a>
+        </div>
         <div class="col-sm-12 select-table table-striped">
             <table id="bootstrap-table"></table>
         </div>
@@ -47,6 +52,7 @@
         var options = {
             url: prefix + "/list",
             updateUrl: prefix + "/edit/{id}",
+            exportUrl: prefix + "/export",
             uniqueId: "dataId",
             modalName: "报销管理",
             columns: [{

@@ -60,7 +60,10 @@
             </form>
         </div>
 
-<!--        <div class="btn-group-sm" id="toolbar" role="group">-->
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="finance:payPlan:export">
+                <i class="fa fa-download"></i> 导出
+            </a>
 <!--            <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="finance:payPlan:add">-->
 <!--                <i class="fa fa-plus"></i> 添加-->
 <!--            </a>-->
@@ -68,7 +71,8 @@
 <!--               shiro:hasPermission="finance:payPlan:edit">-->
 <!--                <i class="fa fa-edit"></i> 修改-->
 <!--            </a>-->
-<!--        </div>-->
+        </div>
+
         <div class="col-sm-12 select-table table-striped">
             <table id="bootstrap-table"></table>
         </div>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('应付汇总')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            <p>采购合同：</p>
+                            <input type="text" name="purchaseContractNo"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    var paymentTypeData = [[${@dict.getType('contract_paytype')}]];
+
+    var prefix = ctx + "finance/standAccount";
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            modalName: "财务挂账",
+            uniqueId: "purchaseContractId",
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'purchaseContractId',
+                    title: 'ID',
+                    visible: false
+                },
+                {
+                    field: 'chargeCompany',
+                    title: '结算单位'
+                },
+                {
+                    field: 'purchaseContractNo',
+                    title: '采购合同'
+                },
+                {
+                    field: 'deptName',
+                    title: '归属单位'
+                },
+                {
+                    field: 'supplierName',
+                    title: '供应商'
+                },
+
+                {
+                    field: 'deliveryDate',
+                    title: '交货日期'
+                },
+                {
+                    field: 'outDate',
+                    title: '发货日期'
+                },
+                {
+                    field: 'arrivalQty',
+                    title: '到货数量'
+                },
+                {
+                    field: 'arrivalAmount',
+                    title: '到货货款'
+                },
+                {
+                    field: 'paidAmount',
+                    title: '已付款额'
+                },
+                {
+                    field: 'payWay',
+                    title: '付款方式',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(paymentTypeData, value);
+                    }
+                },
+                {
+                    field: 'contractAmount',
+                    title: '合同金额'
+                },
+                {
+                    field: 'purchaseStatus',
+                    title: '合同状态',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        var remark = "未采购";
+                        if (value == "2") {
+                            remark = "审批中";
+                        } else if (value == "3") {
+                            remark = "采购中";
+                        } else if (value == "4") {
+                            remark = "已完成";
+                        } else if (value == "5") {
+                            remark = "已回票";
+                        } else if (value == "6") {
+                            remark = "已付款";
+                        }
+                        actions.push(remark);
+                        return actions.join('');
+                    }
+                },
+                {
+                    title: '操作',
+                    align: 'left',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewExamineDetail(\'' + row.purchaseContractId + '\')"><i class="fa fa-remove"></i> 合同详情 </a>');
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(options);
+    });
+
+    function viewExamineDetail(dataId) {
+        var url = ctx + "fmis/procurement/viewDetail?dataId=" + dataId;
+        $.modal.openNoEnter("详情", url, $(window).width(), $(window).height(), function () {
+            $.modal.closeAll();
+        });
+    }
+
+</script>
+</body>
+</html>

@@ -32,6 +32,7 @@ public class BizFinanceController extends BaseController {
     private IBizFinanceService bizFinanceService;
 
     @GetMapping("/receivable")
+    @RequiresPermissions("finance:receivable:view")
     public String receivable() {
         return prefix + "/receivable/receivable";
     }
@@ -48,8 +49,26 @@ public class BizFinanceController extends BaseController {
         return getDataTable(list);
     }
 
+    @GetMapping("/receivable/summary")
+    @RequiresPermissions("finance:receivable:summary:view")
+    public String receivableSummary() {
+        return prefix + "/receivable/receivableSummary";
+    }
+
+    /**
+     * 查询应收列表(销售合同列表)
+     */
+    @RequiresPermissions("finance:receivable:summary:list")
+    @PostMapping("/receivable/summary/list")
+    @ResponseBody
+    public TableDataInfo receivableSummaryList(ReceivableReqVo reqVo) {
+        startPage();
+        List<ReceivableRespVo> list = bizFinanceService.selectReceivableList(reqVo);
+        return getDataTable(list);
+    }
 
     @GetMapping("/standAccount")
+    @RequiresPermissions("finance:standAccount:view")
     public String standAccount() {
         return prefix + "/standAccount/standAccount";
     }
@@ -66,4 +85,21 @@ public class BizFinanceController extends BaseController {
         return getDataTable(list);
     }
 
+    @GetMapping("/standAccount/summary")
+    @RequiresPermissions("finance:standAccount:summary:view")
+    public String standAccountSummary() {
+        return prefix + "/standAccount/standAccountSummary";
+    }
+
+    /**
+     * 查询财务挂账(采购合同列表,到货数量大于0)
+     */
+    @RequiresPermissions("finance:standAccount:summary:list")
+    @PostMapping("/standAccount/summary/list")
+    @ResponseBody
+    public TableDataInfo standAccountSummaryList(StandAccountReqVo reqVo) {
+        startPage();
+        List<StandAccountRespVo> list = bizFinanceService.selectStandAccountList(reqVo);
+        return getDataTable(list);
+    }
 }
