@@ -1479,6 +1479,9 @@ public class BizProcessDataController extends BaseController {
                 cellSubtitle.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
                 tbSubtitle.addCell(cellSubtitle);
                 tbSubtitle.setHorizontalAlignment(Paragraph.ALIGN_CENTER);
+            } else {
+                paragraph = new Paragraph("生产单", titleFont);
+                paragraph.setAlignment(Paragraph.ALIGN_CENTER);
             }
 
 
@@ -1550,7 +1553,12 @@ public class BizProcessDataController extends BaseController {
 
             //第二行
             table.addCell(PdfUtil.mergeCol("买方：", 2,textFont));
-            table.addCell(PdfUtil.mergeCol(bizCustomer.getName(), 6,textFont));
+            if (!isSchengchan) {
+                table.addCell(PdfUtil.mergeCol(bizCustomer.getName(), 6,textFont));
+            } else {
+                table.addCell(PdfUtil.mergeCol(bizCustomer.getCodeName(), 6,textFont));
+            }
+
 
             table.addCell(PdfUtil.mergeCol("签订日期：", 2,textFont));
             table.addCell(PdfUtil.mergeCol(DateUtils.dateTime(bizProcessData.getCreateTime()), 5,textFont));
