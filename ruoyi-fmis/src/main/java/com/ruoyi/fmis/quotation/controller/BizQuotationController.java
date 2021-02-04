@@ -1326,18 +1326,19 @@ public class BizQuotationController extends BaseController {
                 if (StringUtils.isNotEmpty(specifications)) {
                     queryBizProduct.setSpecificationsName(specifications);
                 }
+                //改成系列
                 if (StringUtils.isNotEmpty(level)) {
-                    queryBizProduct.setString2(level);
+                    queryBizProduct.setSeries(level);
                 }
                 List<BizProduct> bizProductList = bizProductService.selectBizProductList(queryBizProduct);
                 if (!CollectionUtils.isEmpty(bizProductList)) {
-                    if (bizProductList.size() > 1) {
+                    /*if (bizProductList.size() > 1) {
                         JSONObject json = new JSONObject();
                         json.put("msg","第" + (i + 1) + "行 查询出多条数据！");
                         errorArray.add(json);
                         i++;
                         continue;
-                    }
+                    }*/
 
                     BizProduct bizProduct = bizProductList.get(0);
                     Long productId = bizProduct.getProductId();
