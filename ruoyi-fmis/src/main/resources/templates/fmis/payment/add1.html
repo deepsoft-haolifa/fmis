@@ -9,6 +9,7 @@
     <form class="form-horizontal m" id="form-data-add">
         <input type="hidden" name="bizId" value="payment"/>
         <input type="hidden" name="string1" value="2"/>
+        <input type="hidden" name="subjectList" value="[{value : 0,text : '正常'}, {value : 1,text : '停用'}]"/>
 
         <div class="form-group">
             <label class="col-sm-3 control-label">报销日期：</label>
@@ -79,7 +80,6 @@
         var treeId = $("#string6").val();
         var deptId = $.common.isEmpty(treeId) ? "100" : $("#string6").val();
         var url = ctx + "system/dept/selectDeptTree/" + deptId;
-        console.log(url)
         var options = {
             title: '选择部门',
             width: "380",
@@ -99,24 +99,32 @@
     }
 
     // 设置费用科目的选择框
-    var subjectList = $("#subjects").val();
-    console.log(subjectList)
-    console.log($("#string6").val())
-
     function deptBudget() {
         var deptId = $("#string6").val();
+        if ($.common.isEmpty(deptId)) {
+           return  $.modal.msgError("请先选择部门！");
+        }
         var url = ctx + "fmis/budget/selectByDeptId/" + deptId;
+        var subjectList = [];
+        $.ajaxSettings.async = false
         $.get(url, function (data) {
-            subjectList = [];
             for (var bud in data) {
-                subjectList.push({value: data[bud].subjectsId, text: data[bud].name});
+                var dictValue = data[bud].subjectsId;
+                var dictLabel = data[bud].name;
+                subjectList.push({value: dictValue, text: dictLabel});
             }
         });
+        return subjectList;
     }
-    console.log(subjectList)
+
+
 
 
     function add() {
+        var deptId = $("#string6").val();
+        if ($.common.isEmpty(deptId)) {
+            return  $.modal.msgError("请先选择部门！");
+        }
         var rowData = {
             childId: 0,
             datetime1: "",
@@ -170,7 +178,11 @@
                     title: '费用科目',
                     visible: true,
                     // editable: true,
-                    editable: {type: 'select', title: '费用科目',source:subjectList, width: 200}
+                    editable: {
+                        type: 'select', title: '费用科目', source: function () {
+                            return deptBudget();
+                        }, width: 200
+                    }
                 },
                 {field: 'remark', title: '摘要', editable: true, width: 200},
                 {

@@ -136,9 +136,9 @@ public class BizCostBudgetController extends BaseController {
     /**
      * 根据部门Id获取费用预算项目
      */
-    @PostMapping( "/selectByDeptId")
+    @GetMapping( "/selectByDeptId/{deptId}")
     @ResponseBody
-    public List<BizSubjects> selectByDeptId(Long deptId) {
+    public List<BizSubjects> selectByDeptId(@PathVariable("deptId") Long deptId) {
         return bizCostBudgetService.selectByDeptId(deptId);
     }
 }
