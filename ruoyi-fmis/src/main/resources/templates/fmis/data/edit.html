@@ -481,7 +481,9 @@
                     {field : 'productNum',title : '数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
                     {field : 'productPrice',title : '单价',editable: false},
                     {field : 'productCostPrice',title : '产品成本价',editable: false,visible: false},
+                    {field : 'contractPrice',title : '合同价',editable: false},
                     {field : 'totalPrice',title : '总价',editable: false},
+                    {field : 'totalPrice',title : '金额',editable: false},
                     {field : 'string14',title : '优惠',editable: {type: 'text',emptytext: '0',validate: function(v){ return numberValidate(v)}}},
                     {field : 'productCoefficient',title : '系数',editable: {type: 'text',emptytext: '0',validate: function(v){ return numberValidate(v)}}},
                     {field : 'actuatorId',title : 'actuatorId',visible: false},
@@ -902,8 +904,14 @@
                 field : "totalPrice",
                 value : totalSum
             };
+            var updateObj1 = {
+                index : row.rowId,
+                field : "contractPrice",
+                value : totalSum / productNum
+            };
             console.log("totalSum=" + totalSum);
             $.btTable.bootstrapTable("updateCell",updateObj);
+            $.btTable.bootstrapTable("updateCell",updateObj1);
             //$("#totalSum_" + productId).val(totalSum);
             return totalSum;
         }
