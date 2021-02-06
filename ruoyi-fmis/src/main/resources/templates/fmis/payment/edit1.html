@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:include="include :: header('修改报销')"/>
+    <th:block th:include="include :: header('修改费用报销')"/>
     <th:block th:include="include :: datetimepicker-css"/>
 </head>
 <body class="white-bg">
@@ -141,8 +141,10 @@
                     field: 'string2',
                     title: '费用科目',
                     visible: true,
-                    editable: true,
-                    // editable: {type: 'select', title: '费用科目', source: subjectList},
+                    // editable: true,
+                    editable: { type: 'select', title: '费用科目', source: function () {
+                            return deptBudget();
+                        }, width: 200},
                     width: 200
                 },
                 {field: 'remark', title: '摘要', editable: true, width: 200},
@@ -157,7 +159,24 @@
         };
         $.table.init(options);
     });
-
+    // 设置费用科目的选择框
+    function deptBudget() {
+        var deptId = $("#string6").val();
+        if ($.common.isEmpty(deptId)) {
+            return  $.modal.msgError("请先选择部门！");
+        }
+        var url = ctx + "fmis/budget/selectByDeptId/" + deptId;
+        var subjectList = [];
+        $.ajaxSettings.async = false
+        $.get(url, function (data) {
+            for (var bud in data) {
+                var dictValue = data[bud].subjectsId;
+                var dictLabel = data[bud].name;
+                subjectList.push({value: dictValue, text: dictLabel});
+            }
+        });
+        return subjectList;
+    }
 
     function removeRow(index) {
         console.log("index=" + index);

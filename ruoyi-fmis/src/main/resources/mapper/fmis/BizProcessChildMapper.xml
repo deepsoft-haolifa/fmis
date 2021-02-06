@@ -1133,4 +1133,9 @@
         </foreach>
     </delete>
 
+    <select id="selectPaymentedPrice" resultType="java.lang.Double">
+        select ifnull(sum(a.price1),0) from biz_process_child a left join biz_process_data b on a.data_id=b.data_id
+        where b.biz_id="payment" and b.string6=#{deptId} and a.string2=#{subjectId} and a.datetime1 between #{startDate} and #{endDate}
+    </select>
+
 </mapper>

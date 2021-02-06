@@ -1,6 +1,8 @@
 package com.ruoyi.fmis.child.mapper;
 
 import com.ruoyi.fmis.child.domain.BizProcessChild;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 
 /**
@@ -108,4 +110,6 @@ public interface BizProcessChildMapper {
      */
     public int deleteBizProcessChildByDataIds(String[] dataIds);
 
+
+    double selectPaymentedPrice(@Param("subjectId") String subjectId, @Param("deptId") String deptId, @Param("startDate") String startDate,@Param("endDate") String endDate);
 }

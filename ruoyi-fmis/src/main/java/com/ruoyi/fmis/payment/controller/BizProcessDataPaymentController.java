@@ -326,12 +326,17 @@ public class BizProcessDataPaymentController extends BaseController {
                     calendar.setTime(date);
                     int year = calendar.get(Calendar.YEAR);
                     int month = calendar.get(Calendar.MONTH) + 1;
+                    String monthStr = String.valueOf(month);
+                    if (month < 10) {
+                        monthStr = "0" + month;
+                    }
                     // 判断此科目的费用是否够
+                    String finalMonthStr = monthStr;
                     List<BizCostBudget> bizCostBudgets = bizCostBudgetService.selectBizCostBudgetList(new BizCostBudget() {{
                         setDeptId(Long.parseLong(bizProcessData.getString6()));
                         setSubjectsId(Long.parseLong(subjectId));
                         setY(String.valueOf(year));
-                        setM(String.valueOf(month));
+                        setM(finalMonthStr);
                     }});
                     double totalAmount = bizCostBudgets.stream().mapToDouble(BizCostBudget::getAmount).sum();
                     // 获取已经报销的费用
@@ -500,8 +505,11 @@ public class BizProcessDataPaymentController extends BaseController {
     @Log(title = "报销管理", businessType = BusinessType.DELETE)
     @PostMapping("/remove")
     @ResponseBody
+    @Transactional(rollbackFor = Exception.class)
     public AjaxResult remove(String ids) {
-        return toAjax(bizProcessDataService.deleteBizProcessDataByIds(ids));
+        int i = bizProcessDataService.deleteBizProcessDataByIds(ids);
+        bizProcessChildService.deleteBizProcessChildByDataIds(ids);
+        return toAjax(i);
     }
 
     @PostMapping("/report")

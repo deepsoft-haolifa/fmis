@@ -205,6 +205,6 @@ public class BizProcessChildServiceImpl implements IBizProcessChildService {
 
     @Override
     public double selectPaymentedPrice(String subjectId, String deptId, String startDate, String endDate) {
-        return 0;
+        return bizProcessChildMapper.selectPaymentedPrice(subjectId,deptId,startDate,endDate);
     }
 }
