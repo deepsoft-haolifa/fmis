@@ -515,6 +515,7 @@ initChildProductTable = function(index, row, $detail) {
 
             {field : 'productName',title : '产品名称',editable: false},
             {field : 'model',title : '型号',editable: false},
+            {field : 'nominalPressure',title : '系列',editable: false},
             {field : 'productNum',title : '数量',editable: {type: 'text',validate: function(v,r){ return numberValidate(v)}}},
             {field : 'productProcurementPrice',title : '采购价',editable: false},
             {field : 'totalPrice',title : '分项金额',editable: false,formatter: function(value, row, index) {
