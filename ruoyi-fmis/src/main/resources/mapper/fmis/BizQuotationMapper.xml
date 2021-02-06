@@ -68,10 +68,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectBizQuotationList" parameterType="BizQuotation" resultMap="BizQuotationResult">
         <include refid="selectBizQuotationVo"/>
         <where>  
-            <if test="freight != null "> and freight = #{freight}</if>
-            <if test="string1 != null "> and string1 = #{string1}</if>
-            <if test="string2 != null "> and string2 = #{string2}</if>
-            <if test="noLoginId != null"> and create_by != #{noLoginId}</if>
+            <if test="freight != null and freight != ''"> and freight = #{freight}</if>
+            <if test="string1 != null and string1 != ''"> and string1 = #{string1}</if>
+            <if test="string2 != null and string2 != ''"> and string2 = #{string2}</if>
+            <if test="noLoginId != null and noLoginId != ''"> and create_by != #{noLoginId}</if>
         </where>
     </select>
 
@@ -98,12 +98,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectBizQuotationFlowVo"/>
         <where>
             1=1
-            <if test="quotationId != null"> and q.quotation_id = #{quotationId}</if>
+            <if test="quotationId != null and quotationId != ''"> and q.quotation_id = #{quotationId}</if>
 
-            <if test="string1 != null"> and q.string1 like concat('%', #{string1}, '%')</if>
-            <if test="customerName != null"> and ct.name like concat('%', #{customerName}, '%')</if>
-            <if test="customerId != null"> and ct.customer_id = #{customerId}</if>
-            <if test="createBy != null"> and u.user_name like concat('%', #{createBy}, '%')</if>
+            <if test="string1 != null and string1 != ''"> and q.string1 like concat('%', #{string1}, '%')</if>
+            <if test="customerName != null and customerName != ''"> and ct.name like concat('%', #{customerName}, '%')</if>
+            <if test="customerId != null and customerId != ''"> and ct.customer_id = #{customerId}</if>
+            <if test="createBy != null and createBy != ''"> and u.user_name like concat('%', #{createBy}, '%')</if>
 
 
             <!-- 查找审核完成的 -->
@@ -178,8 +178,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
             </if>
         </where>
-        <if test="string6 == 3">
-            or (q.`create_by` = #{string20} and q.flow_status=q.normal_flag)
+        <if test="string6 == 3 and customerName != null and customerName != ''">
+            or (q.`create_by` = #{string20} and q.flow_status=q.normal_flag and  ct.name like concat('%', #{customerName}, '%'))
         </if>
         <if test="string6 != 3">
             or q.`create_by` = #{string20}

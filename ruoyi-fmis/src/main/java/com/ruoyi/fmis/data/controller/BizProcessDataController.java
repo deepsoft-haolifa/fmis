@@ -1896,13 +1896,33 @@ public class BizProcessDataController extends BaseController {
 
                 } else if ("3".equals(string18)) {
                     //协议付款
-                    payRemark += " : 预付" + StringUtils.getDoubleString0(bizProcessData.getPrice5()) + " % ";
-                    payRemark += "发货前付款" + StringUtils.getDoubleString0(bizProcessData.getPrice6()) + " % ";
-                    payRemark += "货到" + StringUtils.getDoubleString0(bizProcessData.getPrice7()) + " 天付 ";
-                    payRemark += StringUtils.getDoubleString0(bizProcessData.getPrice8()) + " % ";
-                    payRemark += "安装调试" + StringUtils.getDoubleString0(bizProcessData.getPrice9()) + " 天 ";
-                    payRemark += "付" + StringUtils.getDoubleString0(bizProcessData.getPrice10()) + " % ";
-                    payRemark += "质保金" + StringUtils.getDoubleString0(bizProcessData.getPrice11()) + " % ";
+                    if (bizProcessData.getPrice5() != null) {
+                        payRemark += " : 预付" + StringUtils.getDoubleString0(bizProcessData.getPrice5() != null ?bizProcessData.getPrice5() : 0) + " % ";
+                    }
+                    if (bizProcessData.getPrice6() != null) {
+                        payRemark += "发货前付款" + StringUtils.getDoubleString0(bizProcessData.getPrice6() != null ?bizProcessData.getPrice6() : 0) + " % ";
+                    }
+                    if (bizProcessData.getPrice7() != null) {
+                        payRemark += "货到" + StringUtils.getDoubleString0(bizProcessData.getPrice7() != null ?bizProcessData.getPrice7() : 0) + " 天付 ";
+
+                    }
+                    if (bizProcessData.getPrice8() != null) {
+                        payRemark += StringUtils.getDoubleString0(bizProcessData.getPrice8() != null ?bizProcessData.getPrice8() : 0) + " % ";
+
+                    }
+                    if (bizProcessData.getPrice9() != null) {
+                        payRemark += "安装调试" + StringUtils.getDoubleString0(bizProcessData.getPrice9() != null ?bizProcessData.getPrice9() : 0) + " 天 ";
+
+                    }
+                    if (bizProcessData.getPrice10() != null) {
+                        payRemark += "付" + StringUtils.getDoubleString0(bizProcessData.getPrice10() != null ?bizProcessData.getPrice10() : 0) + " % ";
+
+                    }
+                    if (bizProcessData.getPrice11() != null) {
+                        payRemark += "质保金" + StringUtils.getDoubleString0(bizProcessData.getPrice11() != null ?bizProcessData.getPrice11() : 0) + " % ";
+                    }
+
+
                 }
             }
 
