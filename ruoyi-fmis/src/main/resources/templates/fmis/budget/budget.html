@@ -3,6 +3,8 @@
 <head>
     <th:block th:include="include :: header('费用预算列表')"/>
     <th:block th:include="include :: datetimepicker-css" />
+    <th:block th:include="include :: bootstrap-select-css" />
+
 </head>
 <body class="gray-bg">
 <div class="container-div">
@@ -23,13 +25,18 @@
                             <p>月：</p>
                             <input name="m" class="form-control" placeholder="MM" type="text">
                         </li>
-                        <li>
-                            <p>费用科目：</p>
-                            <select name="subjectsId" id="subjectsId" class="form-control select2-multiple"> <!--multiple-->
-                                <option value="">请选择</option>
-                                <option th:each="subject:${subjects}" th:value="${subject.subjectsId}" th:text="${subject.name}"></option>
-                            </select>
-                        </li>
+                        <li class="select-selectpicker">
+                            <label>费用科目： </label><select name="subjectsId" id="subjectsId"  class="selectpicker" data-none-selected-text="请选择" multiple>
+                            <option value="">全部</option>
+                            <option th:each="subject:${subjects}" th:value="${subject.subjectsId}" th:text="${subject.name}"></option>
+                        </select>
+<!--                        <li>-->
+<!--                            <p>费用科目：</p>-->
+<!--                            <select name="subjectsId" id="subjectsId" class="form-control select2-multiple"> &lt;!&ndash;multiple&ndash;&gt;-->
+<!--                                <option value="">请选择</option>-->
+<!--                                <option th:each="subject:${subjects}" th:value="${subject.subjectsId}" th:text="${subject.name}"></option>-->
+<!--                            </select>-->
+<!--                        </li>-->
                         <li>
                             <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
                                     class="fa fa-search"></i>&nbsp;搜索</a>
@@ -61,6 +68,7 @@
 </div>
 <th:block th:include="include :: footer"/>
 <th:block th:include="include :: datetimepicker-js" />
+<th:block th:include="include :: bootstrap-select-js" />
 
 <script th:inline="javascript">
     var editFlag = [[${@permission.hasPermi('fmis:budget:edit')}]];

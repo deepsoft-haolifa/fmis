@@ -51,19 +51,21 @@
         u.user_name as createByName,s.name as subjectsName
         from biz_cost_budget b
         left join sys_dept d on d.dept_id = b.dept_id
-        left join sys_user u on u.user_id=b.create_by
+         left join sys_user u on u.user_id=d.create_by
         left join biz_subjects s on s.subjects_id=b.subjects_id
     </sql>
 
     <select id="selectBizCostBudgetList" parameterType="BizCostBudget" resultMap="BizCostBudgetResult">
         <include refid="selectBizCostBudgetVo"/>
         <where>
-            <if test="name != null  and name != ''">and name like concat('%', #{name}, '%')</if>
+            <if test="name != null  and name != ''">and s.name like concat('%', #{name}, '%')</if>
             <if test="y != null  and y != ''">and y=#{y}</if>
             <if test="m != null  and m != ''">and m=#{m}</if>
             <if test="subjectsId != null  and subjectsId != ''">and b.subjects_id=#{subjectsId}</if>
             <if test="amount != null ">and amount = #{amount}</if>
             <if test="deptId != null ">and b.dept_id = #{deptId}</if>
+            <!-- 数据范围过滤 -->
+            ${params.dataScope}
         </where>
     </select>
 

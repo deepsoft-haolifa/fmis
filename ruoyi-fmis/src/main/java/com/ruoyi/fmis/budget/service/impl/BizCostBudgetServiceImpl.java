@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.ruoyi.common.annotation.DataScope;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.fmis.subjects.domain.BizSubjects;
 import com.ruoyi.fmis.subjects.service.IBizSubjectsService;
@@ -46,10 +47,10 @@ public class BizCostBudgetServiceImpl implements IBizCostBudgetService {
      * @return 费用预算
      */
     @Override
+    @DataScope(deptAlias = "b", userAlias = "u")
     public List<BizCostBudget> selectBizCostBudgetList(BizCostBudget bizCostBudget) {
         return bizCostBudgetMapper.selectBizCostBudgetList(bizCostBudget);
     }
-
     /**
      * 新增费用预算
      *
