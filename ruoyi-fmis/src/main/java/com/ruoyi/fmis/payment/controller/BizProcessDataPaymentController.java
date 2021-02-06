@@ -1,50 +1,39 @@
 package com.ruoyi.fmis.payment.controller;
 
-import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.stream.Collectors;
-
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.ruoyi.common.annotation.Log;
+import com.ruoyi.common.core.controller.BaseController;
+import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.core.page.TableDataInfo;
+import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.fmis.budget.domain.BizCostBudget;
 import com.ruoyi.fmis.budget.service.IBizCostBudgetService;
 import com.ruoyi.fmis.child.domain.BizProcessChild;
 import com.ruoyi.fmis.child.service.IBizProcessChildService;
-import com.ruoyi.fmis.common.BizConstants;
 import com.ruoyi.fmis.common.CommonUtils;
-import com.ruoyi.fmis.customer.service.IBizCustomerService;
+import com.ruoyi.fmis.data.domain.BizProcessData;
+import com.ruoyi.fmis.data.service.IBizProcessDataService;
 import com.ruoyi.fmis.define.service.IBizProcessDefineService;
-import com.ruoyi.fmis.product.domain.BizProduct;
-import com.ruoyi.fmis.product.service.IBizProductService;
 import com.ruoyi.fmis.subjects.domain.BizSubjects;
 import com.ruoyi.fmis.subjects.service.IBizSubjectsService;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysRole;
-import com.ruoyi.system.service.ISysRoleService;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import com.ruoyi.common.annotation.Log;
-import com.ruoyi.common.enums.BusinessType;
-import com.ruoyi.fmis.data.domain.BizProcessData;
-import com.ruoyi.fmis.data.service.IBizProcessDataService;
-import com.ruoyi.common.core.controller.BaseController;
-import com.ruoyi.common.core.domain.AjaxResult;
-import com.ruoyi.common.utils.poi.ExcelUtil;
-import com.ruoyi.common.core.page.TableDataInfo;
+import org.springframework.web.bind.annotation.*;
+
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 费用报销-申请
@@ -329,6 +318,10 @@ public class BizProcessDataPaymentController extends BaseController {
                     if (date == null || StringUtils.isEmpty(subjectId)) {
                         return error("报销项日期/科目 是必填项");
                     }
+                    // 根据id查询费用科目的名称
+                    BizSubjects bizSubjects = bizSubjectsService.selectBizSubjectsById(Long.valueOf(subjectId));
+                    bizProcessChild.setString3(bizSubjects.getName());
+
                     Calendar calendar = Calendar.getInstance();
                     calendar.setTime(date);
                     int year = calendar.get(Calendar.YEAR);
@@ -371,24 +364,6 @@ public class BizProcessDataPaymentController extends BaseController {
             }
         }
         return toAjax(insertReturn);
-    }
-
-    public static void main(String[] args) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date());
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH) + 1;
-        calendar.add(Calendar.MONTH, 0);
-        calendar.set(Calendar.DAY_OF_MONTH, 1);
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        String firstDay = format.format(calendar.getTime());
-        calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
-        String lastDay = format.format(calendar.getTime());
-
-        System.out.println(year);
-        System.out.println(month);
-        System.out.println(firstDay);
-        System.out.println(lastDay);
     }
 
     /**
