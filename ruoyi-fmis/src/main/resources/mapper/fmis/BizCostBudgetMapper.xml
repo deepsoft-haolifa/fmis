@@ -63,6 +63,7 @@
             <if test="m != null  and m != ''">and m=#{m}</if>
             <if test="subjectsId != null  and subjectsId != ''">and b.subjects_id=#{subjectsId}</if>
             <if test="amount != null ">and amount = #{amount}</if>
+            <if test="deptId != null ">and b.dept_id = #{deptId}</if>
         </where>
     </select>
 
