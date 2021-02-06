@@ -233,46 +233,46 @@
                             //角色=销售经理  状态=销售员上报
                             console.log("-1");
                             actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subExamine(\'' + row.quotationId + '\')"><i class="fa fa-remove"></i> 审批</a>');
-                            if (flowStatus != "0" && flowStatus == normalFlag) {
+                            /*if (flowStatus != "0" && flowStatus == normalFlag) {
                                 //已完成
-                            } else {
+                            } else if (loginId == createBy) {
                                 actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="edit(\'' + row.quotationId + '\')"><i class="fa fa-edit"></i> 编辑</a>');
                                 actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="remove(\'' + row.quotationId + '\')"><i class="fa fa-remove"></i> 删除</a>');
                                 actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subReport(\'' + row.quotationId + '\')"><i class="fa fa-remove"></i> 上报</a>');
-                            }
+                            }*/
                         }  else if (roleType == "3" && flowStatus == "2"  && normalFlag != flowStatus) {
                             //角色=区域经理  状态=销售经理同意
                             console.log("-2");
                             actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subExamine(\'' + row.quotationId + '\')"><i class="fa fa-remove"></i> 审批</a>');
-                            if (flowStatus != "0" && flowStatus == normalFlag) {
+                            /*if (flowStatus != "0" && flowStatus == normalFlag) {
                                 //已完成
-                            } else {
+                            } else if (loginId == createBy){
                                 actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="edit(\'' + row.quotationId + '\')"><i class="fa fa-edit"></i> 编辑</a>');
                                 actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="remove(\'' + row.quotationId + '\')"><i class="fa fa-remove"></i> 删除</a>');
                                 actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subReport(\'' + row.quotationId + '\')"><i class="fa fa-remove"></i> 上报</a>');
-                            }
+                            }*/
                         }  else if (roleType == "4" && flowStatus == "3"  && normalFlag != flowStatus) {
                             //角色=副总  状态=区域经理同意
                             console.log("-3");
                             actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subExamine(\'' + row.quotationId + '\')"><i class="fa fa-remove"></i> 审批</a>');
-                            if (flowStatus != "0" && flowStatus == normalFlag) {
+                           /* if (flowStatus != "0" && flowStatus == normalFlag) {
                                 //已完成
-                            } else {
+                            } else if (loginId == createBy){
                                 actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="edit(\'' + row.quotationId + '\')"><i class="fa fa-edit"></i> 编辑</a>');
                                 actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="remove(\'' + row.quotationId + '\')"><i class="fa fa-remove"></i> 删除</a>');
                                 actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subReport(\'' + row.quotationId + '\')"><i class="fa fa-remove"></i> 上报</a>');
-                            }
+                            }*/
                         } else if (roleType == "5" && flowStatus == "4" && normalFlag != flowStatus) {
                             //角色=老总  状态=区域经理同意
                             console.log("-4");
                             actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subExamine(\'' + row.quotationId + '\')"><i class="fa fa-remove"></i> 审批</a>');
-                            if (flowStatus != "0" && flowStatus == normalFlag) {
+                            /*if (flowStatus != "0" && flowStatus == normalFlag) {
                                 //已完成
-                            } else {
+                            } else if (loginId == createBy){
                                 actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="edit(\'' + row.quotationId + '\')"><i class="fa fa-edit"></i> 编辑</a>');
                                 actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="remove(\'' + row.quotationId + '\')"><i class="fa fa-remove"></i> 删除</a>');
                                 actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subReport(\'' + row.quotationId + '\')"><i class="fa fa-remove"></i> 上报</a>');
-                            }
+                            }*/
                         }
                         //查看审批历史 待做
                         actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewExamine(\'' + row.quotationId + '\')"><i class="fa fa-remove"></i> 审批记录 </a>');

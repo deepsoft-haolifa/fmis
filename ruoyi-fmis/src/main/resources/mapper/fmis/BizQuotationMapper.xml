@@ -178,7 +178,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
             </if>
         </where>
-        or q.`create_by` = #{string20}
+        <if test="string6 == 3">
+            or (q.`create_by` = #{string20} and q.flow_status=q.normal_flag)
+        </if>
+        <if test="string6 != 3">
+            or q.`create_by` = #{string20}
+        </if>
+
         order by q.create_time desc
     </select>
 
