@@ -36,8 +36,7 @@
 
             <label class="col-sm-1 control-label">供方：</label>
             <div class="col-sm-2">
-                <select name="string3" id="string3" class="form-control m-b" th:with="type=${@dict.getType('supplier_type')}">
-                    <option value="0">请选择</option>
+                <select name="string3" id="string3" class="form-control m-b" th:with="type=${@dict.getType('supplier_type')}" required>
                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                 </select>
                 <!--
@@ -49,7 +48,7 @@
         <div class="form-group" style="margin-bottom: 7px">
             <label class="col-sm-1 control-label">签订地点：</label>
             <div class="col-sm-2">
-                <input name="string4" class="form-control" type="text">
+                <input name="string4" class="form-control" type="text" required>
             </div>
             <label class="col-sm-1 control-label">含发票：</label>
             <div class="col-sm-2">
@@ -59,14 +58,13 @@
             <div class="col-sm-2">
                 <div class="input-group date">
                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                    <input name="string6" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    <input name="string6" class="form-control" placeholder="yyyy-MM-dd" type="text" required>
                 </div>
             </div>
 
             <label class="col-sm-1 control-label">配送方式：</label>
             <div class="col-sm-2">
-                <select name="string7" id="string7" class="form-control m-b" th:with="type=${@dict.getType('transport_type')}">
-                    <option value="0">请选择</option>
+                <select name="string7" id="string7" class="form-control m-b" th:with="type=${@dict.getType('transport_type')}" required>
                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                 </select>
 
@@ -77,20 +75,20 @@
 
             <label class="col-sm-1 control-label">收货电话：</label>
             <div class="col-sm-2">
-                <input name="string12" class="form-control" type="text">
+                <input name="string12" class="form-control" type="text" required>
             </div>
 
             <label class="col-sm-1 control-label">交货地点：</label>
             <div class="col-sm-2">
-                <input name="string9" class="form-control" type="text">
+                <input name="string9" class="form-control" type="text" required>
             </div>
             <label class="col-sm-1 control-label">运费承担：</label>
             <div class="col-sm-2">
-                <input name="string10" class="form-control" type="text">
+                <input name="string10" class="form-control" type="text" required>
             </div>
             <label class="col-sm-1 control-label">收货人：</label>
             <div class="col-sm-2">
-                <input name="string11" class="form-control" type="text">
+                <input name="string11" class="form-control" type="text" required>
             </div>
         </div>
 
@@ -99,7 +97,6 @@
             <label class="col-sm-1 control-label">付款方式：</label>
             <div class="col-sm-2">
                 <select name="string18" id="string18" class="form-control m-b" th:with="type=${@dict.getType('payment_type')}">
-                    <option value="0">请选择</option>
                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                 </select>
             </div>
@@ -158,8 +155,8 @@
             </div>
             <label class="col-sm-1 control-label">产品标识：</label>
             <div class="col-sm-2">
-                <select name="string19" id="string19" class="form-control m-b" th:with="type=${@dict.getType('product_logo')}">
-                    <option value="0">请选择</option>
+                <select name="string19" id="string19" class="form-control m-b" th:with="type=${@dict.getType('product_logo')}" required>
+                    <!--<option value="0">请选择</option>-->
                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                 </select>
             </div>
@@ -172,7 +169,7 @@
             </div>
             <label class="col-sm-1 control-label">特殊费用：</label>
             <div class="col-sm-2">
-                <input name="string14" id="string14"  onblur="calculateTotalPrice()" onkeyup="AmountKeyUp(this)" class="form-control" type="text">
+                <input name="string14" id="string14"  onblur="calculateTotalPrice()" onkeyup="AmountKeyUp(this)" class="form-control" type="text" number>
             </div>
 
         </div>
@@ -181,11 +178,11 @@
         <div class="form-group" style="margin-bottom: 7px">
             <label class="col-sm-1 control-label">交货周期：</label>
             <div class="col-sm-2">
-                <input name="string24" id="string24" class="form-control" type="text" >
+                <input name="string24" id="string24" class="form-control" type="text" required >
             </div>
             <label class="col-sm-1 control-label">质保期：</label>
             <div class="col-sm-2 form-inline">
-                <input name="string26" id="string26" style="width: 80px" class="form-control" type="text" onkeyup="AmountKeyUp(this)">月
+                <input name="string26" id="string26" style="width: 80px" class="form-control" type="text" onkeyup="AmountKeyUp(this)" required>月
             </div>
             <label class="col-sm-1 control-label">合计数量：</label>
             <div class="col-sm-2">
