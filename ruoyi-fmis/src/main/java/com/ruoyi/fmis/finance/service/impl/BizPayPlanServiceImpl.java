@@ -32,6 +32,11 @@ public class BizPayPlanServiceImpl implements IBizPayPlanService {
         return bizPayPlanMapper.selectBizPayPlanById(payPlanId);
     }
 
+    @Override
+    public List<BizPayPlan> selectBizPayPlanByIds(String[] ids) {
+        return bizPayPlanMapper.selectBizPayPlanByIds(ids);
+    }
+
     /**
      * 查询付款计划（基于付款申请记录）列表
      *
@@ -90,5 +95,10 @@ public class BizPayPlanServiceImpl implements IBizPayPlanService {
     @Override
     public int deleteBizPayPlanById(Long payPlanId) {
         return bizPayPlanMapper.deleteBizPayPlanById(payPlanId);
+    }
+
+    @Override
+    public int updateDateStatus(String ids, String dataStatus) {
+        return bizPayPlanMapper.updateDataStatus(Convert.toStrArray(ids),dataStatus);
     }
 }

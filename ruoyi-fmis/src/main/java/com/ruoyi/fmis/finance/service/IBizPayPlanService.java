@@ -18,6 +18,8 @@ public interface IBizPayPlanService {
      */
     public BizPayPlan selectBizPayPlanById(Long payPlanId);
 
+    public List<BizPayPlan> selectBizPayPlanByIds(String[] ids);
+
     /**
      * 查询付款计划（基于付款申请记录）列表
      *
@@ -57,4 +59,6 @@ public interface IBizPayPlanService {
      * @return 结果
      */
     public int deleteBizPayPlanById(Long payPlanId);
+
+    int updateDateStatus(String ids,String dataStatus);
 }

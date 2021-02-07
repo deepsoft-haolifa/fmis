@@ -16,9 +16,11 @@
                         </li>
                         <li class="select-time">
                             <p>申请日期：</p>
-                            <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginApplyDate]"/>
+                            <input type="text" class="time-input" id="startTime" placeholder="开始时间"
+                                   name="params[beginApplyDate]"/>
                             <span>-</span>
-                            <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endApplyDate]"/>
+                            <input type="text" class="time-input" id="endTime" placeholder="结束时间"
+                                   name="params[endApplyDate]"/>
                         </li>
                         <li>
                             <p>合同号：</p>
@@ -64,13 +66,13 @@
             <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="finance:payPlan:export">
                 <i class="fa fa-download"></i> 导出
             </a>
-<!--            <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="finance:payPlan:add">-->
-<!--                <i class="fa fa-plus"></i> 添加-->
-<!--            </a>-->
-<!--            <a class="btn btn-primary single disabled" onclick="$.operate.edit()"-->
-<!--               shiro:hasPermission="finance:payPlan:edit">-->
-<!--                <i class="fa fa-edit"></i> 修改-->
-<!--            </a>-->
+            <a class="btn btn-success" onclick="confirm()" shiro:hasPermission="finance:payPlan:confirm">
+                <i class="fa fa-plus"></i> 确认
+            </a>
+            <!--            <a class="btn btn-primary single disabled" onclick="$.operate.edit()"-->
+            <!--               shiro:hasPermission="finance:payPlan:edit">-->
+            <!--                <i class="fa fa-edit"></i> 修改-->
+            <!--            </a>-->
         </div>
 
         <div class="col-sm-12 select-table table-striped">
@@ -172,6 +174,19 @@
         };
         $.table.init(options);
     });
+
+    function confirm() {
+        var rows = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
+        if (rows.length == 0) {
+            $.modal.alertWarning("请至少选择一条记录");
+            return;
+        }
+        $.modal.confirm("确认要付款选中的" + rows.length + "条数据吗?", function () {
+            var url = prefix + "/confirm";
+            var data = {"ids": rows.join()};
+            $.operate.submit(url, "post", "json", data);
+        });
+    }
 </script>
 </body>
 </html>

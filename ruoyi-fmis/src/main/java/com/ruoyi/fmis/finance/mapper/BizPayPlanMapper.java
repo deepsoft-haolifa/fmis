@@ -1,6 +1,8 @@
 package com.ruoyi.fmis.finance.mapper;
 
 import com.ruoyi.fmis.finance.domain.BizPayPlan;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 
 /**
@@ -17,6 +19,8 @@ public interface BizPayPlanMapper {
      * @return 付款计划（基于付款申请记录）
      */
     public BizPayPlan selectBizPayPlanById(Long payPlanId);
+
+    public List<BizPayPlan> selectBizPayPlanByIds(String[] payPlanIds);
 
     /**
      * 查询付款计划（基于付款申请记录）列表
@@ -57,4 +61,7 @@ public interface BizPayPlanMapper {
      * @return 结果
      */
     public int deleteBizPayPlanByIds(String[] payPlanIds);
+
+
+    public int updateDataStatus(@Param("payPlanIds") String[] payPlanIds, @Param("dataStatus") String dataStatus);
 }

@@ -2,15 +2,23 @@ package com.ruoyi.fmis.finance.controller;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.fmis.data.domain.BizProcessData;
 import com.ruoyi.fmis.data.service.IBizProcessDataService;
 import com.ruoyi.fmis.finance.domain.BizBankBill;
 import com.ruoyi.fmis.finance.domain.BizBill;
 import com.ruoyi.fmis.finance.service.IBizBankBillService;
 import com.ruoyi.fmis.finance.service.IBizBillService;
+import com.ruoyi.fmis.util.RoleEnum;
 import com.ruoyi.framework.util.ShiroUtils;
+import com.ruoyi.system.domain.SysRole;
+import org.apache.commons.lang3.Conversion;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +37,9 @@ import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 /**
  * 付款计划（基于付款申请记录）Controller
@@ -64,6 +75,18 @@ public class BizPayPlanController extends BaseController {
     @ResponseBody
     public TableDataInfo list(BizPayPlan bizPayPlan) {
         startPage();
+        List<SysRole> roles = ShiroUtils.getSysUser().getRoles();
+        Set<String> roleKeySet = roles.stream().map(SysRole::getRoleKey).collect(Collectors.toSet());
+
+        // 老总角色，看所有
+        // 财务总管，看老总确认的数据
+        // 出纳，看老总和财务总管确认的数据
+        if (roleKeySet.contains(RoleEnum.PROCESS_FK_ZJL.getRoleKey())) {
+        } else if (roleKeySet.contains(RoleEnum.ZGKJ.getRoleKey())) {
+            bizPayPlan.setDataStatusList(Stream.of("2", "3").collect(Collectors.toList()));
+        } else if (roleKeySet.contains(RoleEnum.CNY.getRoleKey())) {
+            bizPayPlan.setDataStatusList(Stream.of("3").collect(Collectors.toList()));
+        }
         List<BizPayPlan> list = bizPayPlanService.selectBizPayPlanList(bizPayPlan);
         return getDataTable(list);
     }
@@ -172,14 +195,28 @@ public class BizPayPlanController extends BaseController {
         return toAjax(payPlan);
     }
 
-//    /**
-//     * 删除付款计划（基于付款申请记录）
-//     */
-//    @RequiresPermissions("finance:payPlan:remove")
-//    @Log(title = "付款计划（基于付款申请记录）", businessType = BusinessType.DELETE)
-//    @PostMapping( "/remove")
-//    @ResponseBody
-//    public AjaxResult remove(String ids) {
-//        return toAjax(bizPayPlanService.deleteBizPayPlanByIds(ids));
-//    }
+    /**
+     * 删除付款计划（基于付款申请记录）
+     */
+    @RequiresPermissions("finance:payPlan:confirm")
+    @Log(title = "付款计划（确认）", businessType = BusinessType.UPDATE)
+    @PostMapping("/confirm")
+    @ResponseBody
+    public AjaxResult updateDateStatus(String ids, String dataStatus) {
+        List<BizPayPlan> bizPayPlans = bizPayPlanService.selectBizPayPlanByIds(Convert.toStrArray(ids));
+        Set<String> dataStatusSet = bizPayPlans.stream().map(BizPayPlan::getDataStatus).collect(Collectors.toSet());
+        if (dataStatusSet.size() > 1) {
+            return error("不同数据状态的数据不能同时确认");
+        }
+        String next = dataStatusSet.iterator().next();
+        if (StringUtils.isEmpty(next)) {
+            next = "0";
+        }
+        int nextInt = Integer.parseInt(next);
+        if (nextInt >= 3) {
+            return error("此状态不能确认");
+        }
+        dataStatus = String.valueOf(nextInt + 1);
+        return toAjax(bizPayPlanService.updateDateStatus(ids, dataStatus));
+    }
 }
