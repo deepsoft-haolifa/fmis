@@ -55,7 +55,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="payDate != null "> and pay_date = #{payDate}</if>
             <if test="bookingType != null  and bookingType != ''"> and booking_type = #{bookingType}</if>
             <if test="dataStatus != null  and dataStatus != ''"> and data_status = #{dataStatus}</if>
-            <if test="dataStatusList != null  and dataStatusList != ''">
+            <if test="dataStatusList != null  and dataStatusList.size > 0">
                 and data_status in
                 <foreach item="ds" collection="dataStatusList" open="(" separator="," close=")">
                     #{ds}

@@ -82,7 +82,7 @@ public class BizPayPlanController extends BaseController {
         // 财务总管，看老总确认的数据
         // 出纳，看老总和财务总管确认的数据
         if (roleKeySet.contains(RoleEnum.PROCESS_FK_ZJL.getRoleKey())) {
-        } else if (roleKeySet.contains(RoleEnum.ZGKJ.getRoleKey())) {
+        } else if (roleKeySet.contains(RoleEnum.ZJJL.getRoleKey())) {
             bizPayPlan.setDataStatusList(Stream.of("2", "3").collect(Collectors.toList()));
         } else if (roleKeySet.contains(RoleEnum.CNY.getRoleKey())) {
             bizPayPlan.setDataStatusList(Stream.of("3").collect(Collectors.toList()));
@@ -128,6 +128,7 @@ public class BizPayPlanController extends BaseController {
         bizPayPlan.setApplyAmount(bizProcessData.getPrice2());
         bizPayPlan.setApplyDate(bizProcessData.getDatetime1());
         bizPayPlan.setContractNo(bizProcessData.getString5());
+        bizPayPlan.setDataStatus("1");
         bizPayPlan.setApplyNo("PP" + DateUtils.dateTimeNow() + RandomStringUtils.randomNumeric(3));
         bizPayPlan.setCreateTime(DateUtils.getNowDate());
         bizPayPlan.setCreateBy(ShiroUtils.getUserId().toString());
@@ -210,7 +211,7 @@ public class BizPayPlanController extends BaseController {
         }
         String next = dataStatusSet.iterator().next();
         if (StringUtils.isEmpty(next)) {
-            next = "0";
+            next = "1";
         }
         int nextInt = Integer.parseInt(next);
         if (nextInt >= 3) {

@@ -13,7 +13,7 @@ import lombok.Getter;
 public enum RoleEnum {
     CNY("cny", "出纳员"),
     PROCESS_FK_ZJL("process_fk_zjl", "付款工作流-总经理"),
-    ZGKJ("zgkj", "主管会计"),
+    ZJJL("zjjl", "资金经理"),
     ;
     private String roleKey;
 
