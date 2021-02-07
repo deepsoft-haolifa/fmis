@@ -372,11 +372,19 @@
                 productObj["string3"] = rowData["productNum"];
                 productObj["price1"] = rowData["productPrice"];
                 productObj["string4"] = rowData["productCoefficient"];
+                if (rowData["productId"] != 0 && rowData["productNum"] == 0) {
+                    $.modal.alertWarning("产品数量不能为0");
+                    return;
+                }
 
 
                 //法兰
                 productObj["string5"] = rowData["productRef1Id"];
                 productObj["string6"] = rowData["productRef1Num"];
+               /* if (rowData["productRef1Id"] != 0 && rowData["productRef1Num"] == 0) {
+                    $.modal.alertWarning("法兰数量不能为0");
+                    return;
+                }*/
                 productObj["price2"] = rowData["ref1Price"];
                 productObj["string7"] = rowData["productRef1Coefficient"];
                 //螺栓
@@ -384,41 +392,63 @@
                 productObj["string9"] = rowData["productRef2Num"];
                 productObj["price3"] = rowData["ref2Price"];
                 productObj["string10"] = rowData["productRef2Coefficient"];
+               /* if (rowData["productRef2Id"] != 0 && rowData["productRef2Num"] == 0) {
+                    $.modal.alertWarning("螺栓数量不能为0");
+                    return;
+                }*/
                 //执行器
                 productObj["string11"] = rowData["actuatorId"];
                 productObj["string12"] = rowData["actuatorNum"];
                 productObj["price4"] = rowData["actuatorPrice"];
                 productObj["string13"] = rowData["actuatorCoefficient"];
 
-
+               /* if (rowData["actuatorId"] != 0 && rowData["actuatorNum"] == 0) {
+                    $.modal.alertWarning("执行器数量不能为0");
+                    return;
+                }*/
 
                 productObj["pattachmentId"] = rowData["pattachmentId"];
                 productObj["pattachmentPrice"] = rowData["pattachmentPrice"];
                 productObj["pattachmentCount"] = rowData["pattachmentCount"];
                 productObj["pattachmentCoefficient"] = rowData["pattachmentCoefficient"];
-
+                /*if (rowData["pattachmentId"] != 0 && rowData["pattachmentCount"] == 0) {
+                    $.modal.alertWarning("选择的辅件数量不能为0");
+                    return;
+                }*/
                 productObj["pattachment1Id"] = rowData["pattachment1Id"];
                 productObj["pattachment1Price"] = rowData["pattachment1Price"];
                 productObj["pattachment1Count"] = rowData["pattachment1Count"];
                 productObj["pattachment1Coefficient"] = rowData["pattachment1Coefficient"];
-
+                /*if (rowData["pattachment1Id"] != 0 && rowData["pattachment1Count"] == 0) {
+                    $.modal.alertWarning("选择的辅件数量不能为0");
+                    return;
+                }*/
                 productObj["pattachment2Id"] = rowData["pattachment2Id"];
 
 
                 productObj["pattachment2Price"] = rowData["pattachment2Price"];
                 productObj["pattachment2Count"] = rowData["pattachment2Count"];
                 productObj["pattachment2Coefficient"] = rowData["pattachment2Coefficient"];
-
+               /* if (rowData["pattachment2Id"] != 0 && rowData["pattachment2Count"] == 0) {
+                    $.modal.alertWarning("选择的辅件数量不能为0");
+                    return;
+                }*/
                 productObj["pattachment3Id"] = rowData["pattachment3Id"];
                 productObj["pattachment3Price"] = rowData["pattachment3Price"];
                 productObj["pattachment3Count"] = rowData["pattachment3Count"];
                 productObj["pattachment3Coefficient"] = rowData["pattachmentCoefficient"];
-
+               /* if (rowData["pattachment3Id"] != 0 && rowData["pattachment3Count"] == 0) {
+                    $.modal.alertWarning("选择的辅件数量不能为0");
+                    return;
+                }*/
                 productObj["pattachment4Id"] = rowData["pattachment4Id"];
                 productObj["pattachment4Price"] = rowData["pattachment4Price"];
                 productObj["pattachment4Count"] = rowData["pattachment4Count"];
                 productObj["pattachment4Coefficient"] = rowData["pattachment4Coefficient"];
-
+               /* if (rowData["pattachment4Id"] != 0 && rowData["pattachment4Count"] == 0) {
+                    $.modal.alertWarning("选择的辅件数量不能为0");
+                    return;
+                }*/
                 productObj["string14"] = rowData["string14"];
                 productObj["string15"] = rowData["string15"];
 
@@ -561,7 +591,8 @@
                 {field : 'productPrice',title : '单价',editable: false},
                 {field : 'productCostPrice',title : '产品成本价',editable: false,visible: false},
                 {field : 'productCoefficient',title : '系数',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
-                {field : 'totalPrice',title : '总价',editable: false},
+                {field : 'contractPrice',title : '合同价',editable: false},
+                {field : 'totalPrice',title : '金额',editable: false},
                 {field : 'string14',title : '优惠',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
 
 
@@ -1015,7 +1046,13 @@
                 field: "totalPrice",
                 value: totalSum
             };
+            var updateObj1 = {
+                index : row.rowId,
+                field : "contractPrice",
+                value : totalSum / productNum
+            };
             $.btTable.bootstrapTable("updateCell", updateObj);
+            $.btTable.bootstrapTable("updateCell", updateObj1);
             //$("#totalSum_" + productId).val(totalSum);
             return totalSum;
         }

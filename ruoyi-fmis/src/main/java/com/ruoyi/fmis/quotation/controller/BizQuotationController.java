@@ -186,8 +186,11 @@ public class BizQuotationController extends BaseController {
             int roleType = sysRoleService.getRoleType(ShiroUtils.getUserId());
             bizQuotation.setString2(roleType + "");
         }
-
-        //临时用userId
+        if (bizQuotation.getCustomerId() != null){
+            BizCustomer bizCustomer = bizCustomerService.selectBizCustomerById(Long.parseLong(bizQuotation.getCustomerId()));
+            bizQuotation.setCustomerName(bizCustomer.getName());
+        }
+         //临时用userId
         bizQuotation.setString20(ShiroUtils.getUserId() + "");
 
         startPage();
