@@ -11,21 +11,9 @@ import lombok.Data;
 public class StandAccountSummaryRespVo {
 
     /**
-     * 合同Id(采购合同)
+     * 需求方
      */
-    private Long purchaseContractId;
-    /**
-     * 合同编号(采购合同)
-     */
-    private String purchaseContractNo;
-    /**
-     * 合同状态
-     */
-    private String purchaseStatus;
-    /**
-     * 结算单位
-     */
-    private String chargeCompany;
+    private String needCompany;
 
     /**
      * 供应商
@@ -33,31 +21,19 @@ public class StandAccountSummaryRespVo {
     private String supplierName;
 
     /**
-     * 归属单位
+     * 累计欠款额
      */
-    private String deptName;
+    private Double totalArrearsAmount;
 
     /**
-     * 交货日期
+     * 累计订货额
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private String deliveryDate;
+    private Double totalContractAmount;
 
     /**
-     * 发货日期
+     * 累计入账额
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private String outDate;
-
-    /**
-     * 到货数量
-     */
-    private Integer arrivalQty;
-
-    /**
-     * 到货货款
-     */
-    private Double arrivalAmount;
+    private Double totalAccountAmount;
 
     /**
      * 已付货款
@@ -65,12 +41,8 @@ public class StandAccountSummaryRespVo {
     private Double paidAmount;
 
     /**
-     * 付款方式(字典：contract_paytype)
+     * 计划付款额
      */
-    private String payWay;
-    /**
-     * 合同金额
-     */
-    private Double contractAmount;
+    private Double planPayAmount;
 
 }

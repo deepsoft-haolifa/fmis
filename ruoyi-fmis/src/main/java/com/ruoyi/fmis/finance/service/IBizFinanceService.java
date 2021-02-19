@@ -30,6 +30,6 @@ public interface IBizFinanceService {
     /**
      * 应付款项汇总 根据收款单位（付款计划）
      */
-    List<StandAccountSummaryRespVo> selectStandAccountSummaryList(ReceivableReqVo reqVo);
+    List<StandAccountSummaryRespVo> selectStandAccountSummaryList(StandAccountReqVo reqVo);
 
 }

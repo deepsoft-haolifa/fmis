@@ -2,10 +2,7 @@ package com.ruoyi.fmis.finance.controller;
 
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.page.TableDataInfo;
-import com.ruoyi.fmis.finance.domain.vo.ReceivableReqVo;
-import com.ruoyi.fmis.finance.domain.vo.ReceivableRespVo;
-import com.ruoyi.fmis.finance.domain.vo.StandAccountReqVo;
-import com.ruoyi.fmis.finance.domain.vo.StandAccountRespVo;
+import com.ruoyi.fmis.finance.domain.vo.*;
 import com.ruoyi.fmis.finance.service.IBizFinanceService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,7 +96,7 @@ public class BizFinanceController extends BaseController {
     @ResponseBody
     public TableDataInfo standAccountSummaryList(StandAccountReqVo reqVo) {
         startPage();
-        List<StandAccountRespVo> list = bizFinanceService.selectStandAccountList(reqVo);
+        List<StandAccountSummaryRespVo> list = bizFinanceService.selectStandAccountSummaryList(reqVo);
         return getDataTable(list);
     }
 }

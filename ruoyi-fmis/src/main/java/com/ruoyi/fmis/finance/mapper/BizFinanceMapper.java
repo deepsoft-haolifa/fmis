@@ -1,9 +1,6 @@
 package com.ruoyi.fmis.finance.mapper;
 
-import com.ruoyi.fmis.finance.domain.vo.ReceivableReqVo;
-import com.ruoyi.fmis.finance.domain.vo.ReceivableRespVo;
-import com.ruoyi.fmis.finance.domain.vo.StandAccountReqVo;
-import com.ruoyi.fmis.finance.domain.vo.StandAccountRespVo;
+import com.ruoyi.fmis.finance.domain.vo.*;
 
 import java.util.List;
 
@@ -20,4 +17,7 @@ public interface BizFinanceMapper {
 
 
     List<StandAccountRespVo> selectStandAccountList(StandAccountReqVo reqVo);
+
+
+    List<StandAccountSummaryRespVo> selectStandAccountSummaryList(StandAccountReqVo reqVo);
 }

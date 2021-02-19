@@ -24,11 +24,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.fmis.finance.domain.BizPayPlan;
@@ -66,6 +62,15 @@ public class BizPayPlanController extends BaseController {
     public String payPlan() {
         return prefix + "/payPlan";
     }
+
+    @GetMapping("view")
+    public String viewPayPlan(@RequestParam String needCompany,@RequestParam String supplierName, ModelMap mmap) {
+        mmap.put("needCompany",needCompany);
+        mmap.put("supplierName",supplierName);
+        mmap.put("payStatus",0);
+        return prefix + "/payPlan";
+    }
+
 
     /**
      * 查询付款计划（基于付款申请记录）列表
@@ -197,7 +202,7 @@ public class BizPayPlanController extends BaseController {
     }
 
     /**
-     * 删除付款计划（基于付款申请记录）
+     * 付款计划（确认）
      */
     @RequiresPermissions("finance:payPlan:confirm")
     @Log(title = "付款计划（确认）", businessType = BusinessType.UPDATE)

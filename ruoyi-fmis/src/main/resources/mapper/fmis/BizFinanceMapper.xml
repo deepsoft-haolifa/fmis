@@ -76,6 +76,42 @@
         <include refid="standAccountWhere"></include>
         order by q.create_time desc
     </select>
+    <select id="selectStandAccountSummaryList"
+            resultType="com.ruoyi.fmis.finance.domain.vo.StandAccountSummaryRespVo">
+      select total.needCompany,
+        total.supplierName,
+        -- 累计欠款额
+        ifnull(sum(total.contractAmount),0) - ifnull(sum(total.paidAmount),0) totalArrearsAmount,
+        -- 累计订货额
+        ifnull(sum(total.contractAmount),0) totalContractAmount,
+        -- 累计入账额
+        ifnull(sum(total.arrivalAmount),0) totalAccountAmount,
+        -- 已付货款
+        ifnull(sum(total.paidAmount),0) paidAmount,
+				-- 计划付款额
+        ifnull(sum(total.planPayAmount),0) planPayAmount
+        from (select * from(select
+        q.string1 needCompany,
+        q.price1 as contractAmount,
+        s.name supplierName,
+        -- 到货入账额
+        ifnull(stnprice.arrivalAmount,0) arrivalAmount,
+        -- 已付货款
+        ifnull(p.paidAmount,0) paidAmount,
+				ifnull(p1.planPayAmount,0) planPayAmount
+        from biz_process_data q
+        left join biz_suppliers s on s.suppliers_id=q.string6
+        -- 合同金额大于已付金额的才统计； 已经付完款的合同不统计
+        left join (select contract_id,sum(apply_amount) as paidAmount  from biz_pay_plan where status=1 group by contract_id) p on p.contract_id=q.data_id
+        left join (select contract_id,sum(apply_amount) as planPayAmount  from biz_pay_plan where status=0 group by contract_id) p1 on p1.contract_id=q.data_id
+        left join (select string4,sum(string1) as arrivalQty from biz_data_stestn  group by string4) stn on stn.string4=q.data_id
+        left join (select a.string4,sum(a.string1*c.procurement_price) arrivalAmount from biz_data_stestn a left join biz_process_child b on a.string5=b.child_id left join biz_product c on b.string2=c.product_id  group by a.string4) stnprice on stnprice.string4=q.data_id
+        where  q.biz_id='procurement' and q.string1!="" and s.name!=""
+         ) a
+         -- 已经付完款的合同不统计
+         where a.contractAmount > a.paidAmount) total
+         group by total.needCompany,total.supplierName
+    </select>
 
     <sql id="standAccountWhere">
         <where>

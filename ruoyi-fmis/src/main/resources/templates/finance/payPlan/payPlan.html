@@ -28,11 +28,11 @@
                         </li>
                         <li>
                             <p>付款单位：</p>
-                            <input type="text" name="applyPayCompany"/>
+                            <input type="text" name="applyPayCompany" th:value="*{needCompany}"/>
                         </li>
                         <li>
                             <p>收款单位：</p>
-                            <input type="text" name="applyCollectionCompany"/>
+                            <input type="text" name="applyCollectionCompany"  th:value="*{supplierName}"/>
                         </li>
 
                         <li>

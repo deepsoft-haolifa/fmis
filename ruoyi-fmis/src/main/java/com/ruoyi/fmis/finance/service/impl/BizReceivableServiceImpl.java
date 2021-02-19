@@ -40,7 +40,7 @@ public class BizReceivableServiceImpl implements IBizFinanceService {
     }
 
     @Override
-    public List<StandAccountSummaryRespVo> selectStandAccountSummaryList(ReceivableReqVo reqVo) {
-        return null;
+    public List<StandAccountSummaryRespVo> selectStandAccountSummaryList(StandAccountReqVo reqVo) {
+        return bizFinanceMapper.selectStandAccountSummaryList(reqVo);
     }
 }
