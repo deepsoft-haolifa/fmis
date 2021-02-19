@@ -521,7 +521,10 @@ public class BizQuotationController extends BaseController {
             paragraphRemark.add(Chunk.NEWLINE);
             paragraphRemark.add(new Chunk("", blackFont));
             paragraphRemark.add(Chunk.NEWLINE);
-            paragraphRemark.add(new Chunk("        1、价格：以上价格为含税不含运费成交价格；", remarkFont));
+            String included_freight = dictDataService.selectDictLabel("included_freight",bizQuotation.getString11());
+            paragraphRemark.add(new Chunk("        1、价格：" + included_freight, remarkFont));
+
+
             paragraphRemark.add(Chunk.NEWLINE);
             paragraphRemark.add(new Chunk("        2、供货周期： " + bizQuotationDict.getLeadTime() + "  个工作日", remarkFont));
             paragraphRemark.add(Chunk.NEWLINE);

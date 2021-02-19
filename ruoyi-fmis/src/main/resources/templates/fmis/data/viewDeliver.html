@@ -16,16 +16,16 @@
         <div class="form-group " >
             <label class="col-sm-1 control-label">编号：</label>
             <div class="col-sm-2">
-                <input name="string26" class="form-control" type="text">
+                <input name="string26" class="form-control"   type="text">
             </div>
             <label class="col-sm-1 control-label">合同单号：</label>
             <div class="col-sm-2">
-                <input name="string27" class="form-control" type="text">
+                <input name="string27" class="form-control" th:field="*{string1}" type="text">
             </div>
 
             <label class="col-sm-1 control-label">客户代号：</label>
             <div class="col-sm-2">
-                <input name="string4" class="form-control" type="text">
+                <input name="string4" class="form-control" th:field="*{bizCustomer.companyCode}"  type="text">
             </div>
 
 
@@ -38,18 +38,18 @@
             <div class="col-sm-2">
                 <div class="input-group date">
                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                    <input name="datetime1" id="datetime1" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    <input name="datetime1" id="datetime1" class="form-control" placeholder="yyyy-MM-dd" type="text" required>
                 </div>
             </div>
 
             <label class="col-sm-1 control-label">发货地：</label>
             <div class="col-sm-2">
-                <input name="string7" class="form-control" type="text">
+                <input name="string7" class="form-control" type="text" required>
             </div>
 
             <label class="col-sm-1 control-label">收货人：</label>
             <div class="col-sm-2">
-                <input name="string8" class="form-control" type="text">
+                <input name="string8" class="form-control" type="text" required>
             </div>
         </div>
 
@@ -62,12 +62,12 @@
 
             <label class="col-sm-1 control-label">手机：</label>
             <div class="col-sm-2">
-                <input name="string10" class="form-control" type="text">
+                <input name="string10" class="form-control" type="text" required>
             </div>
 
             <label class="col-sm-1 control-label">运费付费方式：</label>
             <div class="col-sm-2">
-                <input name="string12" class="form-control" type="text">
+                <input name="string12" class="form-control" type="text" required>
             </div>
         </div>
 
