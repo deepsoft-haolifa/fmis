@@ -302,36 +302,36 @@
             <!--flow_status 0=待上报 1=已上报 2=销售经理同意 -2=不同意 3=区域经理同意 -3=不同意 4=副总同意 -4=不同意 5=老总同意 -5=不同意 -->
             <if test="roleType == 1 ">
                 <if test="queryStatus == 1 ">
-                    and q.flow_status in ('0','-2','-3','-4','-5')
+                    and (q.flow_status in ('0','-2','-3','-4','-5') or q.`create_by` = #{string30})
                 </if>
                 <if test="queryStatus == 2 ">
-                    and q.flow_status != '0'
+                    and (q.flow_status != '0' or q.`create_by` = #{string30})
                 </if>
                 ${params.dataScope}
             </if>
             <!-- 销售经理 查看已上报的 -->
             <if test="roleType == 2 ">
                 <if test="queryStatus == 0 ">
-                    and q.flow_status in ('1','2','-2','3','-3','-4','-5','4','5')
+                    and (q.flow_status in ('1','2','-2','3','-3','-4','-5','4','5') or q.`create_by` = #{string30})
                 </if>
                 <if test="queryStatus == 1 ">
-                    and q.flow_status in ('1')
+                    and (q.flow_status in ('1') or q.`create_by` = #{string30})
                 </if>
                 <if test="queryStatus == 2 ">
-                    and q.flow_status in ('2','-2','3','-3','-4','-5','4','5')
+                    and (q.flow_status in ('2','-2','3','-3','-4','-5','4','5') or q.`create_by` = #{string30})
                 </if>
                 ${params.dataScope}
             </if>
             <!-- 区域经理  查看 销售经理同意的  -->
             <if test="roleType == 3 ">
                 <if test="queryStatus == 0 ">
-                    and q.flow_status in ('1','2','-2','3','-3','4','-4','-5','5')
+                    and (q.flow_status in ('1','2','-2','3','-3','4','-4','-5','5') or q.`create_by` = #{string30})
                 </if>
                 <if test="queryStatus == 1 ">
-                    and q.flow_status in ('2')
+                    and (q.flow_status in ('2') or q.`create_by` = #{string30})
                 </if>
                 <if test="queryStatus == 2 ">
-                    and q.flow_status in ('3','-3','4','-4','-5','5')
+                    and (q.flow_status in ('3','-3','4','-4','-5','5') or q.`create_by` = #{string30})
                 </if>
                 ${params.dataScope}
             </if>
@@ -339,13 +339,13 @@
             <!-- 副总  查看 区域经理同意的  -->
             <if test="roleType == 4 ">
                 <if test="queryStatus == 0 ">
-                    and q.flow_status in ('1','2','-2','3','-3','4','-4','-5','5')
+                    and (q.flow_status in ('1','2','-2','3','-3','4','-4','-5','5')   or q.`create_by` = #{string30})
                 </if>
                 <if test="queryStatus == 1 ">
-                    and q.flow_status in ('3')
+                    and (q.flow_status in ('3') or q.`create_by` = #{string30})
                 </if>
                 <if test="queryStatus == 2 ">
-                    and q.flow_status in ('4','-4','-5','5')
+                    and (q.flow_status in ('4','-4','-5','5') or q.`create_by` = #{string30})
                 </if>
 
                 ${params.dataScope}
@@ -353,13 +353,13 @@
             <!-- 总经理  查看 副总同意的  -->
             <if test="roleType == 5 ">
                 <if test="queryStatus == 0 ">
-                    and q.flow_status in ('1','2','-2','3','-3','4','-4','5','-5')
+                    and (q.flow_status in ('1','2','-2','3','-3','4','-4','5','-5')   or q.`create_by` = #{string30})
                 </if>
                 <if test="queryStatus == 1 ">
-                    and q.flow_status in ('4')
+                    and (q.flow_status in ('4')   or q.`create_by` = #{string30})
                 </if>
                 <if test="queryStatus == 2 ">
-                    and q.flow_status in ('5','-5')
+                    and (q.flow_status in ('5','-5')  or q.`create_by` = #{string30})
                 </if>
 
                 ${params.dataScope}
@@ -369,7 +369,7 @@
                 and q.flow_status=q.normal_flag
             </if>
         </where>
-         or q.`create_by` = #{string30} and biz_id = #{bizId}
+
         order by q.create_time desc
 
     </select>

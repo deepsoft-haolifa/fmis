@@ -898,6 +898,21 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
      */
     @Override
     public int deleteBizProcessDataByIds(String ids) {
+        //更新采购池状态
+        String[] bizIds = ids.split(",");
+        for (String id : bizIds) {
+            BizProcessData bizProcessData = bizProcessDataMapper.selectBizProcessDataById(Long.parseLong(id));
+            if (bizProcessData.getBizId().equals("procurement")) {
+                BizProcessData bizProcessDataxs = new BizProcessData();
+                bizProcessDataxs.setString1(bizProcessData.getString3().split(",")[0]);
+                bizProcessDataxs.setBizId("contract");
+                List<BizProcessData> bizProcessData1 = bizProcessDataMapper.selectBizProcessDataList(bizProcessDataxs);
+                for (BizProcessData bizProcessData2 : bizProcessData1) {
+                    bizProcessData2.setString30("1");
+                    bizProcessDataMapper.updateBizProcessData(bizProcessData2);
+                }
+            }
+        }
         return bizProcessDataMapper.deleteBizProcessDataByIds(Convert.toStrArray(ids));
     }
 
