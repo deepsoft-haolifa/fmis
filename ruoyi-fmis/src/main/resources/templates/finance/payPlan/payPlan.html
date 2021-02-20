@@ -40,10 +40,11 @@
                             <select name="payWay" th:with="type=${@dict.getType('pay_way')}">
                                 <option value="">所有</option>
                                 <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
-                                        th:value="${dict.dictValue}"></option>
+                                        th:value="${dict.dictValue}" ></option>
                             </select>
                         </li>
                         <li>
+                            <input type="hidden" name="status"  th:value="*{payStatus}"/>
                             <p>付款状态</p>
                             <select name="status" th:with="type=${@dict.getType('pay_status')}">
                                 <option value="">所有</option>
