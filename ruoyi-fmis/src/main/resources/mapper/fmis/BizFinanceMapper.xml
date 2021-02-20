@@ -33,7 +33,7 @@
         left join biz_customer ct on ct.customer_id=q.string2
         left join sys_dept dt1 on q.string22=dt1.dept_id
         left join (select data_id,sum(string3) saleQty from biz_process_child group by data_id) bpc ON bpc.data_id = q.data_id
-        left join (select data_id,sum(string13) deliveryQty from biz_process_child group by data_id) bpc1 ON bpc1.data_id = q.data_id
+        left join (select string5,sum(string13) deliveryQty from biz_process_child group by string5) bpc1 ON bpc1.string5 = q.string1
         left join (select data_id,sum(amount) as paidAmount  from biz_bill_contract group by data_id) bbc on bbc.data_id=q.data_id
         <include refid="ReceivableWhere"></include>
         order by q.create_time desc
