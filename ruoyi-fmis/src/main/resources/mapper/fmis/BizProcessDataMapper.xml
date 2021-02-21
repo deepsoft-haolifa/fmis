@@ -148,7 +148,8 @@
         q.datetime1, q.datetime2, q.datetime3, q.datetime4, q.datetime5, q.status, q.del_flag, q.create_by, q.create_time, q.update_by, q.update_time,
         dt1.dept_name as deptName
         from biz_process_data q
-        left join sys_dept dt1 on q.string22=dt1.dept_id left join biz_data_status ds on q.data_id = ds.string4
+        left join sys_dept dt1 on q.string22=dt1.dept_id left join biz_data_status ds on q.data_id = ds.string4  left join biz_process_child pc on q.data_id = pc.data_id
+        join `biz_data_status` bs on pc.child_id = bs.`child_id`
     </sql>
 
     <select id="selectBizProcessDataListCg" parameterType="BizProcessData" resultMap="BizProcessDataResult">
@@ -168,7 +169,7 @@
             <if test="price8 != null "> and price8 = #{price8}</if>
             <if test="price9 != null "> and price9 = #{price9}</if>
             <if test="price10 != null "> and price10 = #{price10}</if>
-            <if test="string1 != null  and string1 != ''"> and string1 = #{string1}</if>
+            <if test="string1 != null  and string1 != ''"> and q.string1 = #{string1}</if>
             <if test="string2 != null  and string2 != ''"> and string2 = #{string2}</if>
             <if test="string3 != null  and string3 != ''"> and q.string3 like concat('%', #{string3}, '%')</if>
             <if test="string4 != null  and string4 != ''"> and string4 = #{string4}</if>
@@ -195,7 +196,7 @@
             <if test="datetime5 != null "> and datetime5 = #{datetime5}</if>
             <if test="status != null  and status != ''"> and status = #{status}</if>
         </where>
-        group  by q.data_id
+        group  by pc.child_id
     </select>
 
 
@@ -382,7 +383,7 @@
             <if test="bizId != null  and bizId != ''"> and biz_id = #{bizId}</if>
             <if test="status != null  and status != ''"> and status = #{status}</if>
             <if test="string13 != null  and string13 != ''"> and q.string13 = #{string13}</if>
-            <if test="string1 != null  and string1 != ''"> and q.string1 = #{string1}</if>
+            <if test="string1 != null  and string1 != ''"> and find_in_set(q.string1,#{string1})</if>
             <if test="string30 == 0 ">
                 and (q.string30 = '' or q.string30 is null or q.string30 = 1)
             </if>
