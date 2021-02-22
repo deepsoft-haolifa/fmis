@@ -195,7 +195,7 @@
           pr1.name as ref1Name,pr2.name as ref2Name,p.name as productName,ac.name as actuatorName,
           p.price as productPrice,pr1.price as ref1Price,pr2.price as ref2Price,ac.price as actuatorPrice,
 
-          d.name as series, p.model, d1.name as specifications, d2.name as nominalPressure,
+          d9.name as series, p.model, d1.name as specifications, d2.name as nominalPressure,
           d3.name as connectionType, d6.name as valvebodyMaterial,
           d4.name as sealingMaterial, d5.name as valveElement,
           d7.name as driveForm,d8.name as structuralStyle,
@@ -271,7 +271,7 @@
     <sql id="selectBizChildProductVo">
         select pd.string3 guishudanwei,
         p.price as productPrice,p.product_id as productId,
-        d.name as series, p.model, d1.name as specifications, d2.name as nominalPressure,
+        d9.name as series, p.model, d1.name as specifications, d2.name as nominalPressure,
         d3.name as connectionType, d6.name as valvebodyMaterial,
         d4.name as sealingMaterial, d5.name as valveElement,
         d7.name as driveForm,d8.name as structuralStyle,
@@ -330,7 +330,7 @@
     <sql id="selectBizTestProductVo">
     select
           bpc.string15 color,p.price as productPrice,p.product_id as productId,ds.string4 as dataId,ds.child_id as childId,sn.remark,ds.status_id as statusId,
-          d.name as series, p.model, d1.name as specifications, d2.name as nominalPressure,
+          d9.name as series, p.model, d1.name as specifications, d2.name as nominalPressure,
           d3.name as connectionType, d6.name as valvebodyMaterial,
           d4.name as sealingMaterial, d5.name as valveElement,
           d7.name as driveForm,d8.name as structuralStyle,
