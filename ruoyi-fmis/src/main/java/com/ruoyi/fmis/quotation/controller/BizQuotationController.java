@@ -1194,6 +1194,7 @@ public class BizQuotationController extends BaseController {
             json.put("productId",bizQuotation.getProductId());
             json.put("productName",bizQuotation.getProductName());
             json.put("model",bizQuotation.getModel());
+            json.put("string1",bizQuotation.getSeries());
             json.put("specifications",bizQuotation.getSpecifications());
             json.put("nominalPressure",bizQuotation.getNominalPressure());
             json.put("valvebodyMaterial",bizQuotation.getValvebodyMaterial());

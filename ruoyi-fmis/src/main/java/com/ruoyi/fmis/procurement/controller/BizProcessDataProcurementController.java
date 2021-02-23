@@ -983,6 +983,7 @@ public class BizProcessDataProcurementController extends BaseController {
             table.addCell(PdfUtil.mergeCol("序号", 1,textFont));
             table.addCell(PdfUtil.mergeCol("产品ID", 1,textFont));
             table.addCell(PdfUtil.mergeCol("名称", 1,textFont));
+            table.addCell(PdfUtil.mergeCol("系列", 1,textFont));
             table.addCell(PdfUtil.mergeCol("压力", 1,textFont));
             table.addCell(PdfUtil.mergeCol("规格", 1,textFont));
             table.addCell(PdfUtil.mergeCol("颜色", 1,textFont));
@@ -1011,6 +1012,7 @@ public class BizProcessDataProcurementController extends BaseController {
                     table.addCell(PdfUtil.mergeCol("" + rowNum, 1,textFont));
                     table.addCell(PdfUtil.mergeCol(bizProcessChild.getModel(), 1,textFont));
                     table.addCell(PdfUtil.mergeCol(bizProcessChild.getProductName(), 1,textFont));
+                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getSeries(), 1,textFont));
                     table.addCell(PdfUtil.mergeCol(bizProcessChild.getNominalPressure(), 1,textFont));
                     table.addCell(PdfUtil.mergeCol(bizProcessChild.getSpecifications(), 1,textFont));
                     //颜色
