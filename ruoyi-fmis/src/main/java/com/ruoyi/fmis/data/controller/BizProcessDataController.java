@@ -247,6 +247,7 @@ public class BizProcessDataController extends BaseController {
 
         bizProcessData.setBizId("contract");
         bizProcessData.setString13("2");
+        startPage();
         List<BizProcessData> list = bizProcessDataService.selectBizProcessDataListRefLiu(bizProcessData);
 
         return getDataTable(list);

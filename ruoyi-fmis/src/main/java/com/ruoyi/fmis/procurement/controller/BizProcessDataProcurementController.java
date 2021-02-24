@@ -341,10 +341,10 @@ public class BizProcessDataProcurementController extends BaseController {
         for (String string : dataIds) {
             BizProcessData bizProcessData2 = bizProcessDataService.selectBizProcessDataById(Long.parseLong(string));
             BizProcessData bizProcessData1 = new BizProcessData();
-            bizProcessData1.setBizId("procurement");
-            bizProcessData1.setString3(bizProcessData2.getString1());
+            bizProcessData1.setBizId("contract");
+            bizProcessData1.setString1(bizProcessData2.getString1());
             List<BizProcessData> list = bizProcessDataService.selectBizProcessDataListCg(bizProcessData1);
-            setXSStatus(string, list.size(), dataIdCount.get(string));
+            setXSStatus(string, list.size() - dataIdCount.get(string), dataIdCount.get(string));
         }
 
         setContractNo(bizProcessData,productArrayStr);
@@ -372,6 +372,10 @@ public class BizProcessDataProcurementController extends BaseController {
             }
             //执行器
             if(!StringUtils.isEmpty(bizProcessChild.getString11()) && !bizProcessChild.getString11().equals("0")) {
+                count ++;
+            }
+            //定位器
+            if(bizProcessChild.getPattachmentId() != null) {
                 count ++;
             }
             //附件1 2 3 4
@@ -979,6 +983,7 @@ public class BizProcessDataProcurementController extends BaseController {
             table.addCell(PdfUtil.mergeCol("序号", 1,textFont));
             table.addCell(PdfUtil.mergeCol("产品ID", 1,textFont));
             table.addCell(PdfUtil.mergeCol("名称", 1,textFont));
+            table.addCell(PdfUtil.mergeCol("系列", 1,textFont));
             table.addCell(PdfUtil.mergeCol("压力", 1,textFont));
             table.addCell(PdfUtil.mergeCol("规格", 1,textFont));
             table.addCell(PdfUtil.mergeCol("颜色", 1,textFont));
@@ -1007,6 +1012,7 @@ public class BizProcessDataProcurementController extends BaseController {
                     table.addCell(PdfUtil.mergeCol("" + rowNum, 1,textFont));
                     table.addCell(PdfUtil.mergeCol(bizProcessChild.getModel(), 1,textFont));
                     table.addCell(PdfUtil.mergeCol(bizProcessChild.getProductName(), 1,textFont));
+                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getSeries(), 1,textFont));
                     table.addCell(PdfUtil.mergeCol(bizProcessChild.getNominalPressure(), 1,textFont));
                     table.addCell(PdfUtil.mergeCol(bizProcessChild.getSpecifications(), 1,textFont));
                     //颜色
