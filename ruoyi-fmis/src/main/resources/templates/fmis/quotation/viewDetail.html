@@ -112,6 +112,14 @@
                 <input name="remark" th:field="*{remark}" class="form-control" readonly type="text" >
             </div>
         </div>
+        <div class="form-group">
+            <label class="col-sm-1 control-label">报价单位：</label>
+            <div class="col-sm-3">
+                <select name="string19" class="form-control m-b" >
+                    <option th:value="*{string19}" th:text="*{string19}"></option>
+                </select>
+            </div>
+        </div>
         <!-- 选择产品传参 -->
         <input type="hidden" id="productsJsonParamter" value=""/>
         <!-- 选择法兰传参 -->

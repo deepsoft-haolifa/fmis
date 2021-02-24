@@ -546,6 +546,36 @@ public class BizQuotationController extends BaseController {
             String remark2 = "北京好利集团商务管理中心";
             String remark3 = "010-67110192";
             String remark4 = "010-67171220";
+            if (bizQuotation.getString19()!=null && bizQuotation.getString19().equals("北京好利阀业集团有限公司")) {
+                remark1 = "Add：北京市大兴区榆垡镇榆顺路6号";
+                remark2 = "北京好利阀业集团有限公司";
+                remark3 = "010-89291733";
+                remark4 = "";
+            }
+            if (bizQuotation.getString19()!=null && bizQuotation.getString19().equals("上海好利阀门技术有限公司")) {
+                remark1 = "Add：上海市闵行区兴梅路375号";
+                remark2 = "上海好利阀门技术有限公司";
+                remark3 = "021-24206461";
+                remark4 = "";
+            }
+            if (bizQuotation.getString19()!=null && bizQuotation.getString19().equals("北京好利时代科技发展有限公司")) {
+                remark1 = "Add：北京市东城区幸福大街幸福家园7号商务楼605室";
+                remark2 = "北京好利时代科技发展有限公司";
+                remark3 = "010-67134151";
+                remark4 = "";
+            }
+            if (bizQuotation.getString19()!=null && bizQuotation.getString19().equals("北京大宇合力科技有限责任公司")) {
+                remark1 = "Add：北京市东城区广渠门内大街90号新裕商务大厦506室";
+                remark2 = "北京大宇合力科技有限责任公司";
+                remark3 = "010-67110192";
+                remark4 = "";
+            }
+            if (bizQuotation.getString19()!=null && bizQuotation.getString19().equals("山西好利阀机械制造有限公司")) {
+                remark1 = "Add：侯马经济开发区旺旺北支路东侧";
+                remark2 = "山西好利阀机械制造有限公司";
+                remark3 = "0357-3563581";
+                remark4 = "";
+            }
             if (StringUtils.isNotEmpty(remark)) {
                 String[] remarks = remark.split("###");
                 if (remarks.length == 4) {
@@ -1352,6 +1382,8 @@ public class BizQuotationController extends BaseController {
                     jsonData.put("productId",productId);
                     jsonData.put("productName",bizProduct.getName());
                     jsonData.put("model",bizProduct.getModel());
+                    jsonData.put("series",bizProduct.getString1());
+
                     jsonData.put("specifications",bizProduct.getSpecifications());
                     jsonData.put("nominalPressure",bizProduct.getNominalPressure());
                     jsonData.put("valvebodyMaterial",bizProduct.getValvebodyMaterial());

@@ -135,6 +135,19 @@
                     <input name="remark" th:field="*{remark}" class="form-control" type="text" >
                 </div>
             </div>
+            <div class="form-group">
+                <label class="col-sm-1 control-label">报价单位：</label>
+                <div class="col-sm-3">
+                    <select name="string19" id="string19" class="form-control" >
+                        <option th:value="*{string19}" th:text="*{string19}"></option>
+                        <option  th:text="北京好利阀业集团有限公司"  th:value="北京好利阀业集团有限公司"></option>
+                        <option  th:text="上海好利阀门技术有限公司"  th:value="上海好利阀门技术有限公司"></option>
+                        <option  th:text="北京好利时代科技发展有限公司"  th:value="北京好利时代科技发展有限公司"></option>
+                        <option  th:text="北京大宇合力科技有限责任公司"  th:value="北京大宇合力科技有限责任公司"></option>
+                        <option  th:text="山西好利阀机械制造有限公司"  th:value="山西好利阀机械制造有限公司"></option>
+                    </select>
+                </div>
+            </div>
             <!-- 选择产品传参 -->
             <input type="hidden" id="productsJsonParamter" value=""/>
             <!-- 选择法兰传参 -->
