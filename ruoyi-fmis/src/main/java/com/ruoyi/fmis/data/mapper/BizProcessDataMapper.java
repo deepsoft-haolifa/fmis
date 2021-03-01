@@ -49,6 +49,13 @@ public interface BizProcessDataMapper {
      * @return
      */
     public List<BizProcessData> selectBizProcessDataListRefCPayment(BizProcessData bizProcessData);
+    /**
+     * 开票申请查询
+     * @param bizProcessData
+     * @return
+     */
+    public List<BizProcessData> selectBizProcessDataListRefInvoice(BizProcessData bizProcessData);
+
 
     /**
      * 报销申请列表查询

@@ -50,23 +50,42 @@
 
              <div class='form-group'>
                  <label class='control-label col-sm-3'>合同编号：</label>
-                 <div class='col-sm-2'>
-                     <input name='productId' id="productId" class='form-control' type='hidden' >
-                     <input name='productName' id="productName" value="productShowText" class='form-control' type='text' readonly >
-                 </div>
-
-                 <label class='control-label col-sm-2'>备注：</label>
-
                  <div class='col-sm-3'>
-                     <input name='productRemark_paramterProductId' id="productRemark_paramterProductId" class='form-control' type='text'>
+                     <input name='contractId' id="contractId" class='form-control' type='hidden' >
+                     <input name='contractNo' id="contractNo" value="contractShowText" class='form-control' type='text' readonly >
                  </div>
 
+                 <div class='col-sm-2'>
+                     <input class='form-control' type='text' id="invoicePrice" name='invoicePrice'
+                            value="priceShowText" placeholder='开票金额'/>
+                 </div>
+                 <div class='col-sm-2'>
+                     <input class='form-control' type='text' id="invoiceRequire" name='invoiceRequire'
+                            value="requireShowText" placeholder='开票要求'/>
+                 </div>
                  <div class='col-sm-1'>
-                     <a class="btn btn-danger btn-sm" onclick="removeProject(paramterProductId)" >
-                         <i class="fa fa-remove"></i> 删除
-                     </a>
+                     <input class='form-control' type='text' id="backDate" name='backDate' value="backShowText"
+                            placeholder='回款日期'/>
+                 </div>
+                 <div class='col-sm-1'>
+                     <input class='form-control' type='text' id="backAmount" name="backAmount"
+                            value="amountShowText" placeholder='回款金额' onblur="sumPrice(paramterProductId)" onkeyup="AmountKeyUp(this)"/>
                  </div>
              </div>
+                 <div class='form-group'>
+                     <label class='control-label col-sm-3'>备注：</label>
+                     <div class='col-sm-5'>
+                         <input name='productRemark_paramterProductId' id="productRemark_paramterProductId" class='form-control'
+                                type='text'>
+                     </div>
+
+                     <div class='col-sm-3'>
+                         <a class="btn btn-danger btn-sm" onclick="removeProject(paramterProductId)">
+                             <i class="fa fa-remove"></i> 删除
+                         </a>
+                     </div>
+                 </div>
+
 
          </div>
          <div class="hr-line-dashed"></div>

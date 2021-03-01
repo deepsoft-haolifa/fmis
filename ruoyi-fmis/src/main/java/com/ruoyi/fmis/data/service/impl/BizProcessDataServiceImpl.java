@@ -769,7 +769,11 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
     public List<BizProcessData> selectBizProcessDataListRefCPayment(BizProcessData bizProcessData) {
         return bizProcessDataMapper.selectBizProcessDataListRefCPayment(bizProcessData);
     }
-
+    @Override
+    @DataScope(deptAlias = "dt", userAlias = "u")
+    public List<BizProcessData> selectBizProcessDataListRefInvoice(BizProcessData bizProcessData) {
+        return bizProcessDataMapper.selectBizProcessDataListRefInvoice(bizProcessData);
+    }
     @Override
     @DataScope(deptAlias = "dt", userAlias = "u")
     public List<BizProcessData> selectBizProcessDataListRefPayment(BizProcessData bizProcessData) {

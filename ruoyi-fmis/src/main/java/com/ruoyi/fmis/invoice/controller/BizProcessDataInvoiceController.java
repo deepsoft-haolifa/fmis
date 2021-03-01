@@ -36,7 +36,7 @@ import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
 
 /**
- * 合同管理Controller
+ * 开票Controller
  *
  * @author frank
  * @date 2020-05-05
@@ -73,12 +73,12 @@ public class BizProcessDataInvoiceController extends BaseController {
     }
 
     /**
-     * 查询合同管理列表
+     * 查询申请开票列表
      */
-    @RequiresPermissions("fmis:invoice:list")
-    @PostMapping("/list")
+    @RequiresPermissions("fmis:invoice:applyList")
+    @PostMapping("/apply-list")
     @ResponseBody
-    public TableDataInfo list(BizProcessData bizProcessData) {
+    public TableDataInfo applyList(BizProcessData bizProcessData) {
 
         String bizId = bizProcessData.getBizId();
 
@@ -156,20 +156,9 @@ public class BizProcessDataInvoiceController extends BaseController {
         mmap.put("bizTable", bizId);
         return prefix + "/viewExamineHistory";
     }
-    /**
-     * 导出合同管理列表
-     */
-    @RequiresPermissions("fmis:invoice:export")
-    @PostMapping("/export")
-    @ResponseBody
-    public AjaxResult export(BizProcessData bizProcessData) {
-        List<BizProcessData> list = bizProcessDataService.selectBizProcessDataList(bizProcessData);
-        ExcelUtil<BizProcessData> util = new ExcelUtil<BizProcessData>(BizProcessData.class);
-        return util.exportExcel(list, "data");
-    }
 
     /**
-     * 新增合同管理
+     * 新增开票
      */
     @GetMapping("/add")
     public String add() {
@@ -177,10 +166,10 @@ public class BizProcessDataInvoiceController extends BaseController {
     }
 
     /**
-     * 新增保存合同管理
+     * 新增保存开票
      */
     @RequiresPermissions("fmis:invoice:add")
-    @Log(title = "合同管理", businessType = BusinessType.INSERT)
+    @Log(title = "开票", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
     public AjaxResult addSave(BizProcessData bizProcessData) {
@@ -209,7 +198,7 @@ public class BizProcessDataInvoiceController extends BaseController {
     }
 
     /**
-     * 修改合同管理
+     * 修改开票
      */
     @GetMapping("/edit/{dataId}")
     public String edit(@PathVariable("dataId") Long dataId, ModelMap mmap) {
@@ -242,10 +231,10 @@ public class BizProcessDataInvoiceController extends BaseController {
     }
 
     /**
-     * 修改保存合同管理
+     * 修改保存开票
      */
     @RequiresPermissions("fmis:invoice:edit")
-    @Log(title = "合同管理", businessType = BusinessType.UPDATE)
+    @Log(title = "开票", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
     public AjaxResult editSave(BizProcessData bizProcessData) {
@@ -281,10 +270,10 @@ public class BizProcessDataInvoiceController extends BaseController {
     }
 
     /**
-     * 删除合同管理
+     * 删除开票
      */
     @RequiresPermissions("fmis:invoice:remove")
-    @Log(title = "合同管理", businessType = BusinessType.DELETE)
+    @Log(title = "开票", businessType = BusinessType.DELETE)
     @PostMapping( "/remove")
     @ResponseBody
     public AjaxResult remove(String ids) {

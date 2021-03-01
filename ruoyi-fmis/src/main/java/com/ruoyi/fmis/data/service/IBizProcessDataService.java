@@ -71,6 +71,8 @@ public interface IBizProcessDataService {
 
     public List<BizProcessData> selectBizProcessDataListRefProcurement(BizProcessData bizProcessData);
 
+    public List<BizProcessData> selectBizProcessDataListRefInvoice(BizProcessData bizProcessData);
+
     public List<BizProcessData> selectBizProcessDataVoRefBorrowing(BizProcessData bizProcessData);
 
     public int doExamine(String dataId,String status,String remark,String bizId);

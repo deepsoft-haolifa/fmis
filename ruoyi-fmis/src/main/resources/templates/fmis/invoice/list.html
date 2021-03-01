@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('申请开票列表')"/>
+    <th:block th:include="include :: header('开票管理列表')"/>
 </head>
 <body class="gray-bg">
 <div class="container-div">
     <div class="row">
         <div class="col-sm-12 search-collapse">
             <form id="formId">
-                <input type="hidden" name="bizId" id="bizId" value="invoice"/>
                 <div class="select-list">
                     <ul>
+
                         <li>
                             <p>状态：</p>
                             <select name="queryStatus" class="form-control m-b">
@@ -51,11 +51,10 @@
     var removeFlag = [[${@permission.hasPermi('fmis:invoice:remove')}]];
     var prefix = ctx + "fmis/invoice";
     var invoiceClassifyDict = [[${@dict.getType('invoice_classify')}]];
-    var invoicelevelDict = [[${@dict.getType('invoice_level')}]];
 
     $(function () {
         var options = {
-            url: prefix + "/apply-list",
+            url: prefix + "/list",
             createUrl: prefix + "/add",
             updateUrl: prefix + "/edit/{id}",
             removeUrl: prefix + "/remove",
@@ -98,6 +97,26 @@
                 {
                     field: 'string4',
                     title: '客户名称'
+                },
+                {
+                    field: 'string3',
+                    title: '合同号'
+                },
+                {
+                    field: 'price1',
+                    title: '开票金额'
+                },
+                {
+                    field: 'string5',
+                    title: '回款金额'
+                },
+                {
+                    field: 'string6',
+                    title: '回款日期'
+                },
+                {
+                    field: 'string7',
+                    title: '开票要求'
                 },
                 {
                     title: '操作',
