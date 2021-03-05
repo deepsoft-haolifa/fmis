@@ -1,265 +1,288 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:include="include :: header('新增开票管理')" />
-    <th:block th:include="include :: datetimepicker-css" />
+    <th:block th:include="include :: header('新增开票管理')"/>
+    <th:block th:include="include :: datetimepicker-css"/>
 </head>
 <body class="white-bg">
-    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
-        <form class="form-horizontal m" id="form-data-add">
-            <input type="hidden" name="bizId" value="invoice"/>
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-data-add">
+        <input type="hidden" name="bizId" value="invoice"/>
 
 
-            <div class="form-group">
-                <label class="col-sm-3 control-label">申请日期：</label>
-                <div class="col-sm-8">
-                    <div class="input-group date">
-                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input name="datetime1" class="form-control" placeholder="yyyy-MM-dd" type="text">
-                    </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">申请日期：</label>
+            <div class="col-sm-8">
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input name="datetime1" class="form-control" placeholder="yyyy-MM-dd" type="text">
                 </div>
             </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>开票单位：</label>
-                <div class="col-sm-8">
-                    <select name="string1" class="form-control m-b" th:with="type=${@dict.getType('pay_company')}" required>
-                        <option value="">请选择</option>
-                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                    </select>
-                </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label"><span style="color: red; ">*</span>开票单位：</label>
+            <div class="col-sm-8">
+                <select name="string1" class="form-control m-b" th:with="type=${@dict.getType('pay_company')}" required>
+                    <option value="">请选择</option>
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label"><span style="color: red; ">*</span>开票种类：</label>
+            <div class="col-sm-8">
+                <select name="string2" class="form-control m-b" th:with="type=${@dict.getType('invoice_classify')}"
+                        required>
+                    <option value="">请选择</option>
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label"><span style="color: red; ">*</span>优先等级：</label>
+            <div class="col-sm-8">
+                <select name="string3" class="form-control m-b" th:with="type=${@dict.getType('invoice_level')}"
+                        required>
+                    <option value="">请选择</option>
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                </select>
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">客户：</label>
+            <div class="col-sm-8">
+                <input name="string4" class="form-control" type="hidden">
+                <input name="string5" id="string5" class="form-control" type="text" readonly onclick="selectCustomer()"
+                       required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">客户代号：</label>
+            <div class="col-sm-8">
+                <input name="string6" class="form-control" type="text">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">税号：</label>
+            <div class="col-sm-8">
+                <input name="string7" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">开户行及账号：</label>
+            <div class="col-sm-8">
+                <input name="string8" class="form-control" type="text">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">地址电话（注册）：</label>
+            <div class="col-sm-8">
+                <input name="string9" class="form-control" type="text">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">发票接收人：</label>
+            <div class="col-sm-8">
+                <input name="string10" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">地址电话（通讯）：</label>
+            <div class="col-sm-8">
+                <input name="string11" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">联系电话：：</label>
+            <div class="col-sm-8">
+                <input name="string12" class="form-control" type="text">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">选择合同：</label>
+            <div class="col-sm-6">
+                <input name="contractIds" id="contractIds" class="form-control" type="hidden">
+                <input name="contractNames" id="contractNames" class="form-control" type="text" readonly
+                       onclick="selectContract(0)" required>
             </div>
 
-            <div class="form-group">
-                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>开票种类：</label>
-                <div class="col-sm-8">
-                    <select name="string2" class="form-control m-b" th:with="type=${@dict.getType('invoice_classify')}" required>
-                        <option value="">请选择</option>
-                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                    </select>
-                </div>
+            <div class="col-sm-3">
+                <a class="btn btn-success btn-sm" onclick="selectContract(1)">
+                    <i class="fa fa"></i> 追加
+                    <input type="hidden" id="productOperationType" name="productOperationType" value="0">
+                </a>
             </div>
+        </div>
 
-            <div class="form-group">
-                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>优先等级：</label>
-                <div class="col-sm-8">
-                    <select name="string3" class="form-control m-b" th:with="type=${@dict.getType('invoice_level')}" required>
-                        <option value="">请选择</option>
-                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                    </select>
-                </div>
+
+        <div class="hr-line-dashed"></div>
+        <div class="form-horizontal" id="productDiv">
+
+
+        </div>
+        <div class="hr-line-dashed"></div>
+
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">总计：</label>
+            <div class="col-sm-8">
+                <input name="price1" id="price1" class="form-control" type="text">
             </div>
+        </div>
 
-
-            <div class="form-group">
-                <label class="col-sm-3 control-label">客户：</label>
-                <div class="col-sm-8">
-                    <input name="string4" class="form-control" type="hidden">
-                    <input name="string5" id="string5" class="form-control" type="text" readonly onclick="selectCustomer()" required>
-                </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">备注：</label>
+            <div class="col-sm-8">
+                <input name="remark" class="form-control" type="text">
             </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">客户代号：</label>
-                <div class="col-sm-8">
-                    <input name="string6" class="form-control" type="text">
-                </div>
-            </div>
+        </div>
+    </form>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: datetimepicker-js"/>
+<script type="text/javascript">
+    var prefix = ctx + "fmis/invoice"
+    $("#form-data-add").validate({
+        focusCleanup: true
+    });
 
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">税号：</label>
-                <div class="col-sm-8">
-                    <input name="string7" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">开户行及账号：</label>
-                <div class="col-sm-8">
-                    <input name="string8" class="form-control" type="text">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="col-sm-3 control-label">地址电话（注册）：</label>
-                <div class="col-sm-8">
-                    <input name="string9" class="form-control" type="text">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="col-sm-3 control-label">发票接收人：</label>
-                <div class="col-sm-8">
-                    <input name="string10" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">地址电话（通讯）：</label>
-                <div class="col-sm-8">
-                    <input name="string11" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">联系电话：：</label>
-                <div class="col-sm-8">
-                    <input name="string12" class="form-control" type="text">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="col-sm-3 control-label">选择合同：</label>
-                <div class="col-sm-6">
-                    <input name="contractIds" id="contractIds" class="form-control" type="hidden" >
-                    <input name="contractNames" id="contractNames" class="form-control" type="text" readonly onclick="selectContract(0)" required>
-                </div>
-
-                <div class="col-sm-3">
-                    <a class="btn btn-success btn-sm" onclick="selectContract(1)" >
-                        <i class="fa fa"></i> 追加
-                        <input type="hidden" id="productOperationType" name="productOperationType" value="0">
-                    </a>
-                </div>
-            </div>
-
-
-            <div class="hr-line-dashed"></div>
-            <div class="form-horizontal" id="productDiv">
-
-
-
-            </div>
-            <div class="hr-line-dashed"></div>
-
-
-        </form>
-    </div>
-    <th:block th:include="include :: footer" />
-    <th:block th:include="include :: datetimepicker-js" />
-    <script type="text/javascript">
-        var prefix = ctx + "fmis/invoice"
-        $("#form-data-add").validate({
-            focusCleanup: true
-        });
-
-        function submitHandler() {
-            var vali = $.validate.form();
-            console.log("vali=" + vali);
-            if (vali) {
-                var dataObj = $('#form-data-add').serializeArray();
-                //计算是否正常
-                //特殊费用
-                var productIds = $("#contractIds").val();
-                var productArray = new Array();
-                var productIdsStrs = productIds.split(",");
-                for (var i = 0; i < productIdsStrs.length; i++) {
-                    var productObj = new Object();
-                    var productId = productIdsStrs[i];
-                    productObj["string1"] = productId;
-                    productObj["price1"] = $("#productNum_" + productId).val();
-                    productObj["price2"] = $("#productPrice_" + productId).val();
-                    productObj["remark"] = $("#productRemark_" + productId).val();
-                    productArray.push(productObj);
-                }
-                dataObj.push({"name": "productParmters", "value": JSON.stringify(productArray)});
-                $.operate.save(prefix + "/add", dataObj);
-            }
-        }
-
-        $("input[name='datetime1']").datetimepicker({
-            format: "yyyy-mm-dd",
-            minView: "month",
-            autoclose: true
-        });
-
-        $("input[name='datetime2']").datetimepicker({
-            format: "yyyy-mm-dd",
-            minView: "month",
-            autoclose: true
-        });
-
-        $("input[name='datetime3']").datetimepicker({
-            format: "yyyy-mm-dd",
-            minView: "month",
-            autoclose: true
-        });
-
-        function isEmpty(v) {
-            return $.common.isEmpty(v);
-        }
-        function selectCustomer() {
-            var widthNum = this.innerWidth - 50;
-            var heigthNum = this.innerHeight - 50;
-            var url = prefix + "/selectCustomer";
-            $.modal.open("关联客户", url,widthNum, heigthNum);
-        }
-
-        function selectContract(type) {
-            var url = prefix + "/selectContract";
-            $("#productOperationType").val(type);
-            var widthNum = this.innerWidth - 50;
-            var heigthNum = this.innerHeight - 50;
-
-            $.modal.open("关联合同", url,widthNum, heigthNum);
-        }
-
-
-        /**
-         * 计算总额
-         */
-        function sumPrice (productId) {
-            getProductSum(productId);
-            totalSumPrice();
-        }
-
-        function getProductSum (productId) {
-            //产品数量 产品系数 价格
-            var productNum = $("#productNum_" + productId).val();
-            productNum = isEmpty(productNum) == true ? 0 : parseFloat(productNum);
-
-            var productPrice = $("#productPrice_" + productId).val();
-            productPrice = isEmpty(productPrice) == true ? 0 : parseFloat(productPrice);
-
-            //合计总额 totalSum
-            var productSum = parseFloat(productPrice).toFixed(4);
-            var totalSum = parseFloat(parseFloat(productSum)).toFixed(4);
-            $("#totalSum_" + productId).val(totalSum);
-            return totalSum + "#" + productNum;
-        }
-
-        function FloatAdd(arg1,arg2){
-            var r1,r2,m;
-            try{r1=arg1.toString().split(".")[1].length}catch(e){r1=0}
-            try{r2=arg2.toString().split(".")[1].length}catch(e){r2=0}
-            m=Math.pow(10,Math.max(r1,r2));
-            return (arg1*m+arg2*m)/m;
-        }
-
-        function totalSumPrice () {
-            //产品合计金额
+    function submitHandler() {
+        var vali = $.validate.form();
+        console.log("vali=" + vali);
+        if (vali) {
+            var dataObj = $('#form-data-add').serializeArray();
+            //计算是否正常
+            //特殊费用
             var productIds = $("#contractIds").val();
-            var productIdsS = productIds.split(",");
-            var productTotalPrice = 0;
-            var totalPrice = 0;
-            var productTotalNumS = 0;
-            for (var i = 0; i < productIdsS.length; i++) {
-                var productId = productIdsS[i];
-                if (isEmpty(productId)) {
-                    continue;
-                }
-                var totalSumStr = getProductSum(productId,productTotalNum);
-                var totalSum = totalSumStr.split("#")[0];
-                var productTotalNum = totalSumStr.split("#")[1];
-                productTotalPrice = FloatAdd(productTotalPrice,totalSum).toFixed(4);
-                productTotalNumS = FloatAdd(productTotalNumS,productTotalNum).toFixed(0);
+            var productArray = new Array();
+            var productIdsStrs = productIds.split(",");
+            for (var i = 0; i < productIdsStrs.length; i++) {
+                var productObj = new Object();
+                var productId = productIdsStrs[i];
+                productObj["string1"] = productId;
+                productObj["string2"] = $("#productName_" + productId).val();
+                productObj["price1"] = $("#invoicePrice_" + productId).val();
+                productObj["string5"] = $("#invoiceRequire_" + productId).val();
+                productObj["string6"] = $("#backDate_" + productId).val();
+                productObj["price2"] = $("#backAmount_" + productId).val();
+                productObj["remark"] = $("#productRemark_" + productId).val();
+                productArray.push(productObj);
             }
-            var specialExpenses = $("#specialExpenses").val();
-            if (isEmpty(specialExpenses)) {
-                specialExpenses = 0;
-            }
-            totalPrice = parseFloat(productTotalPrice) + parseFloat(specialExpenses);
-            $("#productTotalPrice").val(parseFloat(productTotalPrice).toFixed(4));
-            $("#price1").val(parseFloat(totalPrice).toFixed(4));
-            $("#productTotalNum").val(productTotalNumS);
+            dataObj.push({"name": "productParmters", "value": JSON.stringify(productArray)});
+            $.operate.save(prefix + "/add", dataObj);
         }
+    }
+
+    $("input[name='datetime1']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+
+    $("input[name='datetime2']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+
+    $("input[name='datetime3']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+
+    function isEmpty(v) {
+        return $.common.isEmpty(v);
+    }
+
+    function selectCustomer() {
+        var widthNum = this.innerWidth - 50;
+        var heigthNum = this.innerHeight - 50;
+        var url = prefix + "/selectCustomer";
+        $.modal.open("关联客户", url, widthNum, heigthNum);
+    }
+
+    function selectContract(type) {
+        var url = prefix + "/selectContract";
+        $("#productOperationType").val(type);
+        var widthNum = this.innerWidth - 50;
+        var heigthNum = this.innerHeight - 50;
+
+        $.modal.open("关联合同", url, widthNum, heigthNum);
+    }
+
+    function removeProject(productId) {
+
+        $.modal.confirm("确定要删除该合同吗？", function () {
+            $("#productDiv_" + productId).remove();
+            var productIds = $("#contractIds").val();
+            var productNames = $("#contractNames").val();
+            var productIdsS = productIds.split(",");
+            var productNamesS = productNames.split(",");
+            for (var i = 0; i < productIdsS.length; i++) {
+                if (productId == productIdsS[i]) {
+                    var productName = productNamesS[i];
+                    productNamesS.splice(i, 1);
+                    productIdsS.splice(i, 1);
+                }
+            }
+            $("#contractIds").val(productIdsS.toString());
+            $("#contractNames").val(productNamesS.toString());
+            // 重新计算金额
+            totalSumPrice();
+        });
 
 
-    </script>
+    }
+
+    function FloatAdd(arg1, arg2) {
+        var r1, r2, m;
+        try {
+            r1 = arg1.toString().split(".")[1].length
+        } catch (e) {
+            r1 = 0
+        }
+        try {
+            r2 = arg2.toString().split(".")[1].length
+        } catch (e) {
+            r2 = 0
+        }
+        m = Math.pow(10, Math.max(r1, r2));
+        return (arg1 * m + arg2 * m) / m;
+    }
+
+
+    function totalSumPrice() {
+        //产品合计金额
+        var productIds = $("#contractIds").val();
+        var productIdsS = productIds.split(",");
+        var totalPrice = 0;
+        for (var i = 0; i < productIdsS.length; i++) {
+            var productId = productIdsS[i];
+            if ($.common.isEmpty(productId)) {
+                continue;
+            }
+            var productPrice = getProductSum(productId);
+            totalPrice = FloatAdd(productPrice, totalPrice).toFixed(4);
+        }
+        $("#price1").val(parseFloat(totalPrice).toFixed(4));
+    }
+
+    function getProductSum(productId) {
+        var productPrice = $("#invoicePrice_" + productId).val();
+        productPrice = $.common.isEmpty(productPrice) === true ? 0 : parseFloat(productPrice);
+        return parseFloat(productPrice).toFixed(4);
+    }
+
+
+</script>
 </body>
 </html>

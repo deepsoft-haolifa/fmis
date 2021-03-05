@@ -369,7 +369,7 @@
         productNamesStr = productNamesStr.substr(0, productNamesStr.length - 1);
         console.log("productNamesStr=" + productNamesStr);
         console.log("productOperationType=" + productOperationType);
-        if (productOperationType == "0") {
+        if (productOperationType === "0") {
             parent.$('#form-data-add input[name=contractIds]').val(productIdsStr);
             parent.$('#form-data-add input[name=contractNames]').val(productNamesStr);
 
@@ -387,9 +387,9 @@
                 if (!$.common.endWith(oldProductNames, ",")) {
                     oldProductNames += ",";
                 }
-                var newProductIds = oldProductIds + productIdsStr;
-                var newProductNames = oldProductNames + productNamesStr;
             }
+            var newProductIds = oldProductIds + productIdsStr;
+            var newProductNames = oldProductNames + productNamesStr;
             parent.$('#form-data-add input[name=contractIds]').val(newProductIds);
             parent.$('#form-data-add input[name=contractNames]').val(newProductNames);
             parent.$('#form-data-edit input[name=contractIds]').val(newProductIds);

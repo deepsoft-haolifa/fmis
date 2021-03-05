@@ -50,26 +50,25 @@
 
              <div class='form-group'>
                  <label class='control-label col-sm-3'>合同编号：</label>
-                 <div class='col-sm-3'>
-                     <input name='contractId' id="contractId" class='form-control' type='hidden' >
-                     <input name='contractNo' id="contractNo" value="contractShowText" class='form-control' type='text' readonly >
+                 <div class='col-sm-2'>
+                     <input name='productName' id="productName" value="productShowText" class='form-control' type='text' readonly>
                  </div>
 
                  <div class='col-sm-2'>
                      <input class='form-control' type='text' id="invoicePrice" name='invoicePrice'
-                            value="priceShowText" placeholder='开票金额'/>
+                            value="priceShowText" placeholder='开票金额' onblur="totalSumPrice()" onkeyup="AmountKeyUp(this)" />
                  </div>
                  <div class='col-sm-2'>
                      <input class='form-control' type='text' id="invoiceRequire" name='invoiceRequire'
                             value="requireShowText" placeholder='开票要求'/>
                  </div>
                  <div class='col-sm-1'>
-                     <input class='form-control' type='text' id="backDate" name='backDate' value="backShowText"
+                     <input class='form-control date form_date' type='text' id="backDate_paramterProductId" name='backDate_paramterProductId'
                             placeholder='回款日期'/>
                  </div>
                  <div class='col-sm-1'>
-                     <input class='form-control' type='text' id="backAmount" name="backAmount"
-                            value="amountShowText" placeholder='回款金额' onblur="sumPrice(paramterProductId)" onkeyup="AmountKeyUp(this)"/>
+                     <input class='form-control' type='text' id="backAmount_paramterProductId" name="backAmount_paramterProductId"
+                            placeholder='回款金额'/>
                  </div>
              </div>
                  <div class='form-group'>
@@ -191,7 +190,7 @@
         /* 添加用户-选择用户-提交 */
         function submitHandler() {
             var rows = $.table.selectFirstColumns();
-            if (rows.length == 0) {
+            if (rows.length === 0) {
                 $.modal.alertWarning("请选择一条记录");
                 return;
             }
@@ -204,10 +203,8 @@
             }
             var rowsSel = $('#bootstrap-table').bootstrapTable('getSelections');
             var productIds = $.table.selectColumns("dataId");
-            var names = $.table.selectColumns("string1");
-            console.log("productIds=" + productIds + "|" + names);
             var htmlStr = "";
-            if (productOperationType == "1") {
+            if (productOperationType === "1") {
                 //htmlStr = parent.$('#productDiv').html();
             } else {
                 parent.$('#productDiv').html(htmlStr);
@@ -228,7 +225,13 @@
             for(var i = 0; i < productIds.length; i++) {
                 var prodictDivHtml = $("#prodictDiv").html();
                 var productId = productIds[i];
+                // 合同号
                 var productName = rowsSel[i].string1;
+                // 开票金额
+                var invoicePirce = rowsSel[i].price1;
+                // 开票要求
+                var invoiceRequire = rowsSel[i].string5;
+
 
                 var productIdsS = oldProductIds.split(",");
                 var productNamesS = oldProductNames.split(",");
@@ -246,38 +249,23 @@
                 }
 
                 console.log("productId=" + productId + " name=" + productName);
+                prodictDivHtml = prodictDivHtml.replace(/productName/g, "productName_" + productId);
+                prodictDivHtml = prodictDivHtml.replace(/productShowText/g, productName);
+                prodictDivHtml = prodictDivHtml.replace(/invoicePrice/g,"invoicePrice_" + productId);
+                prodictDivHtml = prodictDivHtml.replace(/priceShowText/g,invoicePirce);
+                prodictDivHtml = prodictDivHtml.replace(/invoiceRequire/g,"invoiceRequire_" + productId);
+                prodictDivHtml = prodictDivHtml.replace(/requireShowText/g,invoiceRequire);
 
-                //prodictDivHtml = prodictDivHtml.replace(/productPrice/g,"productPrice_" + productId);
-                //prodictDivHtml = prodictDivHtml.replace(/productValuePrice/g,$.table.selectColumns("price")[i]);
-
-                prodictDivHtml = prodictDivHtml.replace(/productName/g,"productName_" + productId);
-
-                console.log("1productId=" + productId + " name=" + productName);
-
-                prodictDivHtml = prodictDivHtml.replace(/productShowText/g,productName);
-
-
-                //prodictDivHtml = prodictDivHtml.replace(/productNum/g,"productNum_" + productId);
-
-
-                prodictDivHtml = prodictDivHtml.replace(/productModelShowText/g,$.table.selectColumns("model")[i]);
-
-
-                prodictDivHtml = prodictDivHtml.replace(/paramterProductId/g,productId);
-                //prodictDivHtml = prodictDivHtml.replace(/unitPrice/g,"unitPrice_" + productId);
-                //prodictDivHtml = prodictDivHtml.replace(/totalSum/g,"totalSum_" + productId);
-
-
-                prodictDivHtml = prodictDivHtml.replace(/productHtml/g,productName);
+                prodictDivHtml = prodictDivHtml.replace(/paramterProductId/g, productId);
+                prodictDivHtml = prodictDivHtml.replace(/productHtml/g, productName);
 
                 htmlStr += prodictDivHtml;
                 productIdsStr += productId + ",";
                 productNamesStr += productName + ",";
-                //console.log(htmlStr);
             }
             productNamesStr = productNamesStr.substr(0,productNamesStr.length - 1);
             console.log("productNamesStr=" + productNamesStr);
-            if (productOperationType == "0") {
+            if (productOperationType === "0") {
                 parent.$('#form-data-add input[name=contractIds]').val(productIdsStr);
                 parent.$('#form-data-add input[name=contractNames]').val(productNamesStr);
 
@@ -285,7 +273,6 @@
                 parent.$('#form-data-edit input[name=contractNames]').val(productNamesStr);
             } else {
                 //追加
-
                 if ($.common.isEmpty(oldProductIds)) {
                     oldProductIds = "";
                     oldProductNames = "";
@@ -296,11 +283,14 @@
                     if (!$.common.endWith(oldProductNames,",")) {
                         oldProductNames += ",";
                     }
-                    var newProductIds = oldProductIds + productIdsStr;
-                    var newProductNames = oldProductNames + productNamesStr;
+
                 }
+                var newProductIds = oldProductIds + productIdsStr;
+                var newProductNames = oldProductNames + productNamesStr;
+                console.log("追加1:"+newProductNames)
                 parent.$('#form-data-add input[name=contractIds]').val(newProductIds);
                 parent.$('#form-data-add input[name=contractNames]').val(newProductNames);
+
                 parent.$('#form-data-edit input[name=contractIds]').val(newProductIds);
                 parent.$('#form-data-edit input[name=contractNames]').val(newProductNames);
             }

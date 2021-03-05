@@ -169,7 +169,7 @@ public class BizProcessDataInvoiceController extends BaseController {
      * 新增保存开票
      */
     @RequiresPermissions("fmis:invoice:add")
-    @Log(title = "开票", businessType = BusinessType.INSERT)
+    @Log(title = "开票申请", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
     public AjaxResult addSave(BizProcessData bizProcessData) {
@@ -218,10 +218,6 @@ public class BizProcessDataInvoiceController extends BaseController {
                 bizProcessChild.setBizProcessData(bizProduct);
             }
             bizProcessData.setBizProcessChildList(bizProcessChildList);
-        }
-        String customerId = bizProcessData.getString4();
-        if (StringUtils.isNotEmpty(customerId)) {
-            bizProcessData.setBizCustomer(bizCustomerService.selectBizCustomerById(Long.parseLong(customerId)));
         }
 
         mmap.put("contractNames", productNames);
