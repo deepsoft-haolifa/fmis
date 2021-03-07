@@ -196,7 +196,7 @@
             <if test="datetime5 != null "> and datetime5 = #{datetime5}</if>
             <if test="status != null  and status != ''"> and status = #{status}</if>
         </where>
-        group  by pc.child_id
+        group  by bs.status_id
     </select>
 
 

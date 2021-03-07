@@ -44,6 +44,11 @@
         <result property="datetime3" column="datetime3"/>
         <result property="datetime4" column="datetime4"/>
         <result property="datetime5" column="datetime5"/>
+        <result property="pattachmentId" column="pattachment_id"/>
+        <result property="pattachment1Id" column="pattachment1_id"/>
+        <result property="pattachment2Id" column="pattachment2_id"/>
+        <result property="pattachment3Id" column="pattachment3_id"/>
+        <result property="pattachment4Id" column="pattachment4_id"/>
         <result property="status" column="status"/>
         <result property="delFlag" column="del_flag"/>
         <result property="createBy" column="create_by"/>
@@ -55,7 +60,9 @@
     </resultMap>
 
     <sql id="selectBizProcessChildVo">
-        select child_id, data_id, remark, price1, price2, price3, price4, price5, price6, price7, price8, price9, price10, string1, string2, string3, string4, string5, string6, string7, string8, string9, string10, string11, string12, string13, string14, string15, string16, string17, string18, string19, string20, datetime1, datetime2, datetime3, datetime4, datetime5, status, del_flag, create_by, create_time, update_by, update_time from biz_process_child
+        select child_id, data_id, remark, price1, price2, price3, price4, price5, price6, price7, price8, price9, price10, string1, string2, string3, string4, string5, string6, string7, string8,
+        string9, string10, string11, string12, string13, string14, string15, string16, string17, string18, string19, string20,
+        pattachment_id,pattachment1_id,pattachment2_id,pattachment3_id,pattachment4_id,datetime1, datetime2, datetime3, datetime4, datetime5, status, del_flag, create_by, create_time, update_by, update_time from biz_process_child
     </sql>
 
     <select id="selectBizProcessChildList" parameterType="BizProcessChild" resultMap="BizProcessChildResult">

@@ -1382,7 +1382,7 @@ public class BizQuotationController extends BaseController {
                     jsonData.put("productId",productId);
                     jsonData.put("productName",bizProduct.getName());
                     jsonData.put("model",bizProduct.getModel());
-                    jsonData.put("series",bizProduct.getString1());
+                    jsonData.put("string1",bizProduct.getString1());
 
                     jsonData.put("specifications",bizProduct.getSpecifications());
                     jsonData.put("nominalPressure",bizProduct.getNominalPressure());
