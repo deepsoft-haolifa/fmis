@@ -19,6 +19,8 @@ import com.ruoyi.fmis.finance.domain.BizPayPlan;
 import com.ruoyi.fmis.finance.service.IBizPayPlanService;
 import com.ruoyi.fmis.flow.domain.BizFlow;
 import com.ruoyi.fmis.flow.mapper.BizFlowMapper;
+import com.ruoyi.fmis.invoice.bean.InvoiceReqVo;
+import com.ruoyi.fmis.invoice.bean.InvoiceRespVo;
 import com.ruoyi.fmis.product.domain.BizProduct;
 import com.ruoyi.fmis.product.service.IBizProductService;
 import com.ruoyi.fmis.quotation.domain.BizQuotation;
@@ -739,11 +741,13 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
     public List<BizProcessData> selectBizProcessDataListRef(BizProcessData bizProcessData) {
         return bizProcessDataMapper.selectBizProcessDataListRef(bizProcessData);
     }
+
     @Override
     @DataScope(deptAlias = "dt", userAlias = "u")
     public List<BizProcessData> selectBizProcessDataListRefLiu(BizProcessData bizProcessData) {
         return bizProcessDataMapper.selectBizProcessDataListRefLiu(bizProcessData);
     }
+
     @Override
     @DataScope(deptAlias = "dt", userAlias = "u")
     public List<BizProcessData> selectBizProcessDataListXs(BizProcessData bizProcessData) {
@@ -769,11 +773,19 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
     public List<BizProcessData> selectBizProcessDataListRefCPayment(BizProcessData bizProcessData) {
         return bizProcessDataMapper.selectBizProcessDataListRefCPayment(bizProcessData);
     }
+
     @Override
     @DataScope(deptAlias = "dt", userAlias = "u")
     public List<BizProcessData> selectBizProcessDataListRefInvoice(BizProcessData bizProcessData) {
         return bizProcessDataMapper.selectBizProcessDataListRefInvoice(bizProcessData);
     }
+
+    @Override
+    @DataScope(deptAlias = "dt", userAlias = "u")
+    public List<InvoiceRespVo> selectBizProcessChildListRefInvoice(InvoiceReqVo reqVo) {
+        return bizProcessDataMapper.selectBizProcessChildListRefInvoice(reqVo);
+    }
+
     @Override
     @DataScope(deptAlias = "dt", userAlias = "u")
     public List<BizProcessData> selectBizProcessDataListRefPayment(BizProcessData bizProcessData) {

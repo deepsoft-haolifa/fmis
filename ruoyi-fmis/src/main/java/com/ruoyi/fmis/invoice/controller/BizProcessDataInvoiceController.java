@@ -1,5 +1,6 @@
 package com.ruoyi.fmis.invoice.controller;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +13,8 @@ import com.ruoyi.fmis.common.BizConstants;
 import com.ruoyi.fmis.common.CommonUtils;
 import com.ruoyi.fmis.customer.service.IBizCustomerService;
 import com.ruoyi.fmis.define.service.IBizProcessDefineService;
+import com.ruoyi.fmis.invoice.bean.InvoiceReqVo;
+import com.ruoyi.fmis.invoice.bean.InvoiceRespVo;
 import com.ruoyi.fmis.product.domain.BizProduct;
 import com.ruoyi.fmis.product.service.IBizProductService;
 import com.ruoyi.system.domain.SysRole;
@@ -79,11 +82,9 @@ public class BizProcessDataInvoiceController extends BaseController {
     @PostMapping("/apply-list")
     @ResponseBody
     public TableDataInfo applyList(BizProcessData bizProcessData) {
-
         String bizId = bizProcessData.getBizId();
-
         startPage();
-        List<BizProcessData> list = bizProcessDataService.selectBizProcessDataListRefProcurement(bizProcessData);
+        List<BizProcessData> list = bizProcessDataService.selectBizProcessDataListRefInvoice(bizProcessData);
 
         Map<String, SysRole> flowMap = bizProcessDefineService.getRoleFlowMap(bizId);
         Map<String, SysRole> flowAllMap = bizProcessDefineService.getFlowAllMap(bizId);
@@ -99,7 +100,7 @@ public class BizProcessDataInvoiceController extends BaseController {
                 } else if ("1".equals(flowStatus)) {
                     flowStatusRemark = "已上报";
                 } else {
-                    SysRole currentSysRole =  CommonUtils.getLikeByMap(flowAllMap,flowStatus.replaceAll("-",""));
+                    SysRole currentSysRole = CommonUtils.getLikeByMap(flowAllMap, flowStatus.replaceAll("-", ""));
                     if (currentSysRole == null) {
                         continue;
                     }
@@ -130,10 +131,30 @@ public class BizProcessDataInvoiceController extends BaseController {
         }
         return getDataTable(list);
     }
+
+
     @GetMapping("/examineEdit")
     public String examineEdit(ModelMap mmap) {
         String dataId = getRequest().getParameter("dataId");
-        BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataById(Long.parseLong(dataId));
+        BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataById(Long.valueOf(dataId));
+        BizProcessChild queryBizProcessChild = new BizProcessChild();
+        queryBizProcessChild.setDataId(bizProcessData.getDataId());
+        List<BizProcessChild> bizProcessChildList = bizProcessChildService.selectBizProcessChildList(queryBizProcessChild);
+        String productNames = "";
+        String productIds = "";
+        if (!CollectionUtils.isEmpty(bizProcessChildList)) {
+            for (BizProcessChild bizProcessChild : bizProcessChildList) {
+                String productId = bizProcessChild.getString1();
+                BizProcessData bizProduct = bizProcessDataService.selectBizProcessDataById(Long.parseLong(productId));
+                productNames += bizProduct.getString1() + ",";
+                productIds += bizProduct.getDataId() + ",";
+                bizProcessChild.setBizProcessData(bizProduct);
+            }
+            bizProcessData.setBizProcessChildList(bizProcessChildList);
+        }
+
+        mmap.put("contractNames", productNames);
+        mmap.put("contractIds", productIds);
         mmap.put("bizProcessData", bizProcessData);
         return prefix + "/examineEdit";
     }
@@ -144,12 +165,11 @@ public class BizProcessDataInvoiceController extends BaseController {
         String examineStatus = bizProcessData.getExamineStatus();
         String examineRemark = bizProcessData.getExamineRemark();
         String dataId = bizProcessData.getDataId().toString();
-        return toAjax(bizProcessDataService.doExamine(dataId,examineStatus,examineRemark,bizProcessData.getBizId()));
+        return toAjax(bizProcessDataService.doExamine(dataId, examineStatus, examineRemark, bizProcessData.getBizId()));
     }
 
     @GetMapping("/viewExamineHistory")
     public String viewExamine(ModelMap mmap) {
-
         String dataId = getRequest().getParameter("dataId");
         String bizId = getRequest().getParameter("bizId");
         mmap.put("bizId", dataId);
@@ -270,18 +290,10 @@ public class BizProcessDataInvoiceController extends BaseController {
      */
     @RequiresPermissions("fmis:invoice:remove")
     @Log(title = "开票", businessType = BusinessType.DELETE)
-    @PostMapping( "/remove")
+    @PostMapping("/remove")
     @ResponseBody
     public AjaxResult remove(String ids) {
         return toAjax(bizProcessDataService.deleteBizProcessDataByIds(ids));
-    }
-
-    @PostMapping("/report")
-    @ResponseBody
-    public AjaxResult report() {
-        String dataId = getRequest().getParameter("dataId");
-        BizProcessData bizQuotation = bizProcessDataService.selectBizProcessDataById(Long.parseLong(dataId));
-        return toAjax(bizProcessDataService.subReportBizQuotation(bizQuotation));
     }
 
     /**
@@ -293,12 +305,82 @@ public class BizProcessDataInvoiceController extends BaseController {
     }
 
     /**
-     * 选择系统用户
+     * 选择合同
      */
     @GetMapping("/selectContract")
     public String selectContract(ModelMap mmap) {
-
-
         return prefix + "/selectContract";
     }
+
+
+    /**
+     * 开票明细
+     *
+     * @param mmap
+     * @return
+     */
+    @RequiresPermissions("fmis:invoice:childView")
+    @GetMapping("/childList")
+    public String childList(ModelMap mmap) {
+        return prefix + "/childList";
+    }
+
+    /**
+     * 查询申请开票列表
+     */
+    @RequiresPermissions("fmis:invoice:childList")
+    @PostMapping("/childList")
+    @ResponseBody
+    public TableDataInfo childList(InvoiceReqVo invoiceReqVo) {
+        startPage();
+        List<InvoiceRespVo> list = bizProcessDataService.selectBizProcessChildListRefInvoice(invoiceReqVo);
+        return getDataTable(list);
+    }
+
+    /**
+     * 开票
+     *
+     */
+    @RequiresPermissions("fmis:invoice:operate")
+    @GetMapping("/operate/{childId}")
+    public String operate(@PathVariable("childId") Long childId, ModelMap mmap) {
+        BizProcessChild child = bizProcessChildService.selectBizProcessChildById(childId);
+        mmap.put("BizProcessChild", child);
+        return prefix + "/operate";
+    }
+
+
+    /**
+     * 开票保存
+     */
+    @RequiresPermissions("fmis:invoice:operate")
+    @PostMapping("/operate")
+    @ResponseBody
+    public AjaxResult operate(BizProcessChild child) {
+        return toAjax(bizProcessChildService.updateBizProcessChild(child));
+    }
+
+    /**
+     * 邮寄登记
+     *
+     */
+    @RequiresPermissions("fmis:invoice:post")
+    @GetMapping("/post/{childId}")
+    public String post(@PathVariable("childId") Long childId, ModelMap mmap) {
+        BizProcessChild child = bizProcessChildService.selectBizProcessChildById(childId);
+        mmap.put("BizProcessChild", child);
+        return prefix + "/post";
+    }
+
+
+    /**
+     * 开票保存
+     */
+    @RequiresPermissions("fmis:invoice:post")
+    @PostMapping("/post")
+    @ResponseBody
+    public AjaxResult post(BizProcessChild child) {
+        return toAjax(bizProcessChildService.updateBizProcessChild(child));
+    }
+
 }

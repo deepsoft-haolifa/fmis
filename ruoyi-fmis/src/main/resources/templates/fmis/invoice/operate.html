@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('开票')"/>
+    <th:block th:include="include :: datetimepicker-css"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-data-edit" th:object="${BizProcessChild}">
+        <input name="childId" th:field="*{childId}" type="hidden">
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">开票时间：</label>
+            <div class="col-sm-8">
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input name="datetime2" class="form-control" placeholder="yyyy-MM-dd"
+                           th:value="${#dates.format(BizProcessChild.datetime2, 'yyyy-MM-dd')}" type="text" readonly>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">开票状态：</label>
+            <div class="col-sm-8">
+                <select name="string7" class="form-control m-b"
+                        th:with="type=${@dict.getType('invoice_status')}">
+                    <option value="">请选择</option>
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{string7}"></option>
+                </select>
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">发票编码：</label>
+            <div class="col-sm-8">
+                <input name="string8" class="form-control" type="text" th:field="*{string8}">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">开票人：</label>
+            <div class="col-sm-8">
+                <input name="string9" class="form-control" type="text" th:field="*{string9}">
+            </div>
+        </div>
+
+    </form>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: datetimepicker-js"/>
+<script type="text/javascript">
+    var prefix = ctx + "fmis/invoice";
+    $("#form-data-edit").validate({
+        focusCleanup: true
+    });
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/operate", $('#form-data-edit').serialize());
+        }
+    }
+
+    $("input[name='datetime1']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+
+    $("input[name='datetime2']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+
+    $("input[name='datetime3']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+
+</script>
+</body>
+</html>

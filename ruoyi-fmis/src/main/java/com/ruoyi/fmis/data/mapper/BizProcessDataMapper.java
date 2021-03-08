@@ -1,6 +1,10 @@
 package com.ruoyi.fmis.data.mapper;
 
+import com.ruoyi.fmis.child.domain.BizProcessChild;
 import com.ruoyi.fmis.data.domain.BizProcessData;
+import com.ruoyi.fmis.invoice.bean.InvoiceReqVo;
+import com.ruoyi.fmis.invoice.bean.InvoiceRespVo;
+
 import java.util.List;
 
 /**
@@ -55,6 +59,12 @@ public interface BizProcessDataMapper {
      * @return
      */
     public List<BizProcessData> selectBizProcessDataListRefInvoice(BizProcessData bizProcessData);
+
+    /**
+     * 开票明细查询
+     * @return
+     */
+    public List<InvoiceRespVo> selectBizProcessChildListRefInvoice(InvoiceReqVo reqVo);
 
 
     /**

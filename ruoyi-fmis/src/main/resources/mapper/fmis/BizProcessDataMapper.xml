@@ -564,6 +564,37 @@
         </where>
         order by d.create_time desc
     </select>
+
+    <sql id="selectBizProcessChildVoRefInvoice">
+              select d.datetime1 pDate1, d.string1 pString1,d.string2 pString2,d.string3 pString3,d.string5 pString5,d.string6 pString6,
+            c.child_id childId,c.data_id dataId,c.string1,c.string2,c.string3,c.string4,c.string5,c.string6,c.string7,c.string8,c.string9,
+            c.string10,c.price1,c.price2,c.datetime1,c.datetime2,c.datetime3,c.datetime4
+            from biz_process_child c
+            left join biz_process_data d on c.data_id=d.data_id
+            left join sys_user u on d.create_by=u.user_id
+            left join sys_dept dt on u.dept_id=dt.dept_id
+    </sql>
+    <select id="selectBizProcessChildListRefInvoice" parameterType="com.ruoyi.fmis.invoice.bean.InvoiceReqVo" resultType="com.ruoyi.fmis.invoice.bean.InvoiceRespVo">
+        <include refid="selectBizProcessChildVoRefInvoice"/>
+        <where>
+            and d.biz_id="invoice" and d.normal_flag=d.flow_status
+            <if test="pString1 != null  and pString1 != ''"> and d.string1 like concat('%', #{pString1}, '%')</if>
+            <if test="pString2 != null  and pString2 != ''"> and d.string2 = #{pString2}</if>
+            <if test="pString3 != null  and pString3 != ''"> and d.string3 like concat('%', #{pString3}, '%')</if>
+            <if test="pString5 != null  and pString5 != ''"> and d.string5 like concat('%', #{pString5}, '%')</if>
+            <if test="pString6 != null  and pString6 != ''"> and d.string6 like concat('%', #{pString6}, '%')</if>
+            ${params.dataScope}
+        </where>
+        order by d.create_time desc
+    </select>
+
+
+
+
+
+
+
+
     <sql id="selectBizProcessDataVoRefPayment">
         select d.data_id, d.biz_data_id, d.biz_id, d.normal_flag, d.flow_status, d.remark, d.price1, d.price2, d.price3,
         d.price4, d.price5, d.price6, d.price7, d.price8, d.price9, d.price10, d.string1, d.string2,

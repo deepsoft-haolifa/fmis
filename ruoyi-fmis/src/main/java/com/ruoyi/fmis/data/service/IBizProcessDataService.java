@@ -3,6 +3,9 @@ package com.ruoyi.fmis.data.service;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.fmis.common.BizContractLevel;
 import com.ruoyi.fmis.data.domain.BizProcessData;
+import com.ruoyi.fmis.invoice.bean.InvoiceReqVo;
+import com.ruoyi.fmis.invoice.bean.InvoiceRespVo;
+
 import java.util.List;
 
 /**
@@ -72,6 +75,13 @@ public interface IBizProcessDataService {
     public List<BizProcessData> selectBizProcessDataListRefProcurement(BizProcessData bizProcessData);
 
     public List<BizProcessData> selectBizProcessDataListRefInvoice(BizProcessData bizProcessData);
+
+    /**
+     * 开票明细
+     * @return
+     */
+    public List<InvoiceRespVo> selectBizProcessChildListRefInvoice(InvoiceReqVo reqVo);
+
 
     public List<BizProcessData> selectBizProcessDataVoRefBorrowing(BizProcessData bizProcessData);
 

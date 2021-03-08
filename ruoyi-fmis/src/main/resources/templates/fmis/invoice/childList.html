@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('开票管理列表')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            <p>开票单位：</p>
+                            <select name="pString1" class="form-control m-b" th:with="type=${@dict.getType('pay_company')}">
+                                <option value="">请选择</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                            </select>
+                        </li>
+                        <li>
+                            <p>开票种类：</p>
+                            <select name="pString2" class="form-control m-b" th:with="type=${@dict.getType('invoice_classify')}">
+                                <option value="">请选择</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                            </select>
+                        </li>
+                        <li>
+                            <p>优先级：</p>
+                            <select name="pString3" class="form-control m-b" th:with="type=${@dict.getType('invoice_level')}">
+                                <option value="">请选择</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                            </select>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('fmis:invoice:post')}]];
+    var removeFlag = [[${@permission.hasPermi('fmis:invoice:operate')}]];
+    var prefix = ctx + "fmis/invoice";
+    var invoiceClassifyDict = [[${@dict.getType('invoice_classify')}]];
+    var invoiceStatusDict = [[${@dict.getType('invoice_status')}]];
+
+    $(function () {
+        var options = {
+            url: prefix + "/childList",
+            uniqueId: "childId",
+            modalName: "开票明细",
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'childId',
+                    title: 'ID',
+                    visible: false
+                },
+                {
+                    field: 'pdate1',
+                    title: '申请日期'
+                },
+                {
+                    field: 'pstring3',
+                    title: '优先级'
+                },
+                {
+                    field: 'pstring1',
+                    title: '开票单位'
+                },
+
+                {
+                    field: 'pstring2',
+                    title: '票种',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(invoiceClassifyDict, value);
+                    }
+                },
+                {
+                    field: 'pstring6',
+                    title: '客户代号'
+                },
+                {
+                    field: 'pstring5',
+                    title: '客户名称'
+                },
+                {
+                    field: 'string2',
+                    title: '合同号'
+                },
+                {
+                    field: 'price1',
+                    title: '开票金额'
+                },
+                {
+                    field: 'price2',
+                    title: '回款金额'
+                },
+                {
+                    field: 'string6',
+                    title: '回款日期'
+                },
+                {
+                    field: 'string5',
+                    title: '开票要求'
+                },
+                {
+                    field: 'string7',
+                    title: '开票状态',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(invoiceStatusDict, value);
+                    }
+                },
+                {
+                    field: 'string8',
+                    title: '发票编码'
+                },
+                {
+                    field: 'string9',
+                    title: '开票人'
+                },
+                {
+                    field: 'datetime2',
+                    title: '开票日期'
+                },
+                {
+                    field: 'datetime3',
+                    title: '邮寄时间'
+                },
+                {
+                    field: 'string10',
+                    title: '快递单号'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="operate(\'' + row.childId + '\')"><i class="fa fa-remove"></i> 开票 </a>');
+                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="post(\'' + row.childId + '\')"><i class="fa fa-remove"></i> 邮寄登记 </a>');
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(options);
+    });
+
+    function operate(dataId) {
+        var url = prefix + "/operate/" + dataId;
+        $.modal.openFull("开票", url);
+    }
+    function post(dataId) {
+        var url = prefix + "/post/" + dataId;
+        $.modal.openFull("邮寄登记", url);
+    }
+
+
+
+</script>
+</body>
+</html>

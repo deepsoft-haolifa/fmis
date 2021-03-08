@@ -51,7 +51,6 @@
     var removeFlag = [[${@permission.hasPermi('fmis:invoice:remove')}]];
     var prefix = ctx + "fmis/invoice";
     var invoiceClassifyDict = [[${@dict.getType('invoice_classify')}]];
-    var invoicelevelDict = [[${@dict.getType('invoice_level')}]];
 
     $(function () {
         var options = {
@@ -92,12 +91,16 @@
                     }
                 },
                 {
-                    field: 'string5',
+                    field: 'string6',
                     title: '客户代号'
                 },
                 {
-                    field: 'string4',
+                    field: 'string5',
                     title: '客户名称'
+                },
+                {
+                    field: 'flowStatusRemark',
+                    title: '审批节点'
                 },
                 {
                     title: '操作',
@@ -122,7 +125,7 @@
                             actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subExamine(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 审批</a>');
                         }
                         actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewExamineHistory(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 审批记录 </a>');
-                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewExamineDetail(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 详情 </a>');
+                        // actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewExamineDetail(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 详情 </a>');
                         return actions.join('');
                     }
                 }]

@@ -144,12 +144,14 @@
                                th:value="${qp.dataId}">
                         <input th:id="'productId_' + ${qp.string1}" class='form-control' type='hidden'
                                th:value="${qp.string1}">
-                        <input name='productName' th:id="'productName_' + ${qp.string1}" th:value="${qp.string2}" value="productShowText"
+                        <input name='productName' th:id="'productName_' + ${qp.string1}" th:value="${qp.string2}"
+                               value="productShowText"
                                class='form-control' type='text' readonly>
                     </div>
                     <div class='col-sm-2'>
                         <input class='form-control' type='text' th:name='invoicePrice'
-                               th:id="'invoicePrice_' + ${qp.string1}" th:value="${qp.price1}" placeholder='开票金额' onblur="totalSumPrice()" onkeyup="AmountKeyUp(this)"/>
+                               th:id="'invoicePrice_' + ${qp.string1}" th:value="${qp.price1}" placeholder='开票金额'
+                               onblur="totalSumPrice()" onkeyup="AmountKeyUp(this)"/>
                     </div>
                     <div class='col-sm-2'>
                         <input class='form-control' type='text' th:name='invoiceRequire'
@@ -247,18 +249,13 @@
             var productNames = $("#contractNames").val();
             var productIdsS = productIds.split(",");
             var productNamesS = productNames.split(",");
-            console.log("删除1："+productNamesS.toString())
-            console.log("删除1："+productIdsS.toString())
-            console.log("删除1："+productId)
             for (var i = 0; i < productIdsS.length; i++) {
                 console.log(productIdsS[i]);
-                if (productId === productIdsS[i]) {
-                    console.log("删除3："+productId)
+                if (productId + '' === productIdsS[i]) {
                     productNamesS.splice(i, 1);
                     productIdsS.splice(i, 1);
                 }
             }
-            console.log("删除2："+productNamesS.toString())
             $("#contractIds").val(productIdsS.toString());
             $("#contractNames").val(productNamesS.toString());
             // 重新计算金额
@@ -272,8 +269,9 @@
         var widthNum = this.innerWidth - 50;
         var heigthNum = this.innerHeight - 50;
 
-        $.modal.open("关联合同", url,widthNum, heigthNum);
+        $.modal.open("关联合同", url, widthNum, heigthNum);
     }
+
     function selectCustomer() {
         var widthNum = this.innerWidth - 50;
         var heigthNum = this.innerHeight - 50;
@@ -300,16 +298,24 @@
     });
 
 
-    function FloatAdd(arg1,arg2){
-        var r1,r2,m;
-        try{r1=arg1.toString().split(".")[1].length}catch(e){r1=0}
-        try{r2=arg2.toString().split(".")[1].length}catch(e){r2=0}
-        m=Math.pow(10,Math.max(r1,r2));
-        return (arg1*m+arg2*m)/m;
+    function FloatAdd(arg1, arg2) {
+        var r1, r2, m;
+        try {
+            r1 = arg1.toString().split(".")[1].length
+        } catch (e) {
+            r1 = 0
+        }
+        try {
+            r2 = arg2.toString().split(".")[1].length
+        } catch (e) {
+            r2 = 0
+        }
+        m = Math.pow(10, Math.max(r1, r2));
+        return (arg1 * m + arg2 * m) / m;
     }
 
 
-    function totalSumPrice () {
+    function totalSumPrice() {
         //产品合计金额
         var productIds = $("#contractIds").val();
         var productIdsS = productIds.split(",");
@@ -320,11 +326,12 @@
                 continue;
             }
             var productPrice = getProductSum(productId);
-            totalPrice = FloatAdd(productPrice,totalPrice).toFixed(4);
+            totalPrice = FloatAdd(productPrice, totalPrice).toFixed(4);
         }
         $("#price1").val(parseFloat(totalPrice).toFixed(4));
     }
-    function getProductSum (productId) {
+
+    function getProductSum(productId) {
         var productPrice = $("#invoicePrice_" + productId).val();
         productPrice = $.common.isEmpty(productPrice) === true ? 0 : parseFloat(productPrice);
         return parseFloat(productPrice).toFixed(4);
