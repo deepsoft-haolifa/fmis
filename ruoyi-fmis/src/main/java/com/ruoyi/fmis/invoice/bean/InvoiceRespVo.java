@@ -18,6 +18,7 @@ public class InvoiceRespVo {
     private String pString2;
     private String pString5;
     private String pString6;
+    private String createByName;
 
     private String string2;
     private Double price1;

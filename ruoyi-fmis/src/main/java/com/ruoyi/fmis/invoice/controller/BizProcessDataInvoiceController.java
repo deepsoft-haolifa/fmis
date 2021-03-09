@@ -24,11 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.fmis.data.domain.BizProcessData;
@@ -83,10 +79,19 @@ public class BizProcessDataInvoiceController extends BaseController {
     @ResponseBody
     public TableDataInfo applyList(BizProcessData bizProcessData) {
         String bizId = bizProcessData.getBizId();
+
+        Map<String, SysRole> flowMap = bizProcessDefineService.getRoleFlowMap(bizId);
+        String userFlowStatus = "";
+        if (!CollectionUtils.isEmpty(flowMap)) {
+            for (String key : flowMap.keySet()) {
+                userFlowStatus = key;
+            }
+            bizProcessData.setRoleType(userFlowStatus);
+        }
+
         startPage();
         List<BizProcessData> list = bizProcessDataService.selectBizProcessDataListRefInvoice(bizProcessData);
 
-        Map<String, SysRole> flowMap = bizProcessDefineService.getRoleFlowMap(bizId);
         Map<String, SysRole> flowAllMap = bizProcessDefineService.getFlowAllMap(bizId);
         if (!CollectionUtils.isEmpty(flowMap)) {
             //计算流程描述
@@ -95,7 +100,7 @@ public class BizProcessDataInvoiceController extends BaseController {
                 //结束标识
                 String normalFlag = data.getNormalFlag();
                 String flowStatusRemark = "待上报";
-                if ("-2".equals(flowStatus)) {
+                if ("0".equals(flowStatus)) {
                     flowStatusRemark = "待上报";
                 } else if ("1".equals(flowStatus)) {
                     flowStatusRemark = "已上报";
@@ -119,12 +124,11 @@ public class BizProcessDataInvoiceController extends BaseController {
                 data.setOperationExamineStatus(false);
                 if (flowStatusInt > 0) {
                     if (!flowStatus.equals(normalFlag)) {
-                        String userFlowStatus = flowMap.keySet().iterator().next();
+//                        String userFlowStatus = flowMap.keySet().iterator().next();
                         int userFlowStatusInt = Integer.parseInt(userFlowStatus);
                         if (userFlowStatusInt == flowStatusInt + 1) {
                             data.setOperationExamineStatus(true);
                         }
-
                     }
                 }
             }
@@ -193,7 +197,7 @@ public class BizProcessDataInvoiceController extends BaseController {
     @PostMapping("/add")
     @ResponseBody
     public AjaxResult addSave(BizProcessData bizProcessData) {
-        bizProcessData.setFlowStatus("-2");
+        bizProcessData.setFlowStatus("0");
         Map<String, SysRole> flowAllMap = bizProcessDefineService.getFlowAllMap(bizProcessData.getBizId());
         if (!CollectionUtils.isEmpty(flowAllMap)) {
             for (String key : flowAllMap.keySet()) {
@@ -285,6 +289,14 @@ public class BizProcessDataInvoiceController extends BaseController {
         return toAjax(updateReturn);
     }
 
+    @PostMapping("/report")
+    @ResponseBody
+    public AjaxResult report() {
+        String dataId = getRequest().getParameter("dataId");
+        BizProcessData bizQuotation = bizProcessDataService.selectBizProcessDataById(Long.parseLong(dataId));
+        return toAjax(bizProcessDataService.subReportBizQuotation(bizQuotation));
+    }
+
     /**
      * 删除开票
      */
@@ -308,7 +320,8 @@ public class BizProcessDataInvoiceController extends BaseController {
      * 选择合同
      */
     @GetMapping("/selectContract")
-    public String selectContract(ModelMap mmap) {
+    public String selectContract(@RequestParam(value = "customerId", required = false) String customerId, ModelMap mmap) {
+        mmap.put("customerId", customerId);
         return prefix + "/selectContract";
     }
 
@@ -339,7 +352,6 @@ public class BizProcessDataInvoiceController extends BaseController {
 
     /**
      * 开票
-     *
      */
     @RequiresPermissions("fmis:invoice:operate")
     @GetMapping("/operate/{childId}")
@@ -362,7 +374,6 @@ public class BizProcessDataInvoiceController extends BaseController {
 
     /**
      * 邮寄登记
-     *
      */
     @RequiresPermissions("fmis:invoice:post")
     @GetMapping("/post/{childId}")

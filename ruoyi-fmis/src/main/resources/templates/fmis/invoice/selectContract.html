@@ -8,6 +8,8 @@
         <div class="row">
             <div class="col-sm-12 search-collapse">
                 <form id="formId">
+                    <input type="hidden" name="bizId" id="bizId" value="contract"/>
+                    <input type="hidden" name="string2" id="string2" th:value="${customerId}"/>
                     <div class="select-list">
                         <ul>
 
@@ -22,7 +24,6 @@
                             <li>
                                 <p>备用1：</p>
                                 <input type="text" name="string1"/>
-                                <input type="hidden" name="bizId" id="bizId" value="contract"/>
                             </li>
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>

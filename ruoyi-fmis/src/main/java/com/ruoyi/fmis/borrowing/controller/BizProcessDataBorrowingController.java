@@ -106,7 +106,7 @@ public class BizProcessDataBorrowingController extends BaseController {
                 String normalFlag = data.getNormalFlag();
                 data.setLoginUserId(ShiroUtils.getUserId().toString());
                 String flowStatusRemark = "待上报";
-                if ("-2".equals(flowStatus)) {
+                if ("0".equals(flowStatus)) {
                     flowStatusRemark = "待上报";
                 } else if ("1".equals(flowStatus)) {
                     flowStatusRemark = "已上报";
