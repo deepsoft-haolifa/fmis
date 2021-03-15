@@ -183,7 +183,7 @@
                 </div>
                 <label class="col-sm-1 control-label">总金额：</label>
                 <div class="col-sm-2">
-                    <input name="price1" id="price1" class="form-control" type="text" th:field="*{price1}" readonly>
+                    <input name="price1" id="price1" class="form-control" type="text" th:field="*{price1}" >
                 </div>
             </div>
             <div class="form-group" style="margin-bottom: 7px">
@@ -944,7 +944,7 @@
             }
         }
         function loadSuccess() {
-            calculateTotalPrice();
+            // calculateTotalPrice();
 
             payTypeChange();
         }

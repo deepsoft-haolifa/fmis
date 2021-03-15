@@ -1143,102 +1143,174 @@ public class BizProcessDataController extends BaseController {
      */
     public String setNormalFlag (BizProcessData bizProcessData,String productArrayStr) {
         String normalFlag = "5";
+        int num = 2;
         String totalPrice = bizProcessData.getPrice1().toString();
         String specialExpenses = bizProcessData.getString14();
-        if (StringUtils.isNotEmpty(totalPrice) && Double.parseDouble(totalPrice) >= 500000) {
+        if (StringUtils.isNotEmpty(totalPrice) && Double.parseDouble(totalPrice) >= 1000000) {
             normalFlag = "5";
-        } else if (StringUtils.isNotEmpty(totalPrice) && Double.parseDouble(totalPrice) >= 300000) {
+            num = 5;
+        } else if (StringUtils.isNotEmpty(totalPrice) && Double.parseDouble(totalPrice) >= 500000) {
             normalFlag = "4";
-        } else if (StringUtils.isNotEmpty(totalPrice) && Double.parseDouble(totalPrice) >= 100000) {
+            num = 4;
+        } else if (StringUtils.isNotEmpty(totalPrice) && Double.parseDouble(totalPrice) >= 200000) {
             normalFlag = "3";
-        }  else {
-            String payType = bizProcessData.getString18();
-            String payType1 = bizProcessData.getString8();
+            num = 3;
+        }
+        String payType = bizProcessData.getString18();
+        String payType1 = bizProcessData.getString8();
 
-            String string15 = bizProcessData.getString15();//账期
-            String string17 = bizProcessData.getString17();//账期天数
-            String string26 = bizProcessData.getString26();//质保期
-            if (StringUtils.isEmpty(string26)) {
-                string26 = "0";
-            }
-            if ("1".equals(payType) && ("1".equals(payType1) || "2".equals(payType1) || "3".equals(payType1) || "4".equals(payType1))) {
-                //预付款	预付（0，20,30,50）%，发货前付至100%	销售人员	销售经理
+        String string15 = bizProcessData.getString15();//账期
+        String string17 = bizProcessData.getString17();//账期天数
+        String string26 = bizProcessData.getString26();//质保期
+        if (StringUtils.isEmpty(string26)) {
+            string26 = "0";
+        }
+        if ("1".equals(payType) && ("1".equals(payType1) || "2".equals(payType1) || "3".equals(payType1) || "4".equals(payType1))) {
+            //预付款	预付（0，20,30,50）%，发货前付至100%	销售人员	销售经理
+            if (num < 3) {
                 normalFlag = "2";
-            } else if ("2".equals(payType) && ("1".equals(string15) || "2".equals(string15))) {
-                //货到□/票到□30/45天 销售总经理
+                num = 2;
+            }
+
+        } else if ("2".equals(payType) && ("1".equals(string15) || "2".equals(string15))) {
+            //货到□/票到□30/45天 销售总经理
+            if (num < 4) {
                 normalFlag = "3";
-            } else if ("2".equals(payType) && ("3".equals(string15))) {
-                //货到□/票到□60 天（可选项30天/45天/60天/90天/其它）
+                num = 3;
+            }
+        } else if ("2".equals(payType) && ("3".equals(string15))) {
+            //货到□/票到□60 天（可选项30天/45天/60天/90天/其它）
+            if (num < 5) {
                 normalFlag = "4";
-            } else if ("2".equals(payType) && ("4".equals(string15) || "5".equals(string15))) {
-                //货到□/票到□90 天/其它
-                normalFlag = "5";
-            } else if ("3".equals(payType)) {
-                //协议付款
-                normalFlag = "5";
-                //price6=发货前付款
-                //price7=货到款天数
-                //price11=质保金
-                //price9=调试款
-                /**
-                 * 发货前付款低于65%；货到款超过90天；质保金超过10%；质保期超过12个月
-                 * 发货前付款低于65%；货到款、调试款超过90天；质保金超过10%；质保期超过12个月  副总
-                 */
-                Double price6 = bizProcessData.getPrice6() == null ? 0 : bizProcessData.getPrice6();
-                Double price7 = bizProcessData.getPrice7() == null ? 0 : bizProcessData.getPrice7();
-                Double price11 = bizProcessData.getPrice11() == null ? 0 : bizProcessData.getPrice11();
-                Double price9 = bizProcessData.getPrice9() == null ? 0 : bizProcessData.getPrice9();
-                if (price6 < 65 || price7 > 90 || price11 > 10 || Integer.parseInt(string26) > 12 || price9 > 90) {
+                num = 4;
+            }
+        } else if ("2".equals(payType) && ("4".equals(string15) || "5".equals(string15))) {
+            //货到□/票到□90 天/其它
+            normalFlag = "5";
+            num = 5;
+        } else if ("3".equals(payType)) {
+            //协议付款
+            normalFlag = "5";
+            //price6=发货前付款
+            //price7=货到款天数
+            //price11=质保金
+            //price9=调试款
+            /**
+             * 发货前付款低于65%；货到款超过90天；质保金超过10%；质保期超过12个月
+             * 发货前付款低于65%；货到款、调试款超过90天；质保金超过10%；质保期超过12个月  副总
+             */
+            Double price6 = bizProcessData.getPrice6() == null ? 0 : bizProcessData.getPrice6();
+            Double price7 = bizProcessData.getPrice7() == null ? 0 : bizProcessData.getPrice7();
+            Double price11 = bizProcessData.getPrice11() == null ? 0 : bizProcessData.getPrice11();
+            Double price9 = bizProcessData.getPrice9() == null ? 0 : bizProcessData.getPrice9();
+            if (price6 < 65 || price7 > 90 || price11 > 10 || Integer.parseInt(string26) > 12 || price9 > 90) {
+                if (num < 5) {
                     normalFlag = "4";
-                }
-
-
-
-
-            } else {
-                JSONArray productArray = JSONArray.parseArray(productArrayStr);
-                Double minCoefficient = new Double(10000000);
-                Double minOtherCoefficient = new Double(10000000);
-                for (int i = 0; i < productArray.size(); i++) {
-                    JSONObject json = productArray.getJSONObject(i);
-                    BizProcessChild bizProcessChild = JSONObject.parseObject(json.toJSONString(), BizProcessChild.class);
-                    if (bizProcessChild.getString2() != null) {
-
-                        String productCoefficient = bizProcessChild.getString4();
-                        if (StringUtils.isNotEmpty(productCoefficient) && Double.parseDouble(productCoefficient) < minCoefficient) {
-                            minCoefficient = Double.parseDouble(productCoefficient);
-                        }
-                        String actuatorCoefficient = bizProcessChild.getString13();
-                        if (StringUtils.isNotEmpty(actuatorCoefficient) && Double.parseDouble(actuatorCoefficient) < minOtherCoefficient) {
-                            minOtherCoefficient = Double.parseDouble(actuatorCoefficient);
-                        }
-                        String productRef1Coefficient = bizProcessChild.getString7();
-                        if (StringUtils.isNotEmpty(productRef1Coefficient) && Double.parseDouble(productRef1Coefficient) < minOtherCoefficient) {
-                            minOtherCoefficient = Double.parseDouble(productRef1Coefficient);
-                        }
-                        String productRef2Coefficient = bizProcessChild.getString10();
-                        if (StringUtils.isNotEmpty(productRef2Coefficient) && Double.parseDouble(productRef2Coefficient) < minOtherCoefficient) {
-                            minOtherCoefficient = Double.parseDouble(productRef2Coefficient);
-                        }
-                    }
-                }
-                /**
-                 * 计算最低系数
-                 * 如果系数（报价员录入的系数）底于0.9，由必须由销售副总审核、总经理审批，流程结束；
-                 * 如果系数0.9--1.0，必须由销售副总审核，流程结束，
-                 * 如果报价系数大于1.0--1.1则由区域经理审批完成后流程结束；
-                 * 如果系数大于1.1，则由部门销售经理审核完成后流程结束
-                 */
-                if (minCoefficient < 0.88 || (minOtherCoefficient > 0 && minOtherCoefficient < 0.92)) {
-                    normalFlag = "5";
-                }else if ((minCoefficient >= 0.88 && minCoefficient < 0.95) || (minOtherCoefficient >= 0.92 && minOtherCoefficient < 0.97)) {
-                    normalFlag = "4";
-                } else if ((minCoefficient >= 0.95 && minCoefficient < 1) || (minOtherCoefficient >= 0.97 && minOtherCoefficient <= 1)) {
-                    normalFlag = "3";
-                } else {
-                    normalFlag = "2";
+                    num = 4;
                 }
             }
+
+
+        }
+
+        JSONArray productArray = JSONArray.parseArray(productArrayStr);
+        Double minCoefficient = new Double(10000000);
+        Double minOtherCoefficient = new Double(10000000);
+        //未修改的并且系数为1的时候的价格
+        Double price = 0.0;
+        //计算所有子类的总价与totalPrice 相除的大minOtherCoefficient
+        for (int i = 0; i < productArray.size(); i++) {
+            JSONObject json = productArray.getJSONObject(i);
+            BizProcessChild bizProcessChild = JSONObject.parseObject(json.toJSONString(), BizProcessChild.class);
+            if (bizProcessChild.getString2() != null) {
+/*
+                String productCoefficient = bizProcessChild.getString4();
+                if (StringUtils.isNotEmpty(productCoefficient) && Double.parseDouble(productCoefficient) < minCoefficient) {
+                    minCoefficient = Double.parseDouble(productCoefficient);
+                }
+                String actuatorCoefficient = bizProcessChild.getString13();
+                if (StringUtils.isNotEmpty(actuatorCoefficient) && Double.parseDouble(actuatorCoefficient) < minOtherCoefficient) {
+                    minOtherCoefficient = Double.parseDouble(actuatorCoefficient);
+                }
+                String productRef1Coefficient = bizProcessChild.getString7();
+                if (StringUtils.isNotEmpty(productRef1Coefficient) && Double.parseDouble(productRef1Coefficient) < minOtherCoefficient) {
+                    minOtherCoefficient = Double.parseDouble(productRef1Coefficient);
+                }
+                String productRef2Coefficient = bizProcessChild.getString10();
+                if (StringUtils.isNotEmpty(productRef2Coefficient) && Double.parseDouble(productRef2Coefficient) < minOtherCoefficient) {
+                    minOtherCoefficient = Double.parseDouble(productRef2Coefficient);
+                }*/
+                if (bizProcessChild.getPrice1() == null) {
+                    bizProcessChild.setPrice1(0.0);
+                }
+                if (bizProcessChild.getPrice2() == null) {
+                    bizProcessChild.setPrice2(0.0);
+                }
+                if (bizProcessChild.getPrice3() == null) {
+                    bizProcessChild.setPrice3(0.0);
+                }
+                if (bizProcessChild.getPrice4() == null) {
+                    bizProcessChild.setPrice4(0.0);
+                }
+                price = price + Integer.parseInt(bizProcessChild.getString3())*bizProcessChild.getPrice1();
+                price = price + Integer.parseInt(bizProcessChild.getString12())*bizProcessChild.getPrice4();
+                price = price + Integer.parseInt(bizProcessChild.getString6())*bizProcessChild.getPrice2();
+                price = price + Integer.parseInt(bizProcessChild.getString9())*bizProcessChild.getPrice3();
+                if (bizProcessChild.getPattachment1Price() == null) {
+                    bizProcessChild.setPattachment1Price(0.0);
+                }
+                if (bizProcessChild.getPattachment2Price() == null) {
+                    bizProcessChild.setPattachment2Price(0.0);
+                }
+                if (bizProcessChild.getPattachment3Price() == null) {
+                    bizProcessChild.setPattachment3Price(0.0);
+                }
+                if (bizProcessChild.getPattachment4Price() == null) {
+                    bizProcessChild.setPattachment4Price(0.0);
+                }
+                if (bizProcessChild.getPattachmentPrice() == null) {
+                    bizProcessChild.setPattachmentPrice(0.0);
+                }
+
+                if (bizProcessChild.getPattachment1Count() == null) {
+                    bizProcessChild.setPattachment1Count(0.0);
+                }
+                if (bizProcessChild.getPattachment2Count() == null) {
+                    bizProcessChild.setPattachment2Count(0.0);
+                }
+                if (bizProcessChild.getPattachment3Count() == null) {
+                    bizProcessChild.setPattachment3Count(0.0);
+                }
+                if (bizProcessChild.getPattachment4Count() == null) {
+                    bizProcessChild.setPattachment4Count(0.0);
+                }
+                if (bizProcessChild.getPattachmentCount() == null) {
+                    bizProcessChild.setPattachmentCount(0.0);
+                }
+                price = price + bizProcessChild.getPattachment1Count()*bizProcessChild.getPattachment1Price();
+                price = price + bizProcessChild.getPattachment2Count()*bizProcessChild.getPattachment2Price();
+                price = price + bizProcessChild.getPattachment3Count()*bizProcessChild.getPattachment3Price();
+                price = price + bizProcessChild.getPattachment4Count()*bizProcessChild.getPattachment4Price();
+                price = price + bizProcessChild.getPattachmentCount()*bizProcessChild.getPattachmentPrice();
+            }
+        }
+        System.out.println("price" + price);
+        /**
+         * 计算最低系数
+         * 如果系数（报价员录入的系数）底于0.9，由必须由销售副总审核、总经理审批，流程结束；
+         * 如果系数0.9--1.0，必须由销售副总审核，流程结束，
+         * 如果报价系数大于1.0--1.1则由区域经理审批完成后流程结束；
+         * 如果系数大于1.1，则由部门销售经理审核完成后流程结束
+         */
+        minCoefficient = Double.parseDouble(totalPrice) / price;
+        if (minCoefficient < 0.88 ) {
+            normalFlag = "5";
+        }else if ((minCoefficient >= 0.88 && minCoefficient < 0.95)) {
+            normalFlag = "4";
+        } else if ((minCoefficient >= 0.95 && minCoefficient < 1) ) {
+            normalFlag = "3";
+        } else {
+            normalFlag = "2";
         }
         bizProcessData.setNormalFlag(normalFlag);
         /**
