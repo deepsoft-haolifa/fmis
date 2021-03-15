@@ -1,6 +1,7 @@
 package com.ruoyi.fmis.finance.service.impl;
 
 import com.ruoyi.common.core.text.Convert;
+import com.ruoyi.common.exception.base.BaseException;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.fmis.customer.domain.BizCustomer;
@@ -87,7 +88,7 @@ public class BizBankBillServiceImpl implements IBizBankBillService {
         if (bizBankBill.getType().equals("1")) {
             bizBankBill.setCompany(bizBankBill.getCollectCompany());
             bizBankBill.setAccount(bizBankBill.getPayAccount());
-        }else if (bizBankBill.getType().equals("2")) {
+        } else if (bizBankBill.getType().equals("2")) {
             bizBankBill.setCompany(bizBankBill.getPayCompany());
             bizBankBill.setAccount(bizBankBill.getPayAccount());
         }
@@ -116,10 +117,12 @@ public class BizBankBillServiceImpl implements IBizBankBillService {
             Double payment = bizBankBill.getPayment();
             double abs = Math.abs(payment);
             BigDecimal subtract = lastBalance.subtract(BigDecimal.valueOf(abs));
+            if (subtract.compareTo(BigDecimal.ZERO) < 0) {
+                throw new BaseException("余额不能小于0");
+            }
             bizBankBill.setBalance(subtract.doubleValue());
         }
         // 设置余额 end
-
         return bizBankBillMapper.insertBizBankBill(bizBankBill);
     }
 

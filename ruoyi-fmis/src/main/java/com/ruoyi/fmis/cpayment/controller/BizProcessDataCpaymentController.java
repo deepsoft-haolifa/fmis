@@ -49,16 +49,10 @@ public class BizProcessDataCpaymentController extends BaseController {
     private IBizProcessDataService bizProcessDataService;
 
     @Autowired
-    private ISysRoleService sysRoleService;
-
-    @Autowired
     private IBizProcessDefineService bizProcessDefineService;
 
     @Autowired
     private IBizProcessChildService bizProcessChildService;
-
-    @Autowired
-    private IBizProductService bizProductService;
 
     @Autowired
     private IBizCustomerService bizCustomerService;
@@ -135,6 +129,41 @@ public class BizProcessDataCpaymentController extends BaseController {
         return getDataTable(list);
     }
 
+    @GetMapping("/viewDetail")
+    public String viewDetail(ModelMap mmap) {
+        String dataId = getRequest().getParameter("dataId");
+        BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataById(Long.parseLong(dataId));
+        BizProcessChild queryBizProcessChild = new BizProcessChild();
+        queryBizProcessChild.setDataId(bizProcessData.getDataId());
+        List<BizProcessChild> bizProcessChildList = bizProcessChildService.selectBizProcessChildList(queryBizProcessChild);
+        String productNames = "";
+        String productIds = "";
+        if (!CollectionUtils.isEmpty(bizProcessChildList)) {
+            for (BizProcessChild bizProcessChild : bizProcessChildList) {
+                String productId = bizProcessChild.getString1();
+                BizProcessData bizProduct = bizProcessDataService.selectBizProcessDataById(Long.parseLong(productId));
+                if (bizProduct != null) {
+                    productNames += bizProduct.getString2() + ",";
+                    productIds += bizProduct.getDataId() + ",";
+                    bizProcessChild.setBizProcessData(bizProduct);
+                }
+            }
+            bizProcessData.setBizProcessChildList(bizProcessChildList);
+        }
+        String customerId = bizProcessData.getString2();
+        if (StringUtils.isNotEmpty(customerId)) {
+            BizCustomer customer = bizCustomerService.selectBizCustomerById(Long.parseLong(customerId));
+            bizProcessData.setBizCustomer(customer);
+            bizProcessData.setCustomerName(customer.getName());
+        }
+
+        mmap.put("contractNames", productNames);
+        mmap.put("contractIds", productIds);
+
+        mmap.put("bizProcessData", bizProcessData);
+        return prefix + "/viewDetail";
+    }
+
     @GetMapping("/examineEdit")
     public String examineEdit(ModelMap mmap) {
         String dataId = getRequest().getParameter("dataId");
@@ -161,10 +190,8 @@ public class BizProcessDataCpaymentController extends BaseController {
             bizProcessData.setBizCustomer(customer);
             bizProcessData.setCustomerName(customer.getName());
         }
-
         mmap.put("contractNames", productNames);
         mmap.put("contractIds", productIds);
-
         mmap.put("bizProcessData", bizProcessData);
         return prefix + "/examineEdit";
     }

@@ -23,7 +23,7 @@
         -- 已付款项
         ifnull(bbc.paidAmount,0) paidAmount,
          -- 已开发票
-         0 invoicedAmount,
+        ifnull(invoice.invoicedAmount,0) invoicedAmount,
          -- 已发货数
         ifnull(bpc1.deliveryQty,0) deliveryQty
         from biz_process_data q
@@ -35,7 +35,7 @@
         left join (select data_id,sum(string3) saleQty from biz_process_child group by data_id) bpc ON bpc.data_id = q.data_id
         left join (select string5,sum(string13) deliveryQty from biz_process_child group by string5) bpc1 ON bpc1.string5 = q.string1
         left join (select data_id,sum(amount) as paidAmount  from biz_bill_contract group by data_id) bbc on bbc.data_id=q.data_id
-        <include refid="ReceivableWhere"></include>
+        left join (select a.string1,sum(a.price1) as invoicedAmount  from biz_process_child a left join biz_process_data b on a.data_id=b.data_id where b.biz_id='invoice' group by a.string1) invoice on invoice.string1=q.data_id        <include refid="ReceivableWhere"></include>
         order by q.create_time desc
     </select>
 

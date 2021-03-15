@@ -21,8 +21,11 @@ import com.ruoyi.fmis.child.service.IBizProcessChildService;
 import com.ruoyi.fmis.common.CommonUtils;
 import com.ruoyi.fmis.customer.domain.BizCustomer;
 import com.ruoyi.fmis.customer.service.IBizCustomerService;
+import com.ruoyi.fmis.customertrack.domain.BizCustomerTrack;
 import com.ruoyi.fmis.data.domain.BizProcessData;
 import com.ruoyi.fmis.data.service.IBizProcessDataService;
+import com.ruoyi.fmis.datatrack.domain.BizProcessDataTrack;
+import com.ruoyi.fmis.datatrack.service.IBizProcessDataTrackService;
 import com.ruoyi.fmis.define.service.IBizProcessDefineService;
 import com.ruoyi.fmis.product.service.IBizProductService;
 import com.ruoyi.fmis.status.domain.BizDataStatus;
@@ -87,10 +90,6 @@ public class BizProcessDataProcurementController extends BaseController {
     @Autowired
     private IBizProcessChildService bizProcessChildService;
 
-
-    @Autowired
-    private IBizProductService bizProductService;
-
     @Autowired
     private IBizCustomerService bizCustomerService;
 
@@ -99,6 +98,8 @@ public class BizProcessDataProcurementController extends BaseController {
 
     @Autowired
     private IBizSuppliersService bizSuppliersService;
+    @Autowired
+    private IBizProcessDataTrackService bizProcessDataTrackService;
 
     @RequiresPermissions("fmis:procurement:view")
     @GetMapping()
@@ -1332,5 +1333,42 @@ public class BizProcessDataProcurementController extends BaseController {
         }
     }
 
+    /**
+     * 新增采购合同追踪
+     */
+    @GetMapping("/addTrack/{dataId}")
+    public String addTrack(@PathVariable("dataId") Long dataId,ModelMap mmap) {
+        mmap.put("dataId", dataId);
+        return prefix + "/addTrack";
+    }
+
+    /**
+     * 新增保存采购合同追踪
+     */
+    @Log(title = "采购合同追踪", businessType = BusinessType.INSERT)
+    @PostMapping("/addTrack")
+    @ResponseBody
+    public AjaxResult addTrack(BizProcessDataTrack bizProcessDataTrack) {
+        return toAjax(bizProcessDataTrackService.insertBizProcessDataTrack(bizProcessDataTrack));
+    }
+
+    @GetMapping("/trackList/{dataId}")
+    public String trackList(@PathVariable("dataId") Long dataId, ModelMap mmap) {
+        mmap.put("dataId", dataId);
+        return prefix + "/trackList";
+    }
+
+    /**
+     * 查询采购合同追踪列表
+     */
+    @PostMapping("/trackList/{dataId}")
+    @ResponseBody
+    public TableDataInfo trackList(@PathVariable("dataId") Long dataId) {
+        startPage();
+        BizProcessDataTrack bizProcessDataTrack=new BizProcessDataTrack();
+        bizProcessDataTrack.setDataId(dataId);
+        List<BizProcessDataTrack> list = bizProcessDataTrackService.selectBizProcessDataTrackList(bizProcessDataTrack);
+        return getDataTable(list);
+    }
 
 }

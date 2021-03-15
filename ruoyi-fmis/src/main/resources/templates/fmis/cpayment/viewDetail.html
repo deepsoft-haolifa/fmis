@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" >
 <head>
-    <th:block th:include="include :: header('审核付款申请')" />
+    <th:block th:include="include :: header('付款申请详情')" />
     <th:block th:include="include :: datetimepicker-css" />
 </head>
 <body class="white-bg">
@@ -26,12 +26,12 @@
                 <input name="contractNames" id="contractNames" th:value="${contractNames}" class="form-control" type="text" readonly required>
             </div>
 
-<!--            <div class="col-sm-3">-->
-<!--                <a class="btn btn-success btn-sm" onclick="selectContract(1)" >-->
-<!--                    <i class="fa fa"></i> 追加-->
-<!--                    <input type="hidden" id="productOperationType" name="productOperationType" value="0">-->
-<!--                </a>-->
-<!--            </div>-->
+            <!--            <div class="col-sm-3">-->
+            <!--                <a class="btn btn-success btn-sm" onclick="selectContract(1)" >-->
+            <!--                    <i class="fa fa"></i> 追加-->
+            <!--                    <input type="hidden" id="productOperationType" name="productOperationType" value="0">-->
+            <!--                </a>-->
+            <!--            </div>-->
         </div>
 
 
@@ -67,27 +67,14 @@
 
                 </div>
 
-
-
-
                 <div class='form-group' th:id="'productRef3Div_' + ${qp.string1}">
                     <label class='control-label col-sm-3'>备注：</label>
 
                     <div class='col-sm-5'>
                         <input th:id="'productRemark_' + ${qp.string1}" th:value="${qp.remark}"  class='form-control' type='text' readonly>
                     </div>
-
-<!--                    <div class='col-sm-3' >-->
-<!--                        <a class="btn btn-danger btn-xs" th:onclick="removeProject([[${qp.string1}]]);" >-->
-<!--                            <i class="fa fa-remove"></i> 删除-->
-<!--                        </a>-->
-<!--                    </div>-->
                 </div>
-
-
             </div>
-
-
         </div>
         <div class="hr-line-dashed"></div>
 
@@ -99,53 +86,10 @@
                 <input name="price1" th:field="*{price1}" class="form-control" type="text" readonly>
             </div>
         </div>
-
-
-<!--        <div class="form-group">-->
-<!--            <label class="col-sm-3 control-label">付款金额：</label>-->
-<!--            <div class="col-sm-8">-->
-<!--                <input name="price2" th:field="*{price2}" class="form-control" type="text">-->
-<!--            </div>-->
-<!--        </div>-->
-<!--        <div class="form-group">-->
-<!--            <label class="col-sm-3 control-label">合同约定付款方式：</label>-->
-<!--            <div class="col-sm-8">-->
-<!--                <input name="string4" th:field="*{string4}" class="form-control" type="text">-->
-<!--            </div>-->
-<!--        </div>-->
-<!--        <div class="form-group">-->
-<!--            <label class="col-sm-3 control-label">采购单号：</label>-->
-<!--            <div class="col-sm-8">-->
-<!--                <input name="string5" th:field="*{string5}" class="form-control" type="text">-->
-<!--            </div>-->
-<!--        </div>-->
-<!--        <div class="form-group">-->
-<!--            <label class="col-sm-3 control-label">付款公司：</label>-->
-<!--            <div class="col-sm-8">-->
-<!--                <input name="string6" th:field="*{string6}" class="form-control" type="text">-->
-<!--            </div>-->
-<!--        </div>-->
         <div class="form-group">
             <label class="col-sm-3 control-label">备注：</label>
             <div class="col-sm-8">
                 <input name="string20" th:field="*{remark}" class="form-control" type="text" readonly>
-            </div>
-        </div>
-
-        <div class="form-group has-success">
-            <label class="col-sm-3 control-label">审批意见：</label>
-            <div class="col-sm-8">
-                <select name="examineStatus" id="examineStatus" class="form-control m-b" th:with="type=${@dict.getType('examine_status')}">
-                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                </select>
-            </div>
-        </div>
-
-
-        <div class="form-group has-success">
-            <label class="col-sm-3 control-label" >审批备注：</label>
-            <div class="col-sm-8">
-                <textarea name="examineRemark" class="form-control" id="examineRemark"></textarea>
             </div>
         </div>
     </form>
@@ -157,12 +101,6 @@
     $("#form-data-edit").validate({
         focusCleanup: true
     });
-
-    function submitHandler() {
-        if ($.validate.form()) {
-            $.operate.save(prefix + "/doExamine", $('#form-data-edit').serialize());
-        }
-    }
 
     $("input[name='datetime1']").datetimepicker({
         format: "yyyy-mm-dd",
