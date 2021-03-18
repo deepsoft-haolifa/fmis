@@ -18,9 +18,9 @@
 </div>
 <th:block th:include="include :: footer"/>
 <script th:inline="javascript">
-    var editFlag = [[${@permission.hasPermi('fmis:customertrack:edit')}]];
-    var removeFlag = [[${@permission.hasPermi('fmis:customertrack:remove')}]];
-    var prefix = ctx + "fmis/procurement";
+    var editFlag = [[${@permission.hasPermi('fmis:processDataTrack:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('fmis:processDataTrack:remove')}]];
+    var prefix = ctx + "fmis/processDataTrack";
 
     $(function () {
         var dataID= $("#dataId").val();

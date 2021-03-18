@@ -99,4 +99,47 @@ public class BizFinanceController extends BaseController {
         List<StandAccountSummaryRespVo> list = bizFinanceService.selectStandAccountSummaryList(reqVo);
         return getDataTable(list);
     }
+
+    /**
+     * 采购合同的汇总统计
+     */
+    @GetMapping("/procurement/summary")
+    @RequiresPermissions("finance:procurement:summary:view")
+    public String procurementSummary() {
+        return prefix + "/summary/procurementSummary";
+    }
+
+    /**
+     * 采购合同的汇总统计
+     */
+    @RequiresPermissions("finance:procurement:summary:view")
+    @PostMapping("/procurement/summary/list")
+    @ResponseBody
+    public TableDataInfo procurementSummaryList(SummaryReqVo reqVo) {
+        startPage();
+        List<SummaryRespVo> list = bizFinanceService.selectProcurementSummary(reqVo);
+        return getDataTable(list);
+    }
+
+    /**
+     * 销售合同的汇总统计
+     */
+    @GetMapping("/saleContract/summary")
+    @RequiresPermissions("finance:saleContract:summary:view")
+    public String saleContractSummary() {
+        return prefix + "/summary/saleContractSummary";
+    }
+
+    /**
+     * 销售合同的汇总统计
+     */
+    @RequiresPermissions("finance:saleContract:summary:view")
+    @PostMapping("/saleContract/summary/list")
+    @ResponseBody
+    public TableDataInfo saleContractSummaryList(SummaryReqVo reqVo) {
+        startPage();
+        List<SummaryRespVo> list = bizFinanceService.selectSaleContractSummary(reqVo);
+        return getDataTable(list);
+    }
+
 }

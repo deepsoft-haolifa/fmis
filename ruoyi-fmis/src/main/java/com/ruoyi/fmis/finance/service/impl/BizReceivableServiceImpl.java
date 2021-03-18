@@ -43,4 +43,14 @@ public class BizReceivableServiceImpl implements IBizFinanceService {
     public List<StandAccountSummaryRespVo> selectStandAccountSummaryList(StandAccountReqVo reqVo) {
         return bizFinanceMapper.selectStandAccountSummaryList(reqVo);
     }
+
+    @Override
+    public List<SummaryRespVo> selectProcurementSummary(SummaryReqVo reqVo) {
+        return bizFinanceMapper.selectProcurementSummary(reqVo);
+    }
+
+    @Override
+    public List<SummaryRespVo> selectSaleContractSummary(SummaryReqVo reqVo) {
+        return bizFinanceMapper.selectSaleContractSummary(reqVo);
+    }
 }

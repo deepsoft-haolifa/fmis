@@ -243,8 +243,6 @@
                         }
                         actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewExamineHistory(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 审批记录 </a>');
                         actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewExamineDetail(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 详情 </a>');
-                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="addTrack(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 添加追踪 </a>');
-                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewTrackList(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 追踪详情 </a>');
 
                         return actions.join('');
                     }
@@ -355,15 +353,6 @@
             });
         }
 
-        function addTrack(dataId) {
-            var url = prefix + "/addTrack/" + dataId;
-            $.modal.open("新增追踪", url);
-        }
-
-        function viewTrackList(dataId) {
-            var url = prefix + "/trackList/" + dataId;
-            $.modal.openTab("追踪列表", url);
-        }
         function subTest(dataId) {
             var url = prefix + "/startTest?dataId=" + dataId;
             $.modal.openNoEnter("发起质检", url,$(window).width(),$(window).height(),function(){

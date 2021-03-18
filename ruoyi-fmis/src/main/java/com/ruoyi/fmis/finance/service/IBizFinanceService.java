@@ -6,7 +6,6 @@ import java.util.List;
 
 /**
  * 应收管理
- *
  */
 public interface IBizFinanceService {
 
@@ -31,5 +30,16 @@ public interface IBizFinanceService {
      * 应付款项汇总 根据收款单位（付款计划）
      */
     List<StandAccountSummaryRespVo> selectStandAccountSummaryList(StandAccountReqVo reqVo);
+
+    /**
+     * 采购合同汇总（按照供应商）
+     */
+    List<SummaryRespVo> selectProcurementSummary(SummaryReqVo reqVo);
+
+    /**
+     * 采购合同汇总（按照客户）
+     */
+    List<SummaryRespVo> selectSaleContractSummary(SummaryReqVo reqVo);
+
 
 }
