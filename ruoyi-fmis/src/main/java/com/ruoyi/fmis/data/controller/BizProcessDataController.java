@@ -1142,7 +1142,7 @@ public class BizProcessDataController extends BaseController {
      * @return
      */
     public String setNormalFlag (BizProcessData bizProcessData,String productArrayStr) {
-        String normalFlag = "5";
+        String normalFlag = "2";
         int num = 2;
         String totalPrice = bizProcessData.getPrice1().toString();
         String specialExpenses = bizProcessData.getString14();
@@ -1304,13 +1304,23 @@ public class BizProcessDataController extends BaseController {
          */
         minCoefficient = Double.parseDouble(totalPrice) / price;
         if (minCoefficient < 0.88 ) {
+
             normalFlag = "5";
         }else if ((minCoefficient >= 0.88 && minCoefficient < 0.95)) {
-            normalFlag = "4";
+            if (num < 5) {
+                normalFlag = "4";
+                num = 4;
+            }
         } else if ((minCoefficient >= 0.95 && minCoefficient < 1) ) {
-            normalFlag = "3";
+            if (num < 4) {
+                normalFlag = "3";
+                num = 3;
+            }
         } else {
-            normalFlag = "2";
+            if (num < 3) {
+                normalFlag = "2";
+                num = 2;
+            }
         }
         bizProcessData.setNormalFlag(normalFlag);
         /**

@@ -284,7 +284,7 @@
                     var rowData = data[i];
                     var productObj = new Object();
                     //var productId = productIdsStrs[i];
-                    productObj["string1"] = rowData["quotationId"];
+                    productObj["string1"] = rowData["string1"];
                     productObj["string2"] = rowData["productId"];
 
                     productObj["string3"] = rowData["productNum"];
@@ -441,7 +441,7 @@
             }
             totalPrice = parseFloat(productTotalPrice) + parseFloat(specialExpenses);
             //$("#productTotalPrice").val(parseFloat(productTotalPrice).toFixed(2));
-            $("#price1").val(parseFloat(totalPrice).toFixed(2));
+            // $("#price1").val(parseFloat(totalPrice).toFixed(2));
             //$("#productTotalNum").val(productTotalNumS);
         }
 
@@ -944,7 +944,7 @@
             }
         }
         function loadSuccess() {
-            // calculateTotalPrice();
+            calculateTotalPrice();
 
             payTypeChange();
         }
