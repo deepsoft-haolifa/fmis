@@ -1107,6 +1107,9 @@ public class BizProcessDataController extends BaseController {
 
         String productArrayStr = bizProcessData.getProductParmters();
         setNormalFlag(bizProcessData,productArrayStr);
+        if (bizProcessData.getString14() != null && bizProcessData.getString14().trim().equals("")) {
+            bizProcessData.setString14("0");
+        }
         int updateReturn = bizProcessDataService.updateBizProcessData(bizProcessData);
 
         Long dataId = bizProcessData.getDataId();
