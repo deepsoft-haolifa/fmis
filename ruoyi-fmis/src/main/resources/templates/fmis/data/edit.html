@@ -284,7 +284,7 @@
                     var rowData = data[i];
                     var productObj = new Object();
                     //var productId = productIdsStrs[i];
-                    productObj["string1"] = rowData["quotationId"];
+                    productObj["string1"] = rowData["string1"];
                     productObj["string2"] = rowData["productId"];
 
                     productObj["string3"] = rowData["productNum"];
@@ -444,7 +444,33 @@
             $("#price1").val(parseFloat(totalPrice).toFixed(2));
             //$("#productTotalNum").val(productTotalNumS);
         }
-
+        function loadtotalSumPrice () {
+            //产品合计金额
+            var productIds = $("#quotationIds").val();
+            var productIdsS = productIds.split(",");
+            var productTotalPrice = 0;
+            var totalPrice = 0;
+            var productTotalNumS = 0;
+            for (var i = 0; i < productIdsS.length; i++) {
+                var productId = productIdsS[i];
+                if (isEmpty(productId)) {
+                    continue;
+                }
+                var totalSumStr = getProductSum(productId,productTotalNum);
+                var totalSum = totalSumStr.split("#")[0];
+                var productTotalNum = totalSumStr.split("#")[1];
+                productTotalPrice = FloatAdd(productTotalPrice,totalSum).toFixed(2);
+                productTotalNumS = FloatAdd(productTotalNumS,productTotalNum).toFixed(0);
+            }
+            var specialExpenses = $("#specialExpenses").val();
+            if (isEmpty(specialExpenses)) {
+                specialExpenses = 0;
+            }
+            totalPrice = parseFloat(productTotalPrice) + parseFloat(specialExpenses);
+            //$("#productTotalPrice").val(parseFloat(productTotalPrice).toFixed(2));
+            $("#price1").val(parseFloat(totalPrice).toFixed(2));
+            //$("#productTotalNum").val(productTotalNumS);
+        }
         $(function() {
             var options = {
                 showSearch: false,
@@ -570,7 +596,7 @@
         }
         function onEditableSave (field, row, oldValue, $el) {
             //alert("字段名：" + field + "，当前值：" + row[field]  + "，旧值：" + oldValue);
-            if (field == "productNum"  || field == "productRef1Num"
+            if (field == "productNum"  || field == "productRef1Num" || field == "productCoefficient"
                 || field == "productRef2Num" || field == "actuatorNum" || field == "pattachmentPrice" || field == "pattachment1Price" || field == "pattachment2Price" || field == "pattachment3Price" || field == "pattachment4Price"
                 || field == "pattachmentCount" || field == "pattachment1Count" || field == "pattachment2Count" || field == "pattachment3Count" || field == "pattachment4Count"
                 || field == "pattachmentCoefficient" || field == "pattachment1Coefficient" || field == "pattachment2Coefficient" || field == "pattachment3Coefficient"
@@ -750,6 +776,42 @@
             $("#productTotalPrice").val(parseFloat(productTotalPrice).toFixed(0));
             var totalPrice = parseFloat(productTotalPrice) + parseFloat(specialExpenses);
             $("#price1").val(parseFloat(totalPrice).toFixed(0));
+            $("#totalNum").val(parseFloat(totalNum).toFixed(0));
+
+            var grossPrice = (parseFloat(productTotalPrice) - parseFloat(allTotalCost) - parseFloat(specialExpenses)).toFixed(0);
+            if ("NaN" == grossPrice) {
+                grossPrice = 0;
+            }
+            $("#grossPrice").val(grossPrice);
+            $("#price3").val(parseFloat(grossPrice / totalPrice).toFixed(3));
+            if ($.common.isEmpty($("#price3").val()) || $.common.isEmpty(grossPrice)
+                || $.common.isEmpty(totalPrice) || "NaN" == $("#price3").val()) {
+                $("#price3").val(0);
+            }
+        }
+        function loadcalculateTotalPrice () {
+            var data = $.btTable.bootstrapTable('getData');
+            var productTotalPrice = 0;
+            var totalNum = 0;
+            var allTotalCost = 0;
+            for (var i = 0; i < data.length; i++) {
+                var rowData = data[i];
+                var price = calculatePrice(rowData);
+                productTotalPrice = FloatAdd(productTotalPrice,price).toFixed(0);
+                var productNum = rowData["productNum"];
+                productNum = isEmpty(productNum) == true ? 0 : parseFloat(productNum);
+                totalNum += parseFloat(productNum);
+
+                var totalCostPrice = totalCostPriceMap.get("totalCostPrice");
+                allTotalCost =  FloatAdd(totalCostPrice,allTotalCost).toFixed(2);
+            }
+            var specialExpenses = $("#string14").val();
+            if (isEmpty(specialExpenses)) {
+                specialExpenses = 0;
+            }
+            $("#productTotalPrice").val(parseFloat(productTotalPrice).toFixed(0));
+            var totalPrice = parseFloat(productTotalPrice) + parseFloat(specialExpenses);
+            // $("#price1").val(parseFloat(totalPrice).toFixed(0));
             $("#totalNum").val(parseFloat(totalNum).toFixed(0));
 
             var grossPrice = (parseFloat(productTotalPrice) - parseFloat(allTotalCost) - parseFloat(specialExpenses)).toFixed(0);
@@ -944,7 +1006,7 @@
             }
         }
         function loadSuccess() {
-            // calculateTotalPrice();
+            loadcalculateTotalPrice();
 
             payTypeChange();
         }
