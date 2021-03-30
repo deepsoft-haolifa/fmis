@@ -638,6 +638,7 @@
             <if test="pString3 != null  and pString3 != ''"> and d.string3 like concat('%', #{pString3}, '%')</if>
             <if test="pString5 != null  and pString5 != ''"> and d.string5 like concat('%', #{pString5}, '%')</if>
             <if test="pString6 != null  and pString6 != ''"> and d.string6 like concat('%', #{pString6}, '%')</if>
+            <if test="string7 != null  and string7 != ''"> and c.string7 = #{string7}</if>
             ${params.dataScope}
         </where>
         order by d.create_time desc

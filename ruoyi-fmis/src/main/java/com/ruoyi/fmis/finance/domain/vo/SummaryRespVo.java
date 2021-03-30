@@ -18,7 +18,10 @@ public class SummaryRespVo {
      * 客户名称
      */
     private String customerName;
-
+    /**
+     * 合同额
+     */
+    private Double contractAmount;
     /**
      * 应收款
      */

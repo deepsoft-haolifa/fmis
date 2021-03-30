@@ -60,7 +60,7 @@ public class BizFinanceController extends BaseController {
     @ResponseBody
     public TableDataInfo receivableSummaryList(ReceivableReqVo reqVo) {
         startPage();
-        List<ReceivableRespVo> list = bizFinanceService.selectReceivableList(reqVo);
+        List<ReceivableSummaryRespVo> list = bizFinanceService.selectReceivableSummaryList(reqVo);
         return getDataTable(list);
     }
 

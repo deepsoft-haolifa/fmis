@@ -44,8 +44,18 @@
             modalName: "采购合同汇总",
             columns: [
                 {
+                    field: 'rowId', title: '序号', visible: true, formatter: function (value, row, index) {
+                        row.rowId = index;
+                        return index + 1;
+                    }
+                },
+                {
                     field: 'supplierName',
                     title: '供应商'
+                },
+                {
+                    field: 'contractAmount',
+                    title: '合同额'
                 },
                 {
                     field: 'needPayAmount',

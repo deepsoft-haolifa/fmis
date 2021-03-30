@@ -1,5 +1,6 @@
 package com.ruoyi.fmis.finance.service.impl;
 
+import com.ruoyi.common.annotation.DataScope;
 import com.ruoyi.fmis.finance.domain.BizBillContract;
 import com.ruoyi.fmis.finance.domain.vo.*;
 import com.ruoyi.fmis.finance.mapper.BizFinanceMapper;
@@ -24,9 +25,9 @@ public class BizReceivableServiceImpl implements IBizFinanceService {
     private IBizBillContractService bizBillContractService;
 
     @Override
+    @DataScope(deptAlias = "dt", userAlias = "u")
     public List<ReceivableRespVo> selectReceivableList(ReceivableReqVo reqVo) {
-        List<ReceivableRespVo> receivableRespVos = bizFinanceMapper.selectReceivableList(reqVo);
-        return receivableRespVos;
+        return bizFinanceMapper.selectReceivableList(reqVo);
     }
 
     @Override
@@ -35,6 +36,7 @@ public class BizReceivableServiceImpl implements IBizFinanceService {
     }
 
     @Override
+    @DataScope(deptAlias = "dt", userAlias = "u")
     public List<StandAccountRespVo> selectStandAccountList(StandAccountReqVo reqVo) {
         return bizFinanceMapper.selectStandAccountList(reqVo);
     }

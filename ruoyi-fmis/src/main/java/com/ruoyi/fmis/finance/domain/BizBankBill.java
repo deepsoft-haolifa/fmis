@@ -98,4 +98,6 @@ public class BizBankBill extends BaseEntity {
     private String delFlag;
 
 
+    private String updateByName;
+
 }

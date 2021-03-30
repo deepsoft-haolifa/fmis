@@ -20,6 +20,10 @@ public class InvoiceReqVo extends BaseEntity {
     private String pString3;
     private String pString5;
     private String pString6;
+    /**
+     * 开票状态
+     */
+    private String string7;
 
 
 

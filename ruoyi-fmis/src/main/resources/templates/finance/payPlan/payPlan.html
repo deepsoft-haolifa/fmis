@@ -32,7 +32,7 @@
                         </li>
                         <li>
                             <p>收款单位：</p>
-                            <input type="text" name="applyCollectionCompany"  th:value="*{supplierName}"/>
+                            <input type="text" name="applyCollectionCompany" th:value="*{supplierName}"/>
                         </li>
 
                         <li>
@@ -40,11 +40,11 @@
                             <select name="payWay" th:with="type=${@dict.getType('pay_way')}">
                                 <option value="">所有</option>
                                 <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
-                                        th:value="${dict.dictValue}" ></option>
+                                        th:value="${dict.dictValue}"></option>
                             </select>
                         </li>
                         <li>
-                            <input type="hidden" name="status"  th:value="*{payStatus}"/>
+                            <input type="hidden" name="status" th:value="*{payStatus}"/>
                             <p>付款状态</p>
                             <select name="status" th:with="type=${@dict.getType('pay_status')}">
                                 <option value="">所有</option>
@@ -183,7 +183,10 @@
                     align: 'center',
                     formatter: function (value, row, index) {
                         var actions = [];
-                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.payPlanId + '\')"><i class="fa fa-edit"></i> 付款</a> ');
+                        var dataStatus = row.dataStatus;
+                        if (dataStatus === "3") {
+                            actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.payPlanId + '\')"><i class="fa fa-edit"></i> 付款</a> ');
+                        }
                         // actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.payPlanId + '\')"><i class="fa fa-remove"></i> 删除</a>');
                         return actions.join('');
                     }
