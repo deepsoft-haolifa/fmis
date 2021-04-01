@@ -1044,6 +1044,7 @@ public class BizProcessDataProcurementController extends BaseController {
                     table.addCell(PdfUtil.mergeCol("" + rowNum, 1,textFont));
                     table.addCell(PdfUtil.mergeCol(bizProcessChild.getActuatorString1(), 1,textFont));
                     table.addCell(PdfUtil.mergeCol(bizProcessChild.getActuatorName(), 1,textFont));
+                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getActuatorString3(), 1,textFont));
                     table.addCell(PdfUtil.mergeCol(bizProcessChild.getPressure(), 1,textFont));//压力
                     table.addCell(PdfUtil.mergeCol("", 1,textFont));//规格
                     //颜色

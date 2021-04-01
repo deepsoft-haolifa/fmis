@@ -91,6 +91,11 @@
             <div class="col-sm-2">
                 <input name="string12" class="form-control" type="text" th:field="*{string12}" readonly>
             </div>
+            <label class="col-sm-1 control-label">合同金额：</label>
+            <div class="col-sm-2">
+                <input name="price11" id="price11" readonly class="form-control" th:field="*{price1}" type="text">
+            </div>
+
         </div>
 
         <input type="hidden" id="numJsonValue" name="numJsonValue" th:value="${numJsonValue}"/>

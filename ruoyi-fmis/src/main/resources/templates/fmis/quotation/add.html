@@ -257,6 +257,14 @@
                     productObj["productRef2Num"] = rowData["productRef2Num"];
                     productObj["actuatorId"] = rowData["actuatorId"];
 
+                    productObj["price1"] = rowData["productPrice"];
+                    productObj["price2"] = rowData["ref1Price"];
+                    console.log(rowData["ref2Price"])
+                    console.log(rowData["ref2Price"][0])
+
+                    productObj["price5"] = rowData["ref2Price"][0];
+                    productObj["price4"] = rowData["actuatorPrice"]
+
                     productObj["productNum"] = rowData["productNum"];
                     productObj["productCoefficient"] = rowData["productCoefficient"];
                     productObj["productRef1Coefficient"] = rowData["productRef1Coefficient"];

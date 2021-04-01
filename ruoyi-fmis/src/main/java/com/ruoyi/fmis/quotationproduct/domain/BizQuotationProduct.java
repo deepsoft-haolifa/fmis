@@ -116,6 +116,24 @@ public class BizQuotationProduct extends BaseEntity {
 
     /** ID */
     private Long qpId;
+    /** 价格1 */
+    @Excel(name = "价格1")
+    private Double price1;
+
+    /** 价格2 */
+    @Excel(name = "价格2")
+    private Double price2;
+
+    /** 价格3 */
+    @Excel(name = "价格3")
+    private Double price3;
+
+    /** 价格4 */
+    @Excel(name = "价格4")
+    private Double price4;
+    /** 价格4 */
+    @Excel(name = "价格4")
+    private Double price5;
 
     /** 报价表ID */
     @Excel(name = "报价表ID")
@@ -395,6 +413,46 @@ public class BizQuotationProduct extends BaseEntity {
 
     public String getDelFlag() {
         return delFlag;
+    }
+
+    public Double getPrice1() {
+        return price1;
+    }
+
+    public void setPrice1(Double price1) {
+        this.price1 = price1;
+    }
+
+    public Double getPrice2() {
+        return price2;
+    }
+
+    public void setPrice2(Double price2) {
+        this.price2 = price2;
+    }
+
+    public Double getPrice3() {
+        return price3;
+    }
+
+    public void setPrice3(Double price3) {
+        this.price3 = price3;
+    }
+
+    public Double getPrice4() {
+        return price4;
+    }
+
+    public void setPrice4(Double price4) {
+        this.price4 = price4;
+    }
+
+    public Double getPrice5() {
+        return price5;
+    }
+
+    public void setPrice5(Double price5) {
+        this.price5 = price5;
     }
 
     @Override

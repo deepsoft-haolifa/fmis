@@ -853,12 +853,14 @@ public class BizQuotationController extends BaseController {
      * @return
      */
     public String setNormalFlag (BizQuotation bizQuotation,String productArrayStr) {
-        String normalFlag = "";
+        String normalFlag = "2";
+        int num = 2;
         String totalPrice = bizQuotation.getString9();
         String specialExpenses = bizQuotation.getSpecialExpenses();
 
         if (StringUtils.isNotEmpty(totalPrice) && Double.parseDouble(totalPrice) >= 1000000) {
             normalFlag = "5";
+            num = 5;
         }
         /*else if ("1".equals(bizQuotation.getPaymentMethod()) || "6".equals(bizQuotation.getPaymentMethod())) {
             //到付
@@ -867,49 +869,106 @@ public class BizQuotationController extends BaseController {
         else if (StringUtils.isNotEmpty(specialExpenses) && !"0".equals(specialExpenses)) {
             //特殊费用
             normalFlag = "5";
+            num = 5;
         } else if (StringUtils.isNotEmpty(totalPrice) && Double.parseDouble(totalPrice) >= 500000) {
             normalFlag = "4";
+            num = 4;
         } else if (StringUtils.isNotEmpty(totalPrice) && Double.parseDouble(totalPrice) >= 200000) {
             normalFlag = "3";
-        }  else {
-
-            JSONArray productArray = JSONArray.parseArray(productArrayStr);
-            Double minCoefficient = new Double(10000000);
-            for (int i = 0; i < productArray.size(); i++) {
-                JSONObject json = productArray.getJSONObject(i);
-                BizQuotationProduct bizQuotationProduct = JSONObject.parseObject(json.toJSONString(), BizQuotationProduct.class);
-                if (bizQuotationProduct.getProductId() != null) {
-                    String actuatorCoefficient = bizQuotationProduct.getActuatorCoefficient();
-                    if (StringUtils.isNotEmpty(actuatorCoefficient) && Double.parseDouble(actuatorCoefficient) < minCoefficient
-                            && Double.parseDouble(actuatorCoefficient) > 0) {
-                        minCoefficient = Double.parseDouble(actuatorCoefficient);
-                    }
-                    String productCoefficient = bizQuotationProduct.getProductCoefficient();
-                    if (StringUtils.isNotEmpty(productCoefficient) && Double.parseDouble(productCoefficient) < minCoefficient
-                            && Double.parseDouble(productCoefficient) > 0) {
-                        minCoefficient = Double.parseDouble(productCoefficient);
-                    }
-
-                    String productRef1Coefficient = bizQuotationProduct.getProductRef1Coefficient();
-                    if (StringUtils.isNotEmpty(productRef1Coefficient) && Double.parseDouble(productRef1Coefficient) < minCoefficient
-                            && Double.parseDouble(productRef1Coefficient) > 0) {
-                        minCoefficient = Double.parseDouble(productRef1Coefficient);
-                    }
-
-                    String productRef2Coefficient = bizQuotationProduct.getProductRef2Coefficient();
-                    if (StringUtils.isNotEmpty(productRef2Coefficient) && Double.parseDouble(productRef2Coefficient) < minCoefficient
-                            && Double.parseDouble(productRef2Coefficient) > 0) {
-                        minCoefficient = Double.parseDouble(productRef2Coefficient);
-                    }
+            num = 3;
+        }
+        JSONArray productArray = JSONArray.parseArray(productArrayStr);
+        Double minCoefficient = new Double(10000000);
+        //未修改的并且系数为1的时候的价格
+        Double price = 0.0;
+        for (int i = 0; i < productArray.size(); i++) {
+            JSONObject json = productArray.getJSONObject(i);
+            BizQuotationProduct bizQuotationProduct = JSONObject.parseObject(json.toJSONString(), BizQuotationProduct.class);
+            if (bizQuotationProduct.getProductId() != null) {
+                String actuatorCoefficient = bizQuotationProduct.getActuatorCoefficient();
+                if (StringUtils.isNotEmpty(actuatorCoefficient) && Double.parseDouble(actuatorCoefficient) < minCoefficient
+                        && Double.parseDouble(actuatorCoefficient) > 0) {
+                    minCoefficient = Double.parseDouble(actuatorCoefficient);
                 }
+                String productCoefficient = bizQuotationProduct.getProductCoefficient();
+                if (StringUtils.isNotEmpty(productCoefficient) && Double.parseDouble(productCoefficient) < minCoefficient
+                        && Double.parseDouble(productCoefficient) > 0) {
+                    minCoefficient = Double.parseDouble(productCoefficient);
+                }
+
+                String productRef1Coefficient = bizQuotationProduct.getProductRef1Coefficient();
+                if (StringUtils.isNotEmpty(productRef1Coefficient) && Double.parseDouble(productRef1Coefficient) < minCoefficient
+                        && Double.parseDouble(productRef1Coefficient) > 0) {
+                    minCoefficient = Double.parseDouble(productRef1Coefficient);
+                }
+
+                String productRef2Coefficient = bizQuotationProduct.getProductRef2Coefficient();
+                if (StringUtils.isNotEmpty(productRef2Coefficient) && Double.parseDouble(productRef2Coefficient) < minCoefficient
+                        && Double.parseDouble(productRef2Coefficient) > 0) {
+                    minCoefficient = Double.parseDouble(productRef2Coefficient);
+                }
+                if (bizQuotationProduct.getPrice1() == null) {
+                    bizQuotationProduct.setPrice1(0.0);
+                }
+                if (bizQuotationProduct.getPrice2() == null) {
+                    bizQuotationProduct.setPrice2(0.0);
+                }
+                if (bizQuotationProduct.getPrice5() == null) {
+                    bizQuotationProduct.setPrice5(0.0);
+                }
+                if (bizQuotationProduct.getPrice4() == null) {
+                    bizQuotationProduct.setPrice4(0.0);
+                }
+                price = price + Integer.parseInt(bizQuotationProduct.getProductNum())*bizQuotationProduct.getPrice1();
+                price = price + Integer.parseInt(bizQuotationProduct.getActuatorNum())*bizQuotationProduct.getPrice4();
+                price = price + Integer.parseInt(bizQuotationProduct.getProductRef1Num())*bizQuotationProduct.getPrice2();
+                price = price + Integer.parseInt(bizQuotationProduct.getProductRef2Num())*bizQuotationProduct.getPrice5();
+                if (bizQuotationProduct.getPattachment1Price() == null) {
+                    bizQuotationProduct.setPattachment1Price(0.0);
+                }
+                if (bizQuotationProduct.getPattachment2Price() == null) {
+                    bizQuotationProduct.setPattachment2Price(0.0);
+                }
+                if (bizQuotationProduct.getPattachment3Price() == null) {
+                    bizQuotationProduct.setPattachment3Price(0.0);
+                }
+                if (bizQuotationProduct.getPattachment4Price() == null) {
+                    bizQuotationProduct.setPattachment4Price(0.0);
+                }
+                if (bizQuotationProduct.getPattachmentPrice() == null) {
+                    bizQuotationProduct.setPattachmentPrice(0.0);
+                }
+
+                if (bizQuotationProduct.getPattachment1Count() == null) {
+                    bizQuotationProduct.setPattachment1Count(0.0);
+                }
+                if (bizQuotationProduct.getPattachment2Count() == null) {
+                    bizQuotationProduct.setPattachment2Count(0.0);
+                }
+                if (bizQuotationProduct.getPattachment3Count() == null) {
+                    bizQuotationProduct.setPattachment3Count(0.0);
+                }
+                if (bizQuotationProduct.getPattachment4Count() == null) {
+                    bizQuotationProduct.setPattachment4Count(0.0);
+                }
+                if (bizQuotationProduct.getPattachmentCount() == null) {
+                    bizQuotationProduct.setPattachmentCount(0.0);
+                }
+                price = price + bizQuotationProduct.getPattachment1Count()*bizQuotationProduct.getPattachment1Price();
+                price = price + bizQuotationProduct.getPattachment2Count()*bizQuotationProduct.getPattachment2Price();
+                price = price + bizQuotationProduct.getPattachment3Count()*bizQuotationProduct.getPattachment3Price();
+                price = price + bizQuotationProduct.getPattachment4Count()*bizQuotationProduct.getPattachment4Price();
+                price = price + bizQuotationProduct.getPattachmentCount()*bizQuotationProduct.getPattachmentPrice();
             }
+        }
+        System.out.println("price" + price);
             /**
-             * 计算最低系数
-             * 如果系数（报价员录入的系数）底于0.9，由必须由销售副总审核、总经理审批，流程结束；
-             * 如果系数0.9--1.0，必须由销售副总审核，流程结束，
-             * 如果报价系数大于1.0--1.1则由区域经理审批完成后流程结束；
-             * 如果系数大于1.1，则由部门销售经理审核完成后流程结束
-             */
+         * 计算最低系数
+         * 如果系数（报价员录入的系数）底于0.9，由必须由销售副总审核、总经理审批，流程结束；
+         * 如果系数0.9--1.0，必须由销售副总审核，流程结束，
+         * 如果报价系数大于1.0--1.1则由区域经理审批完成后流程结束；
+         * 如果系数大于1.1，则由部门销售经理审核完成后流程结束
+         */
             if (minCoefficient < 0.88) {
                 normalFlag = "5";
             }else if (minCoefficient >= 0.88 && minCoefficient < 0.95) {
@@ -919,7 +978,6 @@ public class BizQuotationController extends BaseController {
             } else {
                 normalFlag = "2";
             }
-        }
 
         bizQuotation.setNormalFlag(normalFlag);
 
