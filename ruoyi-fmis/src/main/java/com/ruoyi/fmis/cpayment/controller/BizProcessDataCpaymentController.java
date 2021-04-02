@@ -35,7 +35,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * 发货管理Controller
+ * 付款申请Controller
  *
  * @author frank
  * @date 2020-05-05
@@ -64,30 +64,29 @@ public class BizProcessDataCpaymentController extends BaseController {
     }
 
     /**
-     * 查询发货管理列表
+     * 查询付款申请列表
      */
     @RequiresPermissions("fmis:cpayment:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(BizProcessData bizProcessData) {
-
         String bizId = bizProcessData.getBizId();
 
+        Map<String, SysRole> flowMap = bizProcessDefineService.getRoleFlowMap(bizId);
+        String userFlowStatus = "";
+        if (!CollectionUtils.isEmpty(flowMap)) {
+            for (String key : flowMap.keySet()) {
+                userFlowStatus = key;
+            }
+            bizProcessData.setRoleType(userFlowStatus);
+        }
         startPage();
         List<BizProcessData> list = bizProcessDataService.selectBizProcessDataListRefCPayment(bizProcessData);
 
-        Map<String, SysRole> flowMap = bizProcessDefineService.getRoleFlowMap(bizId);
         Map<String, SysRole> flowAllMap = bizProcessDefineService.getFlowAllMap(bizId);
         if (!CollectionUtils.isEmpty(flowMap)) {
             //计算流程描述
             for (BizProcessData data : list) {
-//                //获取客户名称
-//                String customerId = data.getString2();
-//                if (StringUtils.isNotEmpty(customerId)) {
-//                    BizCustomer customer = bizCustomerService.selectBizCustomerById(Long.parseLong(customerId));
-//                    data.setBizCustomer(customer);
-//                    data.setCustomerName(customer.getName());
-//                }
                 String flowStatus = data.getFlowStatus();
                 //结束标识
                 String normalFlag = data.getNormalFlag();
@@ -116,7 +115,6 @@ public class BizProcessDataCpaymentController extends BaseController {
                 data.setOperationExamineStatus(false);
                 if (flowStatusInt > 0) {
                     if (!flowStatus.equals(normalFlag)) {
-                        String userFlowStatus = flowMap.keySet().iterator().next();
                         int userFlowStatusInt = Integer.parseInt(userFlowStatus);
                         if (userFlowStatusInt == flowStatusInt + 1) {
                             data.setOperationExamineStatus(true);
@@ -216,7 +214,7 @@ public class BizProcessDataCpaymentController extends BaseController {
     }
 
     /**
-     * 导出发货管理列表
+     * 导出付款申请列表
      */
     @RequiresPermissions("fmis:cpayment:export")
     @PostMapping("/export")
@@ -228,7 +226,7 @@ public class BizProcessDataCpaymentController extends BaseController {
     }
 
     /**
-     * 新增发货管理
+     * 新增付款申请
      */
     @GetMapping("/add")
     public String add() {
@@ -236,10 +234,10 @@ public class BizProcessDataCpaymentController extends BaseController {
     }
 
     /**
-     * 新增保存发货管理
+     * 新增保存付款申请
      */
     @RequiresPermissions("fmis:cpayment:add")
-    @Log(title = "发货管理", businessType = BusinessType.INSERT)
+    @Log(title = "付款申请", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
     public AjaxResult addSave(BizProcessData bizProcessData) {
@@ -284,7 +282,7 @@ public class BizProcessDataCpaymentController extends BaseController {
     }
 
     /**
-     * 修改发货管理
+     * 修改付款申请
      */
     @GetMapping("/edit/{dataId}")
     public String edit(@PathVariable("dataId") Long dataId, ModelMap mmap) {
@@ -317,10 +315,10 @@ public class BizProcessDataCpaymentController extends BaseController {
     }
 
     /**
-     * 修改保存发货管理
+     * 修改保存付款申请
      */
     @RequiresPermissions("fmis:cpayment:edit")
-    @Log(title = "发货管理", businessType = BusinessType.UPDATE)
+    @Log(title = "付款申请", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
     public AjaxResult editSave(BizProcessData bizProcessData) {
@@ -354,7 +352,7 @@ public class BizProcessDataCpaymentController extends BaseController {
     }
 
     /**
-     * 删除发货管理
+     * 删除付款申请
      */
     @RequiresPermissions("fmis:cpayment:remove")
     @Log(title = "合同管理", businessType = BusinessType.DELETE)

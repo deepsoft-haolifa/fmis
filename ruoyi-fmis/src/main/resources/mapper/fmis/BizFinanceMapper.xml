@@ -110,8 +110,7 @@
         left join biz_suppliers s on s.suppliers_id=q.string6
         left join (select contract_id,sum(apply_amount) as paidAmount  from biz_pay_plan where status=1 group by contract_id) p on p.contract_id=q.data_id
         left join (select contract_id,sum(apply_amount) as planPayAmount  from biz_pay_plan where status=0 group by contract_id) p1 on p1.contract_id=q.data_id
-        left join (select string4,sum(string1) as arrivalQty from biz_data_stestn  group by string4) stn on stn.string4=q.data_id
-        left join (select a.string4,sum(a.string1*ba.string6) arrivalAmount from biz_data_stestn a left join biz_process_child b on a.string5=b.child_id left join biz_actuator ba on ba.actuator_id=b.string11  group by a.string4) stnprice on stnprice.string4=q.data_id
+        left join (select a.string4,sum(a.string1*b.procurement_price) arrivalAmount from biz_data_stestn a left join biz_product b on a.string3=b.product_id  group by a.string4) stnprice on stnprice.string4=q.data_id
          ) a
          -- 已经付完款的合同不统计
          where a.contractAmount > a.paidAmount) total
@@ -178,8 +177,9 @@
                 ifnull(sum(invoice.invoicedAmount),0) invoicedAmount
             from biz_process_data q
                 left join biz_customer ct on ct.customer_id=q.string2
+                -- 发货申请流程走完，且已经出库（string19=1）
                 left join (select a.string5,sum(a.string13*a.price1) deliveryAmount from biz_process_child  a left join biz_process_data
-                b on a.data_id=b.data_id where b.biz_id='newdelivery' and b.normal_flag=b.flow_status group by a.string5) bpc1 ON
+                b on a.data_id=b.data_id where b.biz_id='newdelivery' and b.normal_flag=b.flow_status and a.string19=1 group by a.string5) bpc1 ON
                 bpc1.string5 = q.string1
                 left join (select data_id,sum(amount) as paidAmount from biz_bill_contract group by data_id) bbc on
                 bbc.data_id=q.data_id
