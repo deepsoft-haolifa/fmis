@@ -2,8 +2,10 @@ package com.ruoyi.fmis.quotation.mapper;
 
 import com.ruoyi.fmis.quotation.domain.BizQuotation;
 import com.ruoyi.fmis.quotationproduct.domain.BizQuotationProduct;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * 报价单Mapper接口
@@ -76,4 +78,9 @@ public interface BizQuotationMapper {
      * @return
      */
     public List<BizQuotation> selectBizQuotationProductList(BizQuotation bizQuotation);
+
+    /**
+     * 根据流程节点和工单类型查询报价单列表
+     */
+    List<BizQuotation> selectBizQuotationByFlowStatus(@Param("flows") Set<String> flows, @Param("userIds") Set<String> userIds);
 }

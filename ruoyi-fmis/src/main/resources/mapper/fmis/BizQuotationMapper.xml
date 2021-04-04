@@ -64,6 +64,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <sql id="selectBizQuotationVo">
         select quotation_id, product_id, product_ref1_id, product_ref1_num, product_ref2_id, product_ref2_num, actuator_id, special_expenses, payment_method, freight, lead_time, report_project, normal_flag, flow_status, remark, string1, string2, string3, string4, string5, string6, string7, string8, string9, string10,string11,string12, string19,status, del_flag, create_by, create_time, update_by, update_time from biz_quotation
     </sql>
+    
+    <select id="selectBizQuotationByFlowStatus" resultMap="BizQuotationResult">
+        <include refid="selectBizQuotationVo"></include>
+        <where>
+            flow_status in (
+            <foreach collection="flows" item="item" separator=",">
+                #{item}
+            </foreach>
+            )
+            and create_by in (
+            <foreach collection="userIds" separator="," item="item">
+                #{item}
+            </foreach>
+            )
+        </where>
+    </select>
 
     <select id="selectBizQuotationList" parameterType="BizQuotation" resultMap="BizQuotationResult">
         <include refid="selectBizQuotationVo"/>

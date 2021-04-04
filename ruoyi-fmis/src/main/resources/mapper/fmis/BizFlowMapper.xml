@@ -30,7 +30,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectBizFlowList" parameterType="BizFlow" resultMap="BizFlowResult">
         <include refid="selectBizFlowVo"/>
-        <where>  
+        <where>
         </where>
     </select>
 
@@ -49,6 +49,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <where>
             <if test="bizTable != null  and bizTable != ''"> and f.biz_table = #{bizTable}</if>
             <if test="bizId != null"> and f.biz_id = #{bizId}</if>
+             <if test="examineUserId != null" >and f.examine_user_id = #{examineUserId}</if>
             order by f.create_time desc
         </where>
     </select>

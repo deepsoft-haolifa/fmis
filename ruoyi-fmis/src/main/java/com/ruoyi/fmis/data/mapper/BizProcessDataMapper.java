@@ -4,8 +4,11 @@ import com.ruoyi.fmis.child.domain.BizProcessChild;
 import com.ruoyi.fmis.data.domain.BizProcessData;
 import com.ruoyi.fmis.invoice.bean.InvoiceReqVo;
 import com.ruoyi.fmis.invoice.bean.InvoiceRespVo;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.jmx.export.annotation.ManagedOperationParameter;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * 合同管理Mapper接口
@@ -130,4 +133,12 @@ public interface BizProcessDataMapper {
     public int deleteBizProcessDataByIds(String[] dataIds);
 
     public Long selectProcurementMaxNo();
+
+    /**
+     * 根据工单类型和流程节点查询工单列表
+     * @param orderType
+     * @param flows
+     * @return
+     */
+    List<BizProcessData> selectBizProcessDataByFlowStatus(@Param("orderType") String orderType, @Param("flows") Set<String> flows, @Param("userIds") Set<String> userIds);
 }

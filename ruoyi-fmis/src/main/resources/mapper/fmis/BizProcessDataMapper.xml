@@ -81,6 +81,23 @@
         <result property="updateTime"    column="update_time"    />
     </resultMap>
 
+    <select id="selectBizProcessDataByFlowStatus" resultMap="BizProcessDataResult">
+        select * from biz_process_data
+        where
+        biz_id = #{orderType}
+        and flow_status != normal_flag
+        and flow_status in (
+        <foreach collection="flows" separator="," item="item">
+            #{item}
+        </foreach>
+        )
+        and create_by in (
+        <foreach collection="userIds" separator="," item="item">
+            #{item}
+        </foreach>
+        )
+    </select>
+
     <sql id="selectBizProcessDataVo">
         select q.data_id, q.biz_data_id, q.biz_id, q.normal_flag, q.flow_status, q.remark, q.price1, q.price2, q.price3, q.price4, q.price5, q.price6, q.price7,
         q.price8, q.price9, q.price10, q.string1, q.string2, q.string3, q.string4, q.string5, q.string6, q.string7, q.string8, q.string9, q.string10, q.string11,
