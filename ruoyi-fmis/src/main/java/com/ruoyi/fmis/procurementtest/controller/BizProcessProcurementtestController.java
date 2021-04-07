@@ -7,6 +7,7 @@ import java.util.Map;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.fmis.Constant;
 import com.ruoyi.fmis.actuator.domain.BizActuator;
 import com.ruoyi.fmis.actuator.service.IBizActuatorService;
 import com.ruoyi.fmis.child.domain.BizProcessChild;
@@ -100,6 +101,7 @@ public class BizProcessProcurementtestController extends BaseController {
 
     @Autowired
     private IBizDataStatusService bizDataStatusService;
+
     @GetMapping()
     public String data() {
         return prefix + "/data";
@@ -137,7 +139,7 @@ public class BizProcessProcurementtestController extends BaseController {
                 } else if ("1".equals(flowStatus)) {
                     flowStatusRemark = "已上报";
                 } else {
-                    SysRole currentSysRole =  CommonUtils.getLikeByMap(flowAllMap,flowStatus.replaceAll("-",""));
+                    SysRole currentSysRole = CommonUtils.getLikeByMap(flowAllMap, flowStatus.replaceAll("-", ""));
                     if (currentSysRole == null) {
                         continue;
                     }
@@ -195,8 +197,8 @@ public class BizProcessProcurementtestController extends BaseController {
                 String levelValue = bizDataStatus.getString5();
                 JSONObject jsonObject = new JSONObject();
                 String k = type + "_" + childId + "_" + bizDataId + "_" + parentContractId + "_" + levelValue;
-                jsonObject.put("id",k);
-                jsonObject.put("num",num);
+                jsonObject.put("id", k);
+                jsonObject.put("num", num);
                 numJsonValue.add(jsonObject);
             }
         }
@@ -210,7 +212,7 @@ public class BizProcessProcurementtestController extends BaseController {
                 suppliers.setFlag(true);
             }
         }
-        mmap.put("suppliers",suppliersList);
+        mmap.put("suppliers", suppliersList);
 
         return prefix + "/edit";
     }
@@ -419,9 +421,14 @@ public class BizProcessProcurementtestController extends BaseController {
             updateChild.setUpdateTime(new Date());
             bizProcessChildService.updateBizProcessChild(updateChild);
         }
+        // 检验完成，更新采购合同状态和销售合同状态
+        bizProcessDataService.testCompleteUpdateStatus(dataId);
+
 
         return toAjax(1);
     }
+
+
 
 
     @PostMapping("/removeTest")
@@ -435,3 +442,4 @@ public class BizProcessProcurementtestController extends BaseController {
         return toAjax(1);
     }
 }
+

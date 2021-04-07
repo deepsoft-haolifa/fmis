@@ -2,6 +2,7 @@ package com.ruoyi.fmis.child.service.impl;
 
 import java.util.List;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.fmis.child.domain.ProcessDataDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.fmis.child.mapper.BizProcessChildMapper;
@@ -206,5 +207,14 @@ public class BizProcessChildServiceImpl implements IBizProcessChildService {
     @Override
     public double selectPaymentedPrice(String subjectId, String deptId, String startDate, String endDate) {
         return bizProcessChildMapper.selectPaymentedPrice(subjectId,deptId,startDate,endDate);
+    }
+
+    @Override
+    public int getDeliveryQtyByContractNo(String contractNo) {
+        return bizProcessChildMapper.getDeliveryQtyByContractNo(contractNo);
+    }
+    @Override
+    public ProcessDataDTO getSaleQtyByContractNo(String contractNo) {
+        return bizProcessChildMapper.getSaleQtyByContractNo(contractNo);
     }
 }

@@ -21,6 +21,7 @@ import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.itextpdf.PdfUtil;
 import com.ruoyi.common.utils.itextpdf.TextWaterMarkPdfPageEvent;
+import com.ruoyi.fmis.Constant;
 import com.ruoyi.fmis.actuator.domain.BizActuator;
 import com.ruoyi.fmis.actuator.service.IBizActuatorService;
 import com.ruoyi.fmis.child.domain.BizProcessChild;
@@ -1400,6 +1401,7 @@ public class BizProcessDataController extends BaseController {
     public AjaxResult report() {
         String dataId = getRequest().getParameter("dataId");
         BizProcessData bizQuotation = bizProcessDataService.selectBizProcessDataById(Long.parseLong(dataId));
+        bizQuotation.setStatus(Constant.contractStatus.AUDIT);
         return toAjax(bizProcessDataService.subReportBizQuotation(bizQuotation));
     }
     //流转到合同审理员
@@ -1419,6 +1421,7 @@ public class BizProcessDataController extends BaseController {
         String dataId = getRequest().getParameter("dataId");
         BizProcessData bizQuotation = bizProcessDataService.selectBizProcessDataById(Long.parseLong(dataId));
         bizQuotation.setString13("1");
+        bizQuotation.setStatus(Constant.contractStatus.TO_BE_PURCHASE);
         bizQuotation.setUpdateBy(ShiroUtils.getUserId().toString());
         return toAjax(bizProcessDataService.updateBizProcessData(bizQuotation));
     }

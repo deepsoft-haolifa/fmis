@@ -1,6 +1,7 @@
 package com.ruoyi.fmis.child.mapper;
 
 import com.ruoyi.fmis.child.domain.BizProcessChild;
+import com.ruoyi.fmis.child.domain.ProcessDataDTO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -112,4 +113,7 @@ public interface BizProcessChildMapper {
 
 
     double selectPaymentedPrice(@Param("subjectId") String subjectId, @Param("deptId") String deptId, @Param("startDate") String startDate,@Param("endDate") String endDate);
+
+    int getDeliveryQtyByContractNo(@Param("contractNo")String contractNo);
+    ProcessDataDTO getSaleQtyByContractNo(@Param("contractNo")String contractNo);
 }

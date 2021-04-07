@@ -7,6 +7,7 @@ import java.util.Map;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.fmis.Constant;
 import com.ruoyi.fmis.child.domain.BizProcessChild;
 import com.ruoyi.fmis.child.service.IBizProcessChildService;
 import com.ruoyi.fmis.common.BizConstants;
@@ -369,7 +370,13 @@ public class BizProcessDataInvoiceController extends BaseController {
     @PostMapping("/operate")
     @ResponseBody
     public AjaxResult operate(BizProcessChild child) {
-        return toAjax(bizProcessChildService.updateBizProcessChild(child));
+        int i = bizProcessChildService.updateBizProcessChild(child);
+        // 开票成功，修改销售合同状态为已开票
+        bizProcessDataService.updateBizProcessData(new BizProcessData(){{
+            setDataId(child.getDataId());
+            setStatus(Constant.contractStatus.INVOICE);
+        }});
+        return toAjax(i);
     }
 
     /**

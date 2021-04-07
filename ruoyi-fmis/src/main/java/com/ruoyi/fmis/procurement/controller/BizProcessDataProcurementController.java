@@ -16,6 +16,7 @@ import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.itextpdf.PdfUtil;
 import com.ruoyi.common.utils.itextpdf.TextWaterMarkPdfPageEvent;
+import com.ruoyi.fmis.Constant;
 import com.ruoyi.fmis.child.domain.BizProcessChild;
 import com.ruoyi.fmis.child.service.IBizProcessChildService;
 import com.ruoyi.fmis.common.CommonUtils;
@@ -393,6 +394,7 @@ public class BizProcessDataProcurementController extends BaseController {
                 count ++;
             }
         }
+        bizProcessData.setStatus(Constant.contractStatus.PURCHASE_ING);
         if (size + num < count) {
             bizProcessData.setString30("1");
             bizProcessDataService.updateBizProcessData(bizProcessData);
@@ -425,7 +427,7 @@ public class BizProcessDataProcurementController extends BaseController {
     public void setContractNo (BizProcessData bizProcessData,String productArrayStr) {
 
         //设置采购状态  审批中
-        bizProcessData.setString11("2");
+        bizProcessData.setString11(Constant.procurementStatus.AUDIT);
 
         List<String> contractNoList = new ArrayList<>();
         if (StringUtils.isNotEmpty(productArrayStr)) {

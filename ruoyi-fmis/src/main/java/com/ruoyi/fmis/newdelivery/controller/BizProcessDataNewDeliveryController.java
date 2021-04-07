@@ -378,7 +378,11 @@ public class BizProcessDataNewDeliveryController extends BaseController {
         child.setUpdateBy(ShiroUtils.getUserId().toString());
         child.setUpdateTime(new Date());
         child.setString19("1");
-        return toAjax(bizProcessChildService.updateBizProcessChild(child));
+        int i = bizProcessChildService.updateBizProcessChild(child);
+        // 发货更新销售订单状态
+        bizProcessDataService.deliveryUpdateStatus(child.getString5());
+
+        return toAjax(i);
     }
 
     /**

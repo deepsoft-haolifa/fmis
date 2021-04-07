@@ -1,6 +1,7 @@
 package com.ruoyi.fmis.child.service;
 
 import com.ruoyi.fmis.child.domain.BizProcessChild;
+import com.ruoyi.fmis.child.domain.ProcessDataDTO;
 
 import java.util.List;
 
@@ -118,5 +119,17 @@ public interface IBizProcessChildService {
     public double selectPaymentedPrice(String subjectId, String deptId, String startDate, String endDate);
 
 
+    /**
+     * 获取销售合同的已发货数量和合同数量
+     *
+     * @return
+     */
+    public int getDeliveryQtyByContractNo(String contractNo);
+    /**
+     * 获取销售合同合同数量
+     *
+     * @return
+     */
+    public ProcessDataDTO getSaleQtyByContractNo(String contractNo);
 
 }

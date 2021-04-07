@@ -8,6 +8,7 @@
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
     <form class="form-horizontal m" id="form-data-edit" th:object="${BizProcessChild}">
         <input name="childId" th:field="*{childId}" type="hidden">
+        <input name="dataId" th:field="*{dataId}" type="hidden">
 
         <div class="form-group">
             <label class="col-sm-3 control-label">开票时间：</label>

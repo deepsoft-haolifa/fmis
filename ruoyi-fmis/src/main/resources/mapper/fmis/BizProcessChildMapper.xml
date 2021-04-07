@@ -1144,5 +1144,18 @@
         select ifnull(sum(a.price1),0) from biz_process_child a left join biz_process_data b on a.data_id=b.data_id
         where b.biz_id="payment" and b.string6=#{deptId} and a.string2=#{subjectId} and a.datetime1 between #{startDate} and #{endDate}
     </select>
+    <select id="getDeliveryQtyByContractNo" resultType="java.lang.Integer">
+        select ifnull(sum(bpc.string13),0) from biz_process_child bpc
+        left join biz_process_data q on q.data_id=bpc.data_id
+        where bpc.string5=#{contractNo} and bpc.string2 = '1' and bpc.string19='1' and q.biz_id='newdelivery'
+        group by bpc.string5
+    </select>
+    <select id="getSaleQtyByContractNo" resultType="com.ruoyi.fmis.child.domain.ProcessDataDTO">
+        select ifnull(sum(bpc.string3),0) saleQty,q.data_id dataId from biz_process_data q
+        left join biz_process_child bpc on q.data_id=bpc.data_id
+        where q.string1=#{contractNo} and q.biz_id='contract'
+        group by bpc.data_id
+    </select>
+
 
 </mapper>

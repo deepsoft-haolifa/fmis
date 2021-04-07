@@ -10,7 +10,9 @@ import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.fmis.Constant;
 import com.ruoyi.fmis.child.domain.BizProcessChild;
+import com.ruoyi.fmis.child.domain.ProcessDataDTO;
 import com.ruoyi.fmis.child.service.IBizProcessChildService;
 import com.ruoyi.fmis.common.BizConstants;
 import com.ruoyi.fmis.common.BizContractLevel;
@@ -24,10 +26,16 @@ import com.ruoyi.fmis.invoice.bean.InvoiceRespVo;
 import com.ruoyi.fmis.product.domain.BizProduct;
 import com.ruoyi.fmis.product.service.IBizProductService;
 import com.ruoyi.fmis.quotation.domain.BizQuotation;
+import com.ruoyi.fmis.status.domain.BizDataStatus;
+import com.ruoyi.fmis.status.service.IBizDataStatusService;
+import com.ruoyi.fmis.stestn.domain.BizDataStestn;
+import com.ruoyi.fmis.stestn.service.IBizDataStestnService;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysRole;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.fmis.data.mapper.BizProcessDataMapper;
@@ -46,6 +54,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Service
 public class BizProcessDataServiceImpl implements IBizProcessDataService {
+    protected final Logger logger = LoggerFactory.getLogger(BizProcessDataServiceImpl.class);
 
     @Autowired
     private BizProcessDataMapper bizProcessDataMapper;
@@ -60,6 +69,11 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
     private IBizProcessChildService bizProcessChildService;
     @Autowired
     private IBizPayPlanService bizPayPlanService;
+
+    @Autowired
+    private IBizDataStestnService bizDataStestnService;
+    @Autowired
+    private IBizDataStatusService bizDataStatusService;
 
     /**
      * 查询合同管理
@@ -853,7 +867,7 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
          */
         if (BizConstants.BIZ_procurement.equals(bizProcessData.getBizId())) {
             if (bizProcessData.getFlowStatus().equals(bizProcessData.getNormalFlag())) {
-                bizProcessData.setString11("3");
+                bizProcessData.setString11(Constant.procurementStatus.ING);
             }
         }
 
@@ -996,6 +1010,78 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
     @Override
     public Long selectProcurementMaxNo() {
         return bizProcessDataMapper.selectProcurementMaxNo();
+    }
+
+
+    /**
+     * 检验完成，更新采购合同状态和销售合同状态
+     * 1.当采购合同的产品已全部合格入库，其状态为：采购完成
+     * 2.当这个销售合同的数量与入库数量相等时：已入库
+     *
+     * @param dataId 采购合同Id
+     */
+    @Override
+    public void testCompleteUpdateStatus(String dataId) {
+        // 判断检验合格数是否等于采购订单的数量，如果等于，将采购合同的状态更改为采购完成
+        List<BizDataStestn> stestnList = bizDataStestnService.selectBizDataStestnList(new BizDataStestn() {{
+            setString4(dataId);
+        }});
+        // 该采购合同已经检验合格的数量
+        int yesSum = stestnList.stream().mapToInt(a -> Integer.parseInt(a.getString1())).sum();
+        List<BizDataStatus> statusList = bizDataStatusService.selectBizDataStatusList(new BizDataStatus() {{
+            setString4(dataId);
+        }});
+        // 该采购合同的数量
+        int totalSum = statusList.stream().mapToInt(b -> Integer.parseInt(b.getString1())).sum();
+        logger.info("采购合同检验保存，状态变更，yesSum:{}，totalSum:{},dataId:{}", yesSum, totalSum, dataId);
+        if (totalSum <= yesSum) {
+            updateBizProcessData(new BizProcessData() {{
+                setDataId(Long.valueOf(dataId));
+                setString11(Constant.procurementStatus.DONE);
+            }});
+        }
+
+        // 销售合同状态变更
+        BizDataStestn bizDataStestn = stestnList.get(0);
+        String string5 = bizDataStestn.getString5();
+        BizProcessChild bizProcessChild = bizProcessChildService.selectBizProcessChildById(Long.valueOf(string5));
+        if (bizProcessChild != null) {
+            List<BizProcessChild> bizProcessChildrenList = bizProcessChildService.selectBizProcessChildList(new BizProcessChild() {{
+                setDataId(bizProcessChild.getDataId());
+            }});
+            int totalSum1 = 0;
+            List<String> childList = new ArrayList<>();
+            for (BizProcessChild processChild : bizProcessChildrenList) {
+                totalSum1 += Integer.valueOf(processChild.getString3());
+                childList.add(String.valueOf(processChild.getChildId()));
+            }
+            List<BizDataStestn> stestnList1 = bizDataStestnService.selectBizDataStestnList(new BizDataStestn() {{
+                setString5List(childList);
+            }});
+            int yesSum1 = stestnList1.stream().mapToInt(a -> Integer.parseInt(a.getString1())).sum();
+            logger.info("销售合同检验保存，状态变更，yesSum:{}，totalSum:{},dataId:{}", yesSum1, totalSum1, bizProcessChild.getDataId());
+            if (totalSum1 <= yesSum1) {
+                updateBizProcessData(new BizProcessData() {{
+                    setDataId(bizProcessChild.getDataId());
+                    setStatus(Constant.contractStatus.STORED);
+                }});
+            }
+        }
+    }
+
+    @Override
+    public void deliveryUpdateStatus(String contractNo) {
+        // 根据销售合同号，查询该合同号已经发货完成的数量
+        int deliveryQty = bizProcessChildService.getDeliveryQtyByContractNo(contractNo);
+        ProcessDataDTO processDataDTO = bizProcessChildService.getSaleQtyByContractNo(contractNo);
+        logger.info("deliveryUpdateStatus contactNo:{},deliverQty:{},saleQty:{},dataId:{}", contractNo, deliveryQty, processDataDTO.getSaleQty(), processDataDTO.getDataId());
+        BizProcessData update = new BizProcessData();
+        update.setStatus(Constant.contractStatus.PART_DELIVERY);
+        if (processDataDTO.getSaleQty() <= deliveryQty) {
+            update.setStatus(Constant.contractStatus.ALL_DELIVERY);
+        }
+        update.setDataId(processDataDTO.getDataId());
+        updateBizProcessData(update);
     }
 
     /**

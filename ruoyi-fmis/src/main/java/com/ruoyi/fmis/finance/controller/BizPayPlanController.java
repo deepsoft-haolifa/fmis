@@ -9,6 +9,7 @@ import java.util.stream.Stream;
 import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.fmis.Constant;
 import com.ruoyi.fmis.data.domain.BizProcessData;
 import com.ruoyi.fmis.data.service.IBizProcessDataService;
 import com.ruoyi.fmis.finance.domain.BizBankBill;
@@ -197,6 +198,11 @@ public class BizPayPlanController extends BaseController {
                 }
 
             }
+            // 付款完成后，将采购订单的状态更新为已付款
+            bizProcessDataService.updateBizProcessData(new BizProcessData(){{
+                setDataId(Long.valueOf(bizPayPlan.getContractId()));
+                setString11(Constant.procurementStatus.PAYED);
+            }});
         }
         return toAjax(payPlan);
     }

@@ -1,10 +1,13 @@
 package com.ruoyi.fmis.data.service;
 
 import com.ruoyi.common.core.page.TableDataInfo;
+import com.ruoyi.fmis.Constant;
 import com.ruoyi.fmis.common.BizContractLevel;
 import com.ruoyi.fmis.data.domain.BizProcessData;
 import com.ruoyi.fmis.invoice.bean.InvoiceReqVo;
 import com.ruoyi.fmis.invoice.bean.InvoiceRespVo;
+import com.ruoyi.fmis.status.domain.BizDataStatus;
+import com.ruoyi.fmis.stestn.domain.BizDataStestn;
 
 import java.util.List;
 
@@ -129,4 +132,18 @@ public interface IBizProcessDataService {
     public int subTestBizQuotation(BizProcessData bizProcessData);
 
     public Long selectProcurementMaxNo ();
+
+
+    /**
+     * 检验完成更新采购订单和销售订单的状态
+     * @param dataId 采购订单的dataId
+     */
+    public void  testCompleteUpdateStatus(String dataId);
+
+    /**
+     * 发货完成更新销售订单的状态（部分发货还是发货完成）
+     * @param contractNo 销售订单No
+     */
+    public void  deliveryUpdateStatus(String contractNo);
+
 }
