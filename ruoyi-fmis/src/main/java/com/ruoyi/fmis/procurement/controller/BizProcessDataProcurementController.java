@@ -310,6 +310,7 @@ public class BizProcessDataProcurementController extends BaseController {
             bizProcessData.setPrice1(0D);
             logger.info(ex.getMessage());
         }
+        bizProcessData.setStatus(Constant.procurementStatus.NEW);
         setNormalFlag(bizProcessData,productArrayStr);
         //添加采购合同
         int insertReturn = bizProcessDataService.insertBizProcessData(bizProcessData);
@@ -425,9 +426,6 @@ public class BizProcessDataProcurementController extends BaseController {
      * @param productArrayStr
      */
     public void setContractNo (BizProcessData bizProcessData,String productArrayStr) {
-
-        //设置采购状态  审批中
-        bizProcessData.setString11(Constant.procurementStatus.AUDIT);
 
         List<String> contractNoList = new ArrayList<>();
         if (StringUtils.isNotEmpty(productArrayStr)) {
@@ -773,6 +771,7 @@ public class BizProcessDataProcurementController extends BaseController {
     public AjaxResult report() {
         String dataId = getRequest().getParameter("dataId");
         BizProcessData bizQuotation = bizProcessDataService.selectBizProcessDataById(Long.parseLong(dataId));
+        bizQuotation.setStatus(Constant.procurementStatus.AUDIT);
         return toAjax(bizProcessDataService.subReportBizQuotation(bizQuotation));
     }
 

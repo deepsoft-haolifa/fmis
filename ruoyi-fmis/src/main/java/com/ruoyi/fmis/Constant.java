@@ -11,6 +11,8 @@ public interface Constant {
      * 采购状态
      */
     interface procurementStatus {
+        // 未采购
+        String NEW = "1";
         // 审批中
         String AUDIT = "2";
         // 采购中

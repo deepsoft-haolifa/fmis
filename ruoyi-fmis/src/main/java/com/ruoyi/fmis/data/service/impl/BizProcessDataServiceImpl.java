@@ -867,7 +867,7 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
          */
         if (BizConstants.BIZ_procurement.equals(bizProcessData.getBizId())) {
             if (bizProcessData.getFlowStatus().equals(bizProcessData.getNormalFlag())) {
-                bizProcessData.setString11(Constant.procurementStatus.ING);
+                bizProcessData.setStatus(Constant.procurementStatus.ING);
             }
         }
 
@@ -1037,7 +1037,7 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
         if (totalSum <= yesSum) {
             updateBizProcessData(new BizProcessData() {{
                 setDataId(Long.valueOf(dataId));
-                setString11(Constant.procurementStatus.DONE);
+                setStatus(Constant.procurementStatus.DONE);
             }});
         }
 

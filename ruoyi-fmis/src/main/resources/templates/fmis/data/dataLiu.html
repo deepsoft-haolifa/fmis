@@ -63,6 +63,7 @@
         var supplierTypeData = [[${@dict.getType('supplier_type')}]];
         var paymentTypeData = [[${@dict.getType('payment_type')}]];
         var transportTypeData = [[${@dict.getType('transport_type')}]];
+        var contractStatusData = [[${@dict.getType('contract_status')}]];
 
 
 
@@ -168,11 +169,13 @@
                         field : 'price2',
                         title : '毛利'
                     },**/
-                {
-                    field : 'flowStatusRemark',
-                    title : '状态',
-                    align: 'center'
-                },
+                    {
+                        field : 'status',
+                        title : '合同状态',
+                        formatter: function(value, row, index) {
+                            return $.table.selectDictLabel(contractStatusData, value);
+                        }
+                    },
                     {
                         field : 'createByName',
                         title : '责任人'

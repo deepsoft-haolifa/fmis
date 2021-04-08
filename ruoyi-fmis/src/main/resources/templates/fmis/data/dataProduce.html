@@ -1,178 +1,182 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('生产单列表')" />
+    <th:block th:include="include :: header('生产单列表')"/>
 </head>
 <body class="gray-bg">
-     <div class="container-div">
-        <div class="row">
-            <div class="col-sm-12 search-collapse">
-                <form id="formId">
-                    <div class="select-list">
-                        <ul>
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
 
-                            <li>
-                                <p>合同编号：</p>
-                                <input type="text" name="string1"/>
-                                <input type="hidden" name="bizId" id="bizId" value="contract"/>
-                            </li>
-                            <li>
-                                <p>客户名称：</p>
-                                <input type="text" name="customerName"  />
-                            </li>
-                            <li>
-                                <p>归属部门：</p>
-                                <input type="text" name="deptName"  />
-                            </li>
-                            <li>
-                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
-                            </li>
-                        </ul>
-                    </div>
-                </form>
-            </div>
+                        <li>
+                            <p>合同编号：</p>
+                            <input type="text" name="string1"/>
+                            <input type="hidden" name="bizId" id="bizId" value="contract"/>
+                        </li>
+                        <li>
+                            <p>客户名称：</p>
+                            <input type="text" name="customerName"/>
+                        </li>
+                        <li>
+                            <p>归属部门：</p>
+                            <input type="text" name="deptName"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
 
-            <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-warning" onclick="exportPdf()" shiro:hasPermission="fmis:data:export">
-                    <i class="fa fa-download"></i> 生成合同
-                </a>
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-warning" onclick="exportPdf()" shiro:hasPermission="fmis:data:export">
+                <i class="fa fa-download"></i> 生成合同
+            </a>
 
-                <a class="btn btn-success" onclick="viewPdf()">
-                    <i class="fa fa-street-view"></i> 预览合同
-                </a>
-            </div>
-            <div class="col-sm-12 select-table table-striped">
-                <table id="bootstrap-table"></table>
-            </div>
+            <a class="btn btn-success" onclick="viewPdf()">
+                <i class="fa fa-street-view"></i> 预览合同
+            </a>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
         </div>
     </div>
-    <th:block th:include="include :: footer" />
-    <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('fmis:data:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('fmis:data:remove')}]];
+</div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('fmis:data:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('fmis:data:remove')}]];
 
-        var supplierTypeData = [[${@dict.getType('supplier_type')}]];
-        var paymentTypeData = [[${@dict.getType('payment_type')}]];
-        var transportTypeData = [[${@dict.getType('transport_type')}]];
+    var supplierTypeData = [[${@dict.getType('supplier_type')}]];
+    var paymentTypeData = [[${@dict.getType('payment_type')}]];
+    var transportTypeData = [[${@dict.getType('transport_type')}]];
+    var contractStatusData = [[${@dict.getType('contract_status')}]];
 
 
-
-        var prefix = ctx + "fmis/data";
-        var dotoType = [[${todo}]];
-        if (dotoType == "1") {
-            $("#queryStatus").val("1");
-        }
-        $(function() {
-            var options = {
-                url: prefix + "/listForProduce",
-                createUrl: prefix + "/add",
-                updateUrl: prefix + "/edit/{id}",
-                removeUrl: prefix + "/remove",
-                exportUrl: prefix + "/export",
-                modalName: "合同管理",
-                uniqueId: "dataId",
-                columns: [{
-                    checkbox: true
-                },
+    var prefix = ctx + "fmis/data";
+    var dotoType = [[${todo}]];
+    if (dotoType == "1") {
+        $("#queryStatus").val("1");
+    }
+    $(function () {
+        var options = {
+            url: prefix + "/listForProduce",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "合同管理",
+            uniqueId: "dataId",
+            columns: [{
+                checkbox: true
+            },
                 {
-                    field : 'dataId', 
-                    title : 'ID',
+                    field: 'dataId',
+                    title: 'ID',
                     visible: false
                 },
                 {
-                    field : 'dataId',
-                    title : 'ID',
+                    field: 'dataId',
+                    title: 'ID',
                     visible: false
                 },
 
                 {
-                    field : 'string1',
-                    title : '合同编号'
+                    field: 'string1',
+                    title: '合同编号'
                 },
                 {
-                    field : 'customerName',
-                    title : '客户'
+                    field: 'customerName',
+                    title: '客户'
                 },
                 {
-                    field : 'datetime1',
-                    title : '签订日期'
+                    field: 'datetime1',
+                    title: '签订日期'
                 },
                 {
-                    field : 'string3',
-                    title : '供方',
-                    formatter: function(value, row, index) {
+                    field: 'string3',
+                    title: '供方',
+                    formatter: function (value, row, index) {
                         return $.table.selectDictLabel(supplierTypeData, value);
                     }
                 },
                 {
-                    field : 'string4',
-                    title : '签订地点'
+                    field: 'string4',
+                    title: '签订地点'
                 },
                 {
-                    field : 'string5',
-                    title : '含发票'
+                    field: 'string5',
+                    title: '含发票'
                 },
                 {
-                    field : 'string6',
-                    title : '发货时间'
+                    field: 'string6',
+                    title: '发货时间'
                 },
                 {
-                    field : 'string7',
-                    title : '配送方式',
-                    formatter: function(value, row, index) {
+                    field: 'string7',
+                    title: '配送方式',
+                    formatter: function (value, row, index) {
                         return $.table.selectDictLabel(transportTypeData, value);
                     }
                 },
                 {
-                    field : 'string18',
-                    title : '付款方式',
-                    formatter: function(value, row, index) {
+                    field: 'string18',
+                    title: '付款方式',
+                    formatter: function (value, row, index) {
                         return $.table.selectDictLabel(paymentTypeData, value);
                     }
                 },
                 {
-                    field : 'string9',
-                    title : '交货地点'
+                    field: 'string9',
+                    title: '交货地点'
                 },
                 {
-                    field : 'string10',
-                    title : '运费承担'
+                    field: 'string10',
+                    title: '运费承担'
                 },
                 {
-                    field : 'string11',
-                    title : '收货人'
+                    field: 'string11',
+                    title: '收货人'
                 },
                 {
-                    field : 'string12',
-                    title : '收货电话'
+                    field: 'string12',
+                    title: '收货电话'
                 },
-                    {
-                        field : 'deptName',
-                        title : '归属部门'
-                    },
                 {
-                    field : 'price1',
-                    title : '总价'
+                    field: 'deptName',
+                    title: '归属部门'
+                },
+                {
+                    field: 'price1',
+                    title: '总价'
                 },
 
-                    /**{
+                /**{
                         field : 'price2',
                         title : '毛利'
                     },**/
                 {
-                    field : 'flowStatusRemark',
-                    title : '状态',
-                    align: 'center'
+                    field: 'status',
+                    title: '合同状态',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(contractStatusData, value);
+                    }
                 },
-                    {
-                        field : 'createByName',
-                        title : '责任人'
-                    },
+                {
+                    field: 'createByName',
+                    title: '责任人'
+                },
                 {
                     title: '操作',
                     align: 'left',
-                    formatter: function(value, row, index) {
+                    formatter: function (value, row, index) {
                         var actions = [];
                         var flowStatus = row.flowStatus;
                         var normalFlag = row.normalFlag;
@@ -184,75 +188,76 @@
                         return actions.join('');
                     }
                 }]
-            };
-            $.table.init(options);
-        });
+        };
+        $.table.init(options);
+    });
 
 
-        function exportPdf(formId) {
+    function exportPdf(formId) {
 
-            var row = $('#bootstrap-table').bootstrapTable('getSelections')[0];
-            var rows = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
-            if ($.common.isEmpty(row) || rows.length != 1) {
-                $.modal.alertWarning("请选择一条记录");
-                return;
-            }
-            var flowStatus = row.flowStatus;
-            var normalFlag = row.normalFlag;
-            /*if (flowStatus == "0" || flowStatus != normalFlag) {
-                $.modal.alertWarning("请等待审批结束后生成！");
-                return;
-            }*/
-            $.modal.confirm("确定生成合同吗？", function() {
-                var currentId = $.common.isEmpty(formId) ? $('form').attr('id') : formId;
-                console.log("currentId=" + currentId);
-                $.modal.loading("正在导出数据，请稍后...");
-                var paramsJson = $("#" + currentId).serializeArray();
-                paramsJson.push({"name": "dataId", "value": row.dataId});
-                $.post($.table._option.exportUrl, paramsJson, function(result) {
-                    if (result.code == web_status.SUCCESS) {
-                        window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;
-                    } else if (result.code == web_status.WARNING) {
-                        $.modal.alertWarning(result.msg)
-                    } else {
-                        $.modal.alertError(result.msg);
-                    }
-                    $.modal.closeLoading();
-                });
-            });
+        var row = $('#bootstrap-table').bootstrapTable('getSelections')[0];
+        var rows = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
+        if ($.common.isEmpty(row) || rows.length != 1) {
+            $.modal.alertWarning("请选择一条记录");
+            return;
         }
-
-        /**
-         * 预览报价单
-         * @param formId
-         */
-        function viewPdf(formId) {
-
-            var row = $('#bootstrap-table').bootstrapTable('getSelections')[0];
-            var rows = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
-            if ($.common.isEmpty(row) || rows.length != 1) {
-                $.modal.alertWarning("请选择一条记录");
-                return;
-            }
-
+        var flowStatus = row.flowStatus;
+        var normalFlag = row.normalFlag;
+        /*if (flowStatus == "0" || flowStatus != normalFlag) {
+            $.modal.alertWarning("请等待审批结束后生成！");
+            return;
+        }*/
+        $.modal.confirm("确定生成合同吗？", function () {
             var currentId = $.common.isEmpty(formId) ? $('form').attr('id') : formId;
             console.log("currentId=" + currentId);
             $.modal.loading("正在导出数据，请稍后...");
             var paramsJson = $("#" + currentId).serializeArray();
             paramsJson.push({"name": "dataId", "value": row.dataId});
-            paramsJson.push({"name": "status", "value": "1"});
-            var viewUrl = prefix + "/viewPdfProduce";
-            console.log(row.dataId + "--row.dataId");
-            window.open("../../pdfjs/web/viewer.html?file="+ viewUrl + "?id%3D" + row.dataId);
-            $.modal.closeLoading();
-        }
-        function viewExamineDetail(dataId) {
-            var bizId = $("#bizId").val();
-            var url = prefix + "/viewDetail?dataId=" + dataId + "&&bizId=" + bizId;
-            $.modal.openNoEnter("详情", url,$(window).width(),$(window).height(),function(){
-                $.modal.closeAll();
+            $.post($.table._option.exportUrl, paramsJson, function (result) {
+                if (result.code == web_status.SUCCESS) {
+                    window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;
+                } else if (result.code == web_status.WARNING) {
+                    $.modal.alertWarning(result.msg)
+                } else {
+                    $.modal.alertError(result.msg);
+                }
+                $.modal.closeLoading();
             });
+        });
+    }
+
+    /**
+     * 预览报价单
+     * @param formId
+     */
+    function viewPdf(formId) {
+
+        var row = $('#bootstrap-table').bootstrapTable('getSelections')[0];
+        var rows = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
+        if ($.common.isEmpty(row) || rows.length != 1) {
+            $.modal.alertWarning("请选择一条记录");
+            return;
         }
-    </script>
+
+        var currentId = $.common.isEmpty(formId) ? $('form').attr('id') : formId;
+        console.log("currentId=" + currentId);
+        $.modal.loading("正在导出数据，请稍后...");
+        var paramsJson = $("#" + currentId).serializeArray();
+        paramsJson.push({"name": "dataId", "value": row.dataId});
+        paramsJson.push({"name": "status", "value": "1"});
+        var viewUrl = prefix + "/viewPdfProduce";
+        console.log(row.dataId + "--row.dataId");
+        window.open("../../pdfjs/web/viewer.html?file=" + viewUrl + "?id%3D" + row.dataId);
+        $.modal.closeLoading();
+    }
+
+    function viewExamineDetail(dataId) {
+        var bizId = $("#bizId").val();
+        var url = prefix + "/viewDetail?dataId=" + dataId + "&&bizId=" + bizId;
+        $.modal.openNoEnter("详情", url, $(window).width(), $(window).height(), function () {
+            $.modal.closeAll();
+        });
+    }
+</script>
 </body>
 </html>

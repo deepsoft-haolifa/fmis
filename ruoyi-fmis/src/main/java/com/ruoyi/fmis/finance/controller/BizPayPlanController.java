@@ -201,7 +201,7 @@ public class BizPayPlanController extends BaseController {
             // 付款完成后，将采购订单的状态更新为已付款
             bizProcessDataService.updateBizProcessData(new BizProcessData(){{
                 setDataId(Long.valueOf(bizPayPlan.getContractId()));
-                setString11(Constant.procurementStatus.PAYED);
+                setStatus(Constant.procurementStatus.PAYED);
             }});
         }
         return toAjax(payPlan);
