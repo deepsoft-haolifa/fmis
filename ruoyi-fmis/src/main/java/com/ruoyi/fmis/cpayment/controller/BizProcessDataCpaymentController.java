@@ -19,6 +19,7 @@ import com.ruoyi.fmis.data.domain.BizProcessData;
 import com.ruoyi.fmis.data.service.IBizProcessDataService;
 import com.ruoyi.fmis.define.service.IBizProcessDefineService;
 import com.ruoyi.fmis.product.service.IBizProductService;
+import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysRole;
 import com.ruoyi.system.service.ISysRoleService;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -88,6 +89,7 @@ public class BizProcessDataCpaymentController extends BaseController {
             //计算流程描述
             for (BizProcessData data : list) {
                 String flowStatus = data.getFlowStatus();
+                data.setLoginUserId(ShiroUtils.getUserId().toString());
                 //结束标识
                 String normalFlag = data.getNormalFlag();
                 String flowStatusRemark = "待上报";

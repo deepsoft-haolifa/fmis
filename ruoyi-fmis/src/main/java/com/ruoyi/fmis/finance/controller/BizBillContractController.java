@@ -18,6 +18,7 @@ import com.ruoyi.system.domain.SysRole;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
@@ -106,6 +107,7 @@ public class BizBillContractController extends BaseController {
 
     @PostMapping("/addContract")
     @ResponseBody
+    @Transactional(rollbackFor = Exception.class)
     public AjaxResult addContract() {
         String bcId = getRequest().getParameter("bcId");
         String dataId = getRequest().getParameter("dataId");//合同id
@@ -162,6 +164,7 @@ public class BizBillContractController extends BaseController {
             bizBillContractService.updateBizBillContract(bizBillContract);
         }
 
+        BizProcessData updateProcessData = new BizProcessData();
         //判断合同分解是否完成
         BizBankBill updateBill = new BizBankBill();
         if (totalAmount >= collectionMoney) {
@@ -191,55 +194,4 @@ public class BizBillContractController extends BaseController {
         updateBill.setContractStatus("0");
         return toAjax(1);
     }
-
-//    /**
-//     * 新增合同收款(合同分解)
-//     */
-//    @GetMapping("/add")
-//    public String add() {
-//        return prefix + "/add";
-//    }
-//
-//    /**
-//     * 新增保存合同收款(合同分解)
-//     */
-//    @RequiresPermissions("finance:billContract:add")
-//    @Log(title = "合同收款(合同分解)", businessType = BusinessType.INSERT)
-//    @PostMapping("/add")
-//    @ResponseBody
-//    public AjaxResult addSave(BizBillContract bizBillContract) {
-//        return toAjax(bizBillContractService.insertBizBillContract(bizBillContract));
-//    }
-//
-//    /**
-//     * 修改合同收款(合同分解)
-//     */
-//    @GetMapping("/edit/{bcId}")
-//    public String edit(@PathVariable("bcId") Long bcId, ModelMap mmap) {
-//        BizBillContract bizBillContract = bizBillContractService.selectBizBillContractById(bcId);
-//        mmap.put("bizBillContract", bizBillContract);
-//        return prefix + "/edit";
-//    }
-//
-//    /**
-//     * 修改保存合同收款(合同分解)
-//     */
-//    @RequiresPermissions("finance:billContract:edit")
-//    @Log(title = "合同收款(合同分解)", businessType = BusinessType.UPDATE)
-//    @PostMapping("/edit")
-//    @ResponseBody
-//    public AjaxResult editSave(BizBillContract bizBillContract) {
-//        return toAjax(bizBillContractService.updateBizBillContract(bizBillContract));
-//    }
-//
-//    /**
-//     * 删除合同收款(合同分解)
-//     */
-//    @RequiresPermissions("finance:billContract:remove")
-//    @Log(title = "合同收款(合同分解)", businessType = BusinessType.DELETE)
-//    @PostMapping( "/remove")
-//    @ResponseBody
-//    public AjaxResult remove(String ids) {
-//        return toAjax(bizBillContractService.deleteBizBillContractByIds(ids));
-//    }
 }

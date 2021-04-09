@@ -48,8 +48,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="string10 != null  and string10 != ''"> and string10 = #{string10}</if>
             <if test="status != null  and status != ''"> and status = #{status}</if>
             <if test="string5List != null  and string5List.size > 0"> and string5 in
-                <foreach item="payPlanId" collection="payPlanIds" open="(" separator="," close=")">
-                    #{payPlanId}
+                <foreach item="string5" collection="string5List" open="(" separator="," close=")">
+                    #{string5}
                 </foreach>
              </if>
         </where>

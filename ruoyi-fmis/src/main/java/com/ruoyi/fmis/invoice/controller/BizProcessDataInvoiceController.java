@@ -18,6 +18,7 @@ import com.ruoyi.fmis.invoice.bean.InvoiceReqVo;
 import com.ruoyi.fmis.invoice.bean.InvoiceRespVo;
 import com.ruoyi.fmis.product.domain.BizProduct;
 import com.ruoyi.fmis.product.service.IBizProductService;
+import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysRole;
 import com.ruoyi.system.service.ISysRoleService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -98,6 +99,7 @@ public class BizProcessDataInvoiceController extends BaseController {
             //计算流程描述
             for (BizProcessData data : list) {
                 String flowStatus = data.getFlowStatus();
+                data.setLoginUserId(ShiroUtils.getUserId().toString());
                 //结束标识
                 String normalFlag = data.getNormalFlag();
                 String flowStatusRemark = "待上报";
@@ -371,11 +373,13 @@ public class BizProcessDataInvoiceController extends BaseController {
     @ResponseBody
     public AjaxResult operate(BizProcessChild child) {
         int i = bizProcessChildService.updateBizProcessChild(child);
-        // 开票成功，修改销售合同状态为已开票
-        bizProcessDataService.updateBizProcessData(new BizProcessData(){{
-            setDataId(child.getDataId());
-            setStatus(Constant.contractStatus.INVOICE);
-        }});
+        if (Constant.invoiceStatus.ALREADY.equals(child.getString7())) {
+            // 开票成功，修改销售合同状态为已开票
+            bizProcessDataService.updateBizProcessData(new BizProcessData() {{
+                setDataId(Long.valueOf(child.getString1()));
+                setString16(Constant.invoiceStatus.ALREADY);
+            }});
+        }
         return toAjax(i);
     }
 

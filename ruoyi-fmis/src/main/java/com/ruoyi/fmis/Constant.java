@@ -43,9 +43,26 @@ public interface Constant {
         String PART_DELIVERY = "5";
         // 全部发货
         String ALL_DELIVERY = "6";
+    }
+
+    /**
+     * 销售合同开票状态
+     */
+    interface invoiceStatus{
+        // 未开票
+        String NOT = "1";
         // 已开票
-        String INVOICE = "7";
-        // 已收款
-        String COLLECTED = "8";
+        String ALREADY = "2";
+    }
+    /**
+     * 销售合同回款状态
+     */
+    interface collectionStatus{
+        // 未回款
+        String NOT = "1";
+        // 部分回款
+        String PART = "2";
+        // 已回款
+        String ALREADY = "3";
     }
 }
