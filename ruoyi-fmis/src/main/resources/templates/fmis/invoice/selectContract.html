@@ -1,303 +1,306 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('合同管理列表')" />
+    <th:block th:include="include :: header('合同管理列表')"/>
 </head>
 <body class="gray-bg">
-     <div class="container-div">
-        <div class="row">
-            <div class="col-sm-12 search-collapse">
-                <form id="formId">
-                    <input type="hidden" name="bizId" id="bizId" value="contract"/>
-                    <input type="hidden" name="string2" id="string2" th:value="${customerId}"/>
-                    <div class="select-list">
-                        <ul>
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <input type="hidden" name="bizId" id="bizId" value="contract"/>
+                <input type="hidden" name="string2" id="string2" th:value="${customerId}"/>
+                <!--已开票的合同不显示-->
+                <input type="hidden" name="string16" id="string16" th:value="2"/>
+                <div class="select-list">
+                    <ul>
 
-                            <li>
-                                <p>状态：</p>
-                                <select name="queryStatus" class="form-control m-b" >
-                                    <option value="0">全部</option>
-                                    <option value="1">待办</option>
-                                    <option value="2">已办</option>
-                                </select>
-                            </li>
-                            <li>
-                                <p>备用1：</p>
-                                <input type="text" name="string1"/>
-                            </li>
-                            <li>
-                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
-                            </li>
-                        </ul>
-                    </div>
-                </form>
-            </div>
+                        <li>
+                            <p>状态：</p>
+                            <select name="queryStatus" class="form-control m-b">
+                                <option value="0">全部</option>
+                                <option value="1">待办</option>
+                                <option value="2">已办</option>
+                            </select>
+                        </li>
+                        <li>
+                            <p>备用1：</p>
+                            <input type="text" name="string1"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
 
 
-
-            <div class="col-sm-12 select-table table-striped">
-                <table id="bootstrap-table"></table>
-            </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
         </div>
     </div>
+</div>
 
 
+<div style="display: none" id="prodictDiv">
 
-     <div style="display: none" id="prodictDiv">
+    <div class="ibox float-e-margins" id="productDiv_paramterProductId">
+        <h5>productHtml</h5>
 
-         <div class="ibox float-e-margins" id="productDiv_paramterProductId">
-             <h5>productHtml</h5>
+        <div class='form-group'>
+            <label class='control-label col-sm-3'>合同编号：</label>
+            <div class='col-sm-2'>
+                <input name='productName' id="productName" value="productShowText" class='form-control' type='text'
+                       readonly>
+            </div>
 
-             <div class='form-group'>
-                 <label class='control-label col-sm-3'>合同编号：</label>
-                 <div class='col-sm-2'>
-                     <input name='productName' id="productName" value="productShowText" class='form-control' type='text' readonly>
-                 </div>
+            <div class='col-sm-2'>
+                <input class='form-control' type='text' id="invoicePrice" name='invoicePrice'
+                       value="priceShowText" placeholder='开票金额' onblur="totalSumPrice()" onkeyup="AmountKeyUp(this)"/>
+            </div>
+            <div class='col-sm-2'>
+                <input class='form-control' type='text' id="invoiceRequire" name='invoiceRequire'
+                       value="requireShowText" placeholder='开票要求'/>
+            </div>
+            <div class='col-sm-1'>
+                <input class='form-control date form_date' type='text' id="backDate_paramterProductId"
+                       name='backDate_paramterProductId'
+                       placeholder='回款日期'/>
+            </div>
+            <div class='col-sm-1'>
+                <input class='form-control' type='text' id="backAmount_paramterProductId"
+                       name="backAmount_paramterProductId"
+                       placeholder='回款金额'/>
+            </div>
+        </div>
+        <div class='form-group'>
+            <label class='control-label col-sm-3'>备注：</label>
+            <div class='col-sm-5'>
+                <input name='productRemark_paramterProductId' id="productRemark_paramterProductId" class='form-control'
+                       type='text'>
+            </div>
 
-                 <div class='col-sm-2'>
-                     <input class='form-control' type='text' id="invoicePrice" name='invoicePrice'
-                            value="priceShowText" placeholder='开票金额' onblur="totalSumPrice()" onkeyup="AmountKeyUp(this)" />
-                 </div>
-                 <div class='col-sm-2'>
-                     <input class='form-control' type='text' id="invoiceRequire" name='invoiceRequire'
-                            value="requireShowText" placeholder='开票要求'/>
-                 </div>
-                 <div class='col-sm-1'>
-                     <input class='form-control date form_date' type='text' id="backDate_paramterProductId" name='backDate_paramterProductId'
-                            placeholder='回款日期'/>
-                 </div>
-                 <div class='col-sm-1'>
-                     <input class='form-control' type='text' id="backAmount_paramterProductId" name="backAmount_paramterProductId"
-                            placeholder='回款金额'/>
-                 </div>
-             </div>
-                 <div class='form-group'>
-                     <label class='control-label col-sm-3'>备注：</label>
-                     <div class='col-sm-5'>
-                         <input name='productRemark_paramterProductId' id="productRemark_paramterProductId" class='form-control'
-                                type='text'>
-                     </div>
-
-                     <div class='col-sm-3'>
-                         <a class="btn btn-danger btn-sm" onclick="removeProject(paramterProductId)">
-                             <i class="fa fa-remove"></i> 删除
-                         </a>
-                     </div>
-                 </div>
+            <div class='col-sm-3'>
+                <a class="btn btn-danger btn-sm" onclick="removeProject(paramterProductId)">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+            </div>
+        </div>
 
 
-         </div>
-         <div class="hr-line-dashed"></div>
-     </div>
+    </div>
+    <div class="hr-line-dashed"></div>
+</div>
 
-    <th:block th:include="include :: footer" />
-    <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('fmis:data:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('fmis:data:remove')}]];
-        var prefix = ctx + "fmis/data";
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('fmis:data:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('fmis:data:remove')}]];
+    var prefix = ctx + "fmis/data";
 
-        $(function() {
-            var options = {
-                url: prefix + "/list",
-                createUrl: prefix + "/add",
-                updateUrl: prefix + "/edit/{id}",
-                removeUrl: prefix + "/remove",
-                exportUrl: prefix + "/export",
-                modalName: "合同管理",
-                uniqueId: "dataId",
-                columns: [{
-                    checkbox: true
-                },
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "合同管理",
+            uniqueId: "dataId",
+            columns: [{
+                checkbox: true
+            },
                 {
-                    field : 'dataId', 
-                    title : 'ID',
+                    field: 'dataId',
+                    title: 'ID',
                     visible: false
                 },
                 {
-                    field : 'dataId',
-                    title : 'ID',
+                    field: 'dataId',
+                    title: 'ID',
                     visible: false
                 },
 
                 {
-                    field : 'string1',
-                    title : '合同编号'
+                    field: 'string1',
+                    title: '合同编号'
                 },
                 {
-                    field : 'customerName',
-                    title : '客户'
+                    field: 'customerName',
+                    title: '客户'
                 },
                 {
-                    field : 'datetime1',
-                    title : '签订日期'
+                    field: 'datetime1',
+                    title: '签订日期'
                 },
                 {
-                    field : 'string3',
-                    title : '供方'
+                    field: 'string3',
+                    title: '供方'
                 },
                 {
-                    field : 'string4',
-                    title : '签订地点'
+                    field: 'string4',
+                    title: '签订地点'
                 },
                 {
-                    field : 'string5',
-                    title : '含发票'
+                    field: 'string5',
+                    title: '含发票'
                 },
                 {
-                    field : 'string6',
-                    title : '发货时间'
+                    field: 'string6',
+                    title: '发货时间'
                 },
                 {
-                    field : 'string7',
-                    title : '运输方式'
+                    field: 'string7',
+                    title: '运输方式'
                 },
                 {
-                    field : 'string8',
-                    title : '付款方式'
+                    field: 'string8',
+                    title: '付款方式'
                 },
                 {
-                    field : 'string9',
-                    title : '交货地点'
+                    field: 'string9',
+                    title: '交货地点'
                 },
                 {
-                    field : 'string10',
-                    title : '运费承担'
+                    field: 'string10',
+                    title: '运费承担'
                 },
                 {
-                    field : 'string11',
-                    title : '收货人'
+                    field: 'string11',
+                    title: '收货人'
                 },
                 {
-                    field : 'string12',
-                    title : '收货电话'
+                    field: 'string12',
+                    title: '收货电话'
                 },
                 {
-                    field : 'price1',
-                    title : '总价'
+                    field: 'price1',
+                    title: '总价'
                 },
                 {
-                    field : 'flowStatusRemark',
-                    title : '状态',
+                    field: 'flowStatusRemark',
+                    title: '状态',
                     align: 'center'
                 }]
-            };
-            $.table.init(options);
-        });
+        };
+        $.table.init(options);
+    });
 
 
+    /* 添加用户-选择用户-提交 */
+    function submitHandler() {
+        var rows = $.table.selectFirstColumns();
+        if (rows.length === 0) {
+            $.modal.alertWarning("请选择一条记录");
+            return;
+        }
+        //$.modal.confirm('确定要关联该产品吗？',
+        //    function() {
+        //0=覆盖 1=追加
+        var productOperationType = parent.$('#form-data-add input[name=productOperationType]').val();
+        if ($.common.isEmpty(productOperationType)) {
+            productOperationType = parent.$('#form-data-edit input[name=productOperationType]').val();
+        }
+        var rowsSel = $('#bootstrap-table').bootstrapTable('getSelections');
+        var productIds = $.table.selectColumns("dataId");
+        var htmlStr = "";
+        if (productOperationType === "1") {
+            //htmlStr = parent.$('#productDiv').html();
+        } else {
+            parent.$('#productDiv').html(htmlStr);
+        }
+        var productIdsStr = "";
+        var productNamesStr = "";
+        var oldProductIds = parent.$('#form-data-add input[name=contractIds]').val();
+        var oldProductNames = parent.$('#form-data-add input[name=contractNames]').val();
+
+        if ($.common.isEmpty(oldProductIds)) {
+            oldProductIds = parent.$('#form-data-edit input[name=contractIds]').val();
+            oldProductNames = parent.$('#form-data-edit input[name=contractNames]').val();
+        }
+        if ($.common.isEmpty(oldProductIds)) {
+            oldProductIds = "";
+            oldProductNames = "";
+        }
+        for (var i = 0; i < productIds.length; i++) {
+            var prodictDivHtml = $("#prodictDiv").html();
+            var productId = productIds[i];
+            // 合同号
+            var productName = rowsSel[i].string1;
+            // 开票金额
+            var invoicePirce = rowsSel[i].price1;
+            // 开票要求
+            var invoiceRequire = rowsSel[i].string5;
 
 
-        /* 添加用户-选择用户-提交 */
-        function submitHandler() {
-            var rows = $.table.selectFirstColumns();
-            if (rows.length === 0) {
-                $.modal.alertWarning("请选择一条记录");
-                return;
+            var productIdsS = oldProductIds.split(",");
+            var productNamesS = oldProductNames.split(",");
+            var isExist = false;
+            if (productOperationType == "1") {
+                for (var j = 0; j < productIdsS.length; j++) {
+                    if (productId == productIdsS[j]) {
+                        isExist = true;
+                        continue;
+                    }
+                }
             }
-            //$.modal.confirm('确定要关联该产品吗？',
-            //    function() {
-            //0=覆盖 1=追加
-            var productOperationType = parent.$('#form-data-add input[name=productOperationType]').val();
-            if ($.common.isEmpty(productOperationType)) {
-                productOperationType = parent.$('#form-data-edit input[name=productOperationType]').val();
+            if (isExist) {
+                continue;
             }
-            var rowsSel = $('#bootstrap-table').bootstrapTable('getSelections');
-            var productIds = $.table.selectColumns("dataId");
-            var htmlStr = "";
-            if (productOperationType === "1") {
-                //htmlStr = parent.$('#productDiv').html();
-            } else {
-                parent.$('#productDiv').html(htmlStr);
-            }
-            var productIdsStr = "";
-            var productNamesStr = "";
-            var oldProductIds = parent.$('#form-data-add input[name=contractIds]').val();
-            var oldProductNames = parent.$('#form-data-add input[name=contractNames]').val();
 
-            if ($.common.isEmpty(oldProductIds)) {
-                oldProductIds = parent.$('#form-data-edit input[name=contractIds]').val();
-                oldProductNames = parent.$('#form-data-edit input[name=contractNames]').val();
-            }
+            console.log("productId=" + productId + " name=" + productName);
+            prodictDivHtml = prodictDivHtml.replace(/productName/g, "productName_" + productId);
+            prodictDivHtml = prodictDivHtml.replace(/productShowText/g, productName);
+            prodictDivHtml = prodictDivHtml.replace(/invoicePrice/g, "invoicePrice_" + productId);
+            prodictDivHtml = prodictDivHtml.replace(/priceShowText/g, invoicePirce);
+            prodictDivHtml = prodictDivHtml.replace(/invoiceRequire/g, "invoiceRequire_" + productId);
+            prodictDivHtml = prodictDivHtml.replace(/requireShowText/g, invoiceRequire);
+
+            prodictDivHtml = prodictDivHtml.replace(/paramterProductId/g, productId);
+            prodictDivHtml = prodictDivHtml.replace(/productHtml/g, productName);
+
+            htmlStr += prodictDivHtml;
+            productIdsStr += productId + ",";
+            productNamesStr += productName + ",";
+        }
+        productNamesStr = productNamesStr.substr(0, productNamesStr.length - 1);
+        console.log("productNamesStr=" + productNamesStr);
+        if (productOperationType === "0") {
+            parent.$('#form-data-add input[name=contractIds]').val(productIdsStr);
+            parent.$('#form-data-add input[name=contractNames]').val(productNamesStr);
+
+            parent.$('#form-data-edit input[name=contractIds]').val(productIdsStr);
+            parent.$('#form-data-edit input[name=contractNames]').val(productNamesStr);
+        } else {
+            //追加
             if ($.common.isEmpty(oldProductIds)) {
                 oldProductIds = "";
                 oldProductNames = "";
-            }
-            for(var i = 0; i < productIds.length; i++) {
-                var prodictDivHtml = $("#prodictDiv").html();
-                var productId = productIds[i];
-                // 合同号
-                var productName = rowsSel[i].string1;
-                // 开票金额
-                var invoicePirce = rowsSel[i].price1;
-                // 开票要求
-                var invoiceRequire = rowsSel[i].string5;
-
-
-                var productIdsS = oldProductIds.split(",");
-                var productNamesS = oldProductNames.split(",");
-                var isExist = false;
-                if (productOperationType == "1") {
-                    for (var j = 0; j < productIdsS.length; j++) {
-                        if (productId == productIdsS[j]) {
-                            isExist = true;
-                            continue;
-                        }
-                    }
-                }
-                if (isExist) {
-                    continue;
-                }
-
-                console.log("productId=" + productId + " name=" + productName);
-                prodictDivHtml = prodictDivHtml.replace(/productName/g, "productName_" + productId);
-                prodictDivHtml = prodictDivHtml.replace(/productShowText/g, productName);
-                prodictDivHtml = prodictDivHtml.replace(/invoicePrice/g,"invoicePrice_" + productId);
-                prodictDivHtml = prodictDivHtml.replace(/priceShowText/g,invoicePirce);
-                prodictDivHtml = prodictDivHtml.replace(/invoiceRequire/g,"invoiceRequire_" + productId);
-                prodictDivHtml = prodictDivHtml.replace(/requireShowText/g,invoiceRequire);
-
-                prodictDivHtml = prodictDivHtml.replace(/paramterProductId/g, productId);
-                prodictDivHtml = prodictDivHtml.replace(/productHtml/g, productName);
-
-                htmlStr += prodictDivHtml;
-                productIdsStr += productId + ",";
-                productNamesStr += productName + ",";
-            }
-            productNamesStr = productNamesStr.substr(0,productNamesStr.length - 1);
-            console.log("productNamesStr=" + productNamesStr);
-            if (productOperationType === "0") {
-                parent.$('#form-data-add input[name=contractIds]').val(productIdsStr);
-                parent.$('#form-data-add input[name=contractNames]').val(productNamesStr);
-
-                parent.$('#form-data-edit input[name=contractIds]').val(productIdsStr);
-                parent.$('#form-data-edit input[name=contractNames]').val(productNamesStr);
             } else {
-                //追加
-                if ($.common.isEmpty(oldProductIds)) {
-                    oldProductIds = "";
-                    oldProductNames = "";
-                } else {
-                    if (!$.common.endWith(oldProductIds,",")) {
-                        oldProductIds += ",";
-                    }
-                    if (!$.common.endWith(oldProductNames,",")) {
-                        oldProductNames += ",";
-                    }
-
+                if (!$.common.endWith(oldProductIds, ",")) {
+                    oldProductIds += ",";
                 }
-                var newProductIds = oldProductIds + productIdsStr;
-                var newProductNames = oldProductNames + productNamesStr;
-                parent.$('#form-data-add input[name=contractIds]').val(newProductIds);
-                parent.$('#form-data-add input[name=contractNames]').val(newProductNames);
+                if (!$.common.endWith(oldProductNames, ",")) {
+                    oldProductNames += ",";
+                }
 
-                parent.$('#form-data-edit input[name=contractIds]').val(newProductIds);
-                parent.$('#form-data-edit input[name=contractNames]').val(newProductNames);
             }
+            var newProductIds = oldProductIds + productIdsStr;
+            var newProductNames = oldProductNames + productNamesStr;
+            parent.$('#form-data-add input[name=contractIds]').val(newProductIds);
+            parent.$('#form-data-add input[name=contractNames]').val(newProductNames);
 
-            parent.$('#productDiv').append(htmlStr);
-            $.modal.close();
+            parent.$('#form-data-edit input[name=contractIds]').val(newProductIds);
+            parent.$('#form-data-edit input[name=contractNames]').val(newProductNames);
         }
-    </script>
+
+        parent.$('#productDiv').append(htmlStr);
+        $.modal.close();
+    }
+</script>
 </body>
 </html>

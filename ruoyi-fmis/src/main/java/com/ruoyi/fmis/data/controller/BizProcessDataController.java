@@ -634,6 +634,8 @@ public class BizProcessDataController extends BaseController {
         String conNo = "XS-" + DateUtils.dateTimeNow();
         bizProcessData.setString1(conNo);
         setNormalFlag(bizProcessData,productArrayStr);
+        bizProcessData.setString16(Constant.invoiceStatus.NOT);
+        bizProcessData.setString17(Constant.collectionStatus.NOT);
         int insertReturn = bizProcessDataService.insertBizProcessData(bizProcessData);
         Long dataId = bizProcessData.getDataId();
         if (StringUtils.isNotEmpty(productArrayStr)) {

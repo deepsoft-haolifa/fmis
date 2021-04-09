@@ -4,6 +4,7 @@ import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.fmis.Constant;
 import com.ruoyi.fmis.common.BizConstants;
 import com.ruoyi.fmis.common.CommonUtils;
 import com.ruoyi.fmis.data.domain.BizProcessData;
@@ -23,6 +24,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -119,17 +121,18 @@ public class BizBillContractController extends BaseController {
         //一.判断合同的金额是否够分
         // 1. 查询合同的总价
         BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataById(Long.parseLong(dataId));
-        Double price1 = bizProcessData.getPrice1();
+        Double contractAmount = bizProcessData.getPrice1();
         // 2. 查询该合同已经分解的金额
         BizBillContract query = new BizBillContract();
         query.setDataId(Long.parseLong(dataId));
         List<BizBillContract> bizBillContractList = bizBillContractService.selectBizBillContractList(query);
         double dataAmount = bizBillContractList.stream().mapToDouble(BizBillContract::getAmount).sum();
-        double v = dataAmount + Double.parseDouble(amount);
-        logger.info("add contract v:{},dataAmount:{},dataId:{}", v, dataAmount, dataId);
-        if (v > price1) {
+        double splitAmount = dataAmount + Double.parseDouble(amount);
+        logger.info("add contract v:{},dataAmount:{},dataId:{}", splitAmount, dataAmount, dataId);
+        if (splitAmount > contractAmount) {
             return error("此合同的已付金额+这次分解的金额 大于合同金额");
         }
+
 
         //二.判断银行日记账的金额是否够分
         // 1. 查询银行日记账的总价
@@ -164,7 +167,6 @@ public class BizBillContractController extends BaseController {
             bizBillContractService.updateBizBillContract(bizBillContract);
         }
 
-        BizProcessData updateProcessData = new BizProcessData();
         //判断合同分解是否完成
         BizBankBill updateBill = new BizBankBill();
         if (totalAmount >= collectionMoney) {
@@ -175,6 +177,16 @@ public class BizBillContractController extends BaseController {
         }
         updateBill.setBillId(bizBankBill.getBillId());
         bizBankBillService.updateBizBankBill(updateBill);
+
+        // 更新合同的回款状态
+        BizProcessData updateProcessData = new BizProcessData();
+        updateProcessData.setDataId(Long.parseLong(dataId));
+        if (new BigDecimal(splitAmount).compareTo(new BigDecimal(contractAmount)) < 0) {
+            updateProcessData.setString17(Constant.collectionStatus.PART);
+        } else {
+            updateProcessData.setString17(Constant.collectionStatus.ALREADY);
+        }
+        bizProcessDataService.updateBizProcessData(updateProcessData);
         return toAjax(1);
     }
 

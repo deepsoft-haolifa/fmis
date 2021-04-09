@@ -55,8 +55,8 @@
 </div>
 <th:block th:include="include :: footer"/>
 <script th:inline="javascript">
-    var editFlag = [[${@permission.hasPermi('fmis:invoice:post')}]];
-    var removeFlag = [[${@permission.hasPermi('fmis:invoice:operate')}]];
+    var postFlag = [[${@permission.hasPermi('fmis:invoice:post')}]];
+    var operateFlag = [[${@permission.hasPermi('fmis:invoice:operate')}]];
     var prefix = ctx + "fmis/invoice";
     var invoiceClassifyDict = [[${@dict.getType('invoice_classify')}]];
     var invoiceStatusDict = [[${@dict.getType('invoice_status')}]];
@@ -158,8 +158,8 @@
                     align: 'center',
                     formatter: function (value, row, index) {
                         var actions = [];
-                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="operate(\'' + row.childId + '\')"><i class="fa fa-remove"></i> 开票 </a>');
-                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="post(\'' + row.childId + '\')"><i class="fa fa-remove"></i> 邮寄登记 </a>');
+                        actions.push('<a class="btn btn-success btn-xs ' + operateFlag + '" href="javascript:void(0)" onclick="operate(\'' + row.childId + '\')"><i class="fa fa-remove"></i> 开票 </a>');
+                        actions.push('<a class="btn btn-success btn-xs ' + postFlag + '" href="javascript:void(0)" onclick="post(\'' + row.childId + '\')"><i class="fa fa-remove"></i> 邮寄登记 </a>');
                         return actions.join('');
                     }
                 }]

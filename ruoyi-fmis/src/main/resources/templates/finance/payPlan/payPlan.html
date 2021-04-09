@@ -184,7 +184,8 @@
                     formatter: function (value, row, index) {
                         var actions = [];
                         var dataStatus = row.dataStatus;
-                        if (dataStatus === "3") {
+                        var status = row.status;
+                        if (status !== '1' &&dataStatus === "3") {
                             actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.payPlanId + '\')"><i class="fa fa-edit"></i> 付款</a> ');
                         }
                         // actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.payPlanId + '\')"><i class="fa fa-remove"></i> 删除</a>');

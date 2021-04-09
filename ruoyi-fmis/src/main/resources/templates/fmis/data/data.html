@@ -73,6 +73,8 @@
     var paymentTypeData = [[${@dict.getType('payment_type')}]];
     var contractStatusData = [[${@dict.getType('contract_status')}]];
     var transportTypeData = [[${@dict.getType('transport_type')}]];
+    var invoiceStatusData = [[${@dict.getType('invoice_status')}]];
+    var collectionStatusData = [[${@dict.getType('collection_status')}]];
 
 
 
@@ -188,6 +190,20 @@
                     title : '合同状态',
                     formatter: function(value, row, index) {
                         return $.table.selectDictLabel(contractStatusData, value);
+                    }
+                },
+                {
+                    field : 'string16',
+                    title : '开票状态',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(invoiceStatusData, value);
+                    }
+                },
+                {
+                    field : 'string17',
+                    title : '回款状态',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(collectionStatusData, value);
                     }
                 },
                 {

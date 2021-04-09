@@ -80,6 +80,9 @@
         left join (select contract_id,sum(apply_amount) as paidAmount from biz_pay_plan where status=1 group by contract_id) p on p.contract_id=q.data_id
         left join (select string4,sum(string1) as arrivalQty from biz_data_stestn group by string4) stn on stn.string4=q.data_id
         left join (select a.string4,sum(a.string1*b.procurement_price) arrivalAmount from biz_data_stestn a left join biz_product b on a.string3=b.product_id  group by a.string4) stnprice on stnprice.string4=q.data_id
+        left join sys_user u on q.create_by=u.user_id
+        left join sys_dept dt on u.dept_id=dt.dept_id
+
         <include refid="standAccountWhere"></include>
         order by q.create_time desc
     </select>
