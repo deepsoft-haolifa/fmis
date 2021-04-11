@@ -66,18 +66,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </sql>
     
     <select id="selectBizQuotationByFlowStatus" resultMap="BizQuotationResult">
-        <include refid="selectBizQuotationVo"></include>
+        select * from biz_quotation q
+        left join sys_user u on q.create_by=u.user_id
+        left join sys_dept dt on u.dept_id=dt.dept_id
         <where>
             flow_status in (
             <foreach collection="flows" item="item" separator=",">
                 #{item}
             </foreach>
             )
-            and create_by in (
-            <foreach collection="userIds" separator="," item="item">
-                #{item}
-            </foreach>
-            )
+            ${params.dataScope}
         </where>
     </select>
 

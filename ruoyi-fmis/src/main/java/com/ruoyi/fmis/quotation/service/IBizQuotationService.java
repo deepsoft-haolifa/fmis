@@ -80,4 +80,12 @@ public interface IBizQuotationService {
      * @return
      */
     public int doExamine(String quotationId,String status,String remark);
+
+    /**
+     * 查询待办
+     * @param bizQuotationTodo
+     * @return
+     */
+    List<BizQuotation> selectBizQuotationByFlowStatus(BizQuotation bizQuotationTodo);
 }
+

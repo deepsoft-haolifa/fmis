@@ -51,7 +51,18 @@ public class SysIndexController extends BaseController
     {
         mmap.put("version", Global.getVersion());
         mmap.put("fileUrl", Global.getFileUrl());
-//        return "main";
         return "main_v2";
     }
+
+
+    // 系统介绍
+    @GetMapping("/system/main3")
+    public String mainOrder(ModelMap mmap)
+    {
+        mmap.put("version", Global.getVersion());
+        mmap.put("fileUrl", Global.getFileUrl());
+        return "main_v3";
+    }
+
+
 }

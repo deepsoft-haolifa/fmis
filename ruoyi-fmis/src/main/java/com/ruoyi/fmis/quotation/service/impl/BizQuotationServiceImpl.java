@@ -80,6 +80,12 @@ public class BizQuotationServiceImpl implements IBizQuotationService {
     }
 
     @Override
+    @DataScope(deptAlias = "dt", userAlias = "u")
+    public List<BizQuotation> selectBizQuotationByFlowStatus(BizQuotation bizQuotationTodo) {
+        return bizQuotationMapper.selectBizQuotationByFlowStatus(bizQuotationTodo);
+    }
+
+    @Override
     public List<BizQuotation> selectBizQuotationProductList(BizQuotation bizQuotation) {
         List<BizQuotation> list = bizQuotationMapper.selectBizQuotationProductList(bizQuotation);
         return list;

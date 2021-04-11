@@ -136,9 +136,8 @@ public interface BizProcessDataMapper {
 
     /**
      * 根据工单类型和流程节点查询工单列表
-     * @param orderType
-     * @param flows
+     * @param bizProcessData
      * @return
      */
-    List<BizProcessData> selectBizProcessDataByFlowStatus(@Param("orderType") String orderType, @Param("flows") Set<String> flows, @Param("userIds") Set<String> userIds);
+    List<BizProcessData> selectBizProcessDataByFlowStatus(BizProcessData bizProcessData);
 }

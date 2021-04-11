@@ -10,6 +10,7 @@ import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * 报价单对象 biz_quotation
@@ -392,6 +393,9 @@ public class BizQuotation extends BaseEntity {
     /** 删除标志（0代表存在 2代表删除） */
     private String delFlag;
 
+    /** 待办使用 */
+    private Set<String> flows;
+
 
     private List<BizQuotationProduct> quotationProductList;
     public void setQuotationProductList(List<BizQuotationProduct> quotationProductList) {
@@ -627,6 +631,14 @@ public class BizQuotation extends BaseEntity {
         return delFlag;
     }
 
+    public void setFlows(Set<String> flows) {
+        this.flows = flows;
+    }
+
+    public Set<String> getFlows() {
+        return flows;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -664,4 +676,6 @@ public class BizQuotation extends BaseEntity {
             .append("updateTime", getUpdateTime())
             .toString();
     }
+
+
 }

@@ -146,4 +146,6 @@ public interface IBizProcessDataService {
      */
     public void  deliveryUpdateStatus(String contractNo);
 
+
+    public List<BizProcessData> selectBizProcessDataForTodo(BizProcessData bizProcessData);
 }

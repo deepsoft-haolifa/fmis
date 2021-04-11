@@ -6,6 +6,7 @@ import com.github.pagehelper.PageInfo;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.fmis.data.domain.BizProcessData;
 import com.ruoyi.fmis.data.mapper.BizProcessDataMapper;
+import com.ruoyi.fmis.data.service.impl.BizProcessDataServiceImpl;
 import com.ruoyi.fmis.define.service.IBizProcessDefineService;
 import com.ruoyi.fmis.flow.domain.BizFlow;
 import com.ruoyi.fmis.flow.mapper.BizFlowMapper;
@@ -15,6 +16,7 @@ import com.ruoyi.fmis.index.dto.OrderAuditDTO;
 import com.ruoyi.fmis.index.service.ITodoService;
 import com.ruoyi.fmis.quotation.domain.BizQuotation;
 import com.ruoyi.fmis.quotation.mapper.BizQuotationMapper;
+import com.ruoyi.fmis.quotation.service.impl.BizQuotationServiceImpl;
 import com.ruoyi.system.domain.SysRole;
 import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.service.ISysUserService;
@@ -47,6 +49,12 @@ public class TodoServiceImpl implements ITodoService {
     @Autowired
     private ISysUserService sysUserService;
 
+    @Autowired
+    private BizProcessDataServiceImpl bizProcessDataService;
+
+    @Autowired
+    private BizQuotationServiceImpl bizQuotationService;
+
     /**
      * 获取用户待办工单
      * 1.查询用户关联的角色
@@ -67,23 +75,21 @@ public class TodoServiceImpl implements ITodoService {
         // 获取流程节点
         Set<String> flows = roleFlowMap.keySet();
 
-        if (CollectionUtils.isEmpty(flows)) {
-            return new TableDataInfo();
-        }
-        // 获取用户所在部门的所有人，增加创建人筛选
-        SysUser sysUser = sysUserService.selectUserById(orderAuditDTO.getUserId());
-        Long deptId = sysUser.getDeptId();
-        SysUser selectUserByDeptId = new SysUser();
-        selectUserByDeptId.setDeptId(deptId);
-        List<SysUser> sysUsers = sysUserService.selectUserList(selectUserByDeptId);
-        Set<String> userIds = sysUsers.stream().map(t->String.valueOf(t.getUserId())).collect(Collectors.toSet());
         List<Todo> todoList = new ArrayList<>();
-        // 其它流程
         TableDataInfo tableDataInfo = new TableDataInfo();
+        tableDataInfo.setCode(0);
+        tableDataInfo.setRows(todoList);
+        if (CollectionUtils.isEmpty(flows)) {
+            return tableDataInfo;
+        }
         Set<String> collect = flows.parallelStream().map(Integer::parseInt).map(t -> t - 1).map(String::valueOf).collect(Collectors.toSet());
         if (BIZ_QUOTATION_TABLE.equals(orderAuditDTO.getOrderType())) {
             // 报价单
-            PageInfo<BizQuotation> pageInfo = PageHelper.startPage(orderAuditDTO.getPageNum(), orderAuditDTO.getPageSize(), "create_time desc").doSelectPageInfo(() -> bizQuotationMapper.selectBizQuotationByFlowStatus(collect, userIds));
+            BizQuotation bizQuotationTodo = new BizQuotation();
+            bizQuotationTodo.setFlows(collect);
+            PageInfo<BizQuotation> pageInfo = PageHelper.startPage(orderAuditDTO.getPageNum(), orderAuditDTO.getPageSize(), "q.create_time desc").doSelectPageInfo(() -> bizQuotationService.selectBizQuotationByFlowStatus
+
+                    (bizQuotationTodo));
             List<BizQuotation> bizQuotationList = pageInfo.getList();
             tableDataInfo.setTotal(pageInfo.getTotal());
             for (BizQuotation bizQuotation : bizQuotationList) {
@@ -95,21 +101,21 @@ public class TodoServiceImpl implements ITodoService {
                 todoList.add(todo);
             }
         } else {
-            PageInfo<BizProcessData> pageInfo = PageHelper.startPage(orderAuditDTO.getPageNum(), orderAuditDTO.getPageSize(), "create_time desc").doSelectPageInfo(() -> bizProcessDataMapper.selectBizProcessDataByFlowStatus(orderAuditDTO.getOrderType(), collect, userIds));
+            BizProcessData bizProcessData = new BizProcessData();
+            bizProcessData.setBizId(orderAuditDTO.getOrderType());
+            bizProcessData.setFlows(collect);
+            PageInfo<BizProcessData> pageInfo = PageHelper.startPage(orderAuditDTO.getPageNum(), orderAuditDTO.getPageSize(), "d.create_time desc").doSelectPageInfo(() -> bizProcessDataService.selectBizProcessDataForTodo(bizProcessData));
             List<BizProcessData> bizProcessDatas = pageInfo.getList();
             tableDataInfo.setTotal(pageInfo.getTotal());
             for (BizProcessData bizProcessDatum : bizProcessDatas) {
                 Todo todo = new Todo();
-                todo.setOrderNo(getOrderNo(bizProcessDatum, orderAuditDTO.getOrderType()));
+                todo.setOrderNo(getOrderNo(bizProcessDatum, bizProcessDatum.getBizId()));
                 todo.setApplyTime(bizProcessDatum.getCreateTime());
-                todo.setOrderType(orderAuditDTO.getOrderType());
+                todo.setOrderType(bizProcessDatum.getBizId());
                 todo.setApplyUser(obtainUserName(bizProcessDatum.getCreateBy()));
                 todoList.add(todo);
             }
         }
-
-
-        tableDataInfo.setCode(0);
         tableDataInfo.setRows(todoList);
         return tableDataInfo;
     }
@@ -162,14 +168,20 @@ public class TodoServiceImpl implements ITodoService {
                 try {
                     BizQuotation bizQuotation = bizQuotationMapper.selectBizQuotationById(bizFlow.getBizId());
                     Done done = new Done();
-                    done.setApprovalUser(obtainUserName(bizQuotation.getCreateBy()));
-                    done.setAuditTime(bizFlow.getCreateTime());
-                    done.setCreateTime(bizQuotation.getCreateTime());
-                    done.setOrderNo(bizQuotation.getString1());
-                    done.setOrderType(orderType);
+                    if(Objects.isNull(bizQuotation)) {
+                        done.setAuditTime(bizFlow.getCreateTime());
+                        done.setOrderType(orderType);
+                        log.warn("bizFlow-bizId obj not exists. bizFlow={}", bizFlow);
+                    } else {
+                        done.setApprovalUser(obtainUserName(bizQuotation.getCreateBy()));
+                        done.setAuditTime(bizFlow.getCreateTime());
+                        done.setCreateTime(bizQuotation.getCreateTime());
+                        done.setOrderNo(bizQuotation.getString1());
+                        done.setOrderType(orderType);
+                    }
                     doneList.add(done);
                 } catch (Exception e) {
-                    log.error("bizFlow-bizId obj not exists. bizFlow={}", bizFlow, e);
+                    log.error("bizFlow-bizId obj query exception. bizFlow={}", bizFlow, e);
                 }
 
             }
@@ -177,17 +189,22 @@ public class TodoServiceImpl implements ITodoService {
             for (BizFlow bizFlow : bizFlows) {
                 try {
                     // 查询报价单单号
-                    BizProcessData bizProcessData = bizProcessDataMapper.selectBizProcessDataById(bizFlow.getBizId());
-
                     Done done = new Done();
-                    done.setApprovalUser(obtainUserName(bizProcessData.getCreateBy()));
-                    done.setAuditTime(bizFlow.getCreateTime());
-                    done.setOrderNo(getOrderNo(bizProcessData, orderType));
-                    done.setCreateTime(bizProcessData.getCreateTime());
-                    done.setOrderType(orderType);
+                    BizProcessData bizProcessData = bizProcessDataMapper.selectBizProcessDataById(bizFlow.getBizId());
+                    if(Objects.isNull(bizProcessData)) {
+                        done.setAuditTime(bizFlow.getCreateTime());
+                        done.setOrderType(bizFlow.getBizTable());
+                        log.warn("bizFlow-bizId obj not exists. bizFlow={}", bizFlow);
+                    } else {
+                        done.setApprovalUser(obtainUserName(bizProcessData.getCreateBy()));
+                        done.setAuditTime(bizFlow.getCreateTime());
+                        done.setOrderNo(getOrderNo(bizProcessData, bizFlow.getBizTable()));
+                        done.setCreateTime(bizProcessData.getCreateTime());
+                        done.setOrderType(bizFlow.getBizTable());
+                    }
                     doneList.add(done);
                 } catch (Exception e) {
-                    log.error("bizFlow-bizId obj not exists. bizFlow={}", bizFlow, e);
+                    log.error("bizFlow-bizId obj query exception. bizFlow={}", bizFlow, e);
                 }
             }
         }

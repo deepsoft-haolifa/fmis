@@ -12,6 +12,7 @@ import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 合同管理对象 biz_process_data
@@ -362,6 +363,16 @@ public class BizProcessData extends BaseEntity {
 
     /** 删除标志（0代表存在 2代表删除） */
     private String delFlag;
+    // 流程节点集合：待办查询使用
+    private Set<String> flows;
+
+    public Set<String> getFlows() {
+        return flows;
+    }
+
+    public void setFlows(Set<String> flows) {
+        this.flows = flows;
+    }
 
     public void setDataId(Long dataId) {
         this.dataId = dataId;

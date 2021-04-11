@@ -82,20 +82,20 @@
     </resultMap>
 
     <select id="selectBizProcessDataByFlowStatus" resultMap="BizProcessDataResult">
-        select * from biz_process_data
+        select * from biz_process_data d
+        left join sys_user u on d.create_by=u.user_id
+        left join sys_dept dt on u.dept_id=dt.dept_id
         where
-        biz_id = #{orderType}
-        and flow_status != normal_flag
+        flow_status != normal_flag
+        <if test="bizId != null and bizId != '' and bizId !='-1'">
+            and biz_id = #{bizId}
+         </if>
         and flow_status in (
         <foreach collection="flows" separator="," item="item">
             #{item}
         </foreach>
         )
-        and create_by in (
-        <foreach collection="userIds" separator="," item="item">
-            #{item}
-        </foreach>
-        )
+        ${params.dataScope}
     </select>
 
     <sql id="selectBizProcessDataVo">

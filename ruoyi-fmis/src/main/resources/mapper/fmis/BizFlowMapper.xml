@@ -47,7 +47,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectBizFlowViewList" parameterType="BizFlow" resultMap="BizFlowResult">
         <include refid="selectBizFlowViewVo"/>
         <where>
-            <if test="bizTable != null  and bizTable != ''"> and f.biz_table = #{bizTable}</if>
+            <if test="bizTable != null  and bizTable != ''">
+             <if test="bizTable == '-1'">
+             and f.biz_table != 'biz_quotation'
+             </if>
+             <if test="bizTable != '-1'">
+                    and f.biz_table = #{bizTable}
+             </if>
+             </if>
             <if test="bizId != null"> and f.biz_id = #{bizId}</if>
              <if test="examineUserId != null" >and f.examine_user_id = #{examineUserId}</if>
             order by f.create_time desc

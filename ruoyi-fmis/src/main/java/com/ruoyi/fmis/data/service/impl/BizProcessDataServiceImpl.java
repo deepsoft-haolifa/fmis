@@ -5,7 +5,6 @@ import java.util.stream.Collectors;
 
 import com.ruoyi.common.annotation.DataScope;
 import com.ruoyi.common.config.RedisUtil;
-import com.ruoyi.common.constant.GenConstants;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.utils.DateUtils;
@@ -43,8 +42,6 @@ import com.ruoyi.fmis.data.domain.BizProcessData;
 import com.ruoyi.fmis.data.service.IBizProcessDataService;
 import com.ruoyi.common.core.text.Convert;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * 合同管理Service业务层处理
@@ -820,6 +817,12 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
     @DataScope(deptAlias = "dt", userAlias = "u")
     public List<BizProcessData> selectBizProcessDataVoRefBorrowing(BizProcessData bizProcessData) {
         return bizProcessDataMapper.selectBizProcessDataVoRefBorrowing(bizProcessData);
+    }
+
+    @Override
+    @DataScope(deptAlias = "dt", userAlias = "u")
+    public List<BizProcessData> selectBizProcessDataForTodo(BizProcessData bizProcessData) {
+        return bizProcessDataMapper.selectBizProcessDataByFlowStatus(bizProcessData);
     }
 
     /**

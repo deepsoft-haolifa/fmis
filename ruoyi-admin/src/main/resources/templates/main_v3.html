@@ -24,20 +24,9 @@
 
     <div style="margin-top: 10px;">
         <div class="col-sm-12 search-collapse">
-            <form id="formId">
-                <div class="select-list">
-                    <ul>
-                        <li>
-                            工单类型：
-                            <select id="search-orderTypes">
-                            </select>
-                        </li>
-                        <li>
-                            <a class="btn btn-primary btn-rounded btn-sm" onclick="searchList()"><i
-                                    class="fa fa-search"></i>&nbsp;查询</a>
-                        </li>
-                    </ul>
-                </div>
+            <form id="formId3">
+                <a class="btn btn-primary btn-rounded btn-sm" onclick="refresh()"><i
+                        class="fa fa-search"></i>&nbsp;查询</a>
             </form>
         </div>
         <ul id="myTab" class="nav nav-tabs">
@@ -211,87 +200,21 @@
 
     var prefix = "/fmis/quotation/";
 
-    function todoQuotation(type) {
-        if (type == 1) {
-            var url = "/fmis/quotation/todoQuotation";
-            location.href = url;
-            //$.modal.openTab("待办列表", url);
-        }
-    }
-
-    function todoContract(type) {
-        if (type == 1) {
-            var url = "/fmis/data?todo=1";
-            location.href = url;
-            //parent.modal.open("aaa", url);
-            //$.modal.open("aaa", url);
-            //$.modal.alertError("1111");
-        }
-    }
-    
-    function searchList() {
-        $.table.search('formId','todo-table',{'orderType': $("#search-orderTypes").val(), "orderByColumn":'create_time', "isAsc":'desc'});
-        $.table.search('formId','done-table',{'orderType': $("#search-orderTypes").val(), "orderByColumn":'create_time', "isAsc":'desc'});
-    }
 
     $(function () {
-        // 获取工单类型
-        $.ajax({
-            type: 'GET',
-            contentType: "application/json;charset=UTF-8",
-            //请求地址
-            url: "/fmis/orderAudit/orderTypes",
-            //请求成功
-            success: function (result) {
-                var optionHtml = '';
-                var i =0;
-                $.each(result,function(key, value){
-                    if(key == '-1') {
-                        optionHtml += '<option value="'+key+'" selected>'+value+'</option>'
-                    } else {
-                        optionHtml += '<option value="'+key+'">'+value+'</option>'
-                    }
-                    i++;
-                })
-                $("#search-orderTypes").html(optionHtml);
 
-                // 获取待办列表，已办列表
-                getTodoList($("#search-orderTypes").val());
-                getDoneList($("#search-orderTypes").val());
-            }
+        // 获取待办列表，已办列表
+        getTodoList('biz_quotation');
+        getDoneList('biz_quotation');
+    })
 
-        });
+    function refresh() {
+        // 获取待办列表，已办列表
+        console.log('xxxx')
+        $.table.search('formId3','todo-table',{'orderType': "biz_quotation", "orderByColumn":'create_time', "isAsc":'desc'});
+        $.table.search('formId3','done-table',{'orderType': "biz_quotation", "orderByColumn":'create_time', "isAsc":'desc'});
+    }
 
-
-        //请求参数
-        var list = {};
-        //
-        $.ajax({
-            //请求方式
-            type: "POST",
-            //请求的媒体类型
-            contentType: "application/json;charset=UTF-8",
-            //请求地址
-            url: prefix + "todoView",
-            dataType: 'json',
-            //请求成功
-            success: function (result) {
-                var quotationNum = result.data.quotationNum;
-                var contractNum = result.data.contractNum;
-                $("#quotationNum").text(quotationNum);
-                $("#contractNum").text(contractNum);
-                console.log("result=" + result.data.quotationNum);
-                if (quotationNum > 0 || contractNum > 0) {
-                    parent.$('#todoListFlag').text("*");
-                }
-            },
-            //请求失败，包含具体的错误信息
-            error: function (e) {
-                console.log(e.status);
-                console.log(e.responseText);
-            }
-        });
-    });
 
     function getDoneList(orderType) {
         var options = {
@@ -344,131 +267,6 @@
             area: ['600px', 'auto'],
             content: html
         });
-    });
-
-    function goQuotation() {
-        $.modal.openTab("报价单审批", "/fmis/quotation/todoQuotation");
-    }
-
-    $(function () {
-        var options = {
-            url: "/fmis/quotation/list",
-            modalName: "报价单",
-            uniqueId: "quotationId",
-            id: "bootstrap-table1",
-            classes: "table table-bordered table-sm",
-            queryParams: {
-                "string6": 1
-            },
-            showFooter: true,
-            columns: [
-                {
-                    field: 'quotationId',
-                    title: 'ID',
-                    visible: false
-                },
-                {
-                    field: 'createBy',
-                    title: '申请人',
-                    footerFormatter: function (value) {
-
-                        return "<a onclick='goQuotation()' href='#'>更多报价单...</a>";
-                    }
-                },
-                {
-                    field: 'string9',
-                    title: '总金额'
-                },
-                {
-                    field: 'createTime',
-                    title: '创建时间'
-                }]
-        };
-        $.table.init(options);
-    });
-
-    $(function () {
-        //请求参数
-        var list = {};
-        //
-        $.ajax({
-            //请求方式
-            type: "POST",
-            //请求的媒体类型
-            contentType: "application/json;charset=UTF-8",
-            //请求地址
-            url: prefix + "todoView",
-            dataType: 'json',
-            //请求成功
-            success: function (result) {
-                var quotationNum = result.data.quotationNum;
-                var contractNum = result.data.contractNum;
-                $("#quotationNum").text(quotationNum);
-                $("#contractNum").text(contractNum);
-                console.log("result=" + result.data.quotationNum);
-                if (quotationNum > 0 || contractNum > 0) {
-                    parent.$('#todoListFlag').text("*");
-                }
-            },
-            //请求失败，包含具体的错误信息
-            error: function (e) {
-                console.log(e.status);
-                console.log(e.responseText);
-            }
-        });
-    });
-
-
-    $('#pay-qrcode').click(function () {
-        var html = $(this).html();
-        parent.layer.open({
-            title: false,
-            type: 1,
-            closeBtn: false,
-            shadeClose: true,
-            area: ['600px', 'auto'],
-            content: html
-        });
-    });
-
-    function goContract() {
-        $.modal.openTab("合同审批", "/fmis/data?todo=1");
-    }
-
-    $(function () {
-        var options = {
-            url: "/fmis/data/list",
-            id: "bootstrap-table2",
-            classes: "table table-bordered table-sm",
-            modalName: "合同管理",
-            queryParams: {
-                "queryStatus": 1
-            },
-            showFooter: true,
-            uniqueId: "dataId",
-            columns: [
-                {
-                    field: 'dataId',
-                    title: 'ID',
-                    visible: false
-                },
-                {
-                    field: 'createByName',
-                    title: '申请人',
-                    footerFormatter: function (value) {
-                        return "<a onclick='goContract()' href='#'>更多合同...</a>";
-                    }
-                },
-                {
-                    field: 'price1',
-                    title: '总价'
-                },
-                {
-                    field: 'createTime',
-                    title: '创建时间'
-                }]
-        };
-        $.table.init(options);
     });
 
 </script>
