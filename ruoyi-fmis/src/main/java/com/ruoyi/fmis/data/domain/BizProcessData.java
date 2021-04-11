@@ -11,6 +11,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
@@ -365,6 +366,8 @@ public class BizProcessData extends BaseEntity {
     private String delFlag;
     // 流程节点集合：待办查询使用
     private Set<String> flows;
+    //
+    private HashMap<String,Set<String>> flowConfig;
 
     public Set<String> getFlows() {
         return flows;
@@ -667,6 +670,14 @@ public class BizProcessData extends BaseEntity {
 
     public String getDelFlag() {
         return delFlag;
+    }
+
+    public HashMap<String, Set<String>> getFlowConfig() {
+        return flowConfig;
+    }
+
+    public void setFlowConfig(HashMap<String, Set<String>> flowConfig) {
+        this.flowConfig = flowConfig;
     }
 
     @Override

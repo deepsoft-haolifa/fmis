@@ -89,12 +89,27 @@
         flow_status != normal_flag
         <if test="bizId != null and bizId != '' and bizId !='-1'">
             and biz_id = #{bizId}
+            and flow_status in (
+            <foreach collection="flows" separator="," item="item">
+                #{item}
+            </foreach>
+            )
          </if>
-        and flow_status in (
-        <foreach collection="flows" separator="," item="item">
-            #{item}
-        </foreach>
-        )
+        <if test="bizId != null and bizId != '' and bizId =='-1'">
+            and
+            <foreach collection="flowConfig.keys" item="key" separator=" or " open="(" close=")">
+                <if test="flowConfig[key].size > 0">
+                    (biz_id = #{key}
+                    and
+                    flow_status in (
+                    <foreach collection="flowConfig[key]" separator="," item="item">
+                        #{item}
+                    </foreach>
+                    ))
+                </if>
+            </foreach>
+        </if>
+
         ${params.dataScope}
     </select>
 

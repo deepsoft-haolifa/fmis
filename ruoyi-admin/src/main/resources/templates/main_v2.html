@@ -13,7 +13,7 @@
     <link href="../static/ruoyi/css/ry-ui.css" th:href="@{/ruoyi/css/ry-ui.css}" rel="stylesheet"/>
     <script th:src="@{/js/jquery.min.js}"></script>
     <script th:src="@{/js/bootstrap.min.js}"></script>
-    <script th:src="@{/ruoyi/js/ry-ui.js?v=4.0.0}"></script>
+    <script th:src="@{/ruoyi/js/ry-ui.js}"></script>
 
 </head>
 
@@ -29,12 +29,12 @@
                     <ul>
                         <li>
                             工单类型：
-                            <select id="search-orderTypes">
+                            <select id="search-orderTypes" name="orderType">
                             </select>
                         </li>
                         <li>
-                            <a class="btn btn-primary btn-rounded btn-sm" onclick="searchList()"><i
-                                    class="fa fa-search"></i>&nbsp;查询</a>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="refresh()">
+                                   <i class="fa fa-search">查询</i>&nbsp;</a>
                         </li>
                     </ul>
                 </div>
@@ -60,22 +60,8 @@
     </div>
 
 
-    <!--  <ul class="m-b">-->
-
-    <!--    <li style="display: none"><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 报价单 <a id="quotationNum" style="color: red;" onclick="todoQuotation(1)"></a> </li>-->
-    <!--    <li style="display: none"><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 合同 <a id="contractNum" style="color: red;" onclick="todoContract(1)"></a> </li>-->
-
-    <!--  </ul>-->
-
     <div class="form-horizontal">
         <div class="form-group">
-
-            <!--      <div class="col-sm-5">-->
-            <!--        <table  id="bootstrap-table1"></table>-->
-            <!--      </div>-->
-            <!--      <div class="col-sm-5">-->
-            <!--        <table  id="bootstrap-table2"></table>-->
-            <!--      </div>-->
         </div>
 
     </div>
@@ -87,34 +73,6 @@
 <script th:src="@{/ajax/libs/layer/layer.min.js}"></script>
 <div th:include="include :: footer"></div>
 <script th:inline="javascript">
-
-
-    function openMenu(orderType) {
-        if(orderType == 'biz_quotation') {
-            $.modal.openTab("报价单审批", "/fmis/quotation/todoQuotation");
-        }
-        if(orderType == 'contract') {
-            $.modal.openTab("合同列表", "/fmis/data");
-        }
-        if(orderType == 'procurement') {
-            $.modal.openTab("采购列表", "/fmis/procurement");
-        }
-        if(orderType == 'cpayment') {
-            $.modal.openTab("付款列表", "/fmis/cpayment");
-        }
-        if(orderType == 'newdelivery') {
-            $.modal.openTab("发货列表", "/fmis/newdelivery");
-        }
-        if(orderType == 'borrowing') {
-            $.modal.openTab("借款列表", "/fmis/borrowing");
-        }
-        if(orderType == 'payment') {
-            $.modal.openTab("报销列表", "/fmis/payment");
-        }
-        if(orderType == 'invoice') {
-            $.modal.openTab("发票列表", "/fmis/invoice");
-        }
-    }
 
     function getOrderType(orderType) {
         if(orderType == 'biz_quotation') {
@@ -169,7 +127,7 @@
             field: '',
             title: '操作', formatter:function (value, row) {
                 var orderType = row.orderType;
-                return "<a onclick=openMenu('"+orderType+"')>去审批</a>";
+                return '<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subExamine(\'' + row.id +'\',\''+orderType + '\')"><i class="fa fa-remove"></i> 审批</a>';
             }
 
         }];
@@ -203,7 +161,7 @@
             field: '',
             title: '操作', formatter:function (value, row ) {
                 var orderType = row.orderType;
-                return "<a onclick=openMenu('"+orderType+"')>去查看</a>";
+                return '<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewExamineHistory(\'' + row.id+'\',\''+orderType + '\')"><i class="fa fa-remove"></i> 审批记录 </a>';
             }
 
         }];
@@ -211,27 +169,58 @@
 
     var prefix = "/fmis/quotation/";
 
-    function todoQuotation(type) {
-        if (type == 1) {
-            var url = "/fmis/quotation/todoQuotation";
-            location.href = url;
-            //$.modal.openTab("待办列表", url);
+    function refresh() {
+        // 获取待办列表，已办列表
+        $.table.search('formId','todo-table');
+        $.table.search('formId','done-table');
+    }
+
+    function getPrefix(orderType) {
+        if(orderType == 'contract') {
+            return "/fmis/data";
+        }
+        if(orderType == 'procurement') {
+            return "/fmis/procurement";
+        }
+        if(orderType == 'cpayment') {
+            return "/fmis/cpayment";
+        }
+        if(orderType == 'newdelivery') {
+            return "/fmis/newdelivery";
+        }
+        if(orderType == 'borrowing') {
+            return "/fmis/borrowing";
+        }
+        if(orderType == 'payment') {
+            return "/fmis/payment";
+        }
+        if(orderType == 'invoice') {
+            return "/fmis/invoice";
         }
     }
 
-    function todoContract(type) {
-        if (type == 1) {
-            var url = "/fmis/data?todo=1";
-            location.href = url;
-            //parent.modal.open("aaa", url);
-            //$.modal.open("aaa", url);
-            //$.modal.alertError("1111");
-        }
+
+    function viewExamineHistory(dataId, orderType) {
+
+        var url = getPrefix(orderType) + "/viewExamineHistory?dataId=" + dataId + "&&bizId=" + orderType;
+        $.modal.openNoEnter("审批记录", url,'','',function(){
+            $.modal.closeAll();
+        });
+    }
+
+    function subExamine(dataId, orderType) {
+        var url = getPrefix(orderType) + "/examineEdit?dataId=" + dataId;
+        $.modal.open("审批", url,'','',function(index, layero) {
+            var iframeWin = layero.find('iframe')[0];
+            iframeWin.contentWindow.submitHandler(index, layero);
+            $('#myTab li:eq(1) a').tab('show')
+            refresh()
+        });
     }
     
     function searchList() {
-        $.table.search('formId','todo-table',{'orderType': $("#search-orderTypes").val(), "orderByColumn":'create_time', "isAsc":'desc'});
-        $.table.search('formId','done-table',{'orderType': $("#search-orderTypes").val(), "orderByColumn":'create_time', "isAsc":'desc'});
+        // $.table.search('formId','todo-table',{'orderType': $("#search-orderTypes").val(), "orderByColumn":'create_time', "isAsc":'desc'});
+        // $.table.search('formId','done-table',{'orderType': $("#search-orderTypes").val(), "orderByColumn":'create_time', "isAsc":'desc'});
     }
 
     $(function () {
@@ -300,13 +289,13 @@
             uniqueId: "done",
             id: "done-table",
             classes: "table table-bordered table-sm",
-            queryParams: {
-                "orderType": orderType,
-                "pageSize":10,
-                "pageNum":1,
-                "orderByColumn":'create_time',
-                "isAsc":'desc'
-            },
+            // queryParams: {
+            //     "orderType": orderType,
+            //     "pageSize":10,
+            //     "pageNum":1,
+            //     "orderByColumn":'create_time',
+            //     "isAsc":'desc'
+            // },
             showFooter: true,
             columns: done_columns
         };
@@ -320,13 +309,13 @@
             uniqueId: "todo",
             id: "todo-table",
             classes: "table table-bordered table-sm",
-            queryParams: {
-                "orderType": orderType,
-                "pageSize":10,
-                "pageNum":1,
-                "orderByColumn":'create_time',
-                "isAsc":'desc'
-            },
+            // queryParams: {
+            //     "orderType": orderType,
+            //     "pageSize":10,
+            //     "pageNum":1,
+            //     "orderByColumn":'create_time',
+            //     "isAsc":'desc'
+            // },
             showFooter: true,
             columns: todo_columns
         };

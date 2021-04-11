@@ -3,7 +3,7 @@ package com.ruoyi.fmis.index.service;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.fmis.index.dto.OrderAuditDTO;
 
-import java.util.List;
+import java.util.HashMap;
 
 public interface ITodoService {
     /**
@@ -14,4 +14,5 @@ public interface ITodoService {
 
     TableDataInfo getPageListForDone(OrderAuditDTO orderAuditDTO);
 
+    HashMap<String, String> getOrderTypeMaps();
 }

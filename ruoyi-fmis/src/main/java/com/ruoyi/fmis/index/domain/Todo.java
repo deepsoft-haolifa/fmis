@@ -16,4 +16,6 @@ public class Todo {
     private Date applyTime;
 
     private String orderType;
+
+    private Long id;
 }

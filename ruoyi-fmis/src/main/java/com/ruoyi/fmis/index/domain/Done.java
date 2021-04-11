@@ -20,4 +20,5 @@ public class Done {
 
     private String orderType;
 
+    private Long id;
 }

@@ -71,29 +71,36 @@ public class TodoServiceImpl implements ITodoService {
     public TableDataInfo getPageListForTodo(OrderAuditDTO orderAuditDTO) throws Exception {
 
         // 获取该流程下当前用户具有审批权限的流程节点
-        Map<String, SysRole> roleFlowMap = bizProcessDefineService.getRoleFlowMap(orderAuditDTO.getOrderType());
-        // 获取流程节点
-        Set<String> flows = roleFlowMap.keySet();
-
+        Set<String> flows = new HashSet<>();
+        HashMap<String,Set<String>> flowConfig = new HashMap<>();
+        // 查询全部
+        if(orderAuditDTO.getOrderType().equals("-1")) {
+            HashMap<String, String> orderTypeMaps = getOrderTypeMaps();
+            for (String orderType : orderTypeMaps.keySet()) {
+                Set<String> collect = getQueryFlowStatusSet(orderType);
+                flowConfig.put(orderType, collect);
+            }
+        } else {
+            Set<String> collect = getQueryFlowStatusSet(orderAuditDTO.getOrderType());
+            flows.addAll(collect);
+        }
         List<Todo> todoList = new ArrayList<>();
         TableDataInfo tableDataInfo = new TableDataInfo();
         tableDataInfo.setCode(0);
         tableDataInfo.setRows(todoList);
-        if (CollectionUtils.isEmpty(flows)) {
+        if (CollectionUtils.isEmpty(flows) && CollectionUtils.isEmpty(flowConfig)) {
             return tableDataInfo;
         }
-        Set<String> collect = flows.parallelStream().map(Integer::parseInt).map(t -> t - 1).map(String::valueOf).collect(Collectors.toSet());
         if (BIZ_QUOTATION_TABLE.equals(orderAuditDTO.getOrderType())) {
             // 报价单
             BizQuotation bizQuotationTodo = new BizQuotation();
-            bizQuotationTodo.setFlows(collect);
-            PageInfo<BizQuotation> pageInfo = PageHelper.startPage(orderAuditDTO.getPageNum(), orderAuditDTO.getPageSize(), "q.create_time desc").doSelectPageInfo(() -> bizQuotationService.selectBizQuotationByFlowStatus
-
-                    (bizQuotationTodo));
+            bizQuotationTodo.setFlows(flows);
+            PageInfo<BizQuotation> pageInfo = PageHelper.startPage(orderAuditDTO.getPageNum(), orderAuditDTO.getPageSize(), "q.create_time desc").doSelectPageInfo(() -> bizQuotationService.selectBizQuotationByFlowStatus(bizQuotationTodo));
             List<BizQuotation> bizQuotationList = pageInfo.getList();
             tableDataInfo.setTotal(pageInfo.getTotal());
             for (BizQuotation bizQuotation : bizQuotationList) {
                 Todo todo = new Todo();
+                todo.setId(bizQuotation.getQuotationId());
                 todo.setOrderNo(bizQuotation.getString1());
                 todo.setApplyTime(bizQuotation.getCreateTime());
                 todo.setApplyUser(obtainUserName(bizQuotation.getCreateBy()));
@@ -103,12 +110,14 @@ public class TodoServiceImpl implements ITodoService {
         } else {
             BizProcessData bizProcessData = new BizProcessData();
             bizProcessData.setBizId(orderAuditDTO.getOrderType());
-            bizProcessData.setFlows(collect);
+            bizProcessData.setFlows(flows);
+            bizProcessData.setFlowConfig(flowConfig);
             PageInfo<BizProcessData> pageInfo = PageHelper.startPage(orderAuditDTO.getPageNum(), orderAuditDTO.getPageSize(), "d.create_time desc").doSelectPageInfo(() -> bizProcessDataService.selectBizProcessDataForTodo(bizProcessData));
             List<BizProcessData> bizProcessDatas = pageInfo.getList();
             tableDataInfo.setTotal(pageInfo.getTotal());
             for (BizProcessData bizProcessDatum : bizProcessDatas) {
                 Todo todo = new Todo();
+                todo.setId(bizProcessDatum.getDataId());
                 todo.setOrderNo(getOrderNo(bizProcessDatum, bizProcessDatum.getBizId()));
                 todo.setApplyTime(bizProcessDatum.getCreateTime());
                 todo.setOrderType(bizProcessDatum.getBizId());
@@ -118,6 +127,12 @@ public class TodoServiceImpl implements ITodoService {
         }
         tableDataInfo.setRows(todoList);
         return tableDataInfo;
+    }
+
+    private Set<String> getQueryFlowStatusSet(String orderType) {
+        Map<String, SysRole> roleFlowMap = bizProcessDefineService.getRoleFlowMap(orderType);
+        Set<String> strings = roleFlowMap.keySet();
+        return strings.parallelStream().map(Integer::parseInt).map(t -> t - 1).map(String::valueOf).collect(Collectors.toSet());
     }
 
     private String obtainUserName(String createBy) {
@@ -152,6 +167,19 @@ public class TodoServiceImpl implements ITodoService {
         return tableDataInfo;
     }
 
+    @Override
+    public HashMap<String, String> getOrderTypeMaps() {
+        HashMap<String, String> orderTypes = new HashMap<>();
+        orderTypes.put("contract", "销售合同工单");
+        orderTypes.put("procurement", "采购合同工单");
+        orderTypes.put("cpayment", "付款审批工单");
+        orderTypes.put("newdelivery", "发货审批工单");
+        orderTypes.put("borrowing", "借款审批工单");
+        orderTypes.put("payment", "报销审批工单");
+        orderTypes.put("invoice", "发票审批工单");
+        return orderTypes;
+    }
+
     /**
      * 封装已办列表
      * 注：报价 与 其它工单原数据不在一张表：报价存在于：biz_quotation 其它：biz_process_data
@@ -168,6 +196,7 @@ public class TodoServiceImpl implements ITodoService {
                 try {
                     BizQuotation bizQuotation = bizQuotationMapper.selectBizQuotationById(bizFlow.getBizId());
                     Done done = new Done();
+                    done.setId(bizFlow.getBizId());
                     if(Objects.isNull(bizQuotation)) {
                         done.setAuditTime(bizFlow.getCreateTime());
                         done.setOrderType(orderType);
@@ -190,6 +219,7 @@ public class TodoServiceImpl implements ITodoService {
                 try {
                     // 查询报价单单号
                     Done done = new Done();
+                    done.setId(bizFlow.getBizId());
                     BizProcessData bizProcessData = bizProcessDataMapper.selectBizProcessDataById(bizFlow.getBizId());
                     if(Objects.isNull(bizProcessData)) {
                         done.setAuditTime(bizFlow.getCreateTime());

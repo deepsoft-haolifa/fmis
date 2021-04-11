@@ -5,6 +5,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.fmis.index.dto.OrderAuditDTO;
 import com.ruoyi.fmis.index.service.ITodoService;
 import com.ruoyi.framework.util.ShiroUtils;
+import org.apache.shiro.crypto.hash.Hash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/fmis/orderAudit")
@@ -57,16 +59,9 @@ public class TodoController extends BaseController {
     @GetMapping("/orderTypes")
     @ResponseBody
     public HashMap getOrderTypes() throws Exception {
-        HashMap<String, String> orderTypes = new HashMap<>();
-        orderTypes.put("-1", "全部");
-        orderTypes.put("contract", "销售合同工单");
-        orderTypes.put("procurement", "采购合同工单");
-        orderTypes.put("cpayment", "付款审批工单");
-        orderTypes.put("newdelivery", "发货审批工单");
-        orderTypes.put("borrowing", "借款审批工单");
-        orderTypes.put("payment", "报销审批工单");
-        orderTypes.put("invoice", "发票审批工单");
-        return orderTypes;
+        HashMap<String, String> orderTypeMaps = todoService.getOrderTypeMaps();
+        orderTypeMaps.put("-1", "全部");
+        return orderTypeMaps;
     }
 
 }
