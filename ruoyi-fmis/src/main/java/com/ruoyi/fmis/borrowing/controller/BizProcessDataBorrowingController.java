@@ -82,7 +82,6 @@ public class BizProcessDataBorrowingController extends BaseController {
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(BizProcessData bizProcessData) {
-
         String bizId = bizProcessData.getBizId();
 
         Map<String, SysRole> flowMap = bizProcessDefineService.getRoleFlowMap(bizId);

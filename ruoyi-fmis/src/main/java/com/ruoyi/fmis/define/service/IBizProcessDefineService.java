@@ -64,4 +64,7 @@ public interface IBizProcessDefineService {
      * @return 结果
      */
     public int deleteBizProcessDefineById(Long defineId);
+
+
+
 }
