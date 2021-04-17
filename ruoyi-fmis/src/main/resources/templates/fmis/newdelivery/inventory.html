@@ -70,9 +70,9 @@
                 {field : 'rowId',title : '序号',visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
 
                 {field : 'childId',title : 'childId',visible: false},
-                {field : 'string3',title : '报检单号',editable: false},
+               /* {field : 'string3',title : '报检单号',editable: false},
                 {field : 'string4',title : '采购合同号'},
-                {field : 'string5',title : '销售合同号',editable: false},
+                {field : 'string5',title : '销售合同号',editable: false},*/
                 {field : 'string2',title : '类型',formatter: function(value, row, index) {
                         var actions = [];
                         if (value == 1) {
@@ -101,9 +101,8 @@
                 {field : 'string8',title : '规格',editable: false},
                /* {field : 'string9',title : '等级',editable: false},
                 {field : 'string10',title : '价格',editable: false},*/
-                {field : 'string11',title : '数量',editable: false},
+                {field : 'string11',title : '库存',editable: false},
                 {field : 'string16',title : '已发货数量',editable: false},
-                {field : 'string13',title : '未发货数量',editable: false},
                 {field : 'string14',title : '状态',formatter: function(value, row, index) {
                         var actions = [];
                         if (value == 1) {
