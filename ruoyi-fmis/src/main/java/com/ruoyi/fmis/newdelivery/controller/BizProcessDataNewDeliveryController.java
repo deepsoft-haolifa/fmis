@@ -176,6 +176,7 @@ public class BizProcessDataNewDeliveryController extends BaseController {
                 //查询主数据
                 BizProcessChild updateChild = bizProcessChildService.selectBizProcessChildById(Long.parseLong(updateChildId));
                 updateChild.setString11((StringUtils.toLong(updateChild.getString11()) + totalNum) + "");
+                updateChild.setString20("0");
                 bizProcessChildService.updateBizProcessChild(updateChild);
             }
         }
