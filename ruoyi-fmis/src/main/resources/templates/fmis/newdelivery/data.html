@@ -91,15 +91,17 @@
                     formatter: function(value, row, index) {
                         var actions = [];
                         var flowStatus = row.flowStatus;
+                        console.log(flowStatus)
                         var normalFlag = row.normalFlag;
                         var operationExamineStatus = row.operationExamineStatus;
+                        var createBy = row.createBy;
+                        var loginUserId = row.loginUserId;
+                        console.log("loginUserId=" + loginUserId + " createBy=" + createBy + " flowStatus=" + flowStatus);
                         console.log("operationExamineStatus=" + operationExamineStatus);
-                        if (flowStatus < 1) {
-                            if (flowStatus == "0") {
-                                //已上报
-                            } else {
-
-                            }
+                        if (flowStatus < 1 && createBy == loginUserId) {
+                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subReport(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 上报 </a>');
+                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="update(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 编辑 </a>');
+                            //已上报
                         } else if (flowStatus == normalFlag) {
                             //已完成
                         } else if (operationExamineStatus == true || operationExamineStatus == "true") {
@@ -128,6 +130,13 @@
                 $.modal.closeAll();
             });
         }
+        function updateFh(dataId) {
+            var bizId = $("#bizId").val();
+            var url = prefix + "/updateFh?dataId=" + dataId + "&&bizId=" + bizId;
+            $.modal.openNoEnter("详情", url,$(window).width(),$(window).height(),function(){
+                $.modal.closeAll();
+            });
+        }
         function subExamine(dataId) {
             var url = prefix + "/examineEdit?dataId=" + dataId;
             $.modal.openFull("审批", url);
@@ -136,10 +145,18 @@
         function subReport(dataId) {
             $.modal.confirm("确定上报该条信息吗？", function() {
                 console.log(dataId + "--dataId");
-                var url = prefix + "/report?dataId=" + dataId;
+                var bizId = $("#bizId").val();
+                var url = prefix + "/reportFh?dataId=" + dataId+ "&&bizId=" + bizId;
                 $.operate.saveModal(url,'',function(){
                     $.table.refresh();
                 });
+            });
+        }
+        function update(dataId) {
+            var bizId = $("#bizId").val();
+            var url = prefix + "/updateViewDetail?dataId=" + dataId + "&&bizId=" + bizId;
+            $.modal.openNoEnter("详情", url,$(window).width(),$(window).height(),function(){
+                $.modal.closeAll();
             });
         }
     </script>

@@ -98,6 +98,7 @@ public class BizProcessDataNewDeliveryController extends BaseController {
         if (!CollectionUtils.isEmpty(flowMap)) {
             //计算流程描述
             for (BizProcessData data : list) {
+                data.setLoginUserId(ShiroUtils.getUserId().toString());
                 String flowStatus = data.getFlowStatus();
                 //结束标识
                 String normalFlag = data.getNormalFlag();
@@ -151,6 +152,14 @@ public class BizProcessDataNewDeliveryController extends BaseController {
         BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataById(Long.parseLong(dataId));
         mmap.put("bizProcessData", bizProcessData);
         return prefix + "/viewDetail";
+    }
+    @GetMapping("/updateViewDetail")
+    public String updateViewDetail(ModelMap mmap) {
+        String dataId = getRequest().getParameter("dataId");
+        BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataById(Long.parseLong(dataId));
+        mmap.put("bizProcessData", bizProcessData);
+        mmap.put("isUpdate", 1);
+        return prefix + "/updateViewDetail";
     }
     @PostMapping("/doExamine")
     @ResponseBody
@@ -212,7 +221,21 @@ public class BizProcessDataNewDeliveryController extends BaseController {
     public String add() {
         return prefix + "/add";
     }
+    /**
+     * 发货申请
+     */
+    @Log(title = "发货申请", businessType = BusinessType.UPDATE)
+    @PostMapping("/reportFh")
+    @ResponseBody
+    @Transactional
+    public AjaxResult reportFh(BizProcessData bizProcessData) {
 
+//        BizProcessData bizProcessData1 = bizProcessDataService.selectBizProcessDataById(bizProcessData.getDataId());
+
+        //自动上报
+        bizProcessDataService.doExamine(bizProcessData.getDataId() + "", "1", "销售员上报", bizProcessData.getBizId());
+        return toAjax(1);
+    }
     /**
      * 新增保存发货管理
      */

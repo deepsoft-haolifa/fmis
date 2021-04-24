@@ -850,7 +850,7 @@ public class BizProcessDataController extends BaseController {
         int insertReturn = bizProcessDataService.insertBizProcessData(bizProcessData);
 
         //自动上报
-        bizProcessDataService.doExamine(bizProcessData.getDataId() + "", "1", "销售员上报", bizProcessData.getBizId());
+        bizProcessDataService.doExamine(bizProcessData.getDataId() + "", "0", "销售员上报", bizProcessData.getBizId());
 
         for (BizProcessChild bizProcessChild : bizProcessChildList) {
             if (!Arrays.asList(childs).contains(bizProcessChild.getChildId() + "")) {
@@ -1134,6 +1134,21 @@ public class BizProcessDataController extends BaseController {
             }
         }*/
         return toAjax(insertReturn);
+    }
+    /**
+     * 发货申请
+     */
+    @Log(title = "发货申请", businessType = BusinessType.UPDATE)
+    @PostMapping("/reportFh")
+    @ResponseBody
+    @Transactional
+    public AjaxResult reportFh(BizProcessData bizProcessData) {
+
+//        BizProcessData bizProcessData1 = bizProcessDataService.selectBizProcessDataById(bizProcessData.getDataId());
+
+        //自动上报
+        bizProcessDataService.doExamine(bizProcessData.getDataId() + "", "1", "销售员上报", bizProcessData.getBizId());
+        return toAjax(0);
     }
 
     /**
