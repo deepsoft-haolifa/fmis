@@ -81,9 +81,17 @@
                     title : '发起时间'
                 },
                 {
-                    field : 'flowStatusRemark',
+                    field : 'flowStatus',
                     title : '状态',
-                    align: 'center'
+                    align: 'center',formatter: function(value, row, index) {
+                        var actions = [];
+                        if (value < 1) {
+                            actions.push('未申请');
+                        } else{
+                            actions.push('已申请');
+                        }
+                        return actions.join('');
+                    }
                 },
                 {
                     title: '操作',
@@ -155,9 +163,13 @@
         function update(dataId) {
             var bizId = $("#bizId").val();
             var url = prefix + "/updateViewDetail?dataId=" + dataId + "&&bizId=" + bizId;
-            $.modal.openNoEnter("详情", url,$(window).width(),$(window).height(),function(){
+            /*$.modal.openNoEnter("详情", url,$(window).width(),$(window).height(),function(){
                 $.modal.closeAll();
-            });
+            });*/
+
+            // var url = prefix + "/viewDeliver?dataId=" + dataId;
+            console.log(url)
+            $.modal.openFullBtnName("详情", url,$(window).width(),$(window).height(),'申请发货');
         }
     </script>
 </body>

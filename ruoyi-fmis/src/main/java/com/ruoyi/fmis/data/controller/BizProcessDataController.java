@@ -1135,6 +1135,36 @@ public class BizProcessDataController extends BaseController {
         }*/
         return toAjax(insertReturn);
     }
+
+    /**
+     * 修改 发货内容
+     */
+    @Log(title = "发货内容", businessType = BusinessType.UPDATE)
+    @PostMapping("/saveInventoryFH")
+    @ResponseBody
+    @Transactional
+    public AjaxResult saveInventoryFH(BizProcessData bizProcessData) {
+        BizProcessChild queryBizProcessChild = new BizProcessChild();
+        queryBizProcessChild.setDataId(bizProcessData.getDataId());
+//        List<BizProcessChild> bizProcessChildList = bizProcessChildService.selectBizQuotationProductList(queryBizProcessChild);
+
+       /* String productArrayStr = bizProcessData.getProductParmters();
+        String[] childs = productArrayStr.split(",");
+        String string1 = bizProcessData.getString1();
+        String string2 = DateUtils.dateTimeNow();//发货通知单号
+        //BizProcessData newData = new BizProcessData();
+        bizProcessData.setString1(string1);
+        bizProcessData.setString2(string2);
+        bizProcessData.setBizId(BizConstants.BIZ_newdelivery);
+        bizProcessData.setNormalFlag("4");
+        bizProcessData.setFlowStatus("2");*/
+
+        bizProcessData.setBizId("newdelivery");
+        int insertReturn = bizProcessDataService.updateBizProcessData(bizProcessData);
+        //自动上报
+        bizProcessDataService.doExamine(bizProcessData.getDataId() + "", "0", "销售员上报", bizProcessData.getBizId());
+        return toAjax(insertReturn);
+    }
     /**
      * 发货申请
      */

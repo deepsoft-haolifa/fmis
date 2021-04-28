@@ -188,7 +188,8 @@
                 },
                 columns: [{
                     checkbox: true,
-                    value:1
+                    value:1,
+                    checked:true
                 },
                     {field : 'rowId',title : '序号',visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
 
@@ -243,17 +244,17 @@
                 var dataObj = $('#form-data-edit').serializeArray();
                 // var data = $.btTable.selectColumns('getData');
                 var data = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
-                if (data.length == 0) {
+                /*if (data.length == 0) {
                     $.modal.alertWarning("请至少选择一条记录");
                     return;
-                }
+                }*/
                 console.log("data=" + data);
 
 
 
                 // console.log("productArray=" + JSON.stringify(productArray));
                 dataObj.push({"name": "productParmters", "value": data});
-                $.operate.save(ctx + "fmis/data/saveInventory", dataObj);
+                $.operate.save(ctx + "fmis/data/saveInventoryFH", dataObj);
             }
         }
         $("input[name='datetime1']").datetimepicker({
