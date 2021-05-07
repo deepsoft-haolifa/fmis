@@ -411,11 +411,11 @@
         <include refid="selectBizProcessDataVoRef"/>
         <where>
             1=1 and q.flow_status=q.normal_flag
-
+            <if test="contractNo != null  and contractNo != ''"> and string12 = #{contractNo}</if>
             <if test="bizId != null  and bizId != ''"> and biz_id = #{bizId}</if>
             <if test="status != null  and status != ''"> and status = #{status}</if>
             <if test="string13 != null  and string13 != ''"> and q.string13 = #{string13}</if>
-            <if test="string1 != null  and string1 != ''"> and find_in_set(q.string1,#{string1})</if>
+            <if test="string1 != null  and string1 != ''"> and q.string1 like concat('%', #{string1}, '%')</if>
             <if test="string30 == 0 ">
                 and (q.string30 = '' or q.string30 is null or q.string30 = 1)
             </if>
