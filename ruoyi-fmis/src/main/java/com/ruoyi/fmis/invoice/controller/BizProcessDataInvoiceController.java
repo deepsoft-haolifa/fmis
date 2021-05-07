@@ -297,7 +297,7 @@ public class BizProcessDataInvoiceController extends BaseController {
     public AjaxResult report() {
         String dataId = getRequest().getParameter("dataId");
         BizProcessData bizQuotation = bizProcessDataService.selectBizProcessDataById(Long.parseLong(dataId));
-        return toAjax(bizProcessDataService.subReportBizQuotation(bizQuotation));
+        return toAjax(bizProcessDataService.subReportBizQuotationBorrowing(bizQuotation));
     }
 
     /**
