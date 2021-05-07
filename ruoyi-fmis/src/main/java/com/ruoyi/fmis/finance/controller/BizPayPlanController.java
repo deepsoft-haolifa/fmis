@@ -24,6 +24,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import com.ruoyi.common.annotation.Log;
@@ -161,6 +162,7 @@ public class BizPayPlanController extends BaseController {
     @Log(title = "付款计划（基于付款申请记录）", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
+    @Transactional(rollbackFor = Exception.class)
     public AjaxResult editSave(BizPayPlan bizPayPlan) {
         int payPlan = bizPayPlanService.updateBizPayPlan(bizPayPlan);
         // 已付款状态之后；

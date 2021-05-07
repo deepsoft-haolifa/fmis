@@ -8,6 +8,7 @@
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
         <form class="form-horizontal m" id="form-payPlan-edit" th:object="${bizPayPlan}">
             <input name="payPlanId" th:field="*{payPlanId}" type="hidden">
+            <input name="contractId" th:field="*{contractId}" type="hidden">
             <div class="form-group">
                 <label class="col-sm-3 control-label">申请编号：</label>
                 <div class="col-sm-8">
