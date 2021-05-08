@@ -794,6 +794,7 @@ public class BizProcessDataController extends BaseController {
                 if (StringUtils.isNotEmpty(ref1Id)) {
                     bizProcessChild.setRef1(bizProductRefService.selectBizProductRefById(Long.parseLong(ref1Id)));
                 }
+                // FIXME 存在bug,具体未知
                 String ref2Id = bizProcessChild.getString8();
                 if (StringUtils.isNotEmpty(ref2Id)) {
                     bizProcessChild.setRef2(bizProductRefService.selectBizProductRefById(Long.parseLong(ref2Id)));

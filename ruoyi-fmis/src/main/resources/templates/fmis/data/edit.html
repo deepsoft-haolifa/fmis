@@ -83,7 +83,11 @@
                 </div>
                 <label class="col-sm-1 control-label">运费承担：</label>
                 <div class="col-sm-2">
-                    <input name="string10" class="form-control" th:field="*{string10}" type="text">
+                    <select name="string10" id="string10" class="form-control"  required>
+                        <option  th:text="供方"  th:value="供方" th:field="*{string10}"></option>
+                        <option  th:text="需方"  th:value="需方" th:field="*{string10}"></option>
+                    </select>
+<!--                    <input name="string10" class="form-control" th:field="*{string10}" type="text">-->
                 </div>
                 <label class="col-sm-1 control-label">收货人：</label>
                 <div class="col-sm-2">

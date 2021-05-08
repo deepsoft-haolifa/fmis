@@ -162,7 +162,10 @@ public class BizQuotationController extends BaseController {
         Long deptId = ShiroUtils.getSysUser().getDeptId();
         SysDept sysDept = sysDeptService.selectDeptById(deptId);
         SysDept sysDept1 = sysDeptService.selectDeptById(sysDept.getParentId());
-        String areCode = sysDept1.getAreCode();
+        String areCode = "";
+        if(Objects.nonNull(sysDept1)) {
+            areCode = sysDept1.getAreCode();
+        }
         String bh = areCode + "-" + DateUtils.dateTimeNow();
         return bh;
     }

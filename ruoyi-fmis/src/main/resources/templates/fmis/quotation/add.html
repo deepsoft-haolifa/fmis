@@ -10,16 +10,16 @@
         <div class="form-horizontal m form-group">
             <label class="col-sm-3 control-label">系数设置：</label>
             <div class='col-sm-1'>
-                <input class='form-control' type='text' id="productCoefficientAll" onblur="setCoefficientAll(1)"  placeholder='产品系数' onkeyup="AmountKeyUp(this)"/>
+                <input class='form-control' type='text' id="productCoefficientAll" onblur="setCoefficientAll(1)"  placeholder='产品系数' onkeyup="AmountKeyUp(this)" required/>
             </div>
             <div class='col-sm-1'>
-                <input class='form-control' type='text' id="actuatorCoefficientAll" onblur="setCoefficientAll(2)"  placeholder='执行器系数' onkeyup="AmountKeyUp(this)"/>
+                <input class='form-control' type='text' id="actuatorCoefficientAll" onblur="setCoefficientAll(2)"  placeholder='执行器系数' onkeyup="AmountKeyUp(this)" required/>
             </div>
             <div class='col-sm-1'>
-                <input class='form-control' type='text' id="productRef1CoefficientAll" onblur="setCoefficientAll(3)"  placeholder='法兰系数' onkeyup="AmountKeyUp(this)"/>
+                <input class='form-control' type='text' id="productRef1CoefficientAll" onblur="setCoefficientAll(3)"  placeholder='法兰系数' onkeyup="AmountKeyUp(this)" required/>
             </div>
             <div class='col-sm-1'>
-                <input class='form-control' type='text' id="productRef2CoefficientAll" onblur="setCoefficientAll(4)" placeholder='螺栓系数' onkeyup="AmountKeyUp(this)"/>
+                <input class='form-control' type='text' id="productRef2CoefficientAll" onblur="setCoefficientAll(4)" placeholder='螺栓系数' onkeyup="AmountKeyUp(this)" required/>
             </div>
             <div class='col-sm-2'>
                 <a class="btn btn-success btn-sm" onclick="insertRow()">
@@ -60,25 +60,6 @@
 
             </div>
 
-            <!--
-            <div class="form-group">
-                <label class="col-sm-3 control-label">选择产品：</label>
-                <div class="col-sm-6">
-                    <input name="productIds" id="productIds" class="form-control" type="hidden" >
-                    <input name="productNames" id="productNames" class="form-control" type="text" readonly onclick="selectProduct(0)" required>
-                </div>
-
-                <div class="col-sm-3">
-                    <a class="btn btn-success btn-sm" onclick="selectProduct(1)" >
-                        <i class="fa fa"></i> 追加
-                        <input type="hidden" id="productOperationType" name="productOperationType" value="0">
-                    </a>
-                </div>
-            </div>-->
-
-
-
-
 
             <div class="form-group">
                 <label class="col-sm-1 control-label">特殊费用：</label>
@@ -87,13 +68,13 @@
                 </div>
                 <label class="col-sm-1 control-label">费用说明：</label>
                 <div class="col-sm-5">
-                    <input name="string4" id="string4" class="form-control" type="text" placeholder="特殊费用说明">
+                    <input name="string4" id="string4" class="form-control" type="text" placeholder="特殊费用说明" required>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-1 control-label">付款方式：</label>
                 <div class="col-sm-3">
-                    <select name="paymentMethod" id="paymentMethod" class="form-control"  th:with="type=${@dict.getType('payment_method')}">
+                    <select name="paymentMethod" id="paymentMethod" class="form-control"  th:with="type=${@dict.getType('payment_method')}" required>
                         <option th:each="dict : ${type}" th:text="${dict.dictLabel}"  th:value="${dict.dictValue}"></option>
                     </select>
                 </div>
@@ -109,16 +90,16 @@
             </div>
             <div class="form-group">
                 <div class="col-sm-4 form-inline">
-                    &nbsp;供货周期&nbsp; <input name="leadTime" style="width: 50px;" class="form-control" type="text"> &nbsp;天
+                    &nbsp;供货周期&nbsp; <input name="leadTime" style="width: 50px;" class="form-control" type="text" required> &nbsp;天
                 </div>
                 <label class="col-sm-1 control-label" >报备项目：</label>
                 <div class="col-sm-3">
-                    <input name="reportProject" class="form-control" type="text" value="非项目">
+                    <input name="reportProject" class="form-control" type="text" value="非项目" required>
                 </div>
 
                 <label class="col-sm-1 control-label">含税运费：</label>
                 <div class="col-sm-3">
-                    <select name="string11" id="string11" class="form-control"  th:with="type=${@dict.getType('included_freight')}">
+                    <select name="string11" id="string11" class="form-control"  th:with="type=${@dict.getType('included_freight')}" required>
                         <option th:each="dict : ${type}" th:text="${dict.dictLabel}"  th:value="${dict.dictValue}"></option>
                     </select>
                 </div>
@@ -137,7 +118,7 @@
 
             <div class="form-group">
                 <div class="col-sm-4 form-inline">
-                    &nbsp;价格有效期 &nbsp;<input name="string12" value="30" style="width: 50px;" class="form-control" type="text"> &nbsp;天
+                    &nbsp;价格有效期 &nbsp;<input name="string12" value="30" style="width: 50px;" class="form-control" type="text" required> &nbsp;天
                 </div>
                 <label class="col-sm-1 control-label">产品金额：</label>
                 <div class="col-sm-3">
@@ -165,7 +146,7 @@
             <div class="form-group">
                 <label class="col-sm-1 control-label">报价单位：</label>
                 <div class="col-sm-3">
-                    <select name="string19" id="string19" class="form-control" >
+                    <select name="string19" id="string19" class="form-control" required>
                         <option  th:text="北京好利阀业集团有限公司"  th:value="北京好利阀业集团有限公司"></option>
                         <option  th:text="上海好利阀门技术有限公司"  th:value="上海好利阀门技术有限公司"></option>
                         <option  th:text="北京好利时代科技发展有限公司"  th:value="北京好利时代科技发展有限公司"></option>

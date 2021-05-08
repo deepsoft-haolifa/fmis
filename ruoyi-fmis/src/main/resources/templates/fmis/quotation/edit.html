@@ -57,11 +57,11 @@
             <div class="form-group">
                 <label class="col-sm-1 control-label">费用说明：</label>
                 <div class="col-sm-3">
-                    <input name="string4" id="string4" th:field="*{string4}"  class="form-control" type="text" placeholder="特殊费用说明">
+                    <input name="string4" id="string4" th:field="*{string4}"  class="form-control" type="text" placeholder="特殊费用说明" required>
                 </div>
                 <label class="col-sm-1 control-label">付款方式：</label>
                 <div class="col-sm-3">
-                    <select name="paymentMethod" class="form-control m-b" th:with="type=${@dict.getType('payment_method')}">
+                    <select name="paymentMethod" class="form-control m-b" th:with="type=${@dict.getType('payment_method')}" required>
                         <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{paymentMethod}"></option>
                     </select>
                 </div>
@@ -86,13 +86,13 @@
 
                 <label class="col-sm-1 control-label">报备项目：</label>
                 <div class="col-sm-2">
-                    <input name="reportProject" th:field="*{reportProject}" class="form-control" type="text" >
+                    <input name="reportProject" th:field="*{reportProject}" class="form-control" type="text" required>
                 </div>
 
 
                 <label class="col-sm-1 control-label">含税运费：</label>
                 <div class="col-sm-2">
-                    <select name="string11" id="string11" class="form-control"  th:with="type=${@dict.getType('included_freight')}">
+                    <select name="string11" id="string11" class="form-control"  th:with="type=${@dict.getType('included_freight')}" required>
                         <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:field="*{string11}"  th:value="${dict.dictValue}"></option>
                     </select>
                 </div>
@@ -111,16 +111,16 @@
 
             <div class="form-group">
                 <div class="col-sm-3 form-inline">
-                    &nbsp;价格有效期&nbsp; <input name="string12" style="width: 50px;" th:field="*{string12}"  class="form-control" type="text"> &nbsp;天
+                    &nbsp;价格有效期&nbsp; <input name="string12" style="width: 50px;" th:field="*{string12}"  class="form-control" type="text" required> &nbsp;天
                 </div>
                 <label class="col-sm-1 control-label">产品金额：</label>
                 <div class="col-sm-3">
-                    <input name="productTotalPrice" id="productTotalPrice" class="form-control" type="text" readonly>
+                    <input name="productTotalPrice" id="productTotalPrice" class="form-control" type="text" readonly required>
                 </div>
 
                 <label class="col-sm-1 control-label">报价总金额：</label>
                 <div class="col-sm-3">
-                    <input name="totalPrice" id="totalPrice" class="form-control" type="text" readonly>
+                    <input name="totalPrice" id="totalPrice" class="form-control" type="text" readonly required>
                 </div>
 
             </div>
@@ -128,7 +128,7 @@
             <div class="form-group">
                 <label class="col-sm-1 control-label">毛利：</label>
                 <div class="col-sm-2">
-                    <input name="grossPrice" id="grossPrice" class="form-control" type="text"  readonly>
+                    <input name="grossPrice" id="grossPrice" class="form-control" type="text"  readonly required>
                 </div>
                 <label class="col-sm-1 control-label">报价备注：</label>
                 <div class="col-sm-8">
@@ -138,7 +138,7 @@
             <div class="form-group">
                 <label class="col-sm-1 control-label">报价单位：</label>
                 <div class="col-sm-3">
-                    <select name="string19" id="string19" class="form-control" >
+                    <select name="string19" id="string19" class="form-control" required>
                         <option th:value="*{string19}" th:text="*{string19}"></option>
                         <option  th:text="北京好利阀业集团有限公司"  th:value="北京好利阀业集团有限公司"></option>
                         <option  th:text="上海好利阀门技术有限公司"  th:value="上海好利阀门技术有限公司"></option>
