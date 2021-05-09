@@ -208,6 +208,9 @@
         }
         var remark = row.remark;
         var amount = row.amount;
+        if(amount<=0){
+            return  $.modal.msgError("金额不能小于0！");
+        }
         var bcId = row.bcId;
 
         var url = prefix + "/addContract?dataId=" + dataId + "&billId=" + billId + "&remark=" + remark + "&amount=" + amount + "&bcId=" + bcId;

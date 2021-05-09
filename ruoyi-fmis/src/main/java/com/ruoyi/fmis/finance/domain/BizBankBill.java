@@ -94,6 +94,9 @@ public class BizBankBill extends BaseEntity {
     /** 收款合同分解状态；0未完成；1.完成 */
     private String contractStatus;
 
+    /** 合同分解用户 **/
+    private String contractUser;
+
     /** 删除标志（0代表存在 1代表删除） */
     private String delFlag;
 

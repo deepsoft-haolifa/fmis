@@ -165,9 +165,9 @@
     <select id="selectSaleContractSummary" resultType="com.ruoyi.fmis.finance.domain.vo.SummaryRespVo">
         select c.customerName,c.contractAmount,c.collectedAmount,
         -- 应收款（发货金额-已收款）
-        c.deliveryAmount - c.collectedAmount needCollectAmount,
+        round(c.deliveryAmount - c.collectedAmount,2) needCollectAmount,
         -- 未开发票（发货金额-已收款-已开发票）
-        c.deliveryAmount - c.collectedAmount - c.invoicedAmount needInvoiceAmount,
+        round(c.deliveryAmount - c.collectedAmount - c.invoicedAmount,2) needInvoiceAmount,
         c.invoicedAmount
         from (
             select

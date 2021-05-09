@@ -78,7 +78,9 @@ public class TodoServiceImpl implements ITodoService {
             HashMap<String, String> orderTypeMaps = getOrderTypeMaps();
             for (String orderType : orderTypeMaps.keySet()) {
                 Set<String> collect = getQueryFlowStatusSet(orderType);
-                flowConfig.put(orderType, collect);
+                if(!CollectionUtils.isEmpty(collect)) {
+                    flowConfig.put(orderType, collect);
+                }
             }
         } else {
             Set<String> collect = getQueryFlowStatusSet(orderAuditDTO.getOrderType());

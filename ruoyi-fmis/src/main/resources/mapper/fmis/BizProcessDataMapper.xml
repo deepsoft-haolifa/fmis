@@ -100,7 +100,7 @@
             and
             <foreach collection="flowConfig.keys" item="key" separator=" or " open="(" close=")">
                 <if test="flowConfig[key].size > 0">
-                    (biz_id = #{key}
+                     (biz_id = #{key}
                     and
                     flow_status in (
                     <foreach collection="flowConfig[key]" separator="," item="item">

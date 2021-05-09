@@ -175,6 +175,7 @@ public class BizBillContractController extends BaseController {
         } else {
             updateBill.setContractStatus("0");
         }
+        updateBill.setContractUser(ShiroUtils.getSysUser().getUserName());
         updateBill.setBillId(bizBankBill.getBillId());
         bizBankBillService.updateBizBankBill(updateBill);
 

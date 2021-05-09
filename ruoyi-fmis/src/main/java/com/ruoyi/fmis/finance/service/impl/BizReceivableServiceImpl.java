@@ -25,7 +25,7 @@ public class BizReceivableServiceImpl implements IBizFinanceService {
     private IBizBillContractService bizBillContractService;
 
     @Override
-//    @DataScope(deptAlias = "dt", userAlias = "u")
+    @DataScope(deptAlias = "dt", userAlias = "u")
     public List<ReceivableRespVo> selectReceivableList(ReceivableReqVo reqVo) {
         return bizFinanceMapper.selectReceivableList(reqVo);
     }
