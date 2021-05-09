@@ -368,6 +368,12 @@ public class BizProcessData extends BaseEntity {
     private Set<String> flows;
     //
     private HashMap<String,Set<String>> flowConfig;
+    @Getter
+    @Setter
+    // 预计回款日期
+    private String exceptPayTime;
+
+
 
     public Set<String> getFlows() {
         return flows;

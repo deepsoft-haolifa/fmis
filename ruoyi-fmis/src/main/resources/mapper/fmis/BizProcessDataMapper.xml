@@ -79,6 +79,7 @@
         <result property="createTime"    column="create_time"    />
         <result property="updateBy"    column="update_by"    />
         <result property="updateTime"    column="update_time"    />
+        <result property="exceptPayTime"    column="except_pay_time"    />
     </resultMap>
 
     <select id="selectBizProcessDataByFlowStatus" resultMap="BizProcessDataResult">
@@ -120,6 +121,7 @@
         q.string21,q.string22,q.string23,q.string24,q.string25,q.string26,q.string27,q.string28,q.string29,q.string30,
         q.price11, q.price12, q.price13, q.price14, q.price15, q.price16, q.price17, q.price18, q.price19, q.price20,
         q.datetime1, q.datetime2, q.datetime3, q.datetime4, q.datetime5, q.status, q.del_flag, q.create_by, q.create_time, q.update_by, q.update_time,
+        q.except_pay_time,
         dt1.dept_name as deptName
         from biz_process_data q
         left join sys_dept dt1 on q.string22=dt1.dept_id
@@ -178,7 +180,7 @@
         q.string21,q.string22,q.string23,q.string24,q.string25,q.string26,q.string27,q.string28,q.string29,q.string30,
         q.price11, q.price12, q.price13, q.price14, q.price15, q.price16, q.price17, q.price18, q.price19, q.price20,
         q.datetime1, q.datetime2, q.datetime3, q.datetime4, q.datetime5, q.status, q.del_flag, q.create_by, q.create_time, q.update_by, q.update_time,
-        dt1.dept_name as deptName
+        q.except_pay_time, dt1.dept_name as deptName
         from biz_process_data q
         left join sys_dept dt1 on q.string22=dt1.dept_id left join biz_data_status ds on q.data_id = ds.string4  left join biz_process_child pc on q.data_id = pc.data_id
         join `biz_data_status` bs on pc.child_id = bs.`child_id`
@@ -242,7 +244,7 @@
         q.create_time, q.update_by, q.update_time,ct.name as customerName,bs.name as suppliersName,
         q.string21,q.string22,q.string23,q.string24,q.string25,q.string26,q.string27,q.string28,q.string29,q.string30,
         q.price11, q.price12, q.price13, q.price14, q.price15, q.price16, q.price17, q.price18, q.price19, q.price20,
-        dt1.dept_name as deptName,u.user_name as createByName
+        dt1.dept_name as deptName,u.user_name as createByName,q.except_pay_time
         from biz_process_data q
         left join sys_user u on q.create_by=u.user_id
         left join sys_dept dt on u.dept_id=dt.dept_id
@@ -483,6 +485,7 @@
         q.create_time, q.update_by, q.update_time,ct.name as customerName,bs.name as suppliersName,
         q.string21,q.string22,q.string23,q.string24,q.string25,q.string26,q.string27,q.string28,q.string29,q.string30,
         q.price11, q.price12, q.price13, q.price14, q.price15, q.price16, q.price17, q.price18, q.price19, q.price20,
+        q.except_pay_time,
         ifnull(sum(bc.amount),0) as billAmount
         from biz_process_data q
         left join sys_user u on q.create_by=u.user_id
@@ -521,7 +524,7 @@
             d.string3, d.string4, d.string5, d.string6, d.string7, d.string8, d.string9, d.string10, d.string11,
             d.string12, d.string13, d.string14, d.string15, d.string16, d.string17, d.string18, d.string19, d.string20,
             d.datetime1, d.datetime2, d.datetime3, d.datetime4, d.datetime5, d.status, d.del_flag, d.create_by,
-            d.create_time, d.update_by, d.update_time,u.user_name as createByName
+            d.create_time, d.update_by, d.update_time,u.user_name as createByName,d.except_pay_time
             from biz_process_data d
             left join sys_user u on d.create_by=u.user_id
             left join sys_dept dt on u.dept_id=dt.dept_id
@@ -550,7 +553,7 @@
             d.string3, d.string4, d.string5, d.string6, d.string7, d.string8, d.string9, d.string10, d.string11,
             d.string12, d.string13, d.string14, d.string15, d.string16, d.string17, d.string18, d.string19, d.string20,
             d.datetime1, d.datetime2, d.datetime3, d.datetime4, d.datetime5, d.status, d.del_flag, d.create_by,
-            d.create_time, d.update_by, d.update_time,u.user_name as createByName
+            d.create_time, d.update_by, d.update_time,u.user_name as createByName,d.except_pay_time
             from biz_process_data d
             left join sys_user u on d.create_by=u.user_id
             left join sys_dept dt on u.dept_id=dt.dept_id
@@ -646,7 +649,7 @@
             d.string3, d.string4, d.string5, d.string6, d.string7, d.string8, d.string9, d.string10, d.string11,
             d.string12, d.string13, d.string14, d.string15, d.string16, d.string17, d.string18, d.string19, d.string20,
             d.datetime1, d.datetime2, d.datetime3, d.datetime4, d.datetime5, d.status, d.del_flag, d.create_by,
-            d.create_time, d.update_by, d.update_time,u.user_name as createByName
+            d.create_time, d.update_by, d.update_time,u.user_name as createByName,d.except_pay_time
             from biz_process_data d
             left join sys_user u on d.create_by=u.user_id
             left join sys_dept dt on u.dept_id=dt.dept_id
@@ -759,7 +762,7 @@
         d.create_time, d.update_by, d.update_time,
         d.string21,d.string22,d.string23,d.string24,d.string25,d.string26,d.string27,d.string28,d.string29,d.string30,
         d.price11, d.price12, d.price13, d.price14, d.price15, d.price16, d.price17, d.price18, d.price19, d.price20,
-
+        d.except_pay_time,
         u.user_name as createByName,de.dept_name as deptName
 
         from biz_process_data d
@@ -920,7 +923,7 @@
         d.create_time, d.update_by, d.update_time,
         d.string21,d.string22,d.string23,d.string24,d.string25,d.string26,d.string27,d.string28,d.string29,d.string30,
         d.price11, d.price12, d.price13, d.price14, d.price15, d.price16, d.price17, d.price18, d.price19, d.price20,
-
+        d.except_pay_time,
          ((COALESCE(sum(ss.num),0)-ifnull(sn1.cn1,0) - ifnull(sn1.cn2,0))) as stayNum,
         s.name as supplierName
         from biz_process_data d
@@ -1052,7 +1055,7 @@
         d.create_time, d.update_by, d.update_time,
         d.string21,d.string22,d.string23,d.string24,d.string25,d.string26,d.string27,d.string28,d.string29,d.string30,
         d.price11, d.price12, d.price13, d.price14, d.price15, d.price16, d.price17, d.price18, d.price19, d.price20,
-
+        d.except_pay_time,
         u.user_name as createByName,de.dept_name as deptName,de1.dept_name as deptName1
 
         from biz_process_data d
@@ -1284,6 +1287,7 @@
             <if test="createTime != null ">create_time,</if>
             <if test="updateBy != null  and updateBy != ''">update_by,</if>
             <if test="updateTime != null ">update_time,</if>
+            <if test="exceptPayTime != null ">except_pay_time,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="bizDataId != null ">#{bizDataId},</if>
@@ -1357,6 +1361,7 @@
             <if test="createTime != null ">#{createTime},</if>
             <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
             <if test="updateTime != null ">#{updateTime},</if>
+            <if test="exceptPayTime != null ">#{exceptPayTime},</if>
         </trim>
     </insert>
 
@@ -1433,6 +1438,7 @@
             <if test="createTime != null ">create_time = #{createTime},</if>
             <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
             <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="exceptPayTime != null ">except_pay_time = #{exceptPayTime},</if>
         </trim>
         where data_id = #{dataId}
     </update>

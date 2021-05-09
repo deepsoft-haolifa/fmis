@@ -203,6 +203,13 @@
                 <div class="col-sm-2">
                     <input name="string25" id="string25" class="form-control" type="text" th:field="*{string25}">
                 </div>
+                <label class="col-sm-1 control-label">预计回款日期：</label>
+                <div class="col-sm-2">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="exceptPayTime" class="form-control" placeholder="yyyy-MM-dd" type="text" th:field="*{exceptPayTime}" required>
+                    </div>
+                </div>
             </div>
 
             <input type="hidden" id="productOperationType" name="productOperationType" value="0">
@@ -402,6 +409,12 @@
         }
 
         $("input[name='datetime1']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $("input[name='exceptPayTime']").datetimepicker({
             format: "yyyy-mm-dd",
             minView: "month",
             autoclose: true
