@@ -15,6 +15,7 @@ var prefixPool = ctx + "fmis/procurementpool";
 var procurementId = $("#dataId").val();
 
 $(function() {
+    // window.opener.reload();
     var options = {
         url: prefixPool + "/list",
         modalName: "采购池",
@@ -84,7 +85,8 @@ $(function() {
             }*/
         ]
     };
-    $.table.init(options);
+    // $.table.clear;
+    faqi$.table.init(options);
 });
 var overAllIds = new Array();  //全局数组
 var numberMap = new Map();
@@ -118,6 +120,8 @@ function initExpandRow() {
             if (repeartMap.get(repeartKey) != null) {
                 continue;
             }
+            console.log("parentDataIdsss:" + parentDataId)
+            console.log("parentDataId11:" + $("#bootstrap-table").bootstrapTable('getRowByUniqueId', parentDataId))
             repeartMap.set(repeartKey,i);
             $("#bootstrap-table").bootstrapTable('expandRow', $("#bootstrap-table").bootstrapTable('getRowByUniqueId', parentDataId).rowId);
             var levelUniqueId = "";

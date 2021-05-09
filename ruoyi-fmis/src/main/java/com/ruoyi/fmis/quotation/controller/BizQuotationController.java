@@ -971,12 +971,21 @@ public class BizQuotationController extends BaseController {
          */
             if (minCoefficient < 0.88) {
                 normalFlag = "5";
-            }else if (minCoefficient >= 0.88 && minCoefficient < 0.95) {
-                normalFlag = "4";
-            } else if (minCoefficient >= 0.95 && minCoefficient < 1) {
-                normalFlag = "3";
+            }else if ((minCoefficient >= 0.88 && minCoefficient < 0.95)) {
+                if (num < 5) {
+                    normalFlag = "4";
+                    num = 4;
+                }
+            } else if ((minCoefficient >= 0.95 && minCoefficient < 1) ) {
+                if (num < 4) {
+                    normalFlag = "3";
+                    num = 3;
+                }
             } else {
-                normalFlag = "2";
+                if (num < 3) {
+                    normalFlag = "2";
+                    num = 2;
+                }
             }
 
         bizQuotation.setNormalFlag(normalFlag);

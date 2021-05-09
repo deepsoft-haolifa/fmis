@@ -57,7 +57,7 @@
             <div class="form-group">
                 <label class="col-sm-1 control-label">费用说明：</label>
                 <div class="col-sm-3">
-                    <input name="string4" id="string4" th:field="*{string4}"  class="form-control" type="text" placeholder="特殊费用说明" required>
+                    <input name="string4" id="string4" th:field="*{string4}"  class="form-control" type="text" placeholder="特殊费用说明" >
                 </div>
                 <label class="col-sm-1 control-label">付款方式：</label>
                 <div class="col-sm-3">
@@ -262,10 +262,14 @@
 
                     productObj["price1"] = rowData["productPrice"];
                     productObj["price2"] = rowData["ref1Price"];
-                    console.log(rowData["ref2Price"])
-                    console.log(rowData["ref2Price"][0])
-
-                    productObj["price5"] = rowData["ref2Price"][0];
+                   /* console.log(rowData["ref2Price"])
+                    console.log(rowData["ref2Price"][0])*/
+                    if (rowData["ref2Price"] == null) {
+                        productObj["price5"] = 0;
+                    }
+                    if (rowData["ref2Price"] != null) {
+                        productObj["price5"] = rowData["ref2Price"][0];
+                    }
                     productObj["price4"] = rowData["actuatorPrice"]
                     productObj["pattachmentId"] = rowData["pattachmentId"];
                     productObj["pattachmentPrice"] = rowData["pattachmentPrice"];

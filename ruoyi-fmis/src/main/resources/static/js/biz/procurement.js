@@ -103,6 +103,7 @@ function initExpandRow() {
             if (repeartMap.get(repeartKey) != null) {
                 continue;
             }
+            console.log("parentDataId:" + parentDataId)
             repeartMap.set(repeartKey,i);
             $("#bootstrap-table").bootstrapTable('expandRow', $("#bootstrap-table").bootstrapTable('getRowByUniqueId', parentDataId).rowId);
             var levelUniqueId = "";
