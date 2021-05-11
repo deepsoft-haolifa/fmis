@@ -192,7 +192,7 @@
     <sql id="selectBizQuotationProductVo">
 
     select pd.string1 contractNo,q.quotation_id as quotationId,
-          q.special_expenses,q.payment_method,q.freight,q.lead_time,q.report_project,q.normal_flag,q.flow_status,q.remark,q.string1 as quotationName,
+          q.special_expenses,q.payment_method,q.freight,q.lead_time,q.report_project,q.normal_flag,q.flow_status,pd.string27 remark,q.string1 as quotationName,
           q.string2,q.string3,q.string4,q.string5,q.string6,q.string7,q.string8,q.string9,q.string10,q.status,q.del_flag,u.user_name as create_by,
           q.create_time,q.update_by,q.update_time,
           ct.name as customerName,pc.child_id as childId,

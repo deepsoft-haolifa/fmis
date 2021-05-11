@@ -86,7 +86,7 @@ $(function() {
         ]
     };
     // $.table.clear;
-    faqi$.table.init(options);
+    $.table.init(options);
 });
 var overAllIds = new Array();  //全局数组
 var numberMap = new Map();
