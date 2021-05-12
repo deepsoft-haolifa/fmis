@@ -67,11 +67,11 @@ $(function() {
             {
                 field : 'string6',
                 title : '发货时间'
-            }/*,
+            },
             {
-                field : 'price1',
-                title : '总价'
-            }*/
+                field : 'string25',
+                title : '特殊要求'
+            }
         ]
     };
     $.table.init(options);

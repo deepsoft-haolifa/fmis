@@ -93,7 +93,10 @@
             </div>
             <label class="col-sm-1 control-label">运费承担：</label>
             <div class="col-sm-2">
-                <input name="string26" class="form-control" th:field="*{string26}" type="text">
+                <select name="string26" id="string26" class="form-control m-b" th:with="type=${@dict.getType('buyer')}">
+                    <option value="0">请选择</option>
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{string26}"></option>
+                </select>
             </div>
 
         </div>

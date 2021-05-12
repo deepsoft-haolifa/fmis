@@ -78,11 +78,11 @@ $(function() {
             {
                 field : 'string6',
                 title : '发货时间'
-            }/*,
+            },
             {
-                field : 'price1',
-                title : '总价'
-            }*/
+                field : 'string25',
+                title : '特殊要求'
+            }
         ]
     };
     // $.table.clear;
@@ -548,7 +548,7 @@ initChildProductTable = function(index, row, $detail) {
             {field : 'connectionType',title : '连接方式',editable: false},
 
             {field : 'goodsTime',title : '回货时间',editable: false},
-            {field : 'contractSpecial',title : '特殊要求',editable: false}
+            // {field : 'contractSpecial',title : '特殊要求',editable: false}
 
 
         ]
@@ -845,7 +845,7 @@ initChildActuatorTable = function(index, row, $detail) {
                 field : 'actuatorExplosionLevel',
                 title : '防爆等级'
             },
-            {field : 'contractSpecial',title : '特殊要求',editable: false}
+            // {field : 'contractSpecial',title : '特殊要求',editable: false}
         ]
     });
     $(cur_table).on('uncheck.bs.table check.bs.table check-all.bs.table uncheck-all.bs.table',function(e,rows){
@@ -924,7 +924,7 @@ initChildRef1Table = function(index, row, $detail) {
             {field : 'ref1Specifications',title : '规格'},
             {field : 'ref1ValvebodyMaterial',title : '材质'},
             {field : 'ref1MaterialRequire',title : '材质要求'},
-            {field : 'contractSpecial',title : '特殊要求',editable: false}
+            // {field : 'contractSpecial',title : '特殊要求',editable: false}
         ]
     });
     $(cur_table).on('uncheck.bs.table check.bs.table check-all.bs.table uncheck-all.bs.table',function(e,rows){
@@ -1005,7 +1005,7 @@ initChildRef2Table = function(index, row, $detail) {
             {field : 'ref1Specifications',title : '规格'},
             {field : 'ref1ValvebodyMaterial',title : '材质'},
             {field : 'ref1MaterialRequire',title : '材质要求'},
-            {field : 'contractSpecial',title : '特殊要求',editable: false}
+            // {field : 'contractSpecial',title : '特殊要求',editable: false}
         ]
     });
     $(cur_table).on('uncheck.bs.table check.bs.table check-all.bs.table uncheck-all.bs.table',function(e,rows){
@@ -1113,7 +1113,7 @@ initChildPATable = function(index, row, $detail) {
                 field : 'goodsCategory',
                 title : '商品分类'
             },
-            {field : 'contractSpecial',title : '特殊要求',editable: false}
+            // {field : 'contractSpecial',title : '特殊要求',editable: false}
         ]
     });
     $(cur_table).on('uncheck.bs.table check.bs.table check-all.bs.table uncheck-all.bs.table',function(e,rows){
@@ -1221,7 +1221,7 @@ initChildPA1Table = function(index, row, $detail) {
                 field : 'goodsCategory',
                 title : '商品分类'
             },
-            {field : 'contractSpecial',title : '特殊要求',editable: false}
+            // {field : 'contractSpecial',title : '特殊要求',editable: false}
         ]
     });
     $(cur_table).on('uncheck.bs.table check.bs.table check-all.bs.table uncheck-all.bs.table',function(e,rows){
@@ -1336,7 +1336,7 @@ initChildPA2Table = function(index, row, $detail) {
                 field : 'goodsCategory',
                 title : '商品分类'
             },
-            {field : 'contractSpecial',title : '特殊要求',editable: false}
+            // {field : 'contractSpecial',title : '特殊要求',editable: false}
         ]
     });
     $(cur_table).on('uncheck.bs.table check.bs.table check-all.bs.table uncheck-all.bs.table',function(e,rows){
@@ -1444,7 +1444,7 @@ initChildPA3Table = function(index, row, $detail) {
                 field : 'goodsCategory',
                 title : '商品分类'
             },
-            {field : 'contractSpecial',title : '特殊要求',editable: false}
+            // {field : 'contractSpecial',title : '特殊要求',editable: false}
         ]
     });
     $(cur_table).on('uncheck.bs.table check.bs.table check-all.bs.table uncheck-all.bs.table',function(e,rows){
@@ -1557,7 +1557,7 @@ initChildPA4Table = function(index, row, $detail) {
                 field : 'goodsCategory',
                 title : '商品分类'
             },
-            {field : 'contractSpecial',title : '特殊要求',editable: false}
+            // {field : 'contractSpecial',title : '特殊要求',editable: false}
         ]
     });
     $(cur_table).on('uncheck.bs.table check.bs.table check-all.bs.table uncheck-all.bs.table',function(e,rows){
