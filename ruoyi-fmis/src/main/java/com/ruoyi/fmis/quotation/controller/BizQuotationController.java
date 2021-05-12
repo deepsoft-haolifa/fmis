@@ -494,8 +494,13 @@ public class BizQuotationController extends BaseController {
                 if (remark.length() == 1) {
                     remark = "";
                 }
+                if (bizProduct.getBizProduct().getSeries().equals("其它")) {
+                    table.addCell(PdfUtil.mergeCol(bizProduct.getRemark(), 4,textFont));
+                } else {
+                    table.addCell(PdfUtil.mergeCol(remark, 4,textFont));
+                }
 
-                table.addCell(PdfUtil.mergeCol(remark, 4,textFont));
+
             }
 
 

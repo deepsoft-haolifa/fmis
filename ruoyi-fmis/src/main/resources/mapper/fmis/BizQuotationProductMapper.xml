@@ -64,7 +64,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <sql id="selectBizQuotationProductDictVo">
 
         select qp.qp_id,qp.quotation_id,qp.product_id,qp.product_ref1_id,qp.product_ref1_num,qp.product_ref2_id,
-          qp.product_ref2_num,qp.actuator_id,qp.remark,qp.string1,qp.string2,qp.string3,qp.string4,
+          qp.product_ref2_num,qp.actuator_id,p.remark,qp.string1,qp.string2,qp.string3,qp.string4,
           qp.string5,qp.status,qp.del_flag,qp.create_by,qp.create_time,qp.update_by,qp.update_time,
           p.name as productName,pr1.name as productRef1Name,pr2.name as productRef2Name,ac.name as actuatorName,
           qp.product_num,qp.product_coefficient,qp.product_ref1_coefficient,qp.product_ref2_coefficient,qp.actuator_num,qp.actuator_coefficient,

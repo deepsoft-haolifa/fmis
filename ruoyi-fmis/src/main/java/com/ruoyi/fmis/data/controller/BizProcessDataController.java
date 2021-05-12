@@ -1978,7 +1978,7 @@ public class BizProcessDataController extends BaseController {
                 if (startRemark.length() > 1) {
                     startRemark = startRemark.substring(0,startRemark.length() - 1);
                 }
-                if (productName.contains("执行器")) {
+                if (bizProduct.getString17().equals("其它")) {
                     endRemark = bizProduct.getRemark();
                     table.addCell(PdfUtil.mergeCol( endRemark, 7,textFont));
                 } else {
