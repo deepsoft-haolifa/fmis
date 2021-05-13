@@ -373,6 +373,11 @@ public class BizProcessData extends BaseEntity {
     // 预计回款日期
     private String exceptPayTime;
 
+    @Getter
+    @Setter
+    // 采购合同特殊要求
+    private String purchaseSpecificRequests;
+
 
 
     public Set<String> getFlows() {
