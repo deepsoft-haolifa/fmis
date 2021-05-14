@@ -105,7 +105,7 @@ function initExpandRow() {
     setTimeout(function () {
         var repeartMap = new Map();
 
-        console.log("loadingModalFmis show..." + overAllIds.length)
+        console.log("loadingModalFmis show..." + overAllIds.length,overAllIds)
         var initOver = false;
         for (var i = 0; i < overAllIds.length; i++) {
             var pathId = overAllIds[i];

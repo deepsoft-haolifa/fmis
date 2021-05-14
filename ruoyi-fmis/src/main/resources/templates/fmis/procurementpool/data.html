@@ -139,9 +139,9 @@
             })
             var dataId = "";
             haoliMap.forEach(function (value, key, map) {
-                dataId = key;
-                console.log("dataId:----" + dataId)
+                dataId += key +",";
             })
+            dataId = dataId.substring(0, dataId.length-1);
             console.log("dataId=" + dataId);
             var url = ctx + "fmis/procurement/addpool/"+dataId;
             $("#numJsonValue").val(JSON.stringify(datas));

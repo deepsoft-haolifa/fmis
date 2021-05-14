@@ -253,9 +253,29 @@ public class BizProcessDataProcurementController extends BaseController {
      * 新增合同管理
      */
     @GetMapping("/addpool/{dataId}")
-    public String addpool(@PathVariable("dataId") Long dataId, ModelMap mmap) {
+    public String addpool(@PathVariable("dataId") String dataId, ModelMap mmap) {
         mmap.put("suppliers",bizSuppliersService.selectAllList());
-        BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataById(dataId);
+        String[] split = dataId.split(",");
+        BizProcessData bizProcessData = null;
+        Long tempTime = 0l;
+        for (String id: split) {
+            BizProcessData tempBizProcessData = bizProcessDataService.selectBizProcessDataById(Long.valueOf(id));
+            //  比较销售合同交付日期:取日期最早的
+            String time  = tempBizProcessData.getString6();
+            if(StringUtils.isNotEmpty(time)) {
+                Date date = DateUtils.dateTime("yyyy-MM-dd", time);
+                if(tempTime == 0) {
+                    tempTime = date.getTime();
+                    bizProcessData = tempBizProcessData;
+                }  else if(tempTime > date.getTime()){
+                    tempTime = date.getTime();
+                    bizProcessData = tempBizProcessData;
+                }
+            } else if(Objects.isNull(bizProcessData)){
+                bizProcessData = tempBizProcessData;
+            }
+
+        }
         mmap.put("bizProcessData", bizProcessData);
         String string1 = dictDataService.selectDictLabel("supplier_type", bizProcessData.getString3());
         SysDept sysDept =  sysDeptService.selectDeptById(bizProcessData.getString22() == null ? 1 : Long.parseLong(bizProcessData.getString22()));
