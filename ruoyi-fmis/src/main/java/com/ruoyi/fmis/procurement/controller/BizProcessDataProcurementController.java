@@ -119,16 +119,24 @@ public class BizProcessDataProcurementController extends BaseController {
         String bizId = bizProcessData.getBizId();
         if (!StringUtils.isEmpty(bizProcessData.getString6())) {
             BizSuppliers bizSuppliers = new BizSuppliers();
+            // 供应商查询
             bizSuppliers.setName(bizProcessData.getString6());
             List<BizSuppliers> suppliers =  bizSuppliersService.selectBizSuppliersList(bizSuppliers);
             if (suppliers != null && suppliers.size() > 0) {
-                bizSuppliers = suppliers.get(0);
-                bizProcessData.setString6(bizSuppliers.getSuppliersId() + "");
-            } else {
-                bizProcessData.setString6("");
+                Set<String> supplierIds = new HashSet<>();
+                for (BizSuppliers supplier: suppliers) {
+                    supplierIds.add(String.valueOf(supplier.getSuppliersId()));
+                }
+                bizProcessData.setSupplierIds(supplierIds);
             }
-
+            // 重置
+            bizProcessData.setString6("");
+            // 判断是否有供应商数据，若没有直接返回
+            if(CollectionUtils.isEmpty(bizProcessData.getSupplierIds())) {
+                return getDataTable(new ArrayList<>());
+            }
         }
+
 
         Map<String, SysRole> flowMap = bizProcessDefineService.getRoleFlowMap(bizId);
         String userFlowStatus = "";
@@ -144,6 +152,8 @@ public class BizProcessDataProcurementController extends BaseController {
         if (!CollectionUtils.isEmpty(flowMap)) {
             //计算流程描述
             for (BizProcessData data : list) {
+                // 发起质检按钮的判断条件loginUserId
+                data.setLoginUserId(String.valueOf(ShiroUtils.getUserId()));
                 String flowStatus = data.getFlowStatus();
                 //结束标识
                 String normalFlag = data.getNormalFlag();
@@ -1185,7 +1195,7 @@ public class BizProcessDataProcurementController extends BaseController {
 
             //特殊要求
             table.addCell(PdfUtil.mergeCol("二、", 1,textFont));
-            table.addCell(PdfUtil.mergeColLeft("特殊要求：" + StringUtils.trim(bizProcessData.getString29()), 14,textFont));
+            table.addCell(PdfUtil.mergeColLeft("特殊要求：" + StringUtils.trim(bizProcessData.getPurchaseSpecificRequests()), 14,textFont));
 
 
             table.addCell(PdfUtil.mergeCol("三、", 1,textFont));

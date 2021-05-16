@@ -185,13 +185,15 @@ public class BizDataSteststayController extends BaseController {
             bizDataStestn = bizDataSteststayService.selectBizDataSteststayById(Long.parseLong(stayId));
         }
         bizDataStestn.setStatusId(Long.parseLong(statusId));
-        bizDataStestn.setNum(Double.parseDouble(stayNum));
+
         bizDataStestn.setString3(paramterId);
         bizDataStestn.setString4(dataId);
         bizDataStestn.setString5(childId);
         bizDataStestn.setString1("0");
         bizDataStestn.setRemark(remark);
         if ("0".equals(stayId) || StringUtils.isEmpty(stayId)) {
+            // 新增
+            bizDataStestn.setNum(Double.parseDouble(stayNum));
             //string6 报检单号
             String noStart = "BJ";
             noStart += DateUtils.dateTime();
@@ -207,7 +209,8 @@ public class BizDataSteststayController extends BaseController {
             bizDataSteststayService.insertBizDataSteststay(bizDataStestn);
 
         } else {
-            //bizDataSteststayService.updateBizDataSteststay(bizDataStestn);
+            // 更新
+            bizDataSteststayService.updateBizDataSteststay(bizDataStestn);
         }
         return toAjax(1);
     }

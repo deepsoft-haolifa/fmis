@@ -955,7 +955,7 @@
             <if test="price8 != null "> and price8 = #{price8}</if>
             <if test="price9 != null "> and price9 = #{price9}</if>
             <if test="price10 != null "> and price10 = #{price10}</if>
-            <if test="string1 != null  and string1 != ''"> and string1 = #{string1}</if>
+            <if test="string1 != null  and string1 != ''"> and string1 like concat('%', #{string1}, '%')</if>
             <if test="string2 != null  and string2 != ''"> and string2 like concat('%', #{string2}, '%')</if>
             <if test="string3 != null  and string3 != ''"> and string3 = #{string3}</if>
             <if test="string4 != null  and string4 != ''"> and string4 = #{string4}</if>
@@ -1038,9 +1038,14 @@
             <if test="roleType == 0 ">
                 and d.flow_status=d.normal_flag
             </if>
+            <if test="supplierIds != null" >
+                and d.string6 in (
+                    <foreach collection="supplierIds" separator="," item="item">
+                        #{item}
+                    </foreach>
+                )
 
-
-
+            </if>
 
         </where>
         order by d.create_time desc

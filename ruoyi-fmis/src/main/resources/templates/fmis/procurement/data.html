@@ -219,10 +219,10 @@
                                     actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subTest(\'' + row.dataId + '\')"><i class="fa fa-save"></i> 发起质检</a>');
                                 }
                             }*/
-                            console.log("loginUserId=" + loginUserId + " createBy=" + createBy);
-                            if (loginUserId == createBy) {
+                            console.log("rowId="+row.dataId+"loginUserId=" + loginUserId + " createBy=" + createBy);
+                            // if (loginUserId == createBy) {
                                 actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subTest(\'' + row.dataId + '\')"><i class="fa fa-save"></i> 发起质检</a>');
-                            }
+                            // }
                         } else if (operationExamineStatus == true || operationExamineStatus == "true") {
                             //审批
                             actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subExamine(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 审批</a>');

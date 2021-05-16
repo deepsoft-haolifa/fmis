@@ -1584,6 +1584,11 @@ public class BizProcessDataController extends BaseController {
             isSchengchan = true;
         }
         BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataById(Long.parseLong(id));
+        // 产品标识
+        String productLogoValue = "";
+        if(StringUtils.isNotEmpty(bizProcessData.getString19())) {
+            productLogoValue = dictDataService.selectDictLabel("product_logo", bizProcessData.getString19());
+        }
         //产品信息
         BizProcessChild queryBizProcessChild = new BizProcessChild();
         queryBizProcessChild.setDataId(bizProcessData.getDataId());
@@ -2041,7 +2046,7 @@ public class BizProcessDataController extends BaseController {
             }
 
             table.addCell(PdfUtil.mergeCol("三、", 1,textFont));
-            table.addCell(PdfUtil.mergeColLeft("产品执行标准；好利阀业有限公司生产标准，符合国家及行业标准；产品提供安装使用说明书，产品合格证；产品标识：好利标牌", 14,textFont));
+            table.addCell(PdfUtil.mergeColLeft("产品执行标准；好利阀业有限公司生产标准，符合国家及行业标准；产品提供安装使用说明书，产品合格证；产品标识：" + productLogoValue, 14,textFont));
 
 
             table.addCell(PdfUtil.mergeCol("四、", 1,textFont));

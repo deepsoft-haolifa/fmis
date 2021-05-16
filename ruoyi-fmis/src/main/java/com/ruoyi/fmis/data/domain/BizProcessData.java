@@ -368,6 +368,10 @@ public class BizProcessData extends BaseEntity {
     private Set<String> flows;
     //
     private HashMap<String,Set<String>> flowConfig;
+    // 采购合同 供应商关联查询
+    @Getter
+    @Setter
+    private Set<String> supplierIds;
     @Getter
     @Setter
     // 预计回款日期
