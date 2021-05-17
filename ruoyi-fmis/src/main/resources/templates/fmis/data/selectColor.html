@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('颜色列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>颜色名称：</p>
+                                <input type="text" name="dictLabel"/>
+                                <input type="text" hidden value="color" name="dictType">
+                                <input type="text" id="colorEdit" hidden th:value="${edit}" name="edit" th:hidden="true">
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+
+        $(function() {
+            var options = {
+                url:ctx+"system/dict/data/list",
+                modalName: "颜色",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'dictValue',
+                    title : '颜色'
+                }]
+            };
+            $.table.init(options);
+        });
+
+
+        /* 添加用户-选择用户-提交 */
+        function submitHandler() {
+            var rows = $.table.selectFirstColumns();
+            if (rows.length == 0) {
+                $.modal.alertWarning("请选择一条记录");
+                return;
+            }
+            if (rows.length > 1) {
+                $.modal.alertWarning("请只选择一条记录");
+                return;
+            }
+
+            var color = $.table.selectColumns("dictValue");
+            var val = $("#colorEdit").val();
+            console.log("select color ", color[0], val)
+            if(val == 'true') {
+                parent.$('#form-data-edit input[name=selectColor]').val(color[0]);
+            } else {
+                parent.$('#form-data-add input[name=selectColor]').val(color[0]);
+            }
+            $.modal.close();
+        }
+    </script>
+</body>
+</html>

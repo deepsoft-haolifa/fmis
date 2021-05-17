@@ -222,6 +222,7 @@
             <!-- 选择执行器传参 -->
             <input type="hidden" id="actuatorJsonParamter" name="actuatorJsonParamter" value=""/>
             <input type="hidden" id="pattachmentJsonParamter" name="pattachmentJsonParamter" value=""/>
+            <input type="hidden" id="selectColor" name="selectColor" value=""/>
         </form>
 
         <div class="form-horizontal m form-group">
@@ -697,6 +698,20 @@
                     var pattachmentJsonParamter = $("#pattachmentJsonParamter").val();
                     setTableValueById(pattachmentJsonParamter, productId, idx);
                 });
+            } else if(field == 'string15') {
+                // 颜色选择
+                var widthNum = $("#form-data-edit").width() - 50;
+                var heigthNum = $("#form-data-edit").height() + 250;
+                var url = prefix + "/selectColor?edit=true";
+                console.log("widthNum=" + widthNum + "---" + this.innerWidth);
+                $.modal.open("关联颜色", url,widthNum, heigthNum,function (index, layero) {
+                    var iframeWin = layero.find('iframe')[0];
+                    iframeWin.contentWindow.submitHandler(index, layero);
+                    var color = $("#selectColor").val();
+                    console.log("color", color)
+                    $.btTable.bootstrapTable("updateCell", {index:idx, field:field, value:color});
+                });
+
             }
         }
         function setTableValueById (jsonValue,id,idx) {

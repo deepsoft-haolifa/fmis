@@ -55,6 +55,7 @@ import com.ruoyi.system.service.ISysDeptService;
 import com.ruoyi.system.service.ISysDictDataService;
 import com.ruoyi.system.service.ISysRoleService;
 import com.ruoyi.system.service.ISysUserService;
+import jdk.nashorn.internal.objects.annotations.Getter;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -567,6 +568,12 @@ public class BizProcessDataController extends BaseController {
         mmap.put("dataId", dataId);
         mmap.put("fileUrl", Global.getFileUrl());
         return prefix + "/upload";
+    }
+
+    @GetMapping("/selectColor")
+    public String selectColor(ModelMap mmap) {
+        mmap.put("edit", getRequest().getParameter("edit"));
+        return prefix + "/selectColor";
     }
 
     @GetMapping("/selectQuotation")
