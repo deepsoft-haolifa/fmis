@@ -966,7 +966,7 @@
             <if test="string9 != null  and string9 != ''"> and string9 = #{string9}</if>
             <if test="string10 != null  and string10 != ''"> and string10  like concat('%', #{string10}, '%')</if>
             <if test="string11 != null  and string11 != ''"> and string11 = #{string11}</if>
-            <if test="string12 != null  and string12 != ''"> and string12 = #{string12}</if>
+            <if test="string12 != null  and string12 != ''"> and string12 like concat('%', #{string12}, '%')</if>
             <if test="string13 != null  and string13 != ''"> and string13 = #{string13}</if>
             <if test="string14 != null  and string14 != ''"> and string14 = #{string14}</if>
             <if test="string15 != null  and string15 != ''"> and string15 = #{string15}</if>

@@ -382,6 +382,11 @@ public class BizProcessData extends BaseEntity {
     // 采购合同特殊要求
     private String purchaseSpecificRequests;
 
+    @Getter
+    @Setter
+    // 是否可发货 0 不可发货 1 可发货
+    private int canDelivery;
+
 
 
     public Set<String> getFlows() {

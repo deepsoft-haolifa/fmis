@@ -236,10 +236,33 @@ public class BizProcessDataController extends BaseController {
 
                     }
                 }
+
+                // 判断是否可以申请发货：若所有产品均已经申请发货，则该订单不再可申请发货
+                if(judgCanDelivery(data.getDataId())) {
+                    data.setCanDelivery(1);
+                }
             }
         }
         return getDataTable(list);
     }
+
+    private boolean judgCanDelivery(Long dataId) {
+        boolean result = false;
+        BizProcessChild bizProcessChild = new BizProcessChild();
+        bizProcessChild.setDataId(dataId);
+        List<BizProcessChild> bizProcessChildren = bizProcessChildService.selectBizProcessChildList(bizProcessChild);
+        if(CollectionUtils.isEmpty(bizProcessChildren)) {
+            return false;
+        }
+        for (BizProcessChild child: bizProcessChildren) {
+            // 存在未发货的产品
+            if(!"1".equals(child.getString20())) {
+                result = true;
+            }
+        }
+        return result;
+    }
+
     /**
      * 已流转的合同
      */
