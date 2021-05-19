@@ -382,6 +382,7 @@
                         actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.customerId + '\')"><i class="fa fa-edit"></i> 编辑</a> ');
                         actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.customerId + '\')"><i class="fa fa-remove"></i> 删除</a>');
                         actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="viewExamineDetail(\'' + row.customerId + '\')"><i class="fa fa-edit"></i> 详情</a>');
+                        actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="viewFinanceList(\'' + row.customerId + '\')"><i class="fa fa-edit"></i>合同列表</a>');
                         return actions.join('');
                     }
                 }]
@@ -392,6 +393,13 @@
             var bizId = $("#bizId").val();
             var url = prefix + "/detail/" + dataId;
             $.modal.openNoEnter("详情", url,$(window).width(),$(window).height(),function(){
+                $.modal.closeAll();
+            });
+        }
+        function viewFinanceList(dataId) {
+            var bizId = $("#bizId").val();
+            var url = "/finance/receivable?customerId="+dataId
+            $.modal.openNoEnter("关联合同列表", url,$(window).width(),$(window).height(),function(){
                 $.modal.closeAll();
             });
         }

@@ -14,6 +14,7 @@
                             <p>合同编号：</p>
                             <input type="text" name="saleContractNo"/>
                             <input type="hidden" name="bizId" id="bizId" value="contract"/>
+                            <input type="hidden" name="customerId" id="customerId" th:value="*{customerId}"/>
                         </li>
                         <li>
                             <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i

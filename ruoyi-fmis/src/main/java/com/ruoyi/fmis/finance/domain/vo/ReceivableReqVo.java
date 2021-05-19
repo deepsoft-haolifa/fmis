@@ -15,4 +15,9 @@ public class ReceivableReqVo extends BaseEntity {
      * 合同编号(销售合同)
      */
     private String saleContractNo;
+
+    /**
+     * 客户编号
+     */
+    private String customerId;
 }

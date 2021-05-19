@@ -52,6 +52,9 @@
             <if test="saleContractNo != null and saleContractNo != ''">
                 and q.string1 like concat('%', #{saleContractNo}, '%')
             </if>
+            <if test="customerId != null and customerId != ''">
+                and q.string2 = #{customerId}
+            </if>
             ${params.dataScope}
         </where>
     </sql>
