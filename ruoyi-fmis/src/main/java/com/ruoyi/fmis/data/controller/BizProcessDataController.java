@@ -190,7 +190,12 @@ public class BizProcessDataController extends BaseController {
         startPage();
         //临时用userId
         bizProcessData.setString30(ShiroUtils.getUserId() + "");
-
+        if (bizProcessData.getString3() != null && !bizProcessData.getString3().equals("")) {
+            List<BizSuppliers> bizSuppliersList = bizSuppliersService.selectBizSuppliersListByName(bizProcessData.getString3());
+            if (bizSuppliersList != null && bizSuppliersList.size() > 0) {
+                bizProcessData.setString3(bizSuppliersList.get(0).getSuppliersId() + "");
+            }
+        }
         List<BizProcessData> list = bizProcessDataService.selectBizProcessDataListRef(bizProcessData);
 
 

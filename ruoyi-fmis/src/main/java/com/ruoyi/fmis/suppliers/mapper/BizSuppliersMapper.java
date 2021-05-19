@@ -25,6 +25,13 @@ public interface BizSuppliersMapper {
      * @return 供应商集合
      */
     public List<BizSuppliers> selectBizSuppliersList(BizSuppliers bizSuppliers);
+    /**
+     * 查询供应商列表
+     *
+     * @param name 供应商
+     * @return 供应商集合
+     */
+    public List<BizSuppliers> selectBizSuppliersListByName(String name);
 
     /**
      * 新增供应商

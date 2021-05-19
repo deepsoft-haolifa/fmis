@@ -62,7 +62,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
         order by s.create_time desc
     </select>
-    
+    <select id="selectBizSuppliersListByName" parameterType="BizSuppliers" resultMap="BizSuppliersResult">
+        <include refid="selectBizSuppliersVo"/>
+        where name like concat('%', #{name}, '%')
+    </select>
     <select id="selectBizSuppliersById" parameterType="Long" resultMap="BizSuppliersResult">
         <include refid="selectBizSuppliersVo"/>
         where suppliers_id = #{suppliersId}

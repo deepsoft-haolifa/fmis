@@ -45,7 +45,9 @@ public class BizSuppliersServiceImpl implements IBizSuppliersService {
     public List<BizSuppliers> selectBizSuppliersList(BizSuppliers bizSuppliers) {
         return bizSuppliersMapper.selectBizSuppliersList(bizSuppliers);
     }
-
+    public List<BizSuppliers> selectBizSuppliersListByName(String name) {
+        return bizSuppliersMapper.selectBizSuppliersListByName(name);
+    }
     @Override
     public List<BizSuppliers> selectAllList() {
         BizSuppliers bizSuppliers = new BizSuppliers();
