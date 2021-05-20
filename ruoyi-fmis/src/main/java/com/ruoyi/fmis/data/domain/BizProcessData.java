@@ -387,6 +387,11 @@ public class BizProcessData extends BaseEntity {
     // 是否可发货 0 不可发货 1 可发货
     private int canDelivery;
 
+    // 是否还需要发起质检 1 需要 0 不需要
+    @Getter
+    @Setter
+    private int canTest;
+
 
 
     public Set<String> getFlows() {

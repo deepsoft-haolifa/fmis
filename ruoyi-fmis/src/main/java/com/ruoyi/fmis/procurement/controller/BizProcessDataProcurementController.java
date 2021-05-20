@@ -121,10 +121,10 @@ public class BizProcessDataProcurementController extends BaseController {
             BizSuppliers bizSuppliers = new BizSuppliers();
             // 供应商查询
             bizSuppliers.setName(bizProcessData.getString6());
-            List<BizSuppliers> suppliers =  bizSuppliersService.selectBizSuppliersList(bizSuppliers);
+            List<BizSuppliers> suppliers = bizSuppliersService.selectBizSuppliersList(bizSuppliers);
             if (suppliers != null && suppliers.size() > 0) {
                 Set<String> supplierIds = new HashSet<>();
-                for (BizSuppliers supplier: suppliers) {
+                for (BizSuppliers supplier : suppliers) {
                     supplierIds.add(String.valueOf(supplier.getSuppliersId()));
                 }
                 bizProcessData.setSupplierIds(supplierIds);
@@ -132,7 +132,7 @@ public class BizProcessDataProcurementController extends BaseController {
             // 重置
             bizProcessData.setString6("");
             // 判断是否有供应商数据，若没有直接返回
-            if(CollectionUtils.isEmpty(bizProcessData.getSupplierIds())) {
+            if (CollectionUtils.isEmpty(bizProcessData.getSupplierIds())) {
                 return getDataTable(new ArrayList<>());
             }
         }
@@ -148,54 +148,104 @@ public class BizProcessDataProcurementController extends BaseController {
         startPage();
         List<BizProcessData> list = bizProcessDataService.selectBizProcessDataListRefProcurement(bizProcessData);
 
+
         Map<String, SysRole> flowAllMap = bizProcessDefineService.getFlowAllMap(bizId);
-        if (!CollectionUtils.isEmpty(flowMap)) {
+        boolean flowMapIsEmpty = !CollectionUtils.isEmpty(flowMap);
+        if (flowMapIsEmpty) {
             //计算流程描述
             for (BizProcessData data : list) {
-                // 发起质检按钮的判断条件loginUserId
-                data.setLoginUserId(String.valueOf(ShiroUtils.getUserId()));
-                String flowStatus = data.getFlowStatus();
-                //结束标识
-                String normalFlag = data.getNormalFlag();
-                String flowStatusRemark = "待上报";
-                data.setLoginUserId(ShiroUtils.getUserId().toString());
-                if ("-2".equals(flowStatus)) {
-                    flowStatusRemark = "待上报";
-                } else if ("1".equals(flowStatus)) {
-                    flowStatusRemark = "已上报";
-                } else {
-                    SysRole currentSysRole =  CommonUtils.getLikeByMap(flowAllMap,flowStatus.replaceAll("-",""));
-                    if (currentSysRole == null) {
-                        continue;
-                    }
-                    if (flowStatus.equals(normalFlag)) {
-                        flowStatusRemark = currentSysRole.getRoleName() + "已完成";
-                    } else if (flowStatus.startsWith("-")) {
-                        //不同意标识
-                        flowStatusRemark = currentSysRole.getRoleName() + "不同意";
+                if (flowMapIsEmpty) {
+                    // 发起质检按钮的判断条件loginUserId
+                    data.setLoginUserId(String.valueOf(ShiroUtils.getUserId()));
+                    String flowStatus = data.getFlowStatus();
+                    //结束标识
+                    String normalFlag = data.getNormalFlag();
+                    String flowStatusRemark = "待上报";
+                    data.setLoginUserId(ShiroUtils.getUserId().toString());
+                    if ("-2".equals(flowStatus)) {
+                        flowStatusRemark = "待上报";
+                    } else if ("1".equals(flowStatus)) {
+                        flowStatusRemark = "已上报";
                     } else {
-                        flowStatusRemark = currentSysRole.getRoleName() + "同意";
+                        SysRole currentSysRole = CommonUtils.getLikeByMap(flowAllMap, flowStatus.replaceAll("-", ""));
+                        if (currentSysRole == null) {
+                            continue;
+                        }
+                        if (flowStatus.equals(normalFlag)) {
+                            flowStatusRemark = currentSysRole.getRoleName() + "已完成";
+                        } else if (flowStatus.startsWith("-")) {
+                            //不同意标识
+                            flowStatusRemark = currentSysRole.getRoleName() + "不同意";
+                        } else {
+                            flowStatusRemark = currentSysRole.getRoleName() + "同意";
+                        }
+                    }
+                    data.setFlowStatusRemark(flowStatusRemark);
+                    //计算是否可以审批
+                    int flowStatusInt = Integer.parseInt(flowStatus);
+                    data.setOperationExamineStatus(false);
+
+                    if (flowStatusInt > 0) {
+                        if (!flowStatus.equals(normalFlag)) {
+                            userFlowStatus = flowMap.keySet().iterator().next();
+                            int userFlowStatusInt = Integer.parseInt(userFlowStatus);
+                            if (userFlowStatusInt == flowStatusInt + 1) {
+                                data.setOperationExamineStatus(true);
+                            }
+
+                        }
                     }
                 }
-                data.setFlowStatusRemark(flowStatusRemark);
-                //计算是否可以审批
-                int flowStatusInt = Integer.parseInt(flowStatus);
-                data.setOperationExamineStatus(false);
-
-                if (flowStatusInt > 0) {
-                    if (!flowStatus.equals(normalFlag)) {
-                        userFlowStatus = flowMap.keySet().iterator().next();
-                        int userFlowStatusInt = Integer.parseInt(userFlowStatus);
-                        if (userFlowStatusInt == flowStatusInt + 1) {
-                            data.setOperationExamineStatus(true);
-                        }
-
+                // 判断是否可以发起质检 1 可以 0 不可以
+                try {
+                    if(canTest(data.getDataId())) {
+                        data.setCanTest(1);
                     }
+                } catch (Exception e) {
+                    data.setCanTest(1);
+                    logger.error("dataId:{},calculate canTest error.", data.getDataId(), e);
                 }
             }
         }
         return getDataTable(list);
     }
+
+    // 判断是否还需要发起质检
+    private boolean canTest(Long dataId) {
+        BizProcessChild bizProcessChild = new BizProcessChild();
+        bizProcessChild.setDataId(dataId);
+        List<BizProcessChild> productList = bizProcessChildService.selectBizTestProductList(bizProcessChild);
+        for (BizProcessChild child: productList) {
+            if (judgeCanTest(child.getYesNum(),child.getProductNum())) return true;
+        }
+        List<BizProcessChild> actuatorList = bizProcessChildService.selectBizTestActuatorList(bizProcessChild);
+        for (BizProcessChild child: actuatorList) {
+            if (judgeCanTest(child.getYesNum(),child.getActuatorNum())) return true;
+        }
+        List<BizProcessChild> pAList = bizProcessChildService.selectBizTestPAList(bizProcessChild);
+        for (BizProcessChild child: pAList) {
+            if (judgeCanTest(child.getYesNum(),String.valueOf(child.getPattachmentCount()))) return true;
+        }
+        List<BizProcessChild> ref1List = bizProcessChildService.selectBizTestRef1List(bizProcessChild);
+        for (BizProcessChild child: ref1List) {
+            if (judgeCanTest(child.getYesNum(),String.valueOf(child.getProductRef1Num()))) return true;
+        }
+        List<BizProcessChild> ref2List = bizProcessChildService.selectBizTestRef2List(bizProcessChild);
+        for (BizProcessChild child: ref2List) {
+            if (judgeCanTest(child.getYesNum(), String.valueOf(child.getProductRef2Num()))) return true;
+        }
+        return false;
+    }
+
+    private boolean judgeCanTest(String yesNum,String countNum) {
+        double yes = StringUtils.isNotEmpty(yesNum)? Double.parseDouble(yesNum): 0;
+        double count = StringUtils.isNotEmpty(countNum)? Double.parseDouble(countNum): 0;
+        if(yes < count){
+            return true;
+        }
+        return false;
+    }
+
     @GetMapping("/examineEdit")
     public String examineEdit(ModelMap mmap) {
         String dataId = getRequest().getParameter("dataId");
@@ -221,8 +271,8 @@ public class BizProcessDataProcurementController extends BaseController {
                 String levelValue = bizDataStatus.getString5();
                 JSONObject jsonObject = new JSONObject();
                 String k = type + "_" + childId + "_" + bizDataId + "_" + parentContractId + "_" + levelValue;
-                jsonObject.put("id",k);
-                jsonObject.put("num",num);
+                jsonObject.put("id", k);
+                jsonObject.put("num", num);
                 numJsonValue.add(jsonObject);
             }
         }
@@ -236,7 +286,7 @@ public class BizProcessDataProcurementController extends BaseController {
                 suppliers.setFlag(true);
             }
         }
-        mmap.put("suppliers",suppliersList);
+        mmap.put("suppliers", suppliersList);
 
         return prefix + "/examineEdit";
     }
@@ -247,7 +297,7 @@ public class BizProcessDataProcurementController extends BaseController {
         String examineStatus = bizProcessData.getExamineStatus();
         String examineRemark = bizProcessData.getExamineRemark();
         String dataId = bizProcessData.getDataId().toString();
-        return toAjax(bizProcessDataService.doExamine(dataId,examineStatus,examineRemark,bizProcessData.getBizId()));
+        return toAjax(bizProcessDataService.doExamine(dataId, examineStatus, examineRemark, bizProcessData.getBizId()));
     }
 
     @GetMapping("/viewExamineHistory")
@@ -259,46 +309,48 @@ public class BizProcessDataProcurementController extends BaseController {
         mmap.put("bizTable", bizId);
         return prefix + "/viewExamineHistory";
     }
+
     /**
      * 新增合同管理
      */
     @GetMapping("/addpool/{dataId}")
     public String addpool(@PathVariable("dataId") String dataId, ModelMap mmap) {
-        mmap.put("suppliers",bizSuppliersService.selectAllList());
+        mmap.put("suppliers", bizSuppliersService.selectAllList());
         String[] split = dataId.split(",");
         BizProcessData bizProcessData = null;
         Long tempTime = 0l;
-        for (String id: split) {
+        for (String id : split) {
             BizProcessData tempBizProcessData = bizProcessDataService.selectBizProcessDataById(Long.valueOf(id));
             //  比较销售合同交付日期:取日期最早的
-            String time  = tempBizProcessData.getString6();
-            if(StringUtils.isNotEmpty(time)) {
+            String time = tempBizProcessData.getString6();
+            if (StringUtils.isNotEmpty(time)) {
                 Date date = DateUtils.dateTime("yyyy-MM-dd", time);
-                if(tempTime == 0) {
+                if (tempTime == 0) {
                     tempTime = date.getTime();
                     bizProcessData = tempBizProcessData;
-                }  else if(tempTime > date.getTime()){
+                } else if (tempTime > date.getTime()) {
                     tempTime = date.getTime();
                     bizProcessData = tempBizProcessData;
                 }
-            } else if(Objects.isNull(bizProcessData)){
+            } else if (Objects.isNull(bizProcessData)) {
                 bizProcessData = tempBizProcessData;
             }
 
         }
         mmap.put("bizProcessData", bizProcessData);
         String string1 = dictDataService.selectDictLabel("supplier_type", bizProcessData.getString3());
-        SysDept sysDept =  sysDeptService.selectDeptById(bizProcessData.getString22() == null ? 1 : Long.parseLong(bizProcessData.getString22()));
+        SysDept sysDept = sysDeptService.selectDeptById(bizProcessData.getString22() == null ? 1 : Long.parseLong(bizProcessData.getString22()));
         bizProcessData.setString1(string1);
         bizProcessData.setString2(sysDept.getDeptName());
         return prefix + "/add";
     }
+
     /**
      * 新增合同管理
      */
     @GetMapping("/add")
     public String add(ModelMap mmap) {
-        mmap.put("suppliers",bizSuppliersService.selectAllList());
+        mmap.put("suppliers", bizSuppliersService.selectAllList());
         return prefix + "/add";
     }
 
@@ -336,18 +388,18 @@ public class BizProcessDataProcurementController extends BaseController {
             if (price1.isNaN()) {
                 bizProcessData.setPrice1(0D);
             }
-        } catch(Exception ex) {
+        } catch (Exception ex) {
             bizProcessData.setPrice1(0D);
             logger.info(ex.getMessage());
         }
         bizProcessData.setStatus(Constant.procurementStatus.NEW);
-        setNormalFlag(bizProcessData,productArrayStr);
+        setNormalFlag(bizProcessData, productArrayStr);
         //添加采购合同
         int insertReturn = bizProcessDataService.insertBizProcessData(bizProcessData);
         Long dataId = bizProcessData.getDataId();
         List<String> dataIds = new ArrayList<>();
         //合并的是同一个合同还是不同合同的
-        Map<String,Integer> dataIdCount = new HashMap<>();
+        Map<String, Integer> dataIdCount = new HashMap<>();
         //此次合并数量
         int count = 0;
         if (StringUtils.isNotEmpty(productArrayStr)) {
@@ -359,7 +411,7 @@ public class BizProcessDataProcurementController extends BaseController {
                 bizDataStatus.setString4(bizProcessData.getDataId().toString());//采购id
                 bizDataStatusService.insertBizDataStatus(bizDataStatus);
                 if (dataIdCount.containsKey(bizDataStatus.getString3())) {
-                    int idCount =  dataIdCount.get(bizDataStatus.getString3()) + 1;
+                    int idCount = dataIdCount.get(bizDataStatus.getString3()) + 1;
                     dataIdCount.put(bizDataStatus.getString3(), idCount);
                 } else {
                     dataIdCount.put(bizDataStatus.getString3(), 1);
@@ -380,9 +432,10 @@ public class BizProcessDataProcurementController extends BaseController {
             setXSStatus(string, list.size() - dataIdCount.get(string), dataIdCount.get(string));
         }
 
-        setContractNo(bizProcessData,productArrayStr);
+        setContractNo(bizProcessData, productArrayStr);
         return toAjax(insertReturn);
     }
+
     public void setXSStatus(String string, int size, int num) {
         //合并采购合同的处理listLevelS
         BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataById(Long.parseLong(string));
@@ -392,37 +445,37 @@ public class BizProcessDataProcurementController extends BaseController {
         int count = 0;
         for (BizProcessChild bizProcessChild : bizProcessChildList) {
             //产品
-            if(!StringUtils.isEmpty(bizProcessChild.getString2()) && !bizProcessChild.getString2().equals("0")) {
-                count ++;
+            if (!StringUtils.isEmpty(bizProcessChild.getString2()) && !bizProcessChild.getString2().equals("0")) {
+                count++;
             }
             //法兰
-            if(!StringUtils.isEmpty(bizProcessChild.getString5()) && !bizProcessChild.getString5().equals("0")) {
-                count ++;
+            if (!StringUtils.isEmpty(bizProcessChild.getString5()) && !bizProcessChild.getString5().equals("0")) {
+                count++;
             }
             //螺栓
-            if(!StringUtils.isEmpty(bizProcessChild.getString8()) && !bizProcessChild.getString8().equals("0")) {
-                count ++;
+            if (!StringUtils.isEmpty(bizProcessChild.getString8()) && !bizProcessChild.getString8().equals("0")) {
+                count++;
             }
             //执行器
-            if(!StringUtils.isEmpty(bizProcessChild.getString11()) && !bizProcessChild.getString11().equals("0")) {
-                count ++;
+            if (!StringUtils.isEmpty(bizProcessChild.getString11()) && !bizProcessChild.getString11().equals("0")) {
+                count++;
             }
             //定位器
-            if(bizProcessChild.getPattachmentId() != null) {
-                count ++;
+            if (bizProcessChild.getPattachmentId() != null) {
+                count++;
             }
             //附件1 2 3 4
-            if(bizProcessChild.getPattachment1Id() != null) {
-                count ++;
+            if (bizProcessChild.getPattachment1Id() != null) {
+                count++;
             }
-            if(bizProcessChild.getPattachment2Id() != null) {
-                count ++;
+            if (bizProcessChild.getPattachment2Id() != null) {
+                count++;
             }
-            if(bizProcessChild.getPattachment3Id() != null) {
-                count ++;
+            if (bizProcessChild.getPattachment3Id() != null) {
+                count++;
             }
-            if(bizProcessChild.getPattachment4Id() != null) {
-                count ++;
+            if (bizProcessChild.getPattachment4Id() != null) {
+                count++;
             }
         }
         bizProcessData.setStatus(Constant.contractStatus.PURCHASE_ING);
@@ -437,7 +490,8 @@ public class BizProcessDataProcurementController extends BaseController {
 
 
     }
-    public String setNormalFlag (BizProcessData bizProcessData,String productArrayStr) {
+
+    public String setNormalFlag(BizProcessData bizProcessData, String productArrayStr) {
         String normalFlag = "5";
         Double totalPrice = bizProcessData.getPrice1();
         if (totalPrice >= 300000) {
@@ -450,12 +504,14 @@ public class BizProcessDataProcurementController extends BaseController {
         bizProcessData.setNormalFlag(normalFlag);
         return normalFlag;
     }
+
     /**
      * 设置合同号
+     *
      * @param bizProcessData
      * @param productArrayStr
      */
-    public void setContractNo (BizProcessData bizProcessData,String productArrayStr) {
+    public void setContractNo(BizProcessData bizProcessData, String productArrayStr) {
 
         List<String> contractNoList = new ArrayList<>();
         if (StringUtils.isNotEmpty(productArrayStr)) {
@@ -493,7 +549,7 @@ public class BizProcessDataProcurementController extends BaseController {
      * @param bizProcessData
      * @param productArrayStr
      */
-    public void setPurchasingStatus (BizProcessData bizProcessData,String productArrayStr) {
+    public void setPurchasingStatus(BizProcessData bizProcessData, String productArrayStr) {
 
         BizProcessChild queryBizProcessChild = new BizProcessChild();
         queryBizProcessChild.setDataId(bizProcessData.getDataId());
@@ -502,7 +558,7 @@ public class BizProcessDataProcurementController extends BaseController {
         JSONArray productArray = JSONArray.parseArray(productArrayStr);
 
         //修改 合同的采购状态
-        Map<String,List<BizDataStatus>> contractMap = new HashMap<>();
+        Map<String, List<BizDataStatus>> contractMap = new HashMap<>();
         for (int i = 0; i < productArray.size(); i++) {
             JSONObject json = productArray.getJSONObject(i);
             BizDataStatus bizDataStatus = JSONObject.parseObject(json.toJSONString(), BizDataStatus.class);
@@ -515,11 +571,11 @@ public class BizProcessDataProcurementController extends BaseController {
             if (!contractMap.containsKey(contractId)) {
                 List<BizDataStatus> bizDataStatusList = new ArrayList<>();
                 bizDataStatusList.add(bizDataStatus);
-                contractMap.put(contractId,bizDataStatusList);
+                contractMap.put(contractId, bizDataStatusList);
             } else {
                 List<BizDataStatus> bizDataStatusList = contractMap.get(contractId);
                 bizDataStatusList.add(bizDataStatus);
-                contractMap.put(contractId,bizDataStatusList);
+                contractMap.put(contractId, bizDataStatusList);
             }
         }
         //contractMap=质检这个合同下的所有产品数据
@@ -535,10 +591,10 @@ public class BizProcessDataProcurementController extends BaseController {
             String string23 = "1";
 
             //计算质检里面合同数
-            Map<String,BizDataStatus> bizDataStatusContractMap = new HashMap<>();
-            if(!CollectionUtils.isEmpty(bizDataStatusList)) {
+            Map<String, BizDataStatus> bizDataStatusContractMap = new HashMap<>();
+            if (!CollectionUtils.isEmpty(bizDataStatusList)) {
                 for (BizDataStatus bizDataStatus1 : bizDataStatusList) {
-                    bizDataStatusContractMap.put(bizDataStatus1.getString4(),bizDataStatus1);
+                    bizDataStatusContractMap.put(bizDataStatus1.getString4(), bizDataStatus1);
                 }
             }
 
@@ -619,8 +675,8 @@ public class BizProcessDataProcurementController extends BaseController {
                 String levelValue = bizDataStatus.getString5();
                 JSONObject jsonObject = new JSONObject();
                 String k = type + "_" + childId + "_" + bizDataId + "_" + parentContractId + "_" + levelValue;
-                jsonObject.put("id",k);
-                jsonObject.put("num",num);
+                jsonObject.put("id", k);
+                jsonObject.put("num", num);
                 numJsonValue.add(jsonObject);
             }
         }
@@ -634,7 +690,7 @@ public class BizProcessDataProcurementController extends BaseController {
                 suppliers.setFlag(true);
             }
         }
-        mmap.put("suppliers",suppliersList);
+        mmap.put("suppliers", suppliersList);
 
         return prefix + "/viewDetail";
     }
@@ -664,8 +720,8 @@ public class BizProcessDataProcurementController extends BaseController {
                 String levelValue = bizDataStatus.getString5();
                 JSONObject jsonObject = new JSONObject();
                 String k = type + "_" + childId + "_" + bizDataId + "_" + parentContractId + "_" + levelValue;
-                jsonObject.put("id",k);
-                jsonObject.put("num",num);
+                jsonObject.put("id", k);
+                jsonObject.put("num", num);
                 numJsonValue.add(jsonObject);
             }
         }
@@ -679,10 +735,11 @@ public class BizProcessDataProcurementController extends BaseController {
                 suppliers.setFlag(true);
             }
         }
-        mmap.put("suppliers",suppliersList);
+        mmap.put("suppliers", suppliersList);
 
         return prefix + "/startTest";
     }
+
     /**
      * 修改合同管理
      */
@@ -710,8 +767,8 @@ public class BizProcessDataProcurementController extends BaseController {
                 String levelValue = bizDataStatus.getString5();
                 JSONObject jsonObject = new JSONObject();
                 String k = type + "_" + childId + "_" + bizDataId + "_" + parentContractId + "_" + levelValue;
-                jsonObject.put("id",k);
-                jsonObject.put("num",num);
+                jsonObject.put("id", k);
+                jsonObject.put("num", num);
                 numJsonValue.add(jsonObject);
             }
         }
@@ -725,7 +782,7 @@ public class BizProcessDataProcurementController extends BaseController {
                 suppliers.setFlag(true);
             }
         }
-        mmap.put("suppliers",suppliersList);
+        mmap.put("suppliers", suppliersList);
         return prefix + "/edit";
     }
 
@@ -739,7 +796,7 @@ public class BizProcessDataProcurementController extends BaseController {
     public AjaxResult editSave(BizProcessData bizProcessData) {
 
         String productArrayStr = bizProcessData.getProductParmters();
-        setNormalFlag(bizProcessData,productArrayStr);
+        setNormalFlag(bizProcessData, productArrayStr);
         int updateReturn = bizProcessDataService.updateBizProcessData(bizProcessData);
 
         Long dataId = bizProcessData.getDataId();
@@ -763,8 +820,8 @@ public class BizProcessDataProcurementController extends BaseController {
                 bizDataStatusService.insertBizDataStatus(bizDataStatus);
             }
         }
-        setPurchasingStatus(bizProcessData,productArrayStr);
-        setContractNo(bizProcessData,productArrayStr);
+        setPurchasingStatus(bizProcessData, productArrayStr);
+        setContractNo(bizProcessData, productArrayStr);
         return toAjax(updateReturn);
     }
 
@@ -773,7 +830,7 @@ public class BizProcessDataProcurementController extends BaseController {
      */
     @RequiresPermissions("fmis:procurement:remove")
     @Log(title = "合同管理", businessType = BusinessType.DELETE)
-    @PostMapping( "/remove")
+    @PostMapping("/remove")
     @ResponseBody
     public AjaxResult remove(String ids) {
 
@@ -812,6 +869,7 @@ public class BizProcessDataProcurementController extends BaseController {
         BizProcessData bizQuotation = bizProcessDataService.selectBizProcessDataById(Long.parseLong(dataId));
         return toAjax(bizProcessDataService.subTestBizQuotation(bizQuotation));
     }
+
     /**
      * 选择客户
      */
@@ -830,7 +888,7 @@ public class BizProcessDataProcurementController extends BaseController {
 
     @GetMapping("/viewPdf")
     public void viewPdf(HttpServletRequest request, HttpServletResponse response) {
-        createPdf(request,response,null);
+        createPdf(request, response, null);
     }
 
     /**
@@ -839,10 +897,10 @@ public class BizProcessDataProcurementController extends BaseController {
     @PostMapping("/export")
     @ResponseBody
     public AjaxResult export(BizProcessData bizProcessData) {
-        return createPdf(null,null,bizProcessData);
+        return createPdf(null, null, bizProcessData);
     }
 
-    public AjaxResult createPdf (HttpServletRequest request, HttpServletResponse response, BizProcessData bizProcessDataParamter) {
+    public AjaxResult createPdf(HttpServletRequest request, HttpServletResponse response, BizProcessData bizProcessDataParamter) {
         String id = "";
         if (bizProcessDataParamter == null) {
             id = request.getParameter("id");
@@ -857,8 +915,7 @@ public class BizProcessDataProcurementController extends BaseController {
         queryBizProcessChild.setDataId(bizProcessData.getDataId());
         //List<BizProcessChild> bizProcessChildList = bizProcessChildService.selectBizQuotationProductList(queryBizProcessChild);
 
-        try
-        {
+        try {
             String filename = PdfUtil.encodingFilename("合同");
             String filePath = PdfUtil.getAbsoluteFile(filename);
             // step 1 横向
@@ -875,11 +932,11 @@ public class BizProcessDataProcurementController extends BaseController {
             writer.setEncryption(null, null, PdfWriter.ALLOW_PRINTING, PdfWriter.STANDARD_ENCRYPTION_128);
             //设置字体样式
             //正常
-            Font textFont = PdfUtil.getPdfChineseFont(6,Font.NORMAL);
+            Font textFont = PdfUtil.getPdfChineseFont(6, Font.NORMAL);
             //加粗
-            Font boldFont = PdfUtil.getPdfChineseFont(11,Font.BOLD);
+            Font boldFont = PdfUtil.getPdfChineseFont(11, Font.BOLD);
             //二级标题
-            Font titleFont = PdfUtil.getPdfChineseFont(15,Font.BOLD);
+            Font titleFont = PdfUtil.getPdfChineseFont(15, Font.BOLD);
             String companyName = bizProcessData.getString1();
             Paragraph paragraph0 = new Paragraph("    " + companyName + "    如无问题，请尽快回传及付款，以免影响交货期！回传电话：010-67171220。", textFont);
             paragraph0.setAlignment(Paragraph.ALIGN_CENTER);
@@ -954,28 +1011,48 @@ public class BizProcessDataProcurementController extends BaseController {
 
             if (StringUtils.isNotEmpty(remark)) {
                 String[] remarks = remark.split("###");
-                if (remarks.length > 1) {remark1 = remarks[0];}
-                if (remarks.length > 2) {remark2 = remarks[1];}
-                if (remarks.length > 3) {remark3 = remarks[2];}
-                if (remarks.length > 4) {remark4 = remarks[3];}
-                if (remarks.length > 5) {remark5 = remarks[4];}
-                if (remarks.length > 6) {remark6 = remarks[5];}
-                if (remarks.length > 7) {remark7 = remarks[6];}
-                if (remarks.length > 8) {remark8 = remarks[7];}
-                if (remarks.length > 9) {remark9 = remarks[8];}
-                if (remarks.length == 10) {remark10 = remarks[9];}
+                if (remarks.length > 1) {
+                    remark1 = remarks[0];
+                }
+                if (remarks.length > 2) {
+                    remark2 = remarks[1];
+                }
+                if (remarks.length > 3) {
+                    remark3 = remarks[2];
+                }
+                if (remarks.length > 4) {
+                    remark4 = remarks[3];
+                }
+                if (remarks.length > 5) {
+                    remark5 = remarks[4];
+                }
+                if (remarks.length > 6) {
+                    remark6 = remarks[5];
+                }
+                if (remarks.length > 7) {
+                    remark7 = remarks[6];
+                }
+                if (remarks.length > 8) {
+                    remark8 = remarks[7];
+                }
+                if (remarks.length > 9) {
+                    remark9 = remarks[8];
+                }
+                if (remarks.length == 10) {
+                    remark10 = remarks[9];
+                }
             }
 
             // 第一行
-            table.addCell(PdfUtil.mergeCol("需方：", 2,textFont));
-            table.addCell(PdfUtil.mergeCol(companyName, 13,textFont));
+            table.addCell(PdfUtil.mergeCol("需方：", 2, textFont));
+            table.addCell(PdfUtil.mergeCol(companyName, 13, textFont));
 
 
 //            table.addCell(PdfUtil.mergeCol("", 2,textFont));
 //            table.addCell(PdfUtil.mergeCol("", 5,textFont));
 
             //第二行
-            table.addCell(PdfUtil.mergeCol("供方：", 2,textFont));
+            table.addCell(PdfUtil.mergeCol("供方：", 2, textFont));
             String string6 = bizProcessData.getString6();
             String string6Name = "";
             BizSuppliers bizSuppliers = null;
@@ -985,24 +1062,24 @@ public class BizProcessDataProcurementController extends BaseController {
                     string6Name = bizSuppliers.getName();
                 }
             }
-            table.addCell(PdfUtil.mergeCol(string6Name, 13,textFont));
+            table.addCell(PdfUtil.mergeCol(string6Name, 13, textFont));
 //            table.addCell(PdfUtil.mergeCol("", 2,textFont));
 //            table.addCell(PdfUtil.mergeCol("", 5,textFont));
             //第三行
-            table.addCell(PdfUtil.mergeCol("采购合同编号：", 2,textFont));
-            table.addCell(PdfUtil.mergeCol(bizProcessData.getString12(), 6,textFont));
-            table.addCell(PdfUtil.mergeCol("内销合同编号：", 2,textFont));
-            table.addCell(PdfUtil.mergeCol(bizProcessData.getString10(), 5,textFont));
+            table.addCell(PdfUtil.mergeCol("采购合同编号：", 2, textFont));
+            table.addCell(PdfUtil.mergeCol(bizProcessData.getString12(), 6, textFont));
+            table.addCell(PdfUtil.mergeCol("内销合同编号：", 2, textFont));
+            table.addCell(PdfUtil.mergeCol(bizProcessData.getString10(), 5, textFont));
             //第四行
-            table.addCell(PdfUtil.mergeCol("签订日期：", 2,textFont));
-            table.addCell(PdfUtil.mergeCol(DateUtils.dateTime(bizProcessData.getCreateTime()), 2,textFont));
-            table.addCell(PdfUtil.mergeCol("", totalColumn - 4,textFont));
+            table.addCell(PdfUtil.mergeCol("签订日期：", 2, textFont));
+            table.addCell(PdfUtil.mergeCol(DateUtils.dateTime(bizProcessData.getCreateTime()), 2, textFont));
+            table.addCell(PdfUtil.mergeCol("", totalColumn - 4, textFont));
 
             //第五行
-            table.addCell(PdfUtil.mergeCol("为保障买卖双方的合法权益，根据《合同法》及有关法律规定，买卖双方经友好协商，一致同意按下列条款签订本合同。", totalColumn,textFont));
+            table.addCell(PdfUtil.mergeCol("为保障买卖双方的合法权益，根据《合同法》及有关法律规定，买卖双方经友好协商，一致同意按下列条款签订本合同。", totalColumn, textFont));
 
-            table.addCell(PdfUtil.mergeCol("一、", 1,textFont));
-            table.addCell(PdfUtil.mergeColLeft("供货内容：", 14,textFont));
+            table.addCell(PdfUtil.mergeCol("一、", 1, textFont));
+            table.addCell(PdfUtil.mergeColLeft("供货内容：", 14, textFont));
 
 
             //产品信息
@@ -1012,18 +1089,18 @@ public class BizProcessDataProcurementController extends BaseController {
             List<BizProcessChild> bizProductChildList = bizProcessChildService.selectBizTestProductList(queryBizProcessChild);
 
             //第七行 产品数据开始 bizQuotationProducts
-            table.addCell(PdfUtil.mergeCol("序号", 1,textFont));
-            table.addCell(PdfUtil.mergeCol("产品ID", 1,textFont));
-            table.addCell(PdfUtil.mergeCol("名称", 1,textFont));
-            table.addCell(PdfUtil.mergeCol("系列", 1,textFont));
-            table.addCell(PdfUtil.mergeCol("压力", 1,textFont));
-            table.addCell(PdfUtil.mergeCol("规格", 1,textFont));
-            table.addCell(PdfUtil.mergeCol("颜色", 1,textFont));
-            table.addCell(PdfUtil.mergeCol("数量", 1,textFont));
-            table.addCell(PdfUtil.mergeCol("单价", 1,textFont));
-            table.addCell(PdfUtil.mergeCol("合计", 1,textFont));
-            table.addCell(PdfUtil.mergeCol("材质", 3,textFont));
-            table.addCell(PdfUtil.mergeCol("备注", 3,textFont));
+            table.addCell(PdfUtil.mergeCol("序号", 1, textFont));
+            table.addCell(PdfUtil.mergeCol("产品ID", 1, textFont));
+            table.addCell(PdfUtil.mergeCol("名称", 1, textFont));
+            table.addCell(PdfUtil.mergeCol("系列", 1, textFont));
+            table.addCell(PdfUtil.mergeCol("压力", 1, textFont));
+            table.addCell(PdfUtil.mergeCol("规格", 1, textFont));
+            table.addCell(PdfUtil.mergeCol("颜色", 1, textFont));
+            table.addCell(PdfUtil.mergeCol("数量", 1, textFont));
+            table.addCell(PdfUtil.mergeCol("单价", 1, textFont));
+            table.addCell(PdfUtil.mergeCol("合计", 1, textFont));
+            table.addCell(PdfUtil.mergeCol("材质", 3, textFont));
+            table.addCell(PdfUtil.mergeCol("备注", 3, textFont));
 
             Double sumTotalNum = new Double(0);
             Double sumTotalPrice = new Double(0);
@@ -1041,26 +1118,26 @@ public class BizProcessDataProcurementController extends BaseController {
                 for (int i = 0; i < bizProductChildList.size(); i++) {
                     rowNum = i + 1;
                     BizProcessChild bizProcessChild = bizProductChildList.get(i);
-                    table.addCell(PdfUtil.mergeCol("" + rowNum, 1,textFont));
-                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getModel(), 1,textFont));
-                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getProductName(), 1,textFont));
-                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getSeries(), 1,textFont));
-                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getNominalPressure(), 1,textFont));
-                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getSpecifications(), 1,textFont));
+                    table.addCell(PdfUtil.mergeCol("" + rowNum, 1, textFont));
+                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getModel(), 1, textFont));
+                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getProductName(), 1, textFont));
+                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getSeries(), 1, textFont));
+                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getNominalPressure(), 1, textFont));
+                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getSpecifications(), 1, textFont));
                     //颜色
-                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getColor(), 1,textFont));
+                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getColor(), 1, textFont));
                     //数量
-                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getProductNum(), 1,textFont));
+                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getProductNum(), 1, textFont));
                     //单价
-                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getProductProcurementPrice().toString(), 1,textFont));
+                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getProductProcurementPrice().toString(), 1, textFont));
                     //合计
-                    table.addCell(PdfUtil.mergeCol((Integer.parseInt(bizProcessChild.getProductNum()) * bizProcessChild.getProductProcurementPrice()) + "", 1,textFont));
+                    table.addCell(PdfUtil.mergeCol((Integer.parseInt(bizProcessChild.getProductNum()) * bizProcessChild.getProductProcurementPrice()) + "", 1, textFont));
                     //材质
                     table.addCell(PdfUtil.mergeCol("阀体:" + bizProcessChild.getValvebodyMaterial() + ",阀芯:" + bizProcessChild.getValvebodyMaterial()
                             + ",密封材质:" + bizProcessChild.getSealingMaterial() + ",驱动形式:" + bizProcessChild.getDriveForm()
-                            + ",连接方式:" + bizProcessChild.getConnectionType(), 3,textFont));
+                            + ",连接方式:" + bizProcessChild.getConnectionType(), 3, textFont));
                     //备注
-                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getRemark() == null ? "" : bizProcessChild.getRemark(), 3,textFont));
+                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getRemark() == null ? "" : bizProcessChild.getRemark(), 3, textFont));
                     sumTotalNum = sumTotalNum + Integer.parseInt(bizProcessChild.getProductNum());
                     sumTotalAmount = sumTotalAmount + Integer.parseInt(bizProcessChild.getProductNum()) * bizProcessChild.getProductProcurementPrice();
                 }
@@ -1072,24 +1149,24 @@ public class BizProcessDataProcurementController extends BaseController {
                 for (int i = 0; i < actuatorList.size(); i++) {
                     BizProcessChild bizProcessChild = actuatorList.get(i);
                     rowNum = rowNum + i + 1;
-                    table.addCell(PdfUtil.mergeCol("" + rowNum, 1,textFont));
-                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getActuatorString1(), 1,textFont));
-                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getActuatorName(), 1,textFont));
-                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getActuatorString3(), 1,textFont));
-                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getPressure(), 1,textFont));//压力
-                    table.addCell(PdfUtil.mergeCol("", 1,textFont));//规格
+                    table.addCell(PdfUtil.mergeCol("" + rowNum, 1, textFont));
+                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getActuatorString1(), 1, textFont));
+                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getActuatorName(), 1, textFont));
+                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getActuatorString3(), 1, textFont));
+                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getPressure(), 1, textFont));//压力
+                    table.addCell(PdfUtil.mergeCol("", 1, textFont));//规格
                     //颜色
-                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getColor(), 1,textFont));
+                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getColor(), 1, textFont));
                     //数量
-                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getActuatorNum(), 1,textFont));
+                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getActuatorNum(), 1, textFont));
                     //单价
-                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getActuatorPrice().toString(), 1,textFont));
+                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getActuatorPrice().toString(), 1, textFont));
                     //合计
-                    table.addCell(PdfUtil.mergeCol((Integer.parseInt(bizProcessChild.getActuatorNum()) * bizProcessChild.getActuatorPrice()) + "", 1,textFont));
+                    table.addCell(PdfUtil.mergeCol((Integer.parseInt(bizProcessChild.getActuatorNum()) * bizProcessChild.getActuatorPrice()) + "", 1, textFont));
                     //材质
-                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getString5(), 3,textFont));
+                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getString5(), 3, textFont));
                     //备注
-                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getRemark(), 3,textFont));
+                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getRemark(), 3, textFont));
                     sumTotalNum = sumTotalNum + Integer.parseInt(bizProcessChild.getActuatorNum());
                     sumTotalAmount = sumTotalAmount + Integer.parseInt(bizProcessChild.getActuatorNum()) * bizProcessChild.getActuatorPrice();
                 }
@@ -1101,23 +1178,23 @@ public class BizProcessDataProcurementController extends BaseController {
                 for (int i = 0; i < ref1List.size(); i++) {
                     BizProcessChild bizProcessChild = ref1List.get(i);
                     rowNum = rowNum + i + 1;
-                    table.addCell(PdfUtil.mergeCol("" + rowNum, 1,textFont));
-                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getModel(), 1,textFont));
-                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getRef1Name(), 1,textFont));
-                    table.addCell(PdfUtil.mergeCol("", 1,textFont));
-                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getRef1Specifications(), 1,textFont));
+                    table.addCell(PdfUtil.mergeCol("" + rowNum, 1, textFont));
+                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getModel(), 1, textFont));
+                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getRef1Name(), 1, textFont));
+                    table.addCell(PdfUtil.mergeCol("", 1, textFont));
+                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getRef1Specifications(), 1, textFont));
                     //颜色
-                    table.addCell(PdfUtil.mergeCol( "", 1,textFont));
+                    table.addCell(PdfUtil.mergeCol("", 1, textFont));
                     //数量
-                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getProductRef1Num() + "", 1,textFont));
+                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getProductRef1Num() + "", 1, textFont));
                     //单价
-                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getRef1Price().toString(), 1,textFont));
+                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getRef1Price().toString(), 1, textFont));
                     //合计
-                    table.addCell(PdfUtil.mergeCol((bizProcessChild.getProductRef1Num() * bizProcessChild.getRef1Price()) + "", 1,textFont));
+                    table.addCell(PdfUtil.mergeCol((bizProcessChild.getProductRef1Num() * bizProcessChild.getRef1Price()) + "", 1, textFont));
                     //材质
-                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getRef1MaterialRequire(), 3,textFont));
+                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getRef1MaterialRequire(), 3, textFont));
                     //备注
-                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getRemark() == null ? "" : bizProcessChild.getRemark(), 3,textFont));
+                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getRemark() == null ? "" : bizProcessChild.getRemark(), 3, textFont));
                     sumTotalNum = sumTotalNum + bizProcessChild.getProductRef1Num();
                     sumTotalAmount = sumTotalAmount + bizProcessChild.getProductRef1Num() * bizProcessChild.getRef1Price();
                 }
@@ -1128,23 +1205,23 @@ public class BizProcessDataProcurementController extends BaseController {
                 for (int i = 0; i < ref2List.size(); i++) {
                     BizProcessChild bizProcessChild = ref2List.get(i);
                     rowNum = rowNum + i + 1;
-                    table.addCell(PdfUtil.mergeCol("" + rowNum, 1,textFont));
-                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getModel(), 1,textFont));
-                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getRef2Name(), 1,textFont));
-                    table.addCell(PdfUtil.mergeCol("", 1,textFont));
-                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getRef1Specifications(), 1,textFont));
+                    table.addCell(PdfUtil.mergeCol("" + rowNum, 1, textFont));
+                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getModel(), 1, textFont));
+                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getRef2Name(), 1, textFont));
+                    table.addCell(PdfUtil.mergeCol("", 1, textFont));
+                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getRef1Specifications(), 1, textFont));
                     //颜色
-                    table.addCell(PdfUtil.mergeCol("", 1,textFont));
+                    table.addCell(PdfUtil.mergeCol("", 1, textFont));
                     //数量
-                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getProductRef2Num() + "", 1,textFont));
+                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getProductRef2Num() + "", 1, textFont));
                     //单价
-                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getRef2Price().toString(), 1,textFont));
+                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getRef2Price().toString(), 1, textFont));
                     //合计
-                    table.addCell(PdfUtil.mergeCol((bizProcessChild.getProductRef2Num() * bizProcessChild.getRef2Price()) + "", 1,textFont));
+                    table.addCell(PdfUtil.mergeCol((bizProcessChild.getProductRef2Num() * bizProcessChild.getRef2Price()) + "", 1, textFont));
                     //材质
-                    table.addCell(PdfUtil.mergeCol("", 3,textFont));
+                    table.addCell(PdfUtil.mergeCol("", 3, textFont));
                     //备注
-                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getRemark() == null ? "" : bizProcessChild.getRemark(), 3,textFont));
+                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getRemark() == null ? "" : bizProcessChild.getRemark(), 3, textFont));
                     sumTotalNum = sumTotalNum + bizProcessChild.getProductRef2Num();
                     sumTotalAmount = sumTotalAmount + bizProcessChild.getProductRef2Num() * bizProcessChild.getRef2Price();
                 }
@@ -1159,23 +1236,23 @@ public class BizProcessDataProcurementController extends BaseController {
                 for (int i = 0; i < paList.size(); i++) {
                     BizProcessChild bizProcessChild = paList.get(i);
                     rowNum = rowNum + i + 1;
-                    table.addCell(PdfUtil.mergeCol("" + rowNum, 1,textFont));
-                    table.addCell(PdfUtil.mergeCol("", 1,textFont));
-                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getChineseName(), 1,textFont));
-                    table.addCell(PdfUtil.mergeCol("", 1,textFont));
-                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getChineseSpecifications(), 1,textFont));
+                    table.addCell(PdfUtil.mergeCol("" + rowNum, 1, textFont));
+                    table.addCell(PdfUtil.mergeCol("", 1, textFont));
+                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getChineseName(), 1, textFont));
+                    table.addCell(PdfUtil.mergeCol("", 1, textFont));
+                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getChineseSpecifications(), 1, textFont));
                     //颜色
-                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getColor(), 1,textFont));
+                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getColor(), 1, textFont));
                     //数量
-                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getPattachmentCount() + "", 1,textFont));
+                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getPattachmentCount() + "", 1, textFont));
                     //单价
-                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getProcurementPrice().toString(), 1,textFont));
+                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getProcurementPrice().toString(), 1, textFont));
                     //合计
-                    table.addCell(PdfUtil.mergeCol((bizProcessChild.getPattachmentCount() * bizProcessChild.getProcurementPrice()) + "", 1,textFont));
+                    table.addCell(PdfUtil.mergeCol((bizProcessChild.getPattachmentCount() * bizProcessChild.getProcurementPrice()) + "", 1, textFont));
                     //材质
-                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getMaterial(), 3,textFont));
+                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getMaterial(), 3, textFont));
                     //备注
-                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getContractSpecial() == null ? "" : bizProcessChild.getContractSpecial(), 3,textFont));
+                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getContractSpecial() == null ? "" : bizProcessChild.getContractSpecial(), 3, textFont));
                     sumTotalNum = sumTotalNum + bizProcessChild.getPattachmentCount();
                     sumTotalAmount = sumTotalAmount + bizProcessChild.getPattachmentCount() * bizProcessChild.getProcurementPrice();
                 }
@@ -1183,27 +1260,27 @@ public class BizProcessDataProcurementController extends BaseController {
 
 
             //金额合计
-            table.addCell(PdfUtil.mergeColRight("合计", 6,textFont));//4
-            table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(sumTotalNum), 1,textFont));//总数量
-            table.addCell(PdfUtil.mergeCol("", 1,textFont));//单价
-            table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(sumTotalAmount), 1,textFont));//合计
-            table.addCell(PdfUtil.mergeCol("", 7,textFont));//备注
+            table.addCell(PdfUtil.mergeColRight("合计", 6, textFont));//4
+            table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(sumTotalNum), 1, textFont));//总数量
+            table.addCell(PdfUtil.mergeCol("", 1, textFont));//单价
+            table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(sumTotalAmount), 1, textFont));//合计
+            table.addCell(PdfUtil.mergeCol("", 7, textFont));//备注
 
-            table.addCell(PdfUtil.mergeColRight("以上价格均为含13%增值税价格", 5,textFont));
-            table.addCell(PdfUtil.mergeCol(StringUtils.convert(sumTotalAmount), 3,textFont));//合计
-            table.addCell(PdfUtil.mergeCol("", 7,textFont));//备注
+            table.addCell(PdfUtil.mergeColRight("以上价格均为含13%增值税价格", 5, textFont));
+            table.addCell(PdfUtil.mergeCol(StringUtils.convert(sumTotalAmount), 3, textFont));//合计
+            table.addCell(PdfUtil.mergeCol("", 7, textFont));//备注
 
             //特殊要求
-            table.addCell(PdfUtil.mergeCol("二、", 1,textFont));
-            table.addCell(PdfUtil.mergeColLeft("特殊要求：" + StringUtils.trim(bizProcessData.getPurchaseSpecificRequests()), 14,textFont));
+            table.addCell(PdfUtil.mergeCol("二、", 1, textFont));
+            table.addCell(PdfUtil.mergeColLeft("特殊要求：" + StringUtils.trim(bizProcessData.getPurchaseSpecificRequests()), 14, textFont));
 
 
-            table.addCell(PdfUtil.mergeCol("三、", 1,textFont));
-            table.addCell(PdfUtil.mergeColLeft("产品执行标准；好利阀业有限公司生产标准，符合国家及行业标准；产品提供安装使用说明书，产品合格证；产品标识：好利标牌", 14,textFont));
+            table.addCell(PdfUtil.mergeCol("三、", 1, textFont));
+            table.addCell(PdfUtil.mergeColLeft("产品执行标准；好利阀业有限公司生产标准，符合国家及行业标准；产品提供安装使用说明书，产品合格证；产品标识：好利标牌", 14, textFont));
 
 
-            table.addCell(PdfUtil.mergeCol("四、", 1,textFont));
-            table.addCell(PdfUtil.mergeColLeft("产品验收标准：按国家标准验收。", 14,textFont));
+            table.addCell(PdfUtil.mergeCol("四、", 1, textFont));
+            table.addCell(PdfUtil.mergeColLeft("产品验收标准：按国家标准验收。", 14, textFont));
             /*table.addCell(PdfUtil.mergeCol("", 1,textFont));
             //电汇结算，款到发货；货物采用纸箱包装，采用市内送货运输，运输费用卖方承担
 
@@ -1239,84 +1316,82 @@ public class BizProcessDataProcurementController extends BaseController {
             table.addCell(PdfUtil.mergeCol("", 1,textFont));
             table.addCell(PdfUtil.mergeColLeft("3、交货地点：" + StringUtils.trim(bizProcessData.getString9()), 14,textFont));*/
 
-            table.addCell(PdfUtil.mergeCol("五、", 1,textFont));
-            table.addCell(PdfUtil.mergeColLeft("质量保证按国家标准执行：质保期18个月（自出厂日算起）；质保期内如因产品本身质量问题，卖方予以免费更换。", 14,textFont));
+            table.addCell(PdfUtil.mergeCol("五、", 1, textFont));
+            table.addCell(PdfUtil.mergeColLeft("质量保证按国家标准执行：质保期18个月（自出厂日算起）；质保期内如因产品本身质量问题，卖方予以免费更换。", 14, textFont));
 
-            table.addCell(PdfUtil.mergeCol("六、", 1,textFont));
-            table.addCell(PdfUtil.mergeCol("包装规范：", 2,textFont));
-            table.addCell(PdfUtil.mergeCol(bizProcessData.getString27(), 6,textFont));
-            table.addCell(PdfUtil.mergeCol("运输方式：", 2,textFont));
-            table.addCell(PdfUtil.mergeCol(bizProcessData.getString9(), 5,textFont));
+            table.addCell(PdfUtil.mergeCol("六、", 1, textFont));
+            table.addCell(PdfUtil.mergeCol("包装规范：", 2, textFont));
+            table.addCell(PdfUtil.mergeCol(bizProcessData.getString27(), 6, textFont));
+            table.addCell(PdfUtil.mergeCol("运输方式：", 2, textFont));
+            table.addCell(PdfUtil.mergeCol(bizProcessData.getString9(), 5, textFont));
 
-            table.addCell(PdfUtil.mergeCol("七、", 1,textFont));
-            table.addCell(PdfUtil.mergeCol("发货日期：", 2,textFont));
+            table.addCell(PdfUtil.mergeCol("七、", 1, textFont));
+            table.addCell(PdfUtil.mergeCol("发货日期：", 2, textFont));
             String strDateFormat = "yyyy-MM-dd HH:mm:ss";
             SimpleDateFormat sdf = new SimpleDateFormat(strDateFormat);
             String date = "";
             if (bizProcessData.getDatetime3() != null) {
                 date = sdf.format(bizProcessData.getDatetime3());
             }
-            table.addCell(PdfUtil.mergeCol(date, 6,textFont));
-            table.addCell(PdfUtil.mergeCol("收货信息：", 2,textFont));
-            table.addCell(PdfUtil.mergeCol(bizProcessData.getString28(), 5,textFont));
-            table.addCell(PdfUtil.mergeCol("八、", 1,textFont));
-            table.addCell(PdfUtil.mergeCol("付款方式：", 2,textFont));
-            SysDictData  dictData = new SysDictData();
+            table.addCell(PdfUtil.mergeCol(date, 6, textFont));
+            table.addCell(PdfUtil.mergeCol("收货信息：", 2, textFont));
+            table.addCell(PdfUtil.mergeCol(bizProcessData.getString28(), 5, textFont));
+            table.addCell(PdfUtil.mergeCol("八、", 1, textFont));
+            table.addCell(PdfUtil.mergeCol("付款方式：", 2, textFont));
+            SysDictData dictData = new SysDictData();
             dictData.setDictType("contract_paytype");
             dictData.setDictValue(bizProcessData.getString20());
             List<SysDictData> list = dictDataService.selectDictDataList(dictData);
             SysDictData sysDictData = list.get(0);
-            table.addCell(PdfUtil.mergeCol(sysDictData == null ? "" : sysDictData.getDictLabel(), 6,textFont));
-            table.addCell(PdfUtil.mergeCol("运费承担：", 2,textFont));
-            table.addCell(PdfUtil.mergeCol(bizProcessData.getString26(), 5,textFont));
+            table.addCell(PdfUtil.mergeCol(sysDictData == null ? "" : sysDictData.getDictLabel(), 6, textFont));
+            table.addCell(PdfUtil.mergeCol("运费承担：", 2, textFont));
+            table.addCell(PdfUtil.mergeCol(bizProcessData.getString26(), 5, textFont));
 
-            table.addCell(PdfUtil.mergeCol("九、", 1,textFont));
-            table.addCell(PdfUtil.mergeColLeft("违约责任：合同签订后，买卖双方严格执行双方所签订合同的条款，其中一方不履行或不完全履行合同者应承担相应的法律责任；解决合同纠纷方式：双方协商解决，解决不成由卖方所在北京仲裁委员会仲裁。", 14,textFont));
+            table.addCell(PdfUtil.mergeCol("九、", 1, textFont));
+            table.addCell(PdfUtil.mergeColLeft("违约责任：合同签订后，买卖双方严格执行双方所签订合同的条款，其中一方不履行或不完全履行合同者应承担相应的法律责任；解决合同纠纷方式：双方协商解决，解决不成由卖方所在北京仲裁委员会仲裁。", 14, textFont));
 
-            table.addCell(PdfUtil.mergeCol("十、", 1,textFont));
-            table.addCell(PdfUtil.mergeColLeft("本合同一式贰份。双方各执一份，双方签字盖章后生效（传真件有效）。", 14,textFont));
-
-
+            table.addCell(PdfUtil.mergeCol("十、", 1, textFont));
+            table.addCell(PdfUtil.mergeColLeft("本合同一式贰份。双方各执一份，双方签字盖章后生效（传真件有效）。", 14, textFont));
 
 
-            table.addCell(PdfUtil.mergeCol("", 1,textFont));
+            table.addCell(PdfUtil.mergeCol("", 1, textFont));
 //            table.addCell(PdfUtil.mergeColLeft("需方：" , 1,textFont));
-            table.addCell(PdfUtil.mergeColLeft("需方：" + companyName, 7,textFont));
+            table.addCell(PdfUtil.mergeColLeft("需方：" + companyName, 7, textFont));
 
 //            table.addCell(PdfUtil.mergeCol("供方", 1,textFont));
-            table.addCell(PdfUtil.mergeColLeft( "供方：" + string6Name, 7,textFont));
+            table.addCell(PdfUtil.mergeColLeft("供方：" + string6Name, 7, textFont));
             //table.addCell(PdfUtil.mergeColLeft("单位地址："  + StringUtils.trim(bizCustomer.getCompanyAddress()), 7,textFont));
 
-            table.addCell(PdfUtil.mergeCol("", 1,textFont));
-            table.addCell(PdfUtil.mergeColLeft("委托代理人：", 7,textFont));
-            table.addCell(PdfUtil.mergeColLeft("委托代理人：" + bizSuppliers.getHumanCapitalMeasure(), 7,textFont));
+            table.addCell(PdfUtil.mergeCol("", 1, textFont));
+            table.addCell(PdfUtil.mergeColLeft("委托代理人：", 7, textFont));
+            table.addCell(PdfUtil.mergeColLeft("委托代理人：" + bizSuppliers.getHumanCapitalMeasure(), 7, textFont));
 
-            table.addCell(PdfUtil.mergeCol("", 1,textFont));
-            table.addCell(PdfUtil.mergeColLeft("电    话：" + Util.jsonObject.getJSONObject(companyName).getString("phone"), 7,textFont));
-            table.addCell(PdfUtil.mergeColLeft("电    话：" + bizSuppliers.getTelphone(), 7,textFont));
+            table.addCell(PdfUtil.mergeCol("", 1, textFont));
+            table.addCell(PdfUtil.mergeColLeft("电    话：" + Util.jsonObject.getJSONObject(companyName).getString("phone"), 7, textFont));
+            table.addCell(PdfUtil.mergeColLeft("电    话：" + bizSuppliers.getTelphone(), 7, textFont));
             //table.addCell(PdfUtil.mergeColLeft("传    真：" + StringUtils.trim(bizCustomer.getFax()), 7,textFont));
 
-            table.addCell(PdfUtil.mergeCol("", 1,textFont));
-            table.addCell(PdfUtil.mergeColLeft("传    真：" + "", 7,textFont));
-            table.addCell(PdfUtil.mergeColLeft("传    真：" + bizSuppliers.getFax(), 7,textFont));
+            table.addCell(PdfUtil.mergeCol("", 1, textFont));
+            table.addCell(PdfUtil.mergeColLeft("传    真：" + "", 7, textFont));
+            table.addCell(PdfUtil.mergeColLeft("传    真：" + bizSuppliers.getFax(), 7, textFont));
 
-            table.addCell(PdfUtil.mergeCol("", 1,textFont));
-            table.addCell(PdfUtil.mergeColLeft("开户银行：" + Util.jsonObject.getJSONObject(companyName).getString("bank"), 7,textFont));
-            table.addCell(PdfUtil.mergeColLeft("开户银行：" + bizSuppliers.getBank() == null ? "": bizSuppliers.getBank(), 7,textFont));
+            table.addCell(PdfUtil.mergeCol("", 1, textFont));
+            table.addCell(PdfUtil.mergeColLeft("开户银行：" + Util.jsonObject.getJSONObject(companyName).getString("bank"), 7, textFont));
+            table.addCell(PdfUtil.mergeColLeft("开户银行：" + bizSuppliers.getBank() == null ? "" : bizSuppliers.getBank(), 7, textFont));
             //table.addCell(PdfUtil.mergeColLeft("开户银行：" + StringUtils.trim(bizCustomer.getString11()), 7,textFont));
 
-            table.addCell(PdfUtil.mergeCol("", 1,textFont));
-            table.addCell(PdfUtil.mergeColLeft("帐    号：" + Util.jsonObject.getJSONObject(companyName).getString("bankNo"), 7,textFont));
+            table.addCell(PdfUtil.mergeCol("", 1, textFont));
+            table.addCell(PdfUtil.mergeColLeft("帐    号：" + Util.jsonObject.getJSONObject(companyName).getString("bankNo"), 7, textFont));
 //            table.addCell(PdfUtil.mergeColLeft("帐    号：" + StringUtils.trim(remark8), 7,textFont));
-            table.addCell(PdfUtil.mergeColLeft("帐    号：" +  bizSuppliers.getBankNo() == null ? "" : bizSuppliers.getBankNo(), 7,textFont));
+            table.addCell(PdfUtil.mergeColLeft("帐    号：" + bizSuppliers.getBankNo() == null ? "" : bizSuppliers.getBankNo(), 7, textFont));
 
-            table.addCell(PdfUtil.mergeCol("", 1,textFont));
-            table.addCell(PdfUtil.mergeColLeft("税    号："  + Util.jsonObject.getJSONObject(companyName).getString("faxNo"), 7,textFont));
-            table.addCell(PdfUtil.mergeColLeft("税    号：" + bizSuppliers.getTaxNumber() == null ? "":bizSuppliers.getTaxNumber(), 7,textFont));
+            table.addCell(PdfUtil.mergeCol("", 1, textFont));
+            table.addCell(PdfUtil.mergeColLeft("税    号：" + Util.jsonObject.getJSONObject(companyName).getString("faxNo"), 7, textFont));
+            table.addCell(PdfUtil.mergeColLeft("税    号：" + bizSuppliers.getTaxNumber() == null ? "" : bizSuppliers.getTaxNumber(), 7, textFont));
 
-            table.addCell(PdfUtil.mergeCol("", 1,textFont));
-            table.addCell(PdfUtil.mergeColLeft("地    址："  + Util.jsonObject.getJSONObject(companyName).getString("address"), 7,textFont));
-            table.addCell(PdfUtil.mergeColLeft("地    址：" + bizSuppliers.getAddress() == null ? "":bizSuppliers.getAddress(), 7,textFont));
+            table.addCell(PdfUtil.mergeCol("", 1, textFont));
+            table.addCell(PdfUtil.mergeColLeft("地    址：" + Util.jsonObject.getJSONObject(companyName).getString("address"), 7, textFont));
+            table.addCell(PdfUtil.mergeColLeft("地    址：" + bizSuppliers.getAddress() == null ? "" : bizSuppliers.getAddress(), 7, textFont));
 
             Paragraph paragraphRemark1 = new Paragraph();
             Font remarkFont1 = PdfUtil.getPdfChineseFont(7, Font.NORMAL);
@@ -1338,7 +1413,6 @@ public class BizProcessDataProcurementController extends BaseController {
             datePar.setSpacingBefore(20);
 
 
-
             document.open();
             //document.add(paragraph0);
             document.add(paragraph);
@@ -1357,14 +1431,11 @@ public class BizProcessDataProcurementController extends BaseController {
             document.close();
             writer.close();
             return AjaxResult.success(filename);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             throw new BusinessException("导出失败，请联系网站管理员！");
         }
     }
-
 
 
 }
