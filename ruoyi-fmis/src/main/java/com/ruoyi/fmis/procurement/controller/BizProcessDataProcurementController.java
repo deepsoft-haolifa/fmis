@@ -28,6 +28,8 @@ import com.ruoyi.fmis.data.service.IBizProcessDataService;
 import com.ruoyi.fmis.datatrack.domain.BizProcessDataTrack;
 import com.ruoyi.fmis.datatrack.service.IBizProcessDataTrackService;
 import com.ruoyi.fmis.define.service.IBizProcessDefineService;
+import com.ruoyi.fmis.finance.domain.BizPayPlan;
+import com.ruoyi.fmis.finance.service.IBizPayPlanService;
 import com.ruoyi.fmis.product.service.IBizProductService;
 import com.ruoyi.fmis.status.domain.BizDataStatus;
 import com.ruoyi.fmis.status.service.IBizDataStatusService;
@@ -102,6 +104,9 @@ public class BizProcessDataProcurementController extends BaseController {
     @Autowired
     private IBizProcessDataTrackService bizProcessDataTrackService;
 
+    @Autowired
+    private IBizPayPlanService bizPayPlanService;
+
     @RequiresPermissions("fmis:procurement:view")
     @GetMapping()
     public String data() {
@@ -151,96 +156,167 @@ public class BizProcessDataProcurementController extends BaseController {
 
         Map<String, SysRole> flowAllMap = bizProcessDefineService.getFlowAllMap(bizId);
         boolean flowMapIsEmpty = !CollectionUtils.isEmpty(flowMap);
-        if (flowMapIsEmpty) {
-            //计算流程描述
-            for (BizProcessData data : list) {
-                if (flowMapIsEmpty) {
-                    // 发起质检按钮的判断条件loginUserId
-                    data.setLoginUserId(String.valueOf(ShiroUtils.getUserId()));
-                    String flowStatus = data.getFlowStatus();
-                    //结束标识
-                    String normalFlag = data.getNormalFlag();
-                    String flowStatusRemark = "待上报";
-                    data.setLoginUserId(ShiroUtils.getUserId().toString());
-                    if ("-2".equals(flowStatus)) {
-                        flowStatusRemark = "待上报";
-                    } else if ("1".equals(flowStatus)) {
-                        flowStatusRemark = "已上报";
-                    } else {
-                        SysRole currentSysRole = CommonUtils.getLikeByMap(flowAllMap, flowStatus.replaceAll("-", ""));
-                        if (currentSysRole == null) {
-                            continue;
-                        }
-                        if (flowStatus.equals(normalFlag)) {
-                            flowStatusRemark = currentSysRole.getRoleName() + "已完成";
-                        } else if (flowStatus.startsWith("-")) {
-                            //不同意标识
-                            flowStatusRemark = currentSysRole.getRoleName() + "不同意";
-                        } else {
-                            flowStatusRemark = currentSysRole.getRoleName() + "同意";
-                        }
+
+        //计算流程描述
+        for (BizProcessData data : list) {
+            if (flowMapIsEmpty) {
+                // 发起质检按钮的判断条件loginUserId
+                data.setLoginUserId(String.valueOf(ShiroUtils.getUserId()));
+                String flowStatus = data.getFlowStatus();
+                //结束标识
+                String normalFlag = data.getNormalFlag();
+                String flowStatusRemark = "待上报";
+                data.setLoginUserId(ShiroUtils.getUserId().toString());
+                if ("-2".equals(flowStatus)) {
+                    flowStatusRemark = "待上报";
+                } else if ("1".equals(flowStatus)) {
+                    flowStatusRemark = "已上报";
+                } else {
+                    SysRole currentSysRole = CommonUtils.getLikeByMap(flowAllMap, flowStatus.replaceAll("-", ""));
+                    if (currentSysRole == null) {
+                        continue;
                     }
-                    data.setFlowStatusRemark(flowStatusRemark);
-                    //计算是否可以审批
-                    int flowStatusInt = Integer.parseInt(flowStatus);
-                    data.setOperationExamineStatus(false);
-
-                    if (flowStatusInt > 0) {
-                        if (!flowStatus.equals(normalFlag)) {
-                            userFlowStatus = flowMap.keySet().iterator().next();
-                            int userFlowStatusInt = Integer.parseInt(userFlowStatus);
-                            if (userFlowStatusInt == flowStatusInt + 1) {
-                                data.setOperationExamineStatus(true);
-                            }
-
-                        }
+                    if (flowStatus.equals(normalFlag)) {
+                        flowStatusRemark = currentSysRole.getRoleName() + "已完成";
+                    } else if (flowStatus.startsWith("-")) {
+                        //不同意标识
+                        flowStatusRemark = currentSysRole.getRoleName() + "不同意";
+                    } else {
+                        flowStatusRemark = currentSysRole.getRoleName() + "同意";
                     }
                 }
-                // 判断是否可以发起质检 1 可以 0 不可以
-                try {
-                    if(canTest(data.getDataId())) {
-                        data.setCanTest(1);
+                data.setFlowStatusRemark(flowStatusRemark);
+                //计算是否可以审批
+                int flowStatusInt = Integer.parseInt(flowStatus);
+                data.setOperationExamineStatus(false);
+
+                if (flowStatusInt > 0) {
+                    if (!flowStatus.equals(normalFlag)) {
+                        userFlowStatus = flowMap.keySet().iterator().next();
+                        int userFlowStatusInt = Integer.parseInt(userFlowStatus);
+                        if (userFlowStatusInt == flowStatusInt + 1) {
+                            data.setOperationExamineStatus(true);
+                        }
+
                     }
-                } catch (Exception e) {
-                    data.setCanTest(1);
-                    logger.error("dataId:{},calculate canTest error.", data.getDataId(), e);
                 }
             }
+            // 判断是否可以发起质检 1 可以 0 不可以
+            try {
+                if (canTest(data.getDataId())) {
+                    data.setCanTest(1);
+                }
+            } catch (Exception e) {
+                data.setCanTest(1);
+                logger.error("dataId:{},calculate canTest error.", data.getDataId(), e);
+            }
+            // 补全数据：采购总数量，已付款金额，已入库数量（质检合格数）
+            repairData(data);
         }
         return getDataTable(list);
     }
 
+    /**
+     * @param data
+     */
+    private void repairData(BizProcessData data) {
+        // 获取采购总数量
+        int purchaseNum = calculatePurchaseNum(data.getDataId());
+        // 获取已付款金额
+        String havePayTotal = calculatePayTotal(data.getString12());
+        // 获取已入库数量
+        int putStorageNum = calculateStorageNum(data.getString12());
+
+        data.setPurchaseNum(purchaseNum);
+        data.setPayTotal(havePayTotal);
+        data.setPutStorageNum(putStorageNum);
+
+    }
+
+    /**
+     * 已入库总数量：按照质检合格数统计
+     *
+     * @param purchaseNo
+     * @return
+     */
+    private int calculateStorageNum(String purchaseNo) {
+        BizProcessChild bizProcessChild = new BizProcessChild();
+        bizProcessChild.setProcurementNo(purchaseNo);
+        List<BizProcessChild> bizProcessChildren = bizProcessChildService.selectBizTestChildHistoryList(bizProcessChild);
+        int count = bizProcessChildren.stream().map(BizProcessChild::getYesNum).mapToInt(Integer::parseInt).reduce(0, (a, b) -> a + b);
+        return count;
+    }
+
+    /**
+     * 已付款总额
+     *
+     * @param purchaseNo
+     * @return
+     */
+    private String calculatePayTotal(String purchaseNo) {
+        BizPayPlan bizPayPlan = new BizPayPlan();
+        bizPayPlan.setStatus("1");// 1 已付款 0 未付款
+        bizPayPlan.setContractNo(purchaseNo);
+        List<BizPayPlan> bizPayPlans = bizPayPlanService.selectBizPayPlanList(bizPayPlan);
+        Double count = bizPayPlans.stream().map(BizPayPlan::getApplyAmount).reduce(0.0, (a, b) -> a + b);
+        return String.valueOf(count);
+    }
+
+    /**
+     * 采购总数量：从采购状态池获取
+     *
+     * @param dataId
+     * @return
+     */
+    private int calculatePurchaseNum(Long dataId) {
+        BizDataStatus bizDataStatus = new BizDataStatus();
+        bizDataStatus.setString4(String.valueOf(dataId));
+        List<BizDataStatus> bizDataStatuses = bizDataStatusService.selectBizDataStatusList(bizDataStatus);
+        int count = bizDataStatuses.stream().map(BizDataStatus::getString1).mapToInt(Integer::parseInt).reduce(0, (a, b) -> a + b);
+        return count;
+    }
+
+
+    /**
+     * @param dataId
+     * @return
+     */
     // 判断是否还需要发起质检
     private boolean canTest(Long dataId) {
         BizProcessChild bizProcessChild = new BizProcessChild();
         bizProcessChild.setDataId(dataId);
         List<BizProcessChild> productList = bizProcessChildService.selectBizTestProductList(bizProcessChild);
-        for (BizProcessChild child: productList) {
-            if (judgeCanTest(child.getYesNum(),child.getProductNum())) return true;
+        for (BizProcessChild child : productList) {
+            if (judgeCanTest(child.getYesNum(), child.getProductNum())) return true;
         }
         List<BizProcessChild> actuatorList = bizProcessChildService.selectBizTestActuatorList(bizProcessChild);
-        for (BizProcessChild child: actuatorList) {
-            if (judgeCanTest(child.getYesNum(),child.getActuatorNum())) return true;
+        for (BizProcessChild child : actuatorList) {
+            if (judgeCanTest(child.getYesNum(), child.getActuatorNum())) return true;
         }
         List<BizProcessChild> pAList = bizProcessChildService.selectBizTestPAList(bizProcessChild);
-        for (BizProcessChild child: pAList) {
-            if (judgeCanTest(child.getYesNum(),String.valueOf(child.getPattachmentCount()))) return true;
+        for (BizProcessChild child : pAList) {
+            if (judgeCanTest(child.getYesNum(), String.valueOf(child.getPattachmentCount()))) return true;
         }
         List<BizProcessChild> ref1List = bizProcessChildService.selectBizTestRef1List(bizProcessChild);
-        for (BizProcessChild child: ref1List) {
-            if (judgeCanTest(child.getYesNum(),String.valueOf(child.getProductRef1Num()))) return true;
+        for (BizProcessChild child : ref1List) {
+            if (judgeCanTest(child.getYesNum(), String.valueOf(child.getProductRef1Num()))) return true;
         }
         List<BizProcessChild> ref2List = bizProcessChildService.selectBizTestRef2List(bizProcessChild);
-        for (BizProcessChild child: ref2List) {
+        for (BizProcessChild child : ref2List) {
             if (judgeCanTest(child.getYesNum(), String.valueOf(child.getProductRef2Num()))) return true;
         }
         return false;
     }
 
-    private boolean judgeCanTest(String yesNum,String countNum) {
-        double yes = StringUtils.isNotEmpty(yesNum)? Double.parseDouble(yesNum): 0;
-        double count = StringUtils.isNotEmpty(countNum)? Double.parseDouble(countNum): 0;
-        if(yes < count){
+    /**
+     * @param yesNum
+     * @param countNum
+     * @return
+     */
+    private boolean judgeCanTest(String yesNum, String countNum) {
+        double yes = StringUtils.isNotEmpty(yesNum) ? Double.parseDouble(yesNum) : 0;
+        double count = StringUtils.isNotEmpty(countNum) ? Double.parseDouble(countNum) : 0;
+        if (yes < count) {
             return true;
         }
         return false;

@@ -876,7 +876,6 @@
         <if test="bjNo != null and bjNo != ''">and ss.string6 like concat('%', #{bjNo}, '%')</if>
         <if test="contractNo != null and contractNo != ''">and d1.string1 like concat('%', #{contractNo}, '%')</if>
         <if test="procurementNo != null and procurementNo != ''">and d.string12 like concat('%', #{procurementNo}, '%')</if>
-
         order by sn.create_time desc
     </select>
 
