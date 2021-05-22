@@ -15,9 +15,20 @@ public class SummaryRespVo {
     private String supplierName;
 
     /**
+     * 供应商
+     */
+    private String supplierId;
+
+    /**
      * 客户名称
      */
     private String customerName;
+
+    /**
+     * 客户名称
+     */
+    private String customerId;
+
     /**
      * 合同额
      */

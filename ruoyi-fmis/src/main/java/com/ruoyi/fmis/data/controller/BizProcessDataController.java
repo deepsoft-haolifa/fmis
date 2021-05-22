@@ -139,6 +139,11 @@ public class BizProcessDataController extends BaseController {
         if ("1".equals(toDo)) {
             mmap.put("todo","1");
         }
+        String customerId = getRequest().getParameter("customerId");
+        if (StringUtils.isNotEmpty(customerId)) {
+            mmap.put("customerId",customerId);
+        }
+
         return prefix + "/data";
     }
     @GetMapping("/produce")

@@ -26,6 +26,7 @@
                         </li>
                         <li>
                             <p>客户名称：</p>
+                            <input type="hidden" name="string2" id="customerId"  />
                             <input type="text" name="customerName"  />
                         </li>
                         <li>
@@ -82,6 +83,10 @@
     var dotoType = [[${todo}]];
     if (dotoType == "1") {
         $("#queryStatus").val("1");
+    }
+    var customerId = [[${customerId}]];
+    if (!$.common.isEmpty(customerId)) {
+        $("#customerId").val(customerId);
     }
     $(function() {
         var options = {

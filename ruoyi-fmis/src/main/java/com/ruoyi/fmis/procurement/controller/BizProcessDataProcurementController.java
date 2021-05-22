@@ -109,7 +109,11 @@ public class BizProcessDataProcurementController extends BaseController {
 
     @RequiresPermissions("fmis:procurement:view")
     @GetMapping()
-    public String data() {
+    public String data(ModelMap mmap) {
+        String supplierId = getRequest().getParameter("supplierId");
+        if (StringUtils.isNotEmpty(supplierId)) {
+            mmap.put("supplierId",supplierId);
+        }
         return prefix + "/data";
     }
 
@@ -122,10 +126,10 @@ public class BizProcessDataProcurementController extends BaseController {
     public TableDataInfo list(BizProcessData bizProcessData) {
 
         String bizId = bizProcessData.getBizId();
-        if (!StringUtils.isEmpty(bizProcessData.getString6())) {
+        if (!StringUtils.isEmpty(bizProcessData.getSupplierName())) {
             BizSuppliers bizSuppliers = new BizSuppliers();
             // 供应商查询
-            bizSuppliers.setName(bizProcessData.getString6());
+            bizSuppliers.setName(bizProcessData.getSupplierName());
             List<BizSuppliers> suppliers = bizSuppliersService.selectBizSuppliersList(bizSuppliers);
             if (suppliers != null && suppliers.size() > 0) {
                 Set<String> supplierIds = new HashSet<>();
@@ -135,7 +139,7 @@ public class BizProcessDataProcurementController extends BaseController {
                 bizProcessData.setSupplierIds(supplierIds);
             }
             // 重置
-            bizProcessData.setString6("");
+//            bizProcessData.setString6("");
             // 判断是否有供应商数据，若没有直接返回
             if (CollectionUtils.isEmpty(bizProcessData.getSupplierIds())) {
                 return getDataTable(new ArrayList<>());

@@ -138,6 +138,7 @@
     <select id="selectProcurementSummary" resultType="com.ruoyi.fmis.finance.domain.vo.SummaryRespVo">
         select
             s.name supplierName,
+            q.string6 supplierId,
             -- 合同额
             ifnull(sum(q.price1),0) contractAmount,
             -- 应付款
@@ -166,7 +167,7 @@
      </select>
 
     <select id="selectSaleContractSummary" resultType="com.ruoyi.fmis.finance.domain.vo.SummaryRespVo">
-        select c.customerName,c.contractAmount,c.collectedAmount,
+        select c.customerName,c.customerId,c.contractAmount,c.collectedAmount,
         -- 应收款（发货金额-已收款）
         round(c.deliveryAmount - c.collectedAmount,2) needCollectAmount,
         -- 未开发票（发货金额-已收款-已开发票）
@@ -175,6 +176,7 @@
         from (
             select
                 ct.name as customerName,
+                q.string2 as customerId,
                 -- 合同额
                 ifnull(sum(q.price1),0) contractAmount,
                 -- 发货金额（发货数量*销售单价）

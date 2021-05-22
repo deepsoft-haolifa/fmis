@@ -23,7 +23,8 @@
 
                         <li>
                             <p>供应商：</p>
-                            <input type="text" name="string6" value=""/>
+                            <input type="hidden" name="string6" id="supplierId"/>
+                            <input type="text" name="supplierName" value=""/>
                         </li>
                         <li>
                             <p>销售合同号：</p>
@@ -94,7 +95,10 @@
     var prefix = ctx + "fmis/procurement";
     var supplierTypeData = [[${@dict.getType('supplier_type')}]];
     var procurementStatusData = [[${@dict.getType('procurement_status')}]];
-
+    var supplierId = [[${supplierId}]];
+    if (!$.common.isEmpty(supplierId)) {
+        $("#supplierId").val(supplierId);
+    }
     $(function () {
         var options = {
             url: prefix + "/list",
