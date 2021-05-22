@@ -399,6 +399,29 @@ public class BizProcessData extends BaseEntity {
     @Setter
     private int canTest;
 
+    /**
+     * 采购单 采购总数量
+     */
+    @Getter
+    @Setter
+    private int purchaseNum;
+
+    /**
+     * 已付款总额
+     */
+    @Getter
+    @Setter
+    private String payTotal;
+
+    /**
+     * 入库总数量
+     */
+    @Getter
+    @Setter
+    private int putStorageNum;
+
+
+
 
 
     public Set<String> getFlows() {
