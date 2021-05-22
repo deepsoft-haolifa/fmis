@@ -41,6 +41,13 @@ public class BizProcessData extends BaseEntity {
 
     @Getter
     @Setter
+    /**
+     * 已发货金额
+     */
+    private Double deliveryAmount;
+
+    @Getter
+    @Setter
     private Double stayNum;
 
     @Getter

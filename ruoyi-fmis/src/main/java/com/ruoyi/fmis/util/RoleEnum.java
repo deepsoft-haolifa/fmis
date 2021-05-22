@@ -14,6 +14,8 @@ public enum RoleEnum {
     CNY("cny", "出纳员"),
     PROCESS_FK_ZJL("process_fk_zjl", "付款工作流-总经理"),
     ZJJL("zjjl", "资金经理"),
+    CGY("cggzl_cgy", "采购员"),
+    ADMIN("admin", "管理员"),
     ;
     private String roleKey;
 

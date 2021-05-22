@@ -18,6 +18,7 @@ import com.ruoyi.fmis.datatrack.service.IBizProcessDataTrackService;
 import com.ruoyi.fmis.define.service.IBizProcessDefineService;
 import com.ruoyi.fmis.suppliers.domain.BizSuppliers;
 import com.ruoyi.fmis.suppliers.service.IBizSuppliersService;
+import com.ruoyi.fmis.util.RoleEnum;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysRole;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -29,6 +30,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * 合同追踪Controller
@@ -62,12 +66,11 @@ public class BizProcessDataTrackController extends BaseController {
     @PostMapping("/process-data-list")
     @ResponseBody
     public TableDataInfo list(BizProcessData bizProcessData) {
-
         String bizId = bizProcessData.getBizId();
         if (!StringUtils.isEmpty(bizProcessData.getString6())) {
             BizSuppliers bizSuppliers = new BizSuppliers();
             bizSuppliers.setName(bizProcessData.getString6());
-            List<BizSuppliers> suppliers =  bizSuppliersService.selectBizSuppliersList(bizSuppliers);
+            List<BizSuppliers> suppliers = bizSuppliersService.selectBizSuppliersList(bizSuppliers);
             if (suppliers != null && suppliers.size() > 0) {
                 bizSuppliers = suppliers.get(0);
                 bizProcessData.setString6(bizSuppliers.getSuppliersId() + "");
@@ -76,61 +79,14 @@ public class BizProcessDataTrackController extends BaseController {
             }
 
         }
-
-        Map<String, SysRole> flowMap = bizProcessDefineService.getRoleFlowMap(bizId);
-        String userFlowStatus = "";
-        if (!CollectionUtils.isEmpty(flowMap)) {
-            userFlowStatus = flowMap.keySet().iterator().next();
-            bizProcessData.setRoleType(userFlowStatus);
-        }
-
         startPage();
-        List<BizProcessData> list = bizProcessDataService.selectBizProcessDataListRefProcurement(bizProcessData);
-
-        Map<String, SysRole> flowAllMap = bizProcessDefineService.getFlowAllMap(bizId);
-        if (!CollectionUtils.isEmpty(flowMap)) {
-            //计算流程描述
-            for (BizProcessData data : list) {
-                String flowStatus = data.getFlowStatus();
-                //结束标识
-                String normalFlag = data.getNormalFlag();
-                String flowStatusRemark = "待上报";
-                data.setLoginUserId(ShiroUtils.getUserId().toString());
-                if ("-2".equals(flowStatus)) {
-                    flowStatusRemark = "待上报";
-                } else if ("1".equals(flowStatus)) {
-                    flowStatusRemark = "已上报";
-                } else {
-                    SysRole currentSysRole =  CommonUtils.getLikeByMap(flowAllMap,flowStatus.replaceAll("-",""));
-                    if (currentSysRole == null) {
-                        continue;
-                    }
-                    if (flowStatus.equals(normalFlag)) {
-                        flowStatusRemark = currentSysRole.getRoleName() + "已完成";
-                    } else if (flowStatus.startsWith("-")) {
-                        //不同意标识
-                        flowStatusRemark = currentSysRole.getRoleName() + "不同意";
-                    } else {
-                        flowStatusRemark = currentSysRole.getRoleName() + "同意";
-                    }
-                }
-                data.setFlowStatusRemark(flowStatusRemark);
-                //计算是否可以审批
-                int flowStatusInt = Integer.parseInt(flowStatus);
-                data.setOperationExamineStatus(false);
-
-                if (flowStatusInt > 0) {
-                    if (!flowStatus.equals(normalFlag)) {
-                        userFlowStatus = flowMap.keySet().iterator().next();
-                        int userFlowStatusInt = Integer.parseInt(userFlowStatus);
-                        if (userFlowStatusInt == flowStatusInt + 1) {
-                            data.setOperationExamineStatus(true);
-                        }
-
-                    }
-                }
-            }
+        // 除了管理员，其他人只能看到自己申报的采购订单
+        List<SysRole> roles = ShiroUtils.getSysUser().getRoles();
+        Set<String> roleKeySet = roles.stream().map(SysRole::getRoleKey).collect(Collectors.toSet());
+        if (!roleKeySet.contains(RoleEnum.ADMIN.getRoleKey())) {
+            bizProcessData.setCreateBy(String.valueOf(ShiroUtils.getSysUser().getUserId()));
         }
+        List<BizProcessData> list = bizProcessDataService.selectBizProcessDataListRefProcurement(bizProcessData);
         return getDataTable(list);
     }
 
@@ -140,7 +96,7 @@ public class BizProcessDataTrackController extends BaseController {
      */
     @RequiresPermissions("fmis:processDataTrack:add")
     @GetMapping("/addTrack/{dataId}")
-    public String addTrack(@PathVariable("dataId") Long dataId,ModelMap mmap) {
+    public String addTrack(@PathVariable("dataId") Long dataId, ModelMap mmap) {
         mmap.put("dataId", dataId);
         return prefix + "/addTrack";
     }
@@ -171,7 +127,7 @@ public class BizProcessDataTrackController extends BaseController {
     @ResponseBody
     public TableDataInfo trackList(@PathVariable("dataId") Long dataId) {
         startPage();
-        BizProcessDataTrack bizProcessDataTrack=new BizProcessDataTrack();
+        BizProcessDataTrack bizProcessDataTrack = new BizProcessDataTrack();
         bizProcessDataTrack.setDataId(dataId);
         List<BizProcessDataTrack> list = bizProcessDataTrackService.selectBizProcessDataTrackList(bizProcessDataTrack);
         return getDataTable(list);

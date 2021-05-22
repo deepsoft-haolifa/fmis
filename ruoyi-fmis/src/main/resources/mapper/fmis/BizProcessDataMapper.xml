@@ -245,7 +245,7 @@
         q.create_time, q.update_by, q.update_time,ct.name as customerName,bs.name as suppliersName,
         q.string21,q.string22,q.string23,q.string24,q.string25,q.string26,q.string27,q.string28,q.string29,q.string30,
         q.price11, q.price12, q.price13, q.price14, q.price15, q.price16, q.price17, q.price18, q.price19, q.price20,
-        dt1.dept_name as deptName,u.user_name as createByName,q.except_pay_time,q.purchase_specific_requests
+        dt1.dept_name as deptName,u.user_name as createByName,q.except_pay_time,q.purchase_specific_requests,  round(bpc1.deliveryAmount,2) deliveryAmount
         from biz_process_data q
         left join sys_user u on q.create_by=u.user_id
         left join sys_dept dt on u.dept_id=dt.dept_id
@@ -254,8 +254,11 @@
 
         left join biz_customer ct on ct.customer_id=q.string2
         left join biz_suppliers bs on bs.suppliers_id=q.string3
-
         left join sys_dept dt1 on q.string22=dt1.dept_id
+
+        left join (select a.string5,sum(a.string13*a.price1) deliveryAmount from biz_process_child  a left join biz_process_data
+            b on a.data_id=b.data_id where b.biz_id='newdelivery' and b.normal_flag=b.flow_status and a.string19=1 group by a.string5) bpc1 ON
+            bpc1.string5 = q.string1
     </sql>
 
     <select id="selectBizProcessDataListRef" parameterType="BizProcessData" resultMap="BizProcessDataResult">
@@ -982,6 +985,7 @@
             <if test="datetime4 != null "> and datetime4 = #{datetime4}</if>
             <if test="datetime5 != null "> and datetime5 = #{datetime5}</if>
             <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="createBy != null  and createBy != ''"> and create_by = #{createBy}</if>
 
             <!-- 采购 采购员-采购主管-采购经理-总经理审批 -->
             <if test="roleType == 1 ">

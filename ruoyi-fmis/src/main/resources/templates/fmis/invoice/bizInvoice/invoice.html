@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('进项发票列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>发票代码：</p>
+                                <input type="text" name="invoiceCode"/>
+                            </li>
+                            <li>
+                                <p>发票号码：</p>
+                                <input type="text" name="invoiceNo"/>
+                            </li>
+                            <li>
+                                <p>发票类型：</p>
+                                <select name="invoiceType" th:with="type=${@dict.getType('invoice_classify')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <p>发票状态</p>
+                                <select name="status" th:with="type=${@dict.getType('biz_invoice_status')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="fmis:bizInvoice:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="fmis:bizInvoice:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="fmis:bizInvoice:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="fmis:bizInvoice:export">
+                    <i class="fa fa-download"></i> 导出
+                 </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('fmis:bizInvoice:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('fmis:bizInvoice:remove')}]];
+        var prefix = ctx + "fmis/bizInvoice";
+        var invoiceClassifyDict = [[${@dict.getType('invoice_classify')}]];
+        var bizInvoiceStatusDict = [[${@dict.getType('biz_invoice_status')}]];
+
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "发票信息（进项发票）",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'id', 
+                    title : 'ID',
+                    visible: false
+                },
+                {
+                    field : 'serialNo', 
+                    title : '序号'
+                },
+                {
+                    field : 'invoiceCode', 
+                    title : '发票代码'
+                },
+                {
+                    field : 'invoiceNo', 
+                    title : '发票号码'
+                },
+                {
+                    field : 'billDate', 
+                    title : '开票日期'
+                },
+                {
+                    field : 'supplierName', 
+                    title : '供应商名称'
+                },
+                {
+                    field : 'amount', 
+                    title : '发票金额'
+                },
+                {
+                    field : 'taxRate', 
+                    title : '税率'
+                },
+                {
+                    field : 'contractNo', 
+                    title : '采购合同号'
+                },
+                {
+                    field : 'invoiceType', 
+                    title : '发票类型',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(invoiceClassifyDict, value);
+                    }
+                },
+                {
+                    field : 'status', 
+                    title : '发票状态',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(bizInvoiceStatusDict, value);
+                    }
+                },
+                {
+                    field : 'remark', 
+                    title : '备注'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i> 编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i> 删除</a>');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>
