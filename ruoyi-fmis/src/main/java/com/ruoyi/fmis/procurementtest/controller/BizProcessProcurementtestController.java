@@ -1,8 +1,7 @@
 package com.ruoyi.fmis.procurementtest.controller;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Stream;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -439,6 +438,36 @@ public class BizProcessProcurementtestController extends BaseController {
             return toAjax(1);
         }
         bizDataStestnService.deleteBizDataStestnById(Long.parseLong(testId));
+        return toAjax(1);
+    }
+
+    // 不合格品处理
+    @GetMapping("/reject")
+    public String  viewReject() {
+        return prefix + "/reject";
+    }
+
+    @GetMapping("/reject/detail/{testId}")
+    public String viewRejectDetail(@PathVariable(name = "testId") Long testId, ModelMap map) {
+        BizDataStestn bizDataStestn = new BizDataStestn();
+        bizDataStestn.setTestId(testId);
+        BizDataStestn detail = bizDataStestnService.selectBizDataStestnById(testId);
+        List<String> accessoryList = new ArrayList<>();
+        String accessorys = detail.getAccessorys();
+        if (StringUtils.isNotEmpty(accessorys)) {
+            String[] split = accessorys.split("\\|");
+            accessoryList.addAll(Arrays.asList(split));
+        }
+        map.put("detail", detail);
+        map.put("accessoryList", accessoryList);
+        return prefix + "/rejectDetail";
+    }
+
+    @PostMapping("/reject/deal")
+    @ResponseBody
+    public AjaxResult dealReject(BizDataStestn bizDataStestn) {
+
+        bizDataStestnService.updateBizDataStestn(bizDataStestn);
         return toAjax(1);
     }
 }

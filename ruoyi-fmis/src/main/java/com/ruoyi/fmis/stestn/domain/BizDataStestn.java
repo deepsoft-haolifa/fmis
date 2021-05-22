@@ -80,6 +80,14 @@ public class BizDataStestn extends BaseEntity {
     @Setter
     private List<String> string5List;
 
+    @Getter
+    @Setter
+    private String accessorys;
+
+    @Getter
+    @Setter
+    private String processMode;
+
     public void setTestId(Long testId) {
         this.testId = testId;
     }

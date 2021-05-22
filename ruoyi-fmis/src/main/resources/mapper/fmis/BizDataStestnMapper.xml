@@ -25,6 +25,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createTime"    column="create_time"    />
         <result property="updateBy"    column="update_by"    />
         <result property="updateTime"    column="update_time"    />
+        <result property="accessorys"    column="accessorys"    />
     </resultMap>
 
     <sql id="selectBizDataStestnVo">
@@ -128,6 +129,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null ">create_time = #{createTime},</if>
             <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
             <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="processMode != null ">process_mode = #{processMode},</if>
+            <if test="accessorys != null ">accessorys = #{accessorys},</if>
         </trim>
         where test_id = #{testId}
     </update>

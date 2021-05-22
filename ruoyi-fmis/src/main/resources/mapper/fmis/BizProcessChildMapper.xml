@@ -57,6 +57,8 @@
         <result property="updateTime" column="update_time"/>
         <result property="pressure" column="press"/>
         <result property="color" column="color"/>
+        <result property="processMode" column="process_mode"/>
+
     </resultMap>
 
     <sql id="selectBizProcessChildVo">
@@ -857,7 +859,7 @@
 
     <sql id="selectBizTestChildHistoryVo">
     select distinct sn.test_id as testId,sn.remark,sn.status_id, sn.string1 as yesNum,sn.string2 as noNum, u.user_name as createByName,
-    sn.create_time,ss.string6 as orderNo,
+    sn.create_time,ss.string6 as orderNo,sn.process_mode,
     ss.string6 as  bjNo,d1.string1 as contractNo,d.string12 as procurementNo,c.string2 as paType,c.string6 as string6,c.string8 as string8
     ,c.string7 as string7
     from biz_data_stestn sn
@@ -876,6 +878,9 @@
         <if test="bjNo != null and bjNo != ''">and ss.string6 like concat('%', #{bjNo}, '%')</if>
         <if test="contractNo != null and contractNo != ''">and d1.string1 like concat('%', #{contractNo}, '%')</if>
         <if test="procurementNo != null and procurementNo != ''">and d.string12 like concat('%', #{procurementNo}, '%')</if>
+        <if test="isReject != null and isReject != '' and isReject > 0" >
+            and CONVERT(sn.string2, signed) > 0
+        </if>
         order by sn.create_time desc
     </select>
 

@@ -2,6 +2,7 @@ package com.ruoyi.fmis.child.service;
 
 import com.ruoyi.fmis.child.domain.BizProcessChild;
 import com.ruoyi.fmis.child.domain.ProcessDataDTO;
+import com.ruoyi.fmis.stestn.domain.BizDataStestn;
 
 import java.util.List;
 
@@ -131,5 +132,4 @@ public interface IBizProcessChildService {
      * @return
      */
     public ProcessDataDTO getSaleQtyByContractNo(String contractNo);
-
 }

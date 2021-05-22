@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('不合格品处理')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div>
+        <div >
+            <form id="formId-process-mode">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            <p>处理方式：</p>
+                            <select name="processMode" id="processMode" class="form-control m-b" th:with="type=${@dict.getType('process_mode')}">
+                                <option value="">请选择</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                            </select>
+                        </li>
+                    </ul>
+                </div>
+                <input type="hidden" name="preProcessMode" id="preProcessMode" th:value="*{detail.processMode}"/>
+                <input type="hidden" name="testId"  th:value="*{detail.testId}"/>
+            </form>
+
+        </div>
+    </div>
+    <div class="row">
+        <label class="col-sm-12">附件列表</label>
+        <div class="col-sm-4">
+            <div class="ui-layout-pane" >
+               <img th:each="url:${accessoryList}" th:src="${url}"  width="200">
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+<th:block th:include="include :: footer" />
+<script th:inline="javascript">
+
+    var prefix = "/fmis/procurementtest";
+
+
+
+    function submitHandler() {
+        if ($.validate.form()) {
+
+            var dataObj = $('#formId-process-mode').serializeArray();
+            if($("#processMode").val() == '') {
+                $.modal.alertWarning("请选择处理方式！");
+                return;
+            }
+            $.operate.save(prefix + "/reject/deal", dataObj);
+        }
+    }
+</script>
+
+</html>

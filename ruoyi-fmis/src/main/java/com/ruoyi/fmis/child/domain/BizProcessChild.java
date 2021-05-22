@@ -723,6 +723,28 @@ public class BizProcessChild extends BaseEntity {
     /** 删除标志（0代表存在 2代表删除） */
     private String delFlag;
 
+    /** 查询标记：0 全部 1 不合格品>0   */
+    private int isReject;
+
+    /** 不合格品处理结果*/
+    private String processMode;
+
+    public String getProcessMode() {
+        return processMode;
+    }
+
+    public void setProcessMode(String processMode) {
+        this.processMode = processMode;
+    }
+
+    public int getIsReject() {
+        return isReject;
+    }
+
+    public void setIsReject(int isReject) {
+        this.isReject = isReject;
+    }
+
     public void setChildId(Long childId) {
         this.childId = childId;
     }
