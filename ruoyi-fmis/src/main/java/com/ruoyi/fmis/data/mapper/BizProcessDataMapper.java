@@ -92,6 +92,13 @@ public interface BizProcessDataMapper {
      * @return
      */
     public List<BizProcessData> selectBizProcessDataListRefProcurement(BizProcessData bizProcessData);
+    /**
+     * 采购追踪管理查询
+     * @param bizProcessData
+     * @return
+     */
+    public List<BizProcessData> selectBizProcessDataListRefTrack(BizProcessData bizProcessData);
+
 
     /**
      * 借款申请

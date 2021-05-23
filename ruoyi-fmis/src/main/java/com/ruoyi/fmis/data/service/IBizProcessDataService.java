@@ -77,6 +77,10 @@ public interface IBizProcessDataService {
 
     public List<BizProcessData> selectBizProcessDataListRefProcurement(BizProcessData bizProcessData);
 
+
+    public List<BizProcessData> selectBizProcessDataListRefTrack(BizProcessData bizProcessData);
+
+
     public List<BizProcessData> selectBizProcessDataListRefInvoice(BizProcessData bizProcessData);
 
     /**

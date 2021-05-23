@@ -245,7 +245,7 @@
         q.create_time, q.update_by, q.update_time,ct.name as customerName,bs.name as suppliersName,
         q.string21,q.string22,q.string23,q.string24,q.string25,q.string26,q.string27,q.string28,q.string29,q.string30,
         q.price11, q.price12, q.price13, q.price14, q.price15, q.price16, q.price17, q.price18, q.price19, q.price20,
-        dt1.dept_name as deptName,u.user_name as createByName,q.except_pay_time,q.purchase_specific_requests,  round(bpc1.deliveryAmount,2) deliveryAmount
+        dt1.dept_name as deptName,u.user_name as createByName,q.except_pay_time,q.purchase_specific_requests
         from biz_process_data q
         left join sys_user u on q.create_by=u.user_id
         left join sys_dept dt on u.dept_id=dt.dept_id
@@ -256,9 +256,7 @@
         left join biz_suppliers bs on bs.suppliers_id=q.string3
         left join sys_dept dt1 on q.string22=dt1.dept_id
 
-        left join (select a.string5,sum(a.string13*a.price1) deliveryAmount from biz_process_child  a left join biz_process_data
-            b on a.data_id=b.data_id where b.biz_id='newdelivery' and b.normal_flag=b.flow_status and a.string19=1 group by a.string5) bpc1 ON
-            bpc1.string5 = q.string1
+
     </sql>
 
     <select id="selectBizProcessDataListRef" parameterType="BizProcessData" resultMap="BizProcessDataResult">
@@ -929,7 +927,7 @@
         d.string21,d.string22,d.string23,d.string24,d.string25,d.string26,d.string27,d.string28,d.string29,d.string30,
         d.price11, d.price12, d.price13, d.price14, d.price15, d.price16, d.price17, d.price18, d.price19, d.price20,
         d.except_pay_time,d.purchase_specific_requests,
-         ((COALESCE(sum(ss.num),0)-ifnull(sn1.cn1,0) - ifnull(sn1.cn2,0))) as stayNum,
+        ((COALESCE(sum(ss.num),0)-ifnull(sn1.cn1,0) - ifnull(sn1.cn2,0))) as stayNum,
         s.name as supplierName
         from biz_process_data d
         left join biz_data_steststay ss on ss.string4=d.data_id and ss.num > 0 and ss.string1='0'
@@ -985,7 +983,7 @@
             <if test="datetime4 != null "> and datetime4 = #{datetime4}</if>
             <if test="datetime5 != null "> and datetime5 = #{datetime5}</if>
             <if test="status != null  and status != ''"> and status = #{status}</if>
-            <if test="createBy != null  and createBy != ''"> and create_by = #{createBy}</if>
+            <if test="createBy != null  and createBy != ''"> and  d.create_by = #{createBy}</if>
 
             <!-- 采购 采购员-采购主管-采购经理-总经理审批 -->
             <if test="roleType == 1 ">
@@ -1056,6 +1054,90 @@
         order by d.create_time desc
     </select>
 
+
+    <sql id="selectBizProcessDataVoRefTrack">
+        select * from (select d.data_id, d.biz_data_id, d.biz_id, d.normal_flag, d.flow_status, d.remark, d.price1, d.price2, d.price3,
+                              d.price4, d.price5, d.price6, d.price7, d.price8, d.price9, d.price10, d.string1, d.string2,
+                              d.string3, d.string4, d.string5, d.string6, d.string7, d.string8, d.string9, d.string10, d.string11,
+                              d.string12, d.string13, d.string14, d.string15, d.string16, d.string17, d.string18, d.string19, d.string20,
+                              d.datetime1, d.datetime2, d.datetime3, d.datetime4, d.datetime5, d.status, d.del_flag, d.create_by,
+                              d.create_time, d.update_by, d.update_time,
+                              d.string21,d.string22,d.string23,d.string24,d.string25,d.string26,d.string27,d.string28,d.string29,d.string30,
+                              d.price11, d.price12, d.price13, d.price14, d.price15, d.price16, d.price17, d.price18, d.price19, d.price20,
+                              d.except_pay_time,d.purchase_specific_requests,
+                              s.name as supplierName
+                       from biz_process_data d
+                                left join biz_suppliers s on s.suppliers_id=d.string6
+                       group by d.data_id
+                      ) d
+    </sql>
+
+    <select id="selectBizProcessDataListRefTrack" parameterType="BizProcessData" resultMap="BizProcessDataResult">
+        <include refid="selectBizProcessDataVoRefTrack"/>
+
+        <where>
+            1=1
+            <if test="bizDataId != null "> and d.biz_data_id = #{bizDataId}</if>
+            <if test="bizId != null  and bizId != ''"> and d.biz_id = #{bizId}</if>
+            <if test="normalFlag != null  and normalFlag != ''"> and normal_flag = #{normalFlag}</if>
+            <if test="flowStatus != null  and flowStatus != ''"> and flow_status = #{flowStatus}</if>
+            <if test="price1 != null "> and price1 = #{price1}</if>
+            <if test="price2 != null "> and price2 = #{price2}</if>
+            <if test="price3 != null "> and price3 = #{price3}</if>
+            <if test="price4 != null "> and price4 = #{price4}</if>
+            <if test="price5 != null "> and price5 = #{price5}</if>
+            <if test="price6 != null "> and price6 = #{price6}</if>
+            <if test="price7 != null "> and price7 = #{price7}</if>
+            <if test="price8 != null "> and price8 = #{price8}</if>
+            <if test="price9 != null "> and price9 = #{price9}</if>
+            <if test="price10 != null "> and price10 = #{price10}</if>
+            <if test="string1 != null  and string1 != ''"> and string1 like concat('%', #{string1}, '%')</if>
+            <if test="string2 != null  and string2 != ''"> and string2 like concat('%', #{string2}, '%')</if>
+            <if test="string3 != null  and string3 != ''"> and string3 = #{string3}</if>
+            <if test="string4 != null  and string4 != ''"> and string4 = #{string4}</if>
+            <if test="string5 != null  and string5 != ''"> and string5 = #{string5}</if>
+            <if test="string6 != null  and string6 != ''"> and string6 like concat('%', #{string6}, '%')</if>
+            <if test="string7 != null  and string7 != ''"> and string7 = #{string7}</if>
+            <if test="string8 != null  and string8 != ''"> and string8 = #{string8}</if>
+            <if test="string9 != null  and string9 != ''"> and string9 = #{string9}</if>
+            <if test="string10 != null  and string10 != ''"> and string10  like concat('%', #{string10}, '%')</if>
+            <if test="string11 != null  and string11 != ''"> and string11 = #{string11}</if>
+            <if test="string12 != null  and string12 != ''"> and string12 like concat('%', #{string12}, '%')</if>
+            <if test="string13 != null  and string13 != ''"> and string13 = #{string13}</if>
+            <if test="string14 != null  and string14 != ''"> and string14 = #{string14}</if>
+            <if test="string15 != null  and string15 != ''"> and string15 = #{string15}</if>
+            <if test="string16 != null  and string16 != ''"> and string16 = #{string16}</if>
+            <if test="string17 != null  and string17 != ''"> and string17 = #{string17}</if>
+            <if test="string18 != null  and string18 != ''"> and string18 = #{string18}</if>
+            <if test="string19 != null  and string19 != ''"> and string19 = #{string19}</if>
+            <if test="string20 != null  and string20 != ''"> and string20 = #{string20}</if>
+            <if test="datetime1 != null "> and datetime1 = #{datetime1}</if>
+            <if test="datetime2 != null "> and datetime2 = #{datetime2}</if>
+            <if test="datetime3 != null "> and datetime3 = #{datetime3}</if>
+            <if test="datetime4 != null "> and datetime4 = #{datetime4}</if>
+            <if test="datetime5 != null "> and datetime5 = #{datetime5}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="createBy != null  and createBy != ''"> and  d.create_by = #{createBy}</if>
+            <if test="supplierIds != null" >
+                and d.string6 in (
+                <foreach collection="supplierIds" separator="," item="item">
+                    #{item}
+                </foreach>
+                )
+
+            </if>
+            <if test="contractNoList != null " >
+                and
+                <foreach collection="contractNoList" separator=" or " item="item" open="(" close=")">
+                    find_in_set(#{item}, d.string10)
+                </foreach>
+
+
+            </if>
+
+        </where>
+        order by d.create_time desc
+    </select>
 
     <sql id="selectBizProcessDataVoRefBorrowing">
         select d.data_id, d.biz_data_id, d.biz_id, d.normal_flag, d.flow_status, d.remark, d.price1, d.price2, d.price3,

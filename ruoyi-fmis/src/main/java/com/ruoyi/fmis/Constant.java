@@ -7,6 +7,11 @@ package com.ruoyi.fmis;
  **/
 public interface Constant {
 
+    interface processDataBizId{
+        String PROCUREMENT="procurement";
+        String CONTRACT="contract";
+    }
+
     /**
      * 采购状态
      */

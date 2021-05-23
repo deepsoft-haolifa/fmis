@@ -7,6 +7,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.fmis.Constant;
 import com.ruoyi.fmis.common.CommonUtils;
 import com.ruoyi.fmis.customer.domain.BizCustomer;
 import com.ruoyi.fmis.customertrack.domain.BizCustomerTrack;
@@ -80,13 +81,32 @@ public class BizProcessDataTrackController extends BaseController {
 
         }
         startPage();
-        // 除了管理员，其他人只能看到自己申报的采购订单
+        // 销售业务员，只能看到自己的合同
         List<SysRole> roles = ShiroUtils.getSysUser().getRoles();
         Set<String> roleKeySet = roles.stream().map(SysRole::getRoleKey).collect(Collectors.toSet());
-        if (!roleKeySet.contains(RoleEnum.ADMIN.getRoleKey())) {
-            bizProcessData.setCreateBy(String.valueOf(ShiroUtils.getSysUser().getUserId()));
+        if (roleKeySet.contains(RoleEnum.XS_YWY.getRoleKey())) {
+            // 获取此业务员的合同号；
+            BizProcessData data=new BizProcessData();
+            data.setBizId(Constant.processDataBizId.CONTRACT);
+            data.setCreateBy(String.valueOf(ShiroUtils.getSysUser().getUserId()));
+            List<BizProcessData> dataList = bizProcessDataService.selectBizProcessDataList(data);
+            if(CollectionUtils.isEmpty(dataList)){
+                return getDataTable(null);
+            } else {
+                List<String> contractNoList = dataList.stream().map(BizProcessData::getString1).collect(Collectors.toList());
+                if(StringUtils.isNotEmpty(bizProcessData.getString10())){
+                    if(!contractNoList.contains(bizProcessData.getString10())){
+                        return getDataTable(null);
+                    }
+                }else{
+                    bizProcessData.setContractNoList(contractNoList);
+                }
+            }
         }
-        List<BizProcessData> list = bizProcessDataService.selectBizProcessDataListRefProcurement(bizProcessData);
+        List<BizProcessData> list = bizProcessDataService.selectBizProcessDataListRefTrack(bizProcessData);
+        for (BizProcessData data : list) {
+            data.setLoginUserId(ShiroUtils.getUserId().toString());
+        }
         return getDataTable(list);
     }
 

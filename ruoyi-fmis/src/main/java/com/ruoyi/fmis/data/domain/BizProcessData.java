@@ -379,6 +379,10 @@ public class BizProcessData extends BaseEntity {
     @Getter
     @Setter
     private Set<String> supplierIds;
+
+    @Getter
+    @Setter
+    private List<String> contractNoList;
     @Getter
     @Setter
     // 预计回款日期

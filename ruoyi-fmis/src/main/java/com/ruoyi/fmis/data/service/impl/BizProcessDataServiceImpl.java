@@ -812,6 +812,11 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
     public List<BizProcessData> selectBizProcessDataListRefProcurement(BizProcessData bizProcessData) {
         return bizProcessDataMapper.selectBizProcessDataListRefProcurement(bizProcessData);
     }
+    @Override
+    public List<BizProcessData> selectBizProcessDataListRefTrack(BizProcessData bizProcessData) {
+        return bizProcessDataMapper.selectBizProcessDataListRefTrack(bizProcessData);
+    }
+
 
     @Override
     @DataScope(deptAlias = "dt", userAlias = "u")

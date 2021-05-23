@@ -87,6 +87,10 @@ public class ReceivableRespVo {
      * 已发货数
      */
     private Integer deliveryQty;
+    /**
+     * 已发货金额
+     */
+    private Double deliveryAmount;
 
     /**
      * 合同状态
