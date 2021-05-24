@@ -80,7 +80,7 @@ public class BizProcessDataTrackController extends BaseController {
             }
 
         }
-        startPage();
+
         // 销售业务员，只能看到自己的合同
         List<SysRole> roles = ShiroUtils.getSysUser().getRoles();
         Set<String> roleKeySet = roles.stream().map(SysRole::getRoleKey).collect(Collectors.toSet());
@@ -103,6 +103,7 @@ public class BizProcessDataTrackController extends BaseController {
                 }
             }
         }
+        startPage();
         List<BizProcessData> list = bizProcessDataService.selectBizProcessDataListRefTrack(bizProcessData);
         for (BizProcessData data : list) {
             data.setLoginUserId(ShiroUtils.getUserId().toString());

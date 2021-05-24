@@ -171,6 +171,7 @@
             <if test="datetime4 != null "> and datetime4 = #{datetime4}</if>
             <if test="datetime5 != null "> and datetime5 = #{datetime5}</if>
             <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="createBy != null  and createBy != ''"> and q.create_by = #{createBy}</if>
         </where>
     </select>
 
