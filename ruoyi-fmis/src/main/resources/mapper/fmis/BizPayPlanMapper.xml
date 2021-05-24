@@ -38,21 +38,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectBizPayPlanVo"/>
         <where>
             <if test="payDataId != null "> and pay_data_id = #{payDataId}</if>
-            <if test="applyNo != null  and applyNo != ''"> and apply_no = #{applyNo}</if>
+            <if test="applyNo != null  and applyNo != ''"> and apply_no like concat('%', #{applyNo}, '%')</if>
             <if test="applyDate != null "> and apply_date = #{applyDate}</if>
             <if test="contractId != null  and contractId != ''"> and contract_id = #{contractId}</if>
-            <if test="contractNo != null  and contractNo != ''"> and contract_no = #{contractNo}</if>
-            <if test="contractPayWay != null  and contractPayWay != ''"> and contract_pay_way = #{contractPayWay}</if>
-            <if test="applyPayCompany != null  and applyPayCompany != ''"> and apply_pay_company = #{applyPayCompany}</if>
+            <if test="contractNo != null  and contractNo != ''"> and contract_no like concat('%', #{contractNo}, '%')</if>
+            <if test="contractPayWay != null  and contractPayWay != ''"> and contract_pay_way = #{applyPayCompany}</if>
+            <if test="applyPayCompany != null  and applyPayCompany != ''"> and apply_pay_company like concat('%', #{applyNo}, '%')</if>
             <if test="applyCollectionCompany != null  and applyCollectionCompany != ''"> and apply_collection_company = #{applyCollectionCompany}</if>
             <if test="applyAmount != null "> and apply_amount = #{applyAmount}</if>
             <if test="applyRemark != null  and applyRemark != ''"> and apply_remark = #{applyRemark}</if>
-            <if test="payCompany != null  and payCompany != ''"> and pay_company = #{payCompany}</if>
+            <if test="payCompany != null  and payCompany != ''"> and pay_company like concat('%', #{payCompany}, '%')</if>
             <if test="payAccount != null  and payAccount != ''"> and pay_account = #{payAccount}</if>
             <if test="payWay != null  and payWay != ''"> and pay_way = #{payWay}</if>
             <if test="paymentType != null  and paymentType != ''"> and payment_type = #{paymentType}</if>
             <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="startTime != null "> and pay_date &gt;= #{startTime}</if>
             <if test="payDate != null "> and pay_date = #{payDate}</if>
+            <if test="endTime != null "> and pay_date &lt;= #{endTime}</if>
             <if test="bookingType != null  and bookingType != ''"> and booking_type = #{bookingType}</if>
             <if test="dataStatus != null  and dataStatus != ''"> and data_status = #{dataStatus}</if>
             <if test="dataStatusList != null  and dataStatusList.size > 0">

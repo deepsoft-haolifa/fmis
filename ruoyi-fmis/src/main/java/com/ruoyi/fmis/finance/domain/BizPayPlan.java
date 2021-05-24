@@ -92,4 +92,7 @@ public class BizPayPlan extends BaseEntity {
 
     /** 数据状态LIST：1. 老总选择； 2. 财务主管选择； 3.出纳付款 */
     private List<String> dataStatusList;
+
+    private String startTime;
+    private String endTime;
 }

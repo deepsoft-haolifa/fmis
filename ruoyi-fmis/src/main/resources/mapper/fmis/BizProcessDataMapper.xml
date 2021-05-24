@@ -421,7 +421,7 @@
             <if test="bizId != null  and bizId != ''"> and biz_id = #{bizId}</if>
             <if test="status != null  and status != ''"> and status = #{status}</if>
             <if test="string13 != null  and string13 != ''"> and q.string13 = #{string13}</if>
-           <!-- <if test="string1 != null  and string1 != ''"> and q.string1 like concat('%', #{string1}, '%')</if>-->
+            <if test="string1 != null  and string1 != ''"> and q.string1 like concat('%', #{string1}, '%')</if>
             <if test="string30 == 0 ">
                 and (q.string30 = '' or q.string30 is null or q.string30 = 1)
             </if>
@@ -665,6 +665,8 @@
             <if test="bizId != null  and bizId != ''"> and d.biz_id = #{bizId}</if>
             <if test="normalFlag != null  and normalFlag != ''"> and d.normal_flag = #{normalFlag}</if>
             <if test="flowStatus != null  and flowStatus != ''"> and d.flow_status = #{flowStatus}</if>
+            <if test="string1 != null  and string1 != ''"> and d.string1 like concat('%', #{string1}, '%')</if>
+            <if test="string5 != null  and string5 != ''"> and d.string5 like concat('%', #{string5}, '%'</if>
             <if test="createByName != null  and createByName != ''"> and u.user_name like concat('%', #{createByName}, '%')</if>
             <!--  开票人-销售经理-销售总经理-往来会计-->
             <if test="roleType == 1 ">
@@ -738,13 +740,15 @@
     <select id="selectBizProcessChildListRefInvoice" parameterType="com.ruoyi.fmis.invoice.bean.InvoiceReqVo" resultType="com.ruoyi.fmis.invoice.bean.InvoiceRespVo">
         <include refid="selectBizProcessChildVoRefInvoice"/>
         <where>
-            and d.biz_id="invoice" and d.normal_flag=d.flow_status
+           1=1 and d.biz_id="invoice" and d.normal_flag=d.flow_status
             <if test="pString1 != null  and pString1 != ''"> and d.string1 like concat('%', #{pString1}, '%')</if>
             <if test="pString2 != null  and pString2 != ''"> and d.string2 = #{pString2}</if>
             <if test="pString3 != null  and pString3 != ''"> and d.string3 like concat('%', #{pString3}, '%')</if>
             <if test="pString5 != null  and pString5 != ''"> and d.string5 like concat('%', #{pString5}, '%')</if>
             <if test="pString6 != null  and pString6 != ''"> and d.string6 like concat('%', #{pString6}, '%')</if>
             <if test="string7 != null  and string7 != ''"> and c.string7 = #{string7}</if>
+            <if test="createByName != null  and createByName != ''"> and u.user_name = #{createByName}</if>
+            <if test="string2 != null  and string2 != ''"> and c.string2 like concat('%', #{string2}, '%')</if>
             ${params.dataScope}
         </where>
         order by d.create_time desc
