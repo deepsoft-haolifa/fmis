@@ -823,6 +823,8 @@
             <if test="datetime4 != null "> and datetime4 = #{datetime4}</if>
             <if test="datetime5 != null "> and datetime5 = #{datetime5}</if>
             <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="deptName != null  and deptName != ''"> and de.dept_name like concat('%', #{deptName}, '%')</if>
+            <if test="createByName != null  and createByName != ''"> and u.user_name like concat('%', #{createByName}, '%')</if>
 
 
             <!--  借款人-部门经理-区域总经理-集团副总-财务总监-集团总裁-出纳付款-->

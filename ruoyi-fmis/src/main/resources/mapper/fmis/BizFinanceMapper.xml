@@ -62,6 +62,18 @@
             <if test="customerId != null and customerId != ''">
                 and q.string2 = #{customerId}
             </if>
+            <if test="customerName != null and customerName != ''">
+                and ct.name like concat('%', #{customerName}, '%')
+            </if>
+            <if test="signTime != null and signTime != ''">
+                and q.datetime1 like concat('%', #{signTime}, '%')
+            </if>
+            <if test="deliveryTime != null and deliveryTime != ''">
+                and q.string6 like concat('%', #{deliveryTime}, '%')
+            </if>
+            <if test="deptName != null and deptName != ''">
+                and dt1.dept_name like concat('%', #{deptName}, '%')
+            </if>
             ${params.dataScope}
         </where>
     </sql>
@@ -136,6 +148,15 @@
             q.biz_id='procurement'
             <if test="purchaseContractNo != null and purchaseContractNo != ''">
                 and q.string12 like concat('%', #{purchaseContractNo}, '%')
+            </if>
+            <if test="chargeCompany != null and chargeCompany != ''">
+                and q.string1 like concat('%', #{chargeCompany}, '%')
+            </if>
+            <if test="deptName != null and deptName != ''">
+                and q.string2 like concat('%', #{deptName}, '%')
+            </if>
+            <if test="supplierName != null and supplierName != ''">
+                and s.name like concat('%', #{supplierName}, '%')
             </if>
             ${params.dataScope}
         </where>
