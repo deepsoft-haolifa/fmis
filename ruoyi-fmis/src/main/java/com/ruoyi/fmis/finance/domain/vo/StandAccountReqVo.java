@@ -12,6 +12,20 @@ public class StandAccountReqVo extends BaseEntity {
      * 合同编号(采购合同)
      */
     private String purchaseContractNo;
+    /**
+     * 结算单位
+     */
+    private String chargeCompany;
+
+    /**
+     * 供应商
+     */
+    private String supplierName;
+
+    /**
+     * 归属单位
+     */
+    private String deptName;
 
     public String getPurchaseContractNo() {
         return purchaseContractNo;
@@ -19,5 +33,31 @@ public class StandAccountReqVo extends BaseEntity {
 
     public void setPurchaseContractNo(String purchaseContractNo) {
         this.purchaseContractNo = purchaseContractNo;
+    }
+
+    public String getChargeCompany() {
+        return chargeCompany;
+    }
+
+    public void setChargeCompany(String chargeCompany) {
+        this.chargeCompany = chargeCompany;
+    }
+
+    public String getSupplierName() {
+        return supplierName;
+    }
+
+    public void setSupplierName(String supplierName) {
+        this.supplierName = supplierName;
+    }
+
+    @Override
+    public String getDeptName() {
+        return deptName;
+    }
+
+    @Override
+    public void setDeptName(String deptName) {
+        this.deptName = deptName;
     }
 }

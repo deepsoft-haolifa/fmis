@@ -20,4 +20,9 @@ public class ReceivableReqVo extends BaseEntity {
      * 客户编号
      */
     private String customerId;
+    private String customerName;
+    private String signTime;
+    private String deptName;
+    private String deliveryTime;
+
 }

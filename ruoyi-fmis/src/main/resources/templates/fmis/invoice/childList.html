@@ -41,18 +41,19 @@
                         <li>
                             <p>开票申请人：</p>
                             <input type="hidden" name="createByName" id="createByName"  />
-                            <input type="text" name="createByName"  />
+                           <input type="text" name="createByName"  />
                         </li>
                         <li>
-                            <p>客户名称：</p>
-                            <input type="hidden" name="pString5" id="pString5"  />
-                            <input type="text" name="pString5"  />
-                        </li>
-                        <li>
-                            <p>合同号：</p>
-                            <input type="hidden" name="string2" id="string2"  />
-                            <input type="text" name="string2"  />
-                        </li>
+                                                <p>客户名称：</p>
+                                                    <input type="hidden" name="pString5" id="pString5"  />
+                                                   <input type="text" name="pString5"  />
+                                                </li>
+                                                <li>
+                                                    <p>合同号：</p>
+                                                    <input type="hidden" name="string2" id="string2"  />
+                                                    <input type="text" name="string2"  />
+                                                </li>
+
                         <li>
                             <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
                                     class="fa fa-search"></i>&nbsp;搜索</a>
@@ -98,27 +99,27 @@
                     title: '开票申请人'
                 },
                 {
-                    field: 'pstring3',
+                    field: 'pString3',
                     title: '优先级'
                 },
                 {
-                    field: 'pstring1',
+                    field: 'pString1',
                     title: '开票单位'
                 },
 
                 {
-                    field: 'pstring2',
+                    field: 'pString2',
                     title: '票种',
                     formatter: function (value, row, index) {
                         return $.table.selectDictLabel(invoiceClassifyDict, value);
                     }
                 },
                 {
-                    field: 'pstring6',
+                    field: 'pString6',
                     title: '客户代号'
                 },
                 {
-                    field: 'pstring5',
+                    field: 'pString5',
                     title: '客户名称'
                 },
                 {
