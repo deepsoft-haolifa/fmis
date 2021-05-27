@@ -1192,7 +1192,7 @@
             <if test="string7 != null  and string7 != ''"> and string7 = #{string7}</if>
             <if test="string8 != null  and string8 != ''"> and string8 = #{string8}</if>
             <if test="string9 != null  and string9 != ''"> and string9 = #{string9}</if>
-            <if test="string10 != null  and string10 != ''"> and string10 = #{string10}</if>
+            <if test="string10 != null  and string10 != ''"> and string10 like concat('%', #{string10}, '%')</if>
             <if test="string11 != null  and string11 != ''"> and string11 = #{string11}</if>
             <if test="string12 != null  and string12 != ''"> and string12 = #{string12}</if>
             <if test="string13 != null  and string13 != ''"> and string13 = #{string13}</if>
@@ -1209,6 +1209,8 @@
             <if test="datetime4 != null "> and datetime4 = #{datetime4}</if>
             <if test="datetime5 != null "> and datetime5 = #{datetime5}</if>
             <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="deptName != null  and deptName != ''"> and de.dept_name   like concat('%', #{deptName}, '%')</if>
+            <if test="createByName != null  and createByName != ''"> and u.user_name like concat('%', #{createByName}, '%')</if>
 
 
             <!--  借款人-部门经理-区域总经理-集团副总-财务总监-集团总裁-出纳付款-->

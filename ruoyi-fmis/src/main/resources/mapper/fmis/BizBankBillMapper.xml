@@ -55,8 +55,8 @@
             </if>
             <if test="payWay != null  and payWay != ''">and pay_way = #{payWay}</if>
             <if test="payAccount != null  and payAccount != ''">and pay_account = #{payAccount}</if>
-            <if test="payCompany != null  and payCompany != ''">and pay_company = #{payCompany}</if>
-            <if test="collectCompany != null  and collectCompany != ''">and collect_company = #{collectCompany}</if>
+            <if test="payCompany != null  and payCompany != ''">and pay_company like concat('%', #{payCompany}, '%')</if>
+            <if test="collectCompany != null  and collectCompany != ''">and collect_company like concat('%', #{collectCompany}, '%')</if>
             <if test="preMonthMoney != null ">and pre_month_money = #{preMonthMoney}</if>
             <if test="collectionMoney != null ">and collection_money = #{collectionMoney}</if>
             <if test="collectionType != null  and collectionType != ''">and collection_type = #{collectionType}</if>
@@ -66,6 +66,12 @@
             <if test="type != null  and type != ''">and type = #{type}</if>
             <if test="deptId != null  and deptId != ''">and dept_id = #{deptId}</if>
             <if test="contractStatus != null  and contractStatus != ''">and contract_status = #{contractStatus}</if>
+            <if test="startOperateDate != null and startOperateDate != ''"><!-- 开始时间检索 -->
+                AND date_format(operate_date,'%y%m%d') &gt;= date_format(#{startOperateDate},'%y%m%d')
+            </if>
+            <if test="endOperateDate != null and endOperateDate != ''"><!-- 结束时间检索 -->
+                AND date_format(operate_date,'%y%m%d') &lt;= date_format(#{endOperateDate},'%y%m%d')
+            </if>
         </where>
         order by b.create_time desc
     </select>
