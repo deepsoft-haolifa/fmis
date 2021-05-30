@@ -70,6 +70,13 @@ public class BizSuppliersController extends BaseController {
         return getDataTable(list);
     }
 
+    @GetMapping("/product")
+    public String productList(ModelMap modelMap) {
+        String supplierId = getRequest().getParameter("supplierId");
+        modelMap.put("supplierId", supplierId);
+        return prefix +"/product";
+    }
+
     /**
      * 导出供应商列表
      */

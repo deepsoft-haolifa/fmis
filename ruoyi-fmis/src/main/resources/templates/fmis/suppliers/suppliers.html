@@ -61,10 +61,10 @@
         $(function() {
             var options = {
                 url: prefix + "/list",
-                createUrl: prefix + "/add",
-                updateUrl: prefix + "/edit/{id}",
-                removeUrl: prefix + "/remove",
-                exportUrl: prefix + "/export",
+                // createUrl: prefix + "/add",
+                // updateUrl: prefix + "/edit/{id}",
+                // removeUrl: prefix + "/remove",
+                // exportUrl: prefix + "/export",
                 modalName: "供应商",
                 columns: [{
                     checkbox: true
@@ -148,6 +148,7 @@
                         var actions = [];
                         actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.suppliersId + '\')"><i class="fa fa-edit"></i> 编辑</a> ');
                         actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.suppliersId + '\')"><i class="fa fa-remove"></i> 删除</a>');
+                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="productList(\'' + row.suppliersId + '\')"><i class="fa fa-remove"></i> 查看产品列表</a>');
                         return actions.join('');
                     }
                 }]
@@ -165,6 +166,14 @@
                 appendTable();
                 calculateTotalPrice();
             });
+        }
+
+        function productList(supplierId) {
+            $.modal.openNoEnter("供应商产品列表", prefix + '/product?supplierId='+supplierId, '', '', function () {
+                $.modal.closeAll();
+            });
+
+
         }
     </script>
 </body>

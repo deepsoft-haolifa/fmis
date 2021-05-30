@@ -64,7 +64,7 @@ public class BizProductController extends BaseController {
     @RequiresPermissions("fmis:product:view")
     @GetMapping()
     public String product(ModelMap mmap) {
-        mmap.put("seriesSelect",bizDictService.selectBizDictByProductType(BizConstants.productTypeCode));
+         mmap.put("seriesSelect",bizDictService.selectBizDictByProductType(BizConstants.productTypeCode));
         mmap.put("suppliers",bizSuppliersService.selectAllList());
         return prefix + "/product";
     }

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('供应商产品列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <input name = "supplier"  th:value="*{supplierId}" hidden/>
+                </form>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+
+        var prefix = ctx + "fmis/suppliers";
+        var supplierId = [[${supplierId}]];
+        var string2Datas = [[${@dict.getType('product_level')}]];
+        var string3Datas = [[${@dict.getType('valve_shaft')}]];
+        $(function() {
+            var options = {
+                url: "/fmis/product/listNoAuth",
+                modalName: "业务产品",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'productId', 
+                    title : '产品id',
+                    visible: false
+                },
+                {
+                    field : 'name', 
+                    title : '产品名称'
+                },
+                // {
+                //     title: '操作',
+                //     align: 'center',
+                //     formatter: function(value, row, index) {
+                //         var actions = [];
+                //         actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.productId + '\')"><i class="fa fa-edit"></i> 编辑</a> ');
+                //         actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.productId + '\')"><i class="fa fa-remove"></i> 删除</a>');
+                //         return actions.join('');
+                //     }
+                // },
+                {
+                    field : 'series', 
+                    title : '类别'
+                },
+                {
+                    field : 'string1',
+                    title : '系列'
+                },
+                {
+                    field : 'model', 
+                    title : '产品型号'
+                },
+                    {
+                        field : 'string4',
+                        title : '好利型号'
+                    },
+                {
+                    field : 'specifications', 
+                    title : '规格'
+                },
+                {
+                    field : 'nominalPressure', 
+                    title : '公称压力'
+                },
+                {
+                    field : 'connectionType', 
+                    title : '连接方式'
+                },
+                {
+                    field : 'structuralStyle',
+                    title : '结构形式'
+                },
+                {
+                    field : 'valvebodyMaterial', 
+                    title : '阀体材质'
+                },
+                {
+                    field : 'sealingMaterial', 
+                    title : '密封材质'
+                },
+                {
+                    field : 'valveElement', 
+                    title : '阀芯材质'
+                },
+                    {
+                        field : 'string3',
+                        title : '阀轴',
+                        formatter: function(value, row, index) {
+                            return $.table.selectDictLabel(string3Datas, value);
+                        }
+                    },
+                {
+                    field : 'driveForm', 
+                    title : '驱动形式'
+                },
+
+                {
+                    field : 'string2',
+                    title : '产品等级',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(string2Datas, value);
+                    }
+                },
+                {
+                    field : 'price', 
+                    title : '产品单价'
+                },
+                {
+                    field : 'supplier', 
+                    title : '供应商代号'
+                },
+                {
+                    field : 'medium',
+                    title : '介质'
+                },
+                {
+                    field : 'temperature',
+                    title : '温度'
+                },
+                {
+                    field : 'other',
+                    title : '其他'
+                },
+                {
+                    field : 'remark', 
+                    title : '备注'
+                },
+                {
+                    field : 'createTime',
+                    title : '创建时间'
+                },{
+                    field : 'updateTime',
+                    title : '修改时间'
+                }]
+            };
+            $.table.init(options);
+        });
+        function string1AddOptions(v){
+            $("#string1").html("");
+            $("#string1").append("<option value=''>请选择</option>");
+            var string1Obj = $("#string1");
+            if (v == "D") {
+                string1Obj.append("<option value='D220'>D220</option>");
+                string1Obj.append("<option value='D240'>D240</option>");
+                string1Obj.append("<option value='D260'>D260</option>");
+                string1Obj.append("<option value='D261'>D261</option>");
+                string1Obj.append("<option value='D270'>D270</option>");
+                string1Obj.append("<option value='D271'>D271</option>");
+                string1Obj.append("<option value='D310'>D310</option>");
+                string1Obj.append("<option value='D370'>D370</option>");
+            } else {
+                string1Obj.append("<option value='" + v + "'>" + v + "</option>");
+            }
+        }
+        $("#series").change(function (){
+            var series = $("#series").val();
+            console.log("series=" + series);
+            if (series == null || series == "请选择" || series == "") {
+                $("#specifications").html("");
+                $("#nominalPressure").html("");
+                $("#connectionType").html("");
+                $("#sealingMaterial").html("");
+                $("#valveElement").html("");
+                $("#driveForm").html("");
+                $("#valvebodyMaterial").html("");
+                $("#structuralStyle").html("");
+                return;
+            }
+
+            /*
+            var string1All = $("#series").find("option:selected").text();
+            var string1 = string1All.split("_")[1];
+            string1AddOptions(string1);*/
+
+            $.ajax({
+                url:prefix + "/findProductTypeDict",
+                type : "post",
+                data : {"dictId" : series},
+                success : function (data) {
+                    var specificationArray = data["specification"];
+                    setDataToOption(specificationArray,"specifications");
+                    //nominalPressure
+                    var nominalPressures = data["nominalPressure"];
+                    setDataToOption(nominalPressures,"nominalPressure");
+
+                    var linkTypes = data["linkType"];
+                    setDataToOption(linkTypes,"connectionType");
+
+                    var sealingMaterials = data["sealingMaterial"];
+                    setDataToOption(sealingMaterials,"sealingMaterial");
+
+                    var spoolMaterials = data["spoolMaterial"];//valveElement
+                    setDataToOption(spoolMaterials,"valveElement");
+
+                    var driveModes = data["driveMode"];
+                    setDataToOption(driveModes,"driveForm");
+
+                    //bodyMaterial
+                    var bodyMaterials = data["bodyMaterial"];
+                    setDataToOption(bodyMaterials,"valvebodyMaterial");
+
+                    var structuralStyles = data["structuralStyle"];
+                    setDataToOption(structuralStyles,"structuralStyle");
+
+                    var seriesTypes = data["seriesType"];
+                    setDataToOption(seriesTypes,"string1");
+
+                }
+            })
+        });
+
+        function setDataToOption(dataArray,selectId) {
+            $("#" + selectId).html("");
+            $("#" + selectId).append("<option value=''>请选择</option>")
+            for (var i = 0; i < dataArray.length; i++) {
+                var specificationObj = dataArray[i];
+                $("#" + selectId).append("<option value='" + specificationObj.dictId + "'>" + specificationObj.name + "</option>")
+            }
+        }
+
+        function openImportExcel () {
+            var url = prefix + "/upload";
+            var widthNum = this.innerWidth - 50;
+            var heigthNum = this.innerHeight - 50;
+            $.modal.open("导入", url,widthNum, heigthNum,function (index, layero) {
+                var iframeWin = layero.find('iframe')[0];
+                iframeWin.contentWindow.submitHandler(index, layero);
+                appendTable();
+                calculateTotalPrice();
+            });
+        }
+    </script>
+</body>
+</html>
