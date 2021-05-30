@@ -138,8 +138,6 @@ public class BizProcessDataProcurementController extends BaseController {
                 }
                 bizProcessData.setSupplierIds(supplierIds);
             }
-            // 重置
-//            bizProcessData.setString6("");
             // 判断是否有供应商数据，若没有直接返回
             if (CollectionUtils.isEmpty(bizProcessData.getSupplierIds())) {
                 return getDataTable(new ArrayList<>());
