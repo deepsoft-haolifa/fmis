@@ -290,11 +290,7 @@
                 $.modal.alertWarning("请至少选择一条记录");
                 return;
             }
-            var flowStatus = row.flowStatus;
-            if (flowStatus > 0) {
-                $.modal.alertWarning("已上报数据不能修改");
-                return;
-            }
+
 
             var url = $.table._option.updateUrl.replace("{id}", row[$.table._option.uniqueId]);
             $.modal.openFull("修改" + $.table._option.modalName, url);
@@ -302,13 +298,6 @@
             var row = $('#bootstrap-table').bootstrapTable("getRowByUniqueId",id);
             if (row == null) {
                 row = $('#bootstrap-table').bootstrapTable('getSelections')[0];
-            }
-            if (row != null) {
-                var flowStatus = row.flowStatus;
-                if (flowStatus > 0) {
-                    $.modal.alertWarning("已上报数据不能修改");
-                    return;
-                }
             }
             $.modal.openFull("修改" + $.table._option.modalName, $.operate.editUrl(id));
         }

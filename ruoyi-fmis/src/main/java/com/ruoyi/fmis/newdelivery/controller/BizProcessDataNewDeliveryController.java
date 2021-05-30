@@ -90,10 +90,17 @@ public class BizProcessDataNewDeliveryController extends BaseController {
     public TableDataInfo list(BizProcessData bizProcessData) {
 
         String bizId = bizProcessData.getBizId();
+        Map<String, SysRole> flowMap = bizProcessDefineService.getRoleFlowMap(bizId);
+        String userFlowStatus = "";
+        if (!CollectionUtils.isEmpty(flowMap)) {
+            for (String key : flowMap.keySet()) {
+                userFlowStatus = key;
+            }
+            bizProcessData.setRoleType(userFlowStatus);
+        }
 
         startPage();
         List<BizProcessData> list = bizProcessDataService.selectBizProcessDataListRefDelivery(bizProcessData);
-        Map<String, SysRole> flowMap = bizProcessDefineService.getRoleFlowMap(bizId);
         Map<String, SysRole> flowAllMap = bizProcessDefineService.getFlowAllMap(bizId);
         if (!CollectionUtils.isEmpty(flowMap)) {
             //计算流程描述
@@ -127,7 +134,6 @@ public class BizProcessDataNewDeliveryController extends BaseController {
                 data.setOperationExamineStatus(false);
                 if (flowStatusInt > 0) {
                     if (!flowStatus.equals(normalFlag)) {
-                        String userFlowStatus = flowMap.keySet().iterator().next();
                         int userFlowStatusInt = Integer.parseInt(userFlowStatus);
                         if (userFlowStatusInt == flowStatusInt + 1) {
                             data.setOperationExamineStatus(true);
@@ -246,8 +252,16 @@ public class BizProcessDataNewDeliveryController extends BaseController {
     public AjaxResult addSave(BizProcessData bizProcessData) {
         bizProcessData.setFlowStatus("-2");
 
-        Map<String, SysRole> flowAllMap = bizProcessDefineService.getFlowAllMap(bizProcessData.getBizId());
+        Map<String, SysRole> flowMap = bizProcessDefineService.getRoleFlowMap(bizProcessData.getBizId());
+        String lastRoleKey = "";
+        for (String key : flowMap.keySet()) {
+            lastRoleKey = key;
+        }
+        if (!"1".equals(lastRoleKey)) {
+            bizProcessData.setFlowStatus(lastRoleKey + "0");
+        }
 
+        Map<String, SysRole> flowAllMap = bizProcessDefineService.getFlowAllMap(bizProcessData.getBizId());
         if (!CollectionUtils.isEmpty(flowAllMap)) {
             for (String key : flowAllMap.keySet()) {
                 bizProcessData.setNormalFlag(key);

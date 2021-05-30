@@ -201,6 +201,16 @@ public class BizProcessDataInvoiceController extends BaseController {
     @ResponseBody
     public AjaxResult addSave(BizProcessData bizProcessData) {
         bizProcessData.setFlowStatus("0");
+
+        Map<String, SysRole> flowMap = bizProcessDefineService.getRoleFlowMap(bizProcessData.getBizId());
+        String lastRoleKey = "";
+        for (String key : flowMap.keySet()) {
+            lastRoleKey = key;
+        }
+        if (!"1".equals(lastRoleKey)) {
+            bizProcessData.setFlowStatus(lastRoleKey + "0");
+        }
+
         Map<String, SysRole> flowAllMap = bizProcessDefineService.getFlowAllMap(bizProcessData.getBizId());
         if (!CollectionUtils.isEmpty(flowAllMap)) {
             for (String key : flowAllMap.keySet()) {
