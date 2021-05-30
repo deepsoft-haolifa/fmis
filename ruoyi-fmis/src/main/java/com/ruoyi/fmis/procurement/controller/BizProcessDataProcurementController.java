@@ -112,7 +112,7 @@ public class BizProcessDataProcurementController extends BaseController {
     public String data(ModelMap mmap) {
         String supplierId = getRequest().getParameter("supplierId");
         if (StringUtils.isNotEmpty(supplierId)) {
-            mmap.put("supplierId",supplierId);
+            mmap.put("supplierId", supplierId);
         }
         return prefix + "/data";
     }
@@ -475,6 +475,11 @@ public class BizProcessDataProcurementController extends BaseController {
         bizProcessData.setStatus(Constant.procurementStatus.NEW);
         setNormalFlag(bizProcessData, productArrayStr);
         //添加采购合同
+        String string3 = bizProcessData.getString3();
+        if (string3.endsWith(",")) {
+            bizProcessData.setString3(string3.substring(0, string3.length() - 1));
+        }
+
         int insertReturn = bizProcessDataService.insertBizProcessData(bizProcessData);
         Long dataId = bizProcessData.getDataId();
         List<String> dataIds = new ArrayList<>();

@@ -13,6 +13,8 @@ import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.poi.ExcelProduct;
 import com.ruoyi.fmis.common.BizProductImport;
 import com.ruoyi.fmis.common.BizSuppliersImport;
+import com.ruoyi.fmis.product.domain.BizProduct;
+import com.ruoyi.fmis.product.service.IBizProductService;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.service.ISysUserService;
@@ -51,6 +53,8 @@ public class BizSuppliersController extends BaseController {
 
     @Autowired
     private ISysUserService userService;
+    @Autowired
+    private IBizProductService bizProductService;
 
     @RequiresPermissions("fmis:suppliers:view")
     @GetMapping()
@@ -215,5 +219,42 @@ public class BizSuppliersController extends BaseController {
             throw new BusinessException("导出失败，请联系网站管理员！");
         }
         return retJson;
+    }
+    // 临时注掉权限
+//    @RequiresPermissions("fmis:supplier:exportProduct")
+    @PostMapping("exportProduct")
+    @ResponseBody
+    public AjaxResult exportProduct(BizProduct bizProduct) {
+        List<BizProduct> list = bizProductService.selectBizProductListNoAuth(bizProduct);
+        ArrayList<BizProductImport> bizProductImports = new ArrayList<>();
+        if(CollectionUtils.isNotEmpty(list)) {
+            int i = 1;
+            for (BizProduct bizProduct1: list) {
+                BizProductImport bizProductImport = new BizProductImport();
+                bizProductImport.setSeqNum(i + "");
+                bizProductImport.setName(bizProduct1.getName());
+                bizProductImport.setString1(bizProduct1.getString1());
+                bizProductImport.setSeries(bizProduct1.getSeries());
+                bizProductImport.setString2(bizProduct1.getString2());
+                bizProductImport.setModel(bizProduct1.getModel());
+                bizProductImport.setSpecifications(bizProduct1.getSpecifications());
+                bizProductImport.setNominalPressure(bizProduct1.getNominalPressure());
+                bizProductImport.setConnectionType(bizProduct1.getConnectionType());
+                bizProductImport.setStructuralStyle(bizProduct1.getStructuralStyle());
+                bizProductImport.setValvebodyMaterial(bizProduct1.getValvebodyMaterial());
+                bizProductImport.setValveElement(bizProduct1.getValveElement());
+                bizProductImport.setSealingMaterial(bizProduct1.getSealingMaterial());
+                bizProductImport.setDriveForm(bizProduct1.getDriveForm());
+                bizProductImport.setPrice(String.valueOf(bizProduct1.getPrice()));
+                bizProductImport.setSupplierCode(bizProduct1.getSupplier());
+                bizProductImport.setSupplier(bizProduct1.getSupplierName());
+                bizProductImport.setColor(bizProduct1.getColor());
+                bizProductImport.setString4(bizProduct1.getString4());
+                bizProductImports.add(bizProductImport);
+                i++;
+            }
+        }
+        ExcelUtil<BizProductImport> util = new ExcelUtil<BizProductImport>(BizProductImport.class);
+        return util.exportExcel(bizProductImports, "供应商产品");
     }
 }

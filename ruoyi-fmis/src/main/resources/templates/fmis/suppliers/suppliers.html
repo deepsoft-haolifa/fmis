@@ -51,6 +51,10 @@
                 <table id="bootstrap-table"></table>
             </div>
         </div>
+
+         <form id="export-form">
+             <input id="exportSupplierId" name="supplierId" hidden="hidden"/>
+         </form>
     </div>
     <th:block th:include="include :: footer" />
     <script th:inline="javascript">
@@ -61,10 +65,10 @@
         $(function() {
             var options = {
                 url: prefix + "/list",
-                // createUrl: prefix + "/add",
-                // updateUrl: prefix + "/edit/{id}",
-                // removeUrl: prefix + "/remove",
-                // exportUrl: prefix + "/export",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
                 modalName: "供应商",
                 columns: [{
                     checkbox: true
@@ -149,12 +153,42 @@
                         actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.suppliersId + '\')"><i class="fa fa-edit"></i> 编辑</a> ');
                         actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.suppliersId + '\')"><i class="fa fa-remove"></i> 删除</a>');
                         actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="productList(\'' + row.suppliersId + '\')"><i class="fa fa-remove"></i> 查看产品列表</a>');
+                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="exportProduct(\'' + row.suppliersId + '\')"><i class="fa fa-remove"></i> 导出产品列表</a>');
+                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="importProduct()"><i class="fa fa-remove"></i> 导入产品列表</a>');
                         return actions.join('');
                     }
                 }]
             };
             $.table.init(options);
         });
+        
+        function exportProduct(supplierId) {
+            $.modal.confirm("确定导出供应商的产品列表吗？", function() {
+                $.modal.loading("正在导出数据，请稍后...");
+                $.post(prefix +"/exportProduct", {"supplier":supplierId}, function(result) {
+                    if (result.code == web_status.SUCCESS) {
+                        window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;
+                    } else if (result.code == web_status.WARNING) {
+                        $.modal.alertWarning(result.msg)
+                    } else {
+                        $.modal.alertError(result.msg);
+                    }
+                    $.modal.closeLoading();
+                });
+            });
+        }
+
+        function importProduct() {
+            var url = ctx + "fmis/product/upload";
+            var widthNum = this.innerWidth - 50;
+            var heigthNum = this.innerHeight - 50;
+            $.modal.open("导入", url,widthNum, heigthNum,function (index, layero) {
+                var iframeWin = layero.find('iframe')[0];
+                iframeWin.contentWindow.submitHandler(index, layero);
+                appendTable();
+                calculateTotalPrice();
+            });
+        }
 
         function openImportExcel () {
             var url = prefix + "/upload";

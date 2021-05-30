@@ -82,10 +82,14 @@ public class BizProduct extends BaseEntity {
 
 
 
-    /** 供应商名称 */
-    @Excel(name = "供应商名称")
+    /** 供应商代码 */
+    @Excel(name = "供应商代码")
     private String supplier;
 
+    @Getter
+    @Setter
+    /** 供应商名称*/
+    private String supplierName;
     private String newSupplier;
     public void setNewSupplier(String newSupplier) {
         this.newSupplier = newSupplier;

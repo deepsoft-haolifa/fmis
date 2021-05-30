@@ -19,6 +19,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="driveForm"    column="drive_form"    />
         <result property="price"    column="price"    />
         <result property="supplier"    column="supplier"    />
+        <result property="supplierName"    column="supplierName"    />
 
         <result property="newSupplier"    column="new_supplier"    />
 
@@ -48,7 +49,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <sql id="selectBizProductNameVo">
         select p.product_id, p.name, d.name as series, p.model, d1.name as specifications, d2.name as nominal_pressure, d3.name as connection_type, d6.name as valvebody_material, p.valve_material, d4.name as sealing_material, d5.name as valve_element, d7.name as drive_form,d8.name as structural_style,
-          p.price, s.nick_name as supplier, p.remark, p.status, p.del_flag, p.create_by, p.create_time,
+          p.price, s.nick_name as supplier,s.name as supplierName, p.remark, p.status, p.del_flag, p.create_by, p.create_time,
           p.update_by, p.update_time,p.new_supplier,
           p.medium,p.temperature,p.other,p.string2,p.string3,p.string4,p.string5,p.procurement_price,p.cost_price,d9.code as string1,p.string2,p.string3,p.string4,p.string5,p.color
 
