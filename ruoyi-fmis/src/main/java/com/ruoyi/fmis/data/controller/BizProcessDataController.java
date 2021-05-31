@@ -663,6 +663,7 @@ public class BizProcessDataController extends BaseController {
     @ResponseBody
     public AjaxResult addSave(BizProcessData bizProcessData) {
         bizProcessData.setFlowStatus("0");
+
         String productArrayStr = bizProcessData.getProductParmters();
 
         Map<String, SysRole> flowAllMap = bizProcessDefineService.getFlowAllMap(bizProcessData.getBizId());
@@ -673,7 +674,38 @@ public class BizProcessDataController extends BaseController {
         }
         String conNo = "XS-" + DateUtils.dateTimeNow();
         bizProcessData.setString1(conNo);
+
         setNormalFlag(bizProcessData,productArrayStr);
+        /**
+         * normalFlag 先把除报价员的权限范围做了
+         *
+         * 1=销售 2=销售经理 3=区域经理 4=副总 5=总经理
+         */
+        String normalFlag = bizProcessData.getNormalFlag();
+        Map<String, SysRole> flowMap = bizProcessDefineService.getRoleFlowMap(bizProcessData.getBizId());
+        String lastRoleKey = "";
+        for (String key : flowMap.keySet()) {
+            lastRoleKey = key;
+        }
+        if (!"1".equals(lastRoleKey)) {
+            bizProcessData.setFlowStatus(lastRoleKey + "0");
+        }
+
+        int roleType = sysRoleService.getRoleType(ShiroUtils.getUserId());
+        if (roleType > 1) {
+            if (normalFlag.equals(roleType + "")) {
+//                bizQuotation.setNormalFlag(normalFlag);
+                bizProcessData.setFlowStatus(normalFlag);
+            } else {
+                bizProcessData.setFlowStatus(roleType + "0");
+            }
+        }
+        //如果高级别创建的不需要再高级别审批的直接同意
+        if (roleType >=  Integer.parseInt(normalFlag)) {
+            bizProcessData.setFlowStatus(roleType + "");
+            bizProcessData.setNormalFlag(roleType + "");
+        }
+
         bizProcessData.setString16(Constant.invoiceStatus.NOT);
         bizProcessData.setString17(Constant.collectionStatus.NOT);
         int insertReturn = bizProcessDataService.insertBizProcessData(bizProcessData);
@@ -1452,25 +1484,7 @@ public class BizProcessDataController extends BaseController {
             }
         }
         bizProcessData.setNormalFlag(normalFlag);
-        /**
-         * normalFlag 先把除报价员的权限范围做了
-         *
-         * 1=销售 2=销售经理 3=区域经理 4=副总 5=总经理
-         */
-        int roleType = sysRoleService.getRoleType(ShiroUtils.getUserId());
-        if (roleType > 1) {
-            if (normalFlag.equals(roleType + "")) {
-//                bizQuotation.setNormalFlag(normalFlag);
-                bizProcessData.setFlowStatus(normalFlag);
-            } else {
-                bizProcessData.setFlowStatus(roleType + "");
-            }
-        }
-        //如果高级别创建的不需要再高级别审批的直接同意
-        if (roleType >=  Integer.parseInt(normalFlag)) {
-            bizProcessData.setFlowStatus(roleType + "");
-            bizProcessData.setNormalFlag(roleType + "");
-        }
+
         return normalFlag;
     }
     /**
