@@ -1,17 +1,12 @@
 package com.ruoyi.fmis.file.controller;
 
-import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.config.Global;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
-import com.ruoyi.common.core.page.TableDataInfo;
-import com.ruoyi.common.enums.BusinessType;
-import com.ruoyi.common.utils.DateUtils;
-import com.ruoyi.common.utils.poi.ExcelUtil;
-import com.ruoyi.fmis.flow.domain.BizFlow;
-import com.ruoyi.fmis.flow.service.IBizFlowService;
+import com.ruoyi.fmis.file.domain.BizAccessory;
+import com.ruoyi.fmis.file.service.IBizAccessoryService;
 import com.ruoyi.framework.util.ShiroUtils;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.aspectj.weaver.loadtime.Aj;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -24,8 +19,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -38,6 +33,9 @@ import java.util.Map;
 @RequestMapping("/fmis/file")
 public class FileController extends BaseController {
     private String prefix = "fmis/file";
+
+    @Autowired
+    private IBizAccessoryService bizAccessoryService;
 
 
     @RequestMapping(value = "/upload",produces="application/json;charset=utf-8")
@@ -65,4 +63,60 @@ public class FileController extends BaseController {
         }
         return uploadData;
     }
+
+
+    @GetMapping("/upload/view")
+    public String uploadView(ModelMap modelMap) {
+        // 文件类目 表明附件是属于哪个列表的。1 供应商 2 销售合同列表 3 采购合同列表 4 质检检验
+        String fileType = getRequest().getParameter("fileType");
+        String bizId = getRequest().getParameter("bizId");
+        modelMap.put("fileType", fileType);
+        modelMap.put("bizId", bizId);
+        return prefix + "/fileUpload";
+    }
+
+    /**
+     * 添加附件
+     * @param bizAccessory
+     * @return
+     */
+    @PostMapping("add")
+    @ResponseBody
+    public AjaxResult addAccessory(BizAccessory bizAccessory) {
+        String fileName = bizAccessory.getFileName();
+        int suffixIdx = fileName.lastIndexOf(".");
+        String fileFormat = fileName.substring(suffixIdx);
+        bizAccessory.setFileFormat(fileFormat);
+        bizAccessory.setDelFlag(0);
+        bizAccessory.setCreateBy(ShiroUtils.getLoginName());
+        bizAccessory.setCreateTime(new Date());
+        bizAccessory.setUpdateBy(ShiroUtils.getLoginName());
+        bizAccessory.setUpdateTime(new Date());
+        int i = bizAccessoryService.insertBizAccessory(bizAccessory);
+        return AjaxResult.success(i);
+    }
+
+    /**
+     * 查询附件列表
+     * @param bizAccessory
+     * @return
+     */
+    @PostMapping("list")
+    @ResponseBody
+    public AjaxResult listAccessory(BizAccessory bizAccessory) {
+        return AjaxResult.success(bizAccessoryService.selectBizAccessoryByBizId(bizAccessory));
+    }
+
+
+    /**
+     * 删除附件
+     * @param id
+     * @return
+     */
+    @PostMapping("delete/{id}")
+    @ResponseBody
+    public AjaxResult deleteAccessory(@PathVariable("id") Integer id) {
+        return AjaxResult.success(bizAccessoryService.deleteBizAccessoryById(id));
+    }
+
 }

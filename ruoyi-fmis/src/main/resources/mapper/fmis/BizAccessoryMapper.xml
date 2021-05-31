@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.fmis.file.mapper.BizAccessoryMapper">
+
+    <resultMap id="BizAccessoryResult" type="BizAccessory">
+        <result property="id" column="id"/>
+        <result property="fileName" column="file_name"/>
+        <result property="fileFormat" column="file_format"/>
+        <result property="fileType" column="file_type"/>
+        <result property="bizId" column="biz_id"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <insert id="insertBizAccessory" parameterType="BizAccessory" useGeneratedKeys="true" keyProperty="id">
+        insert into biz_accessory
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="fileName != null  and fileName != ''">file_name,</if>
+            <if test="fileFormat != null  and fileFormat != ''">file_format,</if>
+            <if test="fileType != null  and fileType != ''">file_type,</if>
+            <if test="bizId != null  and bizId != ''">biz_id,</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="fileName != null  and fileName != ''">#{fileName},</if>
+            <if test="fileFormat != null  and fileFormat != ''">#{fileFormat},</if>
+            <if test="fileType != null  and fileType != ''">#{fileType},</if>
+            <if test="bizId != null  and bizId != ''">#{bizId},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <delete id="deleteAccessoryById" parameterType="int">
+        delete from biz_accessory where id = #{id}
+    </delete>
+    
+    <select id="selectAccessoryByBizId" resultMap="BizAccessoryResult">
+        select * from biz_accessory where file_type=#{fileType}  and biz_id =#{bizId} and delFlag = 0;
+    </select>
+
+</mapper>

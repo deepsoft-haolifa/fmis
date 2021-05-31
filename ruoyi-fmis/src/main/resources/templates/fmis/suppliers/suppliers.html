@@ -155,6 +155,8 @@
                         actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="productList(\'' + row.suppliersId + '\')"><i class="fa fa-remove"></i> 查看产品列表</a>');
                         actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="exportProduct(\'' + row.suppliersId + '\')"><i class="fa fa-remove"></i> 导出产品列表</a>');
                         actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="importProduct()"><i class="fa fa-remove"></i> 导入产品列表</a>');
+                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="uploadFiles(\'' + row.suppliersId + '\')"><i class="fa fa-remove"></i> 附件上传</a>');
+                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewFileList(\'' + row.suppliersId + '\')"><i class="fa fa-remove"></i> 查看附件</a>');
                         return actions.join('');
                     }
                 }]
@@ -176,6 +178,20 @@
                     $.modal.closeLoading();
                 });
             });
+        }
+
+        function uploadFiles(supplierId) {
+            var url = ctx + "fmis/file/upload/view?fileType=1&bizId="+supplierId;
+            var widthNum = this.innerWidth - 50;
+            var heigthNum = this.innerHeight - 50;
+            $.modal.open("上传", url,widthNum, heigthNum,function (index, layero) {
+                var iframeWin = layero.find('iframe')[0];
+                iframeWin.contentWindow.submitHandler(index, layero);
+            });
+        }
+
+        function viewFileList(supplierId) {
+            layer.alert('功能完善中');
         }
 
         function importProduct() {
