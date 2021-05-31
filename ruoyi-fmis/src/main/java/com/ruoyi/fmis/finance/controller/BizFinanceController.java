@@ -4,6 +4,9 @@ import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.fmis.finance.domain.vo.*;
 import com.ruoyi.fmis.finance.service.IBizFinanceService;
+import com.ruoyi.fmis.suppliers.service.IBizSuppliersService;
+import com.ruoyi.system.service.ISysDictDataService;
+import com.ruoyi.system.service.ISysDictTypeService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,11 +31,14 @@ public class BizFinanceController extends BaseController {
 
     @Autowired
     private IBizFinanceService bizFinanceService;
+    @Autowired
+    private ISysDictDataService dictDataService;
 
     @GetMapping("/receivable")
     @RequiresPermissions("finance:receivable:view")
     public String receivable(ModelMap map) {
         map.put("customerId", getRequest().getParameter("customerId"));
+        map.put("suppliers", dictDataService.selectDictDataByType("pay_company"));
         return prefix + "/receivable/receivable";
     }
 
@@ -42,8 +48,9 @@ public class BizFinanceController extends BaseController {
     @RequiresPermissions("finance:receivable:list")
     @PostMapping("/receivable/list")
     @ResponseBody
-    public TableDataInfo receivableList(ReceivableReqVo reqVo) {
+    public TableDataInfo receivableList(ReceivableReqVo reqVo, ModelMap mmap) {
         startPage();
+        mmap.put("suppliers", dictDataService.selectDictDataByType("pay_company"));
         List<ReceivableRespVo> list = bizFinanceService.selectReceivableList(reqVo);
         return getDataTable(list);
     }

@@ -18,6 +18,7 @@
         ct.name as customerName,
         q.string3 as supplierName,
         dt1.dept_name as deptName,
+        u.user_name as createByName,
         -- 销售总量
         ifnull(bpc.saleQty,0) saleQty,
         -- 已付款项
@@ -73,6 +74,12 @@
             </if>
             <if test="deptName != null and deptName != ''">
                 and dt1.dept_name like concat('%', #{deptName}, '%')
+            </if>
+            <if test="createByName != null and createByName != ''">
+                and u.user_name like concat('%', #{createByName}, '%')
+            </if>
+            <if test="supplierName != null and supplierName != ''">
+                and q.string3 = #{supplierName}
             </if>
             ${params.dataScope}
         </where>

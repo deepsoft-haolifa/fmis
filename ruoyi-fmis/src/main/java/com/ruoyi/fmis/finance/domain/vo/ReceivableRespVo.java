@@ -96,4 +96,5 @@ public class ReceivableRespVo {
      * 合同状态
      */
     private String saleContractStatus;
+    private String createByName;
 }
