@@ -690,20 +690,9 @@ public class BizProcessDataController extends BaseController {
         if (!"1".equals(lastRoleKey)) {
             bizProcessData.setFlowStatus(lastRoleKey + "0");
         }
-
-        int roleType = sysRoleService.getRoleType(ShiroUtils.getUserId());
-        if (roleType > 1) {
-            if (normalFlag.equals(roleType + "")) {
-//                bizQuotation.setNormalFlag(normalFlag);
-                bizProcessData.setFlowStatus(normalFlag);
-            } else {
-                bizProcessData.setFlowStatus(roleType + "0");
-            }
-        }
         //如果高级别创建的不需要再高级别审批的直接同意
-        if (roleType >=  Integer.parseInt(normalFlag)) {
-            bizProcessData.setFlowStatus(roleType + "");
-            bizProcessData.setNormalFlag(roleType + "");
+        if (Integer.parseInt(lastRoleKey) >=  Integer.parseInt(normalFlag)) {
+            bizProcessData.setNormalFlag(lastRoleKey);
         }
 
         bizProcessData.setString16(Constant.invoiceStatus.NOT);
@@ -1504,7 +1493,7 @@ public class BizProcessDataController extends BaseController {
         String dataId = getRequest().getParameter("dataId");
         BizProcessData bizQuotation = bizProcessDataService.selectBizProcessDataById(Long.parseLong(dataId));
         bizQuotation.setStatus(Constant.contractStatus.AUDIT);
-        return toAjax(bizProcessDataService.subReportBizQuotation(bizQuotation));
+        return toAjax(bizProcessDataService.subReportBizQuotationBorrowing(bizQuotation));
     }
     //流转到合同审理员
     @PostMapping("/goPool")
