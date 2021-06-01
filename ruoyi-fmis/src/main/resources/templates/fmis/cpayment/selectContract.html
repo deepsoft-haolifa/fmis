@@ -21,14 +21,10 @@
                         </li>
                         <li>
                             <p>采购状态：</p>
-                            <select name="string11" class="form-control m-b">
-                                <option value="">全部</option>
-                                <option value="1">未采购</option>
-                                <option value="2">审批中</option>
-                                <option value="3">采购中</option>
-                                <option value="4">已完成</option>
-                                <option value="5">已回票</option>
-                                <option value="6">已付款</option>
+                            <select name="status" th:with="type=${@dict.getType('procurement_status')}">
+                                <option value="">所有</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                        th:value="${dict.dictValue}"></option>
                             </select>
                         </li>
                         <li>
@@ -119,14 +115,11 @@
     var prefix = ctx + "fmis/procurement";
     var supplierTypeData = [[${@dict.getType('supplier_type')}]];
     var contractPaytypeData = [[${@dict.getType('contract_paytype')}]];
+    var procurementStatusData = [[${@dict.getType('procurement_status')}]];
 
     $(function () {
         var options = {
             url: prefix + "/list",
-            createUrl: prefix + "/add",
-            updateUrl: prefix + "/edit/{id}",
-            removeUrl: prefix + "/remove",
-            exportUrl: prefix + "/export",
             uniqueId: "dataId",
             modalName: "采购管理",
             columns: [{
@@ -203,24 +196,10 @@
                     title: '备注'
                 },
                 {
-                    field: 'string11',
+                    field: 'status',
                     title: '采购状态',
                     formatter: function (value, row, index) {
-                        var actions = [];
-                        var remark = "未采购";
-                        if (value == "2") {
-                            remark = "审批中";
-                        } else if (value == "3") {
-                            remark = "采购中";
-                        } else if (value == "4") {
-                            remark = "已完成";
-                        } else if (value == "5") {
-                            remark = "已回票";
-                        } else if (value == "6") {
-                            remark = "已付款";
-                        }
-                        actions.push(remark);
-                        return actions.join('');
+                        return $.table.selectDictLabel(procurementStatusData, value);
                     }
                 },
                 {
@@ -233,33 +212,6 @@
                     align: 'center',
                     formatter: function (value, row, index) {
                         var actions = [];
-                        // var flowStatus = row.flowStatus;
-                        // var normalFlag = row.normalFlag;
-                        // var createBy = row.createBy;
-                        // var loginUserId = row.loginUserId;
-                        // var operationExamineStatus = row.operationExamineStatus;
-                        // //质检状态
-                        // var testStatus = row.string10;
-                        // console.log("flowStatus=" + flowStatus + " normalFlag=" + normalFlag);
-                        // if (flowStatus < 1) {
-                        //     if (flowStatus == "0") {
-                        //         //已上报
-                        //     } else {
-                        //         actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="edit(\'' + row.dataId + '\')"><i class="fa fa-edit"></i> 编辑</a> ');
-                        //         actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="remove(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 删除</a>');
-                        //         if (loginUserId == createBy) {
-                        //             actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subReport(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 上报</a>');
-                        //         }
-                        //     }
-                        // } else if (flowStatus == normalFlag) {
-                        //     console.log("loginUserId=" + loginUserId + " createBy=" + createBy);
-                        //     if (loginUserId == createBy) {
-                        //         actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subTest(\'' + row.dataId + '\')"><i class="fa fa-save"></i> 发起质检</a>');
-                        //     }
-                        // } else if (operationExamineStatus == true || operationExamineStatus == "true") {
-                        //     //审批
-                        //     actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subExamine(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 审批</a>');
-                        // }
                         actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewExamineDetail(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 详情 </a>');
                         return actions.join('');
                     }

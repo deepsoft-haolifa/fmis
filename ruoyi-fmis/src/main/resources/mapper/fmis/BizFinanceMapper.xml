@@ -42,8 +42,8 @@
         left join (select a.string5,sum(a.string13*a.price1) deliveryAmount from biz_process_child  a left join biz_process_data
         b on a.data_id=b.data_id where b.biz_id='newdelivery' and b.normal_flag=b.flow_status and a.string19=1 group by a.string5) bpc2 ON
         bpc2.string5 = q.string1
-        left join (select a.string5,sum(a.string16) deliveryQty from biz_process_child a left join biz_process_data
-        b on a.string5=b.string1 where b.biz_id='newdelivery' and a.string14 = '1' and a.data_id='0' group by a.string5) bpc1 ON
+        left join (select a.string5,sum(a.string13) deliveryQty from biz_process_child a left join biz_process_data
+        b on a.data_id=b.data_id where b.biz_id='newdelivery' and b.normal_flag=b.flow_status and a.string19=1 group by a.string5) bpc1 ON
         bpc1.string5 = q.string1
         left join (select data_id,sum(amount) as paidAmount from biz_bill_contract group by data_id) bbc on
         bbc.data_id=q.data_id

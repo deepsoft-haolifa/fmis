@@ -215,18 +215,17 @@
                         var canTest = row.canTest;
                         //质检状态
                         var testStatus = row.string10;
-                        console.log("flowStatus=" + flowStatus + " normalFlag=" + normalFlag);
                         if (flowStatus < 1) {
-                            if (flowStatus == "0") {
+                            if (flowStatus === "0") {
                                 //已上报
                             } else {
+                                if (loginUserId === createBy) {
                                 actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="edit(\'' + row.dataId + '\')"><i class="fa fa-edit"></i> 编辑</a> ');
                                 actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="remove(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 删除</a>');
-                                if (loginUserId == createBy) {
-                                    actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subReport(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 上报</a>');
+                                actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subReport(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 上报</a>');
                                 }
                             }
-                        } else if (flowStatus == normalFlag) {
+                        } else if (flowStatus === normalFlag) {
                             //已完成
                             /**
                              if (testStatus == 1) {
