@@ -106,7 +106,10 @@ initChildTestTable = function(index, rows, $detail) {
             {field : 'saveTest',title : '操作',width: 200,visible: true,formatter: function(value, row, index) {
                     var actions = [];
                     actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="saveTest(' + row.rowId + "," + childId + "," + paramterId + "," + dataId + ",'" + contractNo + "'," + statusId + "," + stayId + "," + stayNum + ')"><i class="fa fa-save"></i> 保存</a>');
-                    //actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="removeTest(' + row.rowId + "," + childId + "," + paramterId + "," + dataId + "," + stayId  + ')"><i class="fa fa-remove"></i> 删除</a>');
+                    if(Number(row.testId) > 0) {
+                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="uploadTestFile(' + row.testId + "," + 4 + ')"><i class="fa fa-save"></i> 上传附件</a>');
+                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewTestFile(' + row.testId + "," + 4 + ')"><i class="fa fa-save"></i> 查看附件</a>');
+                    }
                     return actions.join('');
                 }},
             {field : 'yesNum',title : '合格数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}},width: 150},
@@ -118,6 +121,28 @@ initChildTestTable = function(index, rows, $detail) {
         ]
     });
 };
+
+
+function uploadTestFile(bizId, fileType) {
+    var url = ctx + "fmis/file/upload/view?fileType="+fileType+"&bizId="+bizId;
+    var widthNum = this.innerWidth - 50;
+    var heigthNum = this.innerHeight - 50;
+    $.modal.open("上传", url,widthNum, heigthNum,function (index, layero) {
+        var iframeWin = layero.find('iframe')[0];
+        iframeWin.contentWindow.submitHandler(index, layero);
+    });
+}
+
+function viewTestFile(bizId, fileType) {
+    var url = ctx + "fmis/file/list/view?bizId="+bizId+"&fileType="+fileType;
+    var widthNum = this.innerWidth - 50;
+    var heigthNum = this.innerHeight - 50;
+    $.modal.openNoEnter("附件查看", url,widthNum, heigthNum,function () {
+        $.modal.closeAll();
+    });
+}
+
+
 function saveTest (rowId,childId,paramterId,dataId,contractNo,statusId,stayId,stayNum) {
     //dataId,paramterId,childId,remark,testId,yesNum,noNum
     var rows = $("#initChildTestTableId_" + stayId).bootstrapTable('getData');

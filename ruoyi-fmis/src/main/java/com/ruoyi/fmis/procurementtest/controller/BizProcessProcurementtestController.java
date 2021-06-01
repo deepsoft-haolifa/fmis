@@ -463,6 +463,7 @@ public class BizProcessProcurementtestController extends BaseController {
         return prefix + "/rejectDetail";
     }
 
+    @RequiresPermissions("fmis:procurementtest:deal")
     @PostMapping("/reject/deal")
     @ResponseBody
     public AjaxResult dealReject(BizDataStestn bizDataStestn) {

@@ -49,121 +49,148 @@
 <th:block th:include="include :: footer"/>
 <script th:inline="javascript">
     var processModes = [[${@dict.getType('process_mode')}]];
+    var dealFlag = [[${@permission.hasPermi('fmis:procurementtest:deal')}]];
     var prefix = ctx + "fmis/procurementtest";
 
     $(function () {
         var options = {
-            url: prefix + "/selectBizTestChildHistoryList",
-            uniqueId: "testId",
-            modalName: "不合格品记录",
-            columns: [{
-                checkbox: true
-            },
-                {
-                    field: 'testId',
-                    title: 'ID',
-                    visible: false
-                },
-
-                {
-                    field: 'procurementNo',
-                    title: '采购合同号'
-                },
-                {
-                    field: 'contractNo',
-                    title: '销售合同号'
-                },
-
-                {
-                    field: 'bjNo',
-                    title: '报检单号'
-                },
-                {
-                    field: 'paType', title: '类型', visible: false, formatter: function (value, row, index) {
-                        var actions = [];
-                        if (value == 1) {
-                            actions.push('产品');
-                        } else if (value == 2) {
-                            actions.push('执行器');
-                        } else if (value == 3) {
-                            actions.push('法兰');
-                        } else if (value == 4) {
-                            actions.push('螺栓');
-                        } else if (value == 5) {
-                            actions.push('定位器');
-                        } else if (value == 6) {
-                            actions.push('电磁阀');
-                        } else if (value == 7) {
-                            actions.push('回信器数');
-                        } else if (value == 8) {
-                            actions.push('气源三连件');
-                        } else if (value == 9) {
-                            actions.push('气源三连件');
-                        }
-                        return actions.join('');
+                url: prefix + "/selectBizTestChildHistoryList",
+                uniqueId: "testId",
+                modalName: "不合格品记录",
+                columns: [
+                    // {
+                    //     checkbox: true
+                    // },
+                    {
+                        field: 'testId',
+                        title: 'ID',
+                        visible: false
                     }
-                },
-                {
-                    field: 'string6',
-                    title: '产品'
-                },
-                {
-                    field: 'string8',
-                    title: '型号'
-                },
-                {
-                    field: 'string7',
-                    title: '规格'
-                },
-                {
-                    field: 'yesNum',
-                    title: '合格数'
-                },
-                {
-                    field: 'noNum',
-                    title: '不合格数'
-                }
-                ,
-                {
-                    field: 'remark',
-                    title: '不合格原因'
-                },
-                {
-                    field: 'processMode',
-                    title: '处理结果',
-                    formatter: function (value, row, index) {
-                        return $.table.selectDictLabel(processModes, value);
-                    }
-                },
-                {
-                    field: 'createTime',
-                    title: '检测时间'
-                },
-                {
-                    field: 'createByName',
-                    title: '检测人'
-                },
-                {
-                    title: '操作',
-                    align: 'left',
-                    formatter: function (value, row, index) {
-                        var actions = [];
-                        // if(!row.processMode || row.processMode == '') {
-                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="rejectDetail(' + row.testId + ')"><i class="fa fa-save"></i>查看并处理</a>');
-                        // }
-                        return actions.join('');
-                    }
-                }
+                    ,
 
-            ]
-        };
+                    {
+                        field: 'procurementNo',
+                        title: '采购合同号'
+                    }
+                    ,
+                    {
+                        field: 'contractNo',
+                        title: '销售合同号'
+                    }
+                    ,
+
+                    {
+                        field: 'bjNo',
+                        title: '报检单号'
+                    }
+                    ,
+                    {
+                        field: 'paType',
+                        title: '类型',
+                        visible: false,
+                        formatter: function (value, row, index) {
+                                var actions = [];
+                                if (value == 1) {
+                                    actions.push('产品');
+                                } else if (value == 2) {
+                                    actions.push('执行器');
+                                } else if (value == 3) {
+                                    actions.push('法兰');
+                                } else if (value == 4) {
+                                    actions.push('螺栓');
+                                } else if (value == 5) {
+                                    actions.push('定位器');
+                                } else if (value == 6) {
+                                    actions.push('电磁阀');
+                                } else if (value == 7) {
+                                    actions.push('回信器数');
+                                } else if (value == 8) {
+                                    actions.push('气源三连件');
+                                } else if (value == 9) {
+                                    actions.push('气源三连件');
+                                }
+                                return actions.join('');
+                            }
+                    }
+                    ,
+                    {
+                        field: 'string6',
+                        title: '产品'
+                    }
+                    ,
+                    {
+                        field: 'string8',
+                        title: '型号'
+                    }
+                    ,
+                    {
+                        field: 'string7',
+                        title: '规格'
+                    }
+                    ,
+                    {
+                        field: 'yesNum',
+                        title: '合格数'
+                    }
+                    ,
+                    {
+                        field: 'noNum',
+                        title: '不合格数'
+                    }
+                    ,
+                    {
+                        field: 'remark',
+                        title: '不合格原因'
+                    }
+                    ,
+                    {
+                        field: 'processMode',
+                        title: '处理结果',
+                        formatter:
+                            function (value, row, index) {
+                                return $.table.selectDictLabel(processModes, value);
+                            }
+                    }
+                    ,
+                    {
+                        field: 'createTime',
+                        title: '检测时间'
+                    }
+                    ,
+                    {
+                        field: 'createByName',
+                        title: '检测人'
+                    }
+                    ,
+                    {
+                        title: '操作',
+                        align: 'left',
+                        formatter: function (value, row, index) {
+                                var actions = [];
+                                actions.push('<a class="btn btn-success btn-xs " + href="javascript:void(0)" onclick="viewTestFile(' + row.testId + "," + 4 + ')"><i class="fa fa-save"></i>查看附件</a>');
+                                actions.push('<a class="btn btn-success btn-xs '+dealFlag+' " href="javascript:void(0)" onclick="rejectDetail(' + row.testId + ')"><i class="fa fa-save"></i>处理</a>');
+                                return actions.join('');
+                            }
+                    }
+                ]
+            }
+        ;
         $.table.init(options);
     });
-    
+
     function rejectDetail(testId) {
 
-        $.modal.openFull("不合格品处理", prefix + '/reject/detail/'+testId,$(window).width()-200,$(window).height()-50);
+        $.modal.open("不合格品处理", prefix + '/reject/detail/' + testId, 500, 200);
 
+    }
+
+    function viewTestFile(bizId, fileType) {
+        var url = ctx + "fmis/file/list/view?bizId=" + bizId + "&fileType=" + fileType;
+        var widthNum = this.innerWidth - 50;
+        var heigthNum = this.innerHeight - 50;
+        $.modal.openNoEnter("附件查看", url, widthNum, heigthNum, function () {
+            $.modal.closeAll();
+        });
     }
 
 
