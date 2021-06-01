@@ -169,7 +169,7 @@
                 $.modal.loading("正在导出数据，请稍后...");
                 $.post(prefix +"/exportProduct", {"supplier":supplierId}, function(result) {
                     if (result.code == web_status.SUCCESS) {
-                        window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;
+                        window.location.href = ctx + "common/download?fileName=" +  encodeURI(result.msg) + "&delete=" + true;
                     } else if (result.code == web_status.WARNING) {
                         $.modal.alertWarning(result.msg)
                     } else {
@@ -191,7 +191,12 @@
         }
 
         function viewFileList(supplierId) {
-            layer.alert('功能完善中');
+            var url = ctx + "fmis/file/list/view?bizId="+supplierId+"&fileType=1";
+            var widthNum = this.innerWidth - 50;
+            var heigthNum = this.innerHeight - 50;
+            $.modal.openNoEnter("附件查看", url,widthNum, heigthNum,function () {
+                $.modal.closeAll();
+            });
         }
 
         function importProduct() {

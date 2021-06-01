@@ -3,10 +3,10 @@ package com.ruoyi.fmis.file.controller;
 import com.ruoyi.common.config.Global;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.fmis.file.domain.BizAccessory;
 import com.ruoyi.fmis.file.service.IBizAccessoryService;
 import com.ruoyi.framework.util.ShiroUtils;
-import org.aspectj.weaver.loadtime.Aj;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -14,8 +14,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -64,6 +67,28 @@ public class FileController extends BaseController {
         return uploadData;
     }
 
+    @GetMapping("preview")
+    @ResponseBody
+    public void previewFile() throws IOException {
+        String fileName = getRequest().getParameter("fileName");
+        String filePath = "/home/img/images/"+fileName;
+        HttpServletResponse response = getResponse();
+        if(fileName.endsWith("pdf") || fileName.endsWith("PDF")) {
+            response.setContentType("application/pdf");
+        } else {
+            response.setContentType("image/jpeg");
+        }
+        FileInputStream in = new FileInputStream(new File(filePath));
+        OutputStream out = response.getOutputStream();
+        byte[] b = new byte[1024];
+        while ((in.read(b))!=-1) {
+            out.write(b);
+        }
+        out.flush();
+        in.close();
+        out.close();
+    }
+
 
     @GetMapping("/upload/view")
     public String uploadView(ModelMap modelMap) {
@@ -73,6 +98,16 @@ public class FileController extends BaseController {
         modelMap.put("fileType", fileType);
         modelMap.put("bizId", bizId);
         return prefix + "/fileUpload";
+    }
+
+    @GetMapping("/list/view")
+    public String listView(ModelMap modelMap) {
+        // 文件类目 表明附件是属于哪个列表的。1 供应商 2 销售合同列表 3 采购合同列表 4 质检检验
+        String fileType = getRequest().getParameter("fileType");
+        String bizId = getRequest().getParameter("bizId");
+        modelMap.put("fileType", fileType);
+        modelMap.put("bizId", bizId);
+        return prefix + "/fileList";
     }
 
     /**
@@ -103,8 +138,8 @@ public class FileController extends BaseController {
      */
     @PostMapping("list")
     @ResponseBody
-    public AjaxResult listAccessory(BizAccessory bizAccessory) {
-        return AjaxResult.success(bizAccessoryService.selectBizAccessoryByBizId(bizAccessory));
+    public TableDataInfo listAccessory(BizAccessory bizAccessory) {
+        return getDataTable(bizAccessoryService.selectBizAccessoryByBizId(bizAccessory));
     }
 
 

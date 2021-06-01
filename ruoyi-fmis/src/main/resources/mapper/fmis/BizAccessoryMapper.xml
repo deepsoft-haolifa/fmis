@@ -48,7 +48,7 @@
     </delete>
     
     <select id="selectAccessoryByBizId" resultMap="BizAccessoryResult">
-        select * from biz_accessory where file_type=#{fileType}  and biz_id =#{bizId} and delFlag = 0;
+        select * from biz_accessory where file_type=#{fileType}  and biz_id =#{bizId} and del_flag = 0;
     </select>
 
 </mapper>
