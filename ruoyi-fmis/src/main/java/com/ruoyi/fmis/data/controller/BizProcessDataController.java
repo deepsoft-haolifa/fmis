@@ -691,7 +691,7 @@ public class BizProcessDataController extends BaseController {
             bizProcessData.setFlowStatus(lastRoleKey + "0");
         }
         //如果高级别创建的不需要再高级别审批的直接同意
-        if (Integer.parseInt(lastRoleKey) >=  Integer.parseInt(normalFlag)) {
+        if (!lastRoleKey.equals("")&&Integer.parseInt(lastRoleKey) >=  Integer.parseInt(normalFlag)) {
             bizProcessData.setNormalFlag(lastRoleKey);
         }
 
