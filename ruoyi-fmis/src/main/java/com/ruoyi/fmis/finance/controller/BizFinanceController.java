@@ -80,7 +80,7 @@ public class BizFinanceController extends BaseController {
     }
 
     /**
-     * 查询财务挂账(采购合同列表,到货数量大于0)
+     * 应付汇总
      */
     @RequiresPermissions("finance:standAccount:list")
     @PostMapping("/standAccount/list")
@@ -98,7 +98,7 @@ public class BizFinanceController extends BaseController {
     }
 
     /**
-     * 查询财务挂账(采购合同列表,到货数量大于0)
+     * 应付汇总
      */
     @RequiresPermissions("finance:standAccount:summary:list")
     @PostMapping("/standAccount/summary/list")

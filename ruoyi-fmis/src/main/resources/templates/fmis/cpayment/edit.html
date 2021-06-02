@@ -280,7 +280,7 @@
                 var productIdsS = productIds.split(",");
                 var productNamesS = productNames.split(",");
                 for (var i = 0; i < productIdsS.length; i++) {
-                    if (productId == productIdsS[i]) {
+                    if (productId === productIdsS[i]) {
                         var productName = productNamesS[i];
                         productNamesS.splice(i,1);
                         productIdsS.splice(i,1);

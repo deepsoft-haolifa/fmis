@@ -217,12 +217,12 @@
 
             $.modal.confirm("确定要删除该产品吗？", function() {
                 $("#productDiv_" + productId).remove();
-                var productIds = $("#productIds").val();
-                var productNames = $("#productNames").val();
+                var productIds = $("#contractIds").val();
+                var productNames = $("#contractNames").val();
                 var productIdsS = productIds.split(",");
                 var productNamesS = productNames.split(",");
                 for (var i = 0; i < productIdsS.length; i++) {
-                    if (productId == productIdsS[i]) {
+                    if (productId === productIdsS[i]) {
                         var productName = productNamesS[i];
                         productNamesS.splice(i,1);
                         productIdsS.splice(i,1);
@@ -230,8 +230,8 @@
                         sumPrice(productId);
                     }
                 }
-                $("#productIds").val(productIdsS.toString());
-                $("#productNames").val(productNamesS.toString());
+                $("#contractIds").val(productIdsS.toString());
+                $("#contractNames").val(productNamesS.toString());
             });
 
 

@@ -144,9 +144,18 @@
         left join (select contract_id,sum(apply_amount) as paidAmount  from biz_pay_plan where status=1 group by contract_id) p on p.contract_id=q.data_id
         left join (select contract_id,sum(apply_amount) as planPayAmount  from biz_pay_plan where status=0 group by contract_id) p1 on p1.contract_id=q.data_id
         left join (select a.string4,sum(a.string1*b.procurement_price) arrivalAmount from biz_data_stestn a left join biz_product b on a.string3=b.product_id  group by a.string4) stnprice on stnprice.string4=q.data_id
-         ) a
+        <where>
+            <if test="supplierName!=null and supplierName!=''">
+                and s.name like concat('%', #{supplierName}, '%')
+            </if>
+            <if test="needCompany!=null and needCompany!=''">
+                and q.string1 like concat('%', #{needCompany}, '%')
+            </if>
+        </where>
+            ) a
          -- 已经付完款的合同不统计
-         where a.contractAmount > a.paidAmount) total
+         where a.contractAmount > a.paidAmount ) total
+
          group by total.needCompany,total.supplierName
     </select>
 
