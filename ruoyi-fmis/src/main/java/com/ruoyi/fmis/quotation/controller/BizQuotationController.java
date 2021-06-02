@@ -825,6 +825,9 @@ public class BizQuotationController extends BaseController {
 
         String productArrayStr = bizQuotation.getString10();
         bizQuotation.setString10("");
+        if (bizQuotation.getSpecialExpenses() == null || bizQuotation.getSpecialExpenses().trim().equals("")) {
+            bizQuotation.setSpecialExpenses("0");
+        }
         setNormalFlag(bizQuotation,productArrayStr);
         int updateReturn = bizQuotationService.updateBizQuotation(bizQuotation);
         Long quotationId = bizQuotation.getQuotationId();
