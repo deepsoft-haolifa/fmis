@@ -172,11 +172,11 @@
 
     function subExamine(quotationId) {
         var url = prefix + "/examineEdit?quotationId=" + quotationId;
-        $.modal.open("审批", url,'','',function(index, layero) {
+        $.modal.open("审批", url,this.innerWidth,this.innerHeight,function(index, layero) {
             var iframeWin = layero.find('iframe')[0];
             iframeWin.contentWindow.submitHandler(index, layero);
             refresh();
-            $('#myTab li:eq(1) a').tab('show')
+            // $('#myTab li:eq(0) a').tab('show')
         });
     }
 

@@ -283,12 +283,35 @@
                         }
                         actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewExamineHistory(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 审批记录 </a>');
                         actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewExamineDetail(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 详情 </a>');
+                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="uploadFiles(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 附件上传</a>');
+                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewFileList(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 查看附件</a>');
+
+
                         return actions.join('');
                     }
                 }]
         };
         $.table.init(options);
     });
+
+    function uploadFiles(dataId) {
+        var url = ctx + "fmis/file/upload/view?fileType=2&bizId="+dataId;
+        var widthNum = this.innerWidth - 50;
+        var heigthNum = this.innerHeight - 50;
+        $.modal.open("上传", url,widthNum, heigthNum,function (index, layero) {
+            var iframeWin = layero.find('iframe')[0];
+            iframeWin.contentWindow.submitHandler(index, layero);
+        });
+    }
+
+    function viewFileList(dataId) {
+        var url = ctx + "fmis/file/list/view?bizId="+dataId+"&fileType=2";
+        var widthNum = this.innerWidth - 50;
+        var heigthNum = this.innerHeight - 50;
+        $.modal.openNoEnter("附件查看", url,widthNum, heigthNum,function () {
+            $.modal.closeAll();
+        });
+    }
 
     function uploadFile (dataId) {
         var url = prefix + "/upload?dataId=" + dataId;

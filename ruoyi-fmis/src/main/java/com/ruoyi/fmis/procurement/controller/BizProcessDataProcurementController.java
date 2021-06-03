@@ -1518,5 +1518,18 @@ public class BizProcessDataProcurementController extends BaseController {
         }
     }
 
+    @PostMapping("export/receipt")
+    @ResponseBody
+    public AjaxResult exportReceipt(BizProcessData bizProcessData) {
+        return createReceiptPdf(null, null, bizProcessData);
+    }
+
+    private AjaxResult createReceiptPdf(Object o, Object o1, BizProcessData bizProcessData) {
+
+
+        return null;
+
+    }
+
 
 }

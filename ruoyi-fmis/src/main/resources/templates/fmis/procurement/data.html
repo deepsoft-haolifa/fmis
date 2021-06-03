@@ -246,6 +246,7 @@
                         }
                         actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewExamineHistory(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 审批记录 </a>');
                         actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewExamineDetail(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 详情 </a>');
+                        // actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="exportReceipt(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 导出验收单 </a>');
 
                         return actions.join('');
                     }
@@ -356,6 +357,22 @@
             var url = prefix + "/report?dataId=" + dataId;
             $.operate.saveModal(url, '', function () {
                 $.table.refresh();
+            });
+        });
+    }
+
+    function exportReceipt(dataId) {
+        $.modal.confirm("确定导出采购合同验收记录吗？", function() {
+            $.modal.loading("正在导出数据，请稍后...");
+            $.post(prefix + "export/receipt", {"dataId":dataId}, function(result) {
+                if (result.code == web_status.SUCCESS) {
+                    window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;
+                } else if (result.code == web_status.WARNING) {
+                    $.modal.alertWarning(result.msg)
+                } else {
+                    $.modal.alertError(result.msg);
+                }
+                $.modal.closeLoading();
             });
         });
     }
