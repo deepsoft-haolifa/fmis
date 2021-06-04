@@ -49,8 +49,9 @@ public class BizFinanceController extends BaseController {
     @PostMapping("/receivable/list")
     @ResponseBody
     public TableDataInfo receivableList(ReceivableReqVo reqVo, ModelMap mmap) {
-        startPage();
+
         mmap.put("suppliers", dictDataService.selectDictDataByType("pay_company"));
+        startPage();
         List<ReceivableRespVo> list = bizFinanceService.selectReceivableList(reqVo);
         return getDataTable(list);
     }

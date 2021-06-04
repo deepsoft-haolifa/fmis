@@ -1318,8 +1318,9 @@ public class BizProcessDataProcurementController extends BaseController {
                     BizProcessChild bizProcessChild = paList.get(i);
                     rowNum = rowNum + i + 1;
                     table.addCell(PdfUtil.mergeCol("" + rowNum, 1, textFont));
-                    table.addCell(PdfUtil.mergeCol("", 1, textFont));
+                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getProductId(), 1, textFont));
                     table.addCell(PdfUtil.mergeCol(bizProcessChild.getChineseName(), 1, textFont));
+                    table.addCell(PdfUtil.mergeCol("", 1, textFont));
                     table.addCell(PdfUtil.mergeCol("", 1, textFont));
                     table.addCell(PdfUtil.mergeCol(bizProcessChild.getChineseSpecifications(), 1, textFont));
                     //颜色
@@ -1341,11 +1342,12 @@ public class BizProcessDataProcurementController extends BaseController {
 
 
             //金额合计
-            table.addCell(PdfUtil.mergeColRight("合计", 6, textFont));//4
+            table.addCell(PdfUtil.mergeColRight("合计", 7, textFont));//4
             table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(sumTotalNum), 1, textFont));//总数量
             table.addCell(PdfUtil.mergeCol("", 1, textFont));//单价
             table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(sumTotalAmount), 1, textFont));//合计
-            table.addCell(PdfUtil.mergeCol("", 7, textFont));//备注
+            table.addCell(PdfUtil.mergeCol("", 6
+                    , textFont));//备注
 
             table.addCell(PdfUtil.mergeColRight("以上价格均为含13%增值税价格", 5, textFont));
             table.addCell(PdfUtil.mergeCol(StringUtils.convert(sumTotalAmount), 3, textFont));//合计

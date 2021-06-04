@@ -1001,7 +1001,7 @@
             var updateObj1 = {
                 index : row.rowId,
                 field : "contractPrice",
-                value : totalSum / productNum
+                value : parseInt(totalSum / productNum)
             };
             console.log("totalSum=" + totalSum);
             $.btTable.bootstrapTable("updateCell",updateObj);
