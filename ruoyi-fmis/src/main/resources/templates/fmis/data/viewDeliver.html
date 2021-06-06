@@ -20,7 +20,7 @@
             </div>
             <label class="col-sm-1 control-label">合同单号：</label>
             <div class="col-sm-2">
-                <input name="string27" class="form-control"  type="text">
+                <input name="string27" class="form-control"  type="text" th:field="*{string1}">
             </div>
 
             <label class="col-sm-1 control-label">客户代号：</label>
@@ -49,7 +49,7 @@
 
             <label class="col-sm-1 control-label">收货人：</label>
             <div class="col-sm-2">
-                <input name="string8" class="form-control" type="text" required>
+                <input name="string8" class="form-control" type="text" th:field="*{string11}" required>
             </div>
         </div>
 
@@ -57,7 +57,7 @@
 
             <label class="col-sm-1 control-label">电话：</label>
             <div class="col-sm-2">
-                <input name="string9" class="form-control" type="text">
+                <input name="string9" class="form-control" type="text" th:field="*{string12}">
             </div>
 
             <label class="col-sm-1 control-label">手机：</label>
