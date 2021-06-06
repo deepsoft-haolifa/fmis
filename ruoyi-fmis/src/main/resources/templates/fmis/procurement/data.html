@@ -364,7 +364,7 @@
     function exportReceipt(dataId) {
         $.modal.confirm("确定导出采购合同验收记录吗？", function() {
             $.modal.loading("正在导出数据，请稍后...");
-            $.post(prefix + "export/receipt", {"dataId":dataId}, function(result) {
+            $.post(prefix + "/export/receipt", {"dataId":dataId}, function(result) {
                 if (result.code == web_status.SUCCESS) {
                     window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;
                 } else if (result.code == web_status.WARNING) {

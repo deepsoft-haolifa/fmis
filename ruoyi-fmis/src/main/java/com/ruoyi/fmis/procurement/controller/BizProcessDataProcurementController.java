@@ -7,6 +7,7 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.ruoyi.common.annotation.Log;
+import com.ruoyi.common.config.Global;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
@@ -45,6 +46,13 @@ import com.ruoyi.system.service.ISysDeptService;
 import com.ruoyi.system.service.ISysDictDataService;
 import com.ruoyi.system.service.ISysRoleService;
 import com.ruoyi.system.service.ISysUserService;
+import org.apache.poi.hssf.usermodel.*;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.usermodel.*;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -53,9 +61,12 @@ import org.springframework.ui.ModelMap;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -614,8 +625,8 @@ public class BizProcessDataProcurementController extends BaseController {
                 }
 
             }
-            if(StringUtils.isNotEmpty(contractNos)) {
-                contractNos = contractNos.substring(0, contractNos.length()-1);
+            if (StringUtils.isNotEmpty(contractNos)) {
+                contractNos = contractNos.substring(0, contractNos.length() - 1);
             }
         }
         bizProcessData.setString10(contractNos);
@@ -1520,18 +1531,161 @@ public class BizProcessDataProcurementController extends BaseController {
         }
     }
 
-    @PostMapping("export/receipt")
+    /**
+     * 导出验收单
+     *
+     * @param bizProcessData
+     * @return
+     */
+    @PostMapping("/export/receipt")
     @ResponseBody
-    public AjaxResult exportReceipt(BizProcessData bizProcessData) {
-        return createReceiptPdf(null, null, bizProcessData);
+    public AjaxResult exportReceipt(BizProcessData bizProcessData) throws IOException {
+        if (Objects.isNull(bizProcessData.getDataId()) || 0 == bizProcessData.getDataId()) {
+            return AjaxResult.warn("请选择采购合同！");
+        }
+
+        Long dataId = bizProcessData.getDataId();
+        BizProcessData bizProcessData1 = bizProcessDataService.selectBizProcessDataById(dataId);
+
+        // 导出excel
+        XSSFWorkbook workbook = new XSSFWorkbook();
+        XSSFSheet receiptSheet = workbook.createSheet("验收单");
+        int rowIdx = 0;
+        //第一行标题
+        XSSFRow row = receiptSheet.createRow(rowIdx);
+        receiptSheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 8));
+        XSSFCell title = row.createCell(0);
+
+        XSSFFont headfont = workbook.createFont();
+        headfont.setFontName("宋体");
+        headfont.setBold(true);// 加粗
+        headfont.setFontHeightInPoints((short) 20);// 字体大小
+        XSSFCellStyle headstyle = workbook.createCellStyle();
+        headstyle.setFont(headfont);
+        headstyle.setAlignment(HorizontalAlignment.CENTER);// 左右居中
+        headstyle.setVerticalAlignment(VerticalAlignment.CENTER);// 上下居中
+        headstyle.setLocked(true);
+        title.setCellValue("验收单");
+        title.setCellStyle(headstyle);
+
+        rowIdx++;
+
+        // 第二行
+        XSSFRow row2 = receiptSheet.createRow(rowIdx);
+        receiptSheet.addMergedRegion(new CellRangeAddress(rowIdx, rowIdx, 1, 2));
+        receiptSheet.addMergedRegion(new CellRangeAddress(rowIdx, rowIdx, 4, 5));
+        receiptSheet.addMergedRegion(new CellRangeAddress(rowIdx, rowIdx, 7, 8));
+        XSSFCell supplierKeyCell = row2.createCell(0);
+        supplierKeyCell.setCellValue("供方：");
+        XSSFCell supplierValueCell = row2.createCell(1);
+        supplierValueCell.setCellValue("供方之");
+        XSSFCell procurementKeyCell = row2.createCell(3);
+        procurementKeyCell.setCellValue("采购合同号：");
+        XSSFCell procurementValueCell = row2.createCell(4);
+        procurementValueCell.setCellValue("采购合同号之");
+        XSSFCell deliveryDateKeyCell = row2.createCell(6);
+        deliveryDateKeyCell.setCellValue("发货日期：");
+        XSSFCell deliveryDateValueCell = row2.createCell(7);
+        deliveryDateValueCell.setCellValue("发货日期之");
+
+        rowIdx++;
+        // 第三行
+        XSSFRow row3 = receiptSheet.createRow(rowIdx);
+        XSSFCell cellKey1 = row3.createCell(0);// 序号
+        cellKey1.setCellValue("序号");
+        XSSFCell cellKey2 = row3.createCell(1);// 产品名称
+        cellKey2.setCellValue("产品名称");
+        XSSFCell cellKey3 = row3.createCell(2);// 型号
+        cellKey3.setCellValue("型号");
+        XSSFCell cellKey4 = row3.createCell(3);// 规格
+        cellKey4.setCellValue("规格");
+        XSSFCell cellKey5 = row3.createCell(4);// 订货数
+        cellKey5.setCellValue("订货数");
+        XSSFCell cellKey6 = row3.createCell(5);// 材质要求
+        cellKey6.setCellValue("材质要求");
+        XSSFCell cellKey7 = row3.createCell(6);// 内销合同号
+        cellKey7.setCellValue("内销合同号");
+        XSSFCell cellKey8 = row3.createCell(7);// 实际到货数
+        cellKey8.setCellValue("实际到货数");
+        XSSFCell cellKey9 = row3.createCell(8);// 备注
+        cellKey9.setCellValue("备注");
+
+        // 循环遍历产品
+
+        // 合计栏
+        rowIdx++;
+        XSSFRow row4 = receiptSheet.createRow(rowIdx);
+        receiptSheet.addMergedRegion(new CellRangeAddress(rowIdx, rowIdx, 0, 3));
+        XSSFCell cellCount = row4.createCell(0);
+        cellCount.setCellValue("合计");
+        row4.createCell(1);
+        row4.createCell(2);
+        row4.createCell(3);
+        row4.createCell(4);
+        row4.createCell(5);
+        // 备注栏
+        rowIdx++;
+        XSSFRow row5 = receiptSheet.createRow(rowIdx);
+        receiptSheet.addMergedRegion(new CellRangeAddress(rowIdx, rowIdx, 1, 8));
+        XSSFCell remark = row5.createCell(0);
+        remark.setCellValue("备注");
+        XSSFCell remarkValue = row5.createCell(1);
+        // 签字栏
+        rowIdx++;
+        XSSFRow row6 = receiptSheet.createRow(rowIdx);
+        receiptSheet.addMergedRegion(new CellRangeAddress(rowIdx, rowIdx, 1, 2));
+        receiptSheet.addMergedRegion(new CellRangeAddress(rowIdx, rowIdx, 4, 5));
+        receiptSheet.addMergedRegion(new CellRangeAddress(rowIdx, rowIdx, 7, 8));
+        XSSFCell purchaseNameKey = row6.createCell(0);
+        purchaseNameKey.setCellValue("采购：");
+        XSSFCell purchaseNameValue = row6.createCell(1);
+        purchaseNameValue.setCellValue("供方之");
+        XSSFCell testResultKey = row6.createCell(3);
+        testResultKey.setCellValue("检验结论：");
+        XSSFCell testResultValue = row6.createCell(4);
+        testResultValue.setCellValue("采购合同号之");
+        XSSFCell factoryCheckKey = row6.createCell(6);
+        factoryCheckKey.setCellValue("工厂验收：");
+        XSSFCell factoryCheckValue = row6.createCell(7);
+        factoryCheckValue.setCellValue("发货日期之");
+
+
+        rowIdx++;
+        XSSFRow row7 = receiptSheet.createRow(rowIdx);
+        row7.createCell(0);
+        row7.createCell(1);
+        row7.createCell(2);
+        row7.createCell(3);
+        row7.createCell(4);
+        row7.createCell(5);
+        row7.createCell(6);
+        row7.createCell(7);
+        row7.createCell(8);
+
+        rowIdx++;
+        XSSFRow row8 = receiptSheet.createRow(rowIdx);
+        row8.createCell(0);
+        XSSFCell cell_1 = row8.createCell(1);
+        cell_1.setCellValue("经办人：");
+        row8.createCell(2);
+        row8.createCell(3);
+        XSSFCell cell_2 = row8.createCell(4);
+        cell_2.setCellValue("质检员：");
+        row8.createCell(5);
+        XSSFCell cell_3 = row8.createCell(6);
+        cell_3.setCellValue("库管：");
+        XSSFCell cell_4 = row8.createCell(7);
+        cell_4.setCellValue("经办人：");
+        row8.createCell(8);
+
+        String filePath = Global.getFilePath();
+        long l = System.currentTimeMillis();
+        String fileName = "验收单_" + bizProcessData1.getString12() + "_" + l + ".xlsx";
+        FileOutputStream fileOutputStream = new FileOutputStream(filePath + "/" + fileName);
+        workbook.write(fileOutputStream);
+        fileOutputStream.close();
+
+        return AjaxResult.success(fileName);
     }
-
-    private AjaxResult createReceiptPdf(Object o, Object o1, BizProcessData bizProcessData) {
-
-
-        return null;
-
-    }
-
 
 }
