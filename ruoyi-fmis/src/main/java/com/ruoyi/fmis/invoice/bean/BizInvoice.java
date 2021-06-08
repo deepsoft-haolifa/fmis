@@ -34,6 +34,14 @@ public class BizInvoice extends BaseEntity {
     @Excel(name = "开票日期", width = 30, dateFormat = "yyyy-MM-dd")
     private Date billDate;
 
+    /** 认证日期 */
+    @Excel(name = "认证日期", width = 30, dateFormat = "yyyy-MM-dd")
+    private Date authDate;
+
+    /** 纳税人识别号 */
+    @Excel(name = "纳税人识别号")
+    private String taxpayerIdNo;
+
     /** 供应商名称 */
     @Excel(name = "供应商名称")
     private String supplierName;
@@ -46,6 +54,7 @@ public class BizInvoice extends BaseEntity {
     @Excel(name = "税率")
     private String taxRate;
 
+
     /** 采购合同号（多个逗号分割） */
     @Excel(name = "采购合同号", readConverterExp = "多=个逗号分割")
     private String contractNo;
@@ -54,8 +63,8 @@ public class BizInvoice extends BaseEntity {
     @Excel(name = "发票类型", readConverterExp = "1=.增值税普通发票;,2=.增值税专用发票;")
     private Integer invoiceType;
 
-    /** 0非正常;1正常 */
-    @Excel(name = "0非正常;1正常")
+    /** 发票状态 0非正常;1正常 */
+    @Excel(name = "发票状态")
     private Integer status;
 
     /** 删除标志（0代表存在 1代表删除） */
@@ -95,6 +104,20 @@ public class BizInvoice extends BaseEntity {
 
     public Date getBillDate() {
         return billDate;
+    }
+    public void setAuthDate(Date authDate) {
+        this.authDate = authDate;
+    }
+
+    public Date getAuthDate() {
+        return authDate;
+    }
+    public void setTaxpayerIdNo(String taxpayerIdNo) {
+        this.taxpayerIdNo = taxpayerIdNo;
+    }
+
+    public String getTaxpayerIdNo() {
+        return taxpayerIdNo;
     }
     public void setSupplierName(String supplierName) {
         this.supplierName = supplierName;
@@ -149,23 +172,25 @@ public class BizInvoice extends BaseEntity {
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("id", getId())
-            .append("serialNo", getSerialNo())
-            .append("invoiceCode", getInvoiceCode())
-            .append("invoiceNo", getInvoiceNo())
-            .append("billDate", getBillDate())
-            .append("supplierName", getSupplierName())
-            .append("amount", getAmount())
-            .append("taxRate", getTaxRate())
-            .append("contractNo", getContractNo())
-            .append("invoiceType", getInvoiceType())
-            .append("status", getStatus())
-            .append("remark", getRemark())
-            .append("delFlag", getDelFlag())
-            .append("createBy", getCreateBy())
-            .append("createTime", getCreateTime())
-            .append("updateBy", getUpdateBy())
-            .append("updateTime", getUpdateTime())
-            .toString();
+                .append("id", getId())
+                .append("serialNo", getSerialNo())
+                .append("invoiceCode", getInvoiceCode())
+                .append("invoiceNo", getInvoiceNo())
+                .append("billDate", getBillDate())
+                .append("authDate", getAuthDate())
+                .append("taxpayerIdNo", getTaxpayerIdNo())
+                .append("supplierName", getSupplierName())
+                .append("amount", getAmount())
+                .append("taxRate", getTaxRate())
+                .append("contractNo", getContractNo())
+                .append("invoiceType", getInvoiceType())
+                .append("status", getStatus())
+                .append("remark", getRemark())
+                .append("delFlag", getDelFlag())
+                .append("createBy", getCreateBy())
+                .append("createTime", getCreateTime())
+                .append("updateBy", getUpdateBy())
+                .append("updateTime", getUpdateTime())
+                .toString();
     }
 }

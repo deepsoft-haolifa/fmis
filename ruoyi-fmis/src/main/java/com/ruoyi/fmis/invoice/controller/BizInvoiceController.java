@@ -1,6 +1,9 @@
 package com.ruoyi.fmis.invoice.controller;
 
 import java.util.List;
+
+import com.ruoyi.framework.util.ShiroUtils;
+import com.ruoyi.system.domain.SysUser;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,6 +21,7 @@ import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 发票信息（进项发票）Controller
@@ -113,4 +117,27 @@ public class BizInvoiceController extends BaseController {
     public AjaxResult remove(String ids) {
         return toAjax(bizInvoiceService.deleteBizInvoiceByIds(ids));
     }
+
+    @RequiresPermissions("invoice:bizInvoice:view")
+    @GetMapping("/importTemplate")
+    @ResponseBody
+    public AjaxResult importTemplate()
+    {
+        ExcelUtil<BizInvoice> util = new ExcelUtil<BizInvoice>(BizInvoice.class);
+        return util.importTemplateExcel("申报抵扣统计表");
+    }
+
+    @RequiresPermissions("invoice:bizInvoice:import")
+    @PostMapping("/importData")
+    @ResponseBody
+    public AjaxResult importData(MultipartFile file, boolean updateSupport) throws Exception
+    {
+        ExcelUtil<BizInvoice> util = new ExcelUtil<BizInvoice>(BizInvoice.class);
+        List<BizInvoice> list = util.importExcel(file.getInputStream());
+        String operName = ShiroUtils.getSysUser().getLoginName();
+        String message="";
+//        String message = bizInvoiceService.importUser(list, updateSupport, operName);
+        return AjaxResult.success(message);
+    }
+
 }
