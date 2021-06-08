@@ -854,8 +854,8 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
         //int roleType = roleService.getRoleType(ShiroUtils.getUserId());
 
         String flowStatus = "";
+        String currentUserFlowStatus = "";
         if (!CollectionUtils.isEmpty(flowMap)) {
-            String currentUserFlowStatus = "";
             if (flowMap.size() > 1) {
                 currentUserFlowStatus = flowMap.keySet().stream().filter(e -> Integer.parseInt(e) > Integer.parseInt(bizProcessData.getFlowStatus())).findFirst().orElse("");
             } else {
@@ -897,6 +897,7 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
         bizFlow.setExamineUserId(ShiroUtils.getUserId());
         bizFlow.setRemark(remark);
         bizFlow.setFlowStatus(status);
+        bizFlow.setString1(currentUserFlowStatus);
         bizFlowMapper.insertBizFlow(bizFlow);
 
         return updateCount;
@@ -1012,6 +1013,7 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
         bizFlow.setBizTable(bizProcessData.getBizId());
         bizFlow.setExamineUserId(ShiroUtils.getUserId());
         bizFlow.setFlowStatus(BizConstants.FLOW_STATUS_0);
+        bizFlow.setString1(bizProcessData.getFlowStatus());
         bizFlowMapper.insertBizFlow(bizFlow);
     }
 

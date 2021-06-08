@@ -1,7 +1,9 @@
 package com.ruoyi.fmis.flow.controller;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
+import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.fmis.data.domain.BizProcessData;
 import com.ruoyi.fmis.data.service.IBizProcessDataService;
 import com.ruoyi.fmis.define.domain.BizProcessDefine;
@@ -83,7 +85,7 @@ public class BizFlowController extends BaseController {
         //节点结束
         String normalFlag = "";
         //已存在的角色列表
-        Map<String,SysRole> roleMap = new LinkedHashMap<>();
+        Map<String, SysRole> roleMap = new LinkedHashMap<>();
         if ("biz_quotation".equals(bizTable)) {
             //报价单
             BizQuotation bizQuotation = bizQuotationService.selectBizQuotationById(bizId);
@@ -102,73 +104,47 @@ public class BizFlowController extends BaseController {
         queryBizProcessDefine.setTbName(bizTable);
         List<BizProcessDefine> bizProcessDefineList = bizProcessDefineService.selectBizProcessDefineList(queryBizProcessDefine);
         BizProcessDefine bizProcessDefine = null;
+        List<BizFlow> resultList = new ArrayList<>();
         if (!CollectionUtils.isEmpty(bizProcessDefineList)) {
             bizProcessDefine = bizProcessDefineList.get(0);
-
             String defineFlow = bizProcessDefine.getDefineFlow();
             String defineRole = bizProcessDefine.getDefineRole();
-            List<SysRole> allRoleList = sysRoleService.selectRoleAll();
-            Map<String,SysRole> allRoleMap = new HashMap<>();
-            for (SysRole sysRole : allRoleList) {
-                allRoleMap.put(sysRole.getRoleKey(),sysRole);
-            }
             String[] defineRoles = defineRole.split("-");
             String[] defineFlows = defineFlow.split("-");
-            int i = 0;
-            for (String roleKey : defineRoles) {
-                SysRole sysRole = allRoleMap.get(roleKey);
-                String defineFlowN = defineFlows[i];
-                if (sysRole != null && Integer.parseInt(defineFlowN) <= Integer.parseInt(normalFlag)) {
-                    roleMap.put(roleKey,sysRole);
-                }
-                i++;
-            }
-        }
-
-
-        List<BizFlow> list = bizFlowService.selectBizFlowViewList(bizFlow);
-        if (!CollectionUtils.isEmpty(list)) {
-            for (BizFlow flow : list) {
-                Long userId = flow.getExamineUserId();
-                List<SysRole> roleList = sysRoleService.selectRolesByUserId(userId);
-                String roleNames = "";
-
-                if (!CollectionUtils.isEmpty(roleList)) {
-                    List<String> roleNameList = new ArrayList<>();
-                    for (SysRole sysRole : roleList) {
-                        if (sysRole.isFlag()) {
-                            if (!roleNameList.contains(sysRole.getRoleName())) {
-                                roleNameList.add(sysRole.getRoleName());
-                            }
+            List<BizFlow> list = bizFlowService.selectBizFlowViewList(bizFlow);
+            for (int i = 0; i < defineFlows.length; i++) {
+                BizFlow bizF = new BizFlow();
+                String flowIndex = defineFlows[i];
+                bizF.setFlowIndex(flowIndex);
+                String roleKey = defineRoles[i];
+                SysRole sysRole = sysRoleService.selectRoleByKey(roleKey);
+                bizF.setRoleNames(sysRole.getRoleName());
+                for (BizFlow flow : list) {
+                    String string1 = flow.getString1();
+                    if (StringUtils.isNotEmpty(string1)) {
+                        if (string1.equals(flowIndex)) {
+                            bizF.setFlowId(flow.getFlowId());
+                            bizF.setExamineUserName(flow.getExamineUserName());
+                            bizF.setFlowStatus(flow.getFlowStatus());
+                            bizF.setRemark(flow.getRemark());
+                            bizF.setCreateTime(flow.getCreateTime());
+                        }
+                    } else {
+                        Long examineUserId = flow.getExamineUserId();
+                        Set<String> roleKeySet = sysRoleService.selectRoleKeys(examineUserId);
+                        if (roleKeySet.contains(roleKey)) {
+                            bizF.setFlowId(flow.getFlowId());
+                            bizF.setExamineUserName(flow.getExamineUserName());
+                            bizF.setFlowStatus(flow.getFlowStatus());
+                            bizF.setRemark(flow.getRemark());
+                            bizF.setCreateTime(flow.getCreateTime());
                         }
                     }
-                    for (String roleName : roleNameList) {
-                        roleNames += roleName + ",";
-                    }
-                    roleNames = roleNames.substring(0,roleNames.length() - 1);
                 }
-                flow.setRoleNames(roleNames);
+                resultList.add(bizF);
             }
         }
-        if (list == null) {
-            list = new ArrayList<>();
-        }
-        if (list.size() < roleMap.size()) {
-            int endIndex = roleMap.size() - list.size();
-
-            int i = 1;
-            for (String roleKey : roleMap.keySet()) {
-                if (i > list.size()) {
-                    BizFlow flow = new BizFlow();
-                    SysRole sysRole = roleMap.get(roleKey);
-                    flow.setRoleNames(sysRole.getRoleName());
-                    flow.setFlowId(0L);
-                    list.add(flow);
-                }
-                i++;
-            }
-        }
-        return getDataTable(list);
+        return getDataTable(resultList);
     }
 
     /**
@@ -228,7 +204,7 @@ public class BizFlowController extends BaseController {
      */
     @RequiresPermissions("fmis:flow:remove")
     @Log(title = "流程记录", businessType = BusinessType.DELETE)
-    @PostMapping( "/remove")
+    @PostMapping("/remove")
     @ResponseBody
     public AjaxResult remove(String ids) {
         return toAjax(bizFlowService.deleteBizFlowByIds(ids));

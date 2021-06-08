@@ -19,6 +19,10 @@ public class BizFlow extends BaseEntity {
 
     @Getter
     @Setter
+    private String flowIndex;
+
+    @Getter
+    @Setter
     private String roleNames;
 
     /** ID */
