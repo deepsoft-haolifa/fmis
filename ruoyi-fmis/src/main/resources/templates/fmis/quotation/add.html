@@ -687,19 +687,19 @@
                 console.log("price" + price)
                 console.log("totalCostPrice" + totalCostPrice)
 
-                productTotalPrice = FloatAdd(productTotalPrice,price).toFixed(2);
-                allTotalCost =  FloatAdd(totalCostPrice,allTotalCost).toFixed(2);
+                productTotalPrice = FloatAdd(productTotalPrice,price).toFixed(0);
+                allTotalCost =  FloatAdd(totalCostPrice,allTotalCost).toFixed(0);
             }
             var specialExpenses = $("#specialExpenses").val();
             if (isEmpty(specialExpenses)) {
                 specialExpenses = 0;
             }
-            $("#productTotalPrice").val(parseFloat(productTotalPrice).toFixed(2));
+            $("#productTotalPrice").val(parseFloat(productTotalPrice).toFixed(0));
             var totalPrice = parseFloat(productTotalPrice) + parseFloat(specialExpenses);
-            $("#totalPrice").val(parseFloat(totalPrice).toFixed(2));
+            $("#totalPrice").val(parseFloat(totalPrice).toFixed(0));
 
             //productTotalPrice 毛利 产品金额-成本价格-特殊费用
-            var grossPrice = (parseFloat(productTotalPrice) - parseFloat(allTotalCost) - parseFloat(specialExpenses)).toFixed(2);
+            var grossPrice = (parseFloat(productTotalPrice) - parseFloat(allTotalCost) - parseFloat(specialExpenses)).toFixed(0);
             console.log("1"+productTotalPrice)
             console.log("2"+allTotalCost)
             console.log("3"+specialExpenses)
