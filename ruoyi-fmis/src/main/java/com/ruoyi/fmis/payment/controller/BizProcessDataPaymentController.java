@@ -10,6 +10,7 @@ import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.fmis.budget.domain.BizCostBudget;
+import com.ruoyi.fmis.budget.mapper.BizCostBudgetMapper;
 import com.ruoyi.fmis.budget.service.IBizCostBudgetService;
 import com.ruoyi.fmis.child.domain.BizProcessChild;
 import com.ruoyi.fmis.child.service.IBizProcessChildService;
@@ -58,6 +59,9 @@ public class BizProcessDataPaymentController extends BaseController {
     private IBizSubjectsService bizSubjectsService;
     @Autowired
     private IBizCostBudgetService bizCostBudgetService;
+    @Autowired
+    private BizCostBudgetMapper bizCostBudgetMapper;
+
 
     @RequiresPermissions("fmis:payment:view")
     @GetMapping()
@@ -332,7 +336,7 @@ public class BizProcessDataPaymentController extends BaseController {
                     }
                     // 判断此科目的费用是否够
                     String finalMonthStr = monthStr;
-                    List<BizCostBudget> bizCostBudgets = bizCostBudgetService.selectBizCostBudgetList(new BizCostBudget() {{
+                    List<BizCostBudget> bizCostBudgets = bizCostBudgetMapper.selectBizCostBudgetList(new BizCostBudget() {{
                         setDeptId(Long.parseLong(bizProcessData.getString6()));
                         setSubjectsId(Long.parseLong(subjectId));
                         setY(String.valueOf(year));
