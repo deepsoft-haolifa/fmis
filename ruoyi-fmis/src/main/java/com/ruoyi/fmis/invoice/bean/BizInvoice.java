@@ -34,38 +34,39 @@ public class BizInvoice extends BaseEntity {
     @Excel(name = "开票日期", width = 30, dateFormat = "yyyy-MM-dd")
     private Date billDate;
 
-    /** 认证日期 */
-    @Excel(name = "认证日期", width = 30, dateFormat = "yyyy-MM-dd")
-    private Date authDate;
-
     /** 纳税人识别号 */
     @Excel(name = "纳税人识别号")
     private String taxpayerIdNo;
 
     /** 供应商名称 */
-    @Excel(name = "供应商名称")
+    @Excel(name = "销方名称")
     private String supplierName;
 
     /** 发票金额 */
     @Excel(name = "发票金额")
     private Double amount;
 
+
+
     /** 税率 */
     @Excel(name = "税率")
     private String taxRate;
 
-
+    @Excel(name = "有效税额")
+    private Double taxAmount;
+    /** 认证日期 */
+    @Excel(name = "确认/认证日期", width = 30, dateFormat = "yyyy-MM-dd")
+    private Date authDate;
     /** 采购合同号（多个逗号分割） */
-    @Excel(name = "采购合同号", readConverterExp = "多=个逗号分割")
     private String contractNo;
 
     /** 发票类型（1.增值税普通发票; 2.增值税专用发票;） */
-    @Excel(name = "发票类型", readConverterExp = "1=.增值税普通发票;,2=.增值税专用发票;")
-    private Integer invoiceType;
+    @Excel(name = "发票类型（1.普通;2.专用）请输入数字", readConverterExp = "1=.增值税普通发票;,2=.增值税专用发票;")
+    private String invoiceType;
 
     /** 发票状态 0非正常;1正常 */
-    @Excel(name = "发票状态")
-    private Integer status;
+    @Excel(name = "发票状态(非正常/正常)，请输入数字", readConverterExp = "0=.非正常;,1=.正常;")
+    private String status;
 
     /** 删除标志（0代表存在 1代表删除） */
     private String delFlag;
@@ -140,6 +141,13 @@ public class BizInvoice extends BaseEntity {
     public String getTaxRate() {
         return taxRate;
     }
+    public void setTaxAmount(Double taxAmount) {
+        this.taxAmount = taxAmount;
+    }
+
+    public Double getTaxAmount() {
+        return taxAmount;
+    }
     public void setContractNo(String contractNo) {
         this.contractNo = contractNo;
     }
@@ -147,18 +155,18 @@ public class BizInvoice extends BaseEntity {
     public String getContractNo() {
         return contractNo;
     }
-    public void setInvoiceType(Integer invoiceType) {
+    public void setInvoiceType(String invoiceType) {
         this.invoiceType = invoiceType;
     }
 
-    public Integer getInvoiceType() {
+    public String getInvoiceType() {
         return invoiceType;
     }
-    public void setStatus(Integer status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
-    public Integer getStatus() {
+    public String getStatus() {
         return status;
     }
     public void setDelFlag(String delFlag) {
@@ -182,6 +190,7 @@ public class BizInvoice extends BaseEntity {
                 .append("supplierName", getSupplierName())
                 .append("amount", getAmount())
                 .append("taxRate", getTaxRate())
+                .append("rateAmount", getTaxAmount())
                 .append("contractNo", getContractNo())
                 .append("invoiceType", getInvoiceType())
                 .append("status", getStatus())

@@ -15,6 +15,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="supplierName"    column="supplier_name"    />
         <result property="amount"    column="amount"    />
         <result property="taxRate"    column="tax_rate"    />
+        <result property="taxAmount"    column="tax_amount"    />
         <result property="contractNo"    column="contract_no"    />
         <result property="invoiceType"    column="invoice_type"    />
         <result property="status"    column="status"    />
@@ -27,7 +28,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectBizInvoiceVo">
-        select id, serial_no, invoice_code, invoice_no, bill_date, auth_date, taxpayer_id_no, supplier_name, amount, tax_rate, contract_no, invoice_type, status, remark, del_flag, create_by, create_time, update_by, update_time from biz_invoice
+        select id, serial_no, invoice_code, invoice_no, bill_date, auth_date, taxpayer_id_no, supplier_name, amount, tax_rate, tax_amount, contract_no, invoice_type, status, remark, del_flag, create_by, create_time, update_by, update_time from biz_invoice
     </sql>
 
     <select id="selectBizInvoiceList" parameterType="com.ruoyi.fmis.invoice.bean.BizInvoice" resultMap="BizInvoiceResult">
@@ -42,9 +43,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="supplierName != null  and supplierName != ''"> and supplier_name like concat('%', #{supplierName}, '%')</if>
             <if test="amount != null "> and amount = #{amount}</if>
             <if test="taxRate != null  and taxRate != ''"> and tax_rate = #{taxRate}</if>
+            <if test="taxAmount != null "> and tax_amount = #{taxAmount}</if>
             <if test="contractNo != null  and contractNo != ''"> and contract_no = #{contractNo}</if>
-            <if test="invoiceType != null "> and invoice_type = #{invoiceType}</if>
-            <if test="status != null "> and status = #{status}</if>
+            <if test="invoiceType != null  and invoiceType != ''"> and invoice_type = #{invoiceType}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
         </where>
     </select>
 
@@ -65,9 +67,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="supplierName != null  and supplierName != ''">supplier_name,</if>
             <if test="amount != null ">amount,</if>
             <if test="taxRate != null  and taxRate != ''">tax_rate,</if>
+            <if test="taxAmount != null ">tax_amount,</if>
             <if test="contractNo != null  and contractNo != ''">contract_no,</if>
-            <if test="invoiceType != null ">invoice_type,</if>
-            <if test="status != null ">status,</if>
+            <if test="invoiceType != null  and invoiceType != ''">invoice_type,</if>
+            <if test="status != null  and status != ''">status,</if>
             <if test="remark != null  and remark != ''">remark,</if>
             <if test="delFlag != null  and delFlag != ''">del_flag,</if>
             <if test="createBy != null  and createBy != ''">create_by,</if>
@@ -85,9 +88,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="supplierName != null  and supplierName != ''">#{supplierName},</if>
             <if test="amount != null ">#{amount},</if>
             <if test="taxRate != null  and taxRate != ''">#{taxRate},</if>
+            <if test="taxAmount != null ">#{taxAmount},</if>
             <if test="contractNo != null  and contractNo != ''">#{contractNo},</if>
-            <if test="invoiceType != null ">#{invoiceType},</if>
-            <if test="status != null ">#{status},</if>
+            <if test="invoiceType != null  and invoiceType != ''">#{invoiceType},</if>
+            <if test="status != null  and status != ''">#{status},</if>
             <if test="remark != null  and remark != ''">#{remark},</if>
             <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
             <if test="createBy != null  and createBy != ''">#{createBy},</if>
@@ -109,9 +113,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="supplierName != null  and supplierName != ''">supplier_name = #{supplierName},</if>
             <if test="amount != null ">amount = #{amount},</if>
             <if test="taxRate != null  and taxRate != ''">tax_rate = #{taxRate},</if>
+            <if test="taxAmount != null ">tax_amount = #{taxAmount},</if>
             <if test="contractNo != null  and contractNo != ''">contract_no = #{contractNo},</if>
-            <if test="invoiceType != null ">invoice_type = #{invoiceType},</if>
-            <if test="status != null ">status = #{status},</if>
+            <if test="invoiceType != null  and invoiceType != ''">invoice_type = #{invoiceType},</if>
+            <if test="status != null  and status != ''">status = #{status},</if>
             <if test="remark != null  and remark != ''">remark = #{remark},</if>
             <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
             <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>

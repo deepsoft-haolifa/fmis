@@ -134,9 +134,7 @@ public class BizInvoiceController extends BaseController {
     {
         ExcelUtil<BizInvoice> util = new ExcelUtil<BizInvoice>(BizInvoice.class);
         List<BizInvoice> list = util.importExcel(file.getInputStream());
-        String operName = ShiroUtils.getSysUser().getLoginName();
-        String message="";
-//        String message = bizInvoiceService.importUser(list, updateSupport, operName);
+        String message = bizInvoiceService.importList(list,updateSupport);
         return AjaxResult.success(message);
     }
 

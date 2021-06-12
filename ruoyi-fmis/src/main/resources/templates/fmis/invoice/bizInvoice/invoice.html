@@ -79,6 +79,8 @@
                 updateUrl: prefix + "/edit/{id}",
                 removeUrl: prefix + "/remove",
                 exportUrl: prefix + "/export",
+                importUrl: prefix + "/importData",
+                importTemplateUrl: prefix + "/importTemplate",
                 modalName: "发票信息（进项发票）",
                 columns: [{
                     checkbox: true
@@ -124,6 +126,10 @@
                     field : 'taxRate', 
                     title : '税率'
                 },
+                    {
+                        field : 'taxAmount',
+                        title : '有效税额'
+                    },
                 {
                     field : 'contractNo', 
                     title : '采购合同号'
