@@ -23,15 +23,12 @@ import com.ruoyi.fmis.child.service.IBizProcessChildService;
 import com.ruoyi.fmis.common.CommonUtils;
 import com.ruoyi.fmis.customer.domain.BizCustomer;
 import com.ruoyi.fmis.customer.service.IBizCustomerService;
-import com.ruoyi.fmis.customertrack.domain.BizCustomerTrack;
 import com.ruoyi.fmis.data.domain.BizProcessData;
 import com.ruoyi.fmis.data.service.IBizProcessDataService;
-import com.ruoyi.fmis.datatrack.domain.BizProcessDataTrack;
 import com.ruoyi.fmis.datatrack.service.IBizProcessDataTrackService;
 import com.ruoyi.fmis.define.service.IBizProcessDefineService;
 import com.ruoyi.fmis.finance.domain.BizPayPlan;
 import com.ruoyi.fmis.finance.service.IBizPayPlanService;
-import com.ruoyi.fmis.product.service.IBizProductService;
 import com.ruoyi.fmis.status.domain.BizDataStatus;
 import com.ruoyi.fmis.status.service.IBizDataStatusService;
 import com.ruoyi.fmis.suppliers.domain.BizSuppliers;
@@ -46,12 +43,11 @@ import com.ruoyi.system.service.ISysDeptService;
 import com.ruoyi.system.service.ISysDictDataService;
 import com.ruoyi.system.service.ISysRoleService;
 import com.ruoyi.system.service.ISysUserService;
-import org.apache.poi.hssf.usermodel.*;
-import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.ss.util.RegionUtil;
 import org.apache.poi.xssf.usermodel.*;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,13 +60,13 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 /**
  * 合同管理Controller
@@ -1534,17 +1530,12 @@ public class BizProcessDataProcurementController extends BaseController {
     /**
      * 导出验收单
      *
-     * @param bizProcessData
+     * @param dataId
      * @return
      */
-    @PostMapping("/export/receipt")
-    @ResponseBody
-    public AjaxResult exportReceipt(BizProcessData bizProcessData) throws IOException {
-        if (Objects.isNull(bizProcessData.getDataId()) || 0 == bizProcessData.getDataId()) {
-            return AjaxResult.warn("请选择采购合同！");
-        }
+    @GetMapping("/export/receipt/{dataId}")
+    public void exportReceipt(@PathVariable("dataId") Long dataId, HttpServletResponse response) throws IOException {
 
-        Long dataId = bizProcessData.getDataId();
         BizProcessData bizProcessData1 = bizProcessDataService.selectBizProcessDataById(dataId);
 
         // 导出excel
@@ -1570,26 +1561,68 @@ public class BizProcessDataProcurementController extends BaseController {
 
         rowIdx++;
 
+        // 加粗字体
+
+        XSSFFont normalBold = workbook.createFont();
+        normalBold.setFontName("宋体");
+        normalBold.setBold(true);// 加粗
+        normalBold.setFontHeightInPoints((short) 10);// 字体大小
         // 第二行
         XSSFRow row2 = receiptSheet.createRow(rowIdx);
-        receiptSheet.addMergedRegion(new CellRangeAddress(rowIdx, rowIdx, 1, 2));
-        receiptSheet.addMergedRegion(new CellRangeAddress(rowIdx, rowIdx, 4, 5));
-        receiptSheet.addMergedRegion(new CellRangeAddress(rowIdx, rowIdx, 7, 8));
+        CellRangeAddress region = new CellRangeAddress(rowIdx, rowIdx, 1, 2);
+        receiptSheet.addMergedRegion(region);
+        CellRangeAddress region1 = new CellRangeAddress(rowIdx, rowIdx, 4, 5);
+        receiptSheet.addMergedRegion(region1);
+        CellRangeAddress region2 = new CellRangeAddress(rowIdx, rowIdx, 7, 8);
+        receiptSheet.addMergedRegion(region2);
+
+        // 加粗
+        XSSFCellStyle boldStyle = workbook.createCellStyle();
+        boldStyle.setFont(normalBold);
+        boldStyle.setBorderBottom(BorderStyle.DOUBLE);
+        boldStyle.setBorderTop(BorderStyle.DOUBLE);
+        // 不加粗字体
+        XSSFCellStyle thinStyle = workbook.createCellStyle();
+        thinStyle.setBorderBottom(BorderStyle.DOUBLE);
+        thinStyle.setBorderTop(BorderStyle.DOUBLE);
         XSSFCell supplierKeyCell = row2.createCell(0);
         supplierKeyCell.setCellValue("供方：");
+        supplierKeyCell.setCellStyle(boldStyle);
         XSSFCell supplierValueCell = row2.createCell(1);
-        supplierValueCell.setCellValue("供方之");
+        supplierValueCell.setCellValue(bizProcessData1.getSupplierName());
+        supplierValueCell.setCellStyle(thinStyle);
+        RegionUtil.setBorderBottom(BorderStyle.DOUBLE, region, receiptSheet);
+        RegionUtil.setBorderTop(BorderStyle.DOUBLE, region, receiptSheet);
         XSSFCell procurementKeyCell = row2.createCell(3);
         procurementKeyCell.setCellValue("采购合同号：");
+        procurementKeyCell.setCellStyle(boldStyle);
         XSSFCell procurementValueCell = row2.createCell(4);
-        procurementValueCell.setCellValue("采购合同号之");
+        procurementValueCell.setCellValue(bizProcessData1.getString12());
+        procurementValueCell.setCellStyle(thinStyle);
+        RegionUtil.setBorderTop(BorderStyle.DOUBLE, region1, receiptSheet);
+        RegionUtil.setBorderBottom(BorderStyle.DOUBLE, region1, receiptSheet);
         XSSFCell deliveryDateKeyCell = row2.createCell(6);
         deliveryDateKeyCell.setCellValue("发货日期：");
+        deliveryDateKeyCell.setCellStyle(boldStyle);
         XSSFCell deliveryDateValueCell = row2.createCell(7);
-        deliveryDateValueCell.setCellValue("发货日期之");
+        deliveryDateValueCell.setCellValue(bizProcessData1.getDatetime3());
+        RegionUtil.setBorderTop(BorderStyle.DOUBLE, region2, receiptSheet);
+        RegionUtil.setBorderBottom(BorderStyle.DOUBLE, region2, receiptSheet);
 
+
+        // 空白行
         rowIdx++;
-        // 第三行
+        receiptSheet.createRow(rowIdx);
+        // 第四行
+        XSSFCellStyle borderCellStyle = workbook.createCellStyle();
+        borderCellStyle.setBorderTop(BorderStyle.THIN);
+        borderCellStyle.setBorderBottom(BorderStyle.THIN);
+        borderCellStyle.setBorderLeft(BorderStyle.THIN);
+        borderCellStyle.setBorderRight(BorderStyle.THIN);
+        borderCellStyle.setAlignment(HorizontalAlignment.LEFT);
+        borderCellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+        borderCellStyle.setWrapText(true);
+        rowIdx++;
         XSSFRow row3 = receiptSheet.createRow(rowIdx);
         XSSFCell cellKey1 = row3.createCell(0);// 序号
         cellKey1.setCellValue("序号");
@@ -1610,82 +1643,242 @@ public class BizProcessDataProcurementController extends BaseController {
         XSSFCell cellKey9 = row3.createCell(8);// 备注
         cellKey9.setCellValue("备注");
 
+        // 设置单元格样式
+        cellKey1.setCellStyle(borderCellStyle);
+        cellKey2.setCellStyle(borderCellStyle);
+        cellKey3.setCellStyle(borderCellStyle);
+        cellKey4.setCellStyle(borderCellStyle);
+        cellKey5.setCellStyle(borderCellStyle);
+        cellKey6.setCellStyle(borderCellStyle);
+        cellKey7.setCellStyle(borderCellStyle);
+        cellKey8.setCellStyle(borderCellStyle);
+        cellKey9.setCellStyle(borderCellStyle);
+
         // 循环遍历产品
+        // 查询报检列表
+        BizProcessChild queryBizProcessChild = new BizProcessChild();
+        queryBizProcessChild.setDataId(dataId);
+        List<BizProcessChild> bizProcessChildrenProduct = bizProcessChildService.selectBizTestProductList(queryBizProcessChild);
+        if(!CollectionUtils.isEmpty(bizProcessChildrenProduct)) {
+            for (int i = 0; i < bizProcessChildrenProduct.size(); i++) {
+                BizProcessChild bizProcessChild = bizProcessChildrenProduct.get(i);
+
+                // 材质要求：
+                // 阀体
+                String valvebodyMaterial =  Objects.isNull(bizProcessChild.getValvebodyMaterial())?"无":bizProcessChild.getValvebodyMaterial();
+                // 阀芯
+                String valveElement =  Objects.isNull(bizProcessChild.getValveElement())?"无":bizProcessChild.getValveElement();
+                // 密封
+                String valveMaterial =  Objects.isNull(bizProcessChild.getValveMaterial())?"无":bizProcessChild.getValveMaterial();
+                // 驱动
+                String driveForm =  Objects.isNull(bizProcessChild.getDriveForm())?"无":bizProcessChild.getDriveForm();
+                // 连接方式
+                String connectionType = Objects.isNull(bizProcessChild.getConnectionType())? "无":bizProcessChild.getConnectionType();
+
+                String format = String.format("阀体：%s;阀芯：%s；密封：%s；驱动：%s；连接方式：%s", valvebodyMaterial, valveElement, valveMaterial, driveForm, connectionType);
+                rowIdx++;
+                XSSFRow rowList = receiptSheet.createRow(rowIdx);
+                XSSFCell cellValue1 = rowList.createCell(0);// 序号
+                cellValue1.setCellValue(i+1);
+                XSSFCell cellValue2 = rowList.createCell(1);// 产品名称
+                cellValue2.setCellValue(bizProcessChild.getProductName());
+                XSSFCell cellValue3 = rowList.createCell(2);// 型号
+                cellValue3.setCellValue(bizProcessChild.getModel());
+                XSSFCell cellValue4 = rowList.createCell(3);// 规格
+                cellValue4.setCellValue(bizProcessChild.getSpecifications());
+                XSSFCell cellValue5 = rowList.createCell(4);// 订货数
+                cellValue5.setCellValue(bizProcessChild.getProductNum());
+                XSSFCell cellValue6 = rowList.createCell(5);// 材质要求
+                cellValue6.setCellValue(format);
+                XSSFCell cellValue7 = rowList.createCell(6);// 内销合同号
+                cellValue7.setCellValue(bizProcessChild.getContractNo());
+                XSSFCell cellValue8 = rowList.createCell(7);// 实际到货数
+                cellValue8.setCellValue(bizProcessChild.getStayNum());
+                XSSFCell cellValue9 = rowList.createCell(8);// 备注
+                cellValue9.setCellValue(Objects.isNull(bizProcessChild.getRemark())? "":bizProcessChild.getRemark());
+
+                // 设置单元格样式
+                cellValue1.setCellStyle(borderCellStyle);
+                cellValue2.setCellStyle(borderCellStyle);
+                cellValue3.setCellStyle(borderCellStyle);
+                cellValue4.setCellStyle(borderCellStyle);
+                cellValue5.setCellStyle(borderCellStyle);
+                cellValue6.setCellStyle(borderCellStyle);
+                cellValue7.setCellStyle(borderCellStyle);
+                cellValue8.setCellStyle(borderCellStyle);
+                cellValue9.setCellStyle(borderCellStyle);
+            }
+        }
+
+        // todo
 
         // 合计栏
+
         rowIdx++;
         XSSFRow row4 = receiptSheet.createRow(rowIdx);
-        receiptSheet.addMergedRegion(new CellRangeAddress(rowIdx, rowIdx, 0, 3));
+        CellRangeAddress region3 = new CellRangeAddress(rowIdx, rowIdx, 0, 3);
+        receiptSheet.addMergedRegion(region3);
         XSSFCell cellCount = row4.createCell(0);
+        XSSFCellStyle centerStyle = workbook.createCellStyle();
+        centerStyle.setWrapText(true);
+        centerStyle.setBorderTop(BorderStyle.THIN);
+        centerStyle.setBorderBottom(BorderStyle.THIN);
+        centerStyle.setBorderLeft(BorderStyle.THIN);
+        centerStyle.setBorderRight(BorderStyle.THIN);
+        centerStyle.setAlignment(HorizontalAlignment.CENTER);
         cellCount.setCellValue("合计");
-        row4.createCell(1);
-        row4.createCell(2);
-        row4.createCell(3);
-        row4.createCell(4);
-        row4.createCell(5);
+        cellCount.setCellStyle(centerStyle);
+        XSSFCell cell1 = row4.createCell(1);
+        XSSFCell cell2 = row4.createCell(2);
+        XSSFCell cell3 = row4.createCell(3);
+        XSSFCell cell4 = row4.createCell(4);
+        XSSFCell cell5 = row4.createCell(5);
+        XSSFCell cell6 = row4.createCell(6);
+        XSSFCell cell7 = row4.createCell(7);
+        XSSFCell cell8 = row4.createCell(8);
+        cell1.setCellStyle(borderCellStyle);
+        cell2.setCellStyle(borderCellStyle);
+        cell3.setCellStyle(borderCellStyle);
+        cell4.setCellStyle(borderCellStyle);
+        cell5.setCellStyle(borderCellStyle);
+        cell6.setCellStyle(borderCellStyle);
+        cell7.setCellStyle(borderCellStyle);
+        cell8.setCellStyle(borderCellStyle);
+
         // 备注栏
+        //
         rowIdx++;
         XSSFRow row5 = receiptSheet.createRow(rowIdx);
-        receiptSheet.addMergedRegion(new CellRangeAddress(rowIdx, rowIdx, 1, 8));
+        CellRangeAddress region4 = new CellRangeAddress(rowIdx, rowIdx, 1, 8);
+        receiptSheet.addMergedRegion(region4);
         XSSFCell remark = row5.createCell(0);
         remark.setCellValue("备注");
+        remark.setCellStyle(borderCellStyle);
         XSSFCell remarkValue = row5.createCell(1);
+        remarkValue.setCellStyle(borderCellStyle);
+        RegionUtil.setBorderBottom(BorderStyle.THIN, region4, receiptSheet);
+        RegionUtil.setBorderTop(BorderStyle.THIN, region4, receiptSheet);
+        RegionUtil.setBorderRight(BorderStyle.THIN, region4, receiptSheet);
+        RegionUtil.setBorderLeft(BorderStyle.THIN, region4, receiptSheet);
         // 签字栏
+        XSSFCellStyle topCellStyle = workbook.createCellStyle();
+        topCellStyle.setBorderTop(BorderStyle.THIN);
+        XSSFCellStyle rightCellStyle = workbook.createCellStyle();
+        rightCellStyle.setBorderTop(BorderStyle.THIN);
+        rightCellStyle.setBorderRight(BorderStyle.THIN);
+        XSSFCellStyle leftCellStyle = workbook.createCellStyle();
+        leftCellStyle.setBorderTop(BorderStyle.THIN);
+        leftCellStyle.setBorderLeft(BorderStyle.THIN);
         rowIdx++;
         XSSFRow row6 = receiptSheet.createRow(rowIdx);
-        receiptSheet.addMergedRegion(new CellRangeAddress(rowIdx, rowIdx, 1, 2));
-        receiptSheet.addMergedRegion(new CellRangeAddress(rowIdx, rowIdx, 4, 5));
-        receiptSheet.addMergedRegion(new CellRangeAddress(rowIdx, rowIdx, 7, 8));
+        CellRangeAddress region7 = new CellRangeAddress(rowIdx, rowIdx, 1, 2);
+        receiptSheet.addMergedRegion(region7);
+        CellRangeAddress region5 = new CellRangeAddress(rowIdx, rowIdx, 4, 5);
+        receiptSheet.addMergedRegion(region5);
+        CellRangeAddress region6 = new CellRangeAddress(rowIdx, rowIdx, 7, 8);
+        receiptSheet.addMergedRegion(region6);
+        RegionUtil.setBorderRight(BorderStyle.THIN, region7, receiptSheet);
+        RegionUtil.setBorderTop(BorderStyle.THIN, region7, receiptSheet);
+        RegionUtil.setBorderRight(BorderStyle.THIN, region5, receiptSheet);
+        RegionUtil.setBorderTop(BorderStyle.THIN, region5, receiptSheet);
+        RegionUtil.setBorderRight(BorderStyle.THIN, region6, receiptSheet);
+        RegionUtil.setBorderTop(BorderStyle.THIN, region6, receiptSheet);
         XSSFCell purchaseNameKey = row6.createCell(0);
         purchaseNameKey.setCellValue("采购：");
+        purchaseNameKey.setCellStyle(leftCellStyle);
         XSSFCell purchaseNameValue = row6.createCell(1);
-        purchaseNameValue.setCellValue("供方之");
+        purchaseNameValue.setCellValue("");
+        purchaseNameValue.setCellStyle(topCellStyle);
         XSSFCell testResultKey = row6.createCell(3);
         testResultKey.setCellValue("检验结论：");
+        testResultKey.setCellStyle(topCellStyle);
         XSSFCell testResultValue = row6.createCell(4);
-        testResultValue.setCellValue("采购合同号之");
+        testResultValue.setCellValue("");
+        testResultValue.setCellStyle(topCellStyle);
         XSSFCell factoryCheckKey = row6.createCell(6);
         factoryCheckKey.setCellValue("工厂验收：");
+        factoryCheckKey.setCellStyle(topCellStyle);
         XSSFCell factoryCheckValue = row6.createCell(7);
-        factoryCheckValue.setCellValue("发货日期之");
+        factoryCheckValue.setCellValue("");
+        factoryCheckValue.setCellStyle(rightCellStyle);
 
 
         rowIdx++;
         XSSFRow row7 = receiptSheet.createRow(rowIdx);
-        row7.createCell(0);
-        row7.createCell(1);
-        row7.createCell(2);
-        row7.createCell(3);
-        row7.createCell(4);
-        row7.createCell(5);
-        row7.createCell(6);
-        row7.createCell(7);
-        row7.createCell(8);
+        XSSFCell cell9 = row7.createCell(0);
+        XSSFCell cell10 = row7.createCell(1);
+        XSSFCell cell11 = row7.createCell(2);
+        XSSFCell cell12 = row7.createCell(3);
+        XSSFCell cell13 = row7.createCell(4);
+        XSSFCell cell14 = row7.createCell(5);
+        XSSFCell cell15 = row7.createCell(6);
+        XSSFCell cell16 = row7.createCell(7);
+        XSSFCell cell17 = row7.createCell(8);
+        XSSFCellStyle leftCellStyle2 = workbook.createCellStyle();
+        leftCellStyle2.setBorderLeft(BorderStyle.THIN);
+        cell9.setCellStyle(leftCellStyle2);
+        XSSFCellStyle rightCellStyle2 = workbook.createCellStyle();
+        rightCellStyle2.setBorderRight(BorderStyle.THIN);
+        cell11.setCellStyle(rightCellStyle2);
+        cell4.setCellStyle(rightCellStyle2);
+        cell17.setCellStyle(rightCellStyle2);
+        cell14.setCellStyle(rightCellStyle2);
 
         rowIdx++;
+        XSSFCellStyle lastLeftStyle = workbook.createCellStyle();
+        lastLeftStyle.setBorderLeft(BorderStyle.THIN);
+        lastLeftStyle.setBorderBottom(BorderStyle.THIN);
+
+        XSSFCellStyle lastRightStyle = workbook.createCellStyle();
+        lastRightStyle.setBorderRight(BorderStyle.THIN);
+        lastRightStyle.setBorderBottom(BorderStyle.THIN);
+
+        XSSFCellStyle lastBottomStyle = workbook.createCellStyle();
+        lastBottomStyle.setBorderBottom(BorderStyle.THIN);
         XSSFRow row8 = receiptSheet.createRow(rowIdx);
-        row8.createCell(0);
+
+        XSSFCell cell18 = row8.createCell(0);
+        cell18.setCellStyle(lastLeftStyle);
         XSSFCell cell_1 = row8.createCell(1);
         cell_1.setCellValue("经办人：");
-        row8.createCell(2);
-        row8.createCell(3);
+        cell_1.setCellStyle(lastBottomStyle);
+        XSSFCell cell = row8.createCell(2);
+        cell.setCellStyle(lastRightStyle);
+        XSSFCell cell19 = row8.createCell(3);
+        cell19.setCellStyle(lastBottomStyle);
         XSSFCell cell_2 = row8.createCell(4);
         cell_2.setCellValue("质检员：");
-        row8.createCell(5);
+        cell_2.setCellStyle(lastBottomStyle);
+        XSSFCell cell20 = row8.createCell(5);
+        cell20.setCellStyle(lastRightStyle);
         XSSFCell cell_3 = row8.createCell(6);
         cell_3.setCellValue("库管：");
+        cell_3.setCellStyle(lastBottomStyle);
         XSSFCell cell_4 = row8.createCell(7);
         cell_4.setCellValue("经办人：");
-        row8.createCell(8);
+        cell_4.setCellStyle(lastBottomStyle);
+        XSSFCell cell21 = row8.createCell(8);
+        cell21.setCellStyle(lastRightStyle);
+
+        // 设置默认列宽
+        receiptSheet.setDefaultColumnWidth(15);
 
         String filePath = Global.getFilePath();
         long l = System.currentTimeMillis();
         String fileName = "验收单_" + bizProcessData1.getString12() + "_" + l + ".xlsx";
         FileOutputStream fileOutputStream = new FileOutputStream(filePath + "/" + fileName);
+
         workbook.write(fileOutputStream);
         fileOutputStream.close();
 
-        return AjaxResult.success(fileName);
+        response.setContentType("application/octet-stream;charset=UTF-8");
+        response.addHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileName));
+
+
+        ServletOutputStream outputStream = response.getOutputStream();
+        workbook.write(outputStream);
+        outputStream.flush();
+        outputStream.close();
     }
 
 }
