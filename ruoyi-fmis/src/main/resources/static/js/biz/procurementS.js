@@ -73,7 +73,6 @@ $(function() {
             {
                 field : 'deptName',
                 title : '归属部门',
-                visible: false
             },
             {
                 field : 'string6',
