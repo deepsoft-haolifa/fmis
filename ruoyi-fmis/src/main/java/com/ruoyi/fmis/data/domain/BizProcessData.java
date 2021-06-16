@@ -346,23 +346,27 @@ public class BizProcessData extends BaseEntity {
 
     /** 时间1 */
     @Excel(name = "时间1", width = 30, dateFormat = "yyyy-MM-dd")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date datetime1;
 
     /** 时间2 */
     @Excel(name = "时间2", width = 30, dateFormat = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date datetime2;
 
     /** 时间3 */
     @Excel(name = "时间3", width = 30, dateFormat = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date datetime3;
 
     /** 时间4 */
     @Excel(name = "时间4", width = 30, dateFormat = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date datetime4;
 
     /** 时间5 */
     @Excel(name = "时间5", width = 30, dateFormat = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date datetime5;
 
     /** 状态（0正常 1停用） */
