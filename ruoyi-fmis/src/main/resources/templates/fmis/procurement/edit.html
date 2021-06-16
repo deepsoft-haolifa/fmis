@@ -45,7 +45,11 @@
             <div class="form-group">
                 <label class="col-sm-1 control-label">类别：</label>
                 <div class="col-sm-2">
-                    <input name="string5" class="form-control" th:field="*{string5}" type="text">
+                    <select name="string5" id="string5" class="form-control m-b" th:with="type=${@dict.getType('purchase_type')}">
+                        <option value="0">请选择</option>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{string5}"></option>
+                    </select>
+<!--                    <input name="string5" class="form-control" th:field="*{string5}" type="text">-->
                 </div>
 
 
