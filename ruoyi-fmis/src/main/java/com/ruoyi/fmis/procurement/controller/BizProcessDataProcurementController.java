@@ -1020,7 +1020,7 @@ public class BizProcessDataProcurementController extends BaseController {
             writer.setEncryption(null, null, PdfWriter.ALLOW_PRINTING, PdfWriter.STANDARD_ENCRYPTION_128);
             //设置字体样式
             //正常
-            Font textFont = PdfUtil.getPdfChineseFont(6, Font.NORMAL);
+            Font textFont = PdfUtil.getPdfChineseFont(10, Font.NORMAL);
             //加粗
             Font boldFont = PdfUtil.getPdfChineseFont(11, Font.BOLD);
             //二级标题
