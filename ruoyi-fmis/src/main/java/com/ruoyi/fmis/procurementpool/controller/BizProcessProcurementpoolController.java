@@ -1,6 +1,7 @@
 package com.ruoyi.fmis.procurementpool.controller;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -114,6 +115,7 @@ public class BizProcessProcurementpoolController extends BaseController {
         if (!StringUtils.isEmpty(bizProcessData.getString12())) {
             String xs = bizProcessData.getString3();
             newBizProcessData.setString1(xs);
+            newBizProcessData.setContractNoList(Arrays.asList(xs.split(",")));
         }
         //startPage();
         List<BizProcessData> list = bizProcessDataService.selectBizProcessDataListXs(newBizProcessData);
