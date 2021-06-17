@@ -2050,15 +2050,16 @@ public class BizProcessDataController extends BaseController {
             }
 
 
+            double discountMoney = sumTotalAmount - string14D;
             if (string14D > 0) {
                 if (!isSchengchan) {
-                    table.addCell(PdfUtil.mergeColRight("优惠价", 5,textFont));//4
+                    table.addCell(PdfUtil.mergeColRight("优惠后合同总金额", 5,textFont));//4
                     table.addCell(PdfUtil.mergeCol("", 1,textFont));//总数量
                     table.addCell(PdfUtil.mergeCol("", 1,textFont));//单价
-                    table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(string14D), 1,textFont));//合计
+                    table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(discountMoney), 1,textFont));//合计
                     table.addCell(PdfUtil.mergeCol("", 7,textFont));//备注
                 } else {
-                    table.addCell(PdfUtil.mergeColRight("优惠价", 5,textFont));//4
+                    table.addCell(PdfUtil.mergeColRight("优惠后合同总金额", 5,textFont));//4
                     table.addCell(PdfUtil.mergeCol("", 1,textFont));//总数量
                     table.addCell(PdfUtil.mergeCol("", 1,textFont));//单价
                     table.addCell(PdfUtil.mergeCol("", 1,textFont));//合计
@@ -2070,7 +2071,7 @@ public class BizProcessDataController extends BaseController {
 
             table.addCell(PdfUtil.mergeColRight("大写人民币合计", 5,textFont));
             if (!isSchengchan) {
-                table.addCell(PdfUtil.mergeCol(StringUtils.convert(sumTotalAmount), 3,textFont));//合计
+                table.addCell(PdfUtil.mergeCol(StringUtils.convert(discountMoney), 3,textFont));//合计
             } else {
                 table.addCell(PdfUtil.mergeCol("", 3,textFont));//合计
             }
