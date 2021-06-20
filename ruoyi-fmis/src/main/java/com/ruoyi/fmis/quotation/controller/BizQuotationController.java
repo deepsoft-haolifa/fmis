@@ -537,7 +537,7 @@ public class BizQuotationController extends BaseController {
             if(payMethod.equals("其他")) {
                 payMethod = StringUtils.isNotEmpty(bizQuotation.getString6())? bizQuotation.getString6():payMethod;
             }
-            paragraphRemark.add(new Chunk("        3、供货方式： " + payMethod + " 款到发货；", remarkFont));
+            paragraphRemark.add(new Chunk("        3、供货方式： " + payMethod , remarkFont));
             paragraphRemark.add(Chunk.NEWLINE);
             paragraphRemark.add(new Chunk("        4、价格有效期  " + bizQuotation.getString12() + "   天；", remarkFont));
             paragraphRemark.add(Chunk.NEWLINE);
