@@ -4,6 +4,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.fmis.Constant;
 import com.ruoyi.fmis.common.BizContractLevel;
 import com.ruoyi.fmis.data.domain.BizProcessData;
+import com.ruoyi.fmis.data.domain.SaleListExportDTO;
 import com.ruoyi.fmis.invoice.bean.InvoiceReqVo;
 import com.ruoyi.fmis.invoice.bean.InvoiceRespVo;
 import com.ruoyi.fmis.status.domain.BizDataStatus;
@@ -152,4 +153,7 @@ public interface IBizProcessDataService {
 
 
     public List<BizProcessData> selectBizProcessDataForTodo(BizProcessData bizProcessData);
+
+
+    public List<SaleListExportDTO> selectSaleListExport(Long dataId);
 }

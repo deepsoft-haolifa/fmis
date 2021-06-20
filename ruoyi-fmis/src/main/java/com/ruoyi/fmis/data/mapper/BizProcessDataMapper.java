@@ -2,6 +2,7 @@ package com.ruoyi.fmis.data.mapper;
 
 import com.ruoyi.fmis.child.domain.BizProcessChild;
 import com.ruoyi.fmis.data.domain.BizProcessData;
+import com.ruoyi.fmis.data.domain.SaleListExportDTO;
 import com.ruoyi.fmis.invoice.bean.InvoiceReqVo;
 import com.ruoyi.fmis.invoice.bean.InvoiceRespVo;
 import org.apache.ibatis.annotations.Param;
@@ -147,4 +148,11 @@ public interface BizProcessDataMapper {
      * @return
      */
     List<BizProcessData> selectBizProcessDataByFlowStatus(BizProcessData bizProcessData);
+
+    /**
+     * 根据合同ID获取销货清单导出列表
+     * @param dataId
+     * @return
+     */
+    public List<SaleListExportDTO> selectSaleListExport(Long dataId);
 }

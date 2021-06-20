@@ -88,5 +88,6 @@
             <artifactId>bcmail-jdk15on</artifactId>
             <version>1.47</version>
         </dependency>
+
     </dependencies>
 </project>

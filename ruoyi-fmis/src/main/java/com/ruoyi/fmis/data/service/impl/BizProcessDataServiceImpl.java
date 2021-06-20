@@ -1,6 +1,7 @@
 package com.ruoyi.fmis.data.service.impl;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import com.ruoyi.common.annotation.DataScope;
@@ -15,6 +16,7 @@ import com.ruoyi.fmis.child.domain.ProcessDataDTO;
 import com.ruoyi.fmis.child.service.IBizProcessChildService;
 import com.ruoyi.fmis.common.BizConstants;
 import com.ruoyi.fmis.common.BizContractLevel;
+import com.ruoyi.fmis.data.domain.SaleListExportDTO;
 import com.ruoyi.fmis.define.service.IBizProcessDefineService;
 import com.ruoyi.fmis.finance.domain.BizPayPlan;
 import com.ruoyi.fmis.finance.service.IBizPayPlanService;
@@ -24,7 +26,6 @@ import com.ruoyi.fmis.invoice.bean.InvoiceReqVo;
 import com.ruoyi.fmis.invoice.bean.InvoiceRespVo;
 import com.ruoyi.fmis.product.domain.BizProduct;
 import com.ruoyi.fmis.product.service.IBizProductService;
-import com.ruoyi.fmis.quotation.domain.BizQuotation;
 import com.ruoyi.fmis.status.domain.BizDataStatus;
 import com.ruoyi.fmis.status.service.IBizDataStatusService;
 import com.ruoyi.fmis.stestn.domain.BizDataStestn;
@@ -32,7 +33,6 @@ import com.ruoyi.fmis.stestn.service.IBizDataStestnService;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysRole;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.RandomUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -812,6 +812,7 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
     public List<BizProcessData> selectBizProcessDataListRefProcurement(BizProcessData bizProcessData) {
         return bizProcessDataMapper.selectBizProcessDataListRefProcurement(bizProcessData);
     }
+
     @Override
     public List<BizProcessData> selectBizProcessDataListRefTrack(BizProcessData bizProcessData) {
         return bizProcessDataMapper.selectBizProcessDataListRefTrack(bizProcessData);
@@ -828,6 +829,14 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
     @DataScope(deptAlias = "dt", userAlias = "u")
     public List<BizProcessData> selectBizProcessDataForTodo(BizProcessData bizProcessData) {
         return bizProcessDataMapper.selectBizProcessDataByFlowStatus(bizProcessData);
+    }
+
+    @Override
+    public List<SaleListExportDTO> selectSaleListExport(Long dataId) {
+        List<SaleListExportDTO> saleListExportDTOS = bizProcessDataMapper.selectSaleListExport(dataId);
+        AtomicInteger i= new AtomicInteger(1);
+        saleListExportDTOS.forEach(e->e.setId(i.getAndIncrement()));
+        return saleListExportDTOS;
     }
 
     /**

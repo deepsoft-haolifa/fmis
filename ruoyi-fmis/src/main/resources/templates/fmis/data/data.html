@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('合同管理列表')" />
+    <th:block th:include="include :: header('合同管理列表')"/>
 </head>
 <body class="gray-bg">
 <div class="container-div">
@@ -13,7 +13,7 @@
 
                         <li>
                             <p>状态：</p>
-                            <select name="queryStatus" id="queryStatus" class="form-control m-b" >
+                            <select name="queryStatus" id="queryStatus" class="form-control m-b">
                                 <option value="0">全部</option>
                                 <option value="1">待办</option>
                                 <option value="2">已办</option>
@@ -26,20 +26,22 @@
                         </li>
                         <li>
                             <p>客户名称：</p>
-                            <input type="hidden" name="string2" id="customerId"  />
-                            <input type="text" name="customerName"  />
+                            <input type="hidden" name="string2" id="customerId"/>
+                            <input type="text" name="customerName"/>
                         </li>
                         <li>
                             <p>归属部门：</p>
-                            <input type="text" name="deptName"  />
+                            <input type="text" name="deptName"/>
                         </li>
                         <li>
                             <p>责任人：</p>
-                            <input type="text" name="createByName"  />
+                            <input type="text" name="createByName"/>
                         </li>
                         <li>
-                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
                         </li>
                     </ul>
                 </div>
@@ -69,10 +71,11 @@
         </div>
     </div>
 </div>
-<th:block th:include="include :: footer" />
+<th:block th:include="include :: footer"/>
 <script th:inline="javascript">
     var editFlag = [[${@permission.hasPermi('fmis:data:edit')}]];
     var removeFlag = [[${@permission.hasPermi('fmis:data:remove')}]];
+    var saleListExportFlag = [[${@permission.hasPermi('fmis:data:saleListExport')}]];
 
     var supplierTypeData = [[${@dict.getType('supplier_type')}]];
     var paymentTypeData = [[${@dict.getType('payment_type')}]];
@@ -80,7 +83,6 @@
     var transportTypeData = [[${@dict.getType('transport_type')}]];
     var invoiceStatusData = [[${@dict.getType('invoice_status')}]];
     var collectionStatusData = [[${@dict.getType('collection_status')}]];
-
 
 
     var prefix = ctx + "fmis/data";
@@ -92,7 +94,7 @@
     if (!$.common.isEmpty(customerId)) {
         $("#customerId").val(customerId);
     }
-    $(function() {
+    $(function () {
         var options = {
             url: prefix + "/list",
             createUrl: prefix + "/add",
@@ -105,84 +107,84 @@
                 checkbox: true
             },
                 {
-                    field : 'dataId',
-                    title : 'ID',
+                    field: 'dataId',
+                    title: 'ID',
                     visible: false
                 },
                 {
-                    field : 'dataId',
-                    title : 'ID',
+                    field: 'dataId',
+                    title: 'ID',
                     visible: false
                 },
 
                 {
-                    field : 'string1',
-                    title : '合同编号'
+                    field: 'string1',
+                    title: '合同编号'
                 },
                 {
-                    field : 'customerName',
-                    title : '客户'
+                    field: 'customerName',
+                    title: '客户'
                 },
                 {
-                    field : 'datetime1',
-                    title : '签订日期'
+                    field: 'datetime1',
+                    title: '签订日期'
                 },
                 {
-                    field : 'string3',
-                    title : '供方',
-                    formatter: function(value, row, index) {
+                    field: 'string3',
+                    title: '供方',
+                    formatter: function (value, row, index) {
                         return $.table.selectDictLabel(supplierTypeData, value);
                     }
                 },
                 {
-                    field : 'string4',
-                    title : '签订地点'
+                    field: 'string4',
+                    title: '签订地点'
                 },
                 {
-                    field : 'string5',
-                    title : '含发票'
+                    field: 'string5',
+                    title: '含发票'
                 },
                 {
-                    field : 'string6',
-                    title : '发货时间'
+                    field: 'string6',
+                    title: '发货时间'
                 },
                 {
-                    field : 'string7',
-                    title : '配送方式',
-                    formatter: function(value, row, index) {
+                    field: 'string7',
+                    title: '配送方式',
+                    formatter: function (value, row, index) {
                         return $.table.selectDictLabel(transportTypeData, value);
                     }
                 },
                 {
-                    field : 'string18',
-                    title : '付款方式',
-                    formatter: function(value, row, index) {
+                    field: 'string18',
+                    title: '付款方式',
+                    formatter: function (value, row, index) {
                         return $.table.selectDictLabel(paymentTypeData, value);
                     }
                 },
                 {
-                    field : 'string9',
-                    title : '交货地点'
+                    field: 'string9',
+                    title: '交货地点'
                 },
                 {
-                    field : 'string10',
-                    title : '运费承担'
+                    field: 'string10',
+                    title: '运费承担'
                 },
                 {
-                    field : 'string11',
-                    title : '收货人'
+                    field: 'string11',
+                    title: '收货人'
                 },
                 {
-                    field : 'string12',
-                    title : '收货电话'
+                    field: 'string12',
+                    title: '收货电话'
                 },
                 {
-                    field : 'deptName',
-                    title : '归属部门'
+                    field: 'deptName',
+                    title: '归属部门'
                 },
                 {
-                    field : 'price1',
-                    title : '总价'
+                    field: 'price1',
+                    title: '总价'
                 },
 
                 /**{
@@ -190,44 +192,44 @@
                         title : '毛利'
                     },**/
                 {
-                    field : 'flowStatusRemark',
-                    title : '审批状态',
+                    field: 'flowStatusRemark',
+                    title: '审批状态',
                     align: 'center'
                 },
                 {
-                    field : 'status',
-                    title : '合同状态',
-                    formatter: function(value, row, index) {
+                    field: 'status',
+                    title: '合同状态',
+                    formatter: function (value, row, index) {
                         return $.table.selectDictLabel(contractStatusData, value);
                     }
                 },
                 {
-                    field : 'string16',
-                    title : '开票状态',
-                    formatter: function(value, row, index) {
+                    field: 'string16',
+                    title: '开票状态',
+                    formatter: function (value, row, index) {
                         return $.table.selectDictLabel(invoiceStatusData, value);
                     }
                 },
                 {
-                    field : 'string17',
-                    title : '回款状态',
-                    formatter: function(value, row, index) {
+                    field: 'string17',
+                    title: '回款状态',
+                    formatter: function (value, row, index) {
                         return $.table.selectDictLabel(collectionStatusData, value);
                     }
                 },
                 {
-                    field : 'exceptPayTime',
-                    title : '预计回款日期'
+                    field: 'exceptPayTime',
+                    title: '预计回款日期'
                 },
                 {
-                    field : 'createByName',
-                    title : '责任人'
+                    field: 'createByName',
+                    title: '责任人'
                 },
                 {
-                    field : 'string20',
-                    title : '合同文件|流传采购池',
+                    field: 'string20',
+                    title: '合同文件|流传采购池',
                     align: 'center',
-                    formatter: function(value, row, index) {
+                    formatter: function (value, row, index) {
                         var flowStatus = row.flowStatus;
                         var dataId = row.dataId;
                         var normalFlag = row.normalFlag;
@@ -262,7 +264,7 @@
                 {
                     title: '操作',
                     align: 'left',
-                    formatter: function(value, row, index) {
+                    formatter: function (value, row, index) {
                         var actions = [];
                         var flowStatus = row.flowStatus;
                         var normalFlag = row.normalFlag;
@@ -283,7 +285,8 @@
                         }
                         actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewExamineHistory(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 审批记录 </a>');
                         actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewExamineDetail(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 详情 </a>');
-                        if(createBy === loginUserId) {
+                        actions.push('<a class="btn btn-success btn-xs  ' + saleListExportFlag + '" href="javascript:void(0)" onclick="exportSaleList(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 销货清单导出 </a>');
+                        if (createBy === loginUserId) {
                             actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="uploadFiles(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 附件上传</a>');
                         }
                         actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewFileList(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 查看附件</a>');
@@ -297,33 +300,34 @@
     });
 
     function uploadFiles(dataId) {
-        var url = ctx + "fmis/file/upload/view?fileType=2&bizId="+dataId;
+        var url = ctx + "fmis/file/upload/view?fileType=2&bizId=" + dataId;
         var widthNum = this.innerWidth - 50;
         var heigthNum = this.innerHeight - 50;
-        $.modal.open("上传", url,widthNum, heigthNum,function (index, layero) {
+        $.modal.open("上传", url, widthNum, heigthNum, function (index, layero) {
             var iframeWin = layero.find('iframe')[0];
             iframeWin.contentWindow.submitHandler(index, layero);
         });
     }
 
     function viewFileList(dataId) {
-        var url = ctx + "fmis/file/list/view?bizId="+dataId+"&fileType=2";
+        var url = ctx + "fmis/file/list/view?bizId=" + dataId + "&fileType=2";
         var widthNum = this.innerWidth - 50;
         var heigthNum = this.innerHeight - 50;
-        $.modal.openNoEnter("附件查看", url,widthNum, heigthNum,function () {
+        $.modal.openNoEnter("附件查看", url, widthNum, heigthNum, function () {
             $.modal.closeAll();
         });
     }
 
-    function uploadFile (dataId) {
+    function uploadFile(dataId) {
         var url = prefix + "/upload?dataId=" + dataId;
-        $.modal.openNoEnter("上传合同", url,$(window).width() - 50,$(window).height() - 50,function(){
+        $.modal.openNoEnter("上传合同", url, $(window).width() - 50, $(window).height() - 50, function () {
             $.modal.closeAll();
             $.table.refresh();
         });
     }
+
     function remove(id) {
-        if($.common.isEmpty(id)) {
+        if ($.common.isEmpty(id)) {
             var row = $('#bootstrap-table').bootstrapTable('getSelections')[0];
             if ($.common.isEmpty(row)) {
                 $.modal.alertWarning("请至少选择一条记录");
@@ -334,55 +338,57 @@
             for (var i = 0; i < rowss.length; i++) {
                 row = rowss[i];
                 var flowStatus = row.flowStatus;
-                console.log("flowStatus",flowStatus)
-                if (flowStatus > 0 && flowStatus<10) {
+                console.log("flowStatus", flowStatus)
+                if (flowStatus > 0 && flowStatus < 10) {
                     $.modal.alertWarning("已上报数据不能删除");
                     return;
                 }
             }
             var rows = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
-            $.modal.confirm("确认要删除选中的" + rows.length + "条数据吗?", function() {
+            $.modal.confirm("确认要删除选中的" + rows.length + "条数据吗?", function () {
                 var url = $.table._option.removeUrl;
-                var data = { "ids": rows.join() };
+                var data = {"ids": rows.join()};
                 $.operate.submit(url, "post", "json", data);
             });
         } else {
-            var row = $('#bootstrap-table').bootstrapTable("getRowByUniqueId",id);
+            var row = $('#bootstrap-table').bootstrapTable("getRowByUniqueId", id);
             if (row == null) {
                 row = $('#bootstrap-table').bootstrapTable('getSelections')[0];
             }
             if (row != null) {
                 var flowStatus = row.flowStatus;
 
-                if (flowStatus > 0 && flowStatus<10) {
+                if (flowStatus > 0 && flowStatus < 10) {
                     $.modal.alertWarning("已上报数据不能删除");
                     return;
                 }
             }
-            $.modal.confirm("确定删除该条" + $.table._option.modalName + "信息吗？", function() {
+            $.modal.confirm("确定删除该条" + $.table._option.modalName + "信息吗？", function () {
                 var url = $.common.isEmpty(id) ? $.table._option.removeUrl : $.table._option.removeUrl.replace("{id}", id);
-                if($.table._option.type == table_type.bootstrapTreeTable) {
+                if ($.table._option.type == table_type.bootstrapTreeTable) {
                     $.operate.get(url);
                 } else {
-                    var data = { "ids": id };
+                    var data = {"ids": id};
                     $.operate.submit(url, "post", "json", data);
                 }
             });
         }
     }
+
     function add() {
         var url = prefix + "/add";
         $.modal.openFull("增加", url);
     }
+
     function edit(id) {
-        if($.common.isEmpty(id) && $.table._option.type == table_type.bootstrapTreeTable) {
+        if ($.common.isEmpty(id) && $.table._option.type == table_type.bootstrapTreeTable) {
             var row = $.bttTable.bootstrapTreeTable('getSelections')[0];
             if ($.common.isEmpty(row)) {
                 $.modal.alertWarning("请至少选择一条记录");
                 return;
             }
             var flowStatus = row.flowStatus;
-            if (flowStatus > 0 && flowStatus<10) {
+            if (flowStatus > 0 && flowStatus < 10) {
                 $.modal.alertWarning("已上报数据不能修改");
                 return;
             }
@@ -390,13 +396,13 @@
             var url = $.table._option.updateUrl.replace("{id}", row[$.table._option.uniqueId]);
             $.modal.openFull("修改" + $.table._option.modalName, url);
         } else {
-            var row = $('#bootstrap-table').bootstrapTable("getRowByUniqueId",id);
+            var row = $('#bootstrap-table').bootstrapTable("getRowByUniqueId", id);
             if (row == null) {
                 row = $('#bootstrap-table').bootstrapTable('getSelections')[0];
             }
             if (row != null) {
                 var flowStatus = row.flowStatus;
-                if (flowStatus > 0 && flowStatus<10) {
+                if (flowStatus > 0 && flowStatus < 10) {
                     $.modal.alertWarning("已上报数据不能修改");
                     return;
                 }
@@ -404,10 +410,11 @@
             $.modal.openFull("修改" + $.table._option.modalName, $.operate.editUrl(id));
         }
     }
+
     function viewExamineHistory(dataId) {
         var bizId = $("#bizId").val();
         var url = prefix + "/viewExamineHistory?dataId=" + dataId + "&&bizId=" + bizId;
-        $.modal.openNoEnter("审批记录", url,'','',function(){
+        $.modal.openNoEnter("审批记录", url, '', '', function () {
             $.modal.closeAll();
         });
     }
@@ -415,7 +422,7 @@
     function viewExamineDetail(dataId) {
         var bizId = $("#bizId").val();
         var url = prefix + "/viewDetail?dataId=" + dataId + "&&bizId=" + bizId;
-        $.modal.openNoEnter("详情", url,$(window).width(),$(window).height(),function(){
+        $.modal.openNoEnter("详情", url, $(window).width(), $(window).height(), function () {
             $.modal.closeAll();
         });
     }
@@ -427,29 +434,30 @@
 
     function viewInventory(dataId) {
         var url = prefix + "/viewInventory?dataId=" + dataId;
-        $.modal.openFullBtnName("查看库存", url,null,null,"申请发货");
+        $.modal.openFullBtnName("查看库存", url, null, null, "申请发货");
     }
 
     function subReport(dataId) {
-        $.modal.confirm("确定上报该条信息吗？", function() {
+        $.modal.confirm("确定上报该条信息吗？", function () {
             console.log(dataId + "--dataId");
             var url = prefix + "/report?dataId=" + dataId;
-            $.operate.saveModal(url,'',function(){
+            $.operate.saveModal(url, '', function () {
                 $.table.refresh();
             });
         });
     }
+
     function goPool(dataId) {
-        var row = $('#bootstrap-table').bootstrapTable("getRowByUniqueId",dataId);
+        var row = $('#bootstrap-table').bootstrapTable("getRowByUniqueId", dataId);
         var string20 = row.string20;//文件路径
         if ($.common.isEmpty(string20)) {
             $.modal.alertWarning("合同未上传不能流转至采购池！");
             return;
         }
-        $.modal.confirm("确定流转该条信息吗？", function() {
+        $.modal.confirm("确定流转该条信息吗？", function () {
             console.log(dataId + "--dataId");
             var url = prefix + "/goPool?dataId=" + dataId;
-            $.operate.saveModal(url,'',function(){
+            $.operate.saveModal(url, '', function () {
                 $.table.refresh();
             });
         });
@@ -469,13 +477,13 @@
             $.modal.alertWarning("请等待审批结束后生成！");
             return;
         }
-        $.modal.confirm("确定生成合同吗？", function() {
+        $.modal.confirm("确定生成合同吗？", function () {
             var currentId = $.common.isEmpty(formId) ? $('form').attr('id') : formId;
             console.log("currentId=" + currentId);
             $.modal.loading("正在导出数据，请稍后...");
             var paramsJson = $("#" + currentId).serializeArray();
             paramsJson.push({"name": "dataId", "value": row.dataId});
-            $.post($.table._option.exportUrl, paramsJson, function(result) {
+            $.post($.table._option.exportUrl, paramsJson, function (result) {
                 if (result.code == web_status.SUCCESS) {
                     window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;
                 } else if (result.code == web_status.WARNING) {
@@ -485,6 +493,21 @@
                 }
                 $.modal.closeLoading();
             });
+        });
+    }
+
+    function exportSaleList(dataId) {
+        $.modal.loading("正在导出数据，请稍后...");
+        var url = prefix + "/goPool?dataId=" + dataId;
+        $.post(prefix + "/sale-list-export?dataId=" + dataId, function (result) {
+            if (result.code === web_status.SUCCESS) {
+                window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;
+            } else if (result.code === web_status.WARNING) {
+                $.modal.alertWarning(result.msg)
+            } else {
+                $.modal.alertError(result.msg);
+            }
+            $.modal.closeLoading();
         });
     }
 
@@ -509,7 +532,7 @@
         paramsJson.push({"name": "status", "value": "1"});
         var viewUrl = prefix + "/viewPdf";
         console.log(row.dataId + "--row.dataId");
-        window.open("../pdfjs/web/viewer.html?file="+ viewUrl + "?id%3D" + row.dataId);
+        window.open("../pdfjs/web/viewer.html?file=" + viewUrl + "?id%3D" + row.dataId);
         $.modal.closeLoading();
     }
 

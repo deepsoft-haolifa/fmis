@@ -1622,4 +1622,20 @@
         where string12 like concat('PO-',date_format(now(), '%Y%m'), '%')
     </select>
 
+    <select id="selectSaleListExport" resultType="com.ruoyi.fmis.data.domain.SaleListExportDTO">
+        select
+            p.name as productName,
+            concat_ws(' ',p.specifications,p.model) as specAndModel,
+            bpc.string3 quantity,
+            bpc.string3*bpc.price1 amount,
+            bpc.string14 discountAmount,
+            '0.13' taxRate,
+            bpc.price1 price
+        from biz_process_child bpc
+                 left join biz_process_data bpd on bpc.data_id=bpd.data_id
+                 left join biz_product p on bpc.string2=p.product_id
+        where bpd.data_id=#{dataId}
+
+    </select>
+
 </mapper>

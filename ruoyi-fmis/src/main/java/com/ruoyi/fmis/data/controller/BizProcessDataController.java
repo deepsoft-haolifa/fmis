@@ -32,6 +32,7 @@ import com.ruoyi.fmis.common.BizProductExcel;
 import com.ruoyi.fmis.common.CommonUtils;
 import com.ruoyi.fmis.customer.domain.BizCustomer;
 import com.ruoyi.fmis.customer.service.IBizCustomerService;
+import com.ruoyi.fmis.data.domain.SaleListExportDTO;
 import com.ruoyi.fmis.define.service.IBizProcessDefineService;
 import com.ruoyi.fmis.dict.service.IBizDictService;
 import com.ruoyi.fmis.pattachment.domain.BizProductAttachment;
@@ -49,6 +50,7 @@ import com.ruoyi.fmis.util.CalcUtils;
 import com.ruoyi.fmis.util.Util;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysDictData;
+import com.ruoyi.system.domain.SysOperLog;
 import com.ruoyi.system.domain.SysRole;
 import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.service.ISysDeptService;
@@ -2519,5 +2521,14 @@ public class BizProcessDataController extends BaseController {
             retJson.put("error",errorArray);
         }
         return retJson;
+    }
+
+    @RequiresPermissions("fmis:data:saleListExport")
+    @PostMapping("/sale-list-export")
+    @ResponseBody
+    public AjaxResult saleListExport(@RequestParam Long dataId) {
+        List<SaleListExportDTO> list = bizProcessDataService.selectSaleListExport(dataId);
+        ExcelUtil<SaleListExportDTO> util = new ExcelUtil<SaleListExportDTO>(SaleListExportDTO.class);
+        return util.exportEasyExcel(list, "销货清单");
     }
 }
