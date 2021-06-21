@@ -2,6 +2,8 @@ package com.ruoyi.fmis.child.mapper;
 
 import com.ruoyi.fmis.child.domain.BizProcessChild;
 import com.ruoyi.fmis.child.domain.ProcessDataDTO;
+import com.ruoyi.fmis.invoice.bean.InvoiceReqVo;
+import com.ruoyi.fmis.invoice.bean.export.InvoiceExportDTO;
 import com.ruoyi.fmis.stestn.domain.BizDataStestn;
 import org.apache.ibatis.annotations.Param;
 
@@ -118,4 +120,6 @@ public interface BizProcessChildMapper {
     int getDeliveryQtyByContractNo(@Param("contractNo")String contractNo);
     ProcessDataDTO getSaleQtyByContractNo(@Param("contractNo")String contractNo);
 
+
+    List<InvoiceExportDTO> yyInvoiceExport(InvoiceReqVo invoiceReqVo);
 }

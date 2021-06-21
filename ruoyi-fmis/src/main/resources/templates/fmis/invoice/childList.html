@@ -12,47 +12,55 @@
                     <ul>
                         <li>
                             <p>开票单位：</p>
-                            <select name="pString1" class="form-control m-b" th:with="type=${@dict.getType('pay_company')}">
+                            <select name="pString1" class="form-control m-b"
+                                    th:with="type=${@dict.getType('pay_company')}">
                                 <option value="">请选择</option>
-                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                        th:value="${dict.dictValue}"></option>
                             </select>
                         </li>
                         <li>
                             <p>开票种类：</p>
-                            <select name="pString2" class="form-control m-b" th:with="type=${@dict.getType('invoice_classify')}">
+                            <select name="pString2" class="form-control m-b"
+                                    th:with="type=${@dict.getType('invoice_classify')}">
                                 <option value="">请选择</option>
-                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                        th:value="${dict.dictValue}"></option>
                             </select>
                         </li>
                         <li>
                             <p>优先级：</p>
-                            <select name="pString3" class="form-control m-b" th:with="type=${@dict.getType('invoice_level')}">
+                            <select name="pString3" class="form-control m-b"
+                                    th:with="type=${@dict.getType('invoice_level')}">
                                 <option value="">请选择</option>
-                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                        th:value="${dict.dictValue}"></option>
                             </select>
                         </li>
                         <li>
                             <p>开票状态：</p>
-                            <select name="string7" class="form-control m-b" th:with="type=${@dict.getType('invoice_status')}">
+                            <select name="string7" class="form-control m-b"
+                                    th:with="type=${@dict.getType('invoice_status')}">
                                 <option value="">请选择</option>
-                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                        th:value="${dict.dictValue}"></option>
                             </select>
                         </li>
                         <li>
                             <p>开票申请人：</p>
-                            <input type="hidden" name="createByName" id="createByName"  />
-                           <input type="text" name="createByName"  />
+                            <input type="hidden" name="createByName" id="createByName"/>
+                            <input type="text" name="createByName"/>
                         </li>
                         <li>
-                                                <p>客户名称：</p>
-                                                    <input type="hidden" name="pString5" id="pString5"  />
-                                                   <input type="text" name="pString5"  />
-                                                </li>
-                                                <li>
-                                                    <p>合同号：</p>
-                                                    <input type="hidden" name="string2" id="string2"  />
-                                                    <input type="text" name="string2"  />
-                                                </li>
+                            <p>客户名称：</p>
+                            <input type="hidden" name="pString5" id="pString5"/>
+                            <input type="text" name="pString5"/>
+                        </li>
+                        <li>
+                            <p>合同号：</p>
+                            <input type="hidden" name="string2" id="string2"/>
+                            <input type="text" name="string2"/>
+                        </li>
 
                         <li>
                             <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
@@ -63,6 +71,11 @@
                     </ul>
                 </div>
             </form>
+        </div>
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-warning" onclick="yyExport()" shiro:hasPermission="fmis:invoice:yyExport">
+                <i class="fa fa-download"></i> 销项发票开票信息导出
+            </a>
         </div>
         <div class="col-sm-12 select-table table-striped">
             <table id="bootstrap-table"></table>
@@ -187,11 +200,15 @@
         var url = prefix + "/operate/" + dataId;
         $.modal.openFull("开票", url);
     }
+
     function post(dataId) {
         var url = prefix + "/post/" + dataId;
         $.modal.openFull("邮寄登记", url);
     }
 
+    function yyExport() {
+        $.modal.open("销项发票开票信息导出", prefix + "/yy-export-get");
+    }
 
 
 </script>

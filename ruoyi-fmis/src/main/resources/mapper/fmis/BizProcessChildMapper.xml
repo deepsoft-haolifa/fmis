@@ -1161,6 +1161,7 @@
         where q.string1=#{contractNo} and q.biz_id='contract'
         group by bpc.data_id
     </select>
+    <select id="yyInvoiceExport" resultType="com.ruoyi.fmis.invoice.bean.export.InvoiceExportDTO"></select>
 
 
 </mapper>

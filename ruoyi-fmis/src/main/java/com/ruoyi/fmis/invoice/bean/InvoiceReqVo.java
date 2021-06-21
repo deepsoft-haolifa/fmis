@@ -25,9 +25,17 @@ public class InvoiceReqVo extends BaseEntity {
      */
     private String string7;
 
+    /**
+     * 开票种类
+     */
     private String string2;
     private String createByName;
 
 
+    /**
+     * 导出的时间
+     */
+    private String startDate;
+    private String endDate;
 
 }

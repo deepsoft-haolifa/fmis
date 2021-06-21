@@ -2,6 +2,8 @@ package com.ruoyi.fmis.child.service;
 
 import com.ruoyi.fmis.child.domain.BizProcessChild;
 import com.ruoyi.fmis.child.domain.ProcessDataDTO;
+import com.ruoyi.fmis.invoice.bean.InvoiceReqVo;
+import com.ruoyi.fmis.invoice.bean.export.InvoiceExportDTO;
 import com.ruoyi.fmis.stestn.domain.BizDataStestn;
 
 import java.util.List;
@@ -132,4 +134,11 @@ public interface IBizProcessChildService {
      * @return
      */
     public ProcessDataDTO getSaleQtyByContractNo(String contractNo);
+
+    /**
+     * 销项开票-用友-导出
+     * @param invoiceReqVo
+     * @return
+     */
+    public List<InvoiceExportDTO> yyInvoiceExport(InvoiceReqVo invoiceReqVo);
 }

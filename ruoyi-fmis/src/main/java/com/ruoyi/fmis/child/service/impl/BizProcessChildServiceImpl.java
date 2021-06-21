@@ -3,6 +3,8 @@ package com.ruoyi.fmis.child.service.impl;
 import java.util.List;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.fmis.child.domain.ProcessDataDTO;
+import com.ruoyi.fmis.invoice.bean.InvoiceReqVo;
+import com.ruoyi.fmis.invoice.bean.export.InvoiceExportDTO;
 import com.ruoyi.fmis.stestn.domain.BizDataStestn;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -219,4 +221,9 @@ public class BizProcessChildServiceImpl implements IBizProcessChildService {
         return bizProcessChildMapper.getSaleQtyByContractNo(contractNo);
     }
 
+    @Override
+    public List<InvoiceExportDTO> yyInvoiceExport(InvoiceReqVo invoiceReqVo){
+        List<InvoiceExportDTO> list = bizProcessChildMapper.yyInvoiceExport(invoiceReqVo);
+        return list;
+    }
 }

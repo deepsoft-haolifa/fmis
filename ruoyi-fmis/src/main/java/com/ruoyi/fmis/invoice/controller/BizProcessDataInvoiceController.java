@@ -14,8 +14,11 @@ import com.ruoyi.fmis.common.BizConstants;
 import com.ruoyi.fmis.common.CommonUtils;
 import com.ruoyi.fmis.customer.service.IBizCustomerService;
 import com.ruoyi.fmis.define.service.IBizProcessDefineService;
+import com.ruoyi.fmis.finance.domain.BizBankBill;
+import com.ruoyi.fmis.finance.domain.vo.export.BizBankExportDTO;
 import com.ruoyi.fmis.invoice.bean.InvoiceReqVo;
 import com.ruoyi.fmis.invoice.bean.InvoiceRespVo;
+import com.ruoyi.fmis.invoice.bean.export.InvoiceExportDTO;
 import com.ruoyi.fmis.product.domain.BizProduct;
 import com.ruoyi.fmis.product.service.IBizProductService;
 import com.ruoyi.framework.util.ShiroUtils;
@@ -415,4 +418,17 @@ public class BizProcessDataInvoiceController extends BaseController {
         return toAjax(bizProcessChildService.updateBizProcessChild(child));
     }
 
+
+    @GetMapping("/yy-export-get")
+    public String yyExportGet() {
+        return prefix + "/exportModal";
+    }
+    @RequiresPermissions("fmis:invoice:yyExport")
+    @PostMapping("/yy-export")
+    @ResponseBody
+    public AjaxResult yyExport(InvoiceReqVo invoiceReqVo) {
+        List<InvoiceExportDTO> list = bizProcessChildService.yyInvoiceExport(invoiceReqVo);
+        ExcelUtil<InvoiceExportDTO> util = new ExcelUtil<InvoiceExportDTO>(InvoiceExportDTO.class);
+        return util.exportEasyExcel(list, "销项发票开票信息导出");
+    }
 }
