@@ -54,6 +54,12 @@
                     <input name="remark" class="form-control" th:field="*{remark}" type="text">
                 </div>
             </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">总金额：</label>
+                <div class="col-sm-8">
+                    <input name="totalMoney" id="totalMoney" class="form-control" type="text" disabled value="0">
+                </div>
+            </div>
         </form>
 
         <div class="btn-group-sm" id="toolbar" role="group">
@@ -170,7 +176,16 @@
                             actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="removeRow(' + index + ')"><i class="fa fa-remove"></i> 删除</a>');
                             return actions.join('');
                         }},
-                ]
+                ],
+                onEditableSave:function (field, row, oldValue, $el) {
+                    // console.log(field,'=',row.price3,',',oldValue)
+                    // 获取所有行；
+                    var allTableData = $('#bootstrap-table').bootstrapTable('getData');
+                    calculateTotalMoney(allTableData);
+                },
+                onLoadSuccess:function (data) {
+                    calculateTotalMoney(data.rows);
+                }
             };
             $.table.init(options);
         });
@@ -182,6 +197,25 @@
                 field: "rowId",
                 values: [index]
             });
+        }
+
+        function calculateTotalMoney(allTableData){
+            var totalMoney = 0;
+            console.log('data', allTableData)
+            $.each(allTableData, function (key, value, index) {
+                if(value.price1 == 'undefined' || value.price1 == null) {
+                    value.price1 = 0
+                }
+                if(value.price2 == 'undefined' || value.price2 == null) {
+                    value.price2 = 0
+                }
+                if(value.price3 == 'undefined' || value.price3 == null) {
+                    value.price3 = 0
+                }
+                totalMoney += Number(value.price1) + Number(value.price2) + Number(value.price3);
+            })
+            $("#totalMoney").val(totalMoney);
+
         }
 
         var selValue = "";
