@@ -1,6 +1,7 @@
 package com.ruoyi.fmis.finance.mapper;
 
 import com.ruoyi.fmis.finance.domain.BizBankBill;
+import com.ruoyi.fmis.finance.domain.vo.export.BizBankExportDTO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -65,4 +66,7 @@ public interface BizBankBillMapper {
      * @return
      */
     BizBankBill getLastRecord(@Param("companyQuery") String companyQuery, @Param("accountQuery") String accountQuery);
+
+    List<BizBankExportDTO> selectyyExport(BizBankBill bizBankBill);
+
 }

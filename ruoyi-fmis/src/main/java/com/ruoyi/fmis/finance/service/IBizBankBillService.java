@@ -1,6 +1,8 @@
 package com.ruoyi.fmis.finance.service;
 
 import com.ruoyi.fmis.finance.domain.BizBankBill;
+import com.ruoyi.fmis.finance.domain.vo.export.BizBankExportDTO;
+
 import java.util.List;
 
 /**
@@ -66,4 +68,6 @@ public interface IBizBankBillService {
      * @return
      */
     public BizBankBill getLastData(String date);
+
+    public List<BizBankExportDTO> yyExport(BizBankBill bizBankBill);
 }

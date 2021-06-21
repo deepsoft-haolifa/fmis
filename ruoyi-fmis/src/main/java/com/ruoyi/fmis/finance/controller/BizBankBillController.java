@@ -8,7 +8,9 @@ import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.fmis.customer.domain.BizCustomer;
 import com.ruoyi.fmis.customer.service.IBizCustomerService;
+import com.ruoyi.fmis.data.domain.SaleListExportDTO;
 import com.ruoyi.fmis.finance.domain.BizBankBill;
+import com.ruoyi.fmis.finance.domain.vo.export.BizBankExportDTO;
 import com.ruoyi.fmis.finance.service.IBizBankBillService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -163,4 +165,12 @@ public class BizBankBillController extends BaseController {
     }
 
 
+    @RequiresPermissions("finance:bankBill:yyExport")
+    @PostMapping("/yy-export")
+    @ResponseBody
+    public AjaxResult yyExport(BizBankBill bizBankBill) {
+        List<BizBankExportDTO> list = bizBankBillService.yyExport(bizBankBill);
+        ExcelUtil<BizBankExportDTO> util = new ExcelUtil<BizBankExportDTO>(BizBankExportDTO.class);
+        return util.exportEasyExcel(list, "银行现金凭证导出");
+    }
 }

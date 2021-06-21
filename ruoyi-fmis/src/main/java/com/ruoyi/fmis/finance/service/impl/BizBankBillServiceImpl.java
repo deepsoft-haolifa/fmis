@@ -7,6 +7,7 @@ import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.fmis.customer.domain.BizCustomer;
 import com.ruoyi.fmis.customer.service.IBizCustomerService;
 import com.ruoyi.fmis.finance.domain.BizBankBill;
+import com.ruoyi.fmis.finance.domain.vo.export.BizBankExportDTO;
 import com.ruoyi.fmis.finance.mapper.BizBankBillMapper;
 import com.ruoyi.fmis.finance.service.IBizBankBillService;
 import com.ruoyi.fmis.finance.service.IBizBillAmountService;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 /**
@@ -172,5 +174,13 @@ public class BizBankBillServiceImpl implements IBizBankBillService {
     @Override
     public BizBankBill getLastData(String date) {
         return null;
+    }
+
+    @Override
+    public List<BizBankExportDTO> yyExport(BizBankBill bizBankBill) {
+        List<BizBankExportDTO> list = bizBankBillMapper.selectyyExport(bizBankBill);
+        AtomicInteger i = new AtomicInteger(1);
+        list.forEach(e -> e.setId(i.getAndIncrement()));
+        return list;
     }
 }

@@ -65,12 +65,15 @@
             <a class="btn btn-success" onclick="addCollectUrl()" shiro:hasPermission="finance:bankBill:addCollect">
                 <i class="fa fa-plus"></i> 添加收款
             </a>
-            <a class="btn btn-success" onclick="addPayUrl()" shiro:hasPermission="	finance:bankBill:addPay">
+            <a class="btn btn-success" onclick="addPayUrl()" shiro:hasPermission="finance:bankBill:addPay">
                 <i class="fa fa-plus"></i> 添加付款
             </a>
             <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"
                shiro:hasPermission="finance:bankBill:remove">
                 <i class="fa fa-remove"></i> 删除
+            </a>
+            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="finance:bankBill:yyExport">
+                <i class="fa fa-download"></i> 导出
             </a>
         </div>
         <div class="col-sm-12 select-table table-striped">
@@ -98,7 +101,7 @@
             updateUrlCollect: prefix + "/editCollect/{id}",
             updateUrlPay: prefix + "/editPay/{id}",
             removeUrl: prefix + "/remove",
-            exportUrl: prefix + "/export",
+            exportUrl: prefix + "/yy-export",
             modalName: "银行日记账",
             columns: [{
                 checkbox: true
