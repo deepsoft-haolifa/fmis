@@ -24,6 +24,11 @@ import java.util.Date;
 public class InvoiceExportDTO {
     private static final long serialVersionUID = 1L;
 
+    private Long childId;
+    private Long dataId;
+    private Integer invoiceClassify;
+
+
     /** 主键 */
     @ExcelProperty(value = "操作序号")
     private Integer id;
@@ -57,11 +62,11 @@ public class InvoiceExportDTO {
     @ExcelProperty(value = "单价")
     private BigDecimal price;
     @ExcelProperty(value = "金额")
-    private String amount;
+    private BigDecimal amount;
     @ExcelProperty(value = "税率")
     private String taxRate;
     @ExcelProperty(value = "税额")
-    private String taxAmount;
+    private BigDecimal taxAmount;
     @ExcelProperty(value = "税收分类编码")
     private String taxClassifyCode;
 

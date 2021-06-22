@@ -16,6 +16,9 @@ public class InvoiceReqVo extends BaseEntity {
 
 
     private String pString1;
+    /**
+     * 开票种类
+     */
     private String pString2;
     private String pString3;
     private String pString5;
@@ -25,9 +28,7 @@ public class InvoiceReqVo extends BaseEntity {
      */
     private String string7;
 
-    /**
-     * 开票种类
-     */
+
     private String string2;
     private String createByName;
 
@@ -37,5 +38,4 @@ public class InvoiceReqVo extends BaseEntity {
      */
     private String startDate;
     private String endDate;
-
 }

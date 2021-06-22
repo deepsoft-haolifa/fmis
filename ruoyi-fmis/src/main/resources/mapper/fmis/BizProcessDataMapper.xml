@@ -789,7 +789,7 @@
     <sql id="selectBizProcessChildVoRefInvoice">
               select d.datetime1 pDate1, d.string1 pString1,d.string2 pString2,d.string3 pString3,d.string5 pString5,d.string6 pString6,
             c.child_id childId,c.data_id dataId,c.string1,c.string2,c.string3,c.string4,c.string5,c.string6,c.string7,c.string8,c.string9,
-            c.string10,c.price1,c.price2,c.datetime1,c.datetime2,c.datetime3,c.datetime4,u.user_name as createByName
+            c.string10,c.string11,c.price1,c.price2,c.datetime1,c.datetime2,c.datetime3,c.datetime4,u.user_name as createByName
             from biz_process_child c
             left join biz_process_data d on c.data_id=d.data_id
             left join sys_user u on d.create_by=u.user_id

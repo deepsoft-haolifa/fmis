@@ -355,7 +355,7 @@ public class BizProcessDataInvoiceController extends BaseController {
     }
 
     /**
-     * 查询申请开票列表
+     * 查询开票明细
      */
     @RequiresPermissions("fmis:invoice:childList")
     @PostMapping("/childList")
@@ -429,6 +429,6 @@ public class BizProcessDataInvoiceController extends BaseController {
     public AjaxResult yyExport(InvoiceReqVo invoiceReqVo) {
         List<InvoiceExportDTO> list = bizProcessChildService.yyInvoiceExport(invoiceReqVo);
         ExcelUtil<InvoiceExportDTO> util = new ExcelUtil<InvoiceExportDTO>(InvoiceExportDTO.class);
-        return util.exportEasyExcel(list, "销项发票开票信息导出");
+        return util.exportMergeEasyExcel(list, "销项发票开票信息导出",0,8);
     }
 }

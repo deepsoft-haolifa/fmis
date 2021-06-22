@@ -49,6 +49,7 @@ import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.reflect.ReflectUtils;
+import org.springframework.ui.Model;
 
 /**
  * Excel相关处理
@@ -939,5 +940,22 @@ public class ExcelUtil<T>
         String filename = encodingFilename(sheetName);
         EasyExcel.write(getAbsoluteFile(filename), clazz).sheet(sheetName).doWrite(list);
         return AjaxResult.success(filename);
+    }
+    /**
+     * 对list数据源将其里面的数据导入到excel表单（EasyExcel）
+     *
+     * @param list 导出数据集合
+     * @param sheetName 工作表的名称
+     * @return 结果
+     */
+    public AjaxResult exportMergeEasyExcel(List<T> list, String sheetName,int startIndex,int endIndex)
+    {
+        String filename = encodingFilename(sheetName);
+        EasyExcel.write(getAbsoluteFile(filename), clazz)
+                .registerWriteHandler(new MergeStrategy(list.size(),0,1))
+                .sheet(sheetName)
+                .doWrite(list);
+        return AjaxResult.success(filename);
+
     }
 }

@@ -37,9 +37,9 @@ public class SaleListExportDTO {
     @ExcelProperty(value = "规格型号")
     private String specAndModel;
     @ExcelProperty(value = "数量")
-    private String quantity;
+    private Integer quantity;
     @ExcelProperty(value = "金额")
-    private String amount;
+    private BigDecimal amount;
     @ExcelProperty(value = "税率")
     private String taxRate;
     @ExcelProperty(value = "商品税目")

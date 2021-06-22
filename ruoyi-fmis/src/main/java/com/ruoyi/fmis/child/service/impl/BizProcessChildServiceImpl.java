@@ -1,11 +1,16 @@
 package com.ruoyi.fmis.child.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.fmis.child.domain.ProcessDataDTO;
+import com.ruoyi.fmis.data.domain.SaleListExportDTO;
+import com.ruoyi.fmis.data.service.IBizProcessDataService;
 import com.ruoyi.fmis.invoice.bean.InvoiceReqVo;
 import com.ruoyi.fmis.invoice.bean.export.InvoiceExportDTO;
 import com.ruoyi.fmis.stestn.domain.BizDataStestn;
+import com.ruoyi.fmis.util.BeanUtil;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.fmis.child.mapper.BizProcessChildMapper;
@@ -23,6 +28,8 @@ import com.ruoyi.common.core.text.Convert;
 public class BizProcessChildServiceImpl implements IBizProcessChildService {
     @Autowired
     private BizProcessChildMapper bizProcessChildMapper;
+    @Autowired
+    private IBizProcessDataService bizProcessDataService;
 
     /**
      * 查询流程数据字
@@ -223,7 +230,33 @@ public class BizProcessChildServiceImpl implements IBizProcessChildService {
 
     @Override
     public List<InvoiceExportDTO> yyInvoiceExport(InvoiceReqVo invoiceReqVo){
+        List<InvoiceExportDTO> newList=new ArrayList<>();
         List<InvoiceExportDTO> list = bizProcessChildMapper.yyInvoiceExport(invoiceReqVo);
-        return list;
+        if(CollectionUtils.isNotEmpty(list)){
+            for (InvoiceExportDTO invoiceExportDTO : list) {
+                Long dataId = invoiceExportDTO.getDataId();
+                List<SaleListExportDTO> saleListExportDTOS = bizProcessDataService.selectSaleListExport(dataId);
+                if(CollectionUtils.isNotEmpty(saleListExportDTOS)&&saleListExportDTOS.size()>5){
+                    for (SaleListExportDTO saleDTO : saleListExportDTOS) {
+                        InvoiceExportDTO exportDTO=new InvoiceExportDTO();
+                        BeanUtil.copyProperties(invoiceExportDTO,exportDTO);
+                        exportDTO.setProductName(saleDTO.getProductName());
+                        exportDTO.setSpec(saleDTO.getSpecAndModel());
+                        exportDTO.setUnit(saleDTO.getUnitMeasurement());
+                        exportDTO.setQuantity(saleDTO.getQuantity());
+                        exportDTO.setPrice(saleDTO.getPrice());
+                        exportDTO.setAmount(saleDTO.getAmount());
+                        exportDTO.setTaxRate(saleDTO.getTaxRate());
+                        exportDTO.setTaxAmount(saleDTO.getTaxAmount());
+                        exportDTO.setTaxClassifyCode(saleDTO.getTaxClassifyCode());
+                        newList.add(exportDTO);
+                    }
+                }else{
+                    invoiceExportDTO.setProductName("（详见销货清单）");
+                    newList.add(invoiceExportDTO);
+                }
+            }
+        }
+        return newList;
     }
 }

@@ -1161,7 +1161,41 @@
         where q.string1=#{contractNo} and q.biz_id='contract'
         group by bpc.data_id
     </select>
-    <select id="yyInvoiceExport" resultType="com.ruoyi.fmis.invoice.bean.export.InvoiceExportDTO"></select>
+
+    <select id="yyInvoiceExport" resultType="com.ruoyi.fmis.invoice.bean.export.InvoiceExportDTO">
+        SELECT
+            c.child_id childId,
+            c.data_id dataId,
+            d.string2 invoiceClassify,
+            c.string8 invoiceCode,
+            c.string11 invoiceNo,
+            bc.name customerName,
+            bc.string13 customerTaxNo,
+            bc.string12 customerBankAccount,
+            CONCAT_WS(bc.company_address,bc.telephone," ") customerAddrPhone,
+            c.datetime2 invoiceDate,
+            c.string2 busNo
+        FROM
+            biz_process_child c
+                LEFT JOIN biz_process_data d ON c.data_id = d.data_id
+                LEFT JOIN biz_customer bc ON bc.customer_id = d.string4
+                LEFT JOIN sys_user u ON d.create_by = u.user_id
+                LEFT JOIN sys_dept dt ON u.dept_id = dt.dept_id
+        WHERE
+            1 = 1
+          AND d.biz_id = "invoice"
+          AND d.normal_flag = d.flow_status
+        <if test="startDate!=null">
+            and c.datetime2>=#{startDate}
+        </if>
+        <if test="endDate!=null">
+            and c.datetime2&lt;=#{startDate}
+        </if>
+        <if test="pString2!=null">
+            and d.string2=#{pString2}
+        </if>
+        ORDER BY d.create_time DESC
+    </select>
 
 
 </mapper>
