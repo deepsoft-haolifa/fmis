@@ -1173,7 +1173,7 @@
             bc.string13 customerTaxNo,
             bc.string12 customerBankAccount,
             CONCAT_WS(bc.company_address,bc.telephone," ") customerAddrPhone,
-            c.datetime2 invoiceDate,
+            c.string1 busId,
             c.string2 busNo
         FROM
             biz_process_child c

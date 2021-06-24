@@ -26,6 +26,7 @@ public class InvoiceExportDTO {
 
     private Long childId;
     private Long dataId;
+    private Long busId;
     private Integer invoiceClassify;
 
 

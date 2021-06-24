@@ -29,7 +29,7 @@ public class BizBankExportDTO {
     private Integer id;
 
     @ExcelProperty(value = "制单日期")
-    @DateTimeFormat("yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat("yyyy-MM-dd")
     private Date operateDate;
 
     @ExcelProperty(value = "科目编码")
