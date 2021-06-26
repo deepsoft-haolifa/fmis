@@ -57,6 +57,7 @@
          u.user_name as createByName
         from biz_bill b
         left join sys_dept d on d.dept_id = b.dept_id
+        left join sys_dept dt1 on b.dept_id=dt1.dept_id
         left join sys_user u on u.user_id=b.create_by
     </sql>
 
@@ -69,8 +70,12 @@
             <if test="collectionType != null  and collectionType != ''"> and b.collection_type = #{collectionType}</if>
             <if test="balance != null "> and b.balance = #{balance}</if>
             <if test="type != null "> and b.type = #{type}</if>
-
+            <if test="string1 != null  and string1 != ''"> and b.string1 like concat('%', #{string1}, '%')</if>
+            <if test="string2 != null  and string2 != ''"> and b.string2 like concat('%', #{string2}, '%')</if>
             <if test="billId != null  and billId != ''"> and b.bill_id = #{billId}</if>
+            <if test="deptName != null and deptName != ''">
+                and dt1.dept_name like concat('%', #{deptName}, '%')
+            </if>
         </where>
         order by bill_id desc
     </select>

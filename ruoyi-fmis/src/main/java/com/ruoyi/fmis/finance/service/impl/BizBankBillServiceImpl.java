@@ -62,19 +62,19 @@ public class BizBankBillServiceImpl implements IBizBankBillService {
         if (CollectionUtils.isEmpty(bizBankBills)) {
             return new ArrayList<>();
         }
-        // 如果是记账是收款；需要转义一下表中的付款单位，也就是客户的名称
-        Set<String> customerIdSet = bizBankBills.stream().filter(e -> "1".equals(e.getType())).map(BizBankBill::getPayCompany).collect(Collectors.toSet());
-        List<BizCustomer> bizCustomers = customerService.selectCustomerAll(customerIdSet);
-        if (CollectionUtils.isNotEmpty(bizCustomers)) {
-            Map<Long, String> customerMap = bizCustomers.stream().collect(Collectors.toMap(BizCustomer::getCustomerId, BizCustomer::getName));
-            bizBankBills.forEach(e -> {
-                if ("1".equals(e.getType())) {
-                    if (StringUtils.isNotEmpty(e.getPayCompany())) {
-                        e.setPayCompany(customerMap.get(Long.valueOf(e.getPayCompany())));
-                    }
-                }
-            });
-        }
+//        // 如果是记账是收款；需要转义一下表中的付款单位，也就是客户的名称
+//        Set<String> customerIdSet = bizBankBills.stream().filter(e -> "1".equals(e.getType())).map(BizBankBill::getPayCompany).collect(Collectors.toSet());
+//        List<BizCustomer> bizCustomers = customerService.selectCustomerAll(customerIdSet);
+//        if (CollectionUtils.isNotEmpty(bizCustomers)) {
+//            Map<Long, String> customerMap = bizCustomers.stream().collect(Collectors.toMap(BizCustomer::getCustomerId, BizCustomer::getName));
+//            bizBankBills.forEach(e -> {
+//                if ("1".equals(e.getType())) {
+//                    if (StringUtils.isNotEmpty(e.getPayCompany())) {
+//                        e.setPayCompany(customerMap.get(Long.valueOf(e.getPayCompany())));
+//                    }
+//                }
+//            });
+//        }
         return bizBankBills;
     }
 

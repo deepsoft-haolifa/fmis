@@ -28,6 +28,10 @@ public class BizBill extends BaseEntity {
 
     @Getter
     @Setter
+    private String deptName;
+
+    @Getter
+    @Setter
     private SysDept dept;
 
     /** ID */

@@ -1625,7 +1625,8 @@
     <select id="selectSaleListExport" resultType="com.ruoyi.fmis.data.domain.SaleListExportDTO">
         select
             p.name as productName,
-            concat_ws(' ',p.specifications,p.model) as specAndModel,
+--             concat_ws(' ',p.specifications,p.model) as specAndModel,
+            p.model as specAndModel,
             bpc.string3 quantity,
             bpc.string3*bpc.price1 amount,
             bpc.string14 discountAmount,
