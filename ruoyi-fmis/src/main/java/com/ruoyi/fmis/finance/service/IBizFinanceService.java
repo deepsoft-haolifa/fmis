@@ -34,12 +34,12 @@ public interface IBizFinanceService {
     /**
      * 采购合同汇总（按照供应商）
      */
-    List<SummaryRespVo> selectProcurementSummary(SummaryReqVo reqVo);
+    List<ProcurementSummaryRespVo> selectProcurementSummary(SummaryReqVo reqVo);
 
     /**
      * 采购合同汇总（按照客户）
      */
-    List<SummaryRespVo> selectSaleContractSummary(SummaryReqVo reqVo);
+    List<SaleSummaryRespVo> selectSaleContractSummary(SummaryReqVo reqVo);
 
 
 }

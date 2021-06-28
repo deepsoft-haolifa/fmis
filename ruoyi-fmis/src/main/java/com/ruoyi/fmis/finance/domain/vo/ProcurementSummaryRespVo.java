@@ -7,7 +7,7 @@ import lombok.Data;
  * @author murphy.he
  **/
 @Data
-public class SummaryRespVo {
+public class ProcurementSummaryRespVo {
 
     /**
      * 供应商
@@ -18,31 +18,26 @@ public class SummaryRespVo {
      * 供应商
      */
     private String supplierId;
-
-    /**
-     * 客户名称
-     */
-    private String customerName;
-
-    /**
-     * 客户名称
-     */
-    private String customerId;
-
     /**
      * 合同额
      */
     private Double contractAmount;
+
     /**
-     * 应收款
+     * 入账额
      */
-    private Double needCollectAmount;
+    private Double entryAmount;
+
     /**
-     * 已收款
+     * 入账欠款
      */
-    private Double collectedAmount;
+    private Double entryOweAmount;
     /**
-     * 未开票
+     * 已付款
+     */
+    private Double payedAmount;
+    /**
+     * 回票欠款
      */
     private Double needInvoiceAmount;
     /**
@@ -51,12 +46,10 @@ public class SummaryRespVo {
     private Double invoicedAmount;
 
     /**
-     * 应付款
+     * 入账欠票
      */
-    private Double needPayAmount;
-    /**
-     * 已付款
-     */
-    private Double paidAmount;
+    private Double entryOweInvoiceAmount;
+
+
 
 }

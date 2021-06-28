@@ -157,16 +157,20 @@ public class BizProcessDataPaymentController extends BaseController {
         String dataId = getRequest().getParameter("dataId");
         BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataPaymentById(Long.parseLong(dataId));
         mmap.put("bizProcessData", bizProcessData);
-        return prefix + "/examineEdit";
+       if("2".equals(bizProcessData.getString1())){
+           return prefix + "/examineEdit1";
+       }else{
+           return prefix + "/examineEdit";
+       }
     }
 
-    @GetMapping("/examineEdit1")
-    public String examineEdit1(ModelMap mmap) {
-        String dataId = getRequest().getParameter("dataId");
-        BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataPaymentById(Long.parseLong(dataId));
-        mmap.put("bizProcessData", bizProcessData);
-        return prefix + "/examineEdit1";
-    }
+//    @GetMapping("/examineEdit1")
+//    public String examineEdit1(ModelMap mmap) {
+//        String dataId = getRequest().getParameter("dataId");
+//        BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataPaymentById(Long.parseLong(dataId));
+//        mmap.put("bizProcessData", bizProcessData);
+//        return prefix + "/examineEdit1";
+//    }
 
     @GetMapping("/viewDetail")
     public String viewDetail(ModelMap mmap) {

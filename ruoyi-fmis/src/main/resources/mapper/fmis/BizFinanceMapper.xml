@@ -179,7 +179,7 @@
     </sql>
 
 
-    <select id="selectProcurementSummary" resultType="com.ruoyi.fmis.finance.domain.vo.SummaryRespVo">
+    <select id="selectProcurementSummary" resultType="com.ruoyi.fmis.finance.domain.vo.ProcurementSummaryRespVo">
         select
             s.name supplierName,
             q.string6 supplierId,
@@ -210,7 +210,7 @@
         order by q.create_time desc
      </select>
 
-    <select id="selectSaleContractSummary" resultType="com.ruoyi.fmis.finance.domain.vo.SummaryRespVo">
+    <select id="selectSaleContractSummary" resultType="com.ruoyi.fmis.finance.domain.vo.SaleSummaryRespVo">
         select c.customerName,c.customerId,c.contractAmount,c.collectedAmount,
         -- 应收款（发货金额-已收款）
         round(c.deliveryAmount - c.collectedAmount,2) needCollectAmount,

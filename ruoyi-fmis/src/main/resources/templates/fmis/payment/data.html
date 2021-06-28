@@ -162,7 +162,7 @@
                             //已完成
                         } else if (operationExamineStatus === true || operationExamineStatus === "true") {
                             //审批
-                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subExamine(\'' + row.dataId + '\',\'' + type + '\')"><i class="fa fa-remove"></i> 审批</a>');
+                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subExamine(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 审批</a>');
                         }
                         actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewExamineHistory(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 审批记录 </a>');
                         actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewDetail(\'' + row.dataId + '\',\'' + type + '\')"><i class="fa fa-remove"></i> 详情 </a>');
@@ -211,9 +211,6 @@
 
     function subExamine(dataId, type) {
         var url = prefix + "/examineEdit?dataId=" + dataId;
-        if (type === "2") {
-            url = prefix + "/examineEdit1?dataId=" + dataId;
-        }
         $.modal.openFull("审批", url);
     }
 

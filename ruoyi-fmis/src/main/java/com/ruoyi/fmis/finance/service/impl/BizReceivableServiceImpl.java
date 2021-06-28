@@ -1,7 +1,5 @@
 package com.ruoyi.fmis.finance.service.impl;
 
-import com.ruoyi.common.annotation.DataScope;
-import com.ruoyi.fmis.finance.domain.BizBillContract;
 import com.ruoyi.fmis.finance.domain.vo.*;
 import com.ruoyi.fmis.finance.mapper.BizFinanceMapper;
 import com.ruoyi.fmis.finance.service.IBizBillContractService;
@@ -10,9 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * @author murphy.he
@@ -47,12 +42,12 @@ public class BizReceivableServiceImpl implements IBizFinanceService {
     }
 
     @Override
-    public List<SummaryRespVo> selectProcurementSummary(SummaryReqVo reqVo) {
+    public List<ProcurementSummaryRespVo> selectProcurementSummary(SummaryReqVo reqVo) {
         return bizFinanceMapper.selectProcurementSummary(reqVo);
     }
 
     @Override
-    public List<SummaryRespVo> selectSaleContractSummary(SummaryReqVo reqVo) {
+    public List<SaleSummaryRespVo> selectSaleContractSummary(SummaryReqVo reqVo) {
         return bizFinanceMapper.selectSaleContractSummary(reqVo);
     }
 }

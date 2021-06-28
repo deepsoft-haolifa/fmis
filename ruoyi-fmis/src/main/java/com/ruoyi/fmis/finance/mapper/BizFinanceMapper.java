@@ -21,7 +21,7 @@ public interface BizFinanceMapper {
 
     List<StandAccountSummaryRespVo> selectStandAccountSummaryList(StandAccountReqVo reqVo);
 
-    List<SummaryRespVo> selectProcurementSummary(SummaryReqVo reqVo);
+    List<ProcurementSummaryRespVo> selectProcurementSummary(SummaryReqVo reqVo);
 
-    List<SummaryRespVo> selectSaleContractSummary(SummaryReqVo reqVo);
+    List<SaleSummaryRespVo> selectSaleContractSummary(SummaryReqVo reqVo);
 }

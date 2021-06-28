@@ -4,9 +4,7 @@ import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.fmis.finance.domain.vo.*;
 import com.ruoyi.fmis.finance.service.IBizFinanceService;
-import com.ruoyi.fmis.suppliers.service.IBizSuppliersService;
 import com.ruoyi.system.service.ISysDictDataService;
-import com.ruoyi.system.service.ISysDictTypeService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -127,7 +125,7 @@ public class BizFinanceController extends BaseController {
     @ResponseBody
     public TableDataInfo procurementSummaryList(SummaryReqVo reqVo) {
         startPage();
-        List<SummaryRespVo> list = bizFinanceService.selectProcurementSummary(reqVo);
+        List<ProcurementSummaryRespVo> list = bizFinanceService.selectProcurementSummary(reqVo);
         return getDataTable(list);
     }
 
@@ -148,7 +146,7 @@ public class BizFinanceController extends BaseController {
     @ResponseBody
     public TableDataInfo saleContractSummaryList(SummaryReqVo reqVo) {
         startPage();
-        List<SummaryRespVo> list = bizFinanceService.selectSaleContractSummary(reqVo);
+        List<SaleSummaryRespVo> list = bizFinanceService.selectSaleContractSummary(reqVo);
         return getDataTable(list);
     }
 
