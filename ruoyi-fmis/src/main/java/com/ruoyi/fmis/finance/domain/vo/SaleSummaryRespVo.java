@@ -30,12 +30,12 @@ public class SaleSummaryRespVo {
     private Double deliveryAmount;
 
     /**
-     * 出货应收
+     * 出货应收（发货金额-已收款）
      */
     private Double deliveryNeedCollectAmount;
 
     /**
-     * 开票应收
+     * 开票应收（已开票-已收款）
      */
     private Double invoiceNeedCollectAmount;
     /**
@@ -43,7 +43,7 @@ public class SaleSummaryRespVo {
      */
     private Double collectedAmount;
     /**
-     * 未开票
+     * 未开票(发货金额-已开票)
      */
     private Double needInvoiceAmount;
     /**

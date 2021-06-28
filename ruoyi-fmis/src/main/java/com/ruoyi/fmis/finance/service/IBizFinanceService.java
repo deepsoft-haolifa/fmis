@@ -37,7 +37,7 @@ public interface IBizFinanceService {
     List<ProcurementSummaryRespVo> selectProcurementSummary(SummaryReqVo reqVo);
 
     /**
-     * 采购合同汇总（按照客户）
+     * 销售合同汇总（按照客户）
      */
     List<SaleSummaryRespVo> selectSaleContractSummary(SummaryReqVo reqVo);
 

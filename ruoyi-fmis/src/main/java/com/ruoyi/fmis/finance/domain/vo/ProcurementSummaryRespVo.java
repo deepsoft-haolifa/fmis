@@ -35,7 +35,7 @@ public class ProcurementSummaryRespVo {
     /**
      * 已付款
      */
-    private Double payedAmount;
+    private Double paidAmount;
     /**
      * 回票欠款
      */

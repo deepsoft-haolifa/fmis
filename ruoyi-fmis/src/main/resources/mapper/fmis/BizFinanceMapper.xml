@@ -39,11 +39,14 @@
         q.data_id
 
 
-        left join (select a.string5,sum(a.string13*a.price1) deliveryAmount from biz_process_child  a left join biz_process_data
-        b on a.data_id=b.data_id where b.biz_id='newdelivery' and b.normal_flag=b.flow_status and a.string19=1 group by a.string5) bpc2 ON
+        left join (select a.string5,sum(a.string13*a.price1) deliveryAmount from biz_process_child a left join
+        biz_process_data
+        b on a.data_id=b.data_id where b.biz_id='newdelivery' and b.normal_flag=b.flow_status and a.string19=1 group by
+        a.string5) bpc2 ON
         bpc2.string5 = q.string1
         left join (select a.string5,sum(a.string13) deliveryQty from biz_process_child a left join biz_process_data
-        b on a.data_id=b.data_id where b.biz_id='newdelivery' and b.normal_flag=b.flow_status and a.string19=1 group by a.string5) bpc1 ON
+        b on a.data_id=b.data_id where b.biz_id='newdelivery' and b.normal_flag=b.flow_status and a.string19=1 group by
+        a.string5) bpc1 ON
         bpc1.string5 = q.string1
         left join (select data_id,sum(amount) as paidAmount from biz_bill_contract group by data_id) bbc on
         bbc.data_id=q.data_id
@@ -106,9 +109,12 @@
         ifnull(p.paidAmount,0) paidAmount
         from biz_process_data q
         left join biz_suppliers s on s.suppliers_id=q.string6
-        left join (select contract_id,sum(apply_amount) as paidAmount from biz_pay_plan where status=1 group by contract_id) p on p.contract_id=q.data_id
-        left join (select string4,sum(string1) as arrivalQty from biz_data_stestn group by string4) stn on stn.string4=q.data_id
-        left join (select a.string4,sum(a.string1*b.procurement_price) arrivalAmount from biz_data_stestn a left join biz_product b on a.string3=b.product_id  group by a.string4) stnprice on stnprice.string4=q.data_id
+        left join (select contract_id,sum(apply_amount) as paidAmount from biz_pay_plan where status=1 group by
+        contract_id) p on p.contract_id=q.data_id
+        left join (select string4,sum(string1) as arrivalQty from biz_data_stestn group by string4) stn on
+        stn.string4=q.data_id
+        left join (select a.string4,sum(a.string1*b.procurement_price) arrivalAmount from biz_data_stestn a left join
+        biz_product b on a.string3=b.product_id group by a.string4) stnprice on stnprice.string4=q.data_id
         left join sys_user u on q.create_by=u.user_id
         left join sys_dept dt on u.dept_id=dt.dept_id
 
@@ -117,7 +123,7 @@
     </select>
     <select id="selectStandAccountSummaryList"
             resultType="com.ruoyi.fmis.finance.domain.vo.StandAccountSummaryRespVo">
-      select total.needCompany,
+        select total.needCompany,
         total.supplierName,
         -- 累计欠款额
         ifnull(sum(total.contractAmount),0) - ifnull(sum(total.paidAmount),0) totalArrearsAmount,
@@ -138,12 +144,15 @@
         -- 已付货款
         ifnull(p.paidAmount,0) paidAmount,
         ifnull(p1.planPayAmount,0) planPayAmount
-      	from biz_pay_plan bpp
+        from biz_pay_plan bpp
         left join biz_process_data q on q.data_id=bpp.contract_id
         left join biz_suppliers s on s.suppliers_id=q.string6
-        left join (select contract_id,sum(apply_amount) as paidAmount  from biz_pay_plan where status=1 group by contract_id) p on p.contract_id=q.data_id
-        left join (select contract_id,sum(apply_amount) as planPayAmount  from biz_pay_plan where status=0 group by contract_id) p1 on p1.contract_id=q.data_id
-        left join (select a.string4,sum(a.string1*b.procurement_price) arrivalAmount from biz_data_stestn a left join biz_product b on a.string3=b.product_id  group by a.string4) stnprice on stnprice.string4=q.data_id
+        left join (select contract_id,sum(apply_amount) as paidAmount from biz_pay_plan where status=1 group by
+        contract_id) p on p.contract_id=q.data_id
+        left join (select contract_id,sum(apply_amount) as planPayAmount from biz_pay_plan where status=0 group by
+        contract_id) p1 on p1.contract_id=q.data_id
+        left join (select a.string4,sum(a.string1*b.procurement_price) arrivalAmount from biz_data_stestn a left join
+        biz_product b on a.string3=b.product_id group by a.string4) stnprice on stnprice.string4=q.data_id
         <where>
             <if test="supplierName!=null and supplierName!=''">
                 and s.name like concat('%', #{supplierName}, '%')
@@ -152,11 +161,11 @@
                 and q.string1 like concat('%', #{needCompany}, '%')
             </if>
         </where>
-            ) a
-         -- 已经付完款的合同不统计
-         where a.contractAmount > a.paidAmount ) total
+        ) a
+        -- 已经付完款的合同不统计
+        where a.contractAmount > a.paidAmount ) total
 
-         group by total.needCompany,total.supplierName
+        group by total.needCompany,total.supplierName
     </select>
 
     <sql id="standAccountWhere">
@@ -181,21 +190,39 @@
 
     <select id="selectProcurementSummary" resultType="com.ruoyi.fmis.finance.domain.vo.ProcurementSummaryRespVo">
         select
-            s.name supplierName,
-            q.string6 supplierId,
-            -- 合同额
-            ifnull(sum(q.price1),0) contractAmount,
-            -- 应付款
-            ifnull(sum(stnprice.arrivalAmount),0) needPayAmount,
-            -- 已付货款
-             ifnull(sum(p.paidAmount),0) paidAmount,
-            -- 已开发票
-            ifnull(sum(invoice.invoicedAmount),0) invoicedAmount
+        c.supplierName,
+        c.supplierId,
+        c.contractAmount,
+        c.entryAmount,
+        c.paidAmount,
+        c.invoicedAmount,
+        -- 入账欠款(入账额-已付款)
+        round(c.entryAmount - c.paidAmount,2) entryOweAmount,
+        -- 回票欠款(回票额-已付款）
+        round(0 - c.paidAmount,2) needInvoiceAmount,
+        -- 入账欠票（入账额-已开票）
+        round(c.entryAmount - c.invoicedAmount,2) entryOweInvoiceAmount
+        from (
+        select
+        s.name supplierName,
+        q.string6 supplierId,
+        -- 合同额
+        ifnull(sum(q.price1),0) contractAmount,
+        -- 入账额
+        ifnull(sum(stnprice.arrivalAmount),0) entryAmount,
+        -- 已付货款
+        ifnull(sum(p.paidAmount),0) paidAmount,
+        -- 已开发票
+        ifnull(sum(invoice.invoicedAmount),0) invoicedAmount
         from biz_process_data q
-            left join biz_suppliers s on s.suppliers_id=q.string6
-            left join (select a.string4,sum(a.string1*b.procurement_price) arrivalAmount from biz_data_stestn a left join biz_product b on a.string3=b.product_id  group by a.string4) stnprice on stnprice.string4=q.data_id
-            left join (select contract_id,sum(apply_amount) as paidAmount  from biz_pay_plan where status=1 group by contract_id) p on p.contract_id=q.data_id
-            left join (select a.string1,sum(a.price1) as invoicedAmount  from biz_process_child a left join biz_process_data b on a.data_id=b.data_id where b.biz_id='invoice' and a.string7=2 group by a.string1) invoice on invoice.string1=q.data_id
+        left join biz_suppliers s on s.suppliers_id=q.string6
+        left join (select a.string4,sum(a.string1*b.procurement_price) arrivalAmount from biz_data_stestn a left join
+        biz_product b on a.string3=b.product_id group by a.string4) stnprice on stnprice.string4=q.data_id
+        left join (select contract_id,sum(apply_amount) as paidAmount from biz_pay_plan where status=1 group by
+        contract_id) p on p.contract_id=q.data_id
+        left join (select a.string1,sum(a.price1) as invoicedAmount from biz_process_child a left join biz_process_data
+        b on a.data_id=b.data_id where b.biz_id='invoice' and a.string7=2 group by a.string1) invoice on
+        invoice.string1=q.data_id
         where q.biz_id='procurement' and q.string6!="" and q.normal_flag=q.flow_status
         <if test="supplierName != null and supplierName != ''">
             AND s.name like concat('%',#{supplierName},'%')
@@ -208,49 +235,57 @@
         </if>
         group by q.string6
         order by q.create_time desc
-     </select>
+        ) c
+    </select>
 
     <select id="selectSaleContractSummary" resultType="com.ruoyi.fmis.finance.domain.vo.SaleSummaryRespVo">
-        select c.customerName,c.customerId,c.contractAmount,c.collectedAmount,
-        -- 应收款（发货金额-已收款）
-        round(c.deliveryAmount - c.collectedAmount,2) needCollectAmount,
-        -- 未开发票（发货金额-已收款-已开发票）
-        round(c.deliveryAmount - c.collectedAmount - c.invoicedAmount,2) needInvoiceAmount,
+        select
+        c.customerName,
+        c.customerId,
+        c.contractAmount,
+        c.collectedAmount,
+        c.deliveryAmount,
+        round(c.deliveryAmount - c.collectedAmount,2) deliveryNeedCollectAmount,
+        round(c.invoicedAmount - c.collectedAmount,2) invoiceNeedCollectAmount,
+        round(c.deliveryAmount - c.invoicedAmount,2) needInvoiceAmount,
         c.invoicedAmount
         from (
-            select
-                ct.name as customerName,
-                q.string2 as customerId,
-                -- 合同额
-                ifnull(sum(q.price1),0) contractAmount,
-                -- 发货金额（发货数量*销售单价）
-                ifnull(sum(bpc1.deliveryAmount),0) deliveryAmount,
-                -- 已收款
-                ifnull(sum(bbc.paidAmount),0) collectedAmount,
-                -- 已开发票
-                ifnull(sum(invoice.invoicedAmount),0) invoicedAmount
-            from biz_process_data q
-                left join biz_customer ct on ct.customer_id=q.string2
-                -- 发货申请流程走完，且已经出库（string19=1）
-                left join (select a.string5,sum(a.string13*a.price1) deliveryAmount from biz_process_child  a left join biz_process_data
-                b on a.data_id=b.data_id where b.biz_id='newdelivery' and b.normal_flag=b.flow_status and a.string19=1 group by a.string5) bpc1 ON
-                bpc1.string5 = q.string1
-                left join (select data_id,sum(amount) as paidAmount from biz_bill_contract group by data_id) bbc on
-                bbc.data_id=q.data_id
-                left join (select a.string1,sum(a.price1) as invoicedAmount from biz_process_child a left join biz_process_data
-                b on a.data_id=b.data_id where b.biz_id='invoice' and a.string7=2 group by a.string1) invoice on invoice.string1=q.data_id
-                where   q.biz_id='contract'
-                <if test="customerName != null and customerName != ''">
-                    AND ct.name like concat('%',#{customerName},'%')
-                </if>
-                <if test="startTime != null and startTime != ''"><!-- 开始时间检索 -->
-                    AND date_format(q.create_time,'%y%m%d') &gt;= date_format(#{startTime},'%y%m%d')
-                </if>
-                <if test="endTime != null and endTime != ''"><!-- 结束时间检索 -->
-                    AND date_format(q.create_time,'%y%m%d') &lt;= date_format(#{endTime},'%y%m%d')
-                </if>
-                group by q.string2
-                order by q.create_time desc
+        select
+        ct.name as customerName,
+        q.string2 as customerId,
+        -- 合同额
+        ifnull(sum(q.price1),0) contractAmount,
+        -- 发货金额（发货数量*销售单价）
+        ifnull(sum(bpc1.deliveryAmount),0) deliveryAmount,
+        -- 已收款
+        ifnull(sum(bbc.paidAmount),0) collectedAmount,
+        -- 已开发票
+        ifnull(sum(invoice.invoicedAmount),0) invoicedAmount
+        from biz_process_data q
+        left join biz_customer ct on ct.customer_id=q.string2
+        -- 发货申请流程走完，且已经出库（string19=1）
+        left join (select a.string5,sum(a.string13*a.price1) deliveryAmount from biz_process_child a left join
+        biz_process_data
+        b on a.data_id=b.data_id where b.biz_id='newdelivery' and b.normal_flag=b.flow_status and a.string19=1 group by
+        a.string5) bpc1 ON
+        bpc1.string5 = q.string1
+        left join (select data_id,sum(amount) as paidAmount from biz_bill_contract group by data_id) bbc on
+        bbc.data_id=q.data_id
+        left join (select a.string1,sum(a.price1) as invoicedAmount from biz_process_child a left join biz_process_data
+        b on a.data_id=b.data_id where b.biz_id='invoice' and a.string7=2 group by a.string1) invoice on
+        invoice.string1=q.data_id
+        where q.biz_id='contract'
+        <if test="customerName != null and customerName != ''">
+            AND ct.name like concat('%',#{customerName},'%')
+        </if>
+        <if test="startTime != null and startTime != ''"><!-- 开始时间检索 -->
+            AND date_format(q.create_time,'%y%m%d') &gt;= date_format(#{startTime},'%y%m%d')
+        </if>
+        <if test="endTime != null and endTime != ''"><!-- 结束时间检索 -->
+            AND date_format(q.create_time,'%y%m%d') &lt;= date_format(#{endTime},'%y%m%d')
+        </if>
+        group by q.string2
+        order by q.create_time desc
         ) c
     </select>
 
