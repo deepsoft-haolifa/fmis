@@ -31,8 +31,6 @@ public class InvoiceExportDTO {
 
 
     /** 主键 */
-    @ExcelProperty(value = "操作序号")
-    private Integer id;
     @ExcelProperty(value = "发票代码")
     private String invoiceCode;
     @ExcelProperty(value = "发票号码")

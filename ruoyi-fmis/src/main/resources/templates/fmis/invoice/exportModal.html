@@ -48,8 +48,9 @@
     });
 
     function submitHandler() {
+        var dataObj = $('#form-data-edit').serializeArray();
         $.modal.loading("正在导出数据，请稍后...");
-        $.post(prefix + "/yy-export", function(result) {
+        $.post(prefix + "/yy-export",dataObj, function(result) {
             if (result.code === web_status.SUCCESS) {
                 window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;
             } else if (result.code === web_status.WARNING) {
