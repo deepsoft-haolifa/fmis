@@ -44,7 +44,7 @@
 
             <label class="col-sm-1 control-label">发货地：</label>
             <div class="col-sm-2">
-                <input name="string7" class="form-control" type="text" required>
+                <input name="string7" class="form-control" type="text" th:field="*{string9}" required>
             </div>
 
             <label class="col-sm-1 control-label">收货人：</label>
@@ -67,7 +67,10 @@
 
             <label class="col-sm-1 control-label">运费付费方式：</label>
             <div class="col-sm-2">
-                <input name="string12" class="form-control" type="text" required>
+                <select name="string12" class="form-control"  required disabled readonly="true">
+                    <option  th:text="供方"  th:value="供方" th:field="*{string10}"></option>
+                    <option  th:text="需方"  th:value="需方" th:field="*{string10}"></option>
+                </select>
             </div>
         </div>
 
@@ -76,7 +79,11 @@
         <div class="form-group " >
             <label class="col-sm-1 control-label">运输方式：</label>
             <div class="col-sm-2">
-                <input name="string14" class="form-control" type="text">
+<!--                <input name="string14" class="form-control" type="text" th:value="*{string7}">-->
+                <select name="string14"  class="form-control m-b" th:with="type=${@dict.getType('transport_type')}" readonly="true" disabled>
+                    <option value="0">请选择</option>
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:field="*{string7}" th:value="${dict.dictValue}"></option>
+                </select>
             </div>
             <label class="col-sm-1 control-label">件数：</label>
             <div class="col-sm-2">
