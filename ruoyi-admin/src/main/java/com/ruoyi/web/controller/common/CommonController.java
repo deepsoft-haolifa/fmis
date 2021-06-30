@@ -53,13 +53,13 @@ public class CommonController
             {
                 throw new Exception(StringUtils.format("文件名称({})非法，不允许下载。 ", fileName));
             }
-            String realFileName = System.currentTimeMillis() + fileName.substring(fileName.indexOf("_") + 1);
+//            String realFileName = System.currentTimeMillis() + fileName.substring(fileName.indexOf("_") + 1);
             String filePath = Global.getDownloadPath() + fileName;
 
             response.setCharacterEncoding("utf-8");
             response.setContentType("multipart/form-data");
             response.setHeader("Content-Disposition",
-                    "attachment;fileName=" + FileUtils.setFileDownloadHeader(request, realFileName));
+                    "attachment;fileName=" + FileUtils.setFileDownloadHeader(request, fileName));
             FileUtils.writeBytes(filePath, response.getOutputStream());
             if (delete)
             {
