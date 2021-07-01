@@ -66,7 +66,10 @@
 
                 <label class="col-sm-1 control-label">运费付费方式：</label>
                 <div class="col-sm-2">
-                    <input name="string12" class="form-control" th:field="*{string12}"  type="text">
+                    <select name="string12" id="string12" class="form-control"  required disabled readonly="true">
+                        <option  th:text="供方"  th:value="供方" th:field="*{string12}"></option>
+                        <option  th:text="需方"  th:value="需方" th:field="*{string12}"></option>
+                    </select>
                 </div>
             </div>
 
@@ -75,7 +78,11 @@
             <div class="form-group " >
                 <label class="col-sm-1 control-label">运输方式：</label>
                 <div class="col-sm-2">
-                    <input name="string14" class="form-control" th:field="*{string14}"  type="text">
+<!--                    <input name="string14" class="form-control" th:field="*{string14}"  type="text">-->
+                    <select name="string14" id="string14" class="form-control m-b" th:with="type=${@dict.getType('transport_type')}" readonly="true" disabled>
+                        <option value="0">请选择</option>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:field="*{string14}" th:value="${dict.dictValue}"></option>
+                    </select>
                 </div>
                 <label class="col-sm-1 control-label">件数：</label>
                 <div class="col-sm-2">
@@ -255,7 +262,10 @@
                 console.log("data=" + data);
 
 
-
+                let string12 = $("#string12").val();
+                let string14 = $("#string14").val();
+                dataObj.push({"name": "string12", "value": string12});
+                dataObj.push({"name": "string14", "value": string14});
                 // console.log("productArray=" + JSON.stringify(productArray));
                 dataObj.push({"name": "productParmters", "value": data});
                 $.operate.save(ctx + "fmis/data/saveInventoryFH", dataObj);

@@ -75,7 +75,11 @@
             <div class="form-group " >
                 <label class="col-sm-1 control-label">运输方式：</label>
                 <div class="col-sm-2">
-                    <input name="string14" class="form-control" th:field="*{string14}" readonly type="text">
+<!--                    <input name="string14" class="form-control" th:field="*{string14}" readonly type="text">-->
+                    <select name="string14" id="string14" class="form-control m-b" th:with="type=${@dict.getType('transport_type')}" readonly="true" disabled>
+                        <option value="0">请选择</option>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:field="*{string14}" th:value="${dict.dictValue}"></option>
+                    </select>
                 </div>
                 <label class="col-sm-1 control-label">件数：</label>
                 <div class="col-sm-2">
