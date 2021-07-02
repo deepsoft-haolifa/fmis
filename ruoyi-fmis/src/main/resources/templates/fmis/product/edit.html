@@ -211,8 +211,15 @@
                     <input name="remark" class="form-control" type="text" th:field="*{remark}">
                 </div>
             </div>
-
-
+            <div class="form-group">
+                <label class="col-sm-3 control-label">标准产品：</label>
+                <div class="col-sm-8">
+                    <select name="string5" class="form-control m-b" th:with="type=${@dict.getType('is_standard-product')}">
+                        <option value="">请选择</option>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"  th:field="*{string5}"></option>
+                    </select>
+                </div>
+            </div>
         </form>
     </div>
     <th:block th:include="include :: footer" />

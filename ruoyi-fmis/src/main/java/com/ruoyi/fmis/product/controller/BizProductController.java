@@ -77,6 +77,7 @@ public class BizProductController extends BaseController {
     @ResponseBody
     public TableDataInfo list(BizProduct bizProduct) {
         startPage();
+        bizProduct.setString5("yes");
         List<BizProduct> list = bizProductService.selectBizProductList(bizProduct);
         return getDataTable(list);
     }
@@ -85,6 +86,7 @@ public class BizProductController extends BaseController {
     @ResponseBody
     public TableDataInfo listNoAuth(BizProduct bizProduct) {
         startPage();
+        bizProduct.setString5("yes");
         List<BizProduct> list = bizProductService.selectBizProductListNoAuth(bizProduct);
         return getDataTable(list);
     }

@@ -294,7 +294,11 @@
         ds.p1_status as p1Status,ds.p2_status as p2Status,ds.p3_status as p3Status,ds.p4_status as p4Status,pc.data_id as dataId,pc.child_id as childId,ds.data_status as dataStatus,
         ds.string4 as procurementId,'A' as levelValue,s.suppliers_id as supplierId,pd.string1 as contractNo,pd.string25 as contractSpecial
         from biz_product p
-        join biz_process_child pc on pc.data_id=#{dataId} and pc.string2=p.product_id
+        join biz_process_child pc on pc.data_id=#{dataId} and /*pc.string2=p.product_id*/
+        p.product_id in (select product_id from biz_product
+        where concat(specifications, model) in
+        (select concat(specifications, model) from biz_product  where product_id  = pc.string2)
+        )
         join biz_process_data pd on pc.data_id=pd.data_id
         left join biz_data_status ds on ds.child_id=pc.child_id and ds.string2=p.product_id
         left join biz_dict d on  d.parent_id=1 and p.series=d.dict_id
