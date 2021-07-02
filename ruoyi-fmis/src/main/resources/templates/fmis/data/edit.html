@@ -52,7 +52,10 @@
                 </div>
                 <label class="col-sm-1 control-label">含发票：</label>
                 <div class="col-sm-2">
-                    <input name="string5" class="form-control" th:field="*{string5}" type="text">
+<!--                    <input name="string5" class="form-control" th:field="*{string5}" type="text">-->
+                    <select name="string5" id="string5" class="form-control m-b" th:with="type=${@dict.getType('contain_tax')}" required>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{string5}"></option>
+                    </select>
                 </div>
                 <label class="col-sm-1 control-label">发货时间：</label>
                 <div class="col-sm-2">
