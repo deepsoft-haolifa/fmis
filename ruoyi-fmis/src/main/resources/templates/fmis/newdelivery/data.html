@@ -109,6 +109,7 @@
                         if (flowStatus < 1 && createBy == loginUserId) {
                             actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subReport(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 上报 </a>');
                             actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="update(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 编辑 </a>');
+                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="deleteDelivery(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 删除 </a>');
                             //已上报
                         } else if (flowStatus == normalFlag) {
                             //已完成
@@ -124,6 +125,11 @@
             };
             $.table.init(options);
         });
+
+        function deleteDelivery(dataId) {
+            $.operate.remove(dataId);
+        }
+
         function viewExamineHistory(dataId) {
             var bizId = $("#bizId").val();
             var url = prefix + "/viewExamineHistory?dataId=" + dataId + "&&bizId=" + bizId;

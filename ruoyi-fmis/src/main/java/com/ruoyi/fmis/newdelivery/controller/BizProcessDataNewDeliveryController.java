@@ -431,7 +431,8 @@ public class BizProcessDataNewDeliveryController extends BaseController {
     @PostMapping( "/remove")
     @ResponseBody
     public AjaxResult remove(String ids) {
-        return toAjax(bizProcessDataService.deleteBizProcessDataByIds(ids));
+
+        return toAjax(bizProcessDataService.deleteNewDeliveryById(ids));
     }
 
     @PostMapping("/report")

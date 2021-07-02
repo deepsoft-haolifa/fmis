@@ -156,4 +156,11 @@ public interface IBizProcessDataService {
 
 
     public List<SaleListExportDTO> selectSaleListExport(Long dataId);
+
+    /**
+     * 删除发货单
+     * @param ids
+     * @return
+     */
+    int deleteNewDeliveryById(String ids);
 }

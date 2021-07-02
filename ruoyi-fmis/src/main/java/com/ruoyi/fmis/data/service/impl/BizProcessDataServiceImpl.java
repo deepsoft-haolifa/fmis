@@ -41,6 +41,7 @@ import com.ruoyi.fmis.data.mapper.BizProcessDataMapper;
 import com.ruoyi.fmis.data.domain.BizProcessData;
 import com.ruoyi.fmis.data.service.IBizProcessDataService;
 import com.ruoyi.common.core.text.Convert;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 /**
@@ -1132,5 +1133,29 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
                 bizPayPlanService.insertBizPayPlan(bizPayPlan);
             }
         }
+    }
+
+    @Transactional
+    @Override
+    public int deleteNewDeliveryById(String dataId) {
+        // 查询发货的childId
+        BizProcessChild bizProcessChild = new BizProcessChild();
+        bizProcessChild.setDataId(Long.parseLong(dataId));
+        List<BizProcessChild> bizProcessChildren = bizProcessChildService.selectBizProcessChildInventoryList(bizProcessChild);
+        if(Objects.isNull(bizProcessChildren)) {
+            bizProcessChildren = new ArrayList<>();
+        }
+        // 变更原始数据状态
+        for (BizProcessChild processChild : bizProcessChildren) {
+            String originalChildId = processChild.getString15();
+            BizProcessChild bizProcessChild1 = bizProcessChildService.selectBizProcessChildById(Long.parseLong(originalChildId));
+            bizProcessChild1.setString20("0");// 1 代表已经操作，0 代表未操作
+            bizProcessChildService.updateBizProcessChild(bizProcessChild1);
+            // 删除 发货子项
+            bizProcessChildService.deleteBizProcessChildById(processChild.getChildId());
+        }
+        // 删除发货单
+        bizProcessDataMapper.deleteBizProcessDataById(Long.parseLong(dataId));
+        return 1;
     }
 }
