@@ -1004,7 +1004,8 @@ public class BizProcessDataProcurementController extends BaseController {
         //List<BizProcessChild> bizProcessChildList = bizProcessChildService.selectBizQuotationProductList(queryBizProcessChild);
 
         try {
-            String filename = PdfUtil.encodingFilename("合同");
+//            bizProcessData
+            String filename = bizProcessData.getString12()+"_"+System.currentTimeMillis()+".pdf";
             String filePath = PdfUtil.getAbsoluteFile(filename);
             // step 1 横向
             Document document = new Document(PageSize.A4_LANDSCAPE);
