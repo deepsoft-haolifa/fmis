@@ -278,8 +278,8 @@
 
 
     <!-- 采购池产品信息 -->
-    <sql id="selectBizChildProductVo">
-        select pd.string3 guishudanwei,
+    <sql id="selectBizChildProductVoCaigou">
+        select pd.string3 guishudanwei,p.string5 as string18,
         p.price as productPrice,p.product_id as productId,
         d9.name as series, p.model, d1.name as specifications, d2.name as nominalPressure,
         d3.name as connectionType, d6.name as valvebodyMaterial,
@@ -295,8 +295,51 @@
         ds.string4 as procurementId,'A' as levelValue,s.suppliers_id as supplierId,pd.string1 as contractNo,pd.string25 as contractSpecial
         from biz_product p
         join biz_process_child pc on pc.data_id=#{dataId} and /*pc.string2=p.product_id*/
-        p.product_id in (select product_id from biz_product
-        where concat(specifications, model) in
+        p.product_id in (select product_id from biz_product left join biz_process_child pc on pc.data_id=#{dataId} left join biz_data_status ds on ds.child_id=pc.child_id  where ds.data_status is null and
+        concat(specifications, model) in
+        (select concat(specifications, model) from biz_product  where product_id  = pc.string2)
+        )
+        join biz_process_data pd on pc.data_id=pd.data_id
+        left join biz_data_status ds on ds.child_id=pc.child_id and ds.string2=p.product_id
+        left join biz_dict d on  d.parent_id=1 and p.series=d.dict_id
+        left join biz_dict d1 on d1.parent_type='specification' and d1.dict_id=p.specifications
+        left join biz_dict d2 on d2.parent_type='nominal_pressure' and d2.dict_id=p.nominal_pressure
+        left join biz_dict d3 on d3.parent_type='link_type' and d3.dict_id=p.connection_type
+        left join biz_dict d4 on d4.parent_type='sealing_material' and d4.dict_id=p.sealing_material
+        left join biz_dict d5 on d5.parent_type='spool_material' and d5.dict_id=p.valve_element
+        left join biz_dict d6 on d6.parent_type='body_material' and d6.dict_id=p.valvebody_material
+        left join biz_dict d7 on d7.parent_type='drive_mode' and d7.dict_id=p.drive_form
+        left join biz_dict d8 on d8.parent_type='structural_type' and d8.dict_id=p.structural_style
+        left join biz_dict d9 on d9.parent_type='series_type' and d9.dict_id=p.string1
+        left join biz_suppliers s on s.suppliers_id=p.supplier
+        /*join sys_dict_data dd on dd.dict_type='product_level' and dd.dict_value=p.string2*/
+        where <!--concat(p.model,p.specifications) in (
+      select concat(p1.model,p1.specifications) from biz_product p1
+      join biz_process_child pc1 on pc1.data_id=#{dataId} and pc1.string2=p1.product_id
+        <if test="supplierId != null and supplierId != ''">and p1.supplier=#{supplierId} </if>
+    ) -->
+        1=1
+    </sql>
+    <sql id="selectBizChildProductVo">
+        /*临时用18*/
+        select pd.string3 guishudanwei,p.string5 as string18,
+        p.price as productPrice,p.product_id as productId,
+        d9.name as series, p.model, d1.name as specifications, d2.name as nominalPressure,
+        d3.name as connectionType, d6.name as valvebodyMaterial,
+        d4.name as sealingMaterial, d5.name as valveElement,
+        d7.name as driveForm,d8.name as structuralStyle,
+        s.name as supplierName,
+        p.medium,p.temperature,p.other,d9.name as productString1,
+        p.string2 as productString2,
+        /*dd.dict_label as levelLabel,*/(case when ds.data_status='1' then ds.string1 else sum(pc.string3) end) as productNum,p.name as productName,
+        s.name as supplier,p.procurement_price as productProcurementPrice,pd.string6 as goodsTime,
+        ds.product_status as productStatus,ds.actuator_status as actuatorStatus,ds.ref1_status as ref1Status,ds.ref2_status as ref2Status,ds.p_status as pStatus,
+        ds.p1_status as p1Status,ds.p2_status as p2Status,ds.p3_status as p3Status,ds.p4_status as p4Status,pc.data_id as dataId,pc.child_id as childId,ds.data_status as dataStatus,
+        ds.string4 as procurementId,'A' as levelValue,s.suppliers_id as supplierId,pd.string1 as contractNo,pd.string25 as contractSpecial
+        from biz_product p
+        join biz_process_child pc on pc.data_id=#{dataId} and /*pc.string2=p.product_id*/
+        p.product_id in (select product_id from biz_product where
+         concat(specifications, model) in
         (select concat(specifications, model) from biz_product  where product_id  = pc.string2)
         )
         join biz_process_data pd on pc.data_id=pd.data_id
@@ -322,6 +365,24 @@
     </sql>
     <select id="selectBizChildProductList" parameterType="BizProcessChild" resultMap="BizProcessChildResult">
         <include refid="selectBizChildProductVo"/>
+        <!-- 如果是详情，只看有数据 || bizEditFlag == 1-->
+
+        <if test="bizEditFlag == 0 ">and ifnull(ds.data_status,'0') = '0'</if>
+
+        <if test="bizEditFlag == 2">and ds.string4 = #{procurementId} </if>
+        <if test="dataStatus == 1">and ds.data_status = #{dataStatus} </if>
+        <if test="dataStatus == -1">and ds.data_status is null </if>
+
+        <if test="supplierId != null and supplierId != ''">and s.suppliers_id=#{supplierId} </if>
+
+        <!-- 备选产品信息 暂时不做 -->
+        <if test="levelValue == -2"> and </if>
+
+        group by p.product_id
+        order by p.string2,p.new_supplier,productNum desc
+    </select>
+    <select id="selectBizChildProductListCaigou" parameterType="BizProcessChild" resultMap="BizProcessChildResult">
+        <include refid="selectBizChildProductVoCaigou"/>
         <!-- 如果是详情，只看有数据 || bizEditFlag == 1-->
 
         <if test="bizEditFlag == 0 ">and ifnull(ds.data_status,'0') = '0'</if>

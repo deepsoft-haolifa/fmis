@@ -38,6 +38,7 @@ public interface IBizProcessChildService {
     public List<BizProcessChild> selectBizQuotationProductList(BizProcessChild bizProcessChild);
 
     public List<BizProcessChild> selectBizChildProductList(BizProcessChild bizProcessChild);
+    public List<BizProcessChild> selectBizChildProductListCaigou(BizProcessChild bizProcessChild);
 
     public List<BizProcessChild> selectBizTestChildList(BizProcessChild bizProcessChild);
 

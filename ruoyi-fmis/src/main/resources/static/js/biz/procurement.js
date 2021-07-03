@@ -498,6 +498,13 @@ initChildProductTable = function(index, row, $detail) {
             {field : 'procurementId',title : 'childId',visible: false},
 
             {field : 'productName',title : '产品名称',editable: false},
+            {field : 'string18',title : '标准产品',editable: false,formatter: function(value, row, index) {
+                    var actions = [];
+                    var productType = row["string18"];
+                    productType = $.common.isEmpty(productType) == true ? "no" : string18;
+                    actions.push(productType);
+                    return actions.join('');
+                }},
             {field : 'model',title : '型号',editable: false},
             {field : 'series',title : '系列',editable: false},
             {field : 'productNum',title : '数量',editable: {type: 'text',validate: function(v,r){ return numberValidate(v)}}},

@@ -72,6 +72,10 @@ public class BizProcessChildServiceImpl implements IBizProcessChildService {
     public List<BizProcessChild> selectBizChildProductList(BizProcessChild bizProcessChild) {
         return bizProcessChildMapper.selectBizChildProductList(bizProcessChild);
     }
+    @Override
+    public List<BizProcessChild> selectBizChildProductListCaigou(BizProcessChild bizProcessChild) {
+        return bizProcessChildMapper.selectBizChildProductListCaigou(bizProcessChild);
+    }
 
     @Override
     public List<BizProcessChild> selectBizTestChildList(BizProcessChild bizProcessChild) {

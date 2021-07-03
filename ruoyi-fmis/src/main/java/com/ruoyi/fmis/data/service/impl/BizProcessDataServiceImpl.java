@@ -603,7 +603,67 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
         }
         return BaseController.getDataTableImpl(bizProcessChildList);
     }
+    @Override
+    public TableDataInfo listLevelProductCaigou(BizProcessData bizProcessData) {
+        BizProcessChild queryBizProcessChild = new BizProcessChild();
+        queryBizProcessChild.setDataId(bizProcessData.getDataId());
+        queryBizProcessChild.setString2(bizProcessData.getLevel());
+        queryBizProcessChild.setDataStatus(bizProcessData.getDataStatus());
+        queryBizProcessChild.setBizEditFlag(bizProcessData.getBizEditFlag());
+        queryBizProcessChild.setProcurementId(bizProcessData.getProcurementId());
 
+        String supplierId = bizProcessData.getSupplierId();
+        if (StringUtils.isNotEmpty(supplierId)) {
+            queryBizProcessChild.setSupplierId(supplierId);
+        }
+
+        List<BizProcessChild> bizProcessChildList = bizProcessChildService.selectBizChildProductListCaigou(queryBizProcessChild);
+
+
+        String pSessionId = bizProcessData.getPSessionId();
+
+        if (!CollectionUtils.isEmpty(bizProcessChildList)) {
+            Map<String, String> productNumMap = new HashMap<>();
+            for (BizProcessChild bizProcessChild : bizProcessChildList) {
+                String productNum = bizProcessChild.getProductNum();
+                String model = bizProcessChild.getModel();
+                String specifications = bizProcessChild.getSpecifications();
+                String k = model + "_" + specifications;
+                if (!productNumMap.containsKey(k)) {
+                    productNumMap.put(k, productNum);
+                } else {
+                    productNum = productNumMap.get(k);
+                }
+                bizProcessChild.setProductNum(productNum);
+
+                if (StringUtils.isNotEmpty(pSessionId)) {
+                    Object newProductIdObj = redisUtil.get(pSessionId + "_" + bizProcessChild.getProductId());
+                    if (newProductIdObj != null) {
+                        String newProductId = newProductIdObj.toString();
+                        //替换新的
+                        BizProduct queryBizProduct = new BizProduct();
+                        queryBizProduct.setProductId(Long.parseLong(newProductId));
+                        List<BizProduct> bizProductList = bizProductService.selectBizProductList(queryBizProduct);
+                        if (!CollectionUtils.isEmpty(bizProductList)) {
+                            BizProduct newBizProduct = bizProductList.get(0);
+                            bizProcessChild.setProductName(newBizProduct.getName());
+                            bizProcessChild.setNewProductId(newBizProduct.getProductId().toString());
+                            bizProcessChild.setModel(newBizProduct.getModel());
+                            bizProcessChild.setSupplier(newBizProduct.getSupplier());
+                            bizProcessChild.setSpecifications(newBizProduct.getSpecifications());
+                            bizProcessChild.setNominalPressure(newBizProduct.getNominalPressure());
+                            bizProcessChild.setValvebodyMaterial(newBizProduct.getValvebodyMaterial());
+                            bizProcessChild.setValveElement(newBizProduct.getValveElement());
+                            bizProcessChild.setDriveForm(newBizProduct.getDriveForm());
+                            bizProcessChild.setConnectionType(newBizProduct.getConnectionType());
+                        }
+                    }
+                }
+
+            }
+        }
+        return BaseController.getDataTableImpl(bizProcessChildList);
+    }
     @Override
     public TableDataInfo listLevelActuator(BizProcessData bizProcessData) {
         BizProcessChild queryBizProcessChild = new BizProcessChild();

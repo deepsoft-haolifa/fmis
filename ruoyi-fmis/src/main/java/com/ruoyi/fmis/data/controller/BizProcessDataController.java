@@ -761,9 +761,21 @@ public class BizProcessDataController extends BaseController {
     @PostMapping("/listLevelProduct")
     @ResponseBody
     public TableDataInfo listLevelProduct(BizProcessData bizProcessData) {
-        return bizProcessDataService.listLevelProduct(bizProcessData);
+        if (bizProcessData.getProcurementId() != null && !bizProcessData.getProcurementId().equals("-1")) {
+            return bizProcessDataService.listLevelProduct(bizProcessData);
+        }
+        return bizProcessDataService.listLevelProductCaigou(bizProcessData);
     }
-
+    /**
+     * 采购池 因为需要关联相同的产品 所以单独写了一个方法
+     * @param bizProcessData
+     * @return
+     */
+    @PostMapping("/listLevelProductCaigou")
+    @ResponseBody
+    public TableDataInfo listLevelProductCaigou(BizProcessData bizProcessData) {
+        return bizProcessDataService.listLevelProductCaigou(bizProcessData);
+    }
     @PostMapping("/listLevelActuator")
     @ResponseBody
     public TableDataInfo listLevelActuator(BizProcessData bizProcessData) {
