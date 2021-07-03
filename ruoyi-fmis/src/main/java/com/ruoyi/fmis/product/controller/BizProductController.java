@@ -81,6 +81,17 @@ public class BizProductController extends BaseController {
         List<BizProduct> list = bizProductService.selectBizProductList(bizProduct);
         return getDataTable(list);
     }
+    /**
+     * 查询业务产品列表
+     */
+    @RequiresPermissions("fmis:product:listProduct")
+    @PostMapping("/listProduct")
+    @ResponseBody
+    public TableDataInfo listProduct(BizProduct bizProduct) {
+        startPage();
+        List<BizProduct> list = bizProductService.selectBizProductList(bizProduct);
+        return getDataTable(list);
+    }
 
     @PostMapping("/listNoAuth")
     @ResponseBody
