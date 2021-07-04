@@ -697,7 +697,11 @@ public class BizProductController extends BaseController {
                     bizProduct.setSupplier(bizSuppliers.getSuppliersId().toString());
                     bizProduct.setColor(product.getColor());
                     bizProduct.setString4(product.getString4());
-
+                    bizProduct.setProcurementPrice(Double.parseDouble(product.getProcurementPrice()));
+                    bizProduct.setCostPrice(Double.parseDouble(product.getCostPrice()));
+                    if (product.getString5() != null && product.getString5().equals("是")) {
+                        bizProduct.setString5("yes");
+                    }
                     if (existProductMap.containsKey(existKey)) {
                         bizProductService.updateBizProduct(bizProduct);
                         updateCount++;

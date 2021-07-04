@@ -39,8 +39,8 @@ public class BizProductImport {
     @Excel(name = "驱动形式")
     private String driveForm;
 
-    @Excel(name = "产品单价（元）")
-    private String price;
+    @Excel(name = "采购价（元）")
+    private String procurementPrice;
 
     @Excel(name = "供应商名称（代号）")
     private String supplier;
@@ -59,7 +59,12 @@ public class BizProductImport {
 
     @Excel(name = "阀轴材质")
     private String valveShaft;
-
+    @Excel(name = "是否标准产品")
+    private String string5;
+    @Excel(name = "成本价（元）")
+    private String costPrice;
+    @Excel(name = "销售底价（元）")
+    private String price;
 
 
 

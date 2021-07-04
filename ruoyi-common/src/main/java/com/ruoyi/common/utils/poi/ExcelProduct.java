@@ -225,6 +225,9 @@ public class ExcelProduct<T>
                     }
                     Object val = "";
                     try {
+                        if (entry.getKey() == null) {
+                            continue;
+                        }
                         val = this.getCellValue(row, entry.getKey());
                     } catch (Exception ex) {
                         ex.printStackTrace();
