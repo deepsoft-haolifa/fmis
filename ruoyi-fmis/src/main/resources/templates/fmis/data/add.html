@@ -153,9 +153,9 @@
         <div class="form-group" style="margin-bottom: 7px">
             <label class="col-sm-1 control-label">归属部门：</label>
             <div class="col-sm-2">
-                <input name="string22" id="string22" class="form-control" type="hidden">
+                <input name="string22" id="string22" class="form-control" type="hidden" th:value="*{deptId}">
                 <div class="input-group">
-                    <input name="deptName" onclick="selectDeptTree()" id="treeName" type="text" placeholder="请选择归属部门" class="form-control" required>
+                    <input name="deptName" onclick="selectDeptTree()" id="treeName" type="text" placeholder="请选择归属部门" class="form-control" required  th:value="*{deptName}">
                     <span class="input-group-addon"><i class="fa fa-search"></i></span>
                 </div>
             </div>
