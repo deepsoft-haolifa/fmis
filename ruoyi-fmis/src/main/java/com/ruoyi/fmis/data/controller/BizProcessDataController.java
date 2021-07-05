@@ -764,6 +764,9 @@ public class BizProcessDataController extends BaseController {
         if (bizProcessData.getProcurementId() != null && !bizProcessData.getProcurementId().equals("-1")) {
             return bizProcessDataService.listLevelProduct(bizProcessData);
         }
+        if (bizProcessData.getDataStatus() != null && bizProcessData.getDataStatus().equals("2")) {
+            return bizProcessDataService.listLevelProduct(bizProcessData);
+        }
         return bizProcessDataService.listLevelProductCaigou(bizProcessData);
     }
     /**
