@@ -1668,7 +1668,6 @@ public class BizProcessDataController extends BaseController {
         BizProcessChild queryBizProcessChild = new BizProcessChild();
         queryBizProcessChild.setDataId(bizProcessData.getDataId());
         List<BizProcessChild> bizProcessChildList = bizProcessChildService.selectBizQuotationProductList(queryBizProcessChild);
-
         try {
 
 
@@ -2264,8 +2263,10 @@ public class BizProcessDataController extends BaseController {
 
 
                 Font remarkFont1 = PdfUtil.getPdfChineseFont(7, Font.NORMAL);
-                paragraphRemark1.add(new Chunk("总经理销售及投诉电话：" + StringUtils.trim(remark10), remarkFont1));
+                String paragraphRemark1Content = String.format("签订地点：%s                         经办人：%s                        总经理销售及投诉电话：%s",bizProcessData.getString4(), sysUser.getUserName(), StringUtils.trim(remark10));
+                paragraphRemark1.add(new Chunk(paragraphRemark1Content, remarkFont1));
                 paragraphRemark1.setAlignment(Paragraph.ALIGN_RIGHT);
+                paragraphRemark1.setIndentationLeft(12f);
 
                 /*paragraphRemark1.add(new Chunk(remark1, remarkFont1));
                 paragraphRemark1.add(Chunk.NEWLINE);
