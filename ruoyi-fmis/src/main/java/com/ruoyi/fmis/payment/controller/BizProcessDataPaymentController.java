@@ -21,7 +21,9 @@ import com.ruoyi.fmis.define.service.IBizProcessDefineService;
 import com.ruoyi.fmis.subjects.domain.BizSubjects;
 import com.ruoyi.fmis.subjects.service.IBizSubjectsService;
 import com.ruoyi.framework.util.ShiroUtils;
+import com.ruoyi.system.domain.SysDept;
 import com.ruoyi.system.domain.SysRole;
+import com.ruoyi.system.mapper.SysDeptMapper;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,6 +63,8 @@ public class BizProcessDataPaymentController extends BaseController {
     private IBizCostBudgetService bizCostBudgetService;
     @Autowired
     private BizCostBudgetMapper bizCostBudgetMapper;
+    @Autowired
+    private SysDeptMapper sysDeptService;
 
 
     @RequiresPermissions("fmis:payment:view")
@@ -212,8 +216,10 @@ public class BizProcessDataPaymentController extends BaseController {
      */
     @GetMapping("/add")
     public String add(ModelMap mmap) {
-//        mmap.put("deptId", ShiroUtils.getSysUser().getDeptId());
-//        mmap.put("deptName", ShiroUtils.getSysUser().getDeptName());
+        Long deptId = ShiroUtils.getSysUser().getDeptId();
+        SysDept sysDept = sysDeptService.selectDeptById(deptId);
+        mmap.put("deptId", deptId);
+        mmap.put("deptName", sysDept.getDeptName());
         return prefix + "/add";
     }
 
@@ -222,6 +228,10 @@ public class BizProcessDataPaymentController extends BaseController {
         List<BizSubjects> bizSubjects = bizSubjectsService.selectBizSubjectsListNoParent(new BizSubjects());
         List<String> subjectNameList = Optional.ofNullable(bizSubjects).orElse(new ArrayList<>()).stream().map(BizSubjects::getName).collect(Collectors.toList());
         mmap.put("subjects", subjectNameList);
+        Long deptId = ShiroUtils.getSysUser().getDeptId();
+        SysDept sysDept = sysDeptService.selectDeptById(deptId);
+        mmap.put("deptId", deptId);
+        mmap.put("deptName", sysDept.getDeptName());
         return prefix + "/add1";
     }
 

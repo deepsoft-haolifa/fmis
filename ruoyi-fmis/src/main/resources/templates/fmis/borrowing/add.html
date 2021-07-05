@@ -13,9 +13,9 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">借款单位：</label>
                 <div class="col-sm-8">
-                    <input name="string1" id="string1" class="form-control" type="hidden">
+                    <input name="string1" id="string1" class="form-control" type="hidden" th:value="*{deptId}">
                     <div class="input-group">
-                        <input name="deptName" onclick="selectDeptTree()" id="treeName" type="text" placeholder="请选择部门" class="form-control" required>
+                        <input name="deptName" onclick="selectDeptTree()" id="treeName" type="text" placeholder="请选择部门" class="form-control" required th:value="*{deptName}">
                         <span class="input-group-addon"><i class="fa fa-search"></i></span>
                     </div>
                 </div>

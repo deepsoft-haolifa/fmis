@@ -49,10 +49,7 @@ import com.ruoyi.fmis.suppliers.service.IBizSuppliersService;
 import com.ruoyi.fmis.util.CalcUtils;
 import com.ruoyi.fmis.util.Util;
 import com.ruoyi.framework.util.ShiroUtils;
-import com.ruoyi.system.domain.SysDictData;
-import com.ruoyi.system.domain.SysOperLog;
-import com.ruoyi.system.domain.SysRole;
-import com.ruoyi.system.domain.SysUser;
+import com.ruoyi.system.domain.*;
 import com.ruoyi.system.service.ISysDeptService;
 import com.ruoyi.system.service.ISysDictDataService;
 import com.ruoyi.system.service.ISysRoleService;
@@ -654,7 +651,11 @@ public class BizProcessDataController extends BaseController {
      * 新增合同管理
      */
     @GetMapping("/add")
-    public String add() {
+    public String add(ModelMap mmap) {
+        Long deptId = ShiroUtils.getSysUser().getDeptId();
+        SysDept sysDept = sysDeptService.selectDeptById(deptId);
+        mmap.put("deptId", deptId);
+        mmap.put("deptName", sysDept.getDeptName());
         return prefix + "/add";
     }
 

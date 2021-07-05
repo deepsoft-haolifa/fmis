@@ -16,7 +16,9 @@ import com.ruoyi.fmis.define.service.IBizProcessDefineService;
 import com.ruoyi.fmis.product.domain.BizProduct;
 import com.ruoyi.fmis.product.service.IBizProductService;
 import com.ruoyi.framework.util.ShiroUtils;
+import com.ruoyi.system.domain.SysDept;
 import com.ruoyi.system.domain.SysRole;
+import com.ruoyi.system.mapper.SysDeptMapper;
 import com.ruoyi.system.service.ISysRoleService;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -68,6 +70,8 @@ public class BizProcessDataBorrowingController extends BaseController {
 
     @Autowired
     private IBizCustomerService bizCustomerService;
+    @Autowired
+    private SysDeptMapper sysDeptService;
 
     @RequiresPermissions("fmis:borrowing:view")
     @GetMapping()
@@ -191,7 +195,11 @@ public class BizProcessDataBorrowingController extends BaseController {
      * 新增合同管理
      */
     @GetMapping("/add")
-    public String add() {
+    public String add(ModelMap mmap) {
+        Long deptId = ShiroUtils.getSysUser().getDeptId();
+        SysDept sysDept = sysDeptService.selectDeptById(deptId);
+        mmap.put("deptId", deptId);
+        mmap.put("deptName", sysDept.getDeptName());
         return prefix + "/add";
     }
 
