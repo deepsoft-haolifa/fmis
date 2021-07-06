@@ -65,4 +65,11 @@ public interface BizFlowMapper {
      * @return 结果
      */
     public int deleteBizFlowByIds(String[] flowIds);
+
+    /**
+     * 清理上报记录
+     * @param dataId
+     * @return
+     */
+    int deleteBizFlowByBizId(Long dataId);
 }

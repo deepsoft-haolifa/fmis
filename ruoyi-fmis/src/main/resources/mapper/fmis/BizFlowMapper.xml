@@ -140,5 +140,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{flowId}
         </foreach>
     </delete>
+
+    <delete id="deleteBizFlowByBizId" parameterType="Long">
+        delete from biz_flow where biz_id = #{bizId}
+    </delete>
     
 </mapper>

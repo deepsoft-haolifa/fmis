@@ -1059,6 +1059,8 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
         }
         bizProcessData.setFlowStatus(lastRoleKey);
         int updateCount = bizProcessDataMapper.updateBizProcessData(bizProcessData);
+        // 上报之前清理 所有的审批记录
+        bizFlowMapper.deleteBizFlowByBizId(bizProcessData.getDataId());
         insertFlow(bizProcessData);
         return updateCount;
     }
