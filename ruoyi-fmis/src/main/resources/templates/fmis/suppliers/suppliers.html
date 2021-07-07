@@ -86,54 +86,54 @@
                     field : 'nickName',
                     title : '代号'
                 },
-                {
-                    field : 'address', 
-                    title : '地址'
-                },
+                // {
+                //     field : 'address',
+                //     title : '地址'
+                // },
                 {
                     field : 'telphone', 
                     title : '电话'
                 },
-                {
-                    field : 'fax', 
-                    title : '传真'
-                },
-                {
-                    field : 'email', 
-                    title : 'Email'
-                },
-                {
-                    field : 'siteUrl', 
-                    title : '网址'
-                },
-                {
-                    field : 'ownerId', 
-                    title : '负责人'
-                },
-                {
-                    field : 'contact', 
-                    title : '联系人'
-                },
-                {
-                    field : 'manageState', 
-                    title : '经营形态'
-                },
-                {
-                    field : 'marketDistribution', 
-                    title : '市场分布'
-                },
-                {
-                    field : 'targetCustomer', 
-                    title : '目标客户'
-                },
-                {
-                    field : 'humanCapitalMeasure', 
-                    title : '人力资源状况'
-                },
-                {
-                    field : 'taxpayer', 
-                    title : '一般纳税人'
-                },
+                // {
+                //     field : 'fax',
+                //     title : '传真'
+                // },
+                // {
+                //     field : 'email',
+                //     title : 'Email'
+                // },
+                // {
+                //     field : 'siteUrl',
+                //     title : '网址'
+                // },
+                // {
+                //     field : 'ownerId',
+                //     title : '负责人'
+                // },
+                // {
+                //     field : 'contact',
+                //     title : '联系人'
+                // },
+                // {
+                //     field : 'manageState',
+                //     title : '经营形态'
+                // },
+                // {
+                //     field : 'marketDistribution',
+                //     title : '市场分布'
+                // },
+                // {
+                //     field : 'targetCustomer',
+                //     title : '目标客户'
+                // },
+                // {
+                //     field : 'humanCapitalMeasure',
+                //     title : '人力资源状况'
+                // },
+                // {
+                //     field : 'taxpayer',
+                //     title : '一般纳税人'
+                // },
                 {
                     field : 'remark', 
                     title : '备注'
@@ -152,9 +152,9 @@
                         var actions = [];
                         actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.suppliersId + '\')"><i class="fa fa-edit"></i> 编辑</a> ');
                         actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.suppliersId + '\')"><i class="fa fa-remove"></i> 删除</a>');
-                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="productList(\'' + row.suppliersId + '\')"><i class="fa fa-remove"></i> 查看产品列表</a>');
-                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="exportProduct(\'' + row.suppliersId + '\')"><i class="fa fa-remove"></i> 导出产品列表</a>');
-                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="importProduct()"><i class="fa fa-remove"></i> 导入产品列表</a>');
+                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="productList(\'' + row.suppliersId + '\')"><i class="fa fa-remove"></i> 查看产品</a>');
+                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="exportProduct(\'' + row.suppliersId + '\')"><i class="fa fa-remove"></i> 导出产品</a>');
+                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="importProduct()"><i class="fa fa-remove"></i> 导入产品</a>');
                         actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="uploadFiles(\'' + row.suppliersId + '\')"><i class="fa fa-remove"></i> 附件上传</a>');
                         actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewFileList(\'' + row.suppliersId + '\')"><i class="fa fa-remove"></i> 查看附件</a>');
                         return actions.join('');

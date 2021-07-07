@@ -87,6 +87,12 @@
                 exportUrl: prefix + "/export",
                 modalName: "报价单",
                 uniqueId: "quotationId",
+                rowStyle:function (row, index) {
+                    if(row.flowStatus != null && row.flowStatus.indexOf("-") > -1) {
+                        return {css:{"background-color":"rgb(171,170,58)"}};
+                    }
+                    return {css:{"background-color":"rgba(248,245,245)"}}
+                },
                 columns: [{
                     checkbox: true
                 },

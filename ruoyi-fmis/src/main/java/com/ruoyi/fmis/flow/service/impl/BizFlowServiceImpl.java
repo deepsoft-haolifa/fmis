@@ -93,4 +93,11 @@ public class BizFlowServiceImpl implements IBizFlowService {
     public int deleteBizFlowById(Long flowId) {
         return bizFlowMapper.deleteBizFlowById(flowId);
     }
+
+    @Override
+    public int deleteBizFlowByBizId(Long dataId) {
+        return bizFlowMapper.deleteBizFlowByBizId(dataId);
+    }
+
+
 }

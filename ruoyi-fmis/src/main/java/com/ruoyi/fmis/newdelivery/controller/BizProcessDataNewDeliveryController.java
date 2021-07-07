@@ -17,6 +17,7 @@ import com.ruoyi.fmis.customer.service.IBizCustomerService;
 import com.ruoyi.fmis.data.domain.BizProcessData;
 import com.ruoyi.fmis.data.service.IBizProcessDataService;
 import com.ruoyi.fmis.define.service.IBizProcessDefineService;
+import com.ruoyi.fmis.flow.service.IBizFlowService;
 import com.ruoyi.fmis.product.service.IBizProductService;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysRole;
@@ -62,6 +63,9 @@ public class BizProcessDataNewDeliveryController extends BaseController {
 
     @Autowired
     private IBizCustomerService bizCustomerService;
+
+    @Autowired
+    private IBizFlowService bizFlowService;
 
     @RequiresPermissions("fmis:newdelivery:view")
     @GetMapping()
@@ -237,7 +241,8 @@ public class BizProcessDataNewDeliveryController extends BaseController {
     public AjaxResult reportFh(BizProcessData bizProcessData) {
 
 //        BizProcessData bizProcessData1 = bizProcessDataService.selectBizProcessDataById(bizProcessData.getDataId());
-
+        // 上报之前清除历史审批记录
+        bizFlowService.deleteBizFlowByBizId(bizProcessData.getDataId());
         //自动上报
         bizProcessDataService.doExamine(bizProcessData.getDataId() + "", "1", "销售员上报", bizProcessData.getBizId());
         return toAjax(1);

@@ -72,6 +72,12 @@
             exportUrl: prefix + "/export",
             uniqueId: "dataId",
             modalName: "报销管理",
+            rowStyle:function (row, index) {
+                if(row.flowStatus != null && row.flowStatus < 0) {
+                    return {css:{"background-color":"rgb(171,170,58)"}};
+                }
+                return {css:{"background-color":"rgba(248,245,245)"}}
+            },
             columns: [{
                 checkbox: true
             },

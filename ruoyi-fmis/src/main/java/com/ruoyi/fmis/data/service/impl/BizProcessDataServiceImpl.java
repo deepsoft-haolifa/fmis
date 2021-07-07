@@ -1042,6 +1042,8 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
         bizProcessData.setUpdateBy(ShiroUtils.getUserId().toString());
         bizProcessData.setFlowStatus(BizConstants.FLOW_STATUS_1);
         int updateCount = bizProcessDataMapper.updateBizProcessData(bizProcessData);
+        // 上报之前清理 所有的审批记录
+        bizFlowMapper.deleteBizFlowByBizId(bizProcessData.getDataId());
         insertFlow(bizProcessData);
         return updateCount;
     }

@@ -58,4 +58,6 @@ public interface IBizFlowService {
      * @return 结果
      */
     public int deleteBizFlowById(Long flowId);
+
+    int deleteBizFlowByBizId(Long dataId);
 }
