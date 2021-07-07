@@ -104,7 +104,7 @@
             modalName: "合同管理",
             uniqueId: "dataId",
             rowStyle:function (row, index) {
-                if(row.flowStatusRemark.indexOf("不同意") > -1) {
+                if(row.flowStatusRemark != null && row.flowStatusRemark.indexOf("不同意") > -1) {
                     return {css:{"background-color":"rgb(171,170,58)"}};
                 }
                 return {css:{"background-color":"rgba(248,245,245)"}}
