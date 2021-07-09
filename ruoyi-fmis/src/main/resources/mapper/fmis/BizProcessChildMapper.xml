@@ -397,7 +397,7 @@
         <if test="levelValue == -2"> and </if>
 
         group by p.product_id
-        order by p.string2,p.new_supplier,productNum desc
+        order by p.model,isnull(p.string5),p.new_supplier,productNum desc
     </select>
 
 
