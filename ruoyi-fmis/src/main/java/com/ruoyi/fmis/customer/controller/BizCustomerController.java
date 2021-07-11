@@ -520,4 +520,21 @@ public class BizCustomerController extends BaseController {
 
         return retJson;
     }
+
+    @PostMapping("/detailDept/{customerId}")
+    @ResponseBody
+    public BizCustomer detailDept(@PathVariable("customerId") Long customerId, ModelMap mmap) {
+        BizCustomer bizCustomer = bizCustomerService.selectBizCustomerById(customerId);
+        String ownerId = bizCustomer.getOwnerUserId();
+        if (StringUtils.isEmpty(ownerId)) {
+            ownerId = "0";
+        }
+        SysUser selUser = userService.selectUserById(Long.parseLong(ownerId));
+        if (selUser == null) {
+            selUser = new SysUser();
+        }
+        bizCustomer.setSysDept(selUser.getDept());
+        return bizCustomer;
+    }
+
 }

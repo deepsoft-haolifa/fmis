@@ -14,6 +14,7 @@
         <result property="payWay" column="pay_way"/>
         <result property="payAccount" column="pay_account"/>
         <result property="payCompany" column="pay_company"/>
+        <result property="payCompanyId" column="pay_company_id"/>
         <result property="collectCompany" column="collect_company"/>
         <result property="preMonthMoney" column="pre_month_money"/>
         <result property="collectionMoney" column="collection_money"/>
@@ -34,7 +35,7 @@
     </resultMap>
 
     <sql id="selectBizBankBillVo">
-     select b.bill_id, b.company,b.account,b.serial_no, b.operate_date, b.certificate_number, b.pay_way, b.pay_account,b.pay_company,b.collect_company, b.pre_month_money, b.collection_money, b.collection_type, b.payment, b.payment_type, b.balance,
+     select b.bill_id, b.company,b.account,b.serial_no, b.operate_date, b.certificate_number, b.pay_way, b.pay_account,b.pay_company,b.pay_company_id,b.collect_company, b.pre_month_money, b.collection_money, b.collection_type, b.payment, b.payment_type, b.balance,
         b.type, b.dept_id,  b.remark, b.contract_status,b.contract_user,b.del_flag, b.create_by, b.create_time, b.update_by, b.update_time,
         u.user_name as createByName,u.user_name as updateByName,d.dept_name as deptName
         from biz_bank_bill b
@@ -56,6 +57,7 @@
             <if test="payWay != null  and payWay != ''">and pay_way = #{payWay}</if>
             <if test="payAccount != null  and payAccount != ''">and pay_account = #{payAccount}</if>
             <if test="payCompany != null  and payCompany != ''">and pay_company like concat('%', #{payCompany}, '%')</if>
+            <if test="payCompanyId != null  and payCompanyId != ''">and pay_company_id= #{payCompanyId}</if>
             <if test="collectCompany != null  and collectCompany != ''">and collect_company like concat('%', #{collectCompany}, '%')</if>
             <if test="preMonthMoney != null ">and pre_month_money = #{preMonthMoney}</if>
             <if test="collectionMoney != null ">and collection_money = #{collectionMoney}</if>
@@ -71,6 +73,13 @@
             </if>
             <if test="endOperateDate != null and endOperateDate != ''"><!-- 结束时间检索 -->
                 AND date_format(operate_date,'%y%m%d') &lt;= date_format(#{endOperateDate},'%y%m%d')
+            </if>
+
+            <if test="payCompanyIdList != null and payCompanyIdList.size>0 ">
+                and pay_company_id in
+                <foreach item="id" collection="payCompanyIdList" open="(" separator="," close=")">
+                    #{id}
+                </foreach>
             </if>
         </where>
         order by b.create_time desc
@@ -92,6 +101,7 @@
             <if test="payWay != null  and payWay != ''">pay_way,</if>
             <if test="payAccount != null  and payAccount != ''">pay_account,</if>
             <if test="payCompany != null  and payCompany != ''">pay_company,</if>
+            <if test="payCompanyId != null  and payCompanyId != ''">pay_company_id,</if>
             <if test="collectCompany != null  and collectCompany != ''">collect_company,</if>
             <if test="preMonthMoney != null ">pre_month_money,</if>
             <if test="collectionMoney != null ">collection_money,</if>
@@ -118,6 +128,7 @@
             <if test="payWay != null  and payWay != ''">#{payWay},</if>
             <if test="payAccount != null  and payAccount != ''">#{payAccount},</if>
             <if test="payCompany != null  and payCompany != ''">#{payCompany},</if>
+            <if test="payCompanyId != null  and payCompanyId != ''">#{payCompanyId},</if>
             <if test="collectCompany != null  and collectCompany != ''">#{collectCompany},</if>
             <if test="preMonthMoney != null ">#{preMonthMoney},</if>
             <if test="collectionMoney != null ">#{collectionMoney},</if>
@@ -150,6 +161,7 @@
             <if test="payWay != null  and payWay != ''">pay_way = #{payWay},</if>
             <if test="payAccount != null  and payAccount != ''">pay_account = #{payAccount},</if>
             <if test="payCompany != null  and payCompany != ''">pay_company = #{payCompany},</if>
+            <if test="payCompanyId != null  and payCompanyId != ''">pay_company_id = #{payCompanyId},</if>
             <if test="collectCompany != null  and collectCompany != ''">collect_company = #{collectCompany},</if>
             <if test="preMonthMoney != null ">pre_month_money = #{preMonthMoney},</if>
             <if test="collectionMoney != null ">collection_money = #{collectionMoney},</if>

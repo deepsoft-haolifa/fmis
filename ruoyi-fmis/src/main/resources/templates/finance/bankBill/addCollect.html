@@ -59,10 +59,10 @@
         <div class="form-group">
             <label class="col-sm-3 control-label">付款单位：</label>
             <div class="col-sm-8">
-                <select name="payCompany" class="form-control m-b">
+                <select name="payCompanyId" id="payCompanyId" class="form-control m-b">
                     <option value="">请选择</option>
                     <option th:each="customer : ${customerList}" th:text="${customer.name}"
-                            th:value="${customer.name}"></option>
+                            th:value="${customer.customerId}"></option>
                 </select>
             </div>
         </div>
@@ -157,6 +157,18 @@
         format: "yyyy-mm-dd",
         minView: "month",
         autoclose: true
+    });
+
+    $('#payCompanyId').on('change', function (e) {
+        var customerId = $('#payCompanyId').val();
+        $.ajax({
+            url: "/fmis/customer/detailDept/"+customerId,
+            type: "post",
+            success: function(data) {
+                $("#deptId").val(data.sysDept.deptId)
+                $("#treeName").val(data.sysDept.deptName)
+            }
+        });
     });
 </script>
 </body>

@@ -183,7 +183,7 @@
                 {
                     field: 'deptName',
                     title: '部门'
-                },{
+                }, {
                     field: 'createByName',
                     title: '经办人'
                 },
@@ -201,10 +201,13 @@
                     formatter: function (value, row, index) {
                         var actions = [];
                         var type = row.type;
-                        if (type == 1) {
-                            actions.push('<a class="btn btn-success btn-xs ' + editCollectFlag + '" href="javascript:void(0)" onclick="editCollectUrl(\'' + row.billId + '\')"><i class="fa fa-edit"></i> 编辑收款</a> ');
+                        var contractStatus = row.contractStatus;
+                        if (type === '1') {
+                            if (contractStatus === '0') {
+                                actions.push('<a class="btn btn-success btn-xs ' + editCollectFlag + '" href="javascript:void(0)" onclick="editCollectUrl(\'' + row.billId + '\')"><i class="fa fa-edit"></i> 编辑收款</a> ');
+                            }
                         }
-                        if (type == 2) {
+                        if (type === '2') {
                             actions.push('<a class="btn btn-success btn-xs ' + editPayFlag + '" href="javascript:void(0)" onclick="editPayUrl(\'' + row.billId + '\')"><i class="fa fa-edit"></i> 编辑付款</a> ');
                         }
                         actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.billId + '\')"><i class="fa fa-remove"></i> 删除</a>');

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('合同收款(合同分解)列表')"/>
+    <th:block th:include="include :: header('合同分解列表')"/>
 </head>
 <body class="gray-bg">
 <div class="container-div">
@@ -65,8 +65,8 @@
 </div>
 <th:block th:include="include :: footer"/>
 <script th:inline="javascript">
-    var editFlag = [[${@permission.hasPermi('finance:bill:edit')}]];
-    var removeFlag = [[${@permission.hasPermi('finance:bill:remove')}]];
+    var resolveFlag = [[${@permission.hasPermi('finance:billContract:resolve')}]];
+    var detailFlag = [[${@permission.hasPermi('finance:billContract:detail')}]];
     var billTypeDatas = [[${@dict.getType('bill_type')}]];
     var payCompanyDatas = [[${@dict.getType('pay_company')}]];
     var payAccountDatas = [[${@dict.getType('pay_account')}]];
@@ -77,7 +77,7 @@
 
     $(function () {
         var options = {
-            url: prefix + "/list",
+            url: prefix + "/saleList",
             updateUrl: prefix + "/edit/{id}",
             modalName: "回款分解",
             columns: [{
@@ -146,14 +146,13 @@
                     formatter: function (value, row, index) {
                         var actions = '';
                         var contractStatus = row.contractStatus;
-                        if (contractStatus == "1") {
+                        if (contractStatus === "1") {
                             actions = "完成";
-                        } else if (contractStatus == "0") {
+                        } else if (contractStatus === "0") {
                             actions = "未完成";
                         }
                         return actions;
                     }
-
                 },
                 {
                     field: 'deptName',
@@ -176,14 +175,23 @@
                     align: 'left',
                     formatter: function (value, row, index) {
                         var actions = [];
-                        // actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.editFull(\'' + row.billId + '\')"><i class="fa fa-edit"></i> 合同分解</a> ');
-                        // actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="edit(\'' + row.billId + '\')"><i class="fa fa-edit"></i> 合同分解</a> ');
+                        var contractStatus = row.contractStatus;
+                        if (contractStatus === "0") {
+                            actions.push('<a class="btn btn-success btn-xs' + resolveFlag + ' " href="javascript:void(0)" onclick="$.operate.editFull(\'' + row.billId + '\')"><i class="fa fa-edit"></i> 合同分解</a> ');
+                        }
+                        actions.push('<a class="btn btn-success btn-xs ' + detailFlag + '" href="javascript:void(0)" onclick="viewDetail(\'' + row.billId + '\')"><i class="fa fa-edit"></i> 分解详情</a> ');
                         return actions.join('');
                     }
                 }]
         };
         $.table.init(options);
     });
+
+    function viewDetail(dataId) {
+        var url = prefix + "/detail/" + dataId;
+        $.modal.openTab("分解详情", url);
+    }
+
 </script>
 </body>
 </html>

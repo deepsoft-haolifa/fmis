@@ -78,6 +78,8 @@ public class BizBankBillController extends BaseController {
         return prefix + "/addCollect";
     }
 
+
+
     /**
      * 新增保存银行日记账（收款）
      */
@@ -86,6 +88,9 @@ public class BizBankBillController extends BaseController {
     @PostMapping("/addCollect")
     @ResponseBody
     public AjaxResult addCollectSave(BizBankBill bizBankBill) {
+        // 根据客户Id获取客户名称
+        BizCustomer bizCustomer = customerService.selectBizCustomerById(Long.parseLong(bizBankBill.getPayCompanyId()));
+        bizBankBill.setPayCompany(bizCustomer!=null?bizCustomer.getName():"");
         return toAjax(bizBankBillService.insertBizBankBill(bizBankBill));
     }
 
@@ -111,6 +116,9 @@ public class BizBankBillController extends BaseController {
     @PostMapping("/editCollect")
     @ResponseBody
     public AjaxResult editCollectSave(BizBankBill bizBankBill) {
+        // 根据客户Id获取客户名称
+        BizCustomer bizCustomer = customerService.selectBizCustomerById(Long.parseLong(bizBankBill.getPayCompanyId()));
+        bizBankBill.setPayCompany(bizCustomer!=null?bizCustomer.getName():"");
         return toAjax(bizBankBillService.updateBizBankBill(bizBankBill));
     }
     /**

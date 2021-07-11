@@ -15,19 +15,27 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createTime"    column="create_time"    />
         <result property="updateBy"    column="update_by"    />
         <result property="updateTime"    column="update_time"    />
+        <result property="saleContractNo"    column="saleContractNo"    />
+        <result property="createByName"    column="createByName"    />
     </resultMap>
 
     <sql id="selectBizBillContractVo">
-        select bc_id, bill_id, data_id, amount, book_keeper, remark, create_by, create_time, update_by, update_time from biz_bill_contract
+        select bc_id, bill_id, data_id, amount, book_keeper, remark, create_by, create_time, update_by, update_time from biz_bill_contract a
+    </sql>
+
+    <sql id="selectBizBillContractListVo">
+        select bbc.bc_id, bbc.bill_id, bbc.data_id, bbc.amount, bbc.book_keeper, bbc.remark, bbc.create_by, bbc.create_time, bbc.update_by, bbc.update_time,
+               bpd.string1 saleContractNo, u.user_name as createByName
+        from biz_bill_contract bbc
+        left join biz_process_data bpd on bbc.data_id=bpd.data_id
+        left join sys_user u on u.user_id=bbc.create_by
     </sql>
 
     <select id="selectBizBillContractList" parameterType="BizBillContract" resultMap="BizBillContractResult">
-        <include refid="selectBizBillContractVo"/>
+        <include refid="selectBizBillContractListVo"/>
         <where>  
-            <if test="billId != null "> and bill_id = #{billId}</if>
-            <if test="dataId != null "> and data_id = #{dataId}</if>
-            <if test="amount != null "> and amount = #{amount}</if>
-            <if test="bookKeeper != null  and bookKeeper != ''"> and book_keeper = #{bookKeeper}</if>
+            <if test="billId != null "> and bbc.bill_id = #{billId}</if>
+            <if test="dataId != null "> and bbc.data_id = #{dataId}</if>
         </where>
     </select>
     

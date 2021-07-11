@@ -5,6 +5,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 银行日记账对象
@@ -54,7 +55,8 @@ public class BizBankBill extends BaseEntity {
     /** 付款单位 */
     @Excel(name = "付款单位")
     private String payCompany;
-
+    /** 付款单位Id */
+    private String payCompanyId;
     /** 付款单位 */
     @Excel(name = "收款单位")
     private String collectCompany;
@@ -102,5 +104,8 @@ public class BizBankBill extends BaseEntity {
 
 
     private String updateByName;
+
+    /** 付款单位Id */
+    private List<String> payCompanyIdList;
 
 }

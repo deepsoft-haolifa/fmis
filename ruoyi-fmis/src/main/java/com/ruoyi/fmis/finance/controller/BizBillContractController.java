@@ -7,8 +7,11 @@ import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.fmis.Constant;
 import com.ruoyi.fmis.common.BizConstants;
 import com.ruoyi.fmis.common.CommonUtils;
+import com.ruoyi.fmis.customer.domain.BizCustomer;
+import com.ruoyi.fmis.customer.service.IBizCustomerService;
 import com.ruoyi.fmis.data.domain.BizProcessData;
 import com.ruoyi.fmis.data.service.IBizProcessDataService;
+import com.ruoyi.fmis.datatrack.domain.BizProcessDataTrack;
 import com.ruoyi.fmis.define.service.IBizProcessDefineService;
 import com.ruoyi.fmis.finance.domain.BizBankBill;
 import com.ruoyi.fmis.finance.domain.BizBillContract;
@@ -25,9 +28,8 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 合同收款(合同分解)Controller
@@ -48,7 +50,8 @@ public class BizBillContractController extends BaseController {
     private IBizProcessDataService bizProcessDataService;
     @Autowired
     private IBizProcessDefineService bizProcessDefineService;
-
+    @Autowired
+    private IBizCustomerService customerService;
 
     @RequiresPermissions("finance:billContract:view")
     @GetMapping()
@@ -69,6 +72,35 @@ public class BizBillContractController extends BaseController {
         List<BizBankBill> list = bizBankBillService.selectBizBankBillList(bizBankBill);
         return getDataTable(list);
     }
+
+
+    @RequiresPermissions("finance:billContract:saleView")
+    @GetMapping("/saleView")
+    public String saleBillContract() {
+        return prefix + "/saleBillContract";
+    }
+
+    @RequiresPermissions("finance:billContract:saleList")
+    @PostMapping("/saleList")
+    @ResponseBody
+    public TableDataInfo saleList(BizBankBill bizBankBill) {
+        startPage();
+        bizBankBill.setType("1");
+        bizBankBill.setCollectionType("2");
+        // 根据当前用户负责的客户ID
+        BizCustomer bizCustomer =new BizCustomer();
+        bizCustomer.setUserId(ShiroUtils.getUserId().toString());
+        List<BizCustomer> customersList = customerService.selectBizCustomerSelfList(bizCustomer);
+        if(CollectionUtils.isEmpty(customersList)){
+            return getDataTable(new ArrayList<>());
+        }
+        List<String> customerIdList = Optional.ofNullable(customersList).orElse(new ArrayList<>()).stream().map(e->String.valueOf(e.getCustomerId())).collect(Collectors.toList());
+        bizBankBill.setPayCompanyIdList(customerIdList);
+
+        List<BizBankBill> list = bizBankBillService.selectBizBankBillList(bizBankBill);
+        return getDataTable(list);
+    }
+
 
     /**
      * 合同分解编辑
@@ -207,4 +239,24 @@ public class BizBillContractController extends BaseController {
         updateBill.setContractStatus("0");
         return toAjax(1);
     }
+
+
+    @RequiresPermissions("finance:billContract:detail")
+    @GetMapping("/detail/{billId}")
+    public String billContract(@PathVariable("billId") Long billId,ModelMap modelMap) {
+        modelMap.put("billId",billId);
+        return prefix + "/detailList";
+    }
+
+    @PostMapping("/detailList/{billId}")
+    @ResponseBody
+    public TableDataInfo saleList(@PathVariable("billId") Long billId) {
+        startPage();
+        BizBillContract bizBillContract = new BizBillContract();
+        bizBillContract.setBillId(billId);
+        List<BizBillContract> list = bizBillContractService.selectBizBillContractList(bizBillContract);
+        return getDataTable(list);
+    }
+
+
 }
