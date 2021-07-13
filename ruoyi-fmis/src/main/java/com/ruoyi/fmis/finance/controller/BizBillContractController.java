@@ -116,12 +116,12 @@ public class BizBillContractController extends BaseController {
     @PostMapping("/contractList")
     @ResponseBody
     public TableDataInfo contractList(BizProcessData bizProcessData) {
-        // 获取银行日记账中 收款 中的付款单位，未付款的完成采购订单
+        // 获取银行日记账中 收款 中的付款单位，未付款的完成销售订单
         Long billId = bizProcessData.getBillId();
         BizBankBill bizBankBill = bizBankBillService.selectBizBankBillById(billId);
         //采购池
         BizProcessData newBizProcessData = new BizProcessData();
-        newBizProcessData.setString2(bizBankBill.getPayCompany());
+        newBizProcessData.setString2(bizBankBill.getPayCompanyId());
         newBizProcessData.setBizId(BizConstants.BIZ_contract);
         List<BizProcessData> list = bizProcessDataService.selectBizProcessDataListRefBill(newBizProcessData);
         return getDataTable(list);
@@ -256,6 +256,19 @@ public class BizBillContractController extends BaseController {
         bizBillContract.setBillId(billId);
         List<BizBillContract> list = bizBillContractService.selectBizBillContractList(bizBillContract);
         return getDataTable(list);
+    }
+
+    @RequiresPermissions("finance:billContract:audit")
+    @GetMapping("/audit/{bcId}")
+    public String audit(@PathVariable("bcId")Long bcId,ModelMap mmap) {
+        mmap.put("bcId",bcId);
+        return prefix + "/audit";
+    }
+
+    @PostMapping("/auditContract")
+    @ResponseBody
+    public AjaxResult auditContract(BizBillContract billContract) {
+        return toAjax(bizBillContractService.updateBizBillContract(billContract));
     }
 
 

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('采购合同追踪详情列表')"/>
+    <th:block th:include="include :: header('分解详情列表')"/>
 </head>
 <body class="gray-bg">
 <div class="container-div">
@@ -19,11 +19,13 @@
 <th:block th:include="include :: footer"/>
 <script th:inline="javascript">
     var prefix = ctx + "finance/billContract";
+    var auditFlag = [[${@permission.hasPermi('finance:billContract:audit')}]];
+    var auditStatusDatas = [[${@dict.getType('audit_status')}]];
 
     $(function () {
-        var billId= $("#billId").val();
+        var billId = $("#billId").val();
         var options = {
-            url: prefix + "/detailList/"+billId,
+            url: prefix + "/detailList/" + billId,
             modalName: "合同分解详情",
             columns: [
                 {
@@ -44,24 +46,41 @@
                     title: '分解人'
                 },
                 {
+                    field: 'auditStatus',
+                    title: '财务审批状态',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(auditStatusDatas, value);
+                    }
+                },
+                {
+                    field: 'remark',
+                    title: '备注'
+                },
+                {
                     field: 'createTime',
                     title: '创建时间'
+                },
+                {
+                    title: '操作',
+                    align: 'left',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        var auditStatus = row.auditStatus;
+                        if (auditStatus === 0) {
+                            actions.push('<a class="btn btn-success btn-xs ' + auditFlag + '" href="javascript:void(0)" onclick="audit(\'' + row.bcId + '\')"><i class="fa fa-edit"></i> 审批</a> ');
+                        }
+                        return actions.join('');
+                    }
                 }
-                // ,
-                // {
-                //     title: '操作',
-                //     align: 'left',
-                //     formatter: function (value, row, index) {
-                //         var actions = [];
-                //         actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.trackId + '\')"><i class="fa fa-edit"></i> 编辑</a> ');
-                //         actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.trackId + '\')"><i class="fa fa-remove"></i> 删除</a>');
-                //         return actions.join('');
-                //     }
-                // }
-                ]
+            ]
         };
         $.table.init(options);
     });
+
+    function audit(bcId) {
+        var url = prefix + "/audit/" + bcId;
+        $.modal.openFull("审批", url);
+    }
 </script>
 </body>
 </html>

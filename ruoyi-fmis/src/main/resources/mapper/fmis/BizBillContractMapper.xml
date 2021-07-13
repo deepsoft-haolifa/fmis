@@ -10,6 +10,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="dataId"    column="data_id"    />
         <result property="amount"    column="amount"    />
         <result property="bookKeeper"    column="book_keeper"    />
+        <result property="auditStatus"    column="audit_status"    />
         <result property="remark"    column="remark"    />
         <result property="createBy"    column="create_by"    />
         <result property="createTime"    column="create_time"    />
@@ -20,11 +21,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectBizBillContractVo">
-        select bc_id, bill_id, data_id, amount, book_keeper, remark, create_by, create_time, update_by, update_time from biz_bill_contract a
+        select bc_id, bill_id, data_id, amount, book_keeper,audit_status, remark, create_by, create_time, update_by, update_time from biz_bill_contract a
     </sql>
 
     <sql id="selectBizBillContractListVo">
-        select bbc.bc_id, bbc.bill_id, bbc.data_id, bbc.amount, bbc.book_keeper, bbc.remark, bbc.create_by, bbc.create_time, bbc.update_by, bbc.update_time,
+        select bbc.bc_id, bbc.bill_id, bbc.data_id, bbc.amount, bbc.book_keeper,bbc.audit_status, bbc.remark, bbc.create_by, bbc.create_time, bbc.update_by, bbc.update_time,
                bpd.string1 saleContractNo, u.user_name as createByName
         from biz_bill_contract bbc
         left join biz_process_data bpd on bbc.data_id=bpd.data_id
@@ -62,6 +63,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="dataId != null ">data_id,</if>
             <if test="amount != null ">amount,</if>
             <if test="bookKeeper != null  and bookKeeper != ''">book_keeper,</if>
+            <if test="auditStatus != null">audit_status,</if>
             <if test="remark != null  and remark != ''">remark,</if>
             <if test="createBy != null  and createBy != ''">create_by,</if>
             <if test="createTime != null ">create_time,</if>
@@ -73,6 +75,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="dataId != null ">#{dataId},</if>
             <if test="amount != null ">#{amount},</if>
             <if test="bookKeeper != null  and bookKeeper != ''">#{bookKeeper},</if>
+            <if test="auditStatus != null">#{auditStatus},</if>
             <if test="remark != null  and remark != ''">#{remark},</if>
             <if test="createBy != null  and createBy != ''">#{createBy},</if>
             <if test="createTime != null ">#{createTime},</if>
@@ -88,6 +91,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="dataId != null ">data_id = #{dataId},</if>
             <if test="amount != null ">amount = #{amount},</if>
             <if test="bookKeeper != null  and bookKeeper != ''">book_keeper = #{bookKeeper},</if>
+            <if test="auditStatus != null">audit_status = #{auditStatus},</if>
             <if test="remark != null  and remark != ''">remark = #{remark},</if>
             <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
             <if test="createTime != null ">create_time = #{createTime},</if>
