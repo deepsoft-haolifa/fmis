@@ -520,9 +520,9 @@ initChildProductTable = function(index, row, $detail) {
                     var actions = '';
                     var isStand = row.string18;
                     if (isStand == "yes") {
-                        actions = '<font color=green>是</font>';
+                        actions = '是';
                     } else {
-                        actions = '非';
+                        actions = '<font color=red>非</font>';
                     }
                     return actions;
                 }},
