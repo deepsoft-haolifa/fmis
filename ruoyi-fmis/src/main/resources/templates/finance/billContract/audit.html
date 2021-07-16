@@ -9,7 +9,7 @@
     <form class="form-horizontal m" id="form-data-edit">
         <div class="form-group">
             <input type="hidden" name="bcId" id="bcId" th:value="${bcId}">
-            <label class="col-sm-3 control-label"><span style="color: red; ">*</span>审批结果：</label>
+            <label class="col-sm-3 control-label"><span style="color: #ff0000; ">*</span>审批结果：</label>
             <div class="col-sm-8">
                 <select name="auditStatus" class="form-control m-b" th:with="type=${@dict.getType('audit_status')}"
                         required>
@@ -28,9 +28,8 @@
     </form>
 </div>
 <th:block th:include="include :: footer"/>
-<th:block th:include="include :: datetimepicker-js"/>
 <script type="text/javascript">
-    var prefix = ctx + "/finance/billContract";
+    var prefix = ctx + "finance/billContract";
     $("#form-data-edit").validate({
         focusCleanup: true
     });

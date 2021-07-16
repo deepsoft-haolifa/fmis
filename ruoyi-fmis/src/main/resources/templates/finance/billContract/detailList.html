@@ -69,6 +69,7 @@
                         if (auditStatus === 0) {
                             actions.push('<a class="btn btn-success btn-xs ' + auditFlag + '" href="javascript:void(0)" onclick="audit(\'' + row.bcId + '\')"><i class="fa fa-edit"></i> 审批</a> ');
                         }
+                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewExamineDetail(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 查看合同 </a>');
                         return actions.join('');
                     }
                 }
@@ -80,6 +81,12 @@
     function audit(bcId) {
         var url = prefix + "/audit/" + bcId;
         $.modal.openFull("审批", url);
+    }
+    function viewExamineDetail(dataId) {
+        var url = ctx + "fmis/data/viewDetail?dataId=" + dataId ;
+        $.modal.openNoEnter("详情", url, $(window).width(), $(window).height(), function () {
+            $.modal.closeAll();
+        });
     }
 </script>
 </body>
