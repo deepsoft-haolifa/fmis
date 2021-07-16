@@ -366,21 +366,41 @@ public class BizProcessDataNewDeliveryController extends BaseController {
                 return error("库存不够，请检查库存");
             }
 
-            BizProcessChild inventoryChild = inventoryChilds.get(0);
+            long inventorySum = inventoryChilds.stream().mapToLong(e -> StringUtils.toLong(e.getString11())).sum();
 
-            if (StringUtils.toLong(inventoryChild.getString11()) < StringUtils.toLong(bizProcessChild.getString13())) {
+            // 总的出库数量
+            Long outTotalNum = StringUtils.toLong(bizProcessChild.getString13());
+            if (inventorySum < outTotalNum) {
                 return error("库存不够，请检查库存");
             }
-            string15 = inventoryChild.getChildId() + "";
-            String string16 = inventoryChild.getString16();
-            inventoryChild.setString16(StringUtils.toLong(string16) + StringUtils.toLong(bizProcessChild.getString13()) + "");
-            //inventoryChild 之前的报检的数据
-            //bizProcessChild发货的数据
-            inventoryChild.setString11((StringUtils.toLong(inventoryChild.getString11()) - StringUtils.toLong(bizProcessChild.getString13())) + "");
-            inventoryChild.setUpdateTime(new Date());
-            inventoryChild.setUpdateBy(ShiroUtils.getUserId() + "");
-            inventoryChild.setString14("1");
-            bizProcessChildService.updateBizProcessChild(inventoryChild);
+            for (BizProcessChild inventoryChild : inventoryChilds) {
+                Long string11Long = StringUtils.toLong(inventoryChild.getString11());
+                if(string11Long <= outTotalNum){
+                    string15 = inventoryChild.getChildId() + "";
+                    String string16 = inventoryChild.getString16();
+                    inventoryChild.setString16(StringUtils.toLong(string16) + string11Long + "");
+                    //inventoryChild 之前的报检的数据
+                    //bizProcessChild发货的数据
+                    inventoryChild.setString11("0");
+                    inventoryChild.setUpdateTime(new Date());
+                    inventoryChild.setUpdateBy(ShiroUtils.getUserId() + "");
+                    inventoryChild.setString14("1");
+                    bizProcessChildService.updateBizProcessChild(inventoryChild);
+                    outTotalNum = outTotalNum - string11Long;
+                }else{
+                    string15 = inventoryChild.getChildId() + "";
+                    String string16 = inventoryChild.getString16();
+                    inventoryChild.setString16(StringUtils.toLong(string16) + outTotalNum + "");
+                    //inventoryChild 之前的报检的数据
+                    //bizProcessChild发货的数据
+                    inventoryChild.setString11((string11Long - outTotalNum) + "");
+                    inventoryChild.setUpdateTime(new Date());
+                    inventoryChild.setUpdateBy(ShiroUtils.getUserId() + "");
+                    inventoryChild.setString14("1");
+                    bizProcessChildService.updateBizProcessChild(inventoryChild);
+                }
+            }
+
 
         } else {
             if (StringUtils.toLong(child.getString2()) < 5) {

@@ -29,6 +29,7 @@ public class InvoiceRespVo {
     private String string8;
     private String string9;
     private String string10;
+    private String string11;
     private Date datetime1;
     private Date datetime2;
     private Date datetime3;
