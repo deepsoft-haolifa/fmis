@@ -150,7 +150,12 @@
                     field: 'payWay',
                     title: '付款方式',
                     formatter: function (value, row, index) {
-                        return $.table.selectDictLabel(payWayDatas, value);
+                        var payWayJson = JSON.parse(value);
+                        var payWayText ="";
+                        payWayText += "支票："+payWayJson.chequeAmount +"元；";
+                        payWayText += "电汇："+payWayJson.wireAmount +"元；";
+                        payWayText += "承兑："+payWayJson.acceptAmount +"元；";
+                        return payWayText;
                     }
                 },
                 {

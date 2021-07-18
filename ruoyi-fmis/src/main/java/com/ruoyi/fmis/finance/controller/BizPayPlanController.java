@@ -1,11 +1,10 @@
 package com.ruoyi.fmis.finance.controller;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.alibaba.fastjson.JSON;
 import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
@@ -21,6 +20,7 @@ import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysRole;
 import org.apache.commons.lang3.Conversion;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.fop.layoutmgr.SpaceResolver;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -164,41 +164,56 @@ public class BizPayPlanController extends BaseController {
     @ResponseBody
     @Transactional(rollbackFor = Exception.class)
     public AjaxResult editSave(BizPayPlan bizPayPlan) {
+        Map<String,Double> payWay = new HashMap<>();
+        payWay.put("acceptAmount", bizPayPlan.getAcceptAmount());
+        payWay.put("chequeAmount", bizPayPlan.getChequeAmount());
+        payWay.put("wireAmount", bizPayPlan.getWireAmount());
+        bizPayPlan.setPayWay(JSON.toJSONString(payWay));
         int payPlan = bizPayPlanService.updateBizPayPlan(bizPayPlan);
         // 已付款状态之后；
-        if (payPlan > 0 && "1".equals(bizPayPlan.getStatus())) {
+        if (payPlan > 0) {
             String bookingType = bizPayPlan.getBookingType();
             if ("1".equals(bookingType)) {
                 // 添加现金日记账
                 if (!bizBillService.existsByCertificateNumber(bizPayPlan.getApplyNo())) {
-                    BizBill bizBill = new BizBill();
-                    bizBill.setType("1");
-                    bizBill.setCertificateNumber(bizPayPlan.getApplyNo());
-                    bizBill.setD(bizPayPlan.getPayDate());
-                    bizBill.setPaymentType(bizPayPlan.getPaymentType());
-                    bizBill.setPayment(bizPayPlan.getApplyAmount());
-                    bizBill.setRemark(bizPayPlan.getApplyRemark());
-                    bizBill.setString1(bizPayPlan.getPayCompany());
-                    bizBill.setString2(bizPayPlan.getApplyCollectionCompany());
-                    bizBillService.insertBizBill(bizBill);
+                    String paymentType = "";
+                    if(bizPayPlan.getAcceptAmount() > 0.0) {
+                        // 承兑金额大于0
+                        paymentType = "承兑";
+                        buildBizBillDomain(bizPayPlan.getAcceptAmount(), paymentType, bizPayPlan);
+                    }
+                    if(bizPayPlan.getChequeAmount() > 0.0) {
+                        // 支票金额大于0
+                        paymentType = "支票";
+                        buildBizBillDomain(bizPayPlan.getChequeAmount(), paymentType, bizPayPlan);
+                    }
+                    if(bizPayPlan.getWireAmount() > 0.0) {
+                        // 电汇金额大于0
+                        paymentType = "电汇";
+                        buildBizBillDomain(bizPayPlan.getWireAmount(), paymentType, bizPayPlan);
+                    }
                 }
             } else if ("2".equals(bookingType)) {
                 // 添加银行日记账
                 if (!bizBankBillService.existsByCertificateNumber(bizPayPlan.getApplyNo())) {
-                    BizBankBill bizBankBill = new BizBankBill();
-                    bizBankBill.setType("2");
-                    bizBankBill.setCertificateNumber(bizPayPlan.getApplyNo());
-                    bizBankBill.setOperateDate(bizPayPlan.getPayDate());
-                    bizBankBill.setPayWay(bizPayPlan.getPayWay());
-                    bizBankBill.setPaymentType(bizPayPlan.getPaymentType());
-                    bizBankBill.setPayment(bizPayPlan.getApplyAmount());
-                    bizBankBill.setRemark(bizPayPlan.getApplyRemark());
-                    bizBankBill.setPayCompany(bizPayPlan.getPayCompany());
-                    bizBankBill.setPayAccount(bizPayPlan.getPayAccount());
-                    bizBankBill.setCollectCompany(bizPayPlan.getApplyCollectionCompany());
-                    bizBankBillService.insertBizBankBill(bizBankBill);
-                }
+                    String paymentType = "";
+                    if(bizPayPlan.getAcceptAmount() > 0.0) {
+                        // 承兑金额大于0
+                        paymentType = "承兑";
+                        buildBizBankBillDomain(bizPayPlan.getAcceptAmount(), paymentType, bizPayPlan);
+                    }
+                    if(bizPayPlan.getChequeAmount() > 0.0) {
+                        // 支票金额大于0
+                        paymentType = "支票";
+                        buildBizBankBillDomain(bizPayPlan.getChequeAmount(), paymentType, bizPayPlan);
+                    }
+                    if(bizPayPlan.getWireAmount() > 0.0) {
+                        // 电汇金额大于0
+                        paymentType = "电汇";
+                        buildBizBankBillDomain(bizPayPlan.getWireAmount(), paymentType, bizPayPlan);
 
+                    }
+                }
             }
             // 付款完成后，将采购订单的状态更新为已付款
             bizProcessDataService.updateBizProcessData(new BizProcessData(){{
@@ -207,6 +222,34 @@ public class BizPayPlanController extends BaseController {
             }});
         }
         return toAjax(payPlan);
+    }
+
+    private void buildBizBankBillDomain(double acceptAmount, String paymentType, BizPayPlan bizPayPlan) {
+        BizBankBill bizBankBill = new BizBankBill();
+        bizBankBill.setType("2");
+        bizBankBill.setCertificateNumber(bizPayPlan.getApplyNo());
+        bizBankBill.setOperateDate(bizPayPlan.getPayDate());
+        bizBankBill.setPayWay(paymentType);
+        bizBankBill.setPaymentType(paymentType);
+        bizBankBill.setPayment(acceptAmount);
+        bizBankBill.setRemark(bizPayPlan.getApplyRemark());
+        bizBankBill.setPayCompany(bizPayPlan.getPayCompany());
+        bizBankBill.setPayAccount(bizPayPlan.getPayAccount());
+        bizBankBill.setCollectCompany(bizPayPlan.getApplyCollectionCompany());
+        bizBankBillService.insertBizBankBill(bizBankBill);
+    }
+
+    private void buildBizBillDomain(double acceptAmount, String paymentType, BizPayPlan bizPayPlan) {
+        BizBill bizBill = new BizBill();
+        bizBill.setType("1");
+        bizBill.setCertificateNumber(bizPayPlan.getApplyNo());
+        bizBill.setD(bizPayPlan.getPayDate());
+        bizBill.setPaymentType(paymentType);
+        bizBill.setPayment(acceptAmount);
+        bizBill.setRemark(bizPayPlan.getApplyRemark());
+        bizBill.setString1(bizPayPlan.getPayCompany());
+        bizBill.setString2(bizPayPlan.getApplyCollectionCompany());
+        bizBillService.insertBizBill(bizBill);
     }
 
     /**

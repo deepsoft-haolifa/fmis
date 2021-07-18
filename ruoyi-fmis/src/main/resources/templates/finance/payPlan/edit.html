@@ -84,14 +84,24 @@
                     </select>
                 </div>
             </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">付款方式</label>
-                <div class="col-sm-8">
-                    <select name="payWay" class="form-control m-b" th:with="type=${@dict.getType('pay_way')}">
-                        <option value="">请选择</option>
-                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{payWay}"></option>
-                    </select>
-                </div>
+            <div style="margin-left: 108px;">付款方式：</div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label" >电汇金额:</label>
+                <div class="col-sm-3">
+                    <input name="wireAmount" class="form-control" type="text" value="0">
+                </div>元
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label" >支票金额:</label>
+                <div class="col-sm-3">
+                    <input name="chequeAmount" class="form-control" type="text"  value="0">
+                </div>元
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label" >承兑金额:</label>
+                <div class="col-sm-3">
+                    <input name="acceptAmount" class="form-control" type="text"  value="0">
+                </div>元
             </div>
             <div class="form-group">
                 <label class="col-sm-3 control-label">付款状态</label>
@@ -125,6 +135,8 @@
     <th:block th:include="include :: footer" />
     <th:block th:include="include :: datetimepicker-js" />
     <script type="text/javascript">
+
+        var applyAmount = [[${bizPayPlan.applyAmount}]];
         var prefix = ctx + "finance/payPlan";
         $("#form-payPlan-edit").validate({
             focusCleanup: true
@@ -132,6 +144,15 @@
 
         function submitHandler() {
             if ($.validate.form()) {
+                var acceptAmount = Number($("input[name='acceptAmount']").val());
+                var chequeAmount = Number($("input[name='chequeAmount']").val());
+                var wireAmount = Number($("input[name='wireAmount']").val());
+                console.log(acceptAmount, chequeAmount, wireAmount);
+                var total = acceptAmount+chequeAmount+wireAmount;
+                if(total != applyAmount){
+                    $.modal.alertWarning("支付总金额与申请金额不一致，请先完善！");
+                    return;
+                }
                 $.operate.save(prefix + "/edit", $('#form-payPlan-edit').serialize());
             }
         }

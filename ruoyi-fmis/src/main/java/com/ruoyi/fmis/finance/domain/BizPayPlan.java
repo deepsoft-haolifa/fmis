@@ -95,4 +95,11 @@ public class BizPayPlan extends BaseEntity {
 
     private String startTime;
     private String endTime;
+
+    // 承兑金额
+    private double acceptAmount;
+    // 支票金额
+    private double chequeAmount;
+    // 电汇金额
+    private double wireAmount;
 }
