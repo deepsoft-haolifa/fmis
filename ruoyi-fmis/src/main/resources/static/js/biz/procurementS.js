@@ -617,6 +617,7 @@ function examine(type,datas,typeIndex,id){
             var tableName = "";
             console.log("typeIndex:" + typeIndex)
             console.log("v:" + v)
+            console.log("v:" + v.childId)
             if (typeIndex == 1) {
                 dataId = v.productId;
                 num = v.productNum;
@@ -701,6 +702,7 @@ function examine(type,datas,typeIndex,id){
         $.each(datas,function(i,v){
             console.log("typeIndex:" + typeIndex)
             console.log("v:" + v)
+            console.log("v11:" + v.childId)
             var dataId = "";
             if (typeIndex == 1) {
                 dataId = v.productId;
