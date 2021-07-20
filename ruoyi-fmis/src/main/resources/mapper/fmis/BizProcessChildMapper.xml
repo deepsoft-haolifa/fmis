@@ -297,7 +297,7 @@
         join biz_process_child pc on pc.data_id=#{dataId} and /*pc.string2=p.product_id*/
         p.product_id in (select product_id from biz_product left join biz_process_child pc1 on pc1.data_id=#{dataId} left join biz_data_status ds on ds.child_id=pc1.child_id  where ds.data_status is null and
         concat(specifications, model,biz_product.string1) in
-        (select concat(specifications, model,biz_product.string1) from biz_product  where product_id  = pc.string2)
+        (select concat(specifications, model,biz_product.string1) from biz_product  where product_id  = pc1.string2)
         )
         join biz_process_data pd on pc.data_id=pd.data_id
         left join biz_data_status ds on ds.child_id=pc.child_id and ds.string2=p.product_id
