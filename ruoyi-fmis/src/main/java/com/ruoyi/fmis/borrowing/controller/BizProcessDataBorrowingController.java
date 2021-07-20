@@ -323,4 +323,21 @@ public class BizProcessDataBorrowingController extends BaseController {
 
         return prefix + "/selectContract";
     }
+
+//    /**
+//     * 获取当前用户的借款申请单，已审批完成，已付款
+//     *
+//     */
+//
+//    @GetMapping("allBorrowing")
+//    public AjaxResult getAllBorrowing() {
+//
+//        List<BizProcessData> bizProcessDatas = bizProcessDataService.selectAllBorrowingWithNoPayAndAgree();
+//        bizProcessDatas.parallelStream().map(t->{
+//            Map<String, >
+//        })
+//        return AjaxResult.success();
+//    }
+
+
 }

@@ -1639,4 +1639,8 @@
 
     </select>
 
+    <select id="selectAllBorrowingWithNoPayAndAgree" resultMap="BizProcessDataResult" >
+        select  * from biz_process_data where biz_id='borrowing' and flow_status = normal_flag and (string11 is null or string11 ='')
+    </select>
+
 </mapper>

@@ -48,6 +48,38 @@
             </div>
         </div>
         <div class="form-group">
+            <label class="col-sm-3 control-label">报销类型：</label>
+            <div class="form-check col-sm-1">
+                <input class="form-check-input" type="radio" name="applyType" id="flexRadioDefault1" checked
+                       value="1">
+                <label class="form-check-label" for="flexRadioDefault1">
+                    普通报销
+                </label>
+            </div>
+            <div class="form-check col-sm-1">
+                <input class="form-check-input" type="radio" name="applyType" id="flexRadioDefault2" value="2">
+                <label class="form-check-label" for="flexRadioDefault2">
+                    借款冲抵
+                </label>
+            </div>
+            <!--            <div class="col-sm-4">-->
+            <!--                <input name="remark" class="form-control" type="radio" value="普通报销"><label class="form-check-label">普通报销</label>-->
+            <!--                <input name="remark" class="form-control" type="radio" value="借款冲抵"><label class="form-check-label">借款冲抵</label>-->
+            <!--            </div>-->
+            <div class="col-sm-6" hidden id="borrowingList">
+                <label class="col-sm-2 control-label">借款单：</label>
+                <select name="string4" class="form-control m-b col-sm-2" th:with="type=${borrowingNoList}"
+                        onchange="changeAmount(this)">
+                    <option  value="">请选择</option>
+                    <option th:each="value : ${type}" th:text="${value}" th:value="${value}"></option>
+                </select>
+                <label class="col-sm-2 control-label">金额：</label>
+                <input class="form-control col-sm-2" type="text" id="applyAmount" value="0">
+
+            </div>
+
+        </div>
+        <div class="form-group">
             <label class="col-sm-3 control-label">备注：</label>
             <div class="col-sm-8">
                 <input name="remark" class="form-control" type="text">
@@ -81,6 +113,9 @@
         focusCleanup: true
     });
 
+    var borrowNoList = [[${borrowingNoList}]]
+    var borrowMap = [[${borrowingMap}]]
+
 
     var paymentProjectDatas = [[${@dict.getType('payment_project')}]];
 
@@ -92,13 +127,35 @@
         var dictValue = dict.dictValue;
         paymentProjectArray.push({value: dictValue, text: dictLabel});
     });
-    console.log("paymentProjectArray:"+paymentProjectArray)
+    console.log("paymentProjectArray:" + paymentProjectArray)
 
     var paymentTrafficArray = [];
     $.each(paymentTrafficDatas, function (index, dict) {
         var dictLabel = dict.dictLabel;
         var dictValue = dict.dictValue;
         paymentTrafficArray.push({value: dictValue, text: dictLabel});
+    });
+
+    function changeAmount(node) {
+        var val = $(node).val();
+        console.log('...', val)
+        if(val=='') {
+            $("#applyAmount").val(0)
+        } else {
+            $("#applyAmount").val(borrowMap[val]);
+        }
+        calculateTotalMoney();
+    }
+
+    $('input[type=radio][name=applyType]').change(function () {
+        if (this.value == '1') {
+            console.log('普通报销')
+            $("#borrowingList").hide()
+        } else {
+            console.log('冲抵借款')
+            $("#borrowingList").show()
+
+        }
     });
 
     function add() {
@@ -182,7 +239,8 @@
                     width: 100
                 },
                 {field: 'string7', title: '项目单据张数', editable: true, width: 100},
-                {field: 'price3', title: '项目金额', editable:true, width: 100
+                {
+                    field: 'price3', title: '项目金额', editable: true, width: 100
                 },
                 {field: 'remark', title: '摘要', editable: true, width: 200},
                 {
@@ -193,7 +251,7 @@
                     }
                 },
             ],
-            onEditableSave:function (field, row, oldValue, $el) {
+            onEditableSave: function (field, row, oldValue, $el) {
                 calculateTotalMoney();
             }
         };
@@ -201,22 +259,30 @@
     });
 
 
-    function calculateTotalMoney(){
+    function calculateTotalMoney() {
         var totalMoney = 0;
         // 获取所有行；
         var allTableData = $('#bootstrap-table').bootstrapTable('getData');
         $.each(allTableData, function (key, value, index) {
-            if(value.price1 == 'undefined') {
+            if (value.price1 == 'undefined') {
                 value.price1 = 0
             }
-            if(value.price2 == 'undefined') {
+            if (value.price2 == 'undefined') {
                 value.price2 = 0
             }
-            if(value.price3 == 'undefined') {
+            if (value.price3 == 'undefined') {
                 value.price3 = 0
             }
-            totalMoney += Number(value.price1) + Number(value.price2) + Number(value.price3);
+
+             totalMoney += Number(value.price1) + Number(value.price2) + Number(value.price3);
         })
+        var a = $('input[name=applyType]:checked').val();
+        var borrowingAmount = 0
+        if(a == '2') {
+            var val = $("#applyAmount").val();
+            borrowingAmount = Number(val);
+        }
+        totalMoney -= borrowingAmount;
         $("#totalMoney").val(totalMoney);
 
     }

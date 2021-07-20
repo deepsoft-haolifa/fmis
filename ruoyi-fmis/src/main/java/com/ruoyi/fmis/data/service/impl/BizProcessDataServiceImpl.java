@@ -1222,4 +1222,9 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
         bizProcessDataMapper.deleteBizProcessDataById(Long.parseLong(dataId));
         return 1;
     }
+
+    @Override
+    public List<BizProcessData> selectAllBorrowingWithNoPayAndAgree() {
+        return bizProcessDataMapper.selectAllBorrowingWithNoPayAndAgree();
+    }
 }

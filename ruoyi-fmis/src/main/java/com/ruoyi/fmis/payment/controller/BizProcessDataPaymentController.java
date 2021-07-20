@@ -220,6 +220,17 @@ public class BizProcessDataPaymentController extends BaseController {
         SysDept sysDept = sysDeptService.selectDeptById(deptId);
         mmap.put("deptId", deptId);
         mmap.put("deptName", sysDept.getDeptName());
+
+        // 借款单
+        List<BizProcessData> bizProcessData = bizProcessDataService.selectAllBorrowingWithNoPayAndAgree();
+        Map<String, Double> borrowingMap = new HashMap<>();
+        List<String> borrowingNoList = new ArrayList<>();
+        for (BizProcessData data : bizProcessData) {
+            borrowingNoList.add(data.getString2());
+            borrowingMap.put(data.getString2(), data.getPrice1());
+        }
+        mmap.put("borrowingNoList", borrowingNoList);
+        mmap.put("borrowingMap", borrowingMap);
         return prefix + "/add";
     }
 

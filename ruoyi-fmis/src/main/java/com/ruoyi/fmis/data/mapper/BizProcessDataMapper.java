@@ -155,4 +155,10 @@ public interface BizProcessDataMapper {
      * @return
      */
     public List<SaleListExportDTO> selectSaleListExport(Long dataId);
+
+    /**
+     * 获取已审批通过 且未付款的借款单
+     * @return
+     */
+    List<BizProcessData> selectAllBorrowingWithNoPayAndAgree();
 }
