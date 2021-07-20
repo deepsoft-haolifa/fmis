@@ -1,6 +1,7 @@
 package com.ruoyi.fmis.finance.service.impl;
 
 import com.ruoyi.common.core.text.Convert;
+import com.ruoyi.common.exception.base.BaseException;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.fmis.finance.domain.BizBill;
@@ -82,6 +83,9 @@ public class BizBillServiceImpl implements IBizBillService {
             Double payment = bizBill.getPayment();
             double abs = Math.abs(payment);
             BigDecimal subtract = lastBalance.subtract(BigDecimal.valueOf(abs));
+            if (subtract.compareTo(BigDecimal.ZERO) < 0) {
+                throw new BaseException("现金余额不足以付款");
+            }
             bizBill.setBalance(subtract.doubleValue());
         }
         // 设置余额 end

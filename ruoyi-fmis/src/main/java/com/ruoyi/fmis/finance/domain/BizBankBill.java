@@ -57,7 +57,7 @@ public class BizBankBill extends BaseEntity {
     private String payCompany;
     /** 付款单位Id */
     private String payCompanyId;
-    /** 付款单位 */
+    /** 收款单位 */
     @Excel(name = "收款单位")
     private String collectCompany;
 
