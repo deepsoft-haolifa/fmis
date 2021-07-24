@@ -493,8 +493,14 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
         if (StringUtils.isNotEmpty(supplierId)) {
             queryBizProcessChild.setSupplierId(supplierId);
         }
+        List<BizProcessChild> bizProcessChildList;
+        if (bizProcessData.getProcurementId() != null && !bizProcessData.getProcurementId().equals("")) {
+             bizProcessChildList = bizProcessChildService.selectBizChildProductList(queryBizProcessChild);
+        } else {
+            bizProcessChildList = bizProcessChildService.selectBizChildProductListCaigou(queryBizProcessChild);
+        }
 
-        List<BizProcessChild> bizProcessChildList = bizProcessChildService.selectBizChildProductList(queryBizProcessChild);
+
 
 
         String pSessionId = bizProcessData.getPSessionId();
