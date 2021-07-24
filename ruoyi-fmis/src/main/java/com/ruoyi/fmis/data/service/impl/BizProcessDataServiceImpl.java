@@ -497,7 +497,12 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
         if (bizProcessData.getProcurementId() != null && !bizProcessData.getProcurementId().equals("")) {
              bizProcessChildList = bizProcessChildService.selectBizChildProductList(queryBizProcessChild);
         } else {
-            bizProcessChildList = bizProcessChildService.selectBizChildProductListCaigou(queryBizProcessChild);
+            if (bizProcessData.getDataStatus() !=null &&bizProcessData.getDataStatus().equals("2")) {
+                bizProcessChildList = bizProcessChildService.selectBizChildProductList(queryBizProcessChild);
+            } else {
+                bizProcessChildList = bizProcessChildService.selectBizChildProductListCaigou(queryBizProcessChild);
+            }
+
         }
 
 
@@ -562,8 +567,17 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
             queryBizProcessChild.setSupplierId(supplierId);
         }
 
-        List<BizProcessChild> bizProcessChildList = bizProcessChildService.selectBizChildProductList(queryBizProcessChild);
-
+//        List<BizProcessChild> bizProcessChildList = bizProcessChildService.selectBizChildProductList(queryBizProcessChild);
+        List<BizProcessChild> bizProcessChildList;
+        if (bizProcessData.getProcurementId() != null && !bizProcessData.getProcurementId().equals("")) {
+            bizProcessChildList = bizProcessChildService.selectBizChildProductList(queryBizProcessChild);
+        } else {
+            if (bizProcessData.getDataStatus() !=null &&bizProcessData.getDataStatus().equals("2")) {
+                bizProcessChildList = bizProcessChildService.selectBizChildProductList(queryBizProcessChild);
+            } else {
+                bizProcessChildList = bizProcessChildService.selectBizChildProductListCaigou(queryBizProcessChild);
+            }
+        }
 
         String pSessionId = bizProcessData.getPSessionId();
 
