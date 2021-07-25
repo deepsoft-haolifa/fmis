@@ -159,6 +159,7 @@ public interface BizProcessDataMapper {
     /**
      * 获取已审批通过 且未付款的借款单
      * @return
+     * @param userId
      */
-    List<BizProcessData> selectAllBorrowingWithNoPayAndAgree();
+    List<BizProcessData> selectAllBorrowingWithNoPayAndAgree(Long userId);
 }

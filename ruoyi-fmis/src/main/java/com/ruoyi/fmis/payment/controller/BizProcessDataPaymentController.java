@@ -27,6 +27,7 @@ import com.ruoyi.system.mapper.SysDeptMapper;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.support.CustomSQLErrorCodesTranslation;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
@@ -161,6 +162,7 @@ public class BizProcessDataPaymentController extends BaseController {
         String dataId = getRequest().getParameter("dataId");
         BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataPaymentById(Long.parseLong(dataId));
         mmap.put("bizProcessData", bizProcessData);
+        wrapBorrowingInfos(mmap , Long.valueOf(bizProcessData.getCreateBy()));
        if("2".equals(bizProcessData.getString1())){
            return prefix + "/examineEdit1";
        }else{
@@ -168,19 +170,13 @@ public class BizProcessDataPaymentController extends BaseController {
        }
     }
 
-//    @GetMapping("/examineEdit1")
-//    public String examineEdit1(ModelMap mmap) {
-//        String dataId = getRequest().getParameter("dataId");
-//        BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataPaymentById(Long.parseLong(dataId));
-//        mmap.put("bizProcessData", bizProcessData);
-//        return prefix + "/examineEdit1";
-//    }
-
     @GetMapping("/viewDetail")
     public String viewDetail(ModelMap mmap) {
         String dataId = getRequest().getParameter("dataId");
         BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataBorrowingById(Long.parseLong(dataId));
         mmap.put("bizProcessData", bizProcessData);
+        // 借款单
+        wrapBorrowingInfos(mmap, Long.valueOf(bizProcessData.getCreateBy()));
         return prefix + "/viewDetail";
     }
 
@@ -189,6 +185,8 @@ public class BizProcessDataPaymentController extends BaseController {
         String dataId = getRequest().getParameter("dataId");
         BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataPaymentById(Long.parseLong(dataId));
         mmap.put("bizProcessData", bizProcessData);
+        // 借款单
+        wrapBorrowingInfos(mmap, Long.valueOf(bizProcessData.getCreateBy()));
         return prefix + "/viewDetail1";
     }
 
@@ -220,9 +218,14 @@ public class BizProcessDataPaymentController extends BaseController {
         SysDept sysDept = sysDeptService.selectDeptById(deptId);
         mmap.put("deptId", deptId);
         mmap.put("deptName", sysDept.getDeptName());
+        wrapBorrowingInfos(mmap , ShiroUtils.getUserId());
 
+        return prefix + "/add";
+    }
+
+    private void wrapBorrowingInfos(ModelMap mmap, Long  userId) {
         // 借款单
-        List<BizProcessData> bizProcessData = bizProcessDataService.selectAllBorrowingWithNoPayAndAgree();
+        List<BizProcessData> bizProcessData = bizProcessDataService.selectAllBorrowingWithNoPayAndAgree(userId);
         Map<String, Double> borrowingMap = new HashMap<>();
         List<String> borrowingNoList = new ArrayList<>();
         for (BizProcessData data : bizProcessData) {
@@ -231,7 +234,6 @@ public class BizProcessDataPaymentController extends BaseController {
         }
         mmap.put("borrowingNoList", borrowingNoList);
         mmap.put("borrowingMap", borrowingMap);
-        return prefix + "/add";
     }
 
     @GetMapping("/add1")
@@ -243,6 +245,9 @@ public class BizProcessDataPaymentController extends BaseController {
         SysDept sysDept = sysDeptService.selectDeptById(deptId);
         mmap.put("deptId", deptId);
         mmap.put("deptName", sysDept.getDeptName());
+
+        // 借款单
+        wrapBorrowingInfos(mmap, ShiroUtils.getUserId());
         return prefix + "/add1";
     }
 
@@ -290,6 +295,7 @@ public class BizProcessDataPaymentController extends BaseController {
                 }
             }
         }
+        resetBorrowingInfos(bizProcessData);
         bizProcessData.setPrice1(totalPrice.doubleValue());
         bizProcessData.setString2("FP" + DateUtils.dateTimeNow() + RandomStringUtils.randomNumeric(3));
         int insertReturn = bizProcessDataService.insertBizProcessData(bizProcessData);
@@ -305,6 +311,14 @@ public class BizProcessDataPaymentController extends BaseController {
             }
         }
         return toAjax(insertReturn);
+    }
+
+    private void resetBorrowingInfos(BizProcessData bizProcessData) {
+        // 如果为普通报销，则将冲抵报销的相关信息重置
+        if(bizProcessData.getPaymentType() == 0) {
+            bizProcessData.setBalanceAmount(0);
+            bizProcessData.setBalanceBorrowNo("");
+        }
     }
 
 
@@ -332,6 +346,8 @@ public class BizProcessDataPaymentController extends BaseController {
                 bizProcessData.setNormalFlag(key);
             }
         }
+
+        resetBorrowingInfos(bizProcessData);
 
         // 获取总价格
         BigDecimal totalPrice = BigDecimal.ZERO;
@@ -407,6 +423,8 @@ public class BizProcessDataPaymentController extends BaseController {
     public String edit(@PathVariable("dataId") Long dataId, ModelMap mmap) {
         BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataPaymentById(dataId);
 
+        // 借款单
+        wrapBorrowingInfos(mmap, Long.valueOf(bizProcessData.getCreateBy()));
         mmap.put("bizProcessData", bizProcessData);
         return prefix + "/edit";
     }
@@ -417,6 +435,8 @@ public class BizProcessDataPaymentController extends BaseController {
     @GetMapping("/edit1/{dataId}")
     public String edit1(@PathVariable("dataId") Long dataId, ModelMap mmap) {
         BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataPaymentById(dataId);
+        // 借款单
+        wrapBorrowingInfos(mmap, Long.valueOf(bizProcessData.getCreateBy()));
         mmap.put("bizProcessData", bizProcessData);
         return prefix + "/edit1";
     }
@@ -449,6 +469,7 @@ public class BizProcessDataPaymentController extends BaseController {
                 }
             }
         }
+        resetBorrowingInfos(bizProcessData);
         bizProcessData.setPrice1(totalPrice.doubleValue());
         int updateReturn = bizProcessDataService.updateBizProcessData(bizProcessData);
 
@@ -499,6 +520,7 @@ public class BizProcessDataPaymentController extends BaseController {
                 }
             }
         }
+        resetBorrowingInfos(bizProcessData);
         bizProcessData.setPrice1(totalPrice.doubleValue());
         int updateReturn = bizProcessDataService.updateBizProcessData(bizProcessData);
 

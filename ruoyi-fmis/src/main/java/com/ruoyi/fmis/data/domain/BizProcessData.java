@@ -428,7 +428,17 @@ public class BizProcessData extends BaseEntity {
     @Setter
     private int putStorageNum;
 
+    @Getter
+    @Setter
+    private int paymentType; // 报销方式 0 普通报销 1 借款冲抵
 
+    @Getter
+    @Setter
+    private double balanceAmount;// 借款冲抵金额
+
+    @Getter
+    @Setter
+    private String balanceBorrowNo; // 借款单号
 
 
 

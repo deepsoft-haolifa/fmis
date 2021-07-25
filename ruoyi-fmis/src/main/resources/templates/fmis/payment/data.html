@@ -100,6 +100,17 @@
                     }
                 },
                 {
+                    field: 'paymentType',
+                    title: '报销方式',
+                    formatter: function (value, row, index) {
+                        if(value == '0') {
+                            return "普通报销"
+                        } else {
+                            return "冲抵报销"
+                        }
+                    }
+                },
+                {
                     field: 'datetime1',
                     title: '报销日期'
                 },

@@ -81,6 +81,9 @@
         <result property="updateTime"    column="update_time"    />
         <result property="exceptPayTime"    column="except_pay_time"    />
         <result property="purchaseSpecificRequests"    column="purchase_specific_requests"    />
+        <result property="paymentType"    column="payment_type"    />
+        <result property="balanceAmount"    column="balance_amount"    />
+        <result property="balanceBorrowNo"    column="balance_borrow_no"    />
     </resultMap>
 
     <select id="selectBizProcessDataByFlowStatus" resultMap="BizProcessDataResult">
@@ -122,7 +125,7 @@
         q.string21,q.string22,q.string23,q.string24,q.string25,q.string26,q.string27,q.string28,q.string29,q.string30,
         q.price11, q.price12, q.price13, q.price14, q.price15, q.price16, q.price17, q.price18, q.price19, q.price20,
         q.datetime1, q.datetime2, q.datetime3, q.datetime4, q.datetime5, q.status, q.del_flag, q.create_by, q.create_time, q.update_by, q.update_time,
-        q.except_pay_time,q.purchase_specific_requests,
+        q.except_pay_time,q.purchase_specific_requests,q.payment_type,q.balance_amount,q.balance_borrow_no,
         dt1.dept_name as deptName
         from biz_process_data q
         left join sys_dept dt1 on q.string22=dt1.dept_id
@@ -182,7 +185,7 @@
         q.string21,q.string22,q.string23,q.string24,q.string25,q.string26,q.string27,q.string28,q.string29,q.string30,
         q.price11, q.price12, q.price13, q.price14, q.price15, q.price16, q.price17, q.price18, q.price19, q.price20,
         q.datetime1, q.datetime2, q.datetime3, q.datetime4, q.datetime5, q.status, q.del_flag, q.create_by, q.create_time, q.update_by, q.update_time,
-        q.except_pay_time,q.purchase_specific_requests, dt1.dept_name as deptName
+        q.except_pay_time,q.purchase_specific_requests, dt1.dept_name as deptName,q.payment_type,q.balance_amount,q.balance_borrow_no
         from biz_process_data q
         left join sys_dept dt1 on q.string22=dt1.dept_id left join biz_data_status ds on q.data_id = ds.string4  left join biz_process_child pc on q.data_id = pc.data_id
         join `biz_data_status` bs on pc.child_id = bs.`child_id`
@@ -246,7 +249,7 @@
         q.create_time, q.update_by, q.update_time,ct.name as customerName,bs.name as suppliersName,
         q.string21,q.string22,q.string23,q.string24,q.string25,q.string26,q.string27,q.string28,q.string29,q.string30,
         q.price11, q.price12, q.price13, q.price14, q.price15, q.price16, q.price17, q.price18, q.price19, q.price20,
-        dt1.dept_name as deptName,u.user_name as createByName,q.except_pay_time,q.purchase_specific_requests
+        dt1.dept_name as deptName,u.user_name as createByName,q.except_pay_time,q.purchase_specific_requests,q.payment_type,q.balance_amount,q.balance_borrow_no
         from biz_process_data q
         left join sys_user u on q.create_by=u.user_id
         left join sys_dept dt on u.dept_id=dt.dept_id
@@ -494,7 +497,7 @@
         q.create_time, q.update_by, q.update_time,ct.name as customerName,bs.name as suppliersName,
         q.string21,q.string22,q.string23,q.string24,q.string25,q.string26,q.string27,q.string28,q.string29,q.string30,
         q.price11, q.price12, q.price13, q.price14, q.price15, q.price16, q.price17, q.price18, q.price19, q.price20,
-        q.except_pay_time,q.purchase_specific_requests,
+        q.except_pay_time,q.purchase_specific_requests,q.payment_type,q.balance_amount,q.balance_borrow_no,
         ifnull(sum(bc.amount),0) as billAmount
         from biz_process_data q
         left join sys_user u on q.create_by=u.user_id
@@ -533,7 +536,8 @@
             d.string3, d.string4, d.string5, d.string6, d.string7, d.string8, d.string9, d.string10, d.string11,
             d.string12, d.string13, d.string14, d.string15, d.string16, d.string17, d.string18, d.string19, d.string20,
             d.datetime1, d.datetime2, d.datetime3, d.datetime4, d.datetime5, d.status, d.del_flag, d.create_by,
-            d.create_time, d.update_by, d.update_time,u.user_name as createByName,d.except_pay_time,d.purchase_specific_requests
+            d.create_time, d.update_by, d.update_time,u.user_name as createByName,d.except_pay_time,d.purchase_specific_requests,
+            d.payment_type,d.balance_amount,d.balance_borrow_no
             from biz_process_data d
             left join sys_user u on d.create_by=u.user_id
             left join sys_dept dt on u.dept_id=dt.dept_id
@@ -615,7 +619,8 @@
             d.string3, d.string4, d.string5, d.string6, d.string7, d.string8, d.string9, d.string10, d.string11,
             d.string12, d.string13, d.string14, d.string15, d.string16, d.string17, d.string18, d.string19, d.string20,
             d.datetime1, d.datetime2, d.datetime3, d.datetime4, d.datetime5, d.status, d.del_flag, d.create_by,
-            d.create_time, d.update_by, d.update_time,u.user_name as createByName,d.except_pay_time,d.purchase_specific_requests
+            d.create_time, d.update_by, d.update_time,u.user_name as createByName,d.except_pay_time,d.purchase_specific_requests,
+            d.payment_type,d.balance_amount,d.balance_borrow_no
             from biz_process_data d
             left join sys_user u on d.create_by=u.user_id
             left join sys_dept dt on u.dept_id=dt.dept_id
@@ -711,7 +716,8 @@
             d.string3, d.string4, d.string5, d.string6, d.string7, d.string8, d.string9, d.string10, d.string11,
             d.string12, d.string13, d.string14, d.string15, d.string16, d.string17, d.string18, d.string19, d.string20,
             d.datetime1, d.datetime2, d.datetime3, d.datetime4, d.datetime5, d.status, d.del_flag, d.create_by,
-            d.create_time, d.update_by, d.update_time,u.user_name as createByName,d.except_pay_time,d.purchase_specific_requests
+            d.create_time, d.update_by, d.update_time,u.user_name as createByName,d.except_pay_time,d.purchase_specific_requests,
+            d.payment_type,d.balance_amount,d.balance_borrow_no
             from biz_process_data d
             left join sys_user u on d.create_by=u.user_id
             left join sys_dept dt on u.dept_id=dt.dept_id
@@ -828,7 +834,7 @@
         d.create_time, d.update_by, d.update_time,
         d.string21,d.string22,d.string23,d.string24,d.string25,d.string26,d.string27,d.string28,d.string29,d.string30,
         d.price11, d.price12, d.price13, d.price14, d.price15, d.price16, d.price17, d.price18, d.price19, d.price20,
-        d.except_pay_time,d.purchase_specific_requests,
+        d.except_pay_time,d.purchase_specific_requests,d.payment_type,d.balance_amount,d.balance_borrow_no,
         u.user_name as createByName,de.dept_name as deptName
 
         from biz_process_data d
@@ -1213,7 +1219,7 @@
         d.create_time, d.update_by, d.update_time,
         d.string21,d.string22,d.string23,d.string24,d.string25,d.string26,d.string27,d.string28,d.string29,d.string30,
         d.price11, d.price12, d.price13, d.price14, d.price15, d.price16, d.price17, d.price18, d.price19, d.price20,
-        d.except_pay_time,d.purchase_specific_requests,
+        d.except_pay_time,d.purchase_specific_requests,d.payment_type,d.balance_amount,d.balance_borrow_no,
         u.user_name as createByName,de.dept_name as deptName,de1.dept_name as deptName1
 
         from biz_process_data d
@@ -1449,6 +1455,9 @@
             <if test="updateTime != null ">update_time,</if>
             <if test="exceptPayTime != null ">except_pay_time,</if>
             <if test="purchaseSpecificRequests != null ">purchase_specific_requests,</if>
+            <if test="paymentType != null ">payment_type,</if>
+            <if test="balanceAmount != null ">balance_amount,</if>
+            <if test="balanceBorrowNo != null ">balance_borrow_no,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="bizDataId != null ">#{bizDataId},</if>
@@ -1524,6 +1533,9 @@
             <if test="updateTime != null ">#{updateTime},</if>
             <if test="exceptPayTime != null ">#{exceptPayTime},</if>
             <if test="purchaseSpecificRequests != null ">#{purchaseSpecificRequests},</if>
+            <if test="paymentType != null ">#{paymentType},</if>
+            <if test="balanceAmount != null ">#{balanceAmount},</if>
+            <if test="balanceBorrowNo != null ">#{balanceBorrowNo},</if>
         </trim>
     </insert>
 
@@ -1602,6 +1614,9 @@
             <if test="updateTime != null ">update_time = #{updateTime},</if>
             <if test="exceptPayTime != null ">except_pay_time = #{exceptPayTime},</if>
             <if test="purchaseSpecificRequests != null ">purchase_specific_requests = #{purchaseSpecificRequests},</if>
+            <if test="paymentType != null ">payment_type = #{paymentType},</if>
+            <if test="balanceAmount != null ">balance_amount = #{balanceAmount},</if>
+            <if test="balanceBorrowNo != null  ">balance_borrow_no = #{balanceBorrowNo},</if>
         </trim>
         where data_id = #{dataId}
     </update>
@@ -1639,8 +1654,8 @@
 
     </select>
 
-    <select id="selectAllBorrowingWithNoPayAndAgree" resultMap="BizProcessDataResult" >
-        select  * from biz_process_data where biz_id='borrowing' and flow_status = normal_flag and (string11 is null or string11 ='')
+    <select id="selectAllBorrowingWithNoPayAndAgree" resultMap="BizProcessDataResult" parameterType="long">
+        select  * from biz_process_data where biz_id='borrowing' and flow_status = normal_flag and string11 ='1' and create_by=#{userId}
     </select>
 
 </mapper>

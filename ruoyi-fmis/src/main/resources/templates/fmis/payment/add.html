@@ -48,33 +48,29 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-3 control-label">报销类型：</label>
+            <label class="col-sm-3 control-label">报销方式：</label>
             <div class="form-check col-sm-1">
-                <input class="form-check-input" type="radio" name="applyType" id="flexRadioDefault1" checked
-                       value="1">
+                <input class="form-check-input" type="radio" name="paymentType" id="flexRadioDefault1" checked
+                       value="0">
                 <label class="form-check-label" for="flexRadioDefault1">
                     普通报销
                 </label>
             </div>
             <div class="form-check col-sm-1">
-                <input class="form-check-input" type="radio" name="applyType" id="flexRadioDefault2" value="2">
+                <input class="form-check-input" type="radio" name="paymentType" id="flexRadioDefault2" value="1">
                 <label class="form-check-label" for="flexRadioDefault2">
                     借款冲抵
                 </label>
             </div>
-            <!--            <div class="col-sm-4">-->
-            <!--                <input name="remark" class="form-control" type="radio" value="普通报销"><label class="form-check-label">普通报销</label>-->
-            <!--                <input name="remark" class="form-control" type="radio" value="借款冲抵"><label class="form-check-label">借款冲抵</label>-->
-            <!--            </div>-->
             <div class="col-sm-6" hidden id="borrowingList">
                 <label class="col-sm-2 control-label">借款单：</label>
-                <select name="string4" class="form-control m-b col-sm-2" th:with="type=${borrowingNoList}"
+                <select name="balanceBorrowNo" class="form-control m-b col-sm-1"  style="width: auto;" required  th:with="type=${borrowingNoList}"
                         onchange="changeAmount(this)">
                     <option  value="">请选择</option>
                     <option th:each="value : ${type}" th:text="${value}" th:value="${value}"></option>
                 </select>
                 <label class="col-sm-2 control-label">金额：</label>
-                <input class="form-control col-sm-2" type="text" id="applyAmount" value="0">
+                <input class="form-control col-sm-1" type="text" style="width: auto;" required id="applyAmount" value="0" name="balanceAmount">
 
             </div>
 
@@ -144,15 +140,12 @@
         } else {
             $("#applyAmount").val(borrowMap[val]);
         }
-        calculateTotalMoney();
     }
 
-    $('input[type=radio][name=applyType]').change(function () {
-        if (this.value == '1') {
-            console.log('普通报销')
+    $('input[type=radio][name=paymentType]').change(function () {
+        if (this.value == '0') {
             $("#borrowingList").hide()
         } else {
-            console.log('冲抵借款')
             $("#borrowingList").show()
 
         }
@@ -276,13 +269,14 @@
 
              totalMoney += Number(value.price1) + Number(value.price2) + Number(value.price3);
         })
-        var a = $('input[name=applyType]:checked').val();
-        var borrowingAmount = 0
-        if(a == '2') {
-            var val = $("#applyAmount").val();
-            borrowingAmount = Number(val);
-        }
-        totalMoney -= borrowingAmount;
+        var a = $('input[name=paymentType]:checked').val();
+        // 这里不在计算冲抵后的总金额
+        // var borrowingAmount = 0
+        // if(a == '1') {
+        //     var val = $("#applyAmount").val();
+        //     borrowingAmount = Number(val);
+        // }
+        // totalMoney -= borrowingAmount;
         $("#totalMoney").val(totalMoney);
 
     }

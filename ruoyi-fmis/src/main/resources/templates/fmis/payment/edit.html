@@ -1,126 +1,166 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:include="include :: header('修改报销')" />
-    <th:block th:include="include :: datetimepicker-css" />
+    <th:block th:include="include :: header('修改报销')"/>
+    <th:block th:include="include :: datetimepicker-css"/>
 </head>
 <body class="white-bg">
-    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
-        <form class="form-horizontal m" id="form-data-edit" th:object="${bizProcessData}">
-            <input name="dataId" th:field="*{dataId}" type="hidden">
-            <input type="hidden" name="bizId" value="payment"/>
-            <input type="hidden" name="string1" value="1"/>
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-data-edit" th:object="${bizProcessData}">
+        <input name="dataId" th:field="*{dataId}" type="hidden">
+        <input type="hidden" name="bizId" value="payment"/>
+        <input type="hidden" name="string1" value="1"/>
 
-            <div class="form-group">
-                <label class="col-sm-3 control-label">报销日期：</label>
-                <div class="col-sm-2">
-                    <div class="input-group date">
-                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input name="datetime1" class="form-control" placeholder="yyyy-MM-dd" th:value="${#dates.format(bizProcessData.datetime1,'yyyy-MM-dd')}"  type="text">
-                    </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">报销日期：</label>
+            <div class="col-sm-2">
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input name="datetime1" class="form-control" placeholder="yyyy-MM-dd"
+                           th:value="${#dates.format(bizProcessData.datetime1,'yyyy-MM-dd')}" type="text">
                 </div>
             </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">收款账户：</label>
-                <div class="col-sm-8">
-                    <input name="string3" class="form-control" th:field="*{string3}" type="text">
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">收款账户：</label>
+            <div class="col-sm-8">
+                <input name="string3" class="form-control" th:field="*{string3}" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">收款账号：</label>
+            <div class="col-sm-8">
+                <input name="string4" class="form-control" th:field="*{string4}" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">开户行：</label>
+            <div class="col-sm-8">
+                <input name="string5" class="form-control" th:field="*{string5}" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">报销部门：</label>
+            <div class="col-sm-8">
+                <input name="string6" id="string6" th:field="*{string6}" class="form-control" type="hidden">
+                <div class="input-group">
+                    <input class="form-control" type="text" name="deptName" onclick="selectDeptTree()" id="treeName"
+                           th:field="*{deptName}" required>
+                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
                 </div>
             </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">收款账号：</label>
-                <div class="col-sm-8">
-                    <input name="string4" class="form-control" th:field="*{string4}" type="text">
-                </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">报销方式：</label>
+            <div class="form-check col-sm-1">
+                <input class="form-check-input" type="radio" name="paymentType" id="flexRadioDefault1" checked
+                       value="0" th:field="*{paymentType}">
+                <label class="form-check-label" for="flexRadioDefault1">
+                    普通报销
+                </label>
             </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">开户行：</label>
-                <div class="col-sm-8">
-                    <input name="string5" class="form-control" th:field="*{string5}" type="text">
-                </div>
+            <div class="form-check col-sm-1">
+                <input class="form-check-input" type="radio" name="paymentType" id="flexRadioDefault2" value="1"
+                       th:field="*{paymentType}">
+                <label class="form-check-label" for="flexRadioDefault2">
+                    借款冲抵
+                </label>
             </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">报销部门：</label>
-                <div class="col-sm-8">
-                    <input name="string6" id="string6" th:field="*{string6}" class="form-control" type="hidden">
-                    <div class="input-group">
-                        <input class="form-control" type="text" name="deptName" onclick="selectDeptTree()" id="treeName" th:field="*{deptName}" required>
-                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">备注：</label>
-                <div class="col-sm-8">
-                    <input name="remark" class="form-control" th:field="*{remark}" type="text">
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">总金额：</label>
-                <div class="col-sm-8">
-                    <input name="totalMoney" id="totalMoney" class="form-control" type="text" disabled value="0">
-                </div>
-            </div>
-        </form>
+            <div class="col-sm-6" hidden id="borrowingList">
+                <label class="col-sm-2 control-label">借款单：</label>
+                <select name="balanceBorrowNo" class="form-control m-b col-sm-1" style="width: auto;" required
+                        th:with="type=${borrowingNoList}"
+                        onchange="changeAmount(this)">
+                    <option value="">请选择</option>
+                    <option th:each="value : ${type}" th:text="${value}" th:value="${value}"
+                            th:field="*{balanceBorrowNo}"></option>
+                </select>
+                <label class="col-sm-2 control-label">金额：</label>
+                <input class="form-control col-sm-1" type="text" style="width: auto;" required id="applyAmount"
+                       value="0" name="balanceAmount" th:field="*{balanceAmount}">
 
-        <div class="btn-group-sm" id="toolbar" role="group">
-            <a class="btn btn-success" onclick="add()" >
-                <i class="fa fa-plus"></i> 增加
-            </a>
+            </div>
+
         </div>
-        <div class="col-sm-12 select-table table-striped">
-            <table id="bootstrap-table"  class="text-nowrap"></table>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">备注：</label>
+            <div class="col-sm-8">
+                <input name="remark" class="form-control" th:field="*{remark}" type="text">
+            </div>
         </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">总金额：</label>
+            <div class="col-sm-8">
+                <input name="totalMoney" id="totalMoney" class="form-control" type="text" disabled value="0">
+            </div>
+        </div>
+    </form>
+
+    <div class="btn-group-sm" id="toolbar" role="group">
+        <a class="btn btn-success" onclick="add()">
+            <i class="fa fa-plus"></i> 增加
+        </a>
     </div>
-    <th:block th:include="include :: footer" />
-    <th:block th:include="include :: datetimepicker-js" />
-    <th:block th:include="include :: bootstrap-editable-css" />
-    <th:block th:include="include :: bootstrap-table-editable-js" />
-    <script th:inline="javascript">
-        var prefix = ctx + "fmis/payment";
-        $("#form-data-edit").validate({
-            focusCleanup: true
-        });
+    <div class="col-sm-12 select-table table-striped">
+        <table id="bootstrap-table" class="text-nowrap"></table>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: datetimepicker-js"/>
+<th:block th:include="include :: bootstrap-editable-css"/>
+<th:block th:include="include :: bootstrap-table-editable-js"/>
+<script th:inline="javascript">
+    var prefix = ctx + "fmis/payment";
+    $("#form-data-edit").validate({
+        focusCleanup: true
+    });
+
+    var borrowNoList = [[${borrowingNoList}]]
+    var borrowMap = [[${borrowingMap}]]
+
+    var paymentType = [[${bizProcessData.paymentType}]]
+    var paymentProjectDatas = [[${@dict.getType('payment_project')}]];
+
+    var paymentTrafficDatas = [[${@dict.getType('payment_traffic')}]];
+
+    var paymentProjectArray = [];
+    $.each(paymentProjectDatas, function (index, dict) {
+        var dictLabel = dict.dictLabel;
+        var dictValue = dict.dictValue;
+        paymentProjectArray.push({value: dictValue, text: dictLabel});
+    });
 
 
-        var paymentProjectDatas = [[${@dict.getType('payment_project')}]];
+    var paymentTrafficArray = [];
+    $.each(paymentTrafficDatas, function (index, dict) {
+        var dictLabel = dict.dictLabel;
+        var dictValue = dict.dictValue;
+        paymentTrafficArray.push({value: dictValue, text: dictLabel});
+    });
 
-        var paymentTrafficDatas = [[${@dict.getType('payment_traffic')}]];
+    function add() {
+        var rowData = {
+            childId: 0,
+            datetime1: "",
+            datetime2: "",
+            string1: "",
+            string2: "",
+            string3: "",
+            string4: "",
+            string5: "",
+            string7: "",
+            string6: "1",
+            price1: 0,
+            price2: 0,
+            price3: 0,
+            remark: ""
+        };
+        $("#bootstrap-table").bootstrapTable('append', rowData);
+    }
 
-        var paymentProjectArray = [];
-        $.each(paymentProjectDatas, function(index, dict) {
-            var dictLabel = dict.dictLabel;
-            var dictValue = dict.dictValue;
-            paymentProjectArray.push({value: dictValue,text: dictLabel});
-        });
+    $(function () {
 
 
-        var paymentTrafficArray = [];
-        $.each(paymentTrafficDatas, function(index, dict) {
-            var dictLabel = dict.dictLabel;
-            var dictValue = dict.dictValue;
-            paymentTrafficArray.push({value: dictValue,text: dictLabel});
-        });
-        function add() {
-            var rowData = {
-                childId: 0,
-                datetime1: "",
-                datetime2: "",
-                string1: "",
-                string2: "",
-                string3: "",
-                string4: "",
-                string5: "",
-                string7: "",
-                string6: "1",
-                price1: 0,
-                price2: 0,
-                price3: 0,
-                remark: ""
-            };
-            $("#bootstrap-table").bootstrapTable('append', rowData);
-        }
-
-        $(function() {
             var options = {
                 url: prefix + "/listChild",
                 modalName: "差旅费报销",
@@ -137,173 +177,228 @@
                 pageSize: 10000,
                 id: "bootstrap-table",
                 pagination: false,
-                rowStyle: function(row, index) {
-                    return {classes:'success'};
+                rowStyle: function (row, index) {
+                    return {classes: 'success'};
                 },
                 expandFirst: true,
                 columns: [
-                    {field : 'rowId',title : '序号',width: 50,visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
-                    {field : 'childId',title : 'childId',visible:false},
-                    {field : 'datetime1',title : '出发日期',editable: {type: "date",title: "出发日期",placement: "center",datepicker: {language: "zh-CN"}},width: 100,
+                    {
+                        field: 'rowId', title: '序号', width: 50, visible: true, formatter: function (value, row, index) {
+                            row.rowId = index;
+                            return index + 1;
+                        }
+                    },
+                    {field: 'childId', title: 'childId', visible: false},
+                    {
+                        field: 'datetime1',
+                        title: '出发日期',
+                        editable: {type: "date", title: "出发日期", placement: "center", datepicker: {language: "zh-CN"}},
+                        width: 100,
                         formatter: function (value, row, index) {
                             if ($.common.isEmpty(value)) {
                                 return "";
                             }
-                            var date = value.substr(0,10);
+                            var date = value.substr(0, 10);
                             return date;
-                        }},
-                    {field : 'string1',title : '出发地',editable: true,width: 100},
-                    {field : 'datetime2',title : '到达日期',editable: {type: "date",title: "出发日期",placement: "center",datepicker: {language: "zh-CN"}},width: 100,
+                        }
+                    },
+                    {field: 'string1', title: '出发地', editable: true, width: 100},
+                    {
+                        field: 'datetime2',
+                        title: '到达日期',
+                        editable: {type: "date", title: "出发日期", placement: "center", datepicker: {language: "zh-CN"}},
+                        width: 100,
                         formatter: function (value, row, index) {
                             if ($.common.isEmpty(value)) {
                                 return "";
                             }
-                            var date = value.substr(0,10);
+                            var date = value.substr(0, 10);
                             return date;
-                        }},
-                    {field : 'string2',title : '到达地',visible: true,editable: true,width: 100},
-                    {field : 'string3',title : '交通工具',visible: true,editable: {type: 'select',title: '项目',source:paymentTrafficArray},width: 200},
-                    {field : 'string4',title : '交通单据张数',visible: true,editable: true,width: 100},
-                    {field : 'price1',title : '交通金额',visible: true,editable: true,width:100},
-                    {field : 'string5',title : '出差天数',visible: true,editable: true,width:100},
-                    {field : 'price2',title : '出差补贴金额',visible: true,editable: true},
-                    {field : 'string6',title : '项目',editable: {type: 'select',title: '项目',source:paymentProjectArray},width: 100},
-                    {field : 'string7',title : '项目单据张数',editable: true,width: 100},
-                    {field : 'price3',title : '项目金额',editable: true,width: 100},
-                    {field : 'remark',title : '摘要',editable: true,width: 200},
-                    {field : 'operation',title : '操作',visible: true,formatter: function(value, row, index) {
+                        }
+                    },
+                    {field: 'string2', title: '到达地', visible: true, editable: true, width: 100},
+                    {
+                        field: 'string3',
+                        title: '交通工具',
+                        visible: true,
+                        editable: {type: 'select', title: '项目', source: paymentTrafficArray},
+                        width: 200
+                    },
+                    {field: 'string4', title: '交通单据张数', visible: true, editable: true, width: 100},
+                    {field: 'price1', title: '交通金额', visible: true, editable: true, width: 100},
+                    {field: 'string5', title: '出差天数', visible: true, editable: true, width: 100},
+                    {field: 'price2', title: '出差补贴金额', visible: true, editable: true},
+                    {
+                        field: 'string6',
+                        title: '项目',
+                        editable: {type: 'select', title: '项目', source: paymentProjectArray},
+                        width: 100
+                    },
+                    {field: 'string7', title: '项目单据张数', editable: true, width: 100},
+                    {field: 'price3', title: '项目金额', editable: true, width: 100},
+                    {field: 'remark', title: '摘要', editable: true, width: 200},
+                    {
+                        field: 'operation', title: '操作', visible: true, formatter: function (value, row, index) {
                             var actions = [];
                             actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="removeRow(' + index + ')"><i class="fa fa-remove"></i> 删除</a>');
                             return actions.join('');
-                        }},
+                        }
+                    },
                 ],
-                onEditableSave:function (field, row, oldValue, $el) {
+                onEditableSave: function (field, row, oldValue, $el) {
                     // console.log(field,'=',row.price3,',',oldValue)
                     // 获取所有行；
                     var allTableData = $('#bootstrap-table').bootstrapTable('getData');
                     calculateTotalMoney(allTableData);
                 },
-                onLoadSuccess:function (data) {
+                onLoadSuccess: function (data) {
                     calculateTotalMoney(data.rows);
                 }
             };
             $.table.init(options);
+
+            hideOrShow(paymentType)
+        }
+    );
+
+    function changeAmount(node) {
+        var val = $(node).val();
+        console.log('...', val)
+        if (val == '') {
+            $("#applyAmount").val(0)
+        } else {
+            $("#applyAmount").val(borrowMap[val]);
+        }
+    }
+
+    function hideOrShow(value) {
+        if (value == '0') {
+            $("#borrowingList").hide()
+        } else {
+            $("#borrowingList").show()
+
+        }
+    }
+
+    $('input[type=radio][name=paymentType]').change(function () {
+        hideOrShow(this.value);
+    });
+
+
+    function removeRow(index) {
+        console.log("index=" + index);
+        $("#bootstrap-table").bootstrapTable('remove', {
+            field: "rowId",
+            values: [index]
         });
+    }
 
-
-        function removeRow (index) {
-            console.log("index=" + index);
-            $("#bootstrap-table").bootstrapTable('remove', {
-                field: "rowId",
-                values: [index]
-            });
-        }
-
-        function calculateTotalMoney(allTableData){
-            var totalMoney = 0;
-            console.log('data', allTableData)
-            $.each(allTableData, function (key, value, index) {
-                if(value.price1 == 'undefined' || value.price1 == null) {
-                    value.price1 = 0
-                }
-                if(value.price2 == 'undefined' || value.price2 == null) {
-                    value.price2 = 0
-                }
-                if(value.price3 == 'undefined' || value.price3 == null) {
-                    value.price3 = 0
-                }
-                totalMoney += Number(value.price1) + Number(value.price2) + Number(value.price3);
-            })
-            $("#totalMoney").val(totalMoney);
-
-        }
-
-        var selValue = "";
-        function initAddProduct () {
-
-            $.each(paymentProjectDatas, function(index, dict) {
-                var dictLabel = dict.dictLabel;
-                var dictValue = dict.dictValue;
-
-                var rowData = {
-                    childId: 0,
-                    datetime1: "",
-                    datetime2: "",
-                    string1: "",
-                    string2: "",
-                    string3: "",
-                    string4: "",
-                    string5: "",
-                    string7: "",
-                    string6: dictValue,
-                    price1: 0,
-                    price2: 0,
-                    price3: 0
-                };
-                console.log("dictLabel=" + dictLabel + " dictValue=" + dictValue);
-                $("#bootstrap-table").bootstrapTable('append', rowData);
-            });
-        }
-
-
-
-        function selectDeptTree() {
-            var treeId = $("#string6").val();
-            var deptId = $.common.isEmpty(treeId) ? "100" : $("#string6").val();
-            var url = ctx + "system/dept/selectDeptTree/" + deptId;
-            var options = {
-                title: '选择部门',
-                width: "380",
-                url: url,
-                callBack: doSubmit
-            };
-            $.modal.openOptions(options);
-        }
-        function doSubmit(index, layero){
-            var tree = layero.find("iframe")[0].contentWindow.$._tree;
-            var body = layer.getChildFrame('body', index);
-            $("#string6").val(body.find('#treeId').val());
-            $("#treeName").val(body.find('#treeName').val());
-            layer.close(index);
-        }
-
-        function submitHandler() {
-            if ($.validate.form()) {
-                var dataObj = $('#form-data-edit').serializeArray();
-
-                var productArray = new Array();
-                var data = $.btTable.bootstrapTable('getData');
-
-                for (var i = 0; i < data.length; i++) {
-                    var rowData = data[i];
-                    var productObj = new Object();
-                    //productObj["string1"] = rowData["quotationId"];
-                    var price1 = rowData["price1"];
-                    var price2 = rowData["price2"];
-                    var price3 = rowData["price3"];
-                    if (price1 > 0 || price2 > 0 || price3 > 0) {
-                        productArray.push(rowData);
-                    }
-                }
-                dataObj.push({"name": "productParmters", "value": JSON.stringify(productArray)});
-
-
-                $.operate.save(prefix + "/edit", dataObj);
+    function calculateTotalMoney(allTableData) {
+        var totalMoney = 0;
+        console.log('data', allTableData)
+        $.each(allTableData, function (key, value, index) {
+            if (value.price1 == 'undefined' || value.price1 == null) {
+                value.price1 = 0
             }
+            if (value.price2 == 'undefined' || value.price2 == null) {
+                value.price2 = 0
+            }
+            if (value.price3 == 'undefined' || value.price3 == null) {
+                value.price3 = 0
+            }
+            totalMoney += Number(value.price1) + Number(value.price2) + Number(value.price3);
+        })
+        $("#totalMoney").val(totalMoney);
+
+    }
+
+    var selValue = "";
+
+    function initAddProduct() {
+
+        $.each(paymentProjectDatas, function (index, dict) {
+            var dictLabel = dict.dictLabel;
+            var dictValue = dict.dictValue;
+
+            var rowData = {
+                childId: 0,
+                datetime1: "",
+                datetime2: "",
+                string1: "",
+                string2: "",
+                string3: "",
+                string4: "",
+                string5: "",
+                string7: "",
+                string6: dictValue,
+                price1: 0,
+                price2: 0,
+                price3: 0
+            };
+            console.log("dictLabel=" + dictLabel + " dictValue=" + dictValue);
+            $("#bootstrap-table").bootstrapTable('append', rowData);
+        });
+    }
+
+
+    function selectDeptTree() {
+        var treeId = $("#string6").val();
+        var deptId = $.common.isEmpty(treeId) ? "100" : $("#string6").val();
+        var url = ctx + "system/dept/selectDeptTree/" + deptId;
+        var options = {
+            title: '选择部门',
+            width: "380",
+            url: url,
+            callBack: doSubmit
+        };
+        $.modal.openOptions(options);
+    }
+
+    function doSubmit(index, layero) {
+        var tree = layero.find("iframe")[0].contentWindow.$._tree;
+        var body = layer.getChildFrame('body', index);
+        $("#string6").val(body.find('#treeId').val());
+        $("#treeName").val(body.find('#treeName').val());
+        layer.close(index);
+    }
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            var dataObj = $('#form-data-edit').serializeArray();
+
+            var productArray = new Array();
+            var data = $.btTable.bootstrapTable('getData');
+
+            for (var i = 0; i < data.length; i++) {
+                var rowData = data[i];
+                var productObj = new Object();
+                //productObj["string1"] = rowData["quotationId"];
+                var price1 = rowData["price1"];
+                var price2 = rowData["price2"];
+                var price3 = rowData["price3"];
+                if (price1 > 0 || price2 > 0 || price3 > 0) {
+                    productArray.push(rowData);
+                }
+            }
+            dataObj.push({"name": "productParmters", "value": JSON.stringify(productArray)});
+
+
+            $.operate.save(prefix + "/edit", dataObj);
         }
+    }
 
-        $("input[name='datetime1']").datetimepicker({
-            format: "yyyy-mm-dd",
-            minView: "month",
-            autoclose: true
-        });
+    $("input[name='datetime1']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
 
-        $("input[name='datetime2']").datetimepicker({
-            format: "yyyy-mm-dd",
-            minView: "month",
-            autoclose: true
-        });
+    $("input[name='datetime2']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
 
-    </script>
+</script>
 </body>
 </html>

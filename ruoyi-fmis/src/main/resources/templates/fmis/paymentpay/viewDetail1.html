@@ -51,6 +51,39 @@
                 </div>
             </div>
         </div>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">报销方式：</label>
+            <div class="form-check col-sm-1">
+                <input class="form-check-input" type="radio" name="paymentType" id="flexRadioDefault1" checked disabled
+                       value="0" th:field="*{paymentType}">
+                <label class="form-check-label" for="flexRadioDefault1">
+                    普通报销
+                </label>
+            </div>
+            <div class="form-check col-sm-1">
+                <input class="form-check-input" type="radio" name="paymentType" id="flexRadioDefault2" value="1"
+                       th:field="*{paymentType}" disabled>
+                <label class="form-check-label" for="flexRadioDefault2">
+                    借款冲抵
+                </label>
+            </div>
+            <div class="col-sm-6" hidden id="borrowingList">
+                <label class="col-sm-2 control-label">借款单：</label>
+                <select name="balanceBorrowNo" class="form-control m-b col-sm-1" style="width: auto;" required disabled
+                        th:with="type=${borrowingNoList}"
+                        onchange="changeAmount(this)">
+                    <option value="">请选择</option>
+                    <option th:each="value : ${type}" th:text="${value}" th:value="${value}"
+                            th:field="*{balanceBorrowNo}"></option>
+                </select>
+                <label class="col-sm-2 control-label">金额：</label>
+                <input class="form-control col-sm-1" type="text" style="width: auto;" required id="applyAmount" disabled
+                       value="0" name="balanceAmount" th:field="*{balanceAmount}">
+
+            </div>
+
+        </div>
         <div class="form-group">
             <label class="col-sm-3 control-label">备注：</label>
             <div class="col-sm-8">
@@ -71,6 +104,8 @@
     $("#form-data-edit").validate({
         focusCleanup: true
     });
+
+    var paymentType = [[${bizProcessData.paymentType}]]
 
 
     $(function () {
@@ -129,7 +164,18 @@
             ]
         };
         $.table.init(options);
+        hideOrShow(paymentType)
     });
+
+    function hideOrShow(value) {
+        if (value == '0') {
+            $("#borrowingList").hide()
+        } else {
+            $("#borrowingList").show()
+
+        }
+    }
+
 
     // 设置费用科目的选择框
     function deptBudget() {

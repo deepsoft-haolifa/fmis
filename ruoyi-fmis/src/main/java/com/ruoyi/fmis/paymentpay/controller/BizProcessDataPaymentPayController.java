@@ -23,10 +23,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * 费用报销-付款
@@ -100,6 +100,8 @@ public class BizProcessDataPaymentPayController extends BaseController {
         String dataId = getRequest().getParameter("dataId");
         BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataPaymentById(Long.parseLong(dataId));
         mmap.put("bizProcessData", bizProcessData);
+        // 借款单
+        wrapBorrowingInfos(mmap, Long.valueOf(bizProcessData.getCreateBy()));
         return prefix + "/viewDetail";
     }
 
@@ -108,7 +110,22 @@ public class BizProcessDataPaymentPayController extends BaseController {
         String dataId = getRequest().getParameter("dataId");
         BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataPaymentById(Long.parseLong(dataId));
         mmap.put("bizProcessData", bizProcessData);
+        // 借款单
+        wrapBorrowingInfos(mmap, Long.valueOf(bizProcessData.getCreateBy()));
         return prefix + "/viewDetail1";
+    }
+
+    private void wrapBorrowingInfos(ModelMap mmap, Long userId) {
+        // 借款单
+        List<BizProcessData> bizProcessData = bizProcessDataService.selectAllBorrowingWithNoPayAndAgree(userId);
+        Map<String, Double> borrowingMap = new HashMap<>();
+        List<String> borrowingNoList = new ArrayList<>();
+        for (BizProcessData data : bizProcessData) {
+            borrowingNoList.add(data.getString2());
+            borrowingMap.put(data.getString2(), data.getPrice1());
+        }
+        mmap.put("borrowingNoList", borrowingNoList);
+        mmap.put("borrowingMap", borrowingMap);
     }
 
     @GetMapping("/viewExamineHistory")
@@ -124,6 +141,8 @@ public class BizProcessDataPaymentPayController extends BaseController {
     public String edit(@PathVariable("dataId") Long dataId, ModelMap mmap) {
         BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataPaymentById(dataId);
         mmap.put("bizProcessData", bizProcessData);
+        // 借款单
+        wrapBorrowingInfos(mmap, Long.valueOf(bizProcessData.getCreateBy()));
         return prefix + "/edit";
     }
 
@@ -136,43 +155,221 @@ public class BizProcessDataPaymentPayController extends BaseController {
     public AjaxResult editSave(BizProcessData bizProcessData) {
         int updateReturn = bizProcessDataService.updateBizProcessData(bizProcessData);
         if (updateReturn > 0 && "1".equals(bizProcessData.getString11())) {
-            String bookingType = bizProcessData.getString13();
-            if ("1".equals(bookingType)) {
-                // 添加现金日记账
-                if (!bizBillService.existsByCertificateNumber(bizProcessData.getString2())) {
-                    BizBill bizBill = new BizBill();
-                    bizBill.setType("1");
-                    bizBill.setDeptId(bizProcessData.getString6());
-                    bizBill.setCertificateNumber(bizProcessData.getString2());
-                    bizBill.setD(bizProcessData.getDatetime3());
-                    bizBill.setPaymentType("1");// 费用报销
-                    bizBill.setPayment(bizProcessData.getPrice1());
-                    bizBill.setRemark(bizProcessData.getRemark());
-                    // 付款单位
-                    bizBill.setString2(bizProcessData.getString10());
-                    // 收款单位
-                    bizBill.setString1(bizProcessData.getString3());
-                    bizBillService.insertBizBill(bizBill);
-                }
-            } else if ("2".equals(bookingType)) {
-                // 添加银行日记账
-                if (!bizBankBillService.existsByCertificateNumber(bizProcessData.getString2())) {
-                    BizBankBill bizBankBill = new BizBankBill();
-                    bizBankBill.setType("2");
-                    bizBankBill.setDeptId(bizProcessData.getString6());
-                    bizBankBill.setCertificateNumber(bizProcessData.getString2());
-                    bizBankBill.setOperateDate(bizProcessData.getDatetime3());
-                    bizBankBill.setPaymentType("1");
-                    bizBankBill.setPayment(bizProcessData.getPrice1());
-                    bizBankBill.setRemark(bizProcessData.getRemark());
-                    bizBankBill.setPayCompany(bizProcessData.getString10());
-                    bizBankBill.setPayAccount(bizProcessData.getString12());
-                    bizBankBill.setCollectCompany(bizProcessData.getString3());
-                    bizBankBillService.insertBizBankBill(bizBankBill);
+            // 已付款
+            // 判断是否为冲抵报销
+            if (bizProcessData.getPaymentType() == 1) {
+                // 如果为冲抵报销，需要计算 冲抵之后金额并进行记账，同时更改冲抵借款单的状态
+                double balanceAmount = bizProcessData.getBalanceAmount();
+                double price1 = bizProcessData.getPrice1();
+                double actualAmount = price1 - balanceAmount;
+                String bookingType = bizProcessData.getString13();
+                insertKeepAccountsRecord(bookingType, bizProcessData, actualAmount);
+            } else {
+                String bookingType = bizProcessData.getString13();
+                if ("1".equals(bookingType)) {
+                    // 添加现金日记账
+                    if (!bizBillService.existsByCertificateNumber(bizProcessData.getString2())) {
+                        BizBill bizBill = new BizBill();
+                        bizBill.setType("1");
+                        bizBill.setDeptId(bizProcessData.getString6());
+                        bizBill.setCertificateNumber(bizProcessData.getString2());
+                        bizBill.setD(bizProcessData.getDatetime3());
+                        bizBill.setPaymentType("1");// 费用报销
+                        bizBill.setPayment(bizProcessData.getPrice1());
+                        bizBill.setRemark(bizProcessData.getRemark());
+                        // 付款单位
+                        bizBill.setString2(bizProcessData.getString10());
+                        // 收款单位
+                        bizBill.setString1(bizProcessData.getString3());
+                        bizBillService.insertBizBill(bizBill);
+                    }
+                } else if ("2".equals(bookingType)) {
+                    // 添加银行日记账
+                    if (!bizBankBillService.existsByCertificateNumber(bizProcessData.getString2())) {
+                        BizBankBill bizBankBill = new BizBankBill();
+                        bizBankBill.setType("2");
+                        bizBankBill.setDeptId(bizProcessData.getString6());
+                        bizBankBill.setCertificateNumber(bizProcessData.getString2());
+                        bizBankBill.setOperateDate(bizProcessData.getDatetime3());
+                        bizBankBill.setPaymentType("1");
+                        bizBankBill.setPayment(bizProcessData.getPrice1());
+                        bizBankBill.setRemark(bizProcessData.getRemark());
+                        bizBankBill.setPayCompany(bizProcessData.getString10());
+                        bizBankBill.setPayAccount(bizProcessData.getString12());
+                        bizBankBill.setCollectCompany(bizProcessData.getString3());
+                        bizBankBillService.insertBizBankBill(bizBankBill);
+                    }
                 }
             }
+
         }
         return toAjax(updateReturn);
+    }
+
+    /**
+     * 区分记账类型
+     *
+     * @param bookingType
+     * @param bizProcessData
+     * @param actualAmount
+     */
+    private void insertKeepAccountsRecord(String bookingType, BizProcessData bizProcessData, double actualAmount) {
+        if ("1".equals(bookingType)) {
+            // 现金日记账
+            insertKeepAccountsRecordForBill(bizProcessData, actualAmount);
+        } else {
+            // 银行日记账
+            insertKeepAccountsRecordForBank(bizProcessData, actualAmount);
+        }
+
+    }
+
+    /**
+     * 银行日记账
+     *
+     * @param bizProcessData
+     * @param actualAmount
+     */
+    private void insertKeepAccountsRecordForBank(BizProcessData bizProcessData, double actualAmount) {
+        // 报销单放款记账
+        insertBankBillRecord(0, "1", bizProcessData.getString6(), bizProcessData.getString2(),
+                bizProcessData.getDatetime3(), bizProcessData.getPrice1(), bizProcessData.getRemark(),
+                bizProcessData.getString10(), bizProcessData.getString3(), bizProcessData.getString12());
+        if (actualAmount >= 0) {
+            // 借款单金额全部冲抵
+            // 生成借款单 回款 记账
+            // 生成报销单 放款 记账
+            // 更新借款单状态为已结清
+
+            // 借款单还款
+            insertBankBillRecord(1, "3", bizProcessData.getString6(), bizProcessData.getString2(), bizProcessData.getDatetime3(), bizProcessData.getBalanceAmount(),
+                    String.format("报销单冲抵还款，单号：s%，金额：s%", bizProcessData.getString2(),
+                            bizProcessData.getPrice1()), bizProcessData.getString3(), bizProcessData.getString10(), "");
+            // 更新状态：借款单单号， 完结状态 ，已结算金额
+            updateBorrowingStatusAndAmount(bizProcessData.getBalanceBorrowNo(), 2, bizProcessData.getBalanceAmount());
+        }
+
+        if (actualAmount < 0) {
+            // 借款单金额部分冲抵
+            // 生成借款单 回款 记账
+            // 生成报销单 放款 记账
+            // 更新借款单状态为 部分结清， 结算金额
+            // 借款单还款记账
+            insertBankBillRecord(1, "3", bizProcessData.getString6(), bizProcessData.getString2(), bizProcessData.getDatetime3(), bizProcessData.getPrice1(),
+                    String.format("报销单冲抵还款，单号：s%，金额：s%", bizProcessData.getString2(),
+                            bizProcessData.getPrice1()), bizProcessData.getString3(), bizProcessData.getString10(), "");
+            updateBorrowingStatusAndAmount(bizProcessData.getBalanceBorrowNo(), 1, bizProcessData.getPrice1());
+
+        }
+    }
+
+    private void insertBankBillRecord(int wayType, String paymentType, String deptId, String certificateNumber, Date d, double price1, String remark, String payer, String payee, String payAccount) {
+
+        BizBankBill bizBankBill = new BizBankBill();
+        bizBankBill.setType("2");
+        bizBankBill.setDeptId(deptId);
+        bizBankBill.setCertificateNumber(certificateNumber);
+        bizBankBill.setOperateDate(d);
+        if(wayType == 0) {
+            bizBankBill.setPaymentType(paymentType);
+        } else {
+            bizBankBill.setCollectionType(paymentType);
+        }
+        bizBankBill.setPayment(price1);
+        bizBankBill.setRemark(remark);
+        bizBankBill.setPayCompany(payer);
+        bizBankBill.setPayAccount(payAccount);
+        bizBankBill.setCollectCompany(payee);
+        bizBankBillService.insertBizBankBill(bizBankBill);
+
+    }
+
+
+    // 现金日记账
+    private void insertKeepAccountsRecordForBill(BizProcessData bizProcessData, double actualAmount) {
+        // 报销单放款记账
+        insertBillRecord(0, "1", bizProcessData.getString6(), bizProcessData.getString2(), bizProcessData.getDatetime3(), bizProcessData.getPrice1(), bizProcessData.getRemark(), bizProcessData.getString10(), bizProcessData.getString3());
+        if (actualAmount >= 0) {
+            // 借款单金额全部冲抵
+            // 生成借款单 回款 记账
+            // 生成报销单 放款 记账
+            // 更新借款单状态为已结清
+
+            // 借款单还款
+            insertBillRecord(1, "3", bizProcessData.getString6(), bizProcessData.getString2(), bizProcessData.getDatetime3(), bizProcessData.getBalanceAmount(),
+                    String.format("报销单冲抵还款，单号：s%，金额：s%", bizProcessData.getString2(),
+                            bizProcessData.getPrice1()), bizProcessData.getString3(), bizProcessData.getString10());
+            // 更新状态：借款单单号， 完结状态 ，已结算金额
+            updateBorrowingStatusAndAmount(bizProcessData.getBalanceBorrowNo(), 2, bizProcessData.getBalanceAmount());
+        }
+
+        if (actualAmount < 0) {
+            // 借款单金额部分冲抵
+            // 生成借款单 回款 记账
+            // 生成报销单 放款 记账
+            // 更新借款单状态为 部分结清， 结算金额
+            // 借款单还款记账
+            insertBillRecord(1, "3", bizProcessData.getString6(), bizProcessData.getString2(), bizProcessData.getDatetime3(), bizProcessData.getPrice1(),
+                    String.format("报销单冲抵还款，单号：s%，金额：s%", bizProcessData.getString2(),
+                            bizProcessData.getPrice1()), bizProcessData.getString3(), bizProcessData.getString10());
+            updateBorrowingStatusAndAmount(bizProcessData.getBalanceBorrowNo(), 1, bizProcessData.getPrice1());
+
+        }
+    }
+
+    /**
+     * 更新借款单数据
+     * @param balanceBorrowNo
+     * @param borrowingStatus 0 未还款 1 部分结清 2 已结清
+     * @param price
+     */
+    private void updateBorrowingStatusAndAmount(String balanceBorrowNo, int borrowingStatus, Double price) {
+        BizProcessData bizProcessData = new BizProcessData();
+        bizProcessData.setBizId("borrowing");
+        bizProcessData.setString2(balanceBorrowNo);
+        List<BizProcessData> bizProcessData1 = bizProcessDataService.selectBizProcessDataVoRefBorrowing(bizProcessData);
+        if (!CollectionUtils.isEmpty(bizProcessData1)) {
+            BizProcessData bizProcessData2 = bizProcessData1.get(0);
+            //设置结算字段
+            bizProcessData2.setPrice2(price);
+            //设置结算状态
+            bizProcessData2.setString13(String.valueOf(borrowingStatus));
+            bizProcessDataService.updateBizProcessData(bizProcessData2);
+        }
+    }
+
+    /**
+     *
+     * @param wayType 0 放款 1 收款
+     * @param paymentType wayType = 0 时 1 // 费用  wayType = 1 时 3 // 借款
+     * @param deptId
+     * @param certificateNumber
+     * @param d
+     * @param price1
+     * @param remark
+     * @param payer
+     * @param payee
+     */
+    private void insertBillRecord(int wayType, String paymentType, String deptId, String certificateNumber, Date d, double price1, String remark, String payer, String payee) {
+        BizBill bizBill = new BizBill();
+        bizBill.setType("1");
+        bizBill.setDeptId(deptId);
+        bizBill.setCertificateNumber(certificateNumber);
+        bizBill.setD(d);
+        if (wayType == 0) {
+            // 付款
+            bizBill.setPaymentType(paymentType);
+        } else {
+            // 收款
+            bizBill.setCollectionType(paymentType);
+        }
+        bizBill.setPayment(price1);
+        bizBill.setRemark(remark);
+        // 付款单位
+        bizBill.setString2(payer);
+        // 收款单位
+        bizBill.setString1(payee);
+        bizBillService.insertBizBill(bizBill);
     }
 
 
@@ -180,6 +377,8 @@ public class BizProcessDataPaymentPayController extends BaseController {
     public String edit1(@PathVariable("dataId") Long dataId, ModelMap mmap) {
         BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataPaymentById(dataId);
         mmap.put("bizProcessData", bizProcessData);
+        // 借款单
+        wrapBorrowingInfos(mmap, Long.valueOf(bizProcessData.getCreateBy()));
         return prefix + "/edit1";
     }
 

@@ -1244,7 +1244,7 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
     }
 
     @Override
-    public List<BizProcessData> selectAllBorrowingWithNoPayAndAgree() {
-        return bizProcessDataMapper.selectAllBorrowingWithNoPayAndAgree();
+    public List<BizProcessData> selectAllBorrowingWithNoPayAndAgree(Long userId) {
+        return bizProcessDataMapper.selectAllBorrowingWithNoPayAndAgree(userId);
     }
 }
