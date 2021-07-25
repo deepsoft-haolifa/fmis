@@ -413,7 +413,11 @@
 
         parent.$('#form-data-add input[name=productsJsonParamter]').val(JSON.stringify(productJsonArray));
         parent.$('#form-data-edit input[name=productsJsonParamter]').val(JSON.stringify(productJsonArray));
-        $.modal.close();
+        $.modal.confirm('添加成功，确定要离开吗？',
+            function() {
+                $.modal.close();
+            }
+        );
     }
 </script>
 </body>
