@@ -247,8 +247,8 @@ public class BizPayPlanController extends BaseController {
         bizBill.setPaymentType(paymentType);
         bizBill.setPayment(acceptAmount);
         bizBill.setRemark(bizPayPlan.getApplyRemark());
-        bizBill.setString1(bizPayPlan.getPayCompany());
-        bizBill.setString2(bizPayPlan.getApplyCollectionCompany());
+        bizBill.setString1(bizPayPlan.getApplyCollectionCompany());
+        bizBill.setString2(bizPayPlan.getPayCompany());
         bizBillService.insertBizBill(bizBill);
     }
 

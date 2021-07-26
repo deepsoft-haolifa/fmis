@@ -218,8 +218,8 @@ public class BizProcessDataBorrowingPayController extends BaseController {
                     bizBill.setPaymentType("3");
                     bizBill.setPayment(bizProcessData.getPrice1());
                     bizBill.setRemark(bizProcessData.getRemark());
-                    bizBill.setString1(bizProcessData.getString10());
-                    bizBill.setString2(bizProcessData.getString5());
+                    bizBill.setString1(bizProcessData.getString5());
+                    bizBill.setString2(bizProcessData.getString10());
                     bizBillService.insertBizBill(bizBill);
                 }
             } else if ("2".equals(bookingType)) {
