@@ -1251,13 +1251,16 @@
           AND d.biz_id = "invoice"
           AND d.normal_flag = d.flow_status
         <if test="startDate!=null">
-            and c.datetime2>=#{startDate}
+            and c.datetime1>=#{startDate}
         </if>
         <if test="endDate!=null">
-            and c.datetime2&lt;=#{endDate}
+            and c.datetime1&lt;=#{endDate}
         </if>
         <if test="pString2!=null">
             and d.string2=#{pString2}
+        </if>
+        <if test="string7!=null">
+            and c.string7=#{string7}
         </if>
         ORDER BY d.create_time DESC
     </select>

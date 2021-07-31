@@ -11,11 +11,13 @@
 
 
         <div class="form-group">
-            <label class="col-sm-3 control-label">申请日期：</label>
+            <label class="col-sm-3 control-label"><span style="color: red; ">*</span>申请日期：</label>
             <div class="col-sm-8">
                 <div class="input-group date">
                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                    <input name="datetime1" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    <input type="text" class="form-control" placeholder="yyyy-MM-dd" name="datetime1" readonly th:value="${#dates.format(new java.util.Date(), 'yyyy-MM-dd')}" />
+
+<!--                    <input name="datetime1" class="form-control" placeholder="yyyy-MM-dd" type="text" readonly>-->
                 </div>
             </div>
         </div>
