@@ -332,7 +332,7 @@
     }
 
 
-    function submitHandler() {
+    function submitHandler(callback) {
         console.log("start...");
         var rows = $.table.selectFirstColumns();
         if (rows.length == 0) {
@@ -411,6 +411,7 @@
             productJsonArray.push(rowData);
         }
 
+
         layer.confirm('添加成功，确定要离开吗？', {
             icon: 3,
             title: "系统提示",
@@ -420,12 +421,12 @@
             parent.$('#form-data-add input[name=productsJsonParamter]').val(JSON.stringify(productJsonArray));
             parent.$('#form-data-edit input[name=productsJsonParamter]').val(JSON.stringify(productJsonArray));
             $.modal.close();
+            callback()
         }, function (index) {
             layer.close(index);
             console.log("重新选择")
-            $.btTable.bootstrapTable('refresh');
+            $.btTable.bootstrapTable('uncheckAll');
         });
-
 
     }
 </script>
