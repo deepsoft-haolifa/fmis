@@ -800,8 +800,8 @@
 
             $.modal.open("关联产品", url,widthNum, heigthNum,function (index, layero) {
                 var iframeWin = layero.find('iframe')[0];
-                iframeWin.contentWindow.submitHandler(index, layero);
-                appendTable();
+                iframeWin.contentWindow.submitHandler(appendTable);
+                // appendTable();
 
             });
         }

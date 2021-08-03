@@ -312,7 +312,7 @@
             }
         }
 
-        function submitHandler() {
+        function submitHandler(callback) {
             console.log("start...");
             var rows = $.table.selectFirstColumns();
             if (rows.length == 0) {
@@ -390,11 +390,20 @@
             }
             parent.$('#form-quotation-add input[id=productsJsonParamter]').val(JSON.stringify(productJsonArray));
             parent.$('#form-quotation-edit input[id=productsJsonParamter]').val(JSON.stringify(productJsonArray));
-            $.modal.confirm('添加成功，确定要离开吗？',
-                function() {
-                    $.modal.close();
-                }
-            );
+            callback()
+
+            layer.confirm('添加成功，确定要离开吗？', {
+                icon: 3,
+                title: "系统提示",
+                btn: ['确认', '取消']
+            }, function (index) {
+                layer.close(index);
+                $.modal.close();
+            }, function (index) {
+                layer.close(index);
+                // console.log("重新选择")
+                $.btTable.bootstrapTable('uncheckAll');
+            });
 
         }
     </script>
