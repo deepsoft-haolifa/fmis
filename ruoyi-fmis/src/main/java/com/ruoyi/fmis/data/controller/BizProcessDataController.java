@@ -770,8 +770,10 @@ public class BizProcessDataController extends BaseController {
         }
         return bizProcessDataService.listLevelProductCaigou(bizProcessData);
     }
+
     /**
      * 采购池 因为需要关联相同的产品 所以单独写了一个方法
+     *
      * @param bizProcessData
      * @return
      */
@@ -780,6 +782,7 @@ public class BizProcessDataController extends BaseController {
     public TableDataInfo listLevelProductCaigou(BizProcessData bizProcessData) {
         return bizProcessDataService.listLevelProductCaigou(bizProcessData);
     }
+
     @PostMapping("/listLevelActuator")
     @ResponseBody
     public TableDataInfo listLevelActuator(BizProcessData bizProcessData) {
@@ -1675,7 +1678,7 @@ public class BizProcessDataController extends BaseController {
         try {
 
 
-            String filename = bizProcessData.getString1() + "_" + System.currentTimeMillis()+".pdf";
+            String filename = bizProcessData.getString1() + "_" + System.currentTimeMillis() + ".pdf";
             String filePath = PdfUtil.getAbsoluteFile(filename);
             // step 1 横向
             Document document = new Document(PageSize.A4_LANDSCAPE);
@@ -2087,14 +2090,26 @@ public class BizProcessDataController extends BaseController {
                     endRemark = bizProduct.getRemark();
                     table.addCell(PdfUtil.mergeCol(endRemark, 7, textFont));
                 } else {
-                    table.addCell(PdfUtil.mergeCol(startRemark + " 含" + endRemark, 7, textFont));
+                    String text = startRemark;
+                    if (StringUtils.isNotEmpty(endRemark)) {
+                        text = startRemark + " 含" + endRemark;
+                    }
+                    table.addCell(PdfUtil.mergeCol(text, 7, textFont));
                 }
 
             }
 
 
             //金额合计
-            table.addCell(PdfUtil.mergeColRight("合计", 5, textFont));//4
+
+            String totalDesc = "合计";
+            String string5 = bizProcessData.getString5();
+            if("不含税".equals(string5)) {
+                totalDesc = "不含税价"+totalDesc;
+            } else {
+                totalDesc = "含税价" + totalDesc;
+            }
+            table.addCell(PdfUtil.mergeColRight(totalDesc, 5, textFont));//4
             table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(sumTotalNum), 1, textFont));//总数量
             if (!isSchengchan) {
                 table.addCell(PdfUtil.mergeCol("", 1, textFont));//单价
@@ -2217,7 +2232,7 @@ public class BizProcessDataController extends BaseController {
             table.addCell(PdfUtil.mergeColLeft("付款及运输：" + payRemark, 14, textFont));
             table.addCell(PdfUtil.mergeCol("", 1, textFont));
             //合同签定后5个工作日发货（若未当日回传，发货期则从收到回传之日延后）
-            table.addCell(PdfUtil.mergeColLeft("1、交货周期：" + StringUtils.trim(bizProcessData.getString24()), 14, textFont));
+            table.addCell(PdfUtil.mergeColLeft("1、发货日期：" + StringUtils.trim(bizProcessData.getString6()), 14, textFont));
             table.addCell(PdfUtil.mergeCol("", 1, textFont));
             table.addCell(PdfUtil.mergeColLeft("2、收  货  人：" + StringUtils.trim(bizProcessData.getString11()) + " " + StringUtils.trim(bizProcessData.getString12()), 14, textFont));
             table.addCell(PdfUtil.mergeCol("", 1, textFont));
@@ -2267,7 +2282,7 @@ public class BizProcessDataController extends BaseController {
 
 
                 Font remarkFont1 = PdfUtil.getPdfChineseFont(7, Font.NORMAL);
-                String paragraphRemark1Content = String.format("签订地点：%s                         经办人：%s                        总经理销售及投诉电话：%s",bizProcessData.getString4(), sysUser.getUserName(), StringUtils.trim(remark10));
+                String paragraphRemark1Content = String.format("签订地点：%s                         经办人：%s                        总经理销售及投诉电话：%s", bizProcessData.getString4(), sysUser.getUserName(), StringUtils.trim(remark10));
                 paragraphRemark1.add(new Chunk(paragraphRemark1Content, remarkFont1));
                 paragraphRemark1.setAlignment(Paragraph.ALIGN_RIGHT);
                 paragraphRemark1.setIndentationLeft(12f);
