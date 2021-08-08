@@ -1249,15 +1249,15 @@ public class BizProcessDataProcurementController extends BaseController {
                     //数量
                     table.addCell(PdfUtil.mergeCol(bizProcessChild.getActuatorNum(), 1, textFont));
                     //单价
-                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getActuatorPrice().toString(), 1, textFont));
+                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getActuatorString6(), 1, textFont));
                     //合计
-                    table.addCell(PdfUtil.mergeCol((Integer.parseInt(bizProcessChild.getActuatorNum()) * bizProcessChild.getActuatorPrice()) + "", 1, textFont));
+                    table.addCell(PdfUtil.mergeCol((Integer.parseInt(bizProcessChild.getActuatorNum()) * Double.valueOf(bizProcessChild.getActuatorString6())) + "", 1, textFont));
                     //材质
                     table.addCell(PdfUtil.mergeCol(bizProcessChild.getString5(), 3, textFont));
                     //备注
                     table.addCell(PdfUtil.mergeCol(bizProcessChild.getRemark(), 3, textFont));
                     sumTotalNum = sumTotalNum + Integer.parseInt(bizProcessChild.getActuatorNum());
-                    sumTotalAmount = sumTotalAmount + Integer.parseInt(bizProcessChild.getActuatorNum()) * bizProcessChild.getActuatorPrice();
+                    sumTotalAmount = sumTotalAmount + Integer.parseInt(bizProcessChild.getActuatorNum()) * Double.valueOf(bizProcessChild.getActuatorString6());
                 }
             }
 
