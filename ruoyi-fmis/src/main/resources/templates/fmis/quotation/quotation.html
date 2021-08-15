@@ -216,24 +216,29 @@
                         var flowStatus = row.flowStatus;
                         var normalFlag = row.normalFlag;
                         var createBy = row.createById;
-                        if (flowStatus == normalFlag && loginId == createBy && flowStatus > 1) {
-                            actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="edit(\'' + row.quotationId + '\')"><i class="fa fa-edit"></i> 编辑</a>');
-                            actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="remove(\'' + row.quotationId + '\')"><i class="fa fa-remove"></i> 删除</a>');
-                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewExamine(\'' + row.quotationId + '\')"><i class="fa fa-remove"></i> 审批记录 </a>');
-                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewExamineDetail(\'' + row.quotationId + '\')"><i class="fa fa-remove"></i> 详情 </a>');
-
-                            return actions.join('');
+                        if ((flowStatus < 1 || flowStatus > 10) && createBy === loginId.toString()) {
+                             actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="edit(\'' + row.quotationId + '\')"><i class="fa fa-edit"></i> 编辑</a>');
+                             actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="remove(\'' + row.quotationId + '\')"><i class="fa fa-remove"></i> 删除</a>');
+                             actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subReport(\'' + row.quotationId + '\')"><i class="fa fa-remove"></i> 上报</a>');
                         }
+                        // if (flowStatus == normalFlag && loginId == createBy && flowStatus > 1) {
+                        //     actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="edit(\'' + row.quotationId + '\')"><i class="fa fa-edit"></i> 编辑</a>');
+                        //     actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="remove(\'' + row.quotationId + '\')"><i class="fa fa-remove"></i> 删除</a>');
+                        //     actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewExamine(\'' + row.quotationId + '\')"><i class="fa fa-remove"></i> 审批记录 </a>');
+                        //     actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewExamineDetail(\'' + row.quotationId + '\')"><i class="fa fa-remove"></i> 详情 </a>');
+                        //
+                        //     return actions.join('');
+                        // }
 
                         if (flowStatus < 1 && roleType == "1") {
 
-                            if (flowStatus != "0" && flowStatus == normalFlag) {
-                                //已完成
-                            } else {
-                                actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="edit(\'' + row.quotationId + '\')"><i class="fa fa-edit"></i> 编辑</a>');
-                                actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="remove(\'' + row.quotationId + '\')"><i class="fa fa-remove"></i> 删除</a>');
-                                actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subReport(\'' + row.quotationId + '\')"><i class="fa fa-remove"></i> 上报</a>');
-                            }
+                            // if (flowStatus != "0" && flowStatus == normalFlag) {
+                            //     //已完成
+                            // } else {
+                            //     actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="edit(\'' + row.quotationId + '\')"><i class="fa fa-edit"></i> 编辑</a>');
+                            //     actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="remove(\'' + row.quotationId + '\')"><i class="fa fa-remove"></i> 删除</a>');
+                            //     actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subReport(\'' + row.quotationId + '\')"><i class="fa fa-remove"></i> 上报</a>');
+                            // }
 
                         } else if (roleType == "2" && flowStatus == "1" && normalFlag != flowStatus) {
                             //角色=销售经理  状态=销售员上报
@@ -387,7 +392,7 @@
                 for (var i = 0; i < rowss.length; i++) {
                     row = rowss[i];
                     var flowStatus = row.flowStatus;
-                    if (flowStatus > 0) {
+                    if (flowStatus > 0&& flowStatus<10) {
                         $.modal.alertWarning("已上报数据不能删除");
                         return;
                     }
@@ -405,7 +410,7 @@
                 }
                 if (row != null) {
                     var flowStatus = row.flowStatus;
-                    if (flowStatus > 0) {
+                    if (flowStatus > 0 && flowStatus<10) {
                         $.modal.alertWarning("已上报数据不能删除");
                         return;
                     }
@@ -431,7 +436,7 @@
                     return;
                 }
                 var flowStatus = row.flowStatus;
-                if (flowStatus > 0) {
+                if (flowStatus > 0 && flowStatus<10) {
                     $.modal.alertWarning("已上报数据不能修改");
                     return;
                 }
@@ -445,7 +450,7 @@
                 }
                 if (row != null) {
                     var flowStatus = row.flowStatus;
-                    if (flowStatus > 0) {
+                    if (flowStatus > 0 && flowStatus<10) {
                         $.modal.alertWarning("已上报数据不能修改");
                         return;
                     }

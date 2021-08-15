@@ -176,9 +176,11 @@ public class BizProcessDataProcurementController extends BaseController {
                 String normalFlag = data.getNormalFlag();
                 String flowStatusRemark = "待上报";
                 data.setLoginUserId(ShiroUtils.getUserId().toString());
-                if ("-2".equals(flowStatus)) {
-                    flowStatusRemark = "待上报";
-                } else if ("1".equals(flowStatus)) {
+//                if ("-2".equals(flowStatus)) {
+//                    flowStatusRemark = "待上报";
+//                } else
+
+               if ("1".equals(flowStatus)) {
                     flowStatusRemark = "已上报";
                 } else {
                     SysRole currentSysRole = CommonUtils.getLikeByMap(flowAllMap, flowStatus.replaceAll("-", ""));
