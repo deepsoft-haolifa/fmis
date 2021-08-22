@@ -75,4 +75,9 @@ public interface IBizCustomerService {
      * 所有客户列表
      */
     public List<BizCustomer> selectCustomerAll(Set<String> customerIdSet);
+
+    /**
+     *
+     */
+    void cleanCustomerAdmin();
 }

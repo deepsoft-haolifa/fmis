@@ -55,4 +55,13 @@ public class RyTask {
     public void ryMonthBillAmount() {
         billAmountService.updateBillAmountJob();
     }
+
+    /**
+     * 定时清理长时间无追踪状态的客户负责人
+     */
+    public void ryCustomerAdminClean() {
+        System.out.println("ryCustomerAdminClean start...");
+        bizCustomerService.cleanCustomerAdmin();
+        System.out.println("ryCustomerAdminClean end...");
+    }
 }

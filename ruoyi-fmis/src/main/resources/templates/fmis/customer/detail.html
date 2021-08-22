@@ -77,9 +77,7 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">分配次数：</label>
                 <div class="col-sm-8">
-                    <select name="assignNumber" disabled class="form-control m-b" th:with="type=${@dict.getType('assign_number')}">
-                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{assignNumber}"></option>
-                    </select>
+                    <input name="assignNumber" disabled class="form-control" type="text" th:field="*{assignNumber}">
                 </div>
             </div>
 

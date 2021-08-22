@@ -85,10 +85,66 @@ public class BizCustomerController extends BaseController {
         return prefix + "/customer";
     }
 
+    @RequiresPermissions("fmis:customer:publicView")
+    @GetMapping("/public")
+    public String publicCustomer() {
+        return prefix + "/publiccustomer";
+    }
+
+
+    @RequiresPermissions("fmis:customer:add2")
+    @GetMapping("/add2")
+    public String addCustomer(ModelMap mmap) {
+        mmap.put("users", userService.selectUserList(new SysUser()));
+        mmap.put("areaCode",getBh());
+        return prefix + "/addmenu";
+    }
+
+    /**
+     * 分配业务负责人页面
+     * @param customerId
+     * @param mmap
+     * @return
+     */
+    @RequiresPermissions("fmis:customer:allocate")
+    @GetMapping("/allocate/admin/{customerId}")
+    public String allocateAdmin(@PathVariable("customerId") int customerId, ModelMap mmap) {
+        mmap.put("users", userService.selectUserList(new SysUser()));
+        mmap.put("areaCode",getBh());
+        mmap.put("customerId", customerId);
+        return prefix + "/allocateAdmin";
+    }
+
+    @RequiresPermissions("fmis:customer:allocate")
+    @Log(title = "客户", businessType = BusinessType.UPDATE)
+    @PostMapping("/allocate/admin")
+    @ResponseBody
+    public AjaxResult allocateAdmin(BizCustomer bizCustomer) {
+        BizCustomer bizCustomer1 = bizCustomerService.selectBizCustomerById(bizCustomer.getCustomerId());
+        String assignNumber = bizCustomer1.getAssignNumber();
+        if(StringUtils.isEmpty(assignNumber)) {
+            assignNumber = "0";
+        }
+        int assignNumberWrapper = Integer.parseInt(assignNumber) + 1;
+        bizCustomer.setAssignNumber(String.valueOf(assignNumberWrapper));
+
+        // 判断当前业务员 负责客户是否超过30个
+        BizCustomer bizCustomerList = new BizCustomer();
+        bizCustomerList.setOwnerUserId(bizCustomer.getOwnerUserId());
+        List<BizCustomer> bizCustomers = bizCustomerService.selectBizCustomerList(bizCustomerList);
+        if(!CollectionUtils.isEmpty(bizCustomers) && bizCustomers.size() >= 30) {
+            return new AjaxResult(AjaxResult.Type.WARN, "每个业务人员最多管理30个客户！");
+        }
+        return toAjax(bizCustomerService.updateBizCustomer(bizCustomer));
+    }
+
+
+
+
     /**
      * 查询客户列表
      */
-    @RequiresPermissions("fmis:customer:list")
+    @RequiresPermissions({"fmis:customer:list"})
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(BizCustomer bizCustomer) {
@@ -97,6 +153,21 @@ public class BizCustomerController extends BaseController {
         List<BizCustomer> list = bizCustomerService.selectBizCustomerList(bizCustomer);
         return getDataTable(list);
     }
+
+    /**
+     * 查询公共客户列表
+     */
+    @RequiresPermissions({"fmis:customer:publicView"})
+    @PostMapping("/publicList")
+    @ResponseBody
+    public TableDataInfo publicList(BizCustomer bizCustomer) {
+        startPage();
+//        PageHelper.startPage(1, 10, "");
+        List<BizCustomer> list = bizCustomerService.selectBizCustomerList(bizCustomer);
+        return getDataTable(list);
+    }
+
+
 
     @PostMapping("/listNoAuth")
     @ResponseBody
