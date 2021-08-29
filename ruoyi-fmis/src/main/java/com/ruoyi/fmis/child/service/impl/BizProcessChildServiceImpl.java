@@ -246,7 +246,7 @@ public class BizProcessChildServiceImpl implements IBizProcessChildService {
                             InvoiceExportDTO exportDTO = new InvoiceExportDTO();
                             BeanUtil.copyProperties(invoiceExportDTO, exportDTO);
                             exportDTO.setProductName(saleDTO.getProductName());
-                            exportDTO.setSpec(saleDTO.getSpecAndModel());
+                            exportDTO.setSpec(saleDTO.getSpecifications());
                             exportDTO.setUnit(saleDTO.getUnitMeasurement());
                             exportDTO.setQuantity(saleDTO.getQuantity());
                             exportDTO.setPrice(saleDTO.getPrice());

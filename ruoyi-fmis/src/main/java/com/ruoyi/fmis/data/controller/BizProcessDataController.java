@@ -1,6 +1,7 @@
 package com.ruoyi.fmis.data.controller;
 
 import java.io.FileOutputStream;
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -1861,7 +1862,6 @@ public class BizProcessDataController extends BaseController {
             Double sumTotalNumRef2 = new Double(0);
 
             DecimalFormat data = new DecimalFormat("#");
-
             //优惠 string14
             Double string14D = new Double(0);
 
@@ -2591,7 +2591,244 @@ public class BizProcessDataController extends BaseController {
     @PostMapping("/sale-list-export")
     @ResponseBody
     public AjaxResult saleListExport(@RequestParam Long dataId) {
-        List<SaleListExportDTO> list = bizProcessDataService.selectSaleListExport(dataId);
+        BizProcessChild queryBizProcessChild = new BizProcessChild();
+        queryBizProcessChild.setDataId(dataId);
+        List<BizProcessChild> bizProcessChildList = bizProcessChildService.selectBizQuotationProductList(queryBizProcessChild);
+        //优惠 string14
+        Double string14D = new Double(0);
+
+        List<SaleListExportDTO> list = new ArrayList<>();
+        for (int i = 0; i < bizProcessChildList.size(); i++) {
+            SaleListExportDTO exportDTO=new SaleListExportDTO();
+            exportDTO.setId(i+1);
+            exportDTO.setTaxRate("0.13");
+            String endRemark = "";
+            BizProcessChild bizProduct = bizProcessChildList.get(i);
+
+            String productName = bizProduct.getProductName();
+            String model = bizProduct.getModel();
+            //执行器计算
+
+            String actuatorId = bizProduct.getActuatorId();
+            BizActuator bizActuator = null;
+            if (StringUtils.isNotEmpty(actuatorId)) {
+                bizActuator = bizActuatorService.selectBizActuatorById(Long.parseLong(actuatorId));
+            }
+
+            Double actuatorTotal = new Double(0);
+            if (bizActuator != null) {
+                Double actuatorPrice = bizActuator.getPrice();
+                String actuatorNum = bizProduct.getActuatorNum();
+                String actuatorCoefficient = bizProduct.getActuatorCoefficient();
+                if (StringUtils.isNotEmpty(actuatorNum) && actuatorPrice > 0 && StringUtils.isNotEmpty(actuatorCoefficient)) {
+                    actuatorTotal = Double.parseDouble(actuatorNum) * actuatorPrice * Double.parseDouble(actuatorCoefficient);
+
+                    String type = bizActuator.getString2();
+                    String repStr = "气动";
+                    String appendStr = "6";
+                    if ("1".equals(type)) {
+                        repStr = "电动";
+                        appendStr = "9";
+                    }
+                    productName = productName.replaceAll("无头", repStr);
+
+                    if (model.startsWith("D")) {
+                        model = model.substring(1, model.length());
+                        model = "D" + appendStr + model;
+                    }
+                    if (endRemark.length() > 0) {
+                        endRemark += ",";
+                    }
+                    endRemark += "执行器" + " " + bizActuator.getName();
+
+                }
+            }
+            exportDTO.setProductName(productName);
+
+            exportDTO.setModel(model);
+            exportDTO.setSpecifications(bizProduct.getSpecifications());
+            exportDTO.setQuantity(bizProduct.getProductNum());
+
+
+            //总价计算
+            Double productPrice = bizProduct.getProductPrice();
+            String productNum = bizProduct.getProductNum();
+
+//            sumTotalNum = sumTotalNum + Double.parseDouble(productNum);
+
+            Double productTotal = new Double(0);
+            String productCoefficient = bizProduct.getProductCoefficient();
+            if (StringUtils.isNotEmpty(productNum) && productPrice > 0 && StringUtils.isNotEmpty(productCoefficient)) {
+                productTotal = Double.parseDouble(productNum) * productPrice * Double.parseDouble(productCoefficient);
+            }
+            //法兰计算
+
+            Double ref1Total = new Double(0);
+            String ref1Id = bizProduct.getProductRef1Id();
+            if (StringUtils.isNotEmpty(ref1Id) && !ref1Id.trim().equals("0")) {
+                Double ref1Price = bizProduct.getPrice2();
+                String ref1Num = bizProduct.getString6();
+                String ref1Coefficient = bizProduct.getProductRef1Coefficient();
+                if (StringUtils.isNotEmpty(ref1Num) && ref1Price != null && ref1Price > 0 && StringUtils.isNotEmpty(ref1Coefficient)) {
+                    ref1Total = Double.parseDouble(ref1Num) * ref1Price * Double.parseDouble(ref1Coefficient);
+//                    sumTotalNumRef1 = sumTotalNumRef1 + Double.parseDouble(ref1Num);
+                }
+                if (endRemark.length() > 0) {
+                    endRemark += ",";
+                }
+                endRemark += "法兰";
+            }
+            //螺栓计算
+            Double ref2Tota = new Double(0);
+            String ref2Id = bizProduct.getString5();
+            if (StringUtils.isNotEmpty(ref2Id)) {
+                Double ref2Price = StringUtils.toDouble(bizProduct.getString8());
+                String ref2Num = bizProduct.getString9();
+                String ref2Coefficient = bizProduct.getProductRef2Coefficient();
+                if (StringUtils.isNotEmpty(ref2Num) && ref2Price > 0 && StringUtils.isNotEmpty(ref2Coefficient)) {
+                    ref2Tota = Double.parseDouble(ref2Num) * ref2Price * Double.parseDouble(ref2Coefficient);
+//                    sumTotalNumRef2 = sumTotalNumRef2 + Double.parseDouble(ref2Num);
+                }
+                if (endRemark.length() > 0) {
+                    endRemark += ",";
+                }
+                endRemark += "螺栓";
+            }
+
+            //定位器
+            Double pattachmentIdTotal = new Double(0);
+            Long pattachmentId = bizProduct.getPattachmentId();
+            if (pattachmentId != null && pattachmentId > 0L) {
+                Double price = bizProduct.getPattachmentPrice();
+                Double num = bizProduct.getPattachmentCount();
+                Double coefficient = bizProduct.getPattachmentCoefficient();
+                if (price > 0 && num > 0 && coefficient > 0) {
+                    pattachmentIdTotal = price * num * coefficient;
+
+                }
+                if (endRemark.length() > 0) {
+                    endRemark += ",";
+                }
+                endRemark += "定位器";
+            }
+
+            Double pattachmentId1Total = new Double(0);
+            Long pattachment1Id = bizProduct.getPattachment1Id();
+            if (pattachment1Id != null && pattachment1Id > 0L) {
+                Double price = bizProduct.getPattachment1Price();
+                Double num = bizProduct.getPattachment1Count();
+                Double coefficient = bizProduct.getPattachment1Coefficient();
+                if (price > 0 && num > 0 && coefficient > 0) {
+                    pattachmentId1Total = price * num * coefficient;
+                }
+                if (endRemark.length() > 0) {
+                    endRemark += ",";
+                }
+                endRemark += "电磁阀";
+            }
+
+            Double pattachmentId2Total = new Double(0);
+            Long pattachment2Id = bizProduct.getPattachment2Id();
+            if (pattachment2Id != null && pattachment2Id > 0L) {
+                Double price = bizProduct.getPattachment2Price();
+                Double num = bizProduct.getPattachment2Count();
+                Double coefficient = bizProduct.getPattachment2Coefficient();
+                if (price > 0 && num > 0 && coefficient > 0) {
+                    pattachmentId2Total = price * num * coefficient;
+                }
+                if (endRemark.length() > 0) {
+                    endRemark += ",";
+                }
+                endRemark += "回信器数";
+            }
+
+
+            Double pattachmentId3Total = new Double(0);
+            Long pattachment3Id = bizProduct.getPattachment3Id();
+            if (pattachment3Id != null && pattachment3Id > 0L) {
+                Double price = bizProduct.getPattachment3Price();
+                Double num = bizProduct.getPattachment3Count();
+                Double coefficient = bizProduct.getPattachment3Coefficient();
+                if (price > 0 && num > 0 && coefficient > 0) {
+                    pattachmentId3Total = price * num * coefficient;
+                }
+                if (endRemark.length() > 0) {
+                    endRemark += ",";
+                }
+                endRemark += "气源三连件";
+            }
+
+            Double pattachmentId4Total = new Double(0);
+            Long pattachment4Id = bizProduct.getPattachment4Id();
+            if (pattachment4Id != null && pattachment4Id > 0L) {
+                Double price = bizProduct.getPattachment4Price();
+                Double num = bizProduct.getPattachment4Count();
+                Double coefficient = bizProduct.getPattachment4Coefficient();
+                if (price > 0 && num > 0 && coefficient > 0) {
+                    pattachmentId4Total = price * num * coefficient;
+                }
+                if (endRemark.length() > 0) {
+                    endRemark += ",";
+                }
+                endRemark += "可离合减速器";
+            }
+
+
+            Double totalAmount = new Double(0);
+            totalAmount = productTotal + ref1Total + ref2Tota + actuatorTotal +
+                    pattachmentIdTotal + pattachmentId1Total + pattachmentId2Total + pattachmentId3Total + pattachmentId4Total;
+
+//            sumTotalAmount = sumTotalAmount + totalAmount;
+
+            //总单价
+            Double productTotalPrice = Double.valueOf(totalAmount / Double.parseDouble(productNum));
+            exportDTO.setPrice(BigDecimal.valueOf(productTotalPrice).setScale(0, BigDecimal.ROUND_HALF_UP));
+            exportDTO.setTotalPrice(BigDecimal.valueOf(totalAmount).setScale(0, BigDecimal.ROUND_HALF_UP));
+            //            sumTotalPrice = sumTotalPrice + productTotalPrice;
+//            if (!isSchengchan) {
+//                table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(productTotalPrice), 1, textFont));//单价
+//
+//                table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(totalAmount), 1, textFont));//合计
+//            } else {
+//                table.addCell(PdfUtil.mergeCol("", 1, textFont));//单价
+//
+//                table.addCell(PdfUtil.mergeCol("", 1, textFont));//合计
+//            }
+
+
+            String startRemark = "";
+            if (StringUtils.isNotEmpty(bizProduct.getValvebodyMaterial())) {
+                startRemark += "阀体材质：" + bizProduct.getValvebodyMaterial() + ",";
+            }
+            //if (StringUtils.isNotEmpty(bizProduct.getValveElement())) {startRemark += bizProduct.getValveElement() + ",";}
+            if (StringUtils.isNotEmpty(bizProduct.getSealingMaterial())) {
+                startRemark += "密封材质：" + bizProduct.getSealingMaterial() + ",";
+            }
+            if (StringUtils.isNotEmpty(bizProduct.getDriveForm())) {
+                startRemark += "驱动形式：" + bizProduct.getDriveForm() + ",";
+            }
+            if (StringUtils.isNotEmpty(bizProduct.getConnectionType())) {
+                startRemark += "连接方式：" + bizProduct.getConnectionType() + ",";
+            }
+            if (StringUtils.isNotEmpty(bizProduct.getString15())) {
+                startRemark += "颜色：" + bizProduct.getString15() + ",";
+            }
+            if (startRemark.length() > 1) {
+                startRemark = startRemark.substring(0, startRemark.length() - 1);
+            }
+            if (bizProduct.getString17().equals("其它")) {
+                endRemark = bizProduct.getRemark();
+                exportDTO.setRemark(endRemark);
+            } else {
+                String text = startRemark;
+                if (StringUtils.isNotEmpty(endRemark)) {
+                    text = startRemark + " 含" + endRemark;
+                }
+                exportDTO.setRemark(endRemark);
+            }
+
+            list.add(exportDTO);
+        }
         ExcelUtil<SaleListExportDTO> util = new ExcelUtil<SaleListExportDTO>(SaleListExportDTO.class);
         return util.exportEasyExcel(list, "销货清单");
     }
