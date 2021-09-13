@@ -68,4 +68,16 @@ public interface BizCustomerMapper {
     public Long selectCustomerFileNumber();
 
     public List<BizCustomer> selectCustomerAll(@Param("customerIds") Set<String> customerIds);
+
+    /**
+     * 获取已分配负责人的客户列表
+     * @return
+     */
+    List<BizCustomer> selectBizCustomerListWithAdmin();
+
+    /**
+     * 清空业务负责人
+     * @param customerId
+     */
+    void updateBizCustomerOwnerUserId(@Param("customerId") Long customerId);
 }

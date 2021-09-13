@@ -122,7 +122,13 @@
         </if>
         <if test="source != null  and source != ''">and c.source = #{source}</if>
         <if test="areaCode != null  and areaCode != ''">and c.area_code = #{areaCode}</if>
-        <if test="ownerUserId != null  and ownerUserId != ''">and u.user_name like concat('%', #{ownerUserId}, '%')</if>
+        <if test="queryType == 0" >
+            <if test="ownerUserId != null  and ownerUserId != ''">and u.user_name like concat('%', #{ownerUserId}, '%')</if>
+        </if>
+        <if test="queryType == 1" >
+            and (c.owner_user_id is null or c.owner_user_id = '')
+        </if>
+
         <if test="deptName != null  and deptName != ''">and dt.dept_name like concat('%', #{deptName}, '%')</if>
 
         <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
@@ -251,6 +257,11 @@
     <select id="selectBizCustomerById" parameterType="Long" resultMap="BizCustomerResult">
         <include refid="selectBizCustomerVo"/>
         where customer_id = #{customerId}
+    </select>
+
+    <select id="selectBizCustomerListWithAdmin" resultMap="BizCustomerResult">
+        <include refid="selectBizCustomerVo"/>
+        where owner_user_id is not null or owner_user_id != ''
     </select>
 
     <insert id="insertBizCustomer" parameterType="BizCustomer" useGeneratedKeys="true" keyProperty="customerId">
@@ -479,5 +490,9 @@
             </foreach>
         </if>
     </select>
+
+    <update id="updateBizCustomerOwnerUserId" parameterType="long" >
+        update biz_customer set owner_user_id = '' where customer_id =#{customerId}
+    </update>
 
 </mapper>

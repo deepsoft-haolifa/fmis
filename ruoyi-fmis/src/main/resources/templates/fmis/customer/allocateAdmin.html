@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('分配负责人')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div>
+        <div >
+            <form id="formId-customer-allocate">
+                <div class="select-list">
+
+                    <ul>
+                        <li>
+                            <p>业务负责人：</p>
+                            <select class="form-control select2-multiple" name="ownerUserId" id="ownerUserId" > <!--multiple-->
+                                <option th:each="user:${users}" th:value="${user.userId}" th:text="${user.userName} + ' ' + ${user.loginName}" ></option>
+                            </select>
+                        </li>
+
+                    </ul>
+                </div>
+                <input type="hidden" name="customerId"  th:value="*{customerId}"/>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+</body>
+<th:block th:include="include :: footer" />
+<script th:inline="javascript">
+
+    var prefix = "/fmis/customer";
+
+
+
+    function submitHandler() {
+        if ($.validate.form()) {
+
+            var dataObj = $('#formId-customer-allocate').serializeArray();
+            if($("#ownerUserId").val() == '') {
+                $.modal.alertWarning("请选择业务负责人！");
+                return;
+            }
+            $.operate.save(prefix + "/allocate/admin", dataObj);
+        }
+    }
+</script>
+
+</html>

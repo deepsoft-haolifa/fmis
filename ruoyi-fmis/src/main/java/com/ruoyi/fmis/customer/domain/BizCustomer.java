@@ -273,6 +273,13 @@ public class BizCustomer extends BaseEntity {
     @Setter
     private String newStatus;
 
+    /**
+     * 查询类型： 0 默认客户列表 1 公共客户列表
+     */
+    @Setter
+    @Getter
+    private int queryType;
+
 
 
     public void setCustomerId(Long customerId) {

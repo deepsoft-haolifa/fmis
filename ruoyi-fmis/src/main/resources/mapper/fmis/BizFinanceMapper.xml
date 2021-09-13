@@ -38,14 +38,14 @@
         left join (select data_id,sum(string3) saleQty from biz_process_child group by data_id) bpc ON bpc.data_id =
         q.data_id
 
-
+        -- 待发货类型为产品的（string2=1）
         left join (select a.string5,sum(a.string13*a.price1) deliveryAmount from biz_process_child a left join
         biz_process_data
-        b on a.data_id=b.data_id where b.biz_id='newdelivery' and b.normal_flag=b.flow_status and a.string19=1 group by
+        b on a.data_id=b.data_id where b.biz_id='newdelivery' and b.normal_flag=b.flow_status and a.string19=1 and a.string2='1' group by
         a.string5) bpc2 ON
         bpc2.string5 = q.string1
         left join (select a.string5,sum(a.string13) deliveryQty from biz_process_child a left join biz_process_data
-        b on a.data_id=b.data_id where b.biz_id='newdelivery' and b.normal_flag=b.flow_status and a.string19=1 group by
+        b on a.data_id=b.data_id where b.biz_id='newdelivery' and b.normal_flag=b.flow_status and a.string19=1 and a.string2='1' group by
         a.string5) bpc1 ON
         bpc1.string5 = q.string1
         left join (select data_id,sum(amount) as paidAmount from biz_bill_contract group by data_id) bbc on

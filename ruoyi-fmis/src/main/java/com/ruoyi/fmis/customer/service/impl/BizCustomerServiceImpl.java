@@ -1,18 +1,20 @@
 package com.ruoyi.fmis.customer.service.impl;
 
 import java.text.DecimalFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import com.ruoyi.common.annotation.DataScope;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.fmis.common.BizConstants;
+import com.ruoyi.fmis.customertrack.domain.BizCustomerTrack;
+import com.ruoyi.fmis.customertrack.mapper.BizCustomerTrackMapper;
 import com.ruoyi.fmis.data.domain.BizProcessData;
 import com.ruoyi.fmis.data.mapper.BizProcessDataMapper;
 import com.ruoyi.framework.util.ShiroUtils;
+import com.ruoyi.framework.web.domain.server.Sys;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.poi.ss.formula.functions.Now;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,7 @@ import com.ruoyi.common.core.text.Convert;
  * @author frank
  * @date 2020-03-02
  */
+@Slf4j
 @Service
 public class BizCustomerServiceImpl implements IBizCustomerService {
 
@@ -37,6 +40,11 @@ public class BizCustomerServiceImpl implements IBizCustomerService {
 
     @Autowired
     private BizProcessDataMapper bizProcessDataMapper;
+
+    @Autowired
+    private BizCustomerTrackMapper bizCustomerTrackMapper;
+    // 30天
+    private final long durationTime = 30 * 24 * 60 * 60 * 1000;
 
     /**
      * 查询客户
@@ -60,6 +68,7 @@ public class BizCustomerServiceImpl implements IBizCustomerService {
     public List<BizCustomer> selectBizCustomerList(BizCustomer bizCustomer) {
         return bizCustomerMapper.selectBizCustomerList(bizCustomer);
     }
+
     /**
      * 查询客户列表
      *
@@ -71,6 +80,7 @@ public class BizCustomerServiceImpl implements IBizCustomerService {
     public List<BizCustomer> selectBizCustomerListByName(BizCustomer bizCustomer) {
         return bizCustomerMapper.selectBizCustomerListByName(bizCustomer);
     }
+
     @Override
     public List<BizCustomer> selectBizCustomerListNoAuth(BizCustomer bizCustomer) {
         return bizCustomerMapper.selectBizCustomerList(bizCustomer);
@@ -181,5 +191,37 @@ public class BizCustomerServiceImpl implements IBizCustomerService {
     @Override
     public List<BizCustomer> selectCustomerAll(Set<String> customerIdSet) {
         return bizCustomerMapper.selectCustomerAll(customerIdSet);
+    }
+
+    @Override
+    public void cleanCustomerAdmin() {
+        // 获取所有已分配的客户
+        List<BizCustomer> bizCustomers = bizCustomerMapper.selectBizCustomerListWithAdmin();
+        // 判断最近一次回访时间
+        if (CollectionUtils.isNotEmpty(bizCustomers)) {
+            long currentTime = System.currentTimeMillis();
+            for (BizCustomer customer : bizCustomers) {
+                try {
+                    BizCustomerTrack bizCustomerTrack = new BizCustomerTrack();
+                    bizCustomerTrack.setCustomerId(customer.getCustomerId());
+                    List<BizCustomerTrack> bizCustomerTracks = bizCustomerTrackMapper.selectBizCustomerTrackList(bizCustomerTrack);
+                    if(CollectionUtils.isNotEmpty(bizCustomerTracks)) {
+                        // 获取最大的id。
+                        int id = 0;
+                        Map<Long, List<BizCustomerTrack>> collect = bizCustomerTracks.stream().collect(Collectors.groupingBy(BizCustomerTrack::getTrackId));
+                        Optional<Long> reduce = collect.keySet().stream().reduce((a, b) -> a > b ? a : b);
+                        BizCustomerTrack bizCustomerTrack1 = collect.get(reduce.get()).get(0);
+                        long time = bizCustomerTrack1.getCreateTime().getTime();
+
+                        if(currentTime - time > durationTime) {
+                            // 清空
+                            bizCustomerMapper.updateBizCustomerOwnerUserId(customer.getCustomerId());
+                        }
+                    }
+                } catch (Exception e) {
+                    log.error("schedule clean customer admin error. customer is {}", customer, e);
+                }
+            }
+        }
     }
 }

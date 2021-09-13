@@ -2,6 +2,7 @@ package com.ruoyi.fmis.quotation.service.impl;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import com.ruoyi.common.annotation.DataScope;
 import com.ruoyi.common.utils.DateUtils;
@@ -9,9 +10,11 @@ import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.fmis.common.BizConstants;
 import com.ruoyi.fmis.customer.domain.BizCustomer;
 import com.ruoyi.fmis.customer.mapper.BizCustomerMapper;
+import com.ruoyi.fmis.define.service.IBizProcessDefineService;
 import com.ruoyi.fmis.flow.domain.BizFlow;
 import com.ruoyi.fmis.flow.mapper.BizFlowMapper;
 import com.ruoyi.framework.util.ShiroUtils;
+import com.ruoyi.system.domain.SysRole;
 import com.ruoyi.system.service.ISysRoleService;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +43,8 @@ public class BizQuotationServiceImpl implements IBizQuotationService {
 
     @Autowired
     private BizCustomerMapper bizCustomerMapper;
-
+    @Autowired
+    private IBizProcessDefineService bizProcessDefineService;
     /**
      * 查询报价单
      *
@@ -211,8 +215,16 @@ public class BizQuotationServiceImpl implements IBizQuotationService {
     public int subReportBizQuotation(BizQuotation bizQuotation) {
         bizQuotation.setUpdateTime(DateUtils.getNowDate());
         bizQuotation.setUpdateBy(ShiroUtils.getUserId().toString());
-        bizQuotation.setFlowStatus(BizConstants.FLOW_STATUS_1);
+//        bizQuotation.setFlowStatus(BizConstants.FLOW_STATUS_1);
+        Map<String, SysRole> flowMap = bizProcessDefineService.getRoleFlowMap("biz_quotation");
+        String lastRoleKey = "";
+        for (String key : flowMap.keySet()) {
+            lastRoleKey = key;
+        }
+        bizQuotation.setFlowStatus(lastRoleKey);
         int updateCount = bizQuotationMapper.updateBizQuotation(bizQuotation);
+        // 上报之前清理 所有的审批记录
+        bizFlowMapper.deleteBizFlowByBizId(bizQuotation.getQuotationId());
         insertFlow(bizQuotation);
         return updateCount;
     }

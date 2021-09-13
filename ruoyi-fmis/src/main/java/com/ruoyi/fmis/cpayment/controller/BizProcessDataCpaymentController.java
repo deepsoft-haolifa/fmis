@@ -143,7 +143,7 @@ public class BizProcessDataCpaymentController extends BaseController {
                 String productId = bizProcessChild.getString1();
                 BizProcessData bizProduct = bizProcessDataService.selectBizProcessDataById(Long.parseLong(productId));
                 if (bizProduct != null) {
-                    productNames += bizProduct.getString2() + ",";
+                    productNames += bizProcessChild.getString2() + ",";
                     productIds += bizProduct.getDataId() + ",";
                     bizProcessChild.setBizProcessData(bizProduct);
                 }
@@ -178,7 +178,7 @@ public class BizProcessDataCpaymentController extends BaseController {
             for (BizProcessChild bizProcessChild : bizProcessChildList) {
                 String productId = bizProcessChild.getString1();
                 BizProcessData bizProduct = bizProcessDataService.selectBizProcessDataById(Long.parseLong(productId));
-                productNames += bizProduct.getString2() + ",";
+                productNames += bizProcessChild.getString2() + ",";
                 productIds += bizProduct.getDataId() + ",";
                 bizProcessChild.setBizProcessData(bizProduct);
             }

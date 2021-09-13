@@ -1012,7 +1012,7 @@ public class BizQuotationController extends BaseController {
 //                bizQuotation.setNormalFlag(normalFlag);
                 bizQuotation.setFlowStatus(normalFlag);
             } else {
-                bizQuotation.setFlowStatus(roleType + "");
+                bizQuotation.setFlowStatus(roleType + "0");
             }
         }
         //如果高级别创建的不需要再高级别审批的直接同意

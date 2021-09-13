@@ -70,12 +70,10 @@
                     </div>
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group" hidden>
                 <label class="col-sm-3 control-label">分配次数：</label>
                 <div class="col-sm-8">
-                    <select name="assignNumber" class="form-control m-b" th:with="type=${@dict.getType('assign_number')}">
-                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                    </select>
+                    <input  name="assignNumber" value="1"/>
                 </div>
             </div>
             <!--
@@ -99,7 +97,7 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">业务负责人：</label>
                 <div class="col-sm-8">
-                    <select id="user" class="form-control select2-multiple" > <!--multiple-->
+                    <select id="user" class="form-control select2-multiple" disabled > <!--multiple-->
                         <option th:each="user:${users}" th:value="${user.userId}" th:text="${user.userName} + ' ' + ${user.loginName}" ></option>
                     </select>
                 </div>

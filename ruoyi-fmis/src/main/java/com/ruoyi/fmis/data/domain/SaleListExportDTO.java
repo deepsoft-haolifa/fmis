@@ -27,17 +27,19 @@ public class SaleListExportDTO {
     private Integer id;
 
     /** 操作模块 */
-    @ExcelProperty(value = "货物或应税劳务、服务名称")
+    @ExcelProperty(value = "货物")
     private String productName;
 
     /** 业务类型（0其它 1新增 2修改 3删除） */
 //    @ExcelProperty(value = "业务类型", converter = BusiTypeStringNumberConverter.class)
     @ExcelProperty(value = "计量单位")
     private String unitMeasurement;
-    @ExcelProperty(value = "规格型号")
-    private String specAndModel;
+    @ExcelProperty(value = "规格")
+    private String specifications;
+    @ExcelProperty(value = "型号")
+    private String model;
     @ExcelProperty(value = "数量")
-    private Integer quantity;
+    private String quantity;
     @ExcelProperty(value = "金额")
     private BigDecimal amount;
     @ExcelProperty(value = "税率")
@@ -54,6 +56,10 @@ public class SaleListExportDTO {
     private BigDecimal discountRate;
     @ExcelProperty(value = "单价")
     private BigDecimal price;
+    @ExcelProperty(value = "合计")
+    private BigDecimal totalPrice;
+    @ExcelProperty(value = "材质说明")
+    private String remark;
     @ExcelProperty(value = "价格方式")
     private Integer priceType;
     @ExcelProperty(value = "税收分类编码版本号")

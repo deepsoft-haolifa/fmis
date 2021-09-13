@@ -411,6 +411,9 @@
             productJsonArray.push(rowData);
         }
 
+        parent.$('#form-data-add input[name=productsJsonParamter]').val(JSON.stringify(productJsonArray));
+        parent.$('#form-data-edit input[name=productsJsonParamter]').val(JSON.stringify(productJsonArray));
+        callback()
 
         layer.confirm('添加成功，确定要离开吗？', {
             icon: 3,
@@ -418,13 +421,10 @@
             btn: ['确认', '取消']
         }, function (index) {
             layer.close(index);
-            parent.$('#form-data-add input[name=productsJsonParamter]').val(JSON.stringify(productJsonArray));
-            parent.$('#form-data-edit input[name=productsJsonParamter]').val(JSON.stringify(productJsonArray));
             $.modal.close();
-            callback()
         }, function (index) {
             layer.close(index);
-            console.log("重新选择")
+            // console.log("重新选择")
             $.btTable.bootstrapTable('uncheckAll');
         });
 

@@ -176,9 +176,11 @@ public class BizProcessDataProcurementController extends BaseController {
                 String normalFlag = data.getNormalFlag();
                 String flowStatusRemark = "待上报";
                 data.setLoginUserId(ShiroUtils.getUserId().toString());
-                if ("-2".equals(flowStatus)) {
-                    flowStatusRemark = "待上报";
-                } else if ("1".equals(flowStatus)) {
+//                if ("-2".equals(flowStatus)) {
+//                    flowStatusRemark = "待上报";
+//                } else
+
+               if ("1".equals(flowStatus)) {
                     flowStatusRemark = "已上报";
                 } else {
                     SysRole currentSysRole = CommonUtils.getLikeByMap(flowAllMap, flowStatus.replaceAll("-", ""));
@@ -1249,15 +1251,15 @@ public class BizProcessDataProcurementController extends BaseController {
                     //数量
                     table.addCell(PdfUtil.mergeCol(bizProcessChild.getActuatorNum(), 1, textFont));
                     //单价
-                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getActuatorPrice().toString(), 1, textFont));
+                    table.addCell(PdfUtil.mergeCol(bizProcessChild.getActuatorString6(), 1, textFont));
                     //合计
-                    table.addCell(PdfUtil.mergeCol((Integer.parseInt(bizProcessChild.getActuatorNum()) * bizProcessChild.getActuatorPrice()) + "", 1, textFont));
+                    table.addCell(PdfUtil.mergeCol((Integer.parseInt(bizProcessChild.getActuatorNum()) * Double.valueOf(bizProcessChild.getActuatorString6())) + "", 1, textFont));
                     //材质
                     table.addCell(PdfUtil.mergeCol(bizProcessChild.getString5(), 3, textFont));
                     //备注
                     table.addCell(PdfUtil.mergeCol(bizProcessChild.getRemark(), 3, textFont));
                     sumTotalNum = sumTotalNum + Integer.parseInt(bizProcessChild.getActuatorNum());
-                    sumTotalAmount = sumTotalAmount + Integer.parseInt(bizProcessChild.getActuatorNum()) * bizProcessChild.getActuatorPrice();
+                    sumTotalAmount = sumTotalAmount + Integer.parseInt(bizProcessChild.getActuatorNum()) * Double.valueOf(bizProcessChild.getActuatorString6());
                 }
             }
 
@@ -1539,6 +1541,21 @@ public class BizProcessDataProcurementController extends BaseController {
 
         BizProcessData bizProcessData1 = bizProcessDataService.selectBizProcessDataById(dataId);
 
+
+        // 查询供应商
+        String string6 = bizProcessData1.getString6();
+        BizSuppliers bizSuppliers = bizSuppliersService.selectBizSuppliersById(Long.valueOf(string6));
+        // 发货日期，最后一个报检日期
+        String string12 = bizProcessData1.getString12();
+        BizProcessChild bizProcessChild_query = new BizProcessChild();
+        bizProcessChild_query.setProcurementNo(string12);
+        List<BizProcessChild> bizProcessChildren = bizProcessChildService.selectBizTestChildHistoryList(bizProcessChild_query);
+        String dateTime = "";
+        if(!CollectionUtils.isEmpty(bizProcessChildren)) {
+            Date createTime = bizProcessChildren.get(0).getCreateTime();
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            dateTime = simpleDateFormat.format(createTime);
+        }
         // 导出excel
         XSSFWorkbook workbook = new XSSFWorkbook();
         XSSFSheet receiptSheet = workbook.createSheet("验收单");
@@ -1590,7 +1607,7 @@ public class BizProcessDataProcurementController extends BaseController {
         supplierKeyCell.setCellValue("供方：");
         supplierKeyCell.setCellStyle(boldStyle);
         XSSFCell supplierValueCell = row2.createCell(1);
-        supplierValueCell.setCellValue(bizProcessData1.getSupplierName());
+        supplierValueCell.setCellValue(bizSuppliers.getName());
         supplierValueCell.setCellStyle(thinStyle);
         RegionUtil.setBorderBottom(BorderStyle.DOUBLE, region, receiptSheet);
         RegionUtil.setBorderTop(BorderStyle.DOUBLE, region, receiptSheet);
@@ -1606,7 +1623,7 @@ public class BizProcessDataProcurementController extends BaseController {
         deliveryDateKeyCell.setCellValue("发货日期：");
         deliveryDateKeyCell.setCellStyle(boldStyle);
         XSSFCell deliveryDateValueCell = row2.createCell(7);
-        deliveryDateValueCell.setCellValue(bizProcessData1.getDatetime3());
+        deliveryDateValueCell.setCellValue(dateTime);
         RegionUtil.setBorderTop(BorderStyle.DOUBLE, region2, receiptSheet);
         RegionUtil.setBorderBottom(BorderStyle.DOUBLE, region2, receiptSheet);
 
@@ -1660,6 +1677,9 @@ public class BizProcessDataProcurementController extends BaseController {
         BizProcessChild queryBizProcessChild = new BizProcessChild();
         queryBizProcessChild.setDataId(dataId);
         List<BizProcessChild> bizProcessChildrenProduct = bizProcessChildService.selectBizTestProductList(queryBizProcessChild);
+        // 总的订货数量和实际到货数量
+        int orderSize = 0;
+        int arrivalSize= 0;
         if(!CollectionUtils.isEmpty(bizProcessChildrenProduct)) {
             for (int i = 0; i < bizProcessChildrenProduct.size(); i++) {
                 BizProcessChild bizProcessChild = bizProcessChildrenProduct.get(i);
@@ -1698,6 +1718,9 @@ public class BizProcessDataProcurementController extends BaseController {
                 XSSFCell cellValue9 = rowList.createCell(8);// 备注
                 cellValue9.setCellValue(Objects.isNull(bizProcessChild.getRemark())? "":bizProcessChild.getRemark());
 
+
+                orderSize += Integer.parseInt(bizProcessChild.getProductNum());
+                arrivalSize += bizProcessChild.getStayNum();
                 // 设置单元格样式
                 cellValue1.setCellStyle(borderCellStyle);
                 cellValue2.setCellStyle(borderCellStyle);
@@ -1733,9 +1756,11 @@ public class BizProcessDataProcurementController extends BaseController {
         XSSFCell cell2 = row4.createCell(2);
         XSSFCell cell3 = row4.createCell(3);
         XSSFCell cell4 = row4.createCell(4);
+        cell4.setCellValue(orderSize);
         XSSFCell cell5 = row4.createCell(5);
         XSSFCell cell6 = row4.createCell(6);
         XSSFCell cell7 = row4.createCell(7);
+        cell7.setCellValue(arrivalSize);
         XSSFCell cell8 = row4.createCell(8);
         cell1.setCellStyle(borderCellStyle);
         cell2.setCellStyle(borderCellStyle);
@@ -1867,10 +1892,10 @@ public class BizProcessDataProcurementController extends BaseController {
         String filePath = Global.getFilePath();
         long l = System.currentTimeMillis();
         String fileName = "验收单_" + bizProcessData1.getString12() + "_" + l + ".xlsx";
-        FileOutputStream fileOutputStream = new FileOutputStream(filePath + "/" + fileName);
-
-        workbook.write(fileOutputStream);
-        fileOutputStream.close();
+//        FileOutputStream fileOutputStream = new FileOutputStream(filePath + "/" + fileName);
+//
+//        workbook.write(fileOutputStream);
+//        fileOutputStream.close();
 
         response.setContentType("application/octet-stream;charset=UTF-8");
         response.addHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileName));

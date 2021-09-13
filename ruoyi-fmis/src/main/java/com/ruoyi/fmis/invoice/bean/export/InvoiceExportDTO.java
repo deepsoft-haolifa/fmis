@@ -57,7 +57,7 @@ public class InvoiceExportDTO {
     @ExcelProperty(value = "单位")
     private String unit;
     @ExcelProperty(value = "数量")
-    private Integer quantity;
+    private String quantity;
     @ExcelProperty(value = "单价")
     private BigDecimal price;
     @ExcelProperty(value = "金额")
