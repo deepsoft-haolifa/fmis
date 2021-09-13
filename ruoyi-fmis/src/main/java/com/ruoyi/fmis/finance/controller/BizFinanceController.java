@@ -4,6 +4,7 @@ import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.fmis.finance.domain.vo.*;
 import com.ruoyi.fmis.finance.service.IBizFinanceService;
+import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.service.ISysDictDataService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +51,8 @@ public class BizFinanceController extends BaseController {
 
         mmap.put("suppliers", dictDataService.selectDictDataByType("pay_company"));
         startPage();
+        //临时用userId
+        reqVo.setString30(ShiroUtils.getUserId() + "");
         List<ReceivableRespVo> list = bizFinanceService.selectReceivableList(reqVo);
         return getDataTable(list);
     }

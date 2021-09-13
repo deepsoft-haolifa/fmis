@@ -22,6 +22,7 @@ import com.ruoyi.fmis.suppliers.service.IBizSuppliersService;
 import com.ruoyi.fmis.util.RoleEnum;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysRole;
+import com.ruoyi.system.service.ISysRoleService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -54,6 +55,8 @@ public class BizProcessDataTrackController extends BaseController {
     private IBizProcessDataService bizProcessDataService;
     @Autowired
     private IBizProcessDefineService bizProcessDefineService;
+    @Autowired
+    private ISysRoleService sysRoleService;
 
 
     @RequiresPermissions("fmis:processDataTrack:view")
@@ -107,6 +110,8 @@ public class BizProcessDataTrackController extends BaseController {
         List<BizProcessData> list = bizProcessDataService.selectBizProcessDataListRefTrack(bizProcessData);
         for (BizProcessData data : list) {
             data.setLoginUserId(ShiroUtils.getUserId().toString());
+            int roleType = sysRoleService.getRoleType(ShiroUtils.getUserId());
+            data.setRoleType(roleType + "");
         }
         return getDataTable(list);
     }

@@ -25,5 +25,6 @@ public class ReceivableReqVo extends BaseEntity {
     private String deptName;
     private String deliveryTime;
     private String supplierName;
+    private String string30;
 
 }
