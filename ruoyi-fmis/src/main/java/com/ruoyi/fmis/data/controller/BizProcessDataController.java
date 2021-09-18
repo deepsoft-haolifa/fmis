@@ -36,6 +36,8 @@ import com.ruoyi.fmis.customer.service.IBizCustomerService;
 import com.ruoyi.fmis.data.domain.SaleListExportDTO;
 import com.ruoyi.fmis.define.service.IBizProcessDefineService;
 import com.ruoyi.fmis.dict.service.IBizDictService;
+import com.ruoyi.fmis.file.domain.BizAccessory;
+import com.ruoyi.fmis.file.service.IBizAccessoryService;
 import com.ruoyi.fmis.pattachment.domain.BizProductAttachment;
 import com.ruoyi.fmis.pattachment.service.IBizProductAttachmentService;
 import com.ruoyi.fmis.product.domain.BizProduct;
@@ -127,6 +129,8 @@ public class BizProcessDataController extends BaseController {
     private ISysDictDataService dictDataService;
     @Autowired
     private IBizProductAttachmentService bizProductAttachmentService;
+    @Autowired
+    private IBizAccessoryService bizAccessoryService;
 
     @Autowired
     private RedisUtil redisUtil;
@@ -207,6 +211,7 @@ public class BizProcessDataController extends BaseController {
         List<BizProcessData> list = bizProcessDataService.selectBizProcessDataListRef(bizProcessData);
 
 
+
         Map<String, SysRole> flowAllMap = bizProcessDefineService.getFlowAllMap(bizId);
         if (!CollectionUtils.isEmpty(flowMap)) {
             //计算流程描述
@@ -253,6 +258,16 @@ public class BizProcessDataController extends BaseController {
                 // 判断是否可以申请发货：若所有产品均已经申请发货，则该订单不再可申请发货
                 if (judgCanDelivery(data.getDataId())) {
                     data.setCanDelivery(1);
+                }
+                //是否有附件
+                BizAccessory bizAccessory = new BizAccessory();
+                bizAccessory.setBizId(Integer.valueOf(data.getDataId() + ""));
+                bizAccessory.setFileType(Integer.valueOf(2));
+                List<com.ruoyi.fmis.file.domain.BizAccessory>  list1 = bizAccessoryService.selectBizAccessoryByBizId(bizAccessory);
+                if (list1 != null && list1.size() > 0) {
+                    data.setIsAtt(1);
+                } else {
+                    data.setIsAtt(0);
                 }
             }
         }

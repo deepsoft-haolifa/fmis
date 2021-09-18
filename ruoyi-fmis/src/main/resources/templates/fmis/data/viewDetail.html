@@ -162,7 +162,10 @@
             <div class="col-sm-2">
                 <input name="string14" id="string14" readonly onblur="calculateTotalPrice()" onkeyup="AmountKeyUp(this)" th:field="*{string14}" class="form-control" type="text">
             </div>
-
+            <label class="col-sm-1 control-label">费用说明：</label>
+            <div class="col-sm-2">
+                <input name="remark" class="form-control" readonly th:field="*{remark}" type="text">
+            </div>
         </div>
         <div class="form-group" style="margin-bottom: 7px">
             <!--<label class="col-sm-1 control-label">交货周期：</label>

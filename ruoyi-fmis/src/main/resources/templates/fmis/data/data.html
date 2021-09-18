@@ -278,6 +278,7 @@
                         var deliveryStatus = row.string27;
                         var createBy = row.createBy;
                         var loginUserId = row.loginUserId;
+                        var isAtt = row.isAtt;
                         if ((flowStatus < 1 || flowStatus > 10) && createBy === loginUserId) {
                             actions.push('<a class="btn btn-success btn-xs  ' + editFlag + '" href="javascript:void(0)" onclick="edit(\'' + row.dataId + '\')"><i class="fa fa-edit"></i> 编辑</a> ');
                             actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="remove(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 删除</a>');
@@ -295,8 +296,9 @@
                         if (createBy === loginUserId) {
                             actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="uploadFiles(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 附件上传</a>');
                         }
-                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewFileList(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 查看附件</a>');
-
+                        if (isAtt === 1) {
+                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewFileList(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 查看附件</a>');
+                        }
 
                         return actions.join('');
                     }

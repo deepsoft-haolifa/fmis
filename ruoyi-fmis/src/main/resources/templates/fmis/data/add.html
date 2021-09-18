@@ -48,7 +48,10 @@
         <div class="form-group" style="margin-bottom: 7px">
             <label class="col-sm-1 control-label">签订地点：</label>
             <div class="col-sm-2">
-                <input name="string4" class="form-control" type="text" required>
+                <!--<input name="string4" class="form-control" type="text" required>-->
+                <select name="string4" id="string4" class="form-control m-b" th:with="type=${@dict.getType('qiandingdi')}" required>
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                </select>
             </div>
             <label class="col-sm-1 control-label">是否含税：</label>
             <div class="col-sm-2">
@@ -173,9 +176,14 @@
                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                 </select>
             </div>
+
             <label class="col-sm-1 control-label">特殊费用：</label>
             <div class="col-sm-2">
                 <input name="string14" id="string14"  onblur="calculateTotalPrice()" onkeyup="AmountKeyUp(this)" class="form-control" type="text" number>
+            </div>
+            <label class="col-sm-1 control-label">费用说明：</label>
+            <div class="col-sm-2">
+                <input name="remark" id="remark"  class="form-control" type="text">
             </div>
 
         </div>
@@ -188,7 +196,11 @@
             </div>-->
             <label class="col-sm-1 control-label">质保期：</label>
             <div class="col-sm-2 form-inline">
-                <input name="string26" id="string26" style="width: 80px" class="form-control" type="text" onkeyup="AmountKeyUp(this)" required>月
+                <!--<input name="string26" id="string26" style="width: 80px" class="form-control" type="text" onkeyup="AmountKeyUp(this)" required>月-->
+
+                <select name="string26" id="string26" class="form-control m-b" th:with="type=${@dict.getType('zhibaoqi')}" required>
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                </select>月
             </div>
             <label class="col-sm-1 control-label">合计数量：</label>
             <div class="col-sm-2">

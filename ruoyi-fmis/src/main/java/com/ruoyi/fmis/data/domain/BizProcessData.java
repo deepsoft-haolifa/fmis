@@ -197,6 +197,9 @@ public class BizProcessData extends BaseEntity {
     @Getter
     @Setter
     private String procurementNo;
+    @Setter
+    @Getter
+    private String reamrk;
     /**
      * 是否可以审批
      */
@@ -401,6 +404,10 @@ public class BizProcessData extends BaseEntity {
     @Setter
     // 是否可发货 0 不可发货 1 可发货
     private int canDelivery;
+    @Getter
+    @Setter
+    // 是否有附件
+    private int isAtt;
 
     // 是否还需要发起质检 1 需要 0 不需要
     @Getter
