@@ -164,7 +164,7 @@
     });
 
     function addTrack(customerId, customerName) {
-        var url = prefix + "/add/" + customerId + "/" + customerName;
+        var url = prefix + "/add/" + customerId + "?customerName="+ customerName;
         $.modal.open("新增", url);
     }
 
