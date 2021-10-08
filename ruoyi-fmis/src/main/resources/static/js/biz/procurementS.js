@@ -65,7 +65,7 @@ $(function() {
             },
             {
                 field : 'string3',
-                title : '供方',
+                title : '销货单位',
                 formatter: function(value, row, index) {
                     return $.table.selectDictLabel(supplierTypeData, value);
                 }

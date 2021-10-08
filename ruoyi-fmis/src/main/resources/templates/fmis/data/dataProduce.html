@@ -178,6 +178,42 @@
                     title: '责任人'
                 },
                 {
+                    field: 'string20',
+                    title: '合同文件|流传采购池',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var flowStatus = row.flowStatus;
+                        var dataId = row.dataId;
+                        var normalFlag = row.normalFlag;
+                        var string20 = row.string20;//文件路径
+                        var string13 = row.string13;//1=进入采购池
+                        var createBy = row.createBy;
+                        var loginUserId = row.loginUserId;
+                        var actions = [];
+                        if (flowStatus == normalFlag) {
+                            if (!$.common.isEmpty(string20)) {
+                                string20 = fileUrlStart + string20;
+                                actions.push('<a class="btn btn-success btn-xs" target="_blank" href="' + string20 + '" ><i class="fa fa-edit"></i>查看</a>');
+                                if (createBy == loginUserId && string13 != 2 && string13 != 1 && string13 != 0) {
+                                    actions.push('<a class="btn btn-success btn-xs"  href="#" onclick="goPool(' + dataId + ')" ><i class="fa fa-edit"></i>流转</a> ');
+                                }
+                                if (loginUserId == createBy && string13 == "0") {
+                                    actions.push('<a class="btn btn-success btn-xs"  href="#" onclick="uploadFile(' + dataId + ')" ><i class="fa fa-edit"></i>上传合同</a> ');
+                                }
+                            } else {
+                                if (loginUserId == createBy) {
+                                    actions.push('<a class="btn btn-success btn-xs"  href="#" onclick="uploadFile(' + dataId + ')" ><i class="fa fa-edit"></i>上传合同</a> ');
+                                }
+                            }
+                            if (!$.common.isEmpty(string13) && (string13 == "1" || string13 == 1 || string13 == "2" || string13 == 2)) {
+                                actions.push('<span class=\'default\'>已流转</span>');
+                            }
+                        }
+
+                        return actions.join('');
+                    }
+                },
+                {
                     title: '操作',
                     align: 'left',
                     formatter: function (value, row, index) {

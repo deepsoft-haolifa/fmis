@@ -189,9 +189,12 @@ public class BizProcessDataProcurementController extends BaseController {
                     }
                     if (flowStatus.equals(normalFlag)) {
                         flowStatusRemark = currentSysRole.getRoleName() + "已完成";
-                    } else if (flowStatus.startsWith("-")) {
+                    } else if (flowStatus.startsWith("-2")) {
                         //不同意标识
                         flowStatusRemark = currentSysRole.getRoleName() + "不同意";
+                    } else if (flowStatus.startsWith("-1")) {
+                        //不同意标识
+                        flowStatusRemark = currentSysRole.getRoleName() + "未上报";
                     } else {
                         flowStatusRemark = currentSysRole.getRoleName() + "同意";
                     }
@@ -450,7 +453,7 @@ public class BizProcessDataProcurementController extends BaseController {
     @ResponseBody
     @Transactional
     public AjaxResult addSave(BizProcessData bizProcessData) {
-        bizProcessData.setFlowStatus("-2");
+        bizProcessData.setFlowStatus("-1");
         Map<String, SysRole> flowAllMap = bizProcessDefineService.getFlowAllMap(bizProcessData.getBizId());
         if (!CollectionUtils.isEmpty(flowAllMap)) {
             for (String key : flowAllMap.keySet()) {
