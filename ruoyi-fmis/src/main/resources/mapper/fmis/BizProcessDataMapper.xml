@@ -481,6 +481,7 @@
             <if test="queryStatus == 0 ">
                 and (q.string13 = 1 or q.string13 = 2)
             </if>
+            ${params.dataScope}
         </where>
 
         order by q.create_time desc
