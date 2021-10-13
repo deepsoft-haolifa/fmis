@@ -336,10 +336,9 @@ public class BizProcessDataController extends BaseController {
 
 
         Map<String, SysRole> flowAllMap = bizProcessDefineService.getFlowAllMap(bizId);
-        if (!CollectionUtils.isEmpty(flowMap)) {
             //计算流程描述
             for (BizProcessData data : list) {
-                String flowStatus = data.getFlowStatus();
+                /*String flowStatus = data.getFlowStatus();
                 //结束标识
                 String normalFlag = data.getNormalFlag();
                 String flowStatusRemark = "待上报";
@@ -376,9 +375,18 @@ public class BizProcessDataController extends BaseController {
                         }
 
                     }
+                }*/
+                //是否有附件
+                BizAccessory bizAccessory = new BizAccessory();
+                bizAccessory.setBizId(Integer.valueOf(data.getDataId() + ""));
+                bizAccessory.setFileType(Integer.valueOf(2));
+                List<com.ruoyi.fmis.file.domain.BizAccessory>  list1 = bizAccessoryService.selectBizAccessoryByBizId(bizAccessory);
+                if (list1 != null && list1.size() > 0) {
+                    data.setIsAtt(1);
+                } else {
+                    data.setIsAtt(0);
                 }
             }
-        }
         return getDataTable(list);
     }
 

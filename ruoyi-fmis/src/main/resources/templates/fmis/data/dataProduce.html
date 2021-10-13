@@ -224,7 +224,11 @@
                         var deliveryStatus = row.string27;
                         var createBy = row.createBy;
                         var loginUserId = row.loginUserId;
+                        var isAtt = row.isAtt;
                         actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewExamineDetail(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 详情 </a>');
+                        if (isAtt === 1) {
+                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewFileList(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 查看附件</a>');
+                        }
                         return actions.join('');
                     }
                 }]
@@ -295,6 +299,14 @@
         var bizId = $("#bizId").val();
         var url = prefix + "/viewDetail?dataId=" + dataId + "&&bizId=" + bizId;
         $.modal.openNoEnter("详情", url, $(window).width(), $(window).height(), function () {
+            $.modal.closeAll();
+        });
+    }
+    function viewFileList(dataId) {
+        var url = ctx + "fmis/file/list/view?bizId=" + dataId + "&fileType=2";
+        var widthNum = this.innerWidth - 50;
+        var heigthNum = this.innerHeight - 50;
+        $.modal.openNoEnter("附件查看", url, widthNum, heigthNum, function () {
             $.modal.closeAll();
         });
     }

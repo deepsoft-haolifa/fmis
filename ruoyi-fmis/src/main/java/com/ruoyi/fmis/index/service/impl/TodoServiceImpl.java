@@ -101,6 +101,9 @@ public class TodoServiceImpl implements ITodoService {
             List<BizQuotation> bizQuotationList = pageInfo.getList();
             tableDataInfo.setTotal(pageInfo.getTotal());
             for (BizQuotation bizQuotation : bizQuotationList) {
+                if (bizQuotation.getNormalFlag().equals(bizQuotation.getFlowStatus())) {
+                    continue;
+                }
                 Todo todo = new Todo();
                 todo.setId(bizQuotation.getQuotationId());
                 todo.setOrderNo(bizQuotation.getString1());

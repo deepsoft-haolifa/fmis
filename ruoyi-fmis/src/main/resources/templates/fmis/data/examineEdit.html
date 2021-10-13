@@ -432,7 +432,8 @@
             if (isEmpty(specialExpenses)) {
                 specialExpenses = 0;
             }
-            totalPrice = parseFloat(productTotalPrice) + parseFloat(specialExpenses);
+            // totalPrice = parseFloat(productTotalPrice) + parseFloat(specialExpenses);
+            totalPrice = parseFloat(productTotalPrice);
             //$("#productTotalPrice").val(parseFloat(productTotalPrice).toFixed(4));
             $("#price1").val(parseFloat(totalPrice).toFixed(4));
             //$("#productTotalNum").val(productTotalNumS);
