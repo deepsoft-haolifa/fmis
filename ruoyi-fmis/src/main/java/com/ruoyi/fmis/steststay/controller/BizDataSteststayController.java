@@ -178,6 +178,9 @@ public class BizDataSteststayController extends BaseController {
         String remark = getRequest().getParameter("remark");
         String stayNum = getRequest().getParameter("stayNum");
         String statusId = getRequest().getParameter("statusId");
+        if (stayNum.equals("0")) {
+            return toAjax(-1);
+        }
 
         BizDataSteststay bizDataStestn = new BizDataSteststay();
 

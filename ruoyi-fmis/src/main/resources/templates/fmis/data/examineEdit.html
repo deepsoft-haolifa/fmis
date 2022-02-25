@@ -116,7 +116,7 @@
                         <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{string15}"></option>
                     </select>
                 </div>
-                <input name="string17" id="string17" readonly onkeyup="AmountKeyUp(this)" th:field="*{string17}" class="form-control" style="width: 45px">天
+                <!--<input name="string17" id="string17" readonly onkeyup="AmountKeyUp(this)" th:field="*{string17}" class="form-control" style="width: 45px">-->天
             </div>
             <div id="divString16" style="display: none">
                 <div class="col-sm-8 form-inline">
@@ -663,7 +663,8 @@
                 specialExpenses = 0;
             }
             $("#productTotalPrice").val(parseFloat(productTotalPrice).toFixed(0));
-            var totalPrice = parseFloat(productTotalPrice) + parseFloat(specialExpenses);
+            // var totalPrice = parseFloat(productTotalPrice) + parseFloat(specialExpenses);
+            var totalPrice = parseFloat(productTotalPrice);
             $("#price1").val(parseFloat(totalPrice).toFixed(0));
             $("#totalNum").val(parseFloat(totalNum).toFixed(0));
 

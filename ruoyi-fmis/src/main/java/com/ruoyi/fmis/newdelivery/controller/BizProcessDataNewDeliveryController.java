@@ -419,6 +419,7 @@ public class BizProcessDataNewDeliveryController extends BaseController {
                 return error("库存不够，请检查库存");
             }
             BizProcessChild inventoryChild = inventoryChilds.get(0);
+
             String string13  = child.getString13();
             if (string13.contains(".")) {
                 string13 =  new BigDecimal(Double.parseDouble(string13)).longValue() + "";

@@ -250,6 +250,12 @@ public class BizSuppliersController extends BaseController {
                 bizProductImport.setSupplier(bizProduct1.getSupplierName());
                 bizProductImport.setColor(bizProduct1.getColor());
                 bizProductImport.setString4(bizProduct1.getString4());
+                bizProductImport.setProcurementPrice(bizProduct1.getProcurementPrice() + "");
+                bizProductImport.setRemark(bizProduct1.getRemark());
+                bizProductImport.setValveShaft(bizProduct1.getValvebodyMaterial());
+                bizProductImport.setString5(bizProduct1.getString5());
+                bizProductImport.setCostPrice(bizProduct1.getCostPrice() + "");
+                bizProductImport.setPrice(bizProduct1.getPrice() + "");
                 bizProductImports.add(bizProductImport);
                 i++;
             }

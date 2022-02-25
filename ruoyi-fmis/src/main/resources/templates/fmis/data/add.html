@@ -125,7 +125,7 @@
                         <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                     </select>
                 </div>
-                <input name="string17" id="string17" onkeyup="AmountKeyUp(this)" class="form-control" style="width: 45px">天
+                <!--<input name="string17" id="string17" onkeyup="AmountKeyUp(this)" class="form-control" style="width: 45px">-->天
             </div>
             <div id="divString16" style="display: none">
                 <!--
@@ -179,7 +179,7 @@
 
             <label class="col-sm-1 control-label">特殊费用：</label>
             <div class="col-sm-2">
-                <input name="string14" id="string14"  onblur="calculateTotalPrice()" onkeyup="AmountKeyUp(this)" class="form-control" type="text" number>
+                <input name="string14" id="string14" th:value="0"  onblur="calculateTotalPrice()" onkeyup="AmountKeyUp(this)" class="form-control" type="text" number>
             </div>
             <label class="col-sm-1 control-label">费用说明：</label>
             <div class="col-sm-2">
@@ -715,6 +715,7 @@
     }
     function removeProduct(uid) {
         $.btTable.bootstrapTable('removeByUniqueId', uid);
+        $.btTable.bootstrapTable('load',$.btTable.bootstrapTable('getData'));
         calculateTotalPrice();
     }
     function onEditableSave (field, row, oldValue, $el) {

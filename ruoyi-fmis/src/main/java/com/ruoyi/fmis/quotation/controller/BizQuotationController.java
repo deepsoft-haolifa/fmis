@@ -58,8 +58,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.FileOutputStream;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.List;
 import java.util.*;
+import java.util.List;
 
 /**
  * 报价单Controller
@@ -1418,9 +1418,9 @@ public class BizQuotationController extends BaseController {
                 } else {
                     model = model.trim();
                 }
-                String level = product.getLevel().trim();
-                if (StringUtils.isNotEmpty(level)) {
-                    level = level.trim();
+                String string1 = product.getString1().trim();
+                if (StringUtils.isNotEmpty(string1)) {
+                    string1 = string1.trim();
                 }
                 String num = product.getNum();
                 if (StringUtils.isNotEmpty(num)) {
@@ -1441,10 +1441,10 @@ public class BizQuotationController extends BaseController {
                 if (StringUtils.isNotEmpty(specifications)) {
                     queryBizProduct.setSpecificationsName(specifications);
                 }
-                //改成系列
-                if (StringUtils.isNotEmpty(level)) {
-                    queryBizProduct.setSeries(level);
+                if (StringUtils.isNotEmpty(string1)) {
+                    queryBizProduct.setSeriesName(string1);
                 }
+                queryBizProduct.setString5("yes");
                 List<BizProduct> bizProductList = bizProductService.selectBizProductList(queryBizProduct);
                 if (!CollectionUtils.isEmpty(bizProductList)) {
                     /*if (bizProductList.size() > 1) {

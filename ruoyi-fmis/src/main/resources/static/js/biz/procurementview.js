@@ -182,7 +182,11 @@ function saveTest (rowId,childId,paramterId,dataId,contractNo,statusId,stayId,st
         $.modal.alertWarning("不能重复保存");
         return;
     }
-
+    if (parseInt(yesNum) == 0 && parseInt(noNum) == 0) {
+        $.modal.alertWarning("数量不能为0");
+        return;
+    }
+    console.log("yesNum=" + yesNum + " noNum=" + noNum + yesNum == 0);
     console.log("yesNum=" + yesNum + " remark=" + remark);
     var url = ctx + "fmis/procurementtest/saveTest?dataId=" + dataId + "&paramterId=" + paramterId + "&childId=" + childId + "&remark=" + remark + "&testId=" + testId +
         "&yesNum=" + yesNum + "&noNum=" + noNum + "&statusId=" + statusId + "&stayId=" + stayId + "&contractNo=" + contractNo;

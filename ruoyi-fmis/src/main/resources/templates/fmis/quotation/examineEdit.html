@@ -512,7 +512,8 @@
             specialExpenses = 0;
         }
         $("#productTotalPrice").val(parseFloat(productTotalPrice).toFixed(4));
-        var totalPrice = parseFloat(productTotalPrice) + parseFloat(specialExpenses);
+        // var totalPrice = parseFloat(productTotalPrice) + parseFloat(specialExpenses);
+        var totalPrice = parseFloat(productTotalPrice);
         $("#totalPrice").val(parseFloat(totalPrice).toFixed(4));
 
         //productTotalPrice 毛利 产品金额-成本价格-特殊费用

@@ -401,7 +401,7 @@
             <if test="companyCode != null  and companyCode != ''">company_code = #{companyCode},</if>
             <if test="area != null  and area != ''">area = #{area},</if>
             <if test="recordCode != null  and recordCode != ''">record_code = #{recordCode},</if>
-            <if test="ownerUserId != null and ownerUserId != ''">owner_user_id = #{ownerUserId},</if>
+            <if test="ownerUserId != null and ownerUserId != '' and ownerUserId != '0'">owner_user_id = #{ownerUserId},</if>
             <if test="name != null  and name != ''">name = #{name},</if>
             <if test="projectAme != null  and projectAme != ''">project_ame = #{projectAme},</if>
             <if test="contactName != null  and contactName != ''">contact_name = #{contactName},</if>

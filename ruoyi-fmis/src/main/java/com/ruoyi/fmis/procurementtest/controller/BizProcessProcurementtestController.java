@@ -262,6 +262,9 @@ public class BizProcessProcurementtestController extends BaseController {
         String noNum = getRequest().getParameter("noNum");
         String statusId = getRequest().getParameter("statusId");
         String contractNo = getRequest().getParameter("contractNo");
+        if (Integer.valueOf(yesNum) == 0 && Integer.valueOf(noNum) == 0) {
+            return toAjax(0);
+        }
 
         BizDataStestn bizDataStestn = new BizDataStestn();
 

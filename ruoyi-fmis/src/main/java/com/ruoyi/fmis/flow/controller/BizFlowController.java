@@ -142,6 +142,9 @@ public class BizFlowController extends BaseController {
                     }
                 }
                 resultList.add(bizF);
+                if (flowIndex.equals(normalFlag)) {
+                    break;
+                }
             }
         }
         return getDataTable(resultList);

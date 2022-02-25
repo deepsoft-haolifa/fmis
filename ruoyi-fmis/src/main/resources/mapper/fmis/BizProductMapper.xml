@@ -64,8 +64,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         left join biz_dict d7 on d7.parent_type='drive_mode' and d7.dict_id=p.drive_form
         left join biz_dict d8 on d8.parent_type='structural_type' and d8.dict_id=p.structural_style
         left join biz_dict d9 on d9.parent_type='series_type' and d9.dict_id=p.string1
-        left join biz_suppliers s on s.suppliers_id=p.supplier
-
+        <if test="nickName == null  or nickName == ''">
+            left join biz_suppliers s on s.suppliers_id=p.supplier
+        </if>
+        <if test="nickName != null  and nickName != ''">
+        join biz_suppliers s on s.suppliers_id=p.supplier and s.nick_name like concat('%', #{nickName}, '%')
+        </if>
         left join sys_user u on u.user_id=p.create_by
         left join sys_dept dt on u.dept_id=dt.dept_id
 
@@ -92,6 +96,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="specifications != null  and specifications != ''"> and p.specifications = #{specifications}</if>
 
             <if test="specificationsName != null  and specificationsName != ''"> and d1.name = #{specificationsName}</if>
+            <if test="seriesName != null  and seriesName != ''"> and d9.name = #{seriesName}</if>
 
             <if test="nominalPressure != null  and nominalPressure != ''"> and p.nominal_pressure = #{nominalPressure}</if>
             <if test="connectionType != null  and connectionType != ''"> and p.connection_type = #{connectionType}</if>

@@ -8,8 +8,8 @@ public class BizProductExcel {
 
     @Excel(name = "产品型号")
     private String model;
-    @Excel(name = "等级")
-    private String level;
+    @Excel(name = "系列")
+    private String string1;
     @Excel(name = "数量")
     private String num;
     @Excel(name = "规格")

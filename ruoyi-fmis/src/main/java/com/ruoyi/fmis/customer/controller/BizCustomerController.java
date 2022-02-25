@@ -397,7 +397,7 @@ public class BizCustomerController extends BaseController {
         BizCustomer oldCustomer = bizCustomerService.selectBizCustomerById(bizCustomer.getCustomerId());
         String oldOwnerId = StringUtils.trim(oldCustomer.getOwnerUserId());
         String newOldOwnerId = StringUtils.trim(bizCustomer.getOwnerUserId());
-        if (!oldOwnerId.equals(newOldOwnerId)) {
+        if (!oldOwnerId.equals(newOldOwnerId) && !newOldOwnerId.equals("0")) {
             //分配记录
             BizCustomerHistory bizCustomerHistory = new BizCustomerHistory();
             bizCustomerHistory.setCustomerId(bizCustomer.getCustomerId());
@@ -409,6 +409,9 @@ public class BizCustomerController extends BaseController {
             bizCustomerHistory.setCreateTime(new Date());
 
             bizCustomerHistoryService.insertBizCustomerHistory(bizCustomerHistory);
+        }
+        if (newOldOwnerId != null && newOldOwnerId.equals("0")) {
+            bizCustomer.setOwnerUserId("");
         }
 
         return toAjax(bizCustomerService.updateBizCustomer(bizCustomer));

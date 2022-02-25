@@ -33,6 +33,10 @@ import javax.servlet.Filter;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -342,8 +346,34 @@ public class ShiroConfig
     {
         CookieRememberMeManager cookieRememberMeManager = new CookieRememberMeManager();
         cookieRememberMeManager.setCookie(rememberMeCookie());
-        cookieRememberMeManager.setCipherKey(Base64.decode("fCq+/xW488hMTCD+cmJ3aQ=="));
+//        cookieRememberMeManager.setCipherKey(Base64.decode("fCq+/xW488hMTCD+cmJ3aQ=="));
+        cookieRememberMeManager.setCipherKey(getPublicKey("haolifa"));
         return cookieRememberMeManager;
+    }
+    private static byte[] getPublicKey(String slatKey) {
+
+        KeyPairGenerator keyPairGenerator = null;
+        try {
+            keyPairGenerator = KeyPairGenerator.getInstance("RSA");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+        SecureRandom random = null;
+        try {
+            random = SecureRandom.getInstance("SHA1PRNG");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+        random.setSeed(slatKey.getBytes());
+
+        keyPairGenerator.initialize(1024, random);//or 2048
+
+        KeyPair keyPair = keyPairGenerator.generateKeyPair();
+
+        return keyPair.getPublic().getEncoded();
+
     }
 
     /**

@@ -156,7 +156,7 @@
         select c.child_id, c.data_id, c.remark, c.price1, c.price2, c.price3, c.price4,
         c.price5, c.price6, c.price7, c.price8, c.price9, c.price10, c.string1, c.string2,
         c.string3, c.string4, c.string5, c.string6, c.string7, c.string8, c.string9, c.string10,
-        sum(c.string11) string11, c.string12, c.string13, c.string14, c.string15, c.string16, c.string17,
+        sum(c.string11) string11, c.string12, c.string13, c.string14, c.string15, sum(c.string16) string16, c.string17,
         c.string18, c.string19, c.string20, c.datetime1, c.datetime2, c.datetime3, c.datetime4,
         c.datetime5, c.status, c.del_flag, c.create_by, c.create_time, c.update_by, c.update_time
         from biz_process_child c
@@ -208,7 +208,11 @@
           d9.name as series, p.model, d1.name as specifications, d2.name as nominalPressure,
           d3.name as connectionType, d6.name as valvebodyMaterial,
           d4.name as sealingMaterial, d5.name as valveElement,
-          d7.name as driveForm,d8.name as structuralStyle,
+          /*d7.name as driveForm*/
+          (case  ac.string2 is null  when TRUE then d7.name
+            when ac.string2 = 1 then '气动'
+            when ac.string2 = 2  then '电动' end) as driveForm
+          ,d8.name as structuralStyle,
           s.name as supplier, p.new_supplier,
           p.medium,p.temperature,p.other,d9.name as productString1,
           p.string2 as productString2,ac.name as actuatorName,pc.string14,pc.string15,pc.string20,
@@ -296,9 +300,13 @@
         from biz_product p
         join (select product_id,pc1.* from biz_product
         join biz_process_child pc1 on pc1.data_id=#{dataId} left join biz_data_status ds on ds.child_id=pc1.child_id
-        where ds.data_status is null and concat(specifications, model,biz_product.string1) in (select concat(specifications, model,biz_product.string1) from biz_product where product_id = pc1.string2))
-        as  pc on pc.data_id=#{dataId} and /*pc.string2=p.product_id*/
-        p.product_id =  pc.product_id
+        and  ds.string2=biz_product.product_id
+        where ds.data_status is null
+        and  concat(specifications, model,biz_product.string1) not in (select concat(specifications, model,biz_product.string1) from biz_product where product_id in (select ds2.string2 from biz_data_status ds2 left join biz_process_child pc2 on ds2.child_id=pc2.child_id  where pc2.`data_id` =#{dataId}))
+        and concat(specifications, model,biz_product.string1) in (select concat(specifications, model,biz_product.string1) from biz_product where product_id = pc1.string2)
+        )
+        as  pc on p.product_id = pc.product_id /*and pc.string2=p.product_id*/
+        /*and ( p.product_id = pc.product_id or p.product_id = pc.string2)*/
         join biz_process_data pd on pc.data_id=pd.data_id
         left join biz_data_status ds on ds.child_id=pc.child_id and ds.string2=p.product_id
         left join biz_dict d on  d.parent_id=1 and p.series=d.dict_id
@@ -337,11 +345,8 @@
         ds.p1_status as p1Status,ds.p2_status as p2Status,ds.p3_status as p3Status,ds.p4_status as p4Status,pc.data_id as dataId,pc.child_id as childId,ds.data_status as dataStatus,
         ds.string4 as procurementId,'A' as levelValue,s.suppliers_id as supplierId,pd.string1 as contractNo,pd.string25 as contractSpecial
         from biz_product p
-        join (select product_id,pc1.* from biz_product
-        join biz_process_child pc1 on pc1.data_id=#{dataId} left join biz_data_status ds on ds.child_id=pc1.child_id
-        where ds.data_status =1 and concat(specifications, model,biz_product.string1) in (select concat(specifications, model,biz_product.string1) from biz_product where product_id = pc1.string2))
-        as  pc on pc.data_id=#{dataId} and /*pc.string2=p.product_id*/
-        p.product_id = pc.product_id
+        join
+        (select ds.string2 product_id,pc1.* from biz_data_status ds, biz_process_child pc1 where pc1.data_id = #{dataId} and ds.child_id=pc1.child_id ) as pc on p.product_id = pc.product_id
         join biz_process_data pd on pc.data_id=pd.data_id
         left join biz_data_status ds on ds.child_id=pc.child_id and ds.string2=p.product_id
         left join biz_dict d on  d.parent_id=1 and p.series=d.dict_id
@@ -378,7 +383,8 @@
         <!-- 备选产品信息 暂时不做 -->
         <if test="levelValue == -2"> and </if>
 
-        group by p.model,p.specifications,p.string1,p.string5
+        /*group by p.model,p.specifications,p.string1,p.string5*/
+        group by  p.product_id
         order by p.string2,p.new_supplier,productNum desc
     </select>
     <select id="selectBizChildProductListCaigou" parameterType="BizProcessChild" resultMap="BizProcessChildResult">
@@ -396,7 +402,8 @@
         <!-- 备选产品信息 暂时不做 -->
         <if test="levelValue == -2"> and </if>
 
-        group by  p.model,p.specifications,p.string1,p.string5
+        /*group by  p.model,p.specifications,p.string1,p.string5*/
+        group by  p.product_id
         order by p.model,isnull(p.string5),p.new_supplier,productNum desc
     </select>
 
@@ -930,7 +937,7 @@
     ,c.string7 as string7
     from biz_data_stestn sn
     join biz_data_steststay ss on ss.stay_id=sn.string6
-    left join biz_process_child c on c.string12=ss.stay_id
+    left join biz_process_child c on c.string12=ss.stay_id and c.string3 like 'BJ%'
     left join sys_user u on sn.create_by=u.user_id
     left join biz_process_data d on d.biz_id='procurement' and d.data_id=ss.string4
     left join biz_data_status s on s.status_id=sn.status_id

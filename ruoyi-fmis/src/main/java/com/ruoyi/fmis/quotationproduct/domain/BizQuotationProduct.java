@@ -122,6 +122,8 @@ public class BizQuotationProduct extends BaseEntity {
 
     /** 价格2 */
     @Excel(name = "价格2")
+    @Getter
+    @Setter
     private Double price2;
 
     /** 价格3 */

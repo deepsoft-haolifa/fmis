@@ -410,6 +410,8 @@
             <if test="roleType == 0 ">
                 and q.flow_status=q.normal_flag
             </if>
+            <!-- 编辑 只看未处理数据的 -->
+            <if test="bizEditFlag == 1"> and q.string30 !=2 </if>
         </where>
 
         order by q.create_time desc

@@ -1,39 +1,37 @@
 package com.ruoyi.fmis.data.controller;
 
-import java.io.FileOutputStream;
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.List;
-import java.util.function.Supplier;
-
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.config.Global;
 import com.ruoyi.common.config.RedisUtil;
-import com.ruoyi.common.constant.Constants;
+import com.ruoyi.common.core.controller.BaseController;
+import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.core.page.TableDataInfo;
+import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.itextpdf.PdfUtil;
 import com.ruoyi.common.utils.itextpdf.TextWaterMarkPdfPageEvent;
+import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.fmis.Constant;
 import com.ruoyi.fmis.actuator.domain.BizActuator;
 import com.ruoyi.fmis.actuator.service.IBizActuatorService;
 import com.ruoyi.fmis.child.domain.BizProcessChild;
 import com.ruoyi.fmis.child.service.IBizProcessChildService;
 import com.ruoyi.fmis.common.BizConstants;
-import com.ruoyi.fmis.common.BizContractLevel;
 import com.ruoyi.fmis.common.BizProductExcel;
 import com.ruoyi.fmis.common.CommonUtils;
 import com.ruoyi.fmis.customer.domain.BizCustomer;
 import com.ruoyi.fmis.customer.service.IBizCustomerService;
+import com.ruoyi.fmis.data.domain.BizProcessData;
 import com.ruoyi.fmis.data.domain.SaleListExportDTO;
+import com.ruoyi.fmis.data.service.IBizProcessDataService;
 import com.ruoyi.fmis.define.service.IBizProcessDefineService;
 import com.ruoyi.fmis.dict.service.IBizDictService;
 import com.ruoyi.fmis.file.domain.BizAccessory;
@@ -46,18 +44,18 @@ import com.ruoyi.fmis.productref.domain.BizProductRef;
 import com.ruoyi.fmis.productref.service.IBizProductRefService;
 import com.ruoyi.fmis.quotation.domain.BizQuotation;
 import com.ruoyi.fmis.quotation.service.IBizQuotationService;
-import com.ruoyi.fmis.quotationproduct.domain.BizQuotationProduct;
 import com.ruoyi.fmis.suppliers.domain.BizSuppliers;
 import com.ruoyi.fmis.suppliers.service.IBizSuppliersService;
 import com.ruoyi.fmis.util.CalcUtils;
 import com.ruoyi.fmis.util.Util;
 import com.ruoyi.framework.util.ShiroUtils;
-import com.ruoyi.system.domain.*;
+import com.ruoyi.system.domain.SysDept;
+import com.ruoyi.system.domain.SysRole;
+import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.service.ISysDeptService;
 import com.ruoyi.system.service.ISysDictDataService;
 import com.ruoyi.system.service.ISysRoleService;
 import com.ruoyi.system.service.ISysUserService;
-import jdk.nashorn.internal.objects.annotations.Getter;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -65,17 +63,15 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
-import com.ruoyi.common.annotation.Log;
-import com.ruoyi.common.enums.BusinessType;
-import com.ruoyi.fmis.data.domain.BizProcessData;
-import com.ruoyi.fmis.data.service.IBizProcessDataService;
-import com.ruoyi.common.core.controller.BaseController;
-import com.ruoyi.common.core.domain.AjaxResult;
-import com.ruoyi.common.utils.poi.ExcelUtil;
-import com.ruoyi.common.core.page.TableDataInfo;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.FileOutputStream;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.List;
 
 /**
  * 合同管理Controller
@@ -1351,7 +1347,7 @@ public class BizProcessDataController extends BaseController {
         int num = 2;
         String totalPrice = bizProcessData.getPrice1().toString();
         String specialExpenses = bizProcessData.getString14();
-        if (StringUtils.isNotEmpty(totalPrice) && Double.parseDouble(totalPrice) >= 1000000) {
+        if ((StringUtils.isNotEmpty(totalPrice) && Double.parseDouble(totalPrice) >= 1000000) ||  Double.parseDouble(specialExpenses) > 0) {
             normalFlag = "5";
             num = 5;
         } else if (StringUtils.isNotEmpty(totalPrice) && Double.parseDouble(totalPrice) >= 500000) {
@@ -2480,9 +2476,9 @@ public class BizProcessDataController extends BaseController {
                 } else {
                     model = model.trim();
                 }
-                String level = product.getLevel().trim();
-                if (StringUtils.isNotEmpty(level)) {
-                    level = level.trim();
+                String string1 = product.getString1().trim();
+                if (StringUtils.isNotEmpty(string1)) {
+                    string1 = string1.trim();
                 }
                 String num = product.getNum();
                 if (StringUtils.isNotEmpty(num)) {
@@ -2503,9 +2499,10 @@ public class BizProcessDataController extends BaseController {
                 if (StringUtils.isNotEmpty(specifications)) {
                     queryBizProduct.setSpecificationsName(specifications);
                 }
-                if (StringUtils.isNotEmpty(level)) {
-                    queryBizProduct.setString2(level);
+                if (StringUtils.isNotEmpty(string1)) {
+                    queryBizProduct.setSeriesName(string1);
                 }
+                queryBizProduct.setString5("yes");
                 List<BizProduct> bizProductList = bizProductService.selectBizProductList(queryBizProduct);
                 if (!CollectionUtils.isEmpty(bizProductList)) {
                     /*if (bizProductList.size() > 1) {

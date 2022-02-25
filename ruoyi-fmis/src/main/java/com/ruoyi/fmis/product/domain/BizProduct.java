@@ -50,6 +50,11 @@ public class BizProduct extends BaseEntity {
     @Setter
     private String specificationsName;
 
+
+    @Getter
+    @Setter
+    private String seriesName;
+
     /** 公称压力 */
     @Excel(name = "公称压力")
     private String nominalPressure;
@@ -90,6 +95,9 @@ public class BizProduct extends BaseEntity {
     @Setter
     /** 供应商名称*/
     private String supplierName;
+    @Getter
+    @Setter
+    private String nickName;
     private String newSupplier;
     public void setNewSupplier(String newSupplier) {
         this.newSupplier = newSupplier;
