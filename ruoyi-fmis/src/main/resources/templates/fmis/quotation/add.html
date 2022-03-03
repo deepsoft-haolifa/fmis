@@ -762,6 +762,7 @@
                     var iframeWin = layero.find('iframe')[0];
                     iframeWin.contentWindow.submitHandler(index, layero);
                     var actuatorJsonParamter = $("#actuatorJsonParamter").val();
+                    console.log("actuatorJsonParamter=" + actuatorJsonParamter + "---idx" + idx);
                     setTableValueById(actuatorJsonParamter,productId,idx);
                 });
             }

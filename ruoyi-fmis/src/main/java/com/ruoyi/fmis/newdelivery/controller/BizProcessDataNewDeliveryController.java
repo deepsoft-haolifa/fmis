@@ -419,23 +419,45 @@ public class BizProcessDataNewDeliveryController extends BaseController {
                 return error("库存不够，请检查库存");
             }
             BizProcessChild inventoryChild = inventoryChilds.get(0);
+            long kucun = 0;
+            for (BizProcessChild inventoryChild1 : inventoryChilds) {
+                kucun = kucun + StringUtils.toLong(inventoryChild1.getString11());
+            }
 
             String string13  = child.getString13();
             if (string13.contains(".")) {
                 string13 =  new BigDecimal(Double.parseDouble(string13)).longValue() + "";
             }
-            if (StringUtils.toLong(inventoryChild.getString11()) < StringUtils.toLong(string13)) {
+            if (kucun < StringUtils.toLong(string13)) {
                 return error("库存不够，请检查库存");
             }
+            long chuku =  StringUtils.toLong(string13);
 
-            string15 = inventoryChild.getChildId() + "";
-            String string16 = inventoryChild.getString16();
-            inventoryChild.setString16(StringUtils.toLong(string16) + StringUtils.toLong(string13) + "");
-            inventoryChild.setString11((StringUtils.toLong(inventoryChild.getString11()) - StringUtils.toLong(string13)) + "");
-            inventoryChild.setUpdateTime(new Date());
-            inventoryChild.setUpdateBy(ShiroUtils.getUserId() + "");
-            inventoryChild.setString14("1");
-            bizProcessChildService.updateBizProcessChild(inventoryChild);
+            for (BizProcessChild inventoryChild2 : inventoryChilds) {
+//                kucun = kucun + StringUtils.toLong(inventoryChild2.getString11());
+                string15 = inventoryChild2.getChildId() + "";
+                String string16 = inventoryChild2.getString16();
+                long kucun1 = StringUtils.toLong(inventoryChild2.getString11());
+                //出库完成
+                if (chuku == 0) {
+                    break;
+                }
+                if (kucun1 < chuku) {
+                    //单个小于出库 从多个出库
+                    inventoryChild.setString11("0");
+                    chuku = chuku - kucun1;
+                    inventoryChild2.setString16(StringUtils.toLong(string16) + kucun1 + "");
+                } else {
+                    //出库数量
+                    inventoryChild2.setString16(StringUtils.toLong(string16) + chuku + "");
+                }
+                inventoryChild2.setString11((StringUtils.toLong(inventoryChild.getString11()) - chuku) + "");
+                inventoryChild2.setUpdateTime(new Date());
+                inventoryChild2.setUpdateBy(ShiroUtils.getUserId() + "");
+                inventoryChild2.setString14("1");
+                bizProcessChildService.updateBizProcessChild(inventoryChild2);
+            }
+
         }
         //出库的是哪个库存里面的
         child.setString15(string15);
