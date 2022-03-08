@@ -48,7 +48,7 @@
         b on a.data_id=b.data_id where b.biz_id='newdelivery' and b.normal_flag=b.flow_status and a.string19=1 and a.string2='1' group by
         a.string5) bpc1 ON
         bpc1.string5 = q.string1
-        left join (select data_id,sum(amount) as paidAmount from biz_bill_contract group by data_id) bbc on
+        left join (select data_id,sum(amount) as paidAmount from biz_bill_contract where audit_status=1 group by data_id) bbc on
         bbc.data_id=q.data_id
         left join (select a.string1,sum(a.price1) as invoicedAmount from biz_process_child a left join biz_process_data
         b on a.data_id=b.data_id where b.biz_id='invoice' and a.string7=2 group by a.string1) invoice on

@@ -58,7 +58,7 @@ public class BizInvoiceController extends BaseController {
     /**
      * 导出发票信息（进项发票）列表
      */
-    @RequiresPermissions("invoice:bizInvoice:export")
+    @RequiresPermissions("fmis:bizInvoice:export")
     @PostMapping("/export")
     @ResponseBody
     public AjaxResult export(BizInvoice bizInvoice) {
@@ -78,7 +78,7 @@ public class BizInvoiceController extends BaseController {
     /**
      * 新增保存发票信息（进项发票）
      */
-    @RequiresPermissions("invoice:bizInvoice:add")
+    @RequiresPermissions("fmis:bizInvoice:add")
     @Log(title = "发票信息（进项发票）", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
@@ -99,7 +99,7 @@ public class BizInvoiceController extends BaseController {
     /**
      * 修改保存发票信息（进项发票）
      */
-    @RequiresPermissions("invoice:bizInvoice:edit")
+    @RequiresPermissions("fmis:bizInvoice:edit")
     @Log(title = "发票信息（进项发票）", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
@@ -110,7 +110,7 @@ public class BizInvoiceController extends BaseController {
     /**
      * 删除发票信息（进项发票）
      */
-    @RequiresPermissions("invoice:bizInvoice:remove")
+    @RequiresPermissions("fmis:bizInvoice:remove")
     @Log(title = "发票信息（进项发票）", businessType = BusinessType.DELETE)
     @PostMapping( "/remove")
     @ResponseBody
@@ -118,7 +118,7 @@ public class BizInvoiceController extends BaseController {
         return toAjax(bizInvoiceService.deleteBizInvoiceByIds(ids));
     }
 
-    @RequiresPermissions("invoice:bizInvoice:view")
+    @RequiresPermissions("fmis:bizInvoice:view")
     @GetMapping("/importTemplate")
     @ResponseBody
     public AjaxResult importTemplate()
@@ -127,7 +127,7 @@ public class BizInvoiceController extends BaseController {
         return util.importTemplateExcel("申报抵扣统计表");
     }
 
-    @RequiresPermissions("invoice:bizInvoice:import")
+    @RequiresPermissions("fmis:bizInvoice:import")
     @PostMapping("/importData")
     @ResponseBody
     public AjaxResult importData(MultipartFile file, boolean updateSupport) throws Exception
