@@ -66,7 +66,7 @@
                     formatter: function (value, row, index) {
                         var actions = [];
                         var auditStatus = row.auditStatus;
-                        if (auditStatus === 0) {
+                        if (auditStatus === 0 || auditStatus === 2) {
                             actions.push('<a class="btn btn-success btn-xs ' + auditFlag + '" href="javascript:void(0)" onclick="audit(\'' + row.bcId + '\')"><i class="fa fa-edit"></i> 审批</a> ');
                         }
                         actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewExamineDetail(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 查看合同 </a>');

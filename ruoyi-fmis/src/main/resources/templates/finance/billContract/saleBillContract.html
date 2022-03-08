@@ -24,11 +24,10 @@
                         </li>
                         <li>
                             <p>分解状态：</p>
-                            <select name="contractStatus">
+                            <select name="contractStatus" th:with="type=${@dict.getType('contract_decompose_status')}">
                                 <option value="">所有</option>
-                                <option value="0">未完成</option>
-                                <option value="1">完成</option>
-
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                        th:value="${dict.dictValue}"></option>
                             </select>
                         </li>
                         <li class="select-time">
@@ -73,6 +72,8 @@
     var payWayDatas = [[${@dict.getType('pay_way')}]];
     var collectionTypeDatas = [[${@dict.getType('collection_type1')}]];
     var paymentTypeDatas = [[${@dict.getType('payment_type1')}]];
+    var contractDecomposeStatus = [[${@dict.getType('contract_decompose_status')}]];
+
     var prefix = ctx + "finance/billContract";
 
     $(function () {
@@ -144,14 +145,7 @@
                     field: 'contractStatus',
                     title: '分解状态',
                     formatter: function (value, row, index) {
-                        var actions = '';
-                        var contractStatus = row.contractStatus;
-                        if (contractStatus === "1") {
-                            actions = "完成";
-                        } else if (contractStatus === "0") {
-                            actions = "未完成";
-                        }
-                        return actions;
+                        return $.table.selectDictLabel(contractDecomposeStatus, value);
                     }
                 },
                 {
