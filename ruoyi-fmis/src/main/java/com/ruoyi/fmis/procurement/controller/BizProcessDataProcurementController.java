@@ -180,7 +180,7 @@ public class BizProcessDataProcurementController extends BaseController {
 //                    flowStatusRemark = "待上报";
 //                } else
 
-               if ("1".equals(flowStatus)) {
+                if ("1".equals(flowStatus)) {
                     flowStatusRemark = "已上报";
                 } else {
                     SysRole currentSysRole = CommonUtils.getLikeByMap(flowAllMap, flowStatus.replaceAll("-", ""));
@@ -1010,7 +1010,7 @@ public class BizProcessDataProcurementController extends BaseController {
 
         try {
 //            bizProcessData
-            String filename = bizProcessData.getString12()+"_"+System.currentTimeMillis()+".pdf";
+            String filename = bizProcessData.getString12() + "_" + System.currentTimeMillis() + ".pdf";
             String filePath = PdfUtil.getAbsoluteFile(filename);
             // step 1 横向
             Document document = new Document(PageSize.A4_LANDSCAPE);
@@ -1160,9 +1160,9 @@ public class BizProcessDataProcurementController extends BaseController {
 //            table.addCell(PdfUtil.mergeCol("", 2,textFont));
 //            table.addCell(PdfUtil.mergeCol("", 5,textFont));
             //第三行
-            table.addCell(PdfUtil.mergeCol("采购合同编号：", 2, textFont));
+            table.addCell(PdfUtil.mergeCol("采购合同编号", 2, textFont));
             table.addCell(PdfUtil.mergeCol(bizProcessData.getString12(), 6, textFont));
-            table.addCell(PdfUtil.mergeCol("内销合同编号：", 2, textFont));
+            table.addCell(PdfUtil.mergeCol("内销合同编号", 2, textFont));
             table.addCell(PdfUtil.mergeCol(bizProcessData.getString10(), 5, textFont));
             //第四行
             table.addCell(PdfUtil.mergeCol("签订日期：", 2, textFont));
@@ -1434,12 +1434,8 @@ public class BizProcessDataProcurementController extends BaseController {
             table.addCell(PdfUtil.mergeCol(bizProcessData.getString28(), 5, textFont));
             table.addCell(PdfUtil.mergeCol("八、", 1, textFont));
             table.addCell(PdfUtil.mergeCol("付款方式：", 2, textFont));
-            SysDictData dictData = new SysDictData();
-            dictData.setDictType("contract_paytype");
-            dictData.setDictValue(bizProcessData.getString20());
-            List<SysDictData> list = dictDataService.selectDictDataList(dictData);
-            SysDictData sysDictData = list.get(0);
-            table.addCell(PdfUtil.mergeCol(sysDictData == null ? "" : sysDictData.getDictLabel(), 6, textFont));
+            String contractPaytype = dictDataService.selectDictLabel("contract_paytype", bizProcessData.getString20());
+            table.addCell(PdfUtil.mergeCol(StringUtils.isNotEmpty(contractPaytype) ? contractPaytype : "", 6, textFont));
             table.addCell(PdfUtil.mergeCol("运费承担：", 2, textFont));
             table.addCell(PdfUtil.mergeCol(bizProcessData.getString26(), 5, textFont));
 
@@ -1554,7 +1550,7 @@ public class BizProcessDataProcurementController extends BaseController {
         bizProcessChild_query.setProcurementNo(string12);
         List<BizProcessChild> bizProcessChildren = bizProcessChildService.selectBizTestChildHistoryList(bizProcessChild_query);
         String dateTime = "";
-        if(!CollectionUtils.isEmpty(bizProcessChildren)) {
+        if (!CollectionUtils.isEmpty(bizProcessChildren)) {
             Date createTime = bizProcessChildren.get(0).getCreateTime();
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
             dateTime = simpleDateFormat.format(createTime);
@@ -1682,28 +1678,28 @@ public class BizProcessDataProcurementController extends BaseController {
         List<BizProcessChild> bizProcessChildrenProduct = bizProcessChildService.selectBizTestProductList(queryBizProcessChild);
         // 总的订货数量和实际到货数量
         int orderSize = 0;
-        int arrivalSize= 0;
-        if(!CollectionUtils.isEmpty(bizProcessChildrenProduct)) {
+        int arrivalSize = 0;
+        if (!CollectionUtils.isEmpty(bizProcessChildrenProduct)) {
             for (int i = 0; i < bizProcessChildrenProduct.size(); i++) {
                 BizProcessChild bizProcessChild = bizProcessChildrenProduct.get(i);
 
                 // 材质要求：
                 // 阀体
-                String valvebodyMaterial =  Objects.isNull(bizProcessChild.getValvebodyMaterial())?"无":bizProcessChild.getValvebodyMaterial();
+                String valvebodyMaterial = Objects.isNull(bizProcessChild.getValvebodyMaterial()) ? "无" : bizProcessChild.getValvebodyMaterial();
                 // 阀芯
-                String valveElement =  Objects.isNull(bizProcessChild.getValveElement())?"无":bizProcessChild.getValveElement();
+                String valveElement = Objects.isNull(bizProcessChild.getValveElement()) ? "无" : bizProcessChild.getValveElement();
                 // 密封
-                String valveMaterial =  Objects.isNull(bizProcessChild.getValveMaterial())?"无":bizProcessChild.getValveMaterial();
+                String valveMaterial = Objects.isNull(bizProcessChild.getValveMaterial()) ? "无" : bizProcessChild.getValveMaterial();
                 // 驱动
-                String driveForm =  Objects.isNull(bizProcessChild.getDriveForm())?"无":bizProcessChild.getDriveForm();
+                String driveForm = Objects.isNull(bizProcessChild.getDriveForm()) ? "无" : bizProcessChild.getDriveForm();
                 // 连接方式
-                String connectionType = Objects.isNull(bizProcessChild.getConnectionType())? "无":bizProcessChild.getConnectionType();
+                String connectionType = Objects.isNull(bizProcessChild.getConnectionType()) ? "无" : bizProcessChild.getConnectionType();
 
                 String format = String.format("阀体：%s;阀芯：%s；密封：%s；驱动：%s；连接方式：%s", valvebodyMaterial, valveElement, valveMaterial, driveForm, connectionType);
                 rowIdx++;
                 XSSFRow rowList = receiptSheet.createRow(rowIdx);
                 XSSFCell cellValue1 = rowList.createCell(0);// 序号
-                cellValue1.setCellValue(i+1);
+                cellValue1.setCellValue(i + 1);
                 XSSFCell cellValue2 = rowList.createCell(1);// 产品名称
                 cellValue2.setCellValue(bizProcessChild.getProductName());
                 XSSFCell cellValue3 = rowList.createCell(2);// 型号
@@ -1719,7 +1715,7 @@ public class BizProcessDataProcurementController extends BaseController {
                 XSSFCell cellValue8 = rowList.createCell(7);// 实际到货数
                 cellValue8.setCellValue(bizProcessChild.getStayNum());
                 XSSFCell cellValue9 = rowList.createCell(8);// 备注
-                cellValue9.setCellValue(Objects.isNull(bizProcessChild.getRemark())? "":bizProcessChild.getRemark());
+                cellValue9.setCellValue(Objects.isNull(bizProcessChild.getRemark()) ? "" : bizProcessChild.getRemark());
 
 
                 orderSize += Integer.parseInt(bizProcessChild.getProductNum());

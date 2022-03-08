@@ -2209,7 +2209,8 @@ public class BizProcessDataController extends BaseController {
                     String string15 = StringUtils.trim(bizProcessData.getString15());
                     if (StringUtils.isNotEmpty(string15)) {
                         String string15Name = dictDataService.selectDictLabel("payment_days", string15);
-                        payRemark += " : " + string15Name + " " + StringUtils.trim(bizProcessData.getString17()) + " 天";
+//                        payRemark += " : " + string15Name + " " + StringUtils.trim(bizProcessData.getString17()) + " 天";
+                        payRemark += " : " + string15Name;
                     }
 
                 } else if ("3".equals(string18)) {
