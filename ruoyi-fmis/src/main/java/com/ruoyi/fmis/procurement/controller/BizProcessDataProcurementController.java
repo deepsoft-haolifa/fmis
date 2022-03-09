@@ -1540,136 +1540,26 @@ public class BizProcessDataProcurementController extends BaseController {
 
         BizProcessData bizProcessData1 = bizProcessDataService.selectBizProcessDataById(dataId);
 
-
-        // 查询供应商
-        String string6 = bizProcessData1.getString6();
-        BizSuppliers bizSuppliers = bizSuppliersService.selectBizSuppliersById(Long.valueOf(string6));
-        // 发货日期，最后一个报检日期
-        String string12 = bizProcessData1.getString12();
-        BizProcessChild bizProcessChild_query = new BizProcessChild();
-        bizProcessChild_query.setProcurementNo(string12);
-        List<BizProcessChild> bizProcessChildren = bizProcessChildService.selectBizTestChildHistoryList(bizProcessChild_query);
-        String dateTime = "";
-        if (!CollectionUtils.isEmpty(bizProcessChildren)) {
-            Date createTime = bizProcessChildren.get(0).getCreateTime();
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            dateTime = simpleDateFormat.format(createTime);
-        }
         // 导出excel
         XSSFWorkbook workbook = new XSSFWorkbook();
         XSSFSheet receiptSheet = workbook.createSheet("验收单");
+
+        // 第一行标题
         int rowIdx = 0;
-        //第一行标题
-        XSSFRow row = receiptSheet.createRow(rowIdx);
-        receiptSheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 8));
-        XSSFCell title = row.createCell(0);
+        h_1(workbook, receiptSheet, rowIdx);
 
-        XSSFFont headfont = workbook.createFont();
-        headfont.setFontName("宋体");
-        headfont.setBold(true);// 加粗
-        headfont.setFontHeightInPoints((short) 20);// 字体大小
-        XSSFCellStyle headstyle = workbook.createCellStyle();
-        headstyle.setFont(headfont);
-        headstyle.setAlignment(HorizontalAlignment.CENTER);// 左右居中
-        headstyle.setVerticalAlignment(VerticalAlignment.CENTER);// 上下居中
-        headstyle.setLocked(true);
-        title.setCellValue("验收单");
-        title.setCellStyle(headstyle);
-
-        rowIdx++;
-
-        // 加粗字体
-
-        XSSFFont normalBold = workbook.createFont();
-        normalBold.setFontName("宋体");
-        normalBold.setBold(true);// 加粗
-        normalBold.setFontHeightInPoints((short) 10);// 字体大小
         // 第二行
-        XSSFRow row2 = receiptSheet.createRow(rowIdx);
-        CellRangeAddress region = new CellRangeAddress(rowIdx, rowIdx, 1, 2);
-        receiptSheet.addMergedRegion(region);
-        CellRangeAddress region1 = new CellRangeAddress(rowIdx, rowIdx, 4, 5);
-        receiptSheet.addMergedRegion(region1);
-        CellRangeAddress region2 = new CellRangeAddress(rowIdx, rowIdx, 7, 8);
-        receiptSheet.addMergedRegion(region2);
-
-        // 加粗
-        XSSFCellStyle boldStyle = workbook.createCellStyle();
-        boldStyle.setFont(normalBold);
-        boldStyle.setBorderBottom(BorderStyle.DOUBLE);
-        boldStyle.setBorderTop(BorderStyle.DOUBLE);
-        // 不加粗字体
-        XSSFCellStyle thinStyle = workbook.createCellStyle();
-        thinStyle.setBorderBottom(BorderStyle.DOUBLE);
-        thinStyle.setBorderTop(BorderStyle.DOUBLE);
-        XSSFCell supplierKeyCell = row2.createCell(0);
-        supplierKeyCell.setCellValue("供方：");
-        supplierKeyCell.setCellStyle(boldStyle);
-        XSSFCell supplierValueCell = row2.createCell(1);
-        supplierValueCell.setCellValue(bizSuppliers.getName());
-        supplierValueCell.setCellStyle(thinStyle);
-        RegionUtil.setBorderBottom(BorderStyle.DOUBLE, region, receiptSheet);
-        RegionUtil.setBorderTop(BorderStyle.DOUBLE, region, receiptSheet);
-        XSSFCell procurementKeyCell = row2.createCell(3);
-        procurementKeyCell.setCellValue("采购合同号：");
-        procurementKeyCell.setCellStyle(boldStyle);
-        XSSFCell procurementValueCell = row2.createCell(4);
-        procurementValueCell.setCellValue(bizProcessData1.getString12());
-        procurementValueCell.setCellStyle(thinStyle);
-        RegionUtil.setBorderTop(BorderStyle.DOUBLE, region1, receiptSheet);
-        RegionUtil.setBorderBottom(BorderStyle.DOUBLE, region1, receiptSheet);
-        XSSFCell deliveryDateKeyCell = row2.createCell(6);
-        deliveryDateKeyCell.setCellValue("发货日期：");
-        deliveryDateKeyCell.setCellStyle(boldStyle);
-        XSSFCell deliveryDateValueCell = row2.createCell(7);
-        deliveryDateValueCell.setCellValue(dateTime);
-        RegionUtil.setBorderTop(BorderStyle.DOUBLE, region2, receiptSheet);
-        RegionUtil.setBorderBottom(BorderStyle.DOUBLE, region2, receiptSheet);
-
-
-        // 空白行
         rowIdx++;
-        receiptSheet.createRow(rowIdx);
+        h_2(bizProcessData1,  workbook, receiptSheet, rowIdx);
+
+        // 第三行 空白行
+        rowIdx++;
+        h_3(receiptSheet, rowIdx);
+
         // 第四行
-        XSSFCellStyle borderCellStyle = workbook.createCellStyle();
-        borderCellStyle.setBorderTop(BorderStyle.THIN);
-        borderCellStyle.setBorderBottom(BorderStyle.THIN);
-        borderCellStyle.setBorderLeft(BorderStyle.THIN);
-        borderCellStyle.setBorderRight(BorderStyle.THIN);
-        borderCellStyle.setAlignment(HorizontalAlignment.LEFT);
-        borderCellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
-        borderCellStyle.setWrapText(true);
         rowIdx++;
-        XSSFRow row3 = receiptSheet.createRow(rowIdx);
-        XSSFCell cellKey1 = row3.createCell(0);// 序号
-        cellKey1.setCellValue("序号");
-        XSSFCell cellKey2 = row3.createCell(1);// 产品名称
-        cellKey2.setCellValue("产品名称");
-        XSSFCell cellKey3 = row3.createCell(2);// 型号
-        cellKey3.setCellValue("型号");
-        XSSFCell cellKey4 = row3.createCell(3);// 规格
-        cellKey4.setCellValue("规格");
-        XSSFCell cellKey5 = row3.createCell(4);// 订货数
-        cellKey5.setCellValue("订货数");
-        XSSFCell cellKey6 = row3.createCell(5);// 材质要求
-        cellKey6.setCellValue("材质要求");
-        XSSFCell cellKey7 = row3.createCell(6);// 内销合同号
-        cellKey7.setCellValue("内销合同号");
-        XSSFCell cellKey8 = row3.createCell(7);// 实际到货数
-        cellKey8.setCellValue("实际到货数");
-        XSSFCell cellKey9 = row3.createCell(8);// 备注
-        cellKey9.setCellValue("备注");
-
-        // 设置单元格样式
-        cellKey1.setCellStyle(borderCellStyle);
-        cellKey2.setCellStyle(borderCellStyle);
-        cellKey3.setCellStyle(borderCellStyle);
-        cellKey4.setCellStyle(borderCellStyle);
-        cellKey5.setCellStyle(borderCellStyle);
-        cellKey6.setCellStyle(borderCellStyle);
-        cellKey7.setCellStyle(borderCellStyle);
-        cellKey8.setCellStyle(borderCellStyle);
-        cellKey9.setCellStyle(borderCellStyle);
+        XSSFCellStyle borderCellStyle = buildXssfCellStyle(workbook);
+        h_4(receiptSheet, rowIdx, borderCellStyle);
 
         // 循环遍历产品
         // 查询报检列表
@@ -1678,58 +1568,15 @@ public class BizProcessDataProcurementController extends BaseController {
         List<BizProcessChild> bizProcessChildrenProduct = bizProcessChildService.selectBizTestProductList(queryBizProcessChild);
         // 总的订货数量和实际到货数量
         int orderSize = 0;
-        int arrivalSize = 0;
-        if (!CollectionUtils.isEmpty(bizProcessChildrenProduct)) {
+        int arrivalSize= 0;
+        if(!CollectionUtils.isEmpty(bizProcessChildrenProduct)) {
             for (int i = 0; i < bizProcessChildrenProduct.size(); i++) {
                 BizProcessChild bizProcessChild = bizProcessChildrenProduct.get(i);
-
-                // 材质要求：
-                // 阀体
-                String valvebodyMaterial = Objects.isNull(bizProcessChild.getValvebodyMaterial()) ? "无" : bizProcessChild.getValvebodyMaterial();
-                // 阀芯
-                String valveElement = Objects.isNull(bizProcessChild.getValveElement()) ? "无" : bizProcessChild.getValveElement();
-                // 密封
-                String valveMaterial = Objects.isNull(bizProcessChild.getValveMaterial()) ? "无" : bizProcessChild.getValveMaterial();
-                // 驱动
-                String driveForm = Objects.isNull(bizProcessChild.getDriveForm()) ? "无" : bizProcessChild.getDriveForm();
-                // 连接方式
-                String connectionType = Objects.isNull(bizProcessChild.getConnectionType()) ? "无" : bizProcessChild.getConnectionType();
-
-                String format = String.format("阀体：%s;阀芯：%s；密封：%s；驱动：%s；连接方式：%s", valvebodyMaterial, valveElement, valveMaterial, driveForm, connectionType);
                 rowIdx++;
-                XSSFRow rowList = receiptSheet.createRow(rowIdx);
-                XSSFCell cellValue1 = rowList.createCell(0);// 序号
-                cellValue1.setCellValue(i + 1);
-                XSSFCell cellValue2 = rowList.createCell(1);// 产品名称
-                cellValue2.setCellValue(bizProcessChild.getProductName());
-                XSSFCell cellValue3 = rowList.createCell(2);// 型号
-                cellValue3.setCellValue(bizProcessChild.getModel());
-                XSSFCell cellValue4 = rowList.createCell(3);// 规格
-                cellValue4.setCellValue(bizProcessChild.getSpecifications());
-                XSSFCell cellValue5 = rowList.createCell(4);// 订货数
-                cellValue5.setCellValue(bizProcessChild.getProductNum());
-                XSSFCell cellValue6 = rowList.createCell(5);// 材质要求
-                cellValue6.setCellValue(format);
-                XSSFCell cellValue7 = rowList.createCell(6);// 内销合同号
-                cellValue7.setCellValue(bizProcessChild.getContractNo());
-                XSSFCell cellValue8 = rowList.createCell(7);// 实际到货数
-                cellValue8.setCellValue(bizProcessChild.getStayNum());
-                XSSFCell cellValue9 = rowList.createCell(8);// 备注
-                cellValue9.setCellValue(Objects.isNull(bizProcessChild.getRemark()) ? "" : bizProcessChild.getRemark());
-
-
+                // 第 n 行
+                h_n(receiptSheet, rowIdx, borderCellStyle, i, bizProcessChild);
                 orderSize += Integer.parseInt(bizProcessChild.getProductNum());
                 arrivalSize += bizProcessChild.getStayNum();
-                // 设置单元格样式
-                cellValue1.setCellStyle(borderCellStyle);
-                cellValue2.setCellStyle(borderCellStyle);
-                cellValue3.setCellStyle(borderCellStyle);
-                cellValue4.setCellStyle(borderCellStyle);
-                cellValue5.setCellStyle(borderCellStyle);
-                cellValue6.setCellStyle(borderCellStyle);
-                cellValue7.setCellStyle(borderCellStyle);
-                cellValue8.setCellStyle(borderCellStyle);
-                cellValue9.setCellStyle(borderCellStyle);
             }
         }
 
@@ -1906,4 +1753,186 @@ public class BizProcessDataProcurementController extends BaseController {
         outputStream.close();
     }
 
+    private void h_n(XSSFSheet receiptSheet, int rowIdx, XSSFCellStyle borderCellStyle, int i, BizProcessChild bizProcessChild) {
+        // 材质要求：
+        // 阀体
+        String valvebodyMaterial =  Objects.isNull(bizProcessChild.getValvebodyMaterial())?"无": bizProcessChild.getValvebodyMaterial();
+        // 阀芯
+        String valveElement =  Objects.isNull(bizProcessChild.getValveElement())?"无": bizProcessChild.getValveElement();
+        // 密封
+        String valveMaterial =  Objects.isNull(bizProcessChild.getValveMaterial())?"无": bizProcessChild.getValveMaterial();
+        // 驱动
+        String driveForm =  Objects.isNull(bizProcessChild.getDriveForm())?"无": bizProcessChild.getDriveForm();
+        // 连接方式
+        String connectionType = Objects.isNull(bizProcessChild.getConnectionType())? "无": bizProcessChild.getConnectionType();
+
+        String format = String.format("阀体：%s;阀芯：%s；密封：%s；驱动：%s；连接方式：%s", valvebodyMaterial, valveElement, valveMaterial, driveForm, connectionType);
+        XSSFRow rowList = receiptSheet.createRow(rowIdx);
+        XSSFCell cellValue1 = rowList.createCell(0);// 序号
+        cellValue1.setCellValue(i +1);
+        XSSFCell cellValue2 = rowList.createCell(1);// 产品名称
+        cellValue2.setCellValue(bizProcessChild.getProductName());
+        XSSFCell cellValue3 = rowList.createCell(2);// 型号
+        cellValue3.setCellValue(bizProcessChild.getModel());
+        XSSFCell cellValue4 = rowList.createCell(3);// 规格
+        cellValue4.setCellValue(bizProcessChild.getSpecifications());
+        XSSFCell cellValue5 = rowList.createCell(4);// 订货数
+        cellValue5.setCellValue(bizProcessChild.getProductNum());
+        XSSFCell cellValue6 = rowList.createCell(5);// 材质要求
+        cellValue6.setCellValue(format);
+        XSSFCell cellValue7 = rowList.createCell(6);// 内销合同号
+        cellValue7.setCellValue(bizProcessChild.getContractNo());
+        XSSFCell cellValue8 = rowList.createCell(7);// 实际到货数
+        cellValue8.setCellValue(bizProcessChild.getStayNum());
+        XSSFCell cellValue9 = rowList.createCell(8);// 备注
+        cellValue9.setCellValue(Objects.isNull(bizProcessChild.getRemark())? "": bizProcessChild.getRemark());
+// 设置单元格样式
+        cellValue1.setCellStyle(borderCellStyle);
+        cellValue2.setCellStyle(borderCellStyle);
+        cellValue3.setCellStyle(borderCellStyle);
+        cellValue4.setCellStyle(borderCellStyle);
+        cellValue5.setCellStyle(borderCellStyle);
+        cellValue6.setCellStyle(borderCellStyle);
+        cellValue7.setCellStyle(borderCellStyle);
+        cellValue8.setCellStyle(borderCellStyle);
+        cellValue9.setCellStyle(borderCellStyle);
+    }
+
+    private XSSFCellStyle buildXssfCellStyle(XSSFWorkbook workbook) {
+        XSSFCellStyle borderCellStyle = workbook.createCellStyle();
+        borderCellStyle.setBorderTop(BorderStyle.THIN);
+        borderCellStyle.setBorderBottom(BorderStyle.THIN);
+        borderCellStyle.setBorderLeft(BorderStyle.THIN);
+        borderCellStyle.setBorderRight(BorderStyle.THIN);
+        borderCellStyle.setAlignment(HorizontalAlignment.LEFT);
+        borderCellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+        borderCellStyle.setWrapText(true);
+        return borderCellStyle;
+    }
+
+    private void h_4(XSSFSheet receiptSheet, int rowIdx, XSSFCellStyle borderCellStyle) {
+        XSSFRow row3 = receiptSheet.createRow(rowIdx);
+
+
+        XSSFCell cellKey1 = row3.createCell(0);// 序号
+        cellKey1.setCellValue("序号");
+        XSSFCell cellKey2 = row3.createCell(1);// 产品名称
+        cellKey2.setCellValue("产品名称");
+        XSSFCell cellKey3 = row3.createCell(2);// 型号
+        cellKey3.setCellValue("型号");
+        XSSFCell cellKey4 = row3.createCell(3);// 规格
+        cellKey4.setCellValue("规格");
+        XSSFCell cellKey5 = row3.createCell(4);// 订货数
+        cellKey5.setCellValue("订货数");
+        XSSFCell cellKey6 = row3.createCell(5);// 材质要求
+        cellKey6.setCellValue("材质要求");
+        XSSFCell cellKey7 = row3.createCell(6);// 内销合同号
+        cellKey7.setCellValue("内销合同号");
+        XSSFCell cellKey8 = row3.createCell(7);// 实际到货数
+        cellKey8.setCellValue("实际到货数");
+        XSSFCell cellKey9 = row3.createCell(8);// 备注
+        cellKey9.setCellValue("备注");
+
+        // 设置单元格样式
+        cellKey1.setCellStyle(borderCellStyle);
+        cellKey2.setCellStyle(borderCellStyle);
+        cellKey3.setCellStyle(borderCellStyle);
+        cellKey4.setCellStyle(borderCellStyle);
+        cellKey5.setCellStyle(borderCellStyle);
+        cellKey6.setCellStyle(borderCellStyle);
+        cellKey7.setCellStyle(borderCellStyle);
+        cellKey8.setCellStyle(borderCellStyle);
+        cellKey9.setCellStyle(borderCellStyle);
+    }
+
+    private void h_3(XSSFSheet receiptSheet, int rowIdx) {
+        receiptSheet.createRow(rowIdx);
+    }
+
+    private void h_2(BizProcessData bizProcessData1, XSSFWorkbook workbook, XSSFSheet receiptSheet, int rowIdx) {
+        // 查询供应商
+        String string6 = bizProcessData1.getString6();
+
+        BizSuppliers bizSuppliers = bizSuppliersService.selectBizSuppliersById(Long.valueOf(string6));
+
+        // 发货日期，最后一个报检日期
+        String string12 = bizProcessData1.getString12();
+        BizProcessChild bizProcessChild_query = new BizProcessChild();
+        bizProcessChild_query.setProcurementNo(string12);
+
+        List<BizProcessChild> bizProcessChildren = bizProcessChildService.selectBizTestChildHistoryList(bizProcessChild_query);
+
+        String dateTime = "";
+        if(!CollectionUtils.isEmpty(bizProcessChildren)) {
+            Date createTime = bizProcessChildren.get(0).getCreateTime();
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            dateTime = simpleDateFormat.format(createTime);
+        }
+
+        // 加粗字体
+
+        XSSFFont normalBold = workbook.createFont();
+        normalBold.setFontName("宋体");
+        normalBold.setBold(true);// 加粗
+        normalBold.setFontHeightInPoints((short) 10);// 字体大小
+        // 第二行
+        XSSFRow row2 = receiptSheet.createRow(rowIdx);
+        CellRangeAddress region = new CellRangeAddress(rowIdx, rowIdx, 1, 2);
+        receiptSheet.addMergedRegion(region);
+        CellRangeAddress region1 = new CellRangeAddress(rowIdx, rowIdx, 4, 5);
+        receiptSheet.addMergedRegion(region1);
+        CellRangeAddress region2 = new CellRangeAddress(rowIdx, rowIdx, 7, 8);
+        receiptSheet.addMergedRegion(region2);
+
+        // 加粗
+        XSSFCellStyle boldStyle = workbook.createCellStyle();
+        boldStyle.setFont(normalBold);
+        boldStyle.setBorderBottom(BorderStyle.DOUBLE);
+        boldStyle.setBorderTop(BorderStyle.DOUBLE);
+        // 不加粗字体
+        XSSFCellStyle thinStyle = workbook.createCellStyle();
+        thinStyle.setBorderBottom(BorderStyle.DOUBLE);
+        thinStyle.setBorderTop(BorderStyle.DOUBLE);
+        XSSFCell supplierKeyCell = row2.createCell(0);
+        supplierKeyCell.setCellValue("供方：");
+        supplierKeyCell.setCellStyle(boldStyle);
+        XSSFCell supplierValueCell = row2.createCell(1);
+        supplierValueCell.setCellValue(bizSuppliers.getName());
+        supplierValueCell.setCellStyle(thinStyle);
+        RegionUtil.setBorderBottom(BorderStyle.DOUBLE, region, receiptSheet);
+        RegionUtil.setBorderTop(BorderStyle.DOUBLE, region, receiptSheet);
+        XSSFCell procurementKeyCell = row2.createCell(3);
+        procurementKeyCell.setCellValue("采购合同号：");
+        procurementKeyCell.setCellStyle(boldStyle);
+        XSSFCell procurementValueCell = row2.createCell(4);
+        procurementValueCell.setCellValue(bizProcessData1.getString12());
+        procurementValueCell.setCellStyle(thinStyle);
+        RegionUtil.setBorderTop(BorderStyle.DOUBLE, region1, receiptSheet);
+        RegionUtil.setBorderBottom(BorderStyle.DOUBLE, region1, receiptSheet);
+        XSSFCell deliveryDateKeyCell = row2.createCell(6);
+        deliveryDateKeyCell.setCellValue("发货日期：");
+        deliveryDateKeyCell.setCellStyle(boldStyle);
+        XSSFCell deliveryDateValueCell = row2.createCell(7);
+        deliveryDateValueCell.setCellValue(dateTime);
+        RegionUtil.setBorderTop(BorderStyle.DOUBLE, region2, receiptSheet);
+        RegionUtil.setBorderBottom(BorderStyle.DOUBLE, region2, receiptSheet);
+    }
+
+    private void h_1(XSSFWorkbook workbook, XSSFSheet receiptSheet, int rowIdx) {
+        XSSFRow row = receiptSheet.createRow(rowIdx);
+        receiptSheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 8));
+        XSSFCell title = row.createCell(0);
+
+        XSSFFont headfont = workbook.createFont();
+        headfont.setFontName("宋体");
+        headfont.setBold(true);// 加粗
+        headfont.setFontHeightInPoints((short) 20);// 字体大小
+        XSSFCellStyle headstyle = workbook.createCellStyle();
+        headstyle.setFont(headfont);
+        headstyle.setAlignment(HorizontalAlignment.CENTER);// 左右居中
+        headstyle.setVerticalAlignment(VerticalAlignment.CENTER);// 上下居中
+        headstyle.setLocked(true);
+        title.setCellValue("验收单");
+        title.setCellStyle(headstyle);
+    }
 }
