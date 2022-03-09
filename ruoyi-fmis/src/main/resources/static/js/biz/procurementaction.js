@@ -36,7 +36,7 @@ function addTest(dataId,paramterId,childId,tableId,statusId) {
         };
         setTimeout(function () {
             console.log("promise 2." + paramterId);
-            $("#initChildTestTableId_" + childId).bootstrapTable('append', rowData);
+            $("#initChildTestTableId_" + statusId).bootstrapTable('append', rowData);
             console.log("promise 4." + paramterId);
         },500)
 
@@ -69,7 +69,7 @@ initChildTestTable = function(index, rows, $detail) {
     var childId = rows["childId"];
     var statusId = rows["statusId"];
     var yesNum = rows["yesNum"];
-    var initChildTestTableId = "initChildTestTableId_" + childId;
+    var initChildTestTableId = "initChildTestTableId_" + statusId;
     var cur_table = $detail.html('<table style="table-layout:fixed" id=' + initChildTestTableId + ' data-cache="true"></table>').find('table');
 
     $(cur_table).bootstrapTable({
@@ -112,7 +112,7 @@ initChildTestTable = function(index, rows, $detail) {
 function saveTest (rowId,childId,paramterId,dataId,statusId,parentTotalNum,parentYesNum) {
     //dataId,paramterId,childId,remark,testId,yesNum,noNum
 
-    var rows = $("#initChildTestTableId_" + childId).bootstrapTable('getData');
+    var rows = $("#initChildTestTableId_" + statusId).bootstrapTable('getData');
 
     //var parentTable = $("#initChildTestTableId_" + childId).bootstrapTable("getParent");
 
@@ -153,7 +153,7 @@ function saveTest (rowId,childId,paramterId,dataId,statusId,parentTotalNum,paren
         "&stayNum=" + stayNum + "&statusId=" + statusId;
     $.operate.saveModal(url,'',function(){
         //$.table.refresh();
-        $("#initChildTestTableId_" + childId).bootstrapTable('refresh');
+        $("#initChildTestTableId_" + statusId).bootstrapTable('refresh');
     });
 }
 
