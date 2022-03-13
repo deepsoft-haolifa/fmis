@@ -333,10 +333,13 @@ function onEditableSave (field, row, oldValue, $el) {
 }
 
 function calculatePrice () {
+    console.log("calculatePrice...")
     var price1 = 0;
     priceMap.forEach(function (value, key, map) {
         price1 = FloatAdd(price1,value);
+        console.log("calculatePrice...xuanzede:" + price1);
     });
+    console.log("calculatePrice...price1:" + price1)
     $("#price1").val(price1);
 }
 function FloatAdd(arg1,arg2){
@@ -494,6 +497,15 @@ initChildProductTable = function(index, row, $detail) {
                 var checkedValue = false;
                 if($.inArray("1_" + row.childId + "_" + row.productId + "_" + row.dataId + "_" + row.levelValue, overAllIds)!=-1){
                     showNum(1,row);
+                    var productNum = row["productNum"];
+                    productNum = $.common.isEmpty(productNum) == true ? 0 : parseFloat(productNum);
+                    var procurementPrice = row["productProcurementPrice"];
+                    procurementPrice = $.common.isEmpty(procurementPrice) == true ? 0 : parseFloat(procurementPrice);
+                    var total = parseFloat(productNum * procurementPrice).toFixed(2);
+                    console.log("productNum"+productNum+"procurementPrice" + procurementPrice + "total" + total)
+                    console.log("chushihua fangru pricemap.."
+                    )
+                    priceMap.set(1 + "_" + row.childId + "_" +  row.productId+ "_" + row.dataId + "_" + row.levelValue,total);
                     checkedValue = true;
                 } else {
 
@@ -731,6 +743,7 @@ function examine(type,datas,typeIndex,id){
             haoliMap.set(id,id);
         });
     }
+    calculatePrice();
 }
 
 
@@ -763,6 +776,15 @@ initChildActuatorTable = function(index, row, $detail) {
                 var checkedValue = false;
                 if($.inArray("2_" + row.childId + "_" + row.actuatorId + "_" + row.dataId + "_" + row.levelValue, overAllIds)!=-1){
                     showNum(2,row);
+                    var productNum = row["actuatorNum"];
+                    productNum = $.common.isEmpty(productNum) == true ? 0 : parseFloat(productNum);
+                    var procurementPrice = row["actuatorString6"];
+                    procurementPrice = $.common.isEmpty(procurementPrice) == true ? 0 : parseFloat(procurementPrice);
+                    var total = parseFloat(productNum * procurementPrice).toFixed(2);
+                    console.log("productNum"+productNum+"procurementPrice" + procurementPrice + "total" + total)
+                    console.log("chushihua fangru pricemap.."
+                    )
+                    priceMap.set(2 + "_" + row.childId + "_" + row.actuatorId+ "_" + row.dataId + "_" + row.levelValue,total);
                     checkedValue = true;
                 }
                 return {
@@ -895,6 +917,13 @@ initChildRef1Table = function(index, row, $detail) {
                 var checkedValue = false;
                 if($.inArray("3_" + row.childId + "_" + row.productRef1Id + "_" + row.dataId + "_" + row.levelValue, overAllIds)!=-1){
                     showNum(3,row);
+                    var productNum = row["productRef1Num"];
+                    productNum = $.common.isEmpty(productNum) == true ? 0 : parseFloat(productNum);
+                    var procurementPrice = row["ref1String2"];
+                    procurementPrice = $.common.isEmpty(procurementPrice) == true ? 0 : parseFloat(procurementPrice);
+                    var total = parseFloat(productNum * procurementPrice).toFixed(2);
+                    console.log("productNum"+productNum+"procurementPrice" + procurementPrice + "total" + total)
+                    priceMap.set(3 + "_" + row.childId + "_" + row.productRef1Id+ "_" + row.dataId + "_" + row.levelValue,total);
                     checkedValue = true;
                 }
                 return {
@@ -976,6 +1005,13 @@ initChildRef2Table = function(index, row, $detail) {
                 var checkedValue = false;
                 if($.inArray("4_" + row.childId + "_" + row.productRef2Id + "_" + row.dataId + "_" + row.levelValue, overAllIds)!=-1){
                     showNum(4,row);
+                    var productNum = row["productRef2Num"];
+                    productNum = $.common.isEmpty(productNum) == true ? 0 : parseFloat(productNum);
+                    var procurementPrice = row["ref1String2"];
+                    procurementPrice = $.common.isEmpty(procurementPrice) == true ? 0 : parseFloat(procurementPrice);
+                    var total = parseFloat(productNum * procurementPrice).toFixed(2);
+                    console.log("productNum"+productNum+"procurementPrice" + procurementPrice + "total" + total)
+                    priceMap.set(4 + "_" + row.childId + "_" + row.productRef2Id+ "_" + row.dataId + "_" + row.levelValue,total);
                     checkedValue = true;
                 }
                 return {
@@ -1054,6 +1090,13 @@ initChildPATable = function(index, row, $detail) {
                 var checkedValue = false;
                 if($.inArray("5_" + row.childId + "_" + row.pattachmentId + "_" + row.dataId + "_" + row.levelValue, overAllIds)!=-1){
                     showNum(5,row);
+                    var productNum = row["pattachmentCount"];
+                    productNum = $.common.isEmpty(productNum) == true ? 0 : parseFloat(productNum);
+                    var procurementPrice = row["procurementPrice"];
+                    procurementPrice = $.common.isEmpty(procurementPrice) == true ? 0 : parseFloat(procurementPrice);
+                    var total = parseFloat(productNum * procurementPrice).toFixed(2);
+                    console.log("productNum"+productNum+"procurementPrice" + procurementPrice + "total" + total)
+                    priceMap.set(5 + "_" + row.childId + "_" + row.pattachmentId+ "_" + row.dataId + "_" + row.levelValue,total);
                     checkedValue = true;
                 }
                 return {
@@ -1162,6 +1205,13 @@ initChildPA1Table = function(index, row, $detail) {
                 var checkedValue = false;
                 if($.inArray("6_" + row.childId + "_" + row.pattachment1Id + "_" + row.dataId + "_" + row.levelValue, overAllIds)!=-1){
                     showNum(6,row);
+                    var productNum = row["pattachment1Count"];
+                    productNum = $.common.isEmpty(productNum) == true ? 0 : parseFloat(productNum);
+                    var procurementPrice = row["procurementPrice"];
+                    procurementPrice = $.common.isEmpty(procurementPrice) == true ? 0 : parseFloat(procurementPrice);
+                    var total = parseFloat(productNum * procurementPrice).toFixed(2);
+                    console.log("productNum"+productNum+"procurementPrice" + procurementPrice + "total" + total)
+                    priceMap.set(6 + "_" + row.childId + "_" + row.pattachment1Id+ "_" + row.dataId + "_" + row.levelValue,total);
                     checkedValue = true;
                 }
                 return {
@@ -1271,6 +1321,13 @@ initChildPA2Table = function(index, row, $detail) {
                 var checkedValue = false;
                 if($.inArray("7_" + row.childId + "_" + row.pattachment2Id + "_" + row.dataId + "_" + row.levelValue, overAllIds)!=-1){
                     showNum(7,row);
+                    var productNum = row["pattachment2Count"];
+                    productNum = $.common.isEmpty(productNum) == true ? 0 : parseFloat(productNum);
+                    var procurementPrice = row["procurementPrice"];
+                    procurementPrice = $.common.isEmpty(procurementPrice) == true ? 0 : parseFloat(procurementPrice);
+                    var total = parseFloat(productNum * procurementPrice).toFixed(2);
+                    console.log("productNum"+productNum+"procurementPrice" + procurementPrice + "total" + total)
+                    priceMap.set(7 + "_" + row.childId + "_" + row.pattachment2Id+ "_" + row.dataId + "_" + row.levelValue,total);
                     checkedValue = true;
                 }
                 return {
@@ -1385,6 +1442,13 @@ initChildPA3Table = function(index, row, $detail) {
                 var checkedValue = false;
                 if($.inArray("8_" + row.childId + "_" + row.pattachment3Id + "_" + row.dataId + "_" + row.levelValue, overAllIds)!=-1){
                     showNum(8,row);
+                    var productNum = row["pattachment3Count"];
+                    productNum = $.common.isEmpty(productNum) == true ? 0 : parseFloat(productNum);
+                    var procurementPrice = row["procurementPrice"];
+                    procurementPrice = $.common.isEmpty(procurementPrice) == true ? 0 : parseFloat(procurementPrice);
+                    var total = parseFloat(productNum * procurementPrice).toFixed(2);
+                    console.log("productNum"+productNum+"procurementPrice" + procurementPrice + "total" + total)
+                    priceMap.set(8 + "_" + row.childId + "_" + row.pattachment3Id+ "_" + row.dataId + "_" + row.levelValue,total);
                     checkedValue = true;
                 }
                 return {
@@ -1494,6 +1558,13 @@ initChildPA4Table = function(index, row, $detail) {
                 var checkedValue = false;
                 if($.inArray("9_" + row.childId + "_" + row.pattachment4Id + "_" + row.dataId + "_" + row.levelValue, overAllIds)!=-1){
                     showNum(9,row);
+                    var productNum = row["pattachment4Count"];
+                    productNum = $.common.isEmpty(productNum) == true ? 0 : parseFloat(productNum);
+                    var procurementPrice = row["procurementPrice"];
+                    procurementPrice = $.common.isEmpty(procurementPrice) == true ? 0 : parseFloat(procurementPrice);
+                    var total = parseFloat(productNum * procurementPrice).toFixed(2);
+                    console.log("productNum"+productNum+"procurementPrice" + procurementPrice + "total" + total)
+                    priceMap.set(9 + "_" + row.childId + "_" + row.pattachment4Id+ "_" + row.dataId + "_" + row.levelValue,total);
                     checkedValue = true;
                 }
                 return {

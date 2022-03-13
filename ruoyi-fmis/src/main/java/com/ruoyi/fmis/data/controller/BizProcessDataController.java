@@ -1957,8 +1957,8 @@ public class BizProcessDataController extends BaseController {
                 Double ref1Total = new Double(0);
                 String ref1Id = bizProduct.getProductRef1Id();
                 if (StringUtils.isNotEmpty(ref1Id) && !ref1Id.trim().equals("0")) {
-                    Double ref1Price = bizProduct.getPrice2();
-                    String ref1Num = bizProduct.getString6();
+                    Double ref1Price = bizProduct.getRef1Price();
+                    String ref1Num = bizProduct.getProductRef1Num() + "";
                     String ref1Coefficient = bizProduct.getProductRef1Coefficient();
                     if (StringUtils.isNotEmpty(ref1Num) && ref1Price != null && ref1Price > 0 && StringUtils.isNotEmpty(ref1Coefficient)) {
                         ref1Total = Double.parseDouble(ref1Num) * ref1Price * Double.parseDouble(ref1Coefficient);
@@ -1971,10 +1971,10 @@ public class BizProcessDataController extends BaseController {
                 }
                 //螺栓计算
                 Double ref2Tota = new Double(0);
-                String ref2Id = bizProduct.getString5();
+                String ref2Id = bizProduct.getProductRef2Id();
                 if (StringUtils.isNotEmpty(ref2Id)) {
-                    Double ref2Price = StringUtils.toDouble(bizProduct.getString8());
-                    String ref2Num = bizProduct.getString9();
+                    Double ref2Price = bizProduct.getRef2Price();
+                    String ref2Num = bizProduct.getProductRef2Num() + "";
                     String ref2Coefficient = bizProduct.getProductRef2Coefficient();
                     if (StringUtils.isNotEmpty(ref2Num) && ref2Price > 0 && StringUtils.isNotEmpty(ref2Coefficient)) {
                         ref2Tota = Double.parseDouble(ref2Num) * ref2Price * Double.parseDouble(ref2Coefficient);

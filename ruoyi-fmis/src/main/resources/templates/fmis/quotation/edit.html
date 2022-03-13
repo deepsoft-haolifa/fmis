@@ -649,7 +649,7 @@
             var updateObjOnly = {
                 index : row.rowId,
                 field : "totalPriceOnly",
-                value : totalPriceOnly
+                value : parseInt(totalSum / productNum)
             };
             $.btTable.bootstrapTable("updateCell",updateObjOnly);
 
