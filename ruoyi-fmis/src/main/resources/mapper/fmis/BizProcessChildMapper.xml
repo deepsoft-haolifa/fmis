@@ -346,7 +346,7 @@
         ds.string4 as procurementId,'A' as levelValue,s.suppliers_id as supplierId,pd.string1 as contractNo,pd.string25 as contractSpecial
         from biz_product p
         join
-        (select ds.string2 product_id,pc1.* from biz_data_status ds, biz_process_child pc1 where pc1.data_id = #{dataId} and ds.child_id=pc1.child_id ) as pc on p.product_id = pc.product_id
+        (select ds.string2 product_id,pc1.* from biz_data_status ds, biz_process_child pc1 where pc1.data_id = #{dataId} and ds.child_id=pc1.child_id  and ds.type=1) as pc on p.product_id = pc.product_id
         join biz_process_data pd on pc.data_id=pd.data_id
         left join biz_data_status ds on ds.child_id=pc.child_id and ds.string2=p.product_id
         left join biz_dict d on  d.parent_id=1 and p.series=d.dict_id
