@@ -655,7 +655,7 @@
             var updateObjOnly = {
                 index : row.rowId,
                 field : "totalPriceOnly",
-                value : totalPriceOnly
+                value : parseFloat(totalSum / productNum).toFixed(2)
             };
             console.log("updateObjOnly2=" + JSON.stringify(updateObjOnly));
             $.btTable.bootstrapTable("updateCell",updateObjOnly);

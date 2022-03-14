@@ -1102,7 +1102,7 @@
             var updateObj1 = {
                 index : row.rowId,
                 field : "contractPrice",
-                value : parseInt(totalSum / productNum)
+                value : parseFloat(totalSum / productNum).toFixed(2)
             };
             $.btTable.bootstrapTable("updateCell", updateObj);
             $.btTable.bootstrapTable("updateCell", updateObj1);
