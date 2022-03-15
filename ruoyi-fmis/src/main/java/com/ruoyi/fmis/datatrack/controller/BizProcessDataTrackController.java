@@ -30,6 +30,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -94,12 +95,12 @@ public class BizProcessDataTrackController extends BaseController {
             data.setCreateBy(String.valueOf(ShiroUtils.getSysUser().getUserId()));
             List<BizProcessData> dataList = bizProcessDataService.selectBizProcessDataList(data);
             if(CollectionUtils.isEmpty(dataList)){
-                return getDataTable(null);
+                return getDataTable(new ArrayList<>());
             } else {
                 List<String> contractNoList = dataList.stream().map(BizProcessData::getString1).collect(Collectors.toList());
                 if(StringUtils.isNotEmpty(bizProcessData.getString10())){
                     if(!contractNoList.contains(bizProcessData.getString10())){
-                        return getDataTable(null);
+                        return getDataTable(new ArrayList<>());
                     }
                 }else{
                     bizProcessData.setContractNoList(contractNoList);
