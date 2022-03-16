@@ -1,7 +1,13 @@
 package com.ruoyi.fmis.invoice.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+import com.ruoyi.fmis.customer.domain.BizCustomer;
+import com.ruoyi.fmis.data.domain.BizProcessData;
+import com.ruoyi.fmis.data.service.IBizProcessDataService;
+import com.ruoyi.fmis.suppliers.domain.BizSuppliers;
+import com.ruoyi.fmis.suppliers.service.IBizSuppliersService;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysUser;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -36,6 +42,10 @@ public class BizInvoiceController extends BaseController {
 
     @Autowired
     private IBizInvoiceService bizInvoiceService;
+    @Autowired
+    private IBizSuppliersService bizSuppliersService;
+    @Autowired
+    private IBizProcessDataService bizProcessDataService;
 
     @RequiresPermissions("fmis:bizInvoice:view")
     @GetMapping()
@@ -71,7 +81,10 @@ public class BizInvoiceController extends BaseController {
      * 新增发票信息（进项发票）
      */
     @GetMapping("/add")
-    public String add() {
+    public String add(ModelMap mmap) {
+        // 供应商列表
+        List<BizSuppliers> suppliersList = bizSuppliersService.selectAllList();
+        mmap.put("suppliersList", suppliersList);
         return prefix + "/add";
     }
 
@@ -93,6 +106,10 @@ public class BizInvoiceController extends BaseController {
     public String edit(@PathVariable("id") Long id, ModelMap mmap) {
         BizInvoice bizInvoice = bizInvoiceService.selectBizInvoiceById(id);
         mmap.put("bizInvoice", bizInvoice);
+
+        // 供应商列表
+        List<BizSuppliers> suppliersList = bizSuppliersService.selectAllList();
+        mmap.put("suppliersList", suppliersList);
         return prefix + "/edit";
     }
 
@@ -112,7 +129,7 @@ public class BizInvoiceController extends BaseController {
      */
     @RequiresPermissions("fmis:bizInvoice:remove")
     @Log(title = "发票信息（进项发票）", businessType = BusinessType.DELETE)
-    @PostMapping( "/remove")
+    @PostMapping("/remove")
     @ResponseBody
     public AjaxResult remove(String ids) {
         return toAjax(bizInvoiceService.deleteBizInvoiceByIds(ids));
@@ -121,8 +138,7 @@ public class BizInvoiceController extends BaseController {
     @RequiresPermissions("fmis:bizInvoice:view")
     @GetMapping("/importTemplate")
     @ResponseBody
-    public AjaxResult importTemplate()
-    {
+    public AjaxResult importTemplate() {
         ExcelUtil<BizInvoice> util = new ExcelUtil<BizInvoice>(BizInvoice.class);
         return util.importTemplateExcel("申报抵扣统计表");
     }
@@ -130,12 +146,22 @@ public class BizInvoiceController extends BaseController {
     @RequiresPermissions("fmis:bizInvoice:import")
     @PostMapping("/importData")
     @ResponseBody
-    public AjaxResult importData(MultipartFile file, boolean updateSupport) throws Exception
-    {
+    public AjaxResult importData(MultipartFile file, boolean updateSupport) throws Exception {
         ExcelUtil<BizInvoice> util = new ExcelUtil<BizInvoice>(BizInvoice.class);
         List<BizInvoice> list = util.importExcel(file.getInputStream());
-        String message = bizInvoiceService.importList(list,updateSupport);
+        String message = bizInvoiceService.importList(list, updateSupport);
         return AjaxResult.success(message);
+    }
+
+    @PostMapping("/selectContract/{supplierId}")
+    @ResponseBody
+    public List<String> selectContract(@PathVariable String supplierId) {
+        BizProcessData bizProcessData = new BizProcessData();
+        bizProcessData.setBizId("procurement");
+        bizProcessData.setString6(supplierId);
+        bizProcessData.setStatus("4");// 采购完成
+        List<BizProcessData> bizProcessDataList = bizProcessDataService.selectBizProcessDataList(bizProcessData);
+        return bizProcessDataList.stream().map(BizProcessData::getString12).collect(Collectors.toList());
     }
 
 }

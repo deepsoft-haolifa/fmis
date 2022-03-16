@@ -52,7 +52,12 @@
             <div class="form-group">    
                 <label class="col-sm-3 control-label">供应商名称：</label>
                 <div class="col-sm-8">
-                    <input name="supplierName" class="form-control" type="text">
+                    <input name="supplierName" id="supplierName" class="form-control" type="hidden" >
+                    <select name="supplierId" id="supplierId" class="form-control m-b">
+                        <option value="">请选择</option>
+                        <option th:each="supplier : ${suppliersList}" th:text="${supplier.name}"
+                                th:value="${supplier.suppliersId}"></option>
+                    </select>
                 </div>
             </div>
             <div class="form-group">    
@@ -70,9 +75,14 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">采购合同号：</label>
                 <div class="col-sm-8">
-                    <input name="contractNo" class="form-control" type="text">
+                    <select id="contractNo" name="contractNo"  class="form-control">
+                        <option value="">请选择</option>
+                    </select>
+<!--                    <input name="contractNo" class="form-control" type="text">-->
                 </div>
             </div>
+
+
             <div class="form-group">    
                 <label class="col-sm-3 control-label">发票类型：</label>
                 <div class="col-sm-8">
@@ -110,10 +120,30 @@
         });
 
         function submitHandler() {
+            var supplierName=$("#supplierId option:selected").text();
+            $("#supplierName").val(supplierName);
             if ($.validate.form()) {
                 $.operate.save(prefix + "/add", $('#form-invoice-add').serialize());
             }
         }
+        $('#supplierId').on('change', function (e) {
+            var supplierId = $('#supplierId').val();
+            $.ajax({
+                url: prefix + "/selectContract/"+supplierId,
+                type: "post",
+                success: function(data) {
+                    <!--清空下拉框中的缓存-->
+                    $("#contractNo").empty();
+                    <!--避免下拉框的值不变-->
+                    $("#contractNo").append("<option value=''>请选择</option>");
+                    <!--使用循环解析后端传来的数据，并用使用js动态拼接html语言-->
+                    for (var i = 0; i < data.length; i++){
+                        $("#contractNo").append("<option value='" + data[i] + "'>" + data[i] + "</option>");
+                    }
+                }
+            });
+        });
+
 
         $("input[name='billDate']").datetimepicker({
             format: "yyyy-mm-dd",

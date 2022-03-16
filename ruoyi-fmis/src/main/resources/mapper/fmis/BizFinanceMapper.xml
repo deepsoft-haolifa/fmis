@@ -220,9 +220,8 @@
         biz_product b on a.string3=b.product_id group by a.string4) stnprice on stnprice.string4=q.data_id
         left join (select contract_id,sum(apply_amount) as paidAmount from biz_pay_plan where status=1 group by
         contract_id) p on p.contract_id=q.data_id
-        left join (select a.string1,sum(a.price1) as invoicedAmount from biz_process_child a left join biz_process_data
-        b on a.data_id=b.data_id where b.biz_id='invoice' and a.string7=2 group by a.string1) invoice on
-        invoice.string1=q.data_id
+        left join (select a.contract_no,sum(a.amount) as invoicedAmount from biz_invoice a where a.status=1 group by a.contract_no)
+            invoice on invoice.contract_no=q.string12
         where q.biz_id='procurement' and q.string6!="" and q.normal_flag=q.flow_status
         <if test="supplierName != null and supplierName != ''">
             AND s.name like concat('%',#{supplierName},'%')

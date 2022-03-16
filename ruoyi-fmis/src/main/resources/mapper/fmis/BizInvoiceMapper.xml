@@ -13,6 +13,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="authDate"    column="auth_date"    />
         <result property="taxpayerIdNo"    column="taxpayer_id_no"    />
         <result property="supplierName"    column="supplier_name"    />
+        <result property="supplierId"    column="supplier_id"    />
         <result property="amount"    column="amount"    />
         <result property="taxRate"    column="tax_rate"    />
         <result property="taxAmount"    column="tax_amount"    />
@@ -28,7 +29,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectBizInvoiceVo">
-        select id, serial_no, invoice_code, invoice_no, bill_date, auth_date, taxpayer_id_no, supplier_name, amount, tax_rate, tax_amount, contract_no, invoice_type, status, remark, del_flag, create_by, create_time, update_by, update_time from biz_invoice
+        select id, serial_no, invoice_code, invoice_no, bill_date, auth_date, taxpayer_id_no, supplier_name,supplier_id, amount, tax_rate, tax_amount, contract_no, invoice_type, status, remark, del_flag, create_by, create_time, update_by, update_time from biz_invoice
     </sql>
 
     <select id="selectBizInvoiceList" parameterType="com.ruoyi.fmis.invoice.bean.BizInvoice" resultMap="BizInvoiceResult">
@@ -41,6 +42,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="authDate != null "> and auth_date = #{authDate}</if>
             <if test="taxpayerIdNo != null  and taxpayerIdNo != ''"> and taxpayer_id_no = #{taxpayerIdNo}</if>
             <if test="supplierName != null  and supplierName != ''"> and supplier_name like concat('%', #{supplierName}, '%')</if>
+            <if test="supplierId != null  and supplierId != ''"> and supplier_id  = #{supplierId}</if>
             <if test="amount != null "> and amount = #{amount}</if>
             <if test="taxRate != null  and taxRate != ''"> and tax_rate = #{taxRate}</if>
             <if test="taxAmount != null "> and tax_amount = #{taxAmount}</if>
@@ -65,6 +67,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="authDate != null ">auth_date,</if>
             <if test="taxpayerIdNo != null  and taxpayerIdNo != ''">taxpayer_id_no,</if>
             <if test="supplierName != null  and supplierName != ''">supplier_name,</if>
+            <if test="supplierId != null  and supplierId != ''">supplier_id,</if>
             <if test="amount != null ">amount,</if>
             <if test="taxRate != null  and taxRate != ''">tax_rate,</if>
             <if test="taxAmount != null ">tax_amount,</if>
@@ -86,6 +89,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="authDate != null ">#{authDate},</if>
             <if test="taxpayerIdNo != null  and taxpayerIdNo != ''">#{taxpayerIdNo},</if>
             <if test="supplierName != null  and supplierName != ''">#{supplierName},</if>
+            <if test="supplierId != null  and supplierId != ''">#{supplierId},</if>
             <if test="amount != null ">#{amount},</if>
             <if test="taxRate != null  and taxRate != ''">#{taxRate},</if>
             <if test="taxAmount != null ">#{taxAmount},</if>
@@ -111,6 +115,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="authDate != null ">auth_date = #{authDate},</if>
             <if test="taxpayerIdNo != null  and taxpayerIdNo != ''">taxpayer_id_no = #{taxpayerIdNo},</if>
             <if test="supplierName != null  and supplierName != ''">supplier_name = #{supplierName},</if>
+            <if test="supplierId != null  and supplierId != ''">supplier_id = #{supplierId},</if>
             <if test="amount != null ">amount = #{amount},</if>
             <if test="taxRate != null  and taxRate != ''">tax_rate = #{taxRate},</if>
             <if test="taxAmount != null ">tax_amount = #{taxAmount},</if>

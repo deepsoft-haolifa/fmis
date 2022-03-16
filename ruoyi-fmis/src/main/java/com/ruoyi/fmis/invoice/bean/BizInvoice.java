@@ -38,9 +38,12 @@ public class BizInvoice extends BaseEntity {
     @Excel(name = "纳税人识别号")
     private String taxpayerIdNo;
 
-    /** 供应商名称 */
+    /** 供应商Id */
     @Excel(name = "销方名称")
     private String supplierName;
+    /** 供应商ID */
+    @Excel(name = "销方名称")
+    private String supplierId;
 
     /** 发票金额 */
     @Excel(name = "发票金额")
@@ -126,6 +129,13 @@ public class BizInvoice extends BaseEntity {
 
     public String getSupplierName() {
         return supplierName;
+    }
+    public void setSupplierId(String supplierId) {
+        this.supplierId = supplierId;
+    }
+
+    public String getSupplierId() {
+        return supplierId;
     }
     public void setAmount(Double amount) {
         this.amount = amount;
