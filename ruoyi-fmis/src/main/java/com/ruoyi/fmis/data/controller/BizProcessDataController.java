@@ -1109,10 +1109,10 @@ public class BizProcessDataController extends BaseController {
                 bizProcessChild1.setDataId(bizProcessChild.getDataId());
                 bizProcessChild1.setString2("4");
                 bizProcessChild1.setString5(bizProcessChild.getContractNo());
-                bizProcessChild1.setString6(bizProcessChild.getRef1Name());
+                bizProcessChild1.setString6(bizProcessChild.getRef2Name());
                 bizProcessChild1.setString7(bizProductRef.getModel());
                 bizProcessChild1.setString8(bizProductRef.getSpecifications());
-                bizProcessChild1.setString13(bizProcessChild.getProductRef1Num() + "");
+                bizProcessChild1.setString13(bizProcessChild.getProductRef2Num() + "");
                 bizProcessChild1.setString15(childId);
                 if (null != bizProcessChild.getRef2Price() && StringUtils.isNotEmpty(bizProcessChild.getActuatorCoefficient())) {
                     Double multiply = CalcUtils.multiply(bizProcessChild.getRef2Price(), Double.valueOf(bizProcessChild.getProductRef2Coefficient()));
