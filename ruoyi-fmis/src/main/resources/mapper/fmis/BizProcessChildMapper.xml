@@ -156,7 +156,7 @@
         select c.child_id, c.data_id, c.remark, c.price1, c.price2, c.price3, c.price4,
         c.price5, c.price6, c.price7, c.price8, c.price9, c.price10, c.string1, c.string2,
         c.string3, c.string4, c.string5, c.string6, c.string7, c.string8, c.string9, c.string10,
-        sum(c.string11) string11, c.string12, c.string13, c.string14, c.string15, sum(c.string16) string16, c.string17,
+        sum(c.string11) string11, c.string12,  sum(c.string13) string13, c.string14, c.string15, sum(c.string16) string16, c.string17,
         c.string18, c.string19, c.string20, c.datetime1, c.datetime2, c.datetime3, c.datetime4,
         c.datetime5, c.status, c.del_flag, c.create_by, c.create_time, c.update_by, c.update_time
         from biz_process_child c
@@ -494,7 +494,9 @@
         <!-- 如果是详情，只看有数据 -->
         <if test="bizEditFlag == 2">and ds.string4 = #{procurementId} </if>
         <if test="dataStatus == 1">and ds.data_status = #{dataStatus} </if>
-        <if test="dataStatus == -1">and ds.data_status is null </if>
+        <if test="dataStatus == -1">
+            and (select pc1.string11 from biz_process_child pc1,biz_data_status ds1  where pc1.data_id = #{dataId} and ds1.child_id=pc1.child_id and ds1.string2=pc1.`string11`) is null
+        </if>
         <if test="supplierId != null and supplierId != ''">and s.suppliers_id=#{supplierId} </if>
         group by a.actuator_id
         order by a.quality_level,a.string4
@@ -718,8 +720,11 @@
         <if test="bizEditFlag == 0 ">and ifnull(ds.data_status,'0') = '0'</if>
         <!-- 如果是详情，只看有数据 -->
         <if test="bizEditFlag == 2">and ds.string4 = #{procurementId} </if>
-        <if test="dataStatus == 1">and ds.data_status = #{dataStatus} </if>
-        <if test="dataStatus == -1">and ds.data_status is null </if>
+        <if test="dataStatus == 1">
+            and ds.data_status = #{dataStatus}
+        </if>
+        <if test="dataStatus == -1">
+            and (select pc1.pattachment_id from biz_process_child pc1,biz_data_status ds1  where pc1.data_id = #{dataId} and ds1.child_id=pc1.child_id and ds1.string2=pc1.`pattachment_id`) is null</if>
         <if test="supplierId != null and supplierId != ''">and s.suppliers_id=#{supplierId} </if>
         group by pa.attachment_id
         order by pa.string1
@@ -793,7 +798,9 @@
         <!-- 如果是详情，只看有数据 -->
         <if test="bizEditFlag == 2">and ds.string4 = #{procurementId} </if>
         <if test="dataStatus == 1">and ds.data_status = #{dataStatus} </if>
-        <if test="dataStatus == -1">and ds.data_status is null </if>
+        <if test="dataStatus == -1">
+            and (select pc1.pattachment1_id from biz_process_child pc1,biz_data_status ds1  where pc1.data_id = #{dataId} and ds1.child_id=pc1.child_id and ds1.string2=pc1.`pattachment1_id`) is null
+        </if>
         <if test="supplierId != null and supplierId != ''">and s.suppliers_id=#{supplierId} </if>
         group by pa.attachment_id
         order by pa.string1
@@ -831,7 +838,9 @@
     <select id="selectBizChildPA2List" parameterType="BizProcessChild" resultMap="BizProcessChildResult">
         <include refid="selectBizChildPA2Vo"/>
         <if test="dataStatus == 1">and ds.data_status = #{dataStatus} </if>
-        <if test="dataStatus == -1">and ds.data_status is null </if>
+        <if test="dataStatus == -1">
+            and (select pc1.pattachment2_id from biz_process_child pc1,biz_data_status ds1  where pc1.data_id = #{dataId} and ds1.child_id=pc1.child_id and ds1.string2=pc1.`pattachment2_id`) is null
+        </if>
         <if test="supplierId != null and supplierId != ''">and s.suppliers_id=#{supplierId} </if>
         group by pa.attachment_id
         order by pa.string1
@@ -871,7 +880,9 @@
         <!-- 如果是详情，只看有数据 -->
         <if test="bizEditFlag == 2">and ds.string4 = #{procurementId} </if>
         <if test="dataStatus == 1">and ds.data_status = #{dataStatus} </if>
-        <if test="dataStatus == -1">and ds.data_status is null </if>
+        <if test="dataStatus == -1">
+            and (select pc1.pattachment3_id from biz_process_child pc1,biz_data_status ds1  where pc1.data_id = #{dataId} and ds1.child_id=pc1.child_id and ds1.string2=pc1.`pattachment3_id`) is null
+        </if>
         <if test="supplierId != null and supplierId != ''">and s.suppliers_id=#{supplierId} </if>
         group by pa.attachment_id
         order by pa.string1
@@ -908,7 +919,9 @@
         <!-- 如果是详情，只看有数据 -->
         <if test="bizEditFlag == 2">and ds.string4 = #{procurementId} </if>
         <if test="dataStatus == 1">and ds.data_status = #{dataStatus} </if>
-        <if test="dataStatus == -1">and ds.data_status is null </if>
+        <if test="dataStatus == -1">
+            and (select pc1.pattachment4_id from biz_process_child pc1,biz_data_status ds1  where pc1.data_id = #{dataId} and ds1.child_id=pc1.child_id and ds1.string2=pc1.`pattachment4_id`) is null
+        </if>
         <if test="supplierId != null and supplierId != ''">and s.suppliers_id=#{supplierId} </if>
         group by pa.attachment_id
         order by pa.string1
