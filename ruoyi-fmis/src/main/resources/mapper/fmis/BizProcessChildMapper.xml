@@ -495,7 +495,7 @@
         <if test="bizEditFlag == 2">and ds.string4 = #{procurementId} </if>
         <if test="dataStatus == 1">and ds.data_status = #{dataStatus} </if>
         <if test="dataStatus == -1">
-            and (select pc1.string11 from biz_process_child pc1,biz_data_status ds1  where pc1.data_id = #{dataId} and ds1.child_id=pc1.child_id and ds1.string2=pc1.`string11`) is null
+            and (select count(*) from biz_process_child pc1,biz_data_status ds1  where pc1.data_id = #{dataId} and ds1.child_id=pc1.child_id and ds1.string2=pc1.`string11`)=0
         </if>
         <if test="supplierId != null and supplierId != ''">and s.suppliers_id=#{supplierId} </if>
         group by a.actuator_id
@@ -724,7 +724,7 @@
             and ds.data_status = #{dataStatus}
         </if>
         <if test="dataStatus == -1">
-            and (select pc1.pattachment_id from biz_process_child pc1,biz_data_status ds1  where pc1.data_id = #{dataId} and ds1.child_id=pc1.child_id and ds1.string2=pc1.`pattachment_id`) is null</if>
+            and (select count(*) from biz_process_child pc1,biz_data_status ds1  where pc1.data_id = #{dataId} and ds1.child_id=pc1.child_id and ds1.string2=pc1.`pattachment_id`) =0</if>
         <if test="supplierId != null and supplierId != ''">and s.suppliers_id=#{supplierId} </if>
         group by pa.attachment_id
         order by pa.string1
@@ -799,7 +799,7 @@
         <if test="bizEditFlag == 2">and ds.string4 = #{procurementId} </if>
         <if test="dataStatus == 1">and ds.data_status = #{dataStatus} </if>
         <if test="dataStatus == -1">
-            and (select pc1.pattachment1_id from biz_process_child pc1,biz_data_status ds1  where pc1.data_id = #{dataId} and ds1.child_id=pc1.child_id and ds1.string2=pc1.`pattachment1_id`) is null
+            and (select count(*) from biz_process_child pc1,biz_data_status ds1  where pc1.data_id = #{dataId} and ds1.child_id=pc1.child_id and ds1.string2=pc1.`pattachment1_id`) =0
         </if>
         <if test="supplierId != null and supplierId != ''">and s.suppliers_id=#{supplierId} </if>
         group by pa.attachment_id
@@ -839,7 +839,7 @@
         <include refid="selectBizChildPA2Vo"/>
         <if test="dataStatus == 1">and ds.data_status = #{dataStatus} </if>
         <if test="dataStatus == -1">
-            and (select pc1.pattachment2_id from biz_process_child pc1,biz_data_status ds1  where pc1.data_id = #{dataId} and ds1.child_id=pc1.child_id and ds1.string2=pc1.`pattachment2_id`) is null
+            and (select count(*) from biz_process_child pc1,biz_data_status ds1  where pc1.data_id = #{dataId} and ds1.child_id=pc1.child_id and ds1.string2=pc1.`pattachment2_id`) =0
         </if>
         <if test="supplierId != null and supplierId != ''">and s.suppliers_id=#{supplierId} </if>
         group by pa.attachment_id
@@ -881,7 +881,7 @@
         <if test="bizEditFlag == 2">and ds.string4 = #{procurementId} </if>
         <if test="dataStatus == 1">and ds.data_status = #{dataStatus} </if>
         <if test="dataStatus == -1">
-            and (select pc1.pattachment3_id from biz_process_child pc1,biz_data_status ds1  where pc1.data_id = #{dataId} and ds1.child_id=pc1.child_id and ds1.string2=pc1.`pattachment3_id`) is null
+            and (select count(*) from biz_process_child pc1,biz_data_status ds1  where pc1.data_id = #{dataId} and ds1.child_id=pc1.child_id and ds1.string2=pc1.`pattachment3_id`) =0
         </if>
         <if test="supplierId != null and supplierId != ''">and s.suppliers_id=#{supplierId} </if>
         group by pa.attachment_id
@@ -920,7 +920,7 @@
         <if test="bizEditFlag == 2">and ds.string4 = #{procurementId} </if>
         <if test="dataStatus == 1">and ds.data_status = #{dataStatus} </if>
         <if test="dataStatus == -1">
-            and (select pc1.pattachment4_id from biz_process_child pc1,biz_data_status ds1  where pc1.data_id = #{dataId} and ds1.child_id=pc1.child_id and ds1.string2=pc1.`pattachment4_id`) is null
+            and (select count(*) from biz_process_child pc1,biz_data_status ds1  where pc1.data_id = #{dataId} and ds1.child_id=pc1.child_id and ds1.string2=pc1.`pattachment4_id`) =0
         </if>
         <if test="supplierId != null and supplierId != ''">and s.suppliers_id=#{supplierId} </if>
         group by pa.attachment_id
