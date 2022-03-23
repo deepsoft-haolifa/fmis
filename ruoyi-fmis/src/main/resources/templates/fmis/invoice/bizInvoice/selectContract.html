@@ -17,7 +17,7 @@
                         </li>
                         <li>
                             <p>供应商：</p>
-                            <input type="text" name="supplierName" th:value="${supplierName}" readonly/>
+                            <input type="text" name="supplierName" th:value="${supplierName}"/>
                         </li>
                         <li>
                             <p>采购状态：</p>
@@ -101,15 +101,7 @@
                 {
                     field: 'supplierName',
                     title: '供应商'
-                }/*,
-                {
-                    field : 'string7',
-                    title : '订货产品'
                 },
-                {
-                    field : 'string8',
-                    title : '回传'
-                }*/,
                 {
                     field: 'datetime2',
                     title: '销售合同交付日期'
@@ -148,15 +140,6 @@
                     field: 'flowStatusRemark',
                     title: '状态',
                     align: 'center'
-                },
-                {
-                    title: '操作',
-                    align: 'center',
-                    formatter: function (value, row, index) {
-                        var actions = [];
-                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewExamineDetail(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 详情 </a>');
-                        return actions.join('');
-                    }
                 }]
         };
         $.table.init(options);
@@ -166,20 +149,15 @@
     /* 添加用户-选择用户-提交 */
     function submitHandler() {
         var rows = $.table.selectFirstColumns();
-        if (rows.length == 0) {
+        if (rows.length === 0) {
             $.modal.alertWarning("请选择一条记录");
             return;
         }
-        var rowData = {
-            actuatorId : selActuatorId,
-            actuatorName:selName,
-            actuatorPrice:selRow.price,
-            actuatorNum:"0",
-            actuatorCoefficient:"0",
-            actuatorCostPrice:costPrice,
-        };
-        parent.$('#form-data-add input[id=actuatorJsonParamter]').val(JSON.stringify(rowData));
-        parent.$('#form-data-edit input[id=actuatorJsonParamter]').val(JSON.stringify(rowData));
+        var contractNo = $.table.selectColumns("string12");
+        console.log(rows)
+        console.log(contractNo)
+        parent.$('#form-invoice-add input[name=contractNo]').val($.table.selectColumns("string12"));
+        parent.$('#form-invoice-edit input[name=contractNo]').val($.table.selectColumns("string12"));
         $.modal.close();
     }
 </script>

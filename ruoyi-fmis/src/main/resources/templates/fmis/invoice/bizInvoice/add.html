@@ -52,12 +52,8 @@
             <div class="form-group">    
                 <label class="col-sm-3 control-label">供应商名称：</label>
                 <div class="col-sm-8">
-                    <input name="supplierName" id="supplierName" class="form-control" type="hidden" >
-                    <select name="supplierId" id="supplierId" class="form-control m-b">
-                        <option value="">请选择</option>
-                        <option th:each="supplier : ${suppliersList}" th:text="${supplier.name}"
-                                th:value="${supplier.suppliersId}"></option>
-                    </select>
+                    <input name="supplierId" id="supplierId" class="form-control" type="hidden">
+                    <input name="supplierName" id="supplierName" class="form-control" type="text" readonly onclick="selectSuppliers()">
                 </div>
             </div>
             <div class="form-group">    
@@ -75,10 +71,11 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">采购合同号：</label>
                 <div class="col-sm-8">
-                    <select id="contractNo" name="contractNo"  class="form-control">
-                        <option value="">请选择</option>
-                    </select>
-<!--                    <input name="contractNo" class="form-control" type="text">-->
+<!--                    <select id="contractNo" name="contractNo"  class="form-control">-->
+<!--                        <option value="">请选择</option>-->
+<!--                    </select>-->
+                    <input name="contractNo" id="contractNo" class="form-control" type="text" readonly
+                           onclick="selectContract()" required>
                 </div>
             </div>
 
@@ -120,8 +117,6 @@
         });
 
         function submitHandler() {
-            var supplierName=$("#supplierId option:selected").text();
-            $("#supplierName").val(supplierName);
             if ($.validate.form()) {
                 $.operate.save(prefix + "/add", $('#form-invoice-add').serialize());
             }
@@ -144,6 +139,25 @@
             });
         });
 
+        function selectSuppliers() {
+            var widthNum = this.innerWidth;
+            var heigthNum = this.innerHeight;
+            var url = prefix + "/selectSuppliers";
+            $.modal.open("关联供应商", url,widthNum, heigthNum);
+        }
+
+        function selectContract() {
+            var supplierName = $("#supplierName").val();
+            if ($.common.isEmpty(supplierName)) {
+                $.modal.alertWarning("请先选择供应商");
+                return;
+            }
+            var url = prefix + "/selectContract?supplierName=" + supplierName;
+            var widthNum = this.innerWidth;
+            var heigthNum = this.innerHeight;
+
+            $.modal.open("关联合同", url, widthNum, heigthNum);
+        }
 
         $("input[name='billDate']").datetimepicker({
             format: "yyyy-mm-dd",
