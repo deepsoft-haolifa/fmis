@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('供应商列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>公司名称：</p>
+                                <input type="text" name="name"/>
+                            </li>
+                            <li>
+                                <p>代号：</p>
+                                <input type="text" name="nickName"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('fmis:suppliers:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('fmis:suppliers:remove')}]];
+        var prefix = ctx + "fmis/suppliers";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "供应商",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'suppliersId', 
+                    title : 'ID',
+                    visible: false
+                },
+                {
+                    field : 'name', 
+                    title : '公司名称'
+                },
+                {
+                    field : 'nickName',
+                    title : '代号'
+                },
+                {
+                    field : 'address', 
+                    title : '地址'
+                },
+                {
+                    field : 'telphone', 
+                    title : '电话'
+                },
+                {
+                    field : 'fax', 
+                    title : '传真'
+                },
+                {
+                    field : 'email', 
+                    title : 'Email'
+                },
+                {
+                    field : 'siteUrl', 
+                    title : '网址'
+                },
+                {
+                    field : 'ownerId', 
+                    title : '负责人'
+                },
+                {
+                    field : 'contact', 
+                    title : '联系人'
+                },
+                {
+                    field : 'manageState', 
+                    title : '经营形态'
+                },
+                {
+                    field : 'marketDistribution', 
+                    title : '市场分布'
+                },
+                {
+                    field : 'targetCustomer', 
+                    title : '目标客户'
+                },
+                {
+                    field : 'humanCapitalMeasure', 
+                    title : '人力资源状况'
+                },
+                {
+                    field : 'taxpayer', 
+                    title : '一般纳税人'
+                },
+                {
+                    field : 'remark', 
+                    title : '备注'
+                },
+                {
+                    field : 'createTime',
+                    title : '创建时间'
+                },{
+                    field : 'updateTime',
+                    title : '修改时间'
+                }]
+            };
+            $.table.init(options);
+        });
+
+
+        /* 添加用户-选择用户-提交 */
+        function submitHandler() {
+            var rows = $.table.selectFirstColumns();
+            if (rows.length == 0) {
+                $.modal.alertWarning("请选择一条记录");
+                return;
+            }
+            if (rows.length > 1) {
+                $.modal.alertWarning("请只选择一条记录");
+                return;
+            }
+            //$.modal.confirm('确定要关联该客户吗？',
+            //    function() {
+
+            var suppliersId = $.table.selectColumns("suppliersId");
+            parent.$('#form-invoice-add input[name=supplierId]').val(suppliersId);
+            parent.$('#form-invoice-add input[name=supplierName]').val($.table.selectColumns("name"));
+            parent.$('#form-invoice-edit input[name=supplierId]').val(suppliersId);
+            parent.$('#form-invoice-edit input[name=supplierName]').val($.table.selectColumns("name"));
+
+            $.modal.close();
+            //   }
+            //);
+        }
+    </script>
+</body>
+</html>
