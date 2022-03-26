@@ -447,11 +447,12 @@ public class BizProcessDataNewDeliveryController extends BaseController {
                     inventoryChild.setString11("0");
                     chuku = chuku - kucun1;
                     inventoryChild2.setString16(StringUtils.toLong(string16) + kucun1 + "");
+                    inventoryChild2.setString11((StringUtils.toLong(inventoryChild.getString11()) - kucun1) + "");
                 } else {
                     //出库数量
                     inventoryChild2.setString16(StringUtils.toLong(string16) + chuku + "");
+                    inventoryChild2.setString11((StringUtils.toLong(inventoryChild.getString11()) - chuku) + "");
                 }
-                inventoryChild2.setString11((StringUtils.toLong(inventoryChild.getString11()) - chuku) + "");
                 inventoryChild2.setUpdateTime(new Date());
                 inventoryChild2.setUpdateBy(ShiroUtils.getUserId() + "");
                 inventoryChild2.setString14("1");
