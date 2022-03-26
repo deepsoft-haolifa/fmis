@@ -1935,4 +1935,16 @@ public class BizProcessDataProcurementController extends BaseController {
         title.setCellValue("验收单");
         title.setCellStyle(headstyle);
     }
+    /**
+     * 修改完成采购
+     */
+    @PostMapping("/caigouwancheng/{dataId}")
+    @ResponseBody
+    public AjaxResult caigouwancheng(@PathVariable("dataId") Long dataId, ModelMap mmap) {
+        BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataById(dataId);
+
+        bizProcessData.setString30("2");
+
+        return toAjax(bizProcessDataService.updateBizProcessData(bizProcessData));
+    }
 }

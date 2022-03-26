@@ -495,7 +495,8 @@
         <if test="bizEditFlag == 2">and ds.string4 = #{procurementId} </if>
         <if test="dataStatus == 1">and ds.data_status = #{dataStatus} </if>
         <if test="dataStatus == -1">
-            and (select count(*) from biz_process_child pc1,biz_data_status ds1  where pc1.data_id = #{dataId} and ds1.child_id=pc1.child_id and ds1.string2=pc1.`string11`)=0
+            and pc.string11 not in
+            (select pc1.string11 from biz_process_child pc1,biz_data_status ds1 where pc1.data_id = #{dataId} and ds1.child_id=pc1.child_id and ds1.string2=pc1.`string11`)
         </if>
         <if test="supplierId != null and supplierId != ''">and s.suppliers_id=#{supplierId} </if>
         group by a.actuator_id
@@ -573,7 +574,9 @@
         <!-- 如果是详情，只看有数据 -->
         <if test="bizEditFlag == 2">and ds.string4 = #{procurementId} </if>
         <if test="dataStatus == 1">and ds.data_status = #{dataStatus} </if>
-        <if test="dataStatus == -1">and ds.data_status is null </if>
+        <if test="dataStatus == -1">
+            and (select count(*) from biz_process_child pc1,biz_data_status ds1  where pc1.data_id = #{dataId} and ds1.child_id=pc1.child_id and ds1.string2=pc1.`string5`) =0
+        </if>
         <if test="supplierId != null and supplierId != ''">and s.suppliers_id=#{supplierId} </if>
         group by pr.product_ref_id
         order by pr.string1,pr.suppliers_id
@@ -647,7 +650,9 @@
         <!-- 如果是详情，只看有数据 -->
         <if test="bizEditFlag == 2">and ds.string4 = #{procurementId} </if>
         <if test="dataStatus == 1">and ds.data_status = #{dataStatus} </if>
-        <if test="dataStatus == -1">and ds.data_status is null </if>
+        <if test="dataStatus == -1">
+            and (select count(*) from biz_process_child pc1,biz_data_status ds1  where pc1.data_id = #{dataId} and ds1.child_id=pc1.child_id and ds1.string2=pc1.`string8`) =0
+        </if>
         <if test="supplierId != null and supplierId != ''">and s.suppliers_id=#{supplierId} </if>
         group by pr.product_ref_id
         order by pr.string8,pr.suppliers_id

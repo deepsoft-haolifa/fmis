@@ -81,7 +81,14 @@ $(function() {
             {
                 field : 'string25',
                 title : '特殊要求'
-            }
+            },
+            {
+                title : '操作',
+                formatter: function (value, row, index) {
+                    var actions = [];
+                    actions.push('<a class="btn btn-success btn-xs  href="javascript:void(0)" onclick="caigouwancheng(\'' + row.dataId + '\')"><i class="fa fa-edit"></i> 采购完成</a> ');
+                    return actions.join('');
+                } }
         ]
     };
     // $.table.clear;
@@ -1676,5 +1683,11 @@ function numberValidate(value) {
     if (isNaN(value)) {
         return "必须是数字！";
     }
+}
+function caigouwancheng(dataId) {
+    $.modal.confirm("确定已完成采购？", function () {
+        var url = ctx + "fmis/procurement/caigouwancheng/"+dataId;
+        $.operate.submit(url, "post", "json", "");
+    });
 }
 
