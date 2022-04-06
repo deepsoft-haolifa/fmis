@@ -128,7 +128,7 @@ public interface IBizProcessChildService {
      *
      * @return
      */
-    public int getDeliveryQtyByContractNo(String contractNo);
+    public Integer getDeliveryQtyByContractNo(String contractNo);
     /**
      * 获取销售合同合同数量
      *

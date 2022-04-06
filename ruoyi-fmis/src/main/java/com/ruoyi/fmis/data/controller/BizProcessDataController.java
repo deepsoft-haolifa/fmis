@@ -1101,9 +1101,9 @@ public class BizProcessDataController extends BaseController {
             }
 
             //螺栓
-            if (bizProcessChild.getProductRef2Num() != 0) {
+            if (bizProcessChild.getProductRef2Num() != 0 && bizProcessChild.getProductRef2Id() != null) {
                 BizProductRef queryRef1 = new BizProductRef();
-                queryRef1.setProductRefId(Long.parseLong(bizProcessChild.getProductRef1Id()));
+                queryRef1.setProductRefId(Long.parseLong(bizProcessChild.getProductRef2Id()));
                 BizProductRef bizProductRef = bizProductRefService.selectBizProductRefList(queryRef1).get(0);
                 BizProcessChild bizProcessChild1 = new BizProcessChild();
                 bizProcessChild1.setDataId(bizProcessChild.getDataId());

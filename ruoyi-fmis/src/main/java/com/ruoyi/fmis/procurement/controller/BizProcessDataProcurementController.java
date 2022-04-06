@@ -1947,4 +1947,16 @@ public class BizProcessDataProcurementController extends BaseController {
 
         return toAjax(bizProcessDataService.updateBizProcessData(bizProcessData));
     }
+    /**
+     * 修改完成采购
+     */
+    @PostMapping("/jixuchuli/{dataId}")
+    @ResponseBody
+    public AjaxResult jixuchuli(@PathVariable("dataId") Long dataId, ModelMap mmap) {
+        BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataById(dataId);
+
+        bizProcessData.setString30("1");
+
+        return toAjax(bizProcessDataService.updateBizProcessData(bizProcessData));
+    }
 }

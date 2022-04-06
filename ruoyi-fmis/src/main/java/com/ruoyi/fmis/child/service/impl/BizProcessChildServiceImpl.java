@@ -224,7 +224,7 @@ public class BizProcessChildServiceImpl implements IBizProcessChildService {
     }
 
     @Override
-    public int getDeliveryQtyByContractNo(String contractNo) {
+    public Integer getDeliveryQtyByContractNo(String contractNo) {
         return bizProcessChildMapper.getDeliveryQtyByContractNo(contractNo);
     }
     @Override

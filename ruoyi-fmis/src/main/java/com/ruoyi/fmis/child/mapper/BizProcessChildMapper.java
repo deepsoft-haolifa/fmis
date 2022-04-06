@@ -118,7 +118,7 @@ public interface BizProcessChildMapper {
 
     double selectPaymentedPrice(@Param("subjectId") String subjectId, @Param("deptId") String deptId, @Param("startDate") String startDate,@Param("endDate") String endDate);
 
-    int getDeliveryQtyByContractNo(@Param("contractNo")String contractNo);
+    Integer getDeliveryQtyByContractNo(@Param("contractNo")String contractNo);
     ProcessDataDTO getSaleQtyByContractNo(@Param("contractNo")String contractNo);
 
 

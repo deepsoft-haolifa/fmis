@@ -403,16 +403,19 @@ public class BizProcessDataNewDeliveryController extends BaseController {
 
 
         } else {
-            if (StringUtils.toLong(child.getString2()) < 5) {
+          /*  if (StringUtils.toLong(child.getString2()) < 5) {
                 bizProcessChild.setString7(child.getString7());
             } else {
                 bizProcessChild.setString8(child.getString8());
             }
             if (StringUtils.toLong(child.getString2()) == 3) {
                 bizProcessChild.setString8(child.getString8());
-            }
+            }*/
 
             bizProcessChild.setString5(child.getString5());
+            bizProcessChild.setString6(child.getString6());
+            bizProcessChild.setString7(child.getString7());
+            bizProcessChild.setString8(child.getString8());
             List<BizProcessChild> inventoryChilds = bizProcessChildService.selectBizProcessChildListForKuCun(bizProcessChild);
             bizProcessChild.setString13(child.getString13());
             if (inventoryChilds == null || inventoryChilds.size() == 0) {
@@ -442,16 +445,15 @@ public class BizProcessDataNewDeliveryController extends BaseController {
                 if (chuku == 0) {
                     break;
                 }
-                if (kucun1 < chuku) {
+                if (kucun1 <= chuku) {
                     //单个小于出库 从多个出库
-                    inventoryChild.setString11("0");
+                    inventoryChild2.setString11("0");
                     chuku = chuku - kucun1;
                     inventoryChild2.setString16(StringUtils.toLong(string16) + kucun1 + "");
-                    inventoryChild2.setString11((StringUtils.toLong(inventoryChild.getString11()) - kucun1) + "");
                 } else {
                     //出库数量
                     inventoryChild2.setString16(StringUtils.toLong(string16) + chuku + "");
-                    inventoryChild2.setString11((StringUtils.toLong(inventoryChild.getString11()) - chuku) + "");
+                    inventoryChild2.setString11((kucun1 - chuku) + "");
                 }
                 inventoryChild2.setUpdateTime(new Date());
                 inventoryChild2.setUpdateBy(ShiroUtils.getUserId() + "");

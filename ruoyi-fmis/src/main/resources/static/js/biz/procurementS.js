@@ -86,7 +86,13 @@ $(function() {
                 title : '操作',
                 formatter: function (value, row, index) {
                     var actions = [];
-                    actions.push('<a class="btn btn-success btn-xs  href="javascript:void(0)" onclick="caigouwancheng(\'' + row.dataId + '\')"><i class="fa fa-edit"></i> 采购完成</a> ');
+                    console.log("----"+row["string30"] +  row["string30"] == '2')
+                    if (row["string30"] == '2') {
+                        actions.push('<a class="btn btn-success btn-xs  href="javascript:void(0)" onclick="jixuchuli(\'' + row.dataId + '\')"><i class="fa fa-edit"></i> 继续处理</a> ');
+                    } else {
+                        actions.push('<a class="btn btn-success btn-xs  href="javascript:void(0)" onclick="caigouwancheng(\'' + row.dataId + '\')"><i class="fa fa-edit"></i> 处理完成</a> ');
+                    }
+
                     return actions.join('');
                 } }
         ]
@@ -1687,6 +1693,12 @@ function numberValidate(value) {
 function caigouwancheng(dataId) {
     $.modal.confirm("确定已完成采购？", function () {
         var url = ctx + "fmis/procurement/caigouwancheng/"+dataId;
+        $.operate.submit(url, "post", "json", "");
+    });
+}
+function jixuchuli(dataId) {
+    $.modal.confirm("确定已完成采购？", function () {
+        var url = ctx + "fmis/procurement/jixuchuli/" + dataId;
         $.operate.submit(url, "post", "json", "");
     });
 }

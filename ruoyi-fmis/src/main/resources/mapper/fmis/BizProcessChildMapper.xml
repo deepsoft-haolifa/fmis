@@ -182,8 +182,8 @@
             <if test="string5 != null  and string5 != ''"> and c.string5 like concat('%', #{string5}, '%')</if>
             <if test="productName != null  and productName != ''"> and c.string6 like concat('%', #{productName}, '%')</if>
         </where>
-        group by c.string3,c.string6,c.string7
-        order by c.string6,c.create_time desc
+        group by c.child_id,c.string5,c.string6,c.string7
+        order by c.string5,c.string6,c.create_time desc
     </select>
 
     <select id="selectBizProcessChildById" parameterType="Long" resultMap="BizProcessChildResult">

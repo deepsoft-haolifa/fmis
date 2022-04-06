@@ -1176,12 +1176,12 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
     @Override
     public void deliveryUpdateStatus(String contractNo) {
         // 根据销售合同号，查询该合同号已经发货完成的数量
-        int deliveryQty = bizProcessChildService.getDeliveryQtyByContractNo(contractNo);
+        Integer deliveryQty = bizProcessChildService.getDeliveryQtyByContractNo(contractNo);
         ProcessDataDTO processDataDTO = bizProcessChildService.getSaleQtyByContractNo(contractNo);
         logger.info("deliveryUpdateStatus contactNo:{},deliverQty:{},saleQty:{},dataId:{}", contractNo, deliveryQty, processDataDTO.getSaleQty(), processDataDTO.getDataId());
         BizProcessData update = new BizProcessData();
         update.setStatus(Constant.contractStatus.PART_DELIVERY);
-        if (processDataDTO.getSaleQty() <= deliveryQty) {
+        if (deliveryQty != null &&processDataDTO.getSaleQty() <= deliveryQty) {
             update.setStatus(Constant.contractStatus.ALL_DELIVERY);
         }
         update.setDataId(processDataDTO.getDataId());
