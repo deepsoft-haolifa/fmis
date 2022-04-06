@@ -666,6 +666,14 @@ public class BizQuotationController extends BaseController {
         String productArrayStr = bizQuotation.getString10();
         bizQuotation.setString10("");
         setNormalFlag(bizQuotation,productArrayStr);
+        Map<String, SysRole> flowMap = bizProcessDefineService.getRoleFlowMap(BizConstants.BIZ_contract);
+        String lastRoleKey = "";
+        for (String key : flowMap.keySet()) {
+            lastRoleKey = key;
+        }
+        if (!"1".equals(lastRoleKey)) {
+            bizQuotation.setFlowStatus(lastRoleKey + "0");
+        }
         int insertReturn = bizQuotationService.insertBizQuotation(bizQuotation);
         Long quotationId = bizQuotation.getQuotationId();
         if (StringUtils.isNotEmpty(productArrayStr)) {
