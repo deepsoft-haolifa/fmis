@@ -183,7 +183,7 @@
             <if test="productName != null  and productName != ''"> and c.string6 like concat('%', #{productName}, '%')</if>
         </where>
         group by c.child_id,c.string5,c.string6,c.string7
-        order by c.string5,c.string6,c.create_time desc
+        order by c.create_time desc,c.string5,c.string6 desc
     </select>
 
     <select id="selectBizProcessChildById" parameterType="Long" resultMap="BizProcessChildResult">

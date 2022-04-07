@@ -117,6 +117,9 @@ public class BizProcessProcurementpoolController extends BaseController {
             newBizProcessData.setString1(xs);
             newBizProcessData.setContractNoList(Arrays.asList(xs.split(",")));
         }
+        if (StringUtils.isNotEmpty(bizProcessData.getString1())) {
+            newBizProcessData.setString5(bizProcessData.getString1());
+        }
         //startPage();
         List<BizProcessData> list = bizProcessDataService.selectBizProcessDataListXs(newBizProcessData);
         newBizProcessData.setString1(bizProcessData.getString1());

@@ -1691,13 +1691,13 @@ function numberValidate(value) {
     }
 }
 function caigouwancheng(dataId) {
-    $.modal.confirm("确定已完成采购？", function () {
+    $.modal.confirm("确定已完成处理？", function () {
         var url = ctx + "fmis/procurement/caigouwancheng/"+dataId;
         $.operate.submit(url, "post", "json", "");
     });
 }
 function jixuchuli(dataId) {
-    $.modal.confirm("确定已完成采购？", function () {
+    $.modal.confirm("确定要继续处理？", function () {
         var url = ctx + "fmis/procurement/jixuchuli/" + dataId;
         $.operate.submit(url, "post", "json", "");
     });
