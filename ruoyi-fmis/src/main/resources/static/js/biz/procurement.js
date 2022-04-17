@@ -89,7 +89,7 @@ function initExpandRow() {
     setTimeout(function () {
         var repeartMap = new Map();
 
-        console.log("loadingModalFmis show...")
+        console.log("loadingModalFmis show... procurement.js")
         var initOver = false;
         for (var i = 0; i < overAllIds.length; i++) {
             var pathId = overAllIds[i];

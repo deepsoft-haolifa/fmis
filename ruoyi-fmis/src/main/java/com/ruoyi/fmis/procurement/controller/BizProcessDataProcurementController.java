@@ -497,6 +497,35 @@ public class BizProcessDataProcurementController extends BaseController {
             for (int i = 0; i < productArray.size(); i++) {
                 JSONObject json = productArray.getJSONObject(i);
                 BizDataStatus bizDataStatus = JSONObject.parseObject(json.toJSONString(), BizDataStatus.class);
+                /*if (bizDataStatus.getType().equals("1")) {
+                    //产品
+                    bizDataStatus.setProductProPrice(bizDataStatus.getCaigoujia());
+                }
+                if (bizDataStatus.getType().equals("2")) {
+                    bizDataStatus.setActProPrice(bizDataStatus.getCaigoujia());
+
+                }
+                if (bizDataStatus.getType().equals("3")) {
+                    bizDataStatus.setFalanProPrice(bizDataStatus.getCaigoujia());
+                }
+                if (bizDataStatus.getType().equals("4")) {
+                    bizDataStatus.setLuoshuanProPrice(bizDataStatus.getCaigoujia());
+                }
+                if (bizDataStatus.getType().equals("5")) {
+                    bizDataStatus.setpProPrice(bizDataStatus.getCaigoujia());
+                }
+                if (bizDataStatus.getType().equals("6")) {
+                    bizDataStatus.setP1ProPrice(bizDataStatus.getCaigoujia());
+                }
+                if (bizDataStatus.getType().equals("7")) {
+                    bizDataStatus.setP2ProPrice(bizDataStatus.getCaigoujia());
+                }
+                if (bizDataStatus.getType().equals("8")) {
+                    bizDataStatus.setP3ProPrice(bizDataStatus.getCaigoujia());
+                }
+                if (bizDataStatus.getType().equals("9")) {
+                    bizDataStatus.setP4ProPrice(bizDataStatus.getCaigoujia());
+                }*/
                 dataIds.add(bizDataStatus.getString3());//销售id
                 bizDataStatus.setString4(bizProcessData.getDataId().toString());//采购id
                 bizDataStatusService.insertBizDataStatus(bizDataStatus);

@@ -193,6 +193,7 @@
                     if (num == null) {
                         num = "-1";
                     }
+                    console.log("value..." + value);
                     var productObj = new Object();
                     var values = value.split("_");
                     var type = values[0];
@@ -200,7 +201,8 @@
                     var dataId = values[2];
                     var procurementId = values[3];
                     var levelValue = values[4];
-
+                    var caigoujia = values[5];
+                    console.log("caigoujia..." + caigoujia);
                     productObj["type"] = type;
                     productObj["childId"] = childId;
                     productObj["string1"] = num;
@@ -208,6 +210,7 @@
                     productObj["string3"] = procurementId;
                     productObj["string5"] = levelValue;
                     productObj["dataStatus"] = "1";
+                    productObj["caigoujia"] = caigoujia;
                     productArray.push(productObj);
                 })
 
@@ -216,7 +219,7 @@
                 dataObj.push({"name": "productParmters", "value": JSON.stringify(productArray)});
 
                 //刷新 采购管理 页面
-                console.log("refresh procurement page...");
+                console.log("refresh procurement page..." + JSON.stringify(productArray));
                 var pageDataId = ctx + "fmis/procurement";
                 var topWindow = $(parent.window.parent.document);
                 var target = $('.RuoYi_iframe[data-id="' + pageDataId + '"]', topWindow);

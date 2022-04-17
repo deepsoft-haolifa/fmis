@@ -279,10 +279,11 @@ public class BizProductController extends BaseController {
                 if (!CollectionUtils.isEmpty(existProductList)) {
                     for (BizProduct bizProduct : existProductList) {
                         String model = bizProduct.getModel();
+                        String series = bizProduct.getSeries();
                         String specifications = bizProduct.getSpecifications();
                         String supplierNickName = bizProduct.getSupplier();
                         if (StringUtils.isNotEmpty(model)) {
-                            existProductMap.put(model + "_" + specifications + "_" + supplierNickName,bizProduct);
+                            existProductMap.put(series + "_" + model + "_" + specifications + "_" + supplierNickName,bizProduct);
                         }
                     }
                 }
@@ -674,8 +675,9 @@ public class BizProductController extends BaseController {
 
                     //插入产品数据
                     String specifications_ = product.getSpecifications();
+                    String productSeries = product.getSeries();
                     String supplierNickName_ = product.getSupplierCode();
-                    String existKey = model + "_" + specifications_ + "_" + supplierNickName_;
+                    String existKey =productSeries + "_" + model + "_" + specifications_ + "_" + supplierNickName_;
                     BizProduct bizProduct = new BizProduct();
                     if (existProductMap.containsKey(existKey)) {
                         bizProduct = existProductMap.get(existKey);

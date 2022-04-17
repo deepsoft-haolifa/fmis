@@ -276,7 +276,8 @@ function onEditableSave (field, row, oldValue, $el) {
         columnName2 = "productProcurementPrice";
         tableName = "initChildProductTable_" + row.dataId;
         var tempNum = row.productNum;
-        numberMap.set("1_" + row.childId + "_" + row.productId + "_" + row.dataId + "_" + row.levelValue,row.productNum);
+        numberMap.set("1_" + row.childId + "_" + row.productId + "_" + row.dataId + "_" + row.levelValue+ "_" + row.productProcurementPrice,row.productNum);
+        console.log("baocunchanping:" + "1_" + row.childId + "_" + row.productId + "_" + row.dataId + "_" + row.levelValue+ "_" + row.productProcurementPrice)
         var price1 = setRowTotalPrice(columnName1,columnName2,tableName,row);
         //row.productNum = tempNum;
         console.log("row.productNum=" + row.productNum + " tempNum=" + tempNum);
@@ -285,42 +286,42 @@ function onEditableSave (field, row, oldValue, $el) {
         columnName1 = "actuatorNum";
         columnName2 = "actuatorString6";
         tableName = "initChildActuatorTable_" + row.dataId;
-        numberMap.set("2_" + row.childId + "_" + row.actuatorId + "_" + row.dataId + "_" + row.levelValue,row.actuatorNum);
+        numberMap.set("2_" + row.childId + "_" + row.actuatorId + "_" + row.dataId + "_" + row.levelValue + "_" + row.actuatorString6,row.actuatorNum);
         var price1 = setRowTotalPrice(columnName1,columnName2,tableName,row);
         priceMap.set("2_" + row.childId + "_" + row.actuatorId + "_" + row.dataId + "_" + row.levelValue,price1);
     } else if (field == "productRef1Num") {
         columnName1 = "productRef1Num";
         columnName2 = "ref1String2";
         tableName = "initChildRef1Table_" + row.dataId;
-        numberMap.set("3_" + row.childId + "_" + row.productRef1Id + "_" + row.dataId + "_" + row.levelValue,row.productRef1Num);
+        numberMap.set("3_" + row.childId + "_" + row.productRef1Id + "_" + row.dataId + "_" + row.levelValue+ "_" + row.ref1String2,row.productRef1Num);
         var price1 = setRowTotalPrice(columnName1,columnName2,tableName,row);
         priceMap.set("3_" + row.childId + "_" + row.productRef1Id + "_" + row.dataId + "_" + row.levelValue,price1);
     } else if (field == "productRef2Num") {
         columnName1 = "productRef2Num";
         columnName2 = "ref1String2";
         tableName = "initChildRef2Table_" + row.dataId;
-        numberMap.set("4_" + row.childId + "_" + row.productRef2Id + "_" + row.dataId + "_" + row.levelValue,row.productRef2Num);
+        numberMap.set("4_" + row.childId + "_" + row.productRef2Id + "_" + row.dataId + "_" + row.levelValue+ "_" + row.ref1String2,row.productRef2Num);
         var price1 = setRowTotalPrice(columnName1,columnName2,tableName,row);
         priceMap.set("4_" + row.childId + "_" + row.productRef2Id + "_" + row.dataId + "_" + row.levelValue,price1);
     } else if (field == "pattachmentCount") {
         columnName1 = "pattachmentCount";
         columnName2 = "procurementPrice";
         tableName = "initChildPATable_" + row.dataId;
-        numberMap.set("5_" + row.childId + "_" + row.pattachmentId + "_" + row.dataId + "_" + row.levelValue,row.pattachmentCount);
+        numberMap.set("5_" + row.childId + "_" + row.pattachmentId + "_" + row.dataId + "_" + row.levelValue+ "_" + row.procurementPrice,row.pattachmentCount);
         var price1 = setRowTotalPrice(columnName1,columnName2,tableName,row);
         priceMap.set("5_" + row.childId + "_" + row.pattachmentId + "_" + row.dataId + "_" + row.levelValue,price1);
     } else if (field == "pattachment1Count") {
         columnName1 = "pattachment1Count";
         columnName2 = "procurementPrice";
         tableName = "initChildPA1Table_" + row.dataId;
-        numberMap.set("6_" + row.childId + "_" + row.pattachment1Id + "_" + row.dataId + "_" + row.levelValue,row.pattachment1Count);
+        numberMap.set("6_" + row.childId + "_" + row.pattachment1Id + "_" + row.dataId + "_" + row.levelValue+ "_" + row.procurementPrice,row.pattachment1Count);
         var price1 = setRowTotalPrice(columnName1,columnName2,tableName,row);
         priceMap.set("6_" + row.childId + "_" + row.pattachment1Id + "_" + row.dataId + "_" + row.levelValue,price1);
     } else if (field == "pattachment2Count") {
         columnName1 = "pattachment2Count";
         columnName2 = "procurementPrice";
         tableName = "initChildPA2Table_" + row.dataId;
-        numberMap.set("7_" + row.childId + "_" + row.pattachment2Id + "_" + row.dataId + "_" + row.levelValue,row.pattachment2Count);
+        numberMap.set("7_" + row.childId + "_" + row.pattachment2Id + "_" + row.dataId + "_" + row.levelValue+ "_" + row.procurementPrice,row.pattachment2Count);
         var price1 = setRowTotalPrice(columnName1,columnName2,tableName,row);
 
         priceMap.set("7_" + row.childId + "_" + row.pattachment2Id + "_" + row.dataId + "_" + row.levelValue,price1);
@@ -328,7 +329,7 @@ function onEditableSave (field, row, oldValue, $el) {
         columnName1 = "pattachment3Count";
         columnName2 = "procurementPrice";
         tableName = "initChildPA3Table_" + row.dataId;
-        numberMap.set("8_" + row.childId + "_" + row.pattachment3Id + "_" + row.dataId + "_" + row.levelValue,row.pattachment3Count);
+        numberMap.set("8_" + row.childId + "_" + row.pattachment3Id + "_" + row.dataId + "_" + row.levelValue+ "_" + row.procurementPrice,row.pattachment3Count);
         var price1 = setRowTotalPrice(columnName1,columnName2,tableName,row);
 
         priceMap.set("8_" + row.childId + "_" + row.pattachment3Id + "_" + row.dataId + "_" + row.levelValue,price1);
@@ -337,7 +338,7 @@ function onEditableSave (field, row, oldValue, $el) {
         columnName1 = "pattachment4Count";
         columnName2 = "procurementPrice";
         tableName = "initChildPA4Table_" + row.dataId;
-        numberMap.set("9_" + row.childId + "_" + row.pattachment4Id + "_" + row.dataId + "_" + row.levelValue,row.pattachment4Count);
+        numberMap.set("9_" + row.childId + "_" + row.pattachment4Id + "_" + row.dataId + "_" + row.levelValue+ "_" + row.procurementPrice,row.pattachment4Count);
         var price1 = setRowTotalPrice(columnName1,columnName2,tableName,row);
         priceMap.set("9_" + row.childId + "_" + row.pattachment4Id + "_" + row.dataId + "_" + row.levelValue,price1);
     }
@@ -405,48 +406,49 @@ function setRowTotalPrice(columnName1,columnName2,tableName,row) {
 function showNum(type,row) {
     console.log("showNum ... ... ");
     if (type == 1) {
-        var num = numberMap.get(type + "_" + row.childId + "_"  + row.productId + "_" + row.dataId + "_" + row.levelValue);
+        var num = numberMap.get(type + "_" + row.childId + "_"  + row.productId + "_" + row.dataId + "_" + row.levelValue + "_" + row.productProcurementPrice);
+        console.log("id ... ... " + type + "_" + row.childId + "_"  + row.productId + "_" + row.dataId + "_" + row.levelValue + "_" + row.productProcurementPrice);
         if (num != null) {
             console.log("showNum1 num=" + num);
             row.productNum = num;
         }
     } else if (type == 2) {
-        var num = numberMap.get(type + "_" + row.childId + "_"  + row.actuatorId + "_" + row.dataId + "_" + row.levelValue);
+        var num = numberMap.get(type + "_" + row.childId + "_"  + row.actuatorId + "_" + row.dataId + "_" + row.levelValue+ "_" + row.actuatorString6);
         if (num != null) {
             row.actuatorNum = num;
         }
     } else if (type == 3) {
-        var num = numberMap.get(type + "_" + row.childId + "_"  + row.productRef1Id + "_" + row.dataId + "_" + row.levelValue);
+        var num = numberMap.get(type + "_" + row.childId + "_"  + row.productRef1Id + "_" + row.dataId + "_" + row.levelValue+ "_" + row.ref1String2);
         if (num != null) {
             row.productRef1Num = num;
         }
     } else if (type == 4) {
-        var num = numberMap.get(type + "_" + row.childId + "_"  + row.productRef2Id + "_" + row.dataId + "_" + row.levelValue);
+        var num = numberMap.get(type + "_" + row.childId + "_"  + row.productRef2Id + "_" + row.dataId + "_" + row.levelValue+ "_" + row.ref1String2);
         if (num != null) {
             row.productRef2Num = num;
         }
     } else if (type == 5) {
-        var num = numberMap.get(type + "_" + row.childId + "_"  + row.pattachmentId + "_" + row.dataId + "_" + row.levelValue);
+        var num = numberMap.get(type + "_" + row.childId + "_"  + row.pattachmentId + "_" + row.dataId + "_" + row.levelValue+ "_" + row.procurementPrice);
         if (num != null) {
             row.pattachmentCount = num;
         }
     } else if (type == 6) {
-        var num = numberMap.get(type + "_" + row.childId + "_"  + row.pattachment1Id + "_" + row.dataId + "_" + row.levelValue);
+        var num = numberMap.get(type + "_" + row.childId + "_"  + row.pattachment1Id + "_" + row.dataId + "_" + row.levelValue+ "_" + row.procurementPrice);
         if (num != null) {
             row.pattachment1Count = num;
         }
     } else if (type == 7) {
-        var num = numberMap.get(type + "_" + row.childId + "_"  + row.pattachment2Id + "_" + row.dataId + "_" + row.levelValue);
+        var num = numberMap.get(type + "_" + row.childId + "_"  + row.pattachment2Id + "_" + row.dataId + "_" + row.levelValue+ "_" + row.procurementPrice);
         if (num != null) {
             row.pattachment2Count = num;
         }
     } else if (type == 8) {
-        var num = numberMap.get(type + "_" + row.childId + "_"  + row.pattachment3Id + "_" + row.dataId + "_" + row.levelValue);
+        var num = numberMap.get(type + "_" + row.childId + "_"  + row.pattachment3Id + "_" + row.dataId + "_" + row.levelValue+ "_" + row.procurementPrice);
         if (num != null) {
             row.pattachment3Count = num;
         }
     } else if (type == 9) {
-        var num = numberMap.get(type + "_" + row.childId + "_"  + row.pattachment4Id + "_" + row.dataId + "_" + row.levelValue);
+        var num = numberMap.get(type + "_" + row.childId + "_"  + row.pattachment4Id + "_" + row.dataId + "_" + row.levelValue+ "_" + row.procurementPrice);
         if (num != null) {
             row.pattachment4Count = num;
         }
@@ -508,7 +510,7 @@ initChildProductTable = function(index, row, $detail) {
                     disabledValue = true;
                 }
                 var checkedValue = false;
-                if($.inArray("1_" + row.childId + "_" + row.productId + "_" + row.dataId + "_" + row.levelValue, overAllIds)!=-1){
+                if($.inArray("1_" + row.childId + "_" + row.productId + "_" + row.dataId + "_" + row.levelValue + "_" +row.productProcurementPrice, overAllIds)!=-1){
                     showNum(1,row);
                     var productNum = row["productNum"];
                     productNum = $.common.isEmpty(productNum) == true ? 0 : parseFloat(productNum);
@@ -708,9 +710,10 @@ function examine(type,datas,typeIndex,id){
                 tableName = "initChildPA4Table_" + v.dataId;
             }
             $("#initChildProductTable_" + dataId).bootstrapTable('expandRow', 0);
-            overAllIds.indexOf(typeIndex + "_" + v.childId + "_" + dataId + "_" + v.dataId + "_" + v.levelValue) == -1 ?
-                overAllIds.push(typeIndex + "_" + v.childId + "_" + dataId + "_" + v.dataId + "_" + v.levelValue) : -1;
-            numberMap.set(typeIndex + "_" + v.childId + "_" + dataId+ "_" + v.dataId + "_" + v.levelValue,num);
+            overAllIds.indexOf(typeIndex + "_" + v.childId + "_" + dataId + "_" + v.dataId + "_" + v.levelValue+ "_" + price) == -1 ?
+                overAllIds.push(typeIndex + "_" + v.childId + "_" + dataId + "_" + v.dataId + "_" + v.levelValue + "_" + price) : -1;
+            console.log("price:" + price)
+            numberMap.set(typeIndex + "_" + v.childId + "_" + dataId+ "_" + v.dataId + "_" + v.levelValue + "_" + price,num);
 
             var price1 = setRowTotalPrice(columnName1,columnName2,tableName,v);
             console.log("v.totalPrice1=" + price1);
@@ -729,26 +732,36 @@ function examine(type,datas,typeIndex,id){
             console.log("v:" + v)
             console.log("v11:" + v.childId)
             var dataId = "";
+            var price = 0;
             if (typeIndex == 1) {
                 dataId = v.productId;
+                price = v.productProcurementPrice;
             } else if (typeIndex == 2) {
+                price = v.actuatorString6;
                 dataId = v.actuatorId;
             } else if (typeIndex == 3) {
+                price = v.ref1String2;
                 dataId = v.productRef1Id;
             } else if (typeIndex == 4) {
+                price = v.ref1String2;
                 dataId = v.productRef2Id;
             } else if (typeIndex == 5){
+                price = v.procurementPrice;
                 dataId = v.pattachmentId;
             } else if (typeIndex == 6){
+                price = v.procurementPrice;
                 dataId = v.pattachment1Id;
             } else if (typeIndex == 7){
+                price = v.procurementPrice;
                 dataId = v.pattachment2Id;
             } else if (typeIndex == 8){
+                price = v.procurementPrice;
                 dataId = v.pattachment3Id;
             } else if (typeIndex == 9){
+                price = v.procurementPrice;
                 dataId = v.pattachment4Id;
             }
-            overAllIds.splice(overAllIds.indexOf(typeIndex + "_" + v.childId + "_" + dataId + "_" + v.dataId + "_" + v.levelValue),1);    //删除取消选中行
+            overAllIds.splice(overAllIds.indexOf(typeIndex + "_" + v.childId + "_" + dataId + "_" + v.dataId + "_" + v.levelValue + "_" + price),1);    //删除取消选中行
             supplierMap.delete(v.supplierId);
             guishudanwei.delete(v.guishudanwei);
             priceMap.delete(typeIndex + "_" + v.childId + "_" + dataId+ "_" + v.dataId + "_" + v.levelValue);
@@ -787,7 +800,7 @@ initChildActuatorTable = function(index, row, $detail) {
                     disabledValue = true;
                 }
                 var checkedValue = false;
-                if($.inArray("2_" + row.childId + "_" + row.actuatorId + "_" + row.dataId + "_" + row.levelValue, overAllIds)!=-1){
+                if($.inArray("2_" + row.childId + "_" + row.actuatorId + "_" + row.dataId + "_" + row.levelValue + "_" +row.actuatorString6, overAllIds)!=-1){
                     showNum(2,row);
                     var productNum = row["actuatorNum"];
                     productNum = $.common.isEmpty(productNum) == true ? 0 : parseFloat(productNum);
@@ -928,7 +941,7 @@ initChildRef1Table = function(index, row, $detail) {
                     disabledValue = true;
                 }
                 var checkedValue = false;
-                if($.inArray("3_" + row.childId + "_" + row.productRef1Id + "_" + row.dataId + "_" + row.levelValue, overAllIds)!=-1){
+                if($.inArray("3_" + row.childId + "_" + row.productRef1Id + "_" + row.dataId + "_" + row.levelValue + "_" +row.ref1String2, overAllIds)!=-1){
                     showNum(3,row);
                     var productNum = row["productRef1Num"];
                     productNum = $.common.isEmpty(productNum) == true ? 0 : parseFloat(productNum);
@@ -1016,7 +1029,7 @@ initChildRef2Table = function(index, row, $detail) {
                     disabledValue = true;
                 }
                 var checkedValue = false;
-                if($.inArray("4_" + row.childId + "_" + row.productRef2Id + "_" + row.dataId + "_" + row.levelValue, overAllIds)!=-1){
+                if($.inArray("4_" + row.childId + "_" + row.productRef2Id + "_" + row.dataId + "_" + row.levelValue  + "_" +row.ref1String2, overAllIds)!=-1){
                     showNum(4,row);
                     var productNum = row["productRef2Num"];
                     productNum = $.common.isEmpty(productNum) == true ? 0 : parseFloat(productNum);
@@ -1101,7 +1114,7 @@ initChildPATable = function(index, row, $detail) {
                     disabledValue = true;
                 }
                 var checkedValue = false;
-                if($.inArray("5_" + row.childId + "_" + row.pattachmentId + "_" + row.dataId + "_" + row.levelValue, overAllIds)!=-1){
+                if($.inArray("5_" + row.childId + "_" + row.pattachmentId + "_" + row.dataId + "_" + row.levelValue  + "_" +row.procurementPrice, overAllIds)!=-1){
                     showNum(5,row);
                     var productNum = row["pattachmentCount"];
                     productNum = $.common.isEmpty(productNum) == true ? 0 : parseFloat(productNum);
@@ -1216,7 +1229,7 @@ initChildPA1Table = function(index, row, $detail) {
                     disabledValue = true;
                 }
                 var checkedValue = false;
-                if($.inArray("6_" + row.childId + "_" + row.pattachment1Id + "_" + row.dataId + "_" + row.levelValue, overAllIds)!=-1){
+                if($.inArray("6_" + row.childId + "_" + row.pattachment1Id + "_" + row.dataId + "_" + row.levelValue+ "_" +row.procurementPrice, overAllIds)!=-1){
                     showNum(6,row);
                     var productNum = row["pattachment1Count"];
                     productNum = $.common.isEmpty(productNum) == true ? 0 : parseFloat(productNum);
@@ -1332,7 +1345,7 @@ initChildPA2Table = function(index, row, $detail) {
                     disabledValue = true;
                 }
                 var checkedValue = false;
-                if($.inArray("7_" + row.childId + "_" + row.pattachment2Id + "_" + row.dataId + "_" + row.levelValue, overAllIds)!=-1){
+                if($.inArray("7_" + row.childId + "_" + row.pattachment2Id + "_" + row.dataId + "_" + row.levelValue+ "_" +row.procurementPrice, overAllIds)!=-1){
                     showNum(7,row);
                     var productNum = row["pattachment2Count"];
                     productNum = $.common.isEmpty(productNum) == true ? 0 : parseFloat(productNum);
@@ -1453,7 +1466,7 @@ initChildPA3Table = function(index, row, $detail) {
                     disabledValue = true;
                 }
                 var checkedValue = false;
-                if($.inArray("8_" + row.childId + "_" + row.pattachment3Id + "_" + row.dataId + "_" + row.levelValue, overAllIds)!=-1){
+                if($.inArray("8_" + row.childId + "_" + row.pattachment3Id + "_" + row.dataId + "_" + row.levelValue+ "_" +row.procurementPrice, overAllIds)!=-1){
                     showNum(8,row);
                     var productNum = row["pattachment3Count"];
                     productNum = $.common.isEmpty(productNum) == true ? 0 : parseFloat(productNum);
@@ -1569,7 +1582,7 @@ initChildPA4Table = function(index, row, $detail) {
                     disabledValue = true;
                 }
                 var checkedValue = false;
-                if($.inArray("9_" + row.childId + "_" + row.pattachment4Id + "_" + row.dataId + "_" + row.levelValue, overAllIds)!=-1){
+                if($.inArray("9_" + row.childId + "_" + row.pattachment4Id + "_" + row.dataId + "_" + row.levelValue+ "_" +row.procurementPrice, overAllIds)!=-1){
                     showNum(9,row);
                     var productNum = row["pattachment4Count"];
                     productNum = $.common.isEmpty(productNum) == true ? 0 : parseFloat(productNum);

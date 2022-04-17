@@ -102,6 +102,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="string10 != null  and string10 != ''">string10,</if>
             <if test="remark != null  and remark != ''">remark,</if>
             <if test="status != null  and status != ''">status,</if>
+            <if test="caigoujia != null  and caigoujia != ''">caigoujia,</if>
             <if test="delFlag != null  and delFlag != ''">del_flag,</if>
             <if test="createBy != null  and createBy != ''">create_by,</if>
             <if test="createTime != null ">create_time,</if>
@@ -133,6 +134,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="string10 != null  and string10 != ''">#{string10},</if>
             <if test="remark != null  and remark != ''">#{remark},</if>
             <if test="status != null  and status != ''">#{status},</if>
+            <if test="caigoujia != null  and caigoujia != ''">#{caigoujia},</if>
             <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
             <if test="createBy != null  and createBy != ''">#{createBy},</if>
             <if test="createTime != null ">#{createTime},</if>

@@ -444,7 +444,7 @@
             <if test="string30 == 3 ">
                 and (ifnull(q.string30,'0') != 2)
             </if>
-            <if test="string5 != null and string5 != ''"> and q.string1 like concat('%', #{string5}, '%')</if>
+            <if test="string1 == null and string5 != null and string5 != ''"> and q.string1 like concat('%', #{string5}, '%')</if>
         </where>
 
         order by q.create_time desc

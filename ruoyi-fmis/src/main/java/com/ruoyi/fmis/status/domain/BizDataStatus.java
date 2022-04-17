@@ -114,6 +114,15 @@ public class BizDataStatus extends BaseEntity {
 
     /** 删除标志（0代表存在 2代表删除） */
     private String delFlag;
+    private Double caigoujia;
+
+    public Double getCaigoujia() {
+        return caigoujia;
+    }
+
+    public void setCaigoujia(Double caigoujia) {
+        this.caigoujia = caigoujia;
+    }
 
     public void setStatusId(Long statusId) {
         this.statusId = statusId;
@@ -291,6 +300,8 @@ public class BizDataStatus extends BaseEntity {
         return delFlag;
     }
 
+
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -322,8 +333,8 @@ public class BizDataStatus extends BaseEntity {
             .append("delFlag", getDelFlag())
             .append("createBy", getCreateBy())
             .append("createTime", getCreateTime())
-            .append("updateBy", getUpdateBy())
             .append("updateTime", getUpdateTime())
+            .append("caigoujia", getCaigoujia())
             .toString();
     }
 }

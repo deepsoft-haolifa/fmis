@@ -94,7 +94,6 @@ public class BizProcessProcurementpoolController extends BaseController {
     @ResponseBody
     public TableDataInfo list(BizProcessData bizProcessData) {
 
-
         BizProcessData newBizProcessData = new BizProcessData();
         String bizId = bizProcessData.getBizId();
         //采购池
@@ -117,8 +116,11 @@ public class BizProcessProcurementpoolController extends BaseController {
             newBizProcessData.setString1(xs);
             newBizProcessData.setContractNoList(Arrays.asList(xs.split(",")));
         }
-        if (StringUtils.isNotEmpty(bizProcessData.getString1())) {
+        if (StringUtils.isNotEmpty(bizProcessData.getString1()) && bizProcessData.getString1().startsWith("XS")) {
             newBizProcessData.setString5(bizProcessData.getString1());
+        }
+        if (StringUtils.isNotEmpty(bizProcessData.getString3()) && bizProcessData.getString3().startsWith("XS")) {
+            newBizProcessData.setString5(bizProcessData.getString3());
         }
         //startPage();
         List<BizProcessData> list = bizProcessDataService.selectBizProcessDataListXs(newBizProcessData);
