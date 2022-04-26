@@ -97,7 +97,11 @@ public class BizProductController extends BaseController {
     @ResponseBody
     public TableDataInfo listNoAuth(BizProduct bizProduct) {
         startPage();
-        bizProduct.setString5("yes");
+        if (bizProduct.getString5()!= null && bizProduct.getString5().equals("all")) {
+            bizProduct.setString5("");
+        } else {
+            bizProduct.setString5("yes");
+        }
         List<BizProduct> list = bizProductService.selectBizProductListNoAuth(bizProduct);
         return getDataTable(list);
     }
@@ -279,7 +283,10 @@ public class BizProductController extends BaseController {
                 if (!CollectionUtils.isEmpty(existProductList)) {
                     for (BizProduct bizProduct : existProductList) {
                         String model = bizProduct.getModel();
-                        String series = bizProduct.getSeries();
+                        String series = bizProduct.getString1();
+                        System.out.println(bizProduct.getProductId());
+                        System.out.println(series);
+                        System.out.println(model);
                         String specifications = bizProduct.getSpecifications();
                         String supplierNickName = bizProduct.getSupplier();
                         if (StringUtils.isNotEmpty(model)) {
@@ -675,7 +682,7 @@ public class BizProductController extends BaseController {
 
                     //插入产品数据
                     String specifications_ = product.getSpecifications();
-                    String productSeries = product.getSeries();
+                    String productSeries = product.getString1();
                     String supplierNickName_ = product.getSupplierCode();
                     String existKey =productSeries + "_" + model + "_" + specifications_ + "_" + supplierNickName_;
                     BizProduct bizProduct = new BizProduct();

@@ -470,7 +470,7 @@
         a.string3 as actuatorString3,a.action_type as actuatorActionType,a.control_circuit as actuatorControlCircuit,a.adaptable_voltage as actuatorAdaptableVoltage,
         a.protection_level as actuatorProtectionLevel,a.quality_level as actuatorQualityLevel,a.explosion_level as actuatorExplosionLevel,
         <if test="procurementId != null">ds.caigoujia as actuatorString6 </if>
-        <if test="procurementId == null">a.string6 as procuractuatorString6ementPrice </if>,
+        <if test="procurementId == null">a.string6 as actuatorString6 </if>,
         pd.string6 as goodsTime,
         ds.product_status as productStatus,ds.actuator_status as actuatorStatus,ds.ref1_status as ref1Status,ds.ref2_status as ref2Status,ds.p_status as pStatus,
         ds.p1_status as p1Status,ds.p2_status as p2Status,ds.p3_status as p3Status,ds.p4_status as p4Status,pc.data_id as dataId,pc.child_id as childId,ds.data_status as dataStatus,
@@ -595,7 +595,7 @@
       ds.string1  as productRef1Num,
           pr.name as ref1Name,pr.price as ref1Price,
         <if test="procurementId != null">ds.caigoujia as ref1String2 </if>
-        <if test="procurementId == null">pr.string2 as ref1String2 </if>,
+        <if test="procurementId == null">pr.string2 as ref1String2 </if>
           ,d1.name as  ref1Specifications,d2.name  as ref1ValvebodyMaterial,
           pr.material_require as ref1MaterialRequire,s.name as  suppliersName,pr.model,
           ds.product_status as productStatus,ds.data_status as dataStatus,
