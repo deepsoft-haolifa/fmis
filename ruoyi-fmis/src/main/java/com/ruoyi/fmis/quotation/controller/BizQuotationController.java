@@ -28,6 +28,7 @@ import com.ruoyi.fmis.data.domain.BizProcessData;
 import com.ruoyi.fmis.data.service.IBizProcessDataService;
 import com.ruoyi.fmis.define.service.IBizProcessDefineService;
 import com.ruoyi.fmis.dict.service.IBizDictService;
+import com.ruoyi.fmis.finance.domain.QuotationEx;
 import com.ruoyi.fmis.product.domain.BizProduct;
 import com.ruoyi.fmis.product.service.IBizProductService;
 import com.ruoyi.fmis.productref.domain.BizProductRef;
@@ -636,7 +637,40 @@ public class BizQuotationController extends BaseController {
     }
 
 
+    /**
+     * 导出报价单excel
+     */
+    @RequiresPermissions("fmis:quotation:exportEx")
+    @PostMapping("/exportEx")
+    @ResponseBody
+    public AjaxResult exportEx(HttpServletRequest request,HttpServletResponse response,BizQuotation bizQuotationRequest) {
+        String id = "";
+        if (bizQuotationRequest == null) {
+            id = request.getParameter("id");
+        } else {
+            id = bizQuotationRequest.getQuotationId().toString();
+        }
+        //报价单
+        BizQuotation bizQuotation = bizQuotationService.selectBizQuotationById(Long.parseLong(id));
+        //产品信息
+        BizQuotationProduct bizQuotationProduct = new BizQuotationProduct();
+        bizQuotationProduct.setQuotationId(bizQuotation.getQuotationId());
+        List<BizQuotationProduct> bizQuotationProducts = bizQuotationProductService.selectBizQuotationProductDictList(bizQuotationProduct);
+        List<QuotationEx> quotationExes = new ArrayList<>();
+        for (BizQuotationProduct bizQuotationProduct1 : bizQuotationProducts) {
+            QuotationEx quotationEx = new QuotationEx();
+            quotationEx.setModel(bizQuotationProduct1.getBizProduct().getModel());
+            quotationEx.setpNumber(bizQuotationProduct1.getProductNum());
+            quotationEx.setString1(bizQuotationProduct1.getBizProduct().getString1());
+            quotationEx.setSpecifications(bizQuotationProduct1.getBizProduct().getSpecifications());
+            quotationEx.setProductPrice(bizQuotationProduct1.getBizProduct().getPrice() + "");
+            quotationEx.setProductCoefficient(bizQuotationProduct1.getProductCoefficient() + "");
+            quotationExes.add(quotationEx);
+        }
+        ExcelUtil<QuotationEx> util = new ExcelUtil<QuotationEx>(QuotationEx.class);
 
+        return util.exportExcel(quotationExes, "quotation");
+    }
 
 
     @GetMapping("/viewPdf")

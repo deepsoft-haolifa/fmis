@@ -285,6 +285,11 @@ public class BizActuatorController extends BaseController {
 
                     newBizActuator.setString3(StringUtils.trim(actuatorImport.getString3()));
                     newBizActuator.setString4(StringUtils.trim(actuatorImport.getString4()));
+                    newBizActuator.setString5(StringUtils.trim(actuatorImport.getString5()));
+                    newBizActuator.setString6(StringUtils.trim(actuatorImport.getString6()));
+                    newBizActuator.setString9(StringUtils.trim(actuatorImport.getString9()));
+                    newBizActuator.setPress(StringUtils.trim(actuatorImport.getPress()));
+                    newBizActuator.setColor(StringUtils.trim(actuatorImport.getColor()));
 
 
                     if ("2".equals(type)) {

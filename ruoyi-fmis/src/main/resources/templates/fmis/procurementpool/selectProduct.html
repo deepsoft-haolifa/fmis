@@ -77,7 +77,7 @@
                                 <p>阀轴：</p>
                                 <select name="string3" class="form-control m-b" th:with="type=${@dict.getType('valve_shaft')}">
                                     <option value="">请选择</option>
-                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictLabel}"></option>
                                 </select>
                             </li>
 
@@ -188,10 +188,7 @@
                 },
                     {
                         field : 'string3',
-                        title : '阀轴',
-                        formatter: function(value, row, index) {
-                            return $.table.selectDictLabel(string3Datas, value);
-                        }
+                        title : '阀轴'
                     },
                 {
                     field : 'driveForm', 

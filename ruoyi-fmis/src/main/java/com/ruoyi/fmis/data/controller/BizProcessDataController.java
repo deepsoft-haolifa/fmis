@@ -1972,7 +1972,7 @@ public class BizProcessDataController extends BaseController {
                 //螺栓计算
                 Double ref2Tota = new Double(0);
                 String ref2Id = bizProduct.getProductRef2Id();
-                if (StringUtils.isNotEmpty(ref2Id)) {
+                if (StringUtils.isNotEmpty(ref2Id) && !ref2Id.equals("0")) {
                     Double ref2Price = bizProduct.getRef2Price();
                     String ref2Num = bizProduct.getProductRef2Num() + "";
                     String ref2Coefficient = bizProduct.getProductRef2Coefficient();

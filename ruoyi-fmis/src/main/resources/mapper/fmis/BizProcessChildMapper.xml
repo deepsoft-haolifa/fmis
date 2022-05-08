@@ -283,7 +283,7 @@
 
     <!-- 采购池产品信息 -->
     <sql id="selectBizChildProductVoCaigou">
-        select pd.string3 guishudanwei,p.string5 as string18,
+        select pd.string3 guishudanwei,p.string5 as string18,p.remark remark,p.string3,
         p.price as productPrice,p.product_id as productId,
         d9.name as series, p.model, d1.name as specifications, d2.name as nominalPressure,
         d3.name as connectionType, d6.name as valvebodyMaterial,

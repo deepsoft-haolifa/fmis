@@ -120,7 +120,7 @@
                 <div class="col-sm-8">
                     <select name="string3" class="form-control m-b" th:with="type=${@dict.getType('valve_shaft')}">
                         <option value="">请选择</option>
-                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{string3}"></option>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictLabel}" th:field="*{string3}"></option>
                     </select>
                 </div>
             </div>

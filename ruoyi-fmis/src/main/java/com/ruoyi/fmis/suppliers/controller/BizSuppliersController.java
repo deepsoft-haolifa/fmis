@@ -252,7 +252,7 @@ public class BizSuppliersController extends BaseController {
                 bizProductImport.setString4(bizProduct1.getString4());
                 bizProductImport.setProcurementPrice(bizProduct1.getProcurementPrice() + "");
                 bizProductImport.setRemark(bizProduct1.getRemark());
-                bizProductImport.setValveShaft(bizProduct1.getValvebodyMaterial());
+                bizProductImport.setValveShaft(bizProduct1.getString3());
                 bizProductImport.setString5(bizProduct1.getString5());
                 bizProductImport.setCostPrice(bizProduct1.getCostPrice() + "");
                 bizProductImport.setPrice(bizProduct1.getPrice() + "");

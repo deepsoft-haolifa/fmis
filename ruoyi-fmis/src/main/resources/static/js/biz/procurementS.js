@@ -579,10 +579,12 @@ initChildProductTable = function(index, row, $detail) {
             {field : 'valvebodyMaterial',title : '阀体',editable: false},
             {field : 'valveElement',title : '阀芯',editable: false},
             {field : 'sealingMaterial',title : '密封材质',editable: false},
+            {field : 'string3',title : '阀轴材质',editable: false},
             {field : 'driveForm',title : '驱动形式',editable: false},
             {field : 'connectionType',title : '连接方式',editable: false},
 
             {field : 'goodsTime',title : '回货时间',editable: false},
+            {field : 'remark',title : '备注',editable: false},
             // {field : 'contractSpecial',title : '特殊要求',editable: false}
 
 

@@ -53,6 +53,10 @@ public class BizActuatorImport {
 
     @Excel(name = "价格")
     private String price;
+    @Excel(name = "采购价")
+    private String string6;
+    @Excel(name = "成本价")
+    private String string9;
 
     @Excel(name = "单价")
     private String areaPrice;
@@ -76,9 +80,12 @@ public class BizActuatorImport {
     @Excel(name = "材质")
     private String string5;
 
-
     @Excel(name = "供应商代码")
     private String string8;
+    @Excel(name = "颜色")
+    private String color;
+    @Excel(name = "压力")
+    private String press;
 
 
 }

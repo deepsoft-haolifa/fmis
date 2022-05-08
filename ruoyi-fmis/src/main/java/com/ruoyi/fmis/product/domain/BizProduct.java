@@ -151,7 +151,7 @@ public class BizProduct extends BaseEntity {
     public String getString2() {
         return string2;
     }
-
+    @Excel(name = "阀轴材质")
     private String string3;
     public void setString3(String string3) {
         this.string3 = string3;

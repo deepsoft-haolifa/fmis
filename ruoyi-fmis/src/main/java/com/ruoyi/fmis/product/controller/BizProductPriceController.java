@@ -1,19 +1,23 @@
 package com.ruoyi.fmis.product.controller;
 
-import java.util.*;
-
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.ruoyi.common.annotation.DataScope;
+import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.config.Global;
+import com.ruoyi.common.core.controller.BaseController;
+import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.core.page.TableDataInfo;
+import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.poi.ExcelProduct;
+import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.fmis.common.BizConstants;
-import com.ruoyi.fmis.common.BizProductExcel;
 import com.ruoyi.fmis.common.BizProductImport;
 import com.ruoyi.fmis.dict.domain.BizDict;
 import com.ruoyi.fmis.dict.service.IBizDictService;
+import com.ruoyi.fmis.product.domain.BizProduct;
+import com.ruoyi.fmis.product.service.IBizProductService;
 import com.ruoyi.fmis.suppliers.domain.BizSuppliers;
 import com.ruoyi.fmis.suppliers.service.IBizSuppliersService;
 import com.ruoyi.framework.util.ShiroUtils;
@@ -24,19 +28,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import com.ruoyi.common.annotation.Log;
-import com.ruoyi.common.enums.BusinessType;
-import com.ruoyi.fmis.product.domain.BizProduct;
-import com.ruoyi.fmis.product.service.IBizProductService;
-import com.ruoyi.common.core.controller.BaseController;
-import com.ruoyi.common.core.domain.AjaxResult;
-import com.ruoyi.common.utils.poi.ExcelUtil;
-import com.ruoyi.common.core.page.TableDataInfo;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.*;
 
 /**
  * 业务产品Controller
@@ -45,9 +39,9 @@ import com.ruoyi.common.core.page.TableDataInfo;
  * @date 2020-02-26
  */
 @Controller
-@RequestMapping("/fmis/product")
-public class BizProductController extends BaseController {
-    private String prefix = "fmis/product";
+@RequestMapping("/fmis/productForPrice")
+public class BizProductPriceController extends BaseController {
+    private String prefix = "fmis/productForPrice";
 
     @Autowired
     private IBizProductService bizProductService;
@@ -61,7 +55,7 @@ public class BizProductController extends BaseController {
     @Autowired
     private ISysDictDataService sysDictDataService;
 
-    @RequiresPermissions("fmis:product:view")
+    @RequiresPermissions("fmis:productForPrice:price")
     @GetMapping()
     public String product(ModelMap mmap) {
          mmap.put("seriesSelect",bizDictService.selectBizDictByProductType(BizConstants.productTypeCode));
@@ -72,7 +66,7 @@ public class BizProductController extends BaseController {
     /**
      * 查询业务产品列表
      */
-    @RequiresPermissions("fmis:product:list")
+    @RequiresPermissions("fmis:productForPrice:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(BizProduct bizProduct) {
@@ -84,18 +78,7 @@ public class BizProductController extends BaseController {
     /**
      * 查询业务产品列表
      */
-    @RequiresPermissions("fmis:product:listall")
-    @PostMapping("/listall")
-    @ResponseBody
-    public TableDataInfo listall(BizProduct bizProduct) {
-        startPage();
-        List<BizProduct> list = bizProductService.selectBizProductList(bizProduct);
-        return getDataTable(list);
-    }
-    /**
-     * 查询业务产品列表
-     */
-    @RequiresPermissions("fmis:product:listProduct")
+    @RequiresPermissions("fmis:productForPrice:listProduct")
     @PostMapping("/listProduct")
     @ResponseBody
     public TableDataInfo listProduct(BizProduct bizProduct) {
@@ -120,7 +103,7 @@ public class BizProductController extends BaseController {
     /**
      * 导出业务产品列表
      */
-    @RequiresPermissions("fmis:product:export")
+    @RequiresPermissions("fmis:productForPrice:export")
     @PostMapping("/export")
     @ResponseBody
     public AjaxResult export(BizProduct bizProduct) {
@@ -221,8 +204,8 @@ public class BizProductController extends BaseController {
     public static Long processNum = 0L;
     @PostMapping("/processBar")
     @ResponseBody
-    public com.alibaba.fastjson.JSONObject processBar(){
-        com.alibaba.fastjson.JSONObject retJson = new com.alibaba.fastjson.JSONObject();
+    public JSONObject processBar(){
+        JSONObject retJson = new JSONObject();
         retJson.put("processTotal",processTotal.toString());
         retJson.put("processNum",processNum.toString());
         return retJson;
@@ -230,10 +213,10 @@ public class BizProductController extends BaseController {
 
     @PostMapping("/importExcel")
     @ResponseBody
-    public com.alibaba.fastjson.JSONObject importExcel(){
+    public JSONObject importExcel(){
         processTotal = 0L;
         processNum = 0L;
-        com.alibaba.fastjson.JSONObject retJson = new com.alibaba.fastjson.JSONObject();
+        JSONObject retJson = new JSONObject();
         JSONArray dataArray = new JSONArray();
         JSONArray errorArray = new JSONArray();
         String url = getRequest().getParameter("url");
@@ -719,8 +702,6 @@ public class BizProductController extends BaseController {
                     bizProduct.setString4(product.getString4());
                     bizProduct.setProcurementPrice(Double.parseDouble(product.getProcurementPrice()));
                     bizProduct.setCostPrice(Double.parseDouble(product.getCostPrice()));
-                    bizProduct.setRemark(product.getRemark());
-                    bizProduct.setString3(product.getValveShaft());
                     if (product.getString5() != null && product.getString5().equals("是")) {
                         bizProduct.setString5("yes");
                     }

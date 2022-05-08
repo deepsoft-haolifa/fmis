@@ -57,6 +57,9 @@
                 <a class="btn btn-warning" onclick="exportPdf()" shiro:hasPermission="fmis:quotation:export">
                     <i class="fa fa-download"></i> 生成报价单
                  </a>
+                <a class="btn btn-warning" onclick="exportEx()" shiro:hasPermission="fmis:quotation:exportEx">
+                    <i class="fa fa-download"></i> 保存报价单
+                </a>
 
                 <a class="btn btn-success" onclick="viewPdf()">
                     <i class="fa fa-street-view"></i> 预览报价单
@@ -85,6 +88,7 @@
                 updateUrl: prefix + "/edit/{id}",
                 removeUrl: prefix + "/remove",
                 exportUrl: prefix + "/export",
+                exportEXUrl: prefix + "/exportEx",
                 modalName: "报价单",
                 uniqueId: "quotationId",
                 rowStyle:function (row, index) {
@@ -146,8 +150,7 @@
                     },
                 {
                     field : 'remark', 
-                    title : '备注',
-                    visible: false
+                    title : '备注'
                 },
                 {
                     field : 'flowStatus',
@@ -379,7 +382,34 @@
                 });
             });
         }
+        function exportEx(formId) {
 
+            var row = $('#bootstrap-table').bootstrapTable('getSelections')[0];
+            var rows = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
+            if ($.common.isEmpty(row) || rows.length != 1) {
+                $.modal.alertWarning("请选择一条记录");
+                return;
+            }
+
+
+            $.modal.confirm("确定生成报价单吗？", function() {
+                var currentId = $.common.isEmpty(formId) ? $('form').attr('id') : formId;
+                console.log("currentId=" + currentId);
+                $.modal.loading("正在导出数据，请稍后...");
+                var paramsJson = $("#" + currentId).serializeArray();
+                paramsJson.push({"name": "quotationId", "value": row.quotationId});
+                $.post($.table._option.exportEXUrl, paramsJson, function(result) {
+                    if (result.code == web_status.SUCCESS) {
+                        window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;
+                    } else if (result.code == web_status.WARNING) {
+                        $.modal.alertWarning(result.msg)
+                    } else {
+                        $.modal.alertError(result.msg);
+                    }
+                    $.modal.closeLoading();
+                });
+            });
+        }
         function remove(id) {
             if($.common.isEmpty(id)) {
                 var row = $('#bootstrap-table').bootstrapTable('getSelections')[0];
