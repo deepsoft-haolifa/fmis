@@ -395,7 +395,7 @@
                             var validateUnique = $.validate.unique(data);
                             console.log("validateUnique:"+validateUnique)
                             if (!validateUnique) {
-                                alert("只允许最多添加50个客户")
+                                alert("只允许最多添加100个客户")
                             }
                             return validateUnique;
                         }
@@ -431,11 +431,11 @@
                     required: icon + "请填写联系人姓名",
                     remote: icon + "联系人姓名重复"
                 },"areaCode": {
-                    required: icon + "最多添加五十个客户",
-                    remote: icon + "最多添加五十个客户"
+                    required: icon + "最多添加一百个客户",
+                    remote: icon + "最多添加一百个客户"
                 },"contactPhone": {
-                    required: icon + "请填写联系人电话",
-                    remote: icon + "联系人电话重复"
+                    required: icon + "请填写联系人电话或格式不正确",
+                    remote: icon + "联系人电话重复或格式不正确"
                 }
             },
             focusCleanup: true

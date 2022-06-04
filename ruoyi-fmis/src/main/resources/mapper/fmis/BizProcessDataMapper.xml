@@ -1445,6 +1445,7 @@
             <if test="string28 != null  and string28 != ''">string28,</if>
             <if test="string29 != null  and string29 != ''">string29,</if>
             <if test="string30 != null  and string30 != ''">string30,</if>
+            <if test="discount != null  and discount != ''">discount,</if>
 
             <if test="datetime1 != null ">datetime1,</if>
             <if test="datetime2 != null ">datetime2,</if>
@@ -1523,6 +1524,7 @@
             <if test="string28 != null  and string28 != ''">#{string28},</if>
             <if test="string29 != null  and string29 != ''">#{string29},</if>
             <if test="string30 != null  and string30 != ''">#{string30},</if>
+            <if test="discount != null  and discount != ''">#{discount},</if>
 
             <if test="datetime1 != null ">#{datetime1},</if>
             <if test="datetime2 != null ">#{datetime2},</if>
@@ -1604,6 +1606,7 @@
             <if test="string28 != null  and string28 != ''">string28 = #{string28},</if>
             <if test="string29 != null  and string29 != ''">string29 = #{string29},</if>
             <if test="string30 != null  and string30 != ''">string30 = #{string30},</if>
+            <if test="discount != null  and discount != ''">string30 = #{discount},</if>
 
             <if test="datetime1 != null ">datetime1 = #{datetime1},</if>
             <if test="datetime2 != null ">datetime2 = #{datetime2},</if>

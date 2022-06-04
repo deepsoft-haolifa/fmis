@@ -24,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -104,6 +105,9 @@ public class TodoServiceImpl implements ITodoService {
                 if (bizQuotation.getNormalFlag().equals(bizQuotation.getFlowStatus())) {
                     continue;
                 }
+                if (!StringUtils.isEmpty(bizQuotation.getFlowStatus()) && Integer.parseInt(bizQuotation.getFlowStatus()) == 0) {
+                    continue;
+                }
                 Todo todo = new Todo();
                 todo.setId(bizQuotation.getQuotationId());
                 todo.setOrderNo(bizQuotation.getString1());
@@ -121,6 +125,12 @@ public class TodoServiceImpl implements ITodoService {
             List<BizProcessData> bizProcessDatas = pageInfo.getList();
             tableDataInfo.setTotal(pageInfo.getTotal());
             for (BizProcessData bizProcessDatum : bizProcessDatas) {
+                if (bizProcessDatum.getNormalFlag().equals(bizProcessDatum.getFlowStatus())) {
+                    continue;
+                }
+                if (!StringUtils.isEmpty(bizProcessDatum.getFlowStatus()) && Integer.parseInt(bizProcessDatum.getFlowStatus()) == 0) {
+                    continue;
+                }
                 Todo todo = new Todo();
                 todo.setId(bizProcessDatum.getDataId());
                 todo.setOrderNo(getOrderNo(bizProcessDatum, bizProcessDatum.getBizId()));
@@ -200,6 +210,9 @@ public class TodoServiceImpl implements ITodoService {
                 // 查询报价单单号
                 try {
                     BizQuotation bizQuotation = bizQuotationMapper.selectBizQuotationById(bizFlow.getBizId());
+                    if (!bizQuotation.getNormalFlag().equals(bizQuotation.getFlowStatus())) {
+                        continue;
+                    }
                     Done done = new Done();
                     done.setId(bizFlow.getBizId());
                     if(Objects.isNull(bizQuotation)) {

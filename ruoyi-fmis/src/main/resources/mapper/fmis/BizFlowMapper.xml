@@ -57,6 +57,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              </if>
             <if test="bizId != null"> and f.biz_id = #{bizId}</if>
              <if test="examineUserId != null" >and f.examine_user_id = #{examineUserId}</if>
+           /* group by f.biz_id*/
             order by f.create_time desc
         </where>
     </select>

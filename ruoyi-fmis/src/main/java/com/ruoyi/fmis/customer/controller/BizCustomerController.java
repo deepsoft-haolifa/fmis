@@ -132,8 +132,8 @@ public class BizCustomerController extends BaseController {
         BizCustomer bizCustomerList = new BizCustomer();
         bizCustomerList.setOwnerUserId(bizCustomer.getOwnerUserId());
         List<BizCustomer> bizCustomers = bizCustomerService.selectBizCustomerList(bizCustomerList);
-        if(!CollectionUtils.isEmpty(bizCustomers) && bizCustomers.size() >= 30) {
-            return new AjaxResult(AjaxResult.Type.WARN, "每个业务人员最多管理30个客户！");
+        if(!CollectionUtils.isEmpty(bizCustomers) && bizCustomers.size() >= 100) {
+            return new AjaxResult(AjaxResult.Type.WARN, "每个业务人员最多管理100个客户！");
         }
         return toAjax(bizCustomerService.updateBizCustomer(bizCustomer));
     }
@@ -218,7 +218,9 @@ public class BizCustomerController extends BaseController {
      */
     @GetMapping("/add")
     public String add(ModelMap mmap) {
-        mmap.put("users", userService.selectUserList(new SysUser()));
+        SysUser sysUser = new SysUser();
+        sysUser.setUserId(ShiroUtils.getSysUser().getUserId());
+        mmap.put("users", userService.selectUserList(sysUser));
         mmap.put("areaCode",getBh());
         return prefix + "/add";
     }
@@ -231,6 +233,9 @@ public class BizCustomerController extends BaseController {
     @PostMapping("/add")
     @ResponseBody
     public AjaxResult addSave(BizCustomer bizCustomer) {
+        bizCustomer.setName(bizCustomer.getName().trim());
+        bizCustomer.setContactName(bizCustomer.getContactName().trim());
+        bizCustomer.setContactPhone(bizCustomer.getContactPhone().trim());
         return toAjax(bizCustomerService.insertBizCustomer(bizCustomer));
     }
 
@@ -247,13 +252,15 @@ public class BizCustomerController extends BaseController {
             return BizConstants.VALIDATE_IS_EXIST;
         }
         BizCustomer queryBizCustomer = new BizCustomer();
-        queryBizCustomer.setName(name);
+        queryBizCustomer.setName(name.trim());
         List<BizCustomer> list = bizCustomerService.selectBizCustomerListByName(queryBizCustomer);
         Iterator<BizCustomer> iterator = list.iterator();
         while(iterator.hasNext()){
             BizCustomer o = iterator.next();
             if(o.getCustomerId().compareTo(id) == 0) {
-                iterator.remove();   //注意这个地方
+                if (status.equals("1")) {
+                    iterator.remove();   //注意这个地方
+                }
             }
         }
         if (CollectionUtil.isEmpty(list) || list.size() == 0) {
@@ -267,7 +274,7 @@ public class BizCustomerController extends BaseController {
     @ResponseBody
     public String checkContactName(BizCustomer bizCustomer)
     {
-        String name = bizCustomer.getContactName();
+        String name = bizCustomer.getContactName().trim();
         //0=增加 1=编辑
         String status = bizCustomer.getStatus();
         Long id = bizCustomer.getCustomerId();
@@ -322,10 +329,13 @@ public class BizCustomerController extends BaseController {
     @ResponseBody
     public String checkContactPhone(BizCustomer bizCustomer)
     {
-        String name = bizCustomer.getContactPhone();
+        String name = bizCustomer.getContactPhone().trim();
         //0=增加 1=编辑
         String status = bizCustomer.getStatus();
         Long id = bizCustomer.getCustomerId();
+        if (name.length() != 11) {
+            return BizConstants.VALIDATE_IS_EXIST;
+        }
         if (StringUtils.isEmpty(name)) {
             return BizConstants.VALIDATE_IS_EXIST;
         }
@@ -336,7 +346,9 @@ public class BizCustomerController extends BaseController {
         while(iterator.hasNext()){
             BizCustomer o = iterator.next();
             if(o.getCustomerId().compareTo(id) == 0) {
-                iterator.remove();   //注意这个地方
+                if (status.equals("1")) {
+                    iterator.remove();   //注意这个地方
+                }
             }
         }
         if (CollectionUtil.isEmpty(list) || list.size() == 0) {

@@ -428,6 +428,10 @@ public class BizProcessData extends BaseEntity {
     @Setter
     private String payTotal;
 
+    @Getter
+    @Setter
+    private String discount;
+
     /**
      * 入库总数量
      */

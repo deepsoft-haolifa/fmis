@@ -1949,7 +1949,7 @@ public class BizProcessDataController extends BaseController {
 
                 Double productTotal = new Double(0);
                 String productCoefficient = bizProduct.getProductCoefficient();
-                if (StringUtils.isNotEmpty(productNum) && StringUtils.isNotEmpty(productPrice) &&  productPrice > 0 && StringUtils.isNotEmpty(productCoefficient)) {
+                if (StringUtils.isNotEmpty(productNum) && productPrice != null &&  productPrice > 0 && StringUtils.isNotEmpty(productCoefficient)) {
                     productTotal = Double.parseDouble(productNum) * productPrice * Double.parseDouble(productCoefficient);
                 }
                 //法兰计算

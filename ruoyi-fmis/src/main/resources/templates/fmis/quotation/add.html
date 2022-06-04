@@ -249,6 +249,11 @@
                     productObj["price4"] = rowData["actuatorPrice"]
 
                     productObj["productNum"] = rowData["productNum"];
+                    if ( productObj["productNum"] == '0') {
+                        console.log("productNumIs0")
+                        $.modal.alertWarning("请产品数量不能为0！");
+                        return;
+                    }
                     productObj["productCoefficient"] = rowData["productCoefficient"];
                     productObj["productRef1Coefficient"] = rowData["productRef1Coefficient"];
                     productObj["productRef2Coefficient"] = rowData["productRef2Coefficient"];
