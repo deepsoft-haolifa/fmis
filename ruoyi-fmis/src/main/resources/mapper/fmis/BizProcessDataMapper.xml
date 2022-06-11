@@ -125,7 +125,7 @@
         q.string21,q.string22,q.string23,q.string24,q.string25,q.string26,q.string27,q.string28,q.string29,q.string30,
         q.price11, q.price12, q.price13, q.price14, q.price15, q.price16, q.price17, q.price18, q.price19, q.price20,
         q.datetime1, q.datetime2, q.datetime3, q.datetime4, q.datetime5, q.status, q.del_flag, q.create_by, q.create_time, q.update_by, q.update_time,q.remark,
-        q.except_pay_time,q.purchase_specific_requests,q.payment_type,q.balance_amount,q.balance_borrow_no,
+        q.except_pay_time,q.purchase_specific_requests,q.payment_type,q.balance_amount,q.balance_borrow_no,q.discount,
         dt1.dept_name as deptName
         from biz_process_data q
         left join sys_dept dt1 on q.string22=dt1.dept_id
@@ -185,7 +185,7 @@
         q.string21,q.string22,q.string23,q.string24,q.string25,q.string26,q.string27,q.string28,q.string29,q.string30,
         q.price11, q.price12, q.price13, q.price14, q.price15, q.price16, q.price17, q.price18, q.price19, q.price20,
         q.datetime1, q.datetime2, q.datetime3, q.datetime4, q.datetime5, q.status, q.del_flag, q.create_by, q.create_time, q.update_by, q.update_time,
-        q.except_pay_time,q.purchase_specific_requests, dt1.dept_name as deptName,q.payment_type,q.balance_amount,q.balance_borrow_no
+        q.except_pay_time,q.purchase_specific_requests, dt1.dept_name as deptName,q.payment_type,q.balance_amount,q.discount,q.balance_borrow_no
         from biz_process_data q
         left join sys_dept dt1 on q.string22=dt1.dept_id left join biz_data_status ds on q.data_id = ds.string4  left join biz_process_child pc on q.data_id = pc.data_id
         join `biz_data_status` bs on pc.child_id = bs.`child_id`
