@@ -640,7 +640,7 @@ public class BizQuotationController extends BaseController {
     /**
      * 导出报价单excel
      */
-    @RequiresPermissions("fmis:quotation:exportEx")
+    @RequiresPermissions("fmis:quotation:export")
     @PostMapping("/exportEx")
     @ResponseBody
     public AjaxResult exportEx(HttpServletRequest request,HttpServletResponse response,BizQuotation bizQuotationRequest) {

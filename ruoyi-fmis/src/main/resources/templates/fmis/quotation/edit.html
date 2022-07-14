@@ -412,6 +412,7 @@
 
                     {field : 'productCoefficient',title : '系数',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
                     {field : 'totalPrice',title : '总价',editable: false},
+                    {field : 'string14',title : '优惠',editable: {type: 'text',emptytext: '0',validate: function(v){ return numberValidate(v)}}},
                     {field : 'totalPriceOnly',title : '单价',editable: false},
 
                     {field : 'actuatorId',title : 'actuatorId',visible: false},
@@ -514,7 +515,7 @@
                 || field == "pattachmentPrice" || field == "pattachment1Price" || field == "pattachment2Price" || field == "pattachment3Price" || field == "pattachment4Price"
                 || field == "pattachmentCount" || field == "pattachment1Count" || field == "pattachment2Count" || field == "pattachment3Count" || field == "pattachment4Count"
                 || field == "pattachmentCoefficient" || field == "pattachment1Coefficient" || field == "pattachment2Coefficient" || field == "pattachment3Coefficient"
-                || field == "pattachment4Coefficient") {
+                || field == "pattachment4Coefficient"|| field == "string14") {
                 calculateTotalPrice();
             }
         }
@@ -679,12 +680,16 @@
             if (isEmpty(specialExpenses)) {
                 specialExpenses = 0;
             }
+            var discountPrice = $("#string14").val();
+            if (isEmpty(discountPrice)) {
+                discountPrice = 0;
+            }
             $("#productTotalPrice").val(parseFloat(productTotalPrice).toFixed(2));
             var totalPrice = parseFloat(productTotalPrice) + parseFloat(specialExpenses);
             $("#totalPrice").val(parseFloat(totalPrice).toFixed(2));
 
             //productTotalPrice 毛利 产品金额-成本价格-特殊费用
-            var grossPrice = (parseFloat(productTotalPrice) - parseFloat(allTotalCost) - parseFloat(specialExpenses)).toFixed(2);
+            var grossPrice = (parseFloat(productTotalPrice) - parseFloat(allTotalCost) - parseFloat(specialExpenses) - parseFloat(discountPrice)).toFixed(2);
             $("#grossPrice").val(grossPrice);
 
         }
