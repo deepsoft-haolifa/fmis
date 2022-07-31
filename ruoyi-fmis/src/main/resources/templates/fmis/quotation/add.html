@@ -126,7 +126,10 @@
                 <div class="col-sm-3">
                     <input name="productTotalPrice" id="productTotalPrice" class="form-control" type="text" readonly>
                 </div>
-
+                <label class="col-sm-1 control-label">优惠金额：</label>
+                    <div class="col-sm-2">
+                        <input name="discount" id="discount" class="form-control" type="text" onkeyup="AmountKeyUp(this)" onblur="calculateTotalPrice()">
+                    </div>
                 <label class="col-sm-1 control-label">报价总金额：</label>
                 <div class="col-sm-3">
                     <input name="totalPrice" id="totalPrice" class="form-control" type="text"  readonly>
@@ -404,7 +407,7 @@
 
                     {field : 'productCoefficient',title : '系数',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
                     {field : 'totalPrice',title : '总价',editable: false},
-                    {field : 'string4',title : '优惠',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
+                    /*{field : 'string4',title : '优惠',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},*/
 
                     {field : 'totalPriceOnly',title : '单价',editable: false},
 
@@ -701,12 +704,13 @@
             if (isEmpty(specialExpenses)) {
                 specialExpenses = 0;
             }
-            var discountPrice = $("#string14").val();
+            var discountPrice = $("#discount").val();
+            console.log("discountPrice:" + discountPrice)
             if (isEmpty(discountPrice)) {
                 discountPrice = 0;
             }
 
-            $("#productTotalPrice").val(parseFloat(productTotalPrice).toFixed(0));
+            $("#productTotalPrice").val(parseFloat(productTotalPrice).toFixed(0) -  parseFloat(discountPrice));
             // var totalPrice = parseFloat(productTotalPrice) + parseFloat(specialExpenses);
             var totalPrice = parseFloat(productTotalPrice);
             $("#totalPrice").val(parseFloat(totalPrice).toFixed(0));

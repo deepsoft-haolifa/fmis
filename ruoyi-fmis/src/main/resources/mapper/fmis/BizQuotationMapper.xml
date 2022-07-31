@@ -40,6 +40,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createTime"    column="create_time"    />
         <result property="updateBy"    column="update_by"    />
         <result property="updateTime"    column="update_time"    />
+        <result property="discount"    column="discount"    />
         <result property="specifications"    column="specifications"    />
         <result property="nominalPressure"    column="nominal_pressure"    />
         <result property="connectionType"    column="connection_type"    />
@@ -62,7 +63,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectBizQuotationVo">
-        select quotation_id, product_id, product_ref1_id, product_ref1_num, product_ref2_id, product_ref2_num, actuator_id, special_expenses, payment_method, freight, lead_time, report_project, normal_flag, flow_status, remark, string1, string2, string3, string4, string5, string6, string7, string8, string9, string10,string11,string12, string19,status, del_flag, create_by, create_time, update_by, update_time from biz_quotation
+        select quotation_id, product_id, product_ref1_id, product_ref1_num, product_ref2_id, product_ref2_num, actuator_id, special_expenses, payment_method, freight, lead_time, report_project, normal_flag, flow_status, remark, string1, string2, string3, string4, string5, string6, string7, string8, string9, string10,string11,string12, string19,discount,status, del_flag, create_by, create_time, update_by, update_time from biz_quotation
     </sql>
     
     <select id="selectBizQuotationByFlowStatus" resultMap="BizQuotationResult">
@@ -94,7 +95,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select q.quotation_id,q.product_id,q.product_ref1_id,q.product_ref1_num,q.product_ref2_id,q.product_ref2_num,q.actuator_id,
           q.special_expenses,q.payment_method,q.freight,q.lead_time,q.report_project,q.normal_flag,q.flow_status,q.remark,q.string1,
           q.string2,q.string3,q.string4,q.string5,q.string6,q.string7,q.string8,q.string9,q.string10,q.status,q.del_flag,u.user_name as create_by,
-          q.create_time,q.update_by,q.update_time,
+          q.create_time,q.update_by,q.update_time,q.discount,
           p.name as productName,pr1.name as productRef1Name,pr2.name as productRef2Name,ac.name as actuatorName,
           ct.name as customerName,
           q.string11,q.string12,q.string13,q.string14,q.string15,q.string16,q.string17,q.string18,q.string19,q.string20,q.create_by as createById
@@ -209,7 +210,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select q.quotation_id,
           q.special_expenses,q.payment_method,q.freight,q.lead_time,q.report_project,q.normal_flag,q.flow_status,q.remark,q.string1,
           q.string2,q.string3,q.string4,q.string5,q.string6,q.string7,q.string8,q.string9,q.string10,q.status,q.del_flag,u.user_name as create_by,
-          q.create_time,q.update_by,q.update_time,
+          q.create_time,q.update_by,q.update_time,q.discount,
           ct.name as customerName,
           qp.product_id,qp.product_ref1_id,qp.product_ref1_num,qp.product_ref2_id,qp.product_ref2_num,qp.actuator_id,
           qp.product_num as productNum,qp.product_coefficient as productCoefficient,qp.product_ref1_coefficient as productRef1Coefficient,
@@ -338,6 +339,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="string18 != null  and string18 != ''">string18,</if>
             <if test="string19 != null  and string19 != ''">string19,</if>
             <if test="string20 != null  and string20 != ''">string20,</if>
+            <if test="discount != null  and discount != ''">discount,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="productId != null ">#{productId},</if>
@@ -381,6 +383,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="string18 != null  and string18 != ''">#{string18},</if>
             <if test="string19 != null  and string19 != ''">#{string19},</if>
             <if test="string20 != null  and string20 != ''">#{string20},</if>
+            <if test="discount != null  and discount != ''">#{discount},</if>
          </trim>
     </insert>
 
@@ -428,6 +431,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="string18 != null  and string18 != ''">string18 = #{string18},</if>
             <if test="string19 != null  and string19 != ''">string19 = #{string19},</if>
             <if test="string20 != null  and string20 != ''">string20 = #{string20},</if>
+            <if test="discount != null  and discount != ''">discount = #{discount},</if>
         </trim>
         where quotation_id = #{quotationId}
     </update>

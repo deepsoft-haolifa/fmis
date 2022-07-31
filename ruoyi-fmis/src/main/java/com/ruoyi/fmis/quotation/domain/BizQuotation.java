@@ -301,6 +301,9 @@ public class BizQuotation extends BaseEntity {
     @Setter
     private String createById;
 
+    @Getter
+    @Setter
+    private String discount;
     /** 产品ID */
     @Excel(name = "产品ID")
     private Long productId;

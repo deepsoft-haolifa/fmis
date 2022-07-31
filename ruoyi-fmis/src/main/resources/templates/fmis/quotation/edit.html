@@ -117,7 +117,10 @@
                 <div class="col-sm-3">
                     <input name="productTotalPrice" id="productTotalPrice" class="form-control" type="text" readonly required>
                 </div>
-
+                <label class="col-sm-1 control-label">优惠金额：</label>
+                                <div class="col-sm-2">
+                                    <input name="discount" id="discount" class="form-control" th:field="*{discount}" type="text" onkeyup="AmountKeyUp(this)" onblur="calculateTotalPrice()">
+                                </div>
                 <label class="col-sm-1 control-label">报价总金额：</label>
                 <div class="col-sm-3">
                     <input name="totalPrice" id="totalPrice" class="form-control" type="text" readonly required>
@@ -680,11 +683,11 @@
             if (isEmpty(specialExpenses)) {
                 specialExpenses = 0;
             }
-            var discountPrice = $("#string14").val();
+            var discountPrice = $("#discount").val();
             if (isEmpty(discountPrice)) {
                 discountPrice = 0;
             }
-            $("#productTotalPrice").val(parseFloat(productTotalPrice).toFixed(2));
+            $("#productTotalPrice").val(parseFloat(productTotalPrice).toFixed(2) -  parseFloat(discountPrice).toFixed(2));
             var totalPrice = parseFloat(productTotalPrice) + parseFloat(specialExpenses);
             $("#totalPrice").val(parseFloat(totalPrice).toFixed(2));
 
