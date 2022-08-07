@@ -61,7 +61,7 @@
             <a class="btn btn-warning" onclick="exportPdf()" shiro:hasPermission="fmis:data:export">
                 <i class="fa fa-download"></i> 生成合同
             </a>
-            <a class="btn btn-warning" onclick="$.table.exportExcel()">
+            <a class="btn btn-warning" onclick="exportEx()">
                 <i class="fa fa-download"></i> 导出
             </a>
 
@@ -104,6 +104,7 @@
             updateUrl: prefix + "/edit/{id}",
             removeUrl: prefix + "/remove",
             exportUrl: prefix + "/export",
+            exportEXUrl: prefix + "/exportEx",
             modalName: "合同管理",
             uniqueId: "dataId",
             rowStyle:function (row, index) {
@@ -546,7 +547,34 @@
         window.open("../pdfjs/web/viewer.html?file=" + viewUrl + "?id%3D" + row.dataId);
         $.modal.closeLoading();
     }
+    function exportEx(formId) {
 
+        var row = $('#bootstrap-table').bootstrapTable('getSelections')[0];
+        var rows = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
+        if ($.common.isEmpty(row) || rows.length != 1) {
+            $.modal.alertWarning("请选择一条记录");
+            return;
+        }
+
+
+        $.modal.confirm("确定生成合同吗？", function() {
+            var currentId = $.common.isEmpty(formId) ? $('form').attr('id') : formId;
+            console.log("currentId=" + currentId);
+            $.modal.loading("正在导出数据，请稍后...");
+            var paramsJson = $("#" + currentId).serializeArray();
+            paramsJson.push({"name": "dataId", "value": row.dataId});
+            $.post($.table._option.exportEXUrl, paramsJson, function(result) {
+                if (result.code == web_status.SUCCESS) {
+                    window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;
+                } else if (result.code == web_status.WARNING) {
+                    $.modal.alertWarning(result.msg)
+                } else {
+                    $.modal.alertError(result.msg);
+                }
+                $.modal.closeLoading();
+            });
+        });
+    }
 </script>
 </body>
 </html>

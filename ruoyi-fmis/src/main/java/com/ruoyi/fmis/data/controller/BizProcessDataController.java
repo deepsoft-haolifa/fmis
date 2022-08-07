@@ -30,12 +30,14 @@ import com.ruoyi.fmis.common.CommonUtils;
 import com.ruoyi.fmis.customer.domain.BizCustomer;
 import com.ruoyi.fmis.customer.service.IBizCustomerService;
 import com.ruoyi.fmis.data.domain.BizProcessData;
+import com.ruoyi.fmis.data.domain.ProcessDataEx;
 import com.ruoyi.fmis.data.domain.SaleListExportDTO;
 import com.ruoyi.fmis.data.service.IBizProcessDataService;
 import com.ruoyi.fmis.define.service.IBizProcessDefineService;
 import com.ruoyi.fmis.dict.service.IBizDictService;
 import com.ruoyi.fmis.file.domain.BizAccessory;
 import com.ruoyi.fmis.file.service.IBizAccessoryService;
+import com.ruoyi.fmis.finance.domain.QuotationEx;
 import com.ruoyi.fmis.pattachment.domain.BizProductAttachment;
 import com.ruoyi.fmis.pattachment.service.IBizProductAttachmentService;
 import com.ruoyi.fmis.product.domain.BizProduct;
@@ -44,6 +46,7 @@ import com.ruoyi.fmis.productref.domain.BizProductRef;
 import com.ruoyi.fmis.productref.service.IBizProductRefService;
 import com.ruoyi.fmis.quotation.domain.BizQuotation;
 import com.ruoyi.fmis.quotation.service.IBizQuotationService;
+import com.ruoyi.fmis.quotationproduct.domain.BizQuotationProduct;
 import com.ruoyi.fmis.suppliers.domain.BizSuppliers;
 import com.ruoyi.fmis.suppliers.service.IBizSuppliersService;
 import com.ruoyi.fmis.util.CalcUtils;
@@ -2410,6 +2413,44 @@ public class BizProcessDataController extends BaseController {
         queryBizProcessChild.setProcurementNo(bizProcessData.getProcurementNo());
         List<BizProcessChild> bizProcessChildList = bizProcessChildService.selectBizTestRef1List(queryBizProcessChild);
         return getDataTable(bizProcessChildList);
+    }
+    /**
+     * 导出报价单excel
+     */
+    @RequiresPermissions("fmis:quotation:export")
+    @PostMapping("/exportEx")
+    @ResponseBody
+    public AjaxResult exportEx(HttpServletRequest request,HttpServletResponse response,BizProcessData bizProcessDataRequest) {
+        String id = "";
+        if (bizProcessDataRequest == null) {
+            id = request.getParameter("id");
+        } else {
+            id = bizProcessDataRequest.getDataId().toString();
+        }
+        BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataById(Long.parseLong(id));
+        // 产品标识
+        String productLogoValue = "";
+        if (StringUtils.isNotEmpty(bizProcessData.getString19())) {
+            productLogoValue = dictDataService.selectDictLabel("product_logo", bizProcessData.getString19());
+        }
+        //产品信息
+        BizProcessChild queryBizProcessChild = new BizProcessChild();
+        queryBizProcessChild.setDataId(bizProcessData.getDataId());
+        List<BizProcessChild> bizProcessChildList = bizProcessChildService.selectBizQuotationProductList(queryBizProcessChild);
+        List<ProcessDataEx> processDataExes = new ArrayList<>();
+        for (BizProcessChild bizProcessChild : bizProcessChildList) {
+            ProcessDataEx processDataEx = new ProcessDataEx();
+            processDataEx.setModel(bizProcessChild.getModel());
+            processDataEx.setpNumber(bizProcessChild.getProductNum());
+            processDataEx.setString1(bizProcessChild.getSeries());
+            processDataEx.setSpecifications(bizProcessChild.getSpecifications());
+            processDataEx.setProductPrice(bizProcessChild.getProductPrice() + "");
+            processDataEx.setProductCoefficient(bizProcessChild.getProductCoefficient() + "");
+            processDataExes.add(processDataEx);
+        }
+        ExcelUtil<ProcessDataEx> util = new ExcelUtil<ProcessDataEx>(ProcessDataEx.class);
+
+        return util.exportExcel(processDataExes, "processData");
     }
 
     @PostMapping("/selectBizTestRef2List")
