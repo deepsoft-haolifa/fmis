@@ -1256,7 +1256,7 @@ public class BizProcessDataProcurementController extends BaseController {
                     //合计
                     table.addCell(PdfUtil.mergeCol((Integer.parseInt(bizProcessChild.getProductNum()) * bizProcessChild.getProductProcurementPrice()) + "", 1, textFont));
                     //材质
-                    table.addCell(PdfUtil.mergeCol("阀体:" + bizProcessChild.getValvebodyMaterial() + ",阀芯:" + bizProcessChild.getValvebodyMaterial()
+                    table.addCell(PdfUtil.mergeCol("阀体:" + bizProcessChild.getValvebodyMaterial() + ",阀芯:" + bizProcessChild.getValveElement()
                             + ",密封材质:" + bizProcessChild.getSealingMaterial() + ",驱动形式:" + bizProcessChild.getDriveForm()
                             + ",连接方式:" + bizProcessChild.getConnectionType(), 3, textFont));
                     //备注

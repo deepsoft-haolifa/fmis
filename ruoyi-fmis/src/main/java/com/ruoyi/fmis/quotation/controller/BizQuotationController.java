@@ -543,7 +543,7 @@ public class BizQuotationController extends BaseController {
             }
             paragraphRemark.add(new Chunk("        3、供货方式： " + payMethod , remarkFont));
             paragraphRemark.add(Chunk.NEWLINE);
-            paragraphRemark.add(new Chunk("        4、价格有效期  " + bizQuotation.getString12() + "   天；", remarkFont));
+            paragraphRemark.add(new Chunk("        4、价格有效期：  " + bizQuotation.getString12() + "   天；", remarkFont));
             paragraphRemark.add(Chunk.NEWLINE);
 
 
