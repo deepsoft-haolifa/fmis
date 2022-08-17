@@ -455,6 +455,9 @@ public class BizProcessDataProcurementController extends BaseController {
     public AjaxResult addSave(BizProcessData bizProcessData) {
         bizProcessData.setFlowStatus("-1");
         Map<String, SysRole> flowAllMap = bizProcessDefineService.getFlowAllMap(bizProcessData.getBizId());
+        if (bizProcessData.getPrice20() != null && !bizProcessData.getPrice20().equals("")) {
+            bizProcessData.setPrice1(bizProcessData.getPrice1() - bizProcessData.getPrice20());
+        }
         if (!CollectionUtils.isEmpty(flowAllMap)) {
             for (String key : flowAllMap.keySet()) {
                 bizProcessData.setNormalFlag(key);
@@ -1387,9 +1390,19 @@ public class BizProcessDataProcurementController extends BaseController {
             table.addCell(PdfUtil.mergeColRight("合计", 7, textFont));//4
             table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(sumTotalNum), 1, textFont));//总数量
             table.addCell(PdfUtil.mergeCol("", 1, textFont));//单价
-            table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(sumTotalAmount), 1, textFont));//合计
-            table.addCell(PdfUtil.mergeCol("", 6
-                    , textFont));//备注
+            if (bizProcessData.getPrice20() !=null && !bizProcessData.getPrice20().equals("") && !bizProcessData.getPrice20().equals("0")&& !bizProcessData.getPrice20().equals("0.00")) {
+                table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(sumTotalAmount - bizProcessData.getPrice20()), 1, textFont));//合计
+            } else {
+                table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(sumTotalAmount), 1, textFont));//合计
+            }
+            if (bizProcessData.getPrice20() !=null && !bizProcessData.getPrice20().equals("") && !bizProcessData.getPrice20().equals("0")&& !bizProcessData.getPrice20().equals("0.00")) {
+                table.addCell(PdfUtil.mergeCol("优惠金额："+ bizProcessData.getPrice20(), 6
+                        , textFont));//备注
+            } else {
+                table.addCell(PdfUtil.mergeCol("", 6
+                        , textFont));//备注
+            }
+
 
             table.addCell(PdfUtil.mergeColRight("以上价格均为含13%增值税价格", 5, textFont));
             table.addCell(PdfUtil.mergeCol(StringUtils.convert(sumTotalAmount), 3, textFont));//合计

@@ -509,7 +509,7 @@ public class BizQuotationController extends BaseController {
             String totalRemark = "阀门：" + sumTotalNum + " 台   法兰合计：" + sumTotalNumRef1 + " 片   螺栓合计：" + sumTotalNumRef2 + " 条   总金额：" + sumTotalAmount;
             table.addCell(PdfUtil.mergeColRight("合计", 9,textFont));
             table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(sumTotalNum), 1,textFont));//总数量
-            if (bizQuotation.getDiscount()!= null && !bizQuotation.getDiscount().equals("0")) {
+            if (bizQuotation.getDiscount()!= null && !bizQuotation.getDiscount().equals("0") && !bizQuotation.getDiscount().equals("0.00")) {
                 table.addCell(PdfUtil.mergeCol("优惠金额：" + bizQuotation.getDiscount(), 1,textFont));//单价
             }
             table.addCell(PdfUtil.mergeCol("", 1,textFont));//单价
@@ -519,7 +519,7 @@ public class BizQuotationController extends BaseController {
 
             table.addCell(PdfUtil.mergeColRight("大写人民币合计", 9,textFont));
             table.addCell(PdfUtil.mergeCol(StringUtils.convert(sumTotalAmount), 3,textFont));//合计
-            table.addCell(PdfUtil.mergeCol("", 3,textFont));//备注
+            table.addCell(PdfUtil.mergeCol(bizQuotation.getRemark(), 3,textFont));//备注
 
             // 特别提醒
             Paragraph paragraphRemark = new Paragraph();
