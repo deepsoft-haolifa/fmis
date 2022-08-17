@@ -151,8 +151,11 @@
                 <div class="col-sm-4">
                     <input name="purchaseSpecificRequests" class="form-control" type="text">
                 </div>
+                <label class="col-sm-1 control-label">优惠金额：</label>
+                <div class="col-sm-1">
+                    <input name="price20" class="form-control" type="text" onkeyup="dis(this)">
+                </div>
             </div>
-
         </form>
 
         <div class="col-sm-12 select-table table-striped">
@@ -263,7 +266,29 @@
             var url = prefix + "/selectCustomer";
             $.modal.open("关联客户", url,widthNum, heigthNum);
         }
-
+        function dis (obj) {
+            console.log("-----start" + obj.value)
+            var t = obj.value.charAt(0);
+            //先把非数字的都替换掉，除了数字和.和-号
+            obj.value = obj.value.replace(/[^\d\.\-]/g,'');
+            //前两位不能是0加数字
+            obj.value = obj.value.replace(/^0\d[0-9]*/g,'');
+            //必须保证第一个为数字而不是.
+            obj.value = obj.value.replace(/^\./g,'');
+            //保证只有出现一个.而没有多个.
+            obj.value = obj.value.replace(/\.{2,}/g,'.');
+            //保证.只出现一次，而不能出现两次以上
+            obj.value = obj.value.replace('.','$#$').replace(/\./g,'').replace('$#$','.');
+            //如果第一位是负号，则允许添加
+            obj.value = obj.value.replace(/^(\-)*(\d+)\.(\d\d\d\d\d\d).*$/,'$1$2.$3');
+            if(t == '-'){ return; }
+            /*console.log("-----end" )
+            var totalPrice = $('#price1').val();
+            console.log("totalPrice:" + totalPrice)
+            var discount =  obj.value;
+            console.log("discount:" + discount)
+            $("#price1").val(totalPrice - discount);*/
+        }
         var setupTypeData = [[${@dict.getType('actuator_setup_type')}]];
         var string2Datas = [[${@dict.getType('product_level')}]];
         var supplierTypeData = [[${@dict.getType('supplier_type')}]];
