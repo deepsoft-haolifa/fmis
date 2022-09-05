@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改采购管理')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg" onload="initExpandRow()">
+<div class="modal fade" id="loadingModalFmis">
+    <div style="width: 200px;height:20px; z-index: 20000; position: absolute; text-align: center; left: 50%; top: 50%;margin-left:-100px;margin-top:-10px">
+        <div class="progress progress-striped active" style="margin-bottom: 0;">
+            <div class="progress-bar" style="width: 100%;"></div>
+        </div>
+        <h5 id="processBarDiv">请稍后...</h5>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-data-edit" th:object="${bizProcessData}">
+        <input name="dataId" id="dataId" th:field="*{dataId}" type="hidden">
+        <input type="hidden" name="bizEditFlag" id="bizEditFlag" value="2"/>
+        <input type="hidden" name="bizId" value="procurement"/>
+
+        <div class="form-group">
+            <label class="col-sm-1 control-label">结算单位：</label>
+            <div class="col-sm-2">
+                <input name="string1" class="form-control" readonly th:field="*{string1}" type="text">
+            </div>
+            <label class="col-sm-1 control-label">归属单位：</label>
+            <div class="col-sm-2">
+                <input name="string2" class="form-control" th:field="*{string2}" readonly type="text">
+            </div>
+            <label class="col-sm-1 control-label">订货日期：</label>
+            <div class="col-sm-2">
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input name="datetime1" class="form-control" placeholder="yyyy-MM-dd" readonly th:value="${#dates.format(bizProcessData.datetime1,'yyyy-MM-dd')}" type="text">
+                </div>
+            </div>
+            <label class="col-sm-1 control-label">生产单号：</label>
+            <div class="col-sm-2">
+                <input name="string3" class="form-control" th:field="*{string3}" readonly type="text">
+            </div>
+
+        </div>
+        <div class="form-group">
+            <label class="col-sm-1 control-label">类别：</label>
+            <div class="col-sm-2">
+                <input name="string5" class="form-control" th:field="*{string5}" readonly type="text">
+            </div>
+
+
+
+
+            <label class="col-sm-1 control-label">供应商：</label>
+            <div class="col-sm-2">
+                <select name="string6" style="pointer-events: none;" id="string6" class="form-control select2-multiple" > <!--multiple-->
+                    <option value="">请选择</option>
+                    <option th:each="supplier:${suppliers}" th:value="${supplier.suppliersId}" th:selected="${supplier.flag}" th:text="${supplier.name}"></option>
+                </select>
+            </div>
+
+           <!-- <label class="col-sm-1 control-label">订货产品：</label>
+            <div class="col-sm-2">
+                <input name="string7" class="form-control" th:field="*{string7}" readonly type="text">
+            </div>-->
+
+            <label class="col-sm-1 control-label">销售合同交付日期：</label>
+            <div class="col-sm-2">
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input name="datetime2" class="form-control" placeholder="yyyy-MM-dd" readonly th:value="${#dates.format(bizProcessData.datetime2,'yyyy-MM-dd')}" type="text">
+                </div>
+            </div>
+            <label class="col-sm-1 control-label">供应商发货日期：</label>
+            <div class="col-sm-2">
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input name="datetime3" class="form-control" placeholder="yyyy-MM-dd" readonly th:value="${#dates.format(bizProcessData.datetime3,'yyyy-MM-dd')}" type="text">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-1 control-label">包装规范：</label>
+            <div class="col-sm-2">
+                <input name="string27" class="form-control" th:field="*{string27}" type="text" readonly>
+            </div>
+            <label class="col-sm-1 control-label">交货地点：</label>
+            <div class="col-sm-2">
+                <input name="string24" class="form-control" th:field="*{string24}" type="text" readonly>
+            </div>
+<!--            <label class="col-sm-1 control-label">收货信息：</label>-->
+<!--            <div class="col-sm-2">-->
+<!--                <input name="string25" class="form-control" th:field="*{string25}" type="text">-->
+<!--            </div>-->
+            <label class="col-sm-1 control-label">运费承担：</label>
+            <div class="col-sm-2">
+                <select name="string26" id="string26" class="form-control m-b" th:with="type=${@dict.getType('buyer')}">
+                    <option value="0">请选择</option>
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{string26}"></option>
+                </select>
+            </div>
+
+        </div>
+
+        <div class="form-group">
+            <!--<label class="col-sm-1 control-label">回传：</label>
+            <div class="col-sm-2">
+                <input name="string8" th:field="*{string8}" class="form-control" readonly type="text">
+            </div>-->
+            <label class="col-sm-1 control-label">收货人：</label>
+            <div class="col-sm-2">
+                <input name="string28" class="form-control" th:field="*{string28}" type="text">
+            </div>
+            <label class="col-sm-1 control-label">运输方式：</label>
+            <div class="col-sm-2">
+                <input name="string9" class="form-control" th:field="*{string9}" readonly type="text">
+            </div>
+            <label class="col-sm-1 control-label">付款方式：</label>
+            <div class="col-sm-2">
+                <select name="string20" disabled id="string20" th:field="*{string20}" class="form-control m-b" th:with="type=${@dict.getType('contract_paytype')}">
+                    <option value="0">请选择</option>
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                </select>
+            </div>
+            <label class="col-sm-1 control-label">采购合同号：</label>
+            <div class="col-sm-2">
+                <input name="string12" class="form-control" type="text" th:field="*{string12}" readonly>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-1 control-label">特殊要求：</label>
+            <div class="col-sm-4">
+                <input name="purchaseSpecificRequests" class="form-control" th:field="*{purchaseSpecificRequests}" type="text" readonly>
+            </div>
+        </div>
+
+        <input type="hidden" id="numJsonValue" name="numJsonValue" th:value="${numJsonValue}"/>
+    </form>
+    <div class="col-sm-12 select-table table-striped">
+        <table id="bootstrap-table"  class="text-nowrap"></table>
+    </div>
+</div>
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: datetimepicker-js" />
+<th:block th:include="include :: bootstrap-editable-css" />
+<th:block th:include="include :: bootstrap-table-editable-js" />
+<script th:inline="javascript">
+    var prefix = ctx + "fmis/procurement";
+    $("#form-data-edit").validate({
+        focusCleanup: true
+    });
+
+    function submitHandler() {
+        if ($.validate.form()) {
+
+            if (overAllIds.length == 0) {
+                $.modal.alertWarning("请至少选择一条记录");
+                return;
+            }
+            var dataObj = $('#form-data-edit').serializeArray();
+            var datas = [];
+            var productArray = [];
+            $.each(overAllIds,function(index,value){
+                var num = numberMap.get(value);
+                if (num == null) {
+                    num = "-1";
+                }
+                var productObj = new Object();
+                var values = value.split("_");
+                var type = values[0];
+                var childId = values[1];
+                var dataId = values[2];
+                var procurementId = values[3];
+                var levelValue = values[4];
+                productObj["type"] = type;
+                productObj["childId"] = childId;
+                productObj["string1"] = num;
+                productObj["string2"] = dataId;
+                productObj["string3"] = procurementId;
+                productObj["string5"] = levelValue;
+                productObj["dataStatus"] = "1";
+                productArray.push(productObj);
+            })
+
+            dataObj.push({"name": "productParmters", "value": JSON.stringify(productArray)});
+            $.operate.save(prefix + "/edit", dataObj);
+        }
+    }
+
+    $("input[name='datetime1']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+
+    $("input[name='datetime2']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+
+    $("input[name='datetime3']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+    var setupTypeData = [[${@dict.getType('actuator_setup_type')}]];
+    var string2Datas = [[${@dict.getType('product_level')}]];
+    var supplierTypeData = [[${@dict.getType('supplier_type')}]];
+</script>
+<script th:src="@{/js/biz/procurementSkg.js}"></script>
+</body>
+</html>

@@ -123,6 +123,15 @@ public class BizProcessDataProcurementController extends BaseController {
         }
         return prefix + "/data";
     }
+    @RequiresPermissions("fmis:procurement:view")
+    @GetMapping("kg")
+    public String kg(ModelMap mmap) {
+        String supplierId = getRequest().getParameter("supplierId");
+        if (StringUtils.isNotEmpty(supplierId)) {
+            mmap.put("supplierId", supplierId);
+        }
+        return prefix + "/kg";
+    }
 
     /**
      * 查询合同管理列表
@@ -819,7 +828,50 @@ public class BizProcessDataProcurementController extends BaseController {
 
         return prefix + "/viewDetail";
     }
+    @GetMapping("/kgviewDetail")
+    public String kgviewDetail(ModelMap mmap) {
+        String dataId = getRequest().getParameter("dataId");
+        BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataById(Long.parseLong(dataId));
 
+        String customerId = bizProcessData.getString4();
+        if (StringUtils.isNotEmpty(customerId)) {
+            bizProcessData.setBizCustomer(bizCustomerService.selectBizCustomerById(Long.parseLong(customerId)));
+        }
+
+        //查询已经选中的采购
+        BizDataStatus queryBizDataStatus = new BizDataStatus();
+        queryBizDataStatus.setString4(bizProcessData.getDataId().toString());
+        List<BizDataStatus> bizDataStatuses = bizDataStatusService.selectBizDataStatusList(queryBizDataStatus);
+        JSONArray numJsonValue = new JSONArray();
+        if (!CollectionUtils.isEmpty(bizDataStatuses)) {
+            for (BizDataStatus bizDataStatus : bizDataStatuses) {
+                String type = bizDataStatus.getType();
+                String childId = bizDataStatus.getChildId().toString();
+                String num = bizDataStatus.getString1();
+                String bizDataId = bizDataStatus.getString2();
+                String parentContractId = bizDataStatus.getString3();
+                String levelValue = bizDataStatus.getString5();
+                JSONObject jsonObject = new JSONObject();
+                String k = type + "_" + childId + "_" + bizDataId + "_" + parentContractId + "_" + levelValue;
+                jsonObject.put("id", k);
+                jsonObject.put("num", num);
+                numJsonValue.add(jsonObject);
+            }
+        }
+        mmap.put("numJsonValue", numJsonValue);
+        mmap.put("bizProcessData", bizProcessData);
+
+        List<BizSuppliers> suppliersList = bizSuppliersService.selectAllList();
+        for (BizSuppliers suppliers : suppliersList) {
+            String supplierId = bizProcessData.getString6() == null ? "" : bizProcessData.getString6();
+            if (supplierId.equals(suppliers.getSuppliersId().toString())) {
+                suppliers.setFlag(true);
+            }
+        }
+        mmap.put("suppliers", suppliersList);
+
+        return prefix + "/kgviewDetail";
+    }
     @GetMapping("/startTest")
     public String startTest(ModelMap mmap) {
         String dataId = getRequest().getParameter("dataId");

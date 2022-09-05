@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('采购管理列表')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+
+                        <li>
+                            <p>状态：</p>
+                            <select name="queryStatus" class="form-control m-b">
+                                <option value="0">全部</option>
+                                <option value="1">待办</option>
+                                <option value="2">已办</option>
+                            </select>
+                            <input type="hidden" name="bizId" id="bizId" value="procurement"/>
+                        </li>
+
+                        <li>
+                            <p>供应商：</p>
+                            <input type="hidden" name="string6" id="supplierId"/>
+                            <input type="text" name="supplierName" value=""/>
+                        </li>
+                        <li>
+                            <p>销售合同号：</p>
+                            <input type="text" name="string10" value=""/>
+                        </li>
+                        <li>
+                            <p>采购合同号：</p>
+                            <input type="text" name="string12" value=""/>
+                        </li>
+                        <li>
+                            <p>归属单位：</p>
+                            <input type="text" name="string2" value=""/>
+                        </li>
+
+                        <li>
+                            <p>采购状态：</p>
+                            <select name="status" th:with="type=${@dict.getType('procurement_status')}">
+                                <option value="">所有</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                        th:value="${dict.dictValue}"></option>
+                            </select>
+                        </li>
+
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <!--
+            <a class="btn btn-success" onclick="add()" shiro:hasPermission="fmis:procurement:add">
+                <i class="fa fa-plus"></i> 添加
+            </a> -->
+            <a class="btn btn-primary single disabled" onclick="edit()" shiro:hasPermission="fmis:procurement:edit">
+                <i class="fa fa-edit"></i> 修改
+            </a>
+            <a class="btn btn-danger multiple disabled" onclick="remove()"
+               shiro:hasPermission="fmis:procurement:remove">
+                <i class="fa fa-remove"></i> 删除
+            </a>
+            <!--
+            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="fmis:procurement:export">
+                <i class="fa fa-download"></i> 导出
+             </a> -->
+            <a class="btn btn-warning" onclick="exportPdf()">
+                <i class="fa fa-download"></i> 生成合同
+            </a>
+
+            <a class="btn btn-success" onclick="viewPdf()">
+                <i class="fa fa-street-view"></i> 预览合同
+            </a>
+            <a class="btn btn-success" onclick="$.table.exportExcel()">
+                <i class="fa fa-street-view"></i> 导出
+            </a>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('fmis:procurement:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('fmis:procurement:remove')}]];
+    var prefix = ctx + "fmis/procurement";
+    var supplierTypeData = [[${@dict.getType('supplier_type')}]];
+    var procurementStatusData = [[${@dict.getType('procurement_status')}]];
+    var supplierId = [[${supplierId}]];
+    if (!$.common.isEmpty(supplierId)) {
+        $("#supplierId").val(supplierId);
+    }
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            uniqueId: "dataId",
+            modalName: "采购管理",
+            rowStyle:function (row, index) {
+                if(row.flowStatusRemark != null && row.flowStatusRemark.indexOf("不同意") > -1) {
+                    return {css:{"background-color":"rgb(171,170,58)"}};
+                }
+                return {css:{"background-color":"rgba(248,245,245)"}}
+            },
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'dataId',
+                    title: 'ID',
+                    visible: false
+                },
+
+                {
+                    field: 'string1',
+                    title: '结算单位'
+                },
+                {
+                    field: 'string12',
+                    title: '采购合同号'
+                },
+                {
+                    field: 'string10',
+                    title: '销售合同号'
+                },
+                {
+                    field: 'string2',
+                    title: '归属单位'
+                },
+                {
+                    field: 'datetime1',
+                    title: '订货日期'
+                },
+                // {
+                //     field: 'string3',
+                //     title: '生产单号'
+                // },
+
+                {
+                    field: 'string5',
+                    title: '类别'
+                },
+                {
+                    field: 'supplierName',
+                    title: '供应商'
+                }/*,
+                {
+                    field : 'string7',
+                    title : '订货产品'
+                },
+                {
+                    field : 'string8',
+                    title : '回传'
+                }*/,
+                {
+                    field: 'datetime2',
+                    title: '销售合同交付日期'
+                },
+                {
+                    field: 'datetime3',
+                    title: '供应商发货日期'
+                },
+                {
+                    field: 'string9',
+                    title: '运输方式'
+                },
+                {
+                    field: 'purchaseNum',
+                    title: '采购数量'
+                },
+                {
+                    field: 'putStorageNum',
+                    title: '入库数量'
+                },
+                /*{
+                    field: 'payTotal',
+                    title: '付款总额'
+                },
+                {
+                    field: 'price1',
+                    title: '合计'
+                },*/
+                {
+                    field: 'remark',
+                    title: '备注'
+                },
+                {
+                    field: 'status',
+                    title: '采购状态',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(procurementStatusData, value);
+                    }
+                },
+                {
+                    field: 'flowStatusRemark',
+                    title: '审批状态',
+                    align: 'center'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        var flowStatus = row.flowStatus;
+                        var normalFlag = row.normalFlag;
+                        var createBy = row.createBy;
+                        var loginUserId = row.loginUserId;
+                        var operationExamineStatus = row.operationExamineStatus;
+                        var canTest = row.canTest;
+                        //质检状态
+                        var testStatus = row.string10;
+                        if (flowStatus < 1) {
+                            if (flowStatus === "0") {
+                                //已上报
+                            } else {
+                                if (loginUserId === createBy) {
+                                actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="edit(\'' + row.dataId + '\')"><i class="fa fa-edit"></i> 编辑</a> ');
+                                actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="remove(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 删除</a>');
+                                actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subReport(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 上报</a>');
+                                }
+                            }
+                        } else if (flowStatus === normalFlag) {
+                            //已完成
+                            /**
+                             if (testStatus == 1) {
+                                actions.push('<i class="fa fa-save">质检中</i>');
+                            } else {
+                                if (loginUserId == createBy) {
+                                    actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subTest(\'' + row.dataId + '\')"><i class="fa fa-save"></i> 发起质检</a>');
+                                }
+                            }*/
+                            console.log("rowId="+row.dataId+"loginUserId=" + loginUserId + " createBy=" + createBy,'canTest=',canTest);
+
+                            if (loginUserId == createBy && canTest == 1) {
+                                actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subTest(\'' + row.dataId + '\')"><i class="fa fa-save"></i> 发起质检</a>');
+                            }
+                        } else if (operationExamineStatus == true || operationExamineStatus == "true") {
+                            //审批
+                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="subExamine(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 审批</a>');
+                        }
+                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewExamineHistory(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 审批记录 </a>');
+                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewExamineDetail(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 详情 </a>');
+                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="exportReceipt(\'' + row.dataId + '\')"><i class="fa fa-remove"></i> 导出验收单 </a>');
+
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(options);
+    });
+
+    function add() {
+        var url = prefix + "/add";
+        $.modal.openFull("增加", url);
+    }
+
+    function edit(id) {
+        if ($.common.isEmpty(id) && $.table._option.type == table_type.bootstrapTreeTable) {
+            var row = $.bttTable.bootstrapTreeTable('getSelections')[0];
+            if ($.common.isEmpty(row)) {
+                $.modal.alertWarning("请至少选择一条记录");
+                return;
+            }
+            var flowStatus = row.flowStatus;
+            if (flowStatus > 0) {
+                $.modal.alertWarning("已上报数据不能修改");
+                return;
+            }
+
+            var url = $.table._option.updateUrl.replace("{id}", row[$.table._option.uniqueId]);
+            $.modal.openFull("修改" + $.table._option.modalName, url);
+        } else {
+            var row = $('#bootstrap-table').bootstrapTable("getRowByUniqueId", id);
+            if (row == null) {
+                row = $('#bootstrap-table').bootstrapTable('getSelections')[0];
+            }
+            if (row != null) {
+                var flowStatus = row.flowStatus;
+                if (flowStatus > 0) {
+                    $.modal.alertWarning("已上报数据不能修改");
+                    return;
+                }
+            }
+            $.modal.openFull("修改" + $.table._option.modalName, $.operate.editUrl(id));
+        }
+    }
+
+    function remove(id) {
+        if ($.common.isEmpty(id)) {
+            var row = $('#bootstrap-table').bootstrapTable('getSelections')[0];
+            if ($.common.isEmpty(row)) {
+                $.modal.alertWarning("请至少选择一条记录");
+                return;
+            }
+
+            var rowss = $('#bootstrap-table').bootstrapTable('getSelections');
+            for (var i = 0; i < rowss.length; i++) {
+                row = rowss[i];
+                var flowStatus = row.flowStatus;
+                if (flowStatus > 0) {
+                    $.modal.alertWarning("已上报数据不能删除");
+                    return;
+                }
+            }
+            var rows = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
+            $.modal.confirm("确认要删除选中的" + rows.length + "条数据吗?", function () {
+                var url = $.table._option.removeUrl;
+                var data = {"ids": rows.join()};
+                $.operate.submit(url, "post", "json", data);
+            });
+        } else {
+            var row = $('#bootstrap-table').bootstrapTable("getRowByUniqueId", id);
+            if (row == null) {
+                row = $('#bootstrap-table').bootstrapTable('getSelections')[0];
+            }
+            if (row != null) {
+                var flowStatus = row.flowStatus;
+                if (flowStatus > 0) {
+                    $.modal.alertWarning("已上报数据不能删除");
+                    return;
+                }
+            }
+            $.modal.confirm("确定删除该条" + $.table._option.modalName + "信息吗？", function () {
+                var url = $.common.isEmpty(id) ? $.table._option.removeUrl : $.table._option.removeUrl.replace("{id}", id);
+                if ($.table._option.type == table_type.bootstrapTreeTable) {
+                    $.operate.get(url);
+                } else {
+                    var data = {"ids": id};
+                    $.operate.submit(url, "post", "json", data);
+                }
+            });
+        }
+    }
+
+    function viewExamineHistory(dataId) {
+        var bizId = $("#bizId").val();
+        var url = prefix + "/viewExamineHistory?dataId=" + dataId + "&&bizId=" + bizId;
+        $.modal.openNoEnter("审批记录", url, '', '', function () {
+            $.modal.closeAll();
+        });
+    }
+
+    function subExamine(dataId) {
+        var url = prefix + "/examineEdit?dataId=" + dataId;
+        $.modal.openFull("审批", url);
+    }
+
+    function subReport(dataId) {
+        $.modal.confirm("确定上报该条信息吗？", function () {
+            console.log(dataId + "--dataId");
+            var url = prefix + "/report?dataId=" + dataId;
+            $.operate.saveModal(url, '', function () {
+                $.table.refresh();
+            });
+        });
+    }
+
+    function exportReceipt(dataId) {
+        $.modal.confirm("确定导出采购合同验收记录吗？", function() {
+            $.modal.loading("正在导出数据，请稍后...");
+            window.location.href=prefix + "/export/receipt/"+dataId;
+            $.modal.closeLoading();
+        });
+    }
+
+    function subTest(dataId) {
+        var url = prefix + "/startTest?dataId=" + dataId;
+        $.modal.openNoEnter("发起质检", url, $(window).width(), $(window).height(), function () {
+            $.modal.closeAll();
+        });
+    }
+
+    function viewExamineDetail(dataId) {
+        var url = prefix + "/kgviewDetail?dataId=" + dataId;
+
+        $.modal.openNoEnter("详情", url, $(window).width(), $(window).height(), function () {
+            $.modal.closeAll();
+        });
+    }
+
+    /**
+     * 预览报价单
+     * @param formId
+     */
+    function viewPdf(formId) {
+
+        var row = $('#bootstrap-table').bootstrapTable('getSelections')[0];
+        var rows = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
+        if ($.common.isEmpty(row) || rows.length != 1) {
+            $.modal.alertWarning("请选择一条记录");
+            return;
+        }
+
+        var currentId = $.common.isEmpty(formId) ? $('form').attr('id') : formId;
+        console.log("currentId=" + currentId);
+        $.modal.loading("正在导出数据，请稍后...");
+        var paramsJson = $("#" + currentId).serializeArray();
+        paramsJson.push({"name": "dataId", "value": row.dataId});
+        paramsJson.push({"name": "status", "value": "1"});
+        var viewUrl = prefix + "/viewPdf";
+        console.log(row.dataId + "--row.dataId");
+        window.open("../pdfjs/web/viewer.html?file=" + viewUrl + "?id%3D" + row.dataId);
+        $.modal.closeLoading();
+    }
+
+    function exportPdf(formId) {
+
+        var row = $('#bootstrap-table').bootstrapTable('getSelections')[0];
+        var rows = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
+        if ($.common.isEmpty(row) || rows.length != 1) {
+            $.modal.alertWarning("请选择一条记录");
+            return;
+        }
+        var flowStatus = row.flowStatus;
+        var normalFlag = row.normalFlag;
+        if (flowStatus == "0" || flowStatus != normalFlag) {
+            $.modal.alertWarning("请等待审批结束后生成！");
+            return;
+        }
+        $.modal.confirm("确定生成合同吗？", function () {
+            var currentId = $.common.isEmpty(formId) ? $('form').attr('id') : formId;
+            console.log("currentId=" + currentId);
+            $.modal.loading("正在导出数据，请稍后...");
+            var paramsJson = $("#" + currentId).serializeArray();
+            paramsJson.push({"name": "dataId", "value": row.dataId});
+            $.post($.table._option.exportUrl, paramsJson, function (result) {
+                if (result.code == web_status.SUCCESS) {
+                    window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;
+                } else if (result.code == web_status.WARNING) {
+                    $.modal.alertWarning(result.msg)
+                } else {
+                    $.modal.alertError(result.msg);
+                }
+                $.modal.closeLoading();
+            });
+        });
+    }
+</script>
+</body>
+</html>

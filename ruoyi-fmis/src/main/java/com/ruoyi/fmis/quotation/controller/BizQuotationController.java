@@ -660,15 +660,25 @@ public class BizQuotationController extends BaseController {
         bizQuotationProduct.setQuotationId(bizQuotation.getQuotationId());
         List<BizQuotationProduct> bizQuotationProducts = bizQuotationProductService.selectBizQuotationProductDictList(bizQuotationProduct);
         List<QuotationEx> quotationExes = new ArrayList<>();
+        int i = 1;
         for (BizQuotationProduct bizQuotationProduct1 : bizQuotationProducts) {
             QuotationEx quotationEx = new QuotationEx();
-            quotationEx.setModel(bizQuotationProduct1.getBizProduct().getModel());
-            quotationEx.setpNumber(bizQuotationProduct1.getProductNum());
-            quotationEx.setString1(bizQuotationProduct1.getBizProduct().getString1());
+            quotationEx.setNumber(i);
+            quotationEx.setProductId(bizQuotationProduct1.getBizProduct().getModel() + bizQuotationProduct1.getBizProduct().getSpecifications());
+            quotationEx.setProductName(bizQuotationProduct1.getBizProduct().getName());
+            quotationEx.setPressure(bizQuotationProduct1.getBizProduct().getNominalPressure());
             quotationEx.setSpecifications(bizQuotationProduct1.getBizProduct().getSpecifications());
+            quotationEx.setpNumber(bizQuotationProduct1.getProductNum());
             quotationEx.setProductPrice(bizQuotationProduct1.getBizProduct().getPrice() + "");
-            quotationEx.setProductCoefficient(bizQuotationProduct1.getProductCoefficient() + "");
+            quotationEx.setTotal(Integer.parseInt(bizQuotationProduct1.getProductNum())* bizQuotationProduct1.getBizProduct().getPrice() + "");
+            String caizhi = "阀体材质:" + bizQuotationProduct1.getBizProduct().getValvebodyMaterial();
+            caizhi = caizhi + "\\r\\n" + "阀板材质:" + bizQuotationProduct1.getBizProduct().getValveMaterial();
+            caizhi = caizhi + "\\r\\n"  + "密封材质:" + bizQuotationProduct1.getBizProduct().getSealingMaterial();
+            caizhi = caizhi + "\\r\\n" + "阀芯材质:" + bizQuotationProduct1.getBizProduct().getValveElement();
+            quotationEx.setCaizhi(caizhi);
+            quotationEx.setRemark(bizQuotationProduct1.getRemark());
             quotationExes.add(quotationEx);
+            i++;
         }
         ExcelUtil<QuotationEx> util = new ExcelUtil<QuotationEx>(QuotationEx.class);
 

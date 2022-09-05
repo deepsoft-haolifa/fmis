@@ -57,6 +57,8 @@ public class BizProduct extends BaseEntity {
 
     /** 公称压力 */
     @Excel(name = "公称压力")
+    @Getter
+    @Setter
     private String nominalPressure;
 
     /** 连接方式 */
