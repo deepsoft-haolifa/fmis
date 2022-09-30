@@ -944,14 +944,14 @@ public class BizQuotationController extends BaseController {
             num = 3;
         }
         JSONArray productArray = JSONArray.parseArray(productArrayStr);
-        Double minCoefficient = new Double(10000000);
+        Double minCoefficient = new Double(1);
         //未修改的并且系数为1的时候的价格
         Double price = 0.0;
         for (int i = 0; i < productArray.size(); i++) {
             JSONObject json = productArray.getJSONObject(i);
             BizQuotationProduct bizQuotationProduct = JSONObject.parseObject(json.toJSONString(), BizQuotationProduct.class);
             if (bizQuotationProduct.getProductId() != null) {
-                String actuatorCoefficient = bizQuotationProduct.getActuatorCoefficient();
+                /*String actuatorCoefficient = bizQuotationProduct.getActuatorCoefficient();
                 if (StringUtils.isNotEmpty(actuatorCoefficient) && Double.parseDouble(actuatorCoefficient) < minCoefficient
                         && Double.parseDouble(actuatorCoefficient) > 0) {
                     minCoefficient = Double.parseDouble(actuatorCoefficient);
@@ -972,6 +972,11 @@ public class BizQuotationController extends BaseController {
                 if (StringUtils.isNotEmpty(productRef2Coefficient) && Double.parseDouble(productRef2Coefficient) < minCoefficient
                         && Double.parseDouble(productRef2Coefficient) > 0) {
                     minCoefficient = Double.parseDouble(productRef2Coefficient);
+                }*/
+                String productAllCoefficient = bizQuotationProduct.getString6();
+                if (StringUtils.isNotEmpty(productAllCoefficient) && Double.parseDouble(productAllCoefficient) < minCoefficient
+                        && Double.parseDouble(productAllCoefficient) > 0) {
+                    minCoefficient = Double.parseDouble(productAllCoefficient);
                 }
                 if (bizQuotationProduct.getPrice1() == null) {
                     bizQuotationProduct.setPrice1(0.0);

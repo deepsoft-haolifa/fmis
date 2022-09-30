@@ -284,7 +284,9 @@ public class BizQuotation extends BaseEntity {
     @Getter
     @Setter
     private String actuatorCoefficient;
-
+    @Getter
+    @Setter
+    private String totalPriceOnly;
     @Getter
     @Setter
     private String ref1Name;
@@ -387,7 +389,7 @@ public class BizQuotation extends BaseEntity {
     /** 备用9 总金额 冗余字段*/
     private String string9;
 
-    /** 备用10 */
+    /** 整单系数 */
     private String string10;
 
     /** 状态（0正常 1停用） */

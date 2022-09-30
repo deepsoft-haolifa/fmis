@@ -209,12 +209,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <sql id="selectBizQuotationProductVo">
         select q.quotation_id,
           q.special_expenses,q.payment_method,q.freight,q.lead_time,q.report_project,q.normal_flag,q.flow_status,q.remark,q.string1,
-          q.string2,q.string3,q.string4,q.string5,q.string6,q.string7,q.string8,q.string9,q.string10,q.status,q.del_flag,u.user_name as create_by,
+          q.string2,q.string3,q.string4,q.string5,q.string6,q.string8,q.string9,q.string10,q.status,q.del_flag,u.user_name as create_by,
           q.create_time,q.update_by,q.update_time,q.discount,
-          ct.name as customerName,
+          ct.name as customerName,qp.string7 string7,
           qp.product_id,qp.product_ref1_id,qp.product_ref1_num,qp.product_ref2_id,qp.product_ref2_num,qp.actuator_id,
           qp.product_num as productNum,qp.product_coefficient as productCoefficient,qp.product_ref1_coefficient as productRef1Coefficient,
-          qp.product_ref2_coefficient as productRef2Coefficient,qp.actuator_num as actuatorNum,qp.actuator_coefficient as actuatorCoefficient,
+          qp.product_ref2_coefficient as productRef2Coefficient,qp.actuator_num as actuatorNum,qp.actuator_coefficient as actuatorCoefficient,qp.total_price_only as totalPriceOnly,
           pr1.name as ref1Name,pr2.name as ref2Name,p.name as productName,ac.name as actuatorName,
           p.price as productPrice,pr1.price as ref1Price,pr2.price as ref2Price,ac.price as actuatorPrice,concat(q.quotation_id,'-',qp.product_id) as quotationProductId,
 

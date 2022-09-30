@@ -46,6 +46,24 @@
         </div>
 
         <form class="form-horizontal m" id="form-quotation-add">
+            <div class="form-group">
+                <label class="col-sm-1 control-label">报价总金额：</label>
+                <div class="col-sm-2">
+                    <input name="totalPrice" id="totalPrice" class="form-control" type="text"  readonly>
+                </div>
+                <label class="col-sm-1 control-label">优惠金额：</label>
+                <div class="col-sm-2">
+                    <input name="discount" id="discount" class="form-control" type="text" onkeyup="AmountKeyUp(this)" onblur="calculateTotalPrice()">
+                </div>
+                <label class="col-sm-1 control-label">优惠后金额：</label>
+                <div class="col-sm-2">
+                    <input name="productTotalPrice" id="productTotalPrice" class="form-control" type="text" readonly>
+                </div>
+                <label class="col-sm-1 control-label">整单系数：</label>
+                <div class="col-sm-2">
+                    <input name="orderCoefficient" id="orderCoefficient" class="form-control" type="text"  readonly>
+                </div>
+            </div>
 
             <div class="form-group">
                 <label class="col-sm-1 control-label">客户名称：</label>
@@ -57,20 +75,8 @@
                 <div class="col-sm-5">
                     <input name="string1" id="string1" class="form-control" type="text" readonly th:value="${bh}" required>
                 </div>
-
             </div>
 
-
-            <div class="form-group">
-                <label class="col-sm-1 control-label">特殊费用：</label>
-                <div class="col-sm-5">
-                    <input name="specialExpenses" id="specialExpenses" th:value="0" onblur="calculateTotalPrice()" onkeyup="AmountKeyUp(this)" class="form-control" type="text">
-                </div>
-                <label class="col-sm-1 control-label">费用说明：</label>
-                <div class="col-sm-5">
-                    <input name="string4" id="string4" class="form-control" type="text"  placeholder="特殊费用说明">
-                </div>
-            </div>
             <div class="form-group">
                 <label class="col-sm-1 control-label">付款方式：</label>
                 <div class="col-sm-3">
@@ -90,8 +96,8 @@
             </div>
             <div class="form-group">
                 <label class="col-sm-1 control-label">供货周期：</label>
-                <div class="col-sm-4 form-inline">
-                     <input name="leadTime" style="width: 50px;" class="form-control" type="text" > &nbsp;天
+                <div class="col-sm-3 form-inline">
+                     <input name="leadTime" style="width: 70px;" class="form-control" type="text" > &nbsp;天
                 </div>
                 <label class="col-sm-1 control-label" >报备项目：</label>
                 <div class="col-sm-3">
@@ -105,7 +111,6 @@
                     </select>
                 </div>
 
-
             </div>
 
 
@@ -117,38 +122,31 @@
                 </div>
             </div>-->
 
-            <div class="form-group">
-                <label class="col-sm-1 control-label">价格有效期：</label>
-                <div class="col-sm-4 form-inline">
-                    <input name="string12" value="30" style="width: 50px;" class="form-control" type="text" required> &nbsp;天
-                </div>
-                <label class="col-sm-1 control-label">产品金额：</label>
-                <div class="col-sm-3">
-                    <input name="productTotalPrice" id="productTotalPrice" class="form-control" type="text" readonly>
-                </div>
-                <label class="col-sm-1 control-label">优惠金额：</label>
-                    <div class="col-sm-2">
-                        <input name="discount" id="discount" class="form-control" type="text" onkeyup="AmountKeyUp(this)" onblur="calculateTotalPrice()">
-                    </div>
-                <label class="col-sm-1 control-label">报价总金额：</label>
-                <div class="col-sm-3">
-                    <input name="totalPrice" id="totalPrice" class="form-control" type="text"  readonly>
-                </div>
-            </div>
 
             <div class="form-group" >
+                <label class="col-sm-1 control-label">价格有效期：</label>
+                <div class="col-sm-3 form-inline">
+                    <input name="string12" value="30" style="width: 70px;" class="form-control" type="text" required> &nbsp;天
+                </div>
                 <label class="col-sm-1 control-label">毛利：</label>
-                <div class="col-sm-2">
+                <div class="col-sm-3">
                     <input name="grossPrice" id="grossPrice" class="form-control" type="text"  readonly>
                 </div>
+
                 <label class="col-sm-1 control-label">报价备注：</label>
-                <div class="col-sm-8">
+                <div class="col-sm-3">
                     <input name="remark" class="form-control" type="text" >
                 </div>
-
-
             </div>
             <div class="form-group">
+                <label class="col-sm-1 control-label">特殊费用：</label>
+                <div class="col-sm-3">
+                    <input name="specialExpenses" id="specialExpenses" th:value="0" onblur="calculateTotalPrice()" onkeyup="AmountKeyUp(this)" class="form-control" type="text">
+                </div>
+                <label class="col-sm-1 control-label">费用说明：</label>
+                <div class="col-sm-3">
+                    <input name="string4" id="string4" class="form-control" type="text"  placeholder="特殊费用说明">
+                </div>
                 <label class="col-sm-1 control-label">报价单位：</label>
                 <div class="col-sm-3">
                     <select name="string19" id="string19" class="form-control" required>
@@ -159,7 +157,6 @@
                         <option  th:text="山西好利阀机械制造有限公司"  th:value="山西好利阀机械制造有限公司"></option>
                     </select>
                 </div>
-
             </div>
             <!-- 选择产品传参 -->
             <input type="hidden" id="productsJsonParamter" value=""/>
@@ -290,7 +287,9 @@
                     productObj["pattachment4Price"] = rowData["pattachment4Price"];
                     productObj["pattachment4Count"] = rowData["pattachment4Count"];
                     productObj["pattachment4Coefficient"] = rowData["pattachment4Coefficient"];
-
+                    productObj["totalPriceOnly"] = rowData["totalPriceOnly"];
+                    productObj["string7"] = rowData["string7"];
+                    console.log("string7："+rowData["string7"])
 
                     productArray.push(productObj);
                 }
@@ -299,6 +298,8 @@
                 dataObj.push({"name": "string9", "value": totalPrice});
                 var grossPrice = $("#grossPrice").val();
                 dataObj.push({"name": "string20", "value": grossPrice});
+                var orderCoefficient = $("#orderCoefficient").val();
+                dataObj.push({"name": "string18", "value": orderCoefficient});
                 $.operate.save(prefix + "/add", dataObj);
             }
         }
@@ -404,12 +405,12 @@
                     {field : 'productNum',title : '数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
                     {field : 'productPrice',title : '底价',editable: false},
                     {field : 'productCostPrice',title : '产品成本价',editable: false,visible: false},
-
+                    {field : 'string7',title : '整套系数',editable: false},
                     {field : 'productCoefficient',title : '系数',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
                     {field : 'totalPrice',title : '总价',editable: false},
                     /*{field : 'string4',title : '优惠',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},*/
 
-                    {field : 'totalPriceOnly',title : '单价',editable: false},
+                    {field : 'totalPriceOnly',title : '单价',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
 
 
 
@@ -520,6 +521,9 @@
 
         function onEditableSave (field, row, oldValue, $el) {
             //alert("字段名：" + field + "，当前值：" + row[field]  + "，旧值：" + oldValue);
+            if (field == "totalPriceOnly") {
+                calculateTotalOnlyPrice();
+            }
             if (field == "productNum" || field == "productCoefficient" || field == "productRef1Num"|| field == "productRef1Coefficient"
                 || field == "productRef2Num"|| field == "productRef2Coefficient" || field == "actuatorNum" || field == "actuatorCoefficient"
                 || field == "pattachmentPrice" || field == "pattachment1Price" || field == "pattachment2Price" || field == "pattachment3Price" || field == "pattachment4Price"
@@ -659,8 +663,11 @@
 
             var totalPriceOnly = parseFloat(parseFloat(productSumOnly) + parseFloat(productRef1SumOnly) + parseFloat(productRef2SumOnly) + parseFloat(actuatorSumOnly)
                 + parseFloat(pattachmentSumOnly)+ parseFloat(pattachment1SumOnly)+ parseFloat(pattachment2SumOnly)+ parseFloat(pattachment3SumOnly)+ parseFloat(pattachment4SumOnly)).toFixed(2);
+            //计算单个产品总价不包括系数
 
+            var productAll =  parseFloat(parseFloat(productNum * productPrice) + parseFloat(productRef1Num * productRef1Price) + parseFloat(productRef2Num * productRef2Price) + parseFloat(actuatorNum * actuatorPrice) + parseFloat(pattachmentCount * pattachmentPrice) + parseFloat(pattachment1Count * pattachment1Price) + parseFloat(pattachment2Count * pattachment2Price) + parseFloat(pattachment3Count * pattachment3Price) + parseFloat(pattachment4Count * pattachment4Price)).toFixed(2);
 
+            totalCostPriceMap.set("productAll",productAll);
 
             var updateObjOnly = {
                 index : row.rowId,
@@ -669,7 +676,16 @@
             };
             console.log("updateObjOnly2=" + JSON.stringify(updateObjOnly));
             $.btTable.bootstrapTable("updateCell",updateObjOnly);
-
+            console.log("actuatorNum:" + actuatorNum);
+            console.log("actuatorPrice:" + actuatorPrice);
+            console.log("productAll:" + productAll);
+            console.log(parseFloat(productNum * productPrice)+ parseFloat(actuatorNum * actuatorPrice));
+            var string7 = {
+                index : row.rowId,
+                field : "string7",
+                value : parseFloat(totalSum / productAll).toFixed(2)
+            };
+            $.btTable.bootstrapTable("updateCell",string7);
             var updateObj = {
                 index : row.rowId,
                 field : "totalPrice",
@@ -682,23 +698,175 @@
             //$("#totalSum_" + productId).val(totalSum);
             return totalSum;
         }
+
+
+        function calculateOnlyPrice (row) {
+            var productNum = row["productNum"];
+            productNum = isEmpty(productNum) == true ? 0 : parseFloat(productNum);
+            var totalPriceOnly = parsePrice(row["totalPriceOnly"]);
+
+            var productCoefficient = row["productCoefficient"];
+            productCoefficient = isEmpty(productCoefficient) == true ? 0 : parseFloat(productCoefficient);
+
+            var productPrice = row["productPrice"];
+            productPrice = isEmpty(productPrice) == true ? 0 : parseFloat(productPrice);
+
+            //法兰
+            var productRef1Num = row["productRef1Num"];
+            productRef1Num = isEmpty(productRef1Num) == true ? 0 : parseFloat(productRef1Num);
+            var productRef1Coefficient = row["productRef1Coefficient"];
+            productRef1Coefficient = isEmpty(productRef1Coefficient) == true ? 0 : parseFloat(productRef1Coefficient);
+            var productRef1Price = row["ref1Price"];
+            productRef1Price = isEmpty(productRef1Price) == true ? 0 : parseFloat(productRef1Price);
+
+            //螺栓
+            var productRef2Num = row["productRef2Num"];
+            productRef2Num = isEmpty(productRef2Num) == true ? 0 : productRef2Num;
+            var productRef2Coefficient = row["productRef2Coefficient"];
+            productRef2Coefficient = isEmpty(productRef2Coefficient) == true ? 0 : parseFloat(productRef2Coefficient);
+            var productRef2Price = row["ref2Price"];
+            productRef2Price = isEmpty(productRef2Price) == true ? 0 : parseFloat(productRef2Price);
+            //执行器
+            var actuatorNum = row["actuatorNum"];
+            actuatorNum = isEmpty(actuatorNum) == true ? 0 : actuatorNum;
+            var actuatorCoefficient = row["actuatorCoefficient"];
+            actuatorCoefficient = isEmpty(actuatorCoefficient) == true ? 0 : parseFloat(actuatorCoefficient);
+            var actuatorPrice = row["actuatorPrice"];
+            actuatorPrice = isEmpty(actuatorPrice) == true ? 0 : parseFloat(actuatorPrice);
+
+            //附件
+            var pattachmentCount = row["pattachmentCount"];
+            pattachmentCount = isEmpty(pattachmentCount) == true ? 0 : pattachmentCount;
+            var pattachmentCoefficient = row["pattachmentCoefficient"];
+            pattachmentCoefficient = isEmpty(pattachmentCoefficient) == true ? 0 : parseFloat(pattachmentCoefficient);
+            var pattachmentPrice = row["pattachmentPrice"];
+            pattachmentPrice = isEmpty(pattachmentPrice) == true ? 0 : parseFloat(pattachmentPrice);
+            var pattachmentSum = parseFloat(pattachmentCount * pattachmentPrice * pattachmentCoefficient).toFixed(2);
+            var pattachmentSumOnly = parseFloat(pattachmentPrice * pattachmentCoefficient).toFixed(2);
+
+
+            //附件1
+            var pattachment1Count = row["pattachment1Count"];
+            pattachment1Count = isEmpty(pattachment1Count) == true ? 0 : pattachment1Count;
+            var pattachment1Coefficient = row["pattachment1Coefficient"];
+            pattachment1Coefficient = isEmpty(pattachment1Coefficient) == true ? 0 : parseFloat(pattachment1Coefficient);
+            var pattachment1Price = row["pattachment1Price"];
+            pattachment1Price = isEmpty(pattachment1Price) == true ? 0 : parseFloat(pattachment1Price);
+            var pattachment1Sum = parseFloat(pattachment1Count * pattachment1Price * pattachment1Coefficient).toFixed(2);
+            var pattachment1SumOnly = parseFloat(pattachment1Price * pattachment1Coefficient).toFixed(2);
+
+            //附件2
+            var pattachment2Count = row["pattachment2Count"];
+            pattachment2Count = isEmpty(pattachment2Count) == true ? 0 : pattachment2Count;
+            var pattachment2Coefficient = row["pattachment2Coefficient"];
+            pattachment2Coefficient = isEmpty(pattachment2Coefficient) == true ? 0 : parseFloat(pattachment2Coefficient);
+            var pattachment2Price = row["pattachment2Price"];
+            pattachment2Price = isEmpty(pattachment2Price) == true ? 0 : parseFloat(pattachment2Price);
+            var pattachment2Sum = parseFloat(pattachment2Count * pattachment2Price * pattachment2Coefficient).toFixed(2);
+            var pattachment2SumOnly = parseFloat(pattachment2Price * pattachment2Coefficient).toFixed(2);
+
+            //附件3
+            var pattachment3Count = row["pattachment3Count"];
+            pattachment3Count = isEmpty(pattachment3Count) == true ? 0 : pattachment3Count;
+            var pattachment3Coefficient = row["pattachment3Coefficient"];
+            pattachment3Coefficient = isEmpty(pattachment3Coefficient) == true ? 0 : parseFloat(pattachment3Coefficient);
+            var pattachment3Price = row["pattachment3Price"];
+            pattachment3Price = isEmpty(pattachment3Price) == true ? 0 : parseFloat(pattachment3Price);
+            var pattachment3Sum = parseFloat(pattachment3Count * pattachment3Price * pattachment3Coefficient).toFixed(2);
+            var pattachment3SumOnly = parseFloat(pattachment3Price * pattachment3Coefficient).toFixed(2);
+
+            //附件4
+            var pattachment4Count = row["pattachment4Count"];
+            pattachment4Count = isEmpty(pattachment4Count) == true ? 0 : pattachment4Count;
+            var pattachment4Coefficient = row["pattachment4Coefficient"];
+            pattachment4Coefficient = isEmpty(pattachment4Coefficient) == true ? 0 : parseFloat(pattachment4Coefficient);
+            var pattachment4Price = row["pattachment4Price"];
+            pattachment4Price = isEmpty(pattachment4Price) == true ? 0 : parseFloat(pattachment4Price);
+            var pattachment4Sum = parseFloat(pattachment4Count * pattachment4Price * pattachment4Coefficient).toFixed(2);
+            var pattachment4SumOnly = parseFloat(pattachment4Price * pattachment4Coefficient).toFixed(2);
+
+            var productSum = parseFloat(productNum * productPrice * productCoefficient).toFixed(2);
+            var productSumOnly = parseFloat(productPrice * productCoefficient).toFixed(2);
+            var productRef1Sum = parseFloat(productRef1Num * productRef1Price * productRef1Coefficient).toFixed(2);
+            var productRef1SumOnly = parseFloat(productRef1Price * productRef1Coefficient).toFixed(2);
+            var productRef2Sum = parseFloat(productRef2Num * productRef2Price * productRef2Coefficient).toFixed(2);
+            var productRef2SumOnly = parseFloat(productRef2Price * productRef2Coefficient).toFixed(2);
+            var actuatorSum = parseFloat(actuatorNum * actuatorCoefficient * actuatorPrice).toFixed(2);
+            var actuatorSumOnly = parseFloat(actuatorCoefficient * actuatorPrice).toFixed(2);
+
+
+            var productCostPrice = parsePrice(row["productCostPrice"]);
+            var totalPriceCost = parseFloat(productNum * productCostPrice).toFixed(2);
+
+            var actuatorCostPrice = parsePrice(row["actuatorCostPrice"]);
+            var totalActuatorCost = parseFloat(actuatorNum * actuatorCostPrice).toFixed(2);
+            console.log("actuatorNum"+actuatorNum)
+
+            var ref1CostPrice = parsePrice(row["ref1CostPrice"]);
+            var totalRef1Cost = parseFloat(productRef1Num * ref1CostPrice).toFixed(2);
+            var ref2CostPrice = parsePrice(row["ref2CostPrice"]);
+            var totalRef2Cost = parseFloat(productRef2Num * ref2CostPrice).toFixed(2);
+
+            var pattachmentCostPrice = parsePrice(row["pattachmentCostPrice"]);
+            var totalPattachmentCost = parseFloat(pattachmentCount * pattachmentCostPrice).toFixed(2);
+            var pattachment1CostPrice = parsePrice(row["pattachment1CostPrice"]);
+            var totalPattachment1Cost = parseFloat(pattachment1Count * pattachment1CostPrice).toFixed(2);
+            var pattachment2CostPrice = parsePrice(row["pattachment2CostPrice"]);
+            var totalPattachment2Cost = parseFloat(pattachment2Count * pattachment2CostPrice).toFixed(2);
+            var pattachment3CostPrice = parsePrice(row["pattachment3CostPrice"]);
+            var totalPattachment3Cost = parseFloat(pattachment3Count * pattachment3CostPrice).toFixed(2);
+            var pattachment4CostPrice = parsePrice(row["pattachment4CostPrice"]);
+            var totalPattachment4Cost = parseFloat(pattachment4Count * pattachment4CostPrice).toFixed(2);
+
+            var totalCostPrice = parseFloat(parseFloat(totalPriceCost) + parseFloat(totalActuatorCost) + parseFloat(totalRef1Cost) + parseFloat(totalRef2Cost) + parseFloat(totalPattachmentCost)
+                + parseFloat(totalPattachment1Cost) + parseFloat(totalPattachment2Cost) + parseFloat(totalPattachment3Cost) + parseFloat(totalPattachment4Cost)).toFixed(2);
+            console.log("totalActuatorCost"+totalActuatorCost)
+            console.log("totalPriceCost"+totalPriceCost)
+            totalCostPriceMap.set("totalCostPrice",totalCostPrice);
+            var totalSum = totalPriceOnly * productNum;
+            var updateObj = {
+                index : row.rowId,
+                field : "totalPrice",
+                value : totalSum
+            };
+
+            console.log("updateObj2=" + JSON.stringify(updateObj));
+            $.btTable.bootstrapTable("updateCell",updateObj);
+            var productAll =  parseFloat( parseFloat(productNum * productPrice) + parseFloat(productRef1Num * productRef1Price) + parseFloat(productRef2Num * productRef2Price)
+                + parseFloat(actuatorNum * actuatorPrice) + parseFloat(pattachmentCount * pattachmentPrice) + parseFloat(pattachment1Count * pattachment1Price)
+                + parseFloat(pattachment2Count * pattachment2Price) + parseFloat(pattachment3Count * pattachment3Price) + parseFloat(pattachment4Count * pattachment4Price)).toFixed(2);
+            totalCostPriceMap.set("productAll",productAll);
+            var string7 = {
+                index : row.rowId,
+                field : "string7",
+                value : parseFloat(totalSum / productAll).toFixed(2)
+            };
+            $.btTable.bootstrapTable("updateCell",string7);
+            console.log("string7=" + JSON.stringify(string7));
+            $.btTable.bootstrapTable("updateCell",updateObj);
+            //$("#totalSum_" + productId).val(totalSum);
+            return totalSum;
+        }
         function parsePrice (p) {
             return isEmpty(p) == true ? 0 : parseFloat(p);
         }
         function calculateTotalPrice () {
             var data = $.btTable.bootstrapTable('getData');
             var productTotalPrice = 0;
+            var productAllPrice = 0; //不算系数所有产品总和
 
             var allTotalCost = 0;
             for (var i = 0; i < data.length; i++) {
                 var rowData = data[i];
                 var price = calculatePrice(rowData);
                 var totalCostPrice = totalCostPriceMap.get("totalCostPrice");
+                var totalproductAllPrice = totalCostPriceMap.get("productAll");
                 console.log("price" + price)
                 console.log("totalCostPrice" + totalCostPrice)
 
                 productTotalPrice = FloatAdd(productTotalPrice,price).toFixed(0);
                 allTotalCost =  FloatAdd(totalCostPrice,allTotalCost).toFixed(0);
+                productAllPrice =  FloatAdd(totalproductAllPrice,productAllPrice).toFixed(0);
             }
             var specialExpenses = $("#specialExpenses").val();
             if (isEmpty(specialExpenses)) {
@@ -721,6 +889,49 @@
             console.log("2"+allTotalCost)
             console.log("3"+specialExpenses)
             $("#grossPrice").val(grossPrice);
+            $("#orderCoefficient").val(parseFloat(totalPrice / parseFloat(productAllPrice)).toFixed(2));
+
+        }
+
+        function calculateTotalOnlyPrice () {
+            var data = $.btTable.bootstrapTable('getData');
+            var productTotalPrice = 0;
+            var productAllPrice = 0; //不算系数所有产品总和
+            var allTotalCost = 0;
+            for (var i = 0; i < data.length; i++) {
+                var rowData = data[i];
+                var price = calculateOnlyPrice(rowData);
+                var totalCostPrice = totalCostPriceMap.get("totalCostPrice");
+                var totalproductAllPrice = totalCostPriceMap.get("productAll");
+                console.log("price" + price)
+                console.log("totalCostPrice" + totalCostPrice)
+
+                productTotalPrice = FloatAdd(productTotalPrice,price).toFixed(0);
+                allTotalCost =  FloatAdd(totalCostPrice,allTotalCost).toFixed(0);
+                productAllPrice =  FloatAdd(totalproductAllPrice,productAllPrice).toFixed(0);
+            }
+            var specialExpenses = $("#specialExpenses").val();
+            if (isEmpty(specialExpenses)) {
+                specialExpenses = 0;
+            }
+            var discountPrice = $("#discount").val();
+            console.log("discountPrice:" + discountPrice)
+            if (isEmpty(discountPrice)) {
+                discountPrice = 0;
+            }
+
+            $("#productTotalPrice").val(parseFloat(productTotalPrice).toFixed(0) -  parseFloat(discountPrice));
+            // var totalPrice = parseFloat(productTotalPrice) + parseFloat(specialExpenses);
+            var totalPrice = parseFloat(productTotalPrice);
+            $("#totalPrice").val(parseFloat(totalPrice).toFixed(0));
+
+            //productTotalPrice 毛利 产品金额-成本价格-特殊费用
+            var grossPrice = (parseFloat(productTotalPrice) - parseFloat(allTotalCost) - parseFloat(specialExpenses) - parseFloat(discountPrice)).toFixed(0);
+            console.log("1"+productTotalPrice)
+            console.log("2"+allTotalCost)
+            console.log("3"+specialExpenses)
+            $("#grossPrice").val(grossPrice);
+            $("#orderCoefficient").val(parseFloat(totalPrice / parseFloat(productAllPrice)).toFixed(2));
 
         }
 
@@ -730,7 +941,12 @@
             }
         }
 
+        function updatePriceOnly(value) {
+            if (isNaN(value)) {
+                return "必须是数字！";
+            }
 
+        }
         function onReorderRow(data) {
             for (var i = 0; i < data.length; i++) {
                 //$("#columns_sort_" + data[i].columnId).val(i+1);

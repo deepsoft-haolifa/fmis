@@ -28,16 +28,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="string3"    column="string3"    />
         <result property="string4"    column="string4"    />
         <result property="string5"    column="string5"    />
+        <result property="string6"    column="string6"    />
         <result property="status"    column="status"    />
         <result property="delFlag"    column="del_flag"    />
         <result property="createBy"    column="create_by"    />
         <result property="createTime"    column="create_time"    />
         <result property="updateBy"    column="update_by"    />
         <result property="updateTime"    column="update_time"    />
+        <result property="updateTime"    column="update_time"    />
     </resultMap>
 
     <sql id="selectBizQuotationProductVo">
-        select qp_id, quotation_id, product_id, product_ref1_id, product_ref1_num, product_ref2_id, product_ref2_num, actuator_id, remark, string1, string2, string3, string4, string5, status, del_flag, create_by, create_time, update_by, update_time,
+        select qp_id, quotation_id, product_id, product_ref1_id, product_ref1_num, product_ref2_id, product_ref2_num, actuator_id, remark, string1, string2, string3, string4, string5,string6, status, del_flag, create_by, create_time, update_by, update_time,
          product_num,product_coefficient,product_ref1_coefficient,product_ref2_coefficient,actuator_num,actuator_coefficient from biz_quotation_product
     </sql>
 
@@ -56,6 +58,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="string3 != null  and string3 != ''"> and string3 = #{string3}</if>
             <if test="string4 != null  and string4 != ''"> and string4 = #{string4}</if>
             <if test="string5 != null  and string5 != ''"> and string5 = #{string5}</if>
+            <if test="string6 != null  and string6 != ''"> and string5 = #{string6}</if>
             <if test="status != null  and status != ''"> and status = #{status}</if>
         </where>
     </select>
@@ -73,7 +76,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
           qp.pattachment_count,qp.pattachment1_count,qp.pattachment2_count,qp.pattachment3_count,qp.pattachment4_count,
           qp.pattachment_price,qp.pattachment1_price,qp.pattachment2_price,qp.pattachment3_price,qp.pattachment4_price,
           qp.pattachment_coefficient,qp.pattachment1_coefficient,qp.pattachment2_coefficient,qp.pattachment3_coefficient,qp.pattachment4_coefficient,
-          qp.string6,qp.string7,qp.string8,qp.string9,qp.string10,qp.string11,qp.string12,qp.string13,qp.string14,qp.string15,
+          qp.string6,qp.string7,qp.string8,qp.string9,qp.string10,qp.string11,qp.string12,qp.string13,qp.string14,qp.string15,qp.total_price_only,
           pa.bh as pattachmentName,pa1.bh as pattachment1Name,pa2.bh as pattachment2Name,pa3.bh as pattachment3Name,pa4.bh as pattachment4Name
 
         from biz_quotation_product qp
@@ -182,6 +185,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="pattachment2Coefficient != null  and pattachment2Coefficient != ''">pattachment2_coefficient,</if>
             <if test="pattachment3Coefficient != null  and pattachment3Coefficient != ''">pattachment3_coefficient,</if>
             <if test="pattachment4Coefficient != null  and pattachment4Coefficient != ''">pattachment4_coefficient,</if>
+            <if test="totalPriceOnly != null  and totalPriceOnly != ''">total_price_only,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="quotationId != null ">#{quotationId},</if>
@@ -246,6 +250,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="pattachment2Coefficient != null  and pattachment2Coefficient != ''">#{pattachment2Coefficient},</if>
             <if test="pattachment3Coefficient != null  and pattachment3Coefficient != ''">#{pattachment3Coefficient},</if>
             <if test="pattachment4Coefficient != null  and pattachment4Coefficient != ''">#{pattachment4Coefficient},</if>
+            <if test="totalPriceOnly != null  and totalPriceOnly != ''">#{totalPriceOnly},</if>
 
          </trim>
     </insert>
@@ -315,6 +320,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="pattachment2Coefficient != null ">pattachment2_coefficient = #{pattachment2Coefficient},</if>
             <if test="pattachment3Coefficient != null ">pattachment3_coefficient = #{pattachment3Coefficient},</if>
             <if test="pattachment4Coefficient != null ">pattachment4_coefficient = #{pattachment4Coefficient},</if>
+            <if test="totalPriceOnly != null ">total_price_only = #{totalPriceOnly},</if>
         </trim>
         where qp_id = #{qpId}
     </update>

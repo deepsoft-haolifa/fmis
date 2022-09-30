@@ -114,6 +114,10 @@ public class BizQuotationProduct extends BaseEntity {
     @Setter
     private Double pattachment4Coefficient;
 
+    @Getter
+    @Setter
+    private Double totalPriceOnly;
+
     /** ID */
     private Long qpId;
     /** 价格1 */
