@@ -346,7 +346,8 @@
 
         var productPrice = row["productPrice"];
         productPrice = isEmpty(productPrice) == true ? 0 : parseFloat(productPrice);
-
+        var totalPriceOnly = row["totalPriceOnly"];
+        totalPriceOnly = isEmpty(totalPriceOnly) == true ? 0 : parseFloat(totalPriceOnly);
         //法兰
         var productRef1Num = row["productRef1Num"];
         productRef1Num = isEmpty(productRef1Num) == true ? 0 : parseFloat(productRef1Num);
@@ -430,13 +431,13 @@
         var actuatorSum = parseFloat(actuatorNum * actuatorCoefficient * actuatorPrice).toFixed(4);
         var actuatorSumOnly = parseFloat(actuatorCoefficient * actuatorPrice).toFixed(4);
 
-        var totalSum = parseFloat(parseFloat(productSum) + parseFloat(productRef1Sum) + parseFloat(productRef2Sum) + parseFloat(actuatorSum)
+        /*var totalSum = parseFloat(parseFloat(productSum) + parseFloat(productRef1Sum) + parseFloat(productRef2Sum) + parseFloat(actuatorSum)
             + parseFloat(pattachmentSum)+ parseFloat(pattachment1Sum)+ parseFloat(pattachment2Sum)+ parseFloat(pattachment3Sum)+ parseFloat(pattachment4Sum)).toFixed(4);
-
-
-        var totalPriceOnly = parseFloat(parseFloat(productSumOnly) + parseFloat(productRef1SumOnly) + parseFloat(productRef2SumOnly) + parseFloat(actuatorSumOnly)
-            + parseFloat(pattachmentSumOnly)+ parseFloat(pattachment1SumOnly)+ parseFloat(pattachment2SumOnly)+ parseFloat(pattachment3SumOnly)+ parseFloat(pattachment4SumOnly)).toFixed(4);
-
+*/
+        var totalSum = totalPriceOnly * parseFloat(productNum);
+        /* var totalPriceOnly = parseFloat(parseFloat(productSumOnly) + parseFloat(productRef1SumOnly) + parseFloat(productRef2SumOnly) + parseFloat(actuatorSumOnly)
+             + parseFloat(pattachmentSumOnly)+ parseFloat(pattachment1SumOnly)+ parseFloat(pattachment2SumOnly)+ parseFloat(pattachment3SumOnly)+ parseFloat(pattachment4SumOnly)).toFixed(4);
+ */
 
         var productCostPrice = parsePrice(row["productCostPrice"]);
         var totalPriceCost = parseFloat(productNum * productCostPrice).toFixed(4);

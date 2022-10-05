@@ -481,16 +481,20 @@ public class BizQuotationController extends BaseController {
 
 
                 Double totalAmount = new Double(0);
-                totalAmount = productTotal + ref1Total + ref2Tota + actuatorTotal;
+//                totalAmount = productTotal + ref1Total + ref2Tota + actuatorTotal;
+                Double productTotalPrice = Double.valueOf(bizProduct.getTotalPriceOnly()); //单价
+                totalAmount = productTotalPrice * Double.parseDouble(productNum);
 
                 sumTotalAmount = sumTotalAmount + totalAmount;
 
                 //总单价
-                Double productTotalPrice = Double.valueOf(totalAmount / Double.parseDouble(productNum));
+//                Double productTotalPrice = Double.valueOf(totalAmount / Double.parseDouble(productNum));
+
                 sumTotalPrice = sumTotalPrice + productTotalPrice;
                 table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(productTotalPrice), 1,textFont));//单价
 
-                table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(totalAmount), 1,textFont));//合计
+                table.addCell(PdfUtil.mergeCol(productTotalPrice * Double.parseDouble(productNum) + "", 1,textFont));//合计
+//                table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(totalAmount), 1,textFont));//合计
 
                 if (remark.length() == 1) {
                     remark = "";

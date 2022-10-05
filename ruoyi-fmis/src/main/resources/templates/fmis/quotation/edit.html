@@ -900,7 +900,7 @@
             }
             $("#productTotalPrice").val(parseFloat(productTotalPrice).toFixed(2) -  parseFloat(discountPrice).toFixed(2));
             var totalPrice = parseFloat(productTotalPrice) + parseFloat(specialExpenses);
-            console.log("totalPrice:---" + totalPrice);
+            console.log("totalPrice:---11--" + totalPrice);
             $("#totalPrice").val(parseFloat(totalPrice).toFixed(2));
 
             //productTotalPrice 毛利 产品金额-成本价格-特殊费用
@@ -1185,9 +1185,9 @@
                 + parseFloat(pattachmentSum)+ parseFloat(pattachment1Sum)+ parseFloat(pattachment2Sum)+ parseFloat(pattachment3Sum)+ parseFloat(pattachment4Sum)).toFixed(2);
 
 
-            var totalPriceOnly = parseFloat(parseFloat(productSumOnly) + parseFloat(productRef1SumOnly) + parseFloat(productRef2SumOnly) + parseFloat(actuatorSumOnly)
+           /* var totalPriceOnly = parseFloat(parseFloat(productSumOnly) + parseFloat(productRef1SumOnly) + parseFloat(productRef2SumOnly) + parseFloat(actuatorSumOnly)
                 + parseFloat(pattachmentSumOnly)+ parseFloat(pattachment1SumOnly)+ parseFloat(pattachment2SumOnly)+ parseFloat(pattachment3SumOnly)+ parseFloat(pattachment4SumOnly)).toFixed(2);
-
+*/
 
             var productCostPrice = parsePrice(row["productCostPrice"]);
             var totalPriceCost = parseFloat(productNum * productCostPrice).toFixed(2);

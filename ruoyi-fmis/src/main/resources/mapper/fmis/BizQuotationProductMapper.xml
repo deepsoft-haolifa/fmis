@@ -20,6 +20,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="productRef2Coefficient"    column="product_ref2_coefficient"    />
         <result property="actuatorNum"    column="actuator_num"    />
         <result property="actuatorCoefficient"    column="actuator_coefficient"    />
+        <result property="totalPriceOnly"    column="total_price_only"    />
 
 
         <result property="remark"    column="remark"    />
