@@ -302,8 +302,8 @@
         join biz_process_child pc1 on pc1.data_id=#{dataId} left join biz_data_status ds on ds.child_id=pc1.child_id
         and  ds.string2=biz_product.product_id
         where ds.data_status is null
-        and  concat(specifications, model,biz_product.string1) not in (select concat(specifications, model,biz_product.string1) from biz_product where product_id in (select ds2.string2 from biz_data_status ds2 left join biz_process_child pc2 on ds2.child_id=pc2.child_id  where pc2.`data_id` =#{dataId}))
-        and concat(specifications, model,biz_product.string1) in (select concat(specifications, model,biz_product.string1) from biz_product where product_id = pc1.string2)
+        and  concat(specifications, model,biz_product.string1, biz_product.remark) not in (select concat(specifications, model,biz_product.string1, biz_product.remark) from biz_product where product_id in (select ds2.string2 from biz_data_status ds2 left join biz_process_child pc2 on ds2.child_id=pc2.child_id  where pc2.`data_id` =#{dataId}))
+        and concat(specifications, model,biz_product.string1, biz_product.remark) in (select concat(specifications, model,biz_product.string1, biz_product.remark) from biz_product where product_id = pc1.string2)
         )
         as  pc on p.product_id = pc.product_id /*and pc.string2=p.product_id*/
         /*and ( p.product_id = pc.product_id or p.product_id = pc.string2)*/
