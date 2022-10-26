@@ -16,26 +16,38 @@
 
     <form class="form-horizontal m" id="form-quotation-edit" th:object="${bizQuotation}">
         <input name="quotationId" id="quotationId" th:field="*{quotationId}" type="hidden">
+
+        <div class="form-group">
+            <label class="col-sm-1 control-label">报价总金额：</label>
+            <div class="col-sm-2">
+                <input name="totalPrice" id="totalPrice" class="form-control" type="text" readonly required>
+            </div>
+            <label class="col-sm-1 control-label">优惠金额：</label>
+            <div class="col-sm-2">
+                <input name="discount" id="discount" class="form-control" th:field="*{discount}" type="text" onkeyup="AmountKeyUp(this)" onblur="calculateTotalOnlyPrice()">
+            </div>
+            <label class="col-sm-1 control-label">优惠后金额：</label>
+            <div class="col-sm-2">
+                <input name="productTotalPrice" id="productTotalPrice" class="form-control" type="text" readonly required>
+            </div>
+            <label class="col-sm-1 control-label">整单系数：</label>
+            <div class="col-sm-2">
+                <input name="orderCoefficient" th:field="*{string18}" id="orderCoefficient" class="form-control" type="text"  readonly>
+            </div>
+
+        </div>
         <div class="form-group">
             <label class="col-sm-1 control-label">客户名称：</label>
-            <div class="col-sm-3">
+            <div class="col-sm-5">
                 <input name="customerName" id="customerName" class="form-control" th:field="*{customerName}"  type="text" readonly onclick="selectCustomer()" required>
                 <input name="string2" id="string2" class="form-control" type="hidden" >
             </div>
             <label class="col-sm-1 control-label">报价单号：</label>
-            <div class="col-sm-3">
+            <div class="col-sm-5">
                 <input name="string1" id="string1" class="form-control" type="text" th:field="*{string1}" readonly  required>
-            </div>
-            <label class="col-sm-1 control-label">特殊费用：</label>
-            <div class="col-sm-3">
-                <input name="specialExpenses" th:field="*{specialExpenses}" onblur="totalSumPrice()" readonly onkeyup="AmountKeyUp(this)" class="form-control" type="text">
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-1 control-label">费用说明：</label>
-            <div class="col-sm-3">
-                <input name="string4" id="string4" th:field="*{string4}"  class="form-control" readonly type="text" placeholder="特殊费用说明">
-            </div>
             <label class="col-sm-1 control-label">付款方式：</label>
             <div class="col-sm-3">
                 <select name="paymentMethod" disabled class="form-control m-b" th:with="type=${@dict.getType('payment_method')}">
@@ -46,29 +58,29 @@
             <div class="col-sm-3 form-inline" id="string6Div" >
                 <input name="string6" id="string6" class="form-control" readonly th:field="*{string6}" type="text">
             </div>
-
+            <label class="col-sm-1 control-label">价格说明：</label>
+            <div class="col-sm-3 ">
+                <input name="freight" th:field="*{freight}" readonly class="form-control" type="text">
+            </div>
         </div>
 
 
         <div class="form-group">
 
-            <label class="col-sm-1 control-label">价格说明：</label>
-            <div class="col-sm-2 ">
-                <input name="freight" th:field="*{freight}" readonly class="form-control" type="text">
-            </div>
+
             <label class="col-sm-1 control-label"></label>
-            <div class="col-sm-2 form-inline">
+            <div class="col-sm-3 form-inline">
                 &nbsp;供货周期 &nbsp;<input name="leadTime" readonly th:field="*{leadTime}" style="width: 50px;" class="form-control" type="text"> &nbsp;天
             </div>
 
             <label class="col-sm-1 control-label">报备项目：</label>
-            <div class="col-sm-2">
+            <div class="col-sm-3">
                 <input name="reportProject" th:field="*{reportProject}" readonly class="form-control" type="text" >
             </div>
 
 
             <label class="col-sm-1 control-label">含税运费：</label>
-            <div class="col-sm-2">
+            <div class="col-sm-3">
                 <select name="string11" id="string11" disabled class="form-control"  th:with="type=${@dict.getType('included_freight')}">
                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:field="*{string11}"  th:value="${dict.dictValue}"></option>
                 </select>
@@ -107,12 +119,21 @@
             <div class="col-sm-2" th:if="${userFlowStatus == '4' || userFlowStatus == '5'}">
                 <input name="grossPrice" id="grossPrice" class="form-control" type="text"  readonly>
             </div>
+
             <label class="col-sm-1 control-label">备注：</label>
-            <div class="col-sm-8">
+            <div class="col-sm-3">
                 <input name="remark" th:field="*{remark}" class="form-control" readonly type="text" >
             </div>
         </div>
         <div class="form-group">
+            <label class="col-sm-1 control-label">费用说明：</label>
+            <div class="col-sm-3">
+                <input name="string4" id="string4" th:field="*{string4}"  class="form-control" readonly type="text" placeholder="特殊费用说明">
+            </div>
+            <label class="col-sm-1 control-label">特殊费用：</label>
+            <div class="col-sm-3">
+                <input name="specialExpenses" th:field="*{specialExpenses}" onblur="totalSumPrice()" readonly onkeyup="AmountKeyUp(this)" class="form-control" type="text">
+            </div>
             <label class="col-sm-1 control-label">报价单位：</label>
             <div class="col-sm-3">
                 <select name="string19" class="form-control m-b" >
