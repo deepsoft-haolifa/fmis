@@ -64,6 +64,9 @@
                 <a class="btn btn-success" onclick="viewPdf()">
                     <i class="fa fa-street-view"></i> 预览报价单
                 </a>
+                <a class="btn btn-success" onclick="exportQuotationExcel()">
+                    <i class="fa fa-street-view"></i> 导出excel
+                </a>
             </div>
             <div class="col-sm-12 select-table table-striped">
                 <table id="bootstrap-table"></table>
@@ -89,6 +92,7 @@
                 removeUrl: prefix + "/remove",
                 exportUrl: prefix + "/export",
                 exportEXUrl: prefix + "/exportEx",
+                exportQuotationExcel: prefix + "/exportQuotationExcel",
                 modalName: "报价单",
                 uniqueId: "quotationId",
                 rowStyle:function (row, index) {
@@ -309,6 +313,33 @@
             //注意路径问题 %3D是“=”号的转义，
             window.open("./pdfjs/web/viewer.html?file="+ url + "?teacherName%3D陈大大");
         }
+
+        function exportQuotationExcel(formId) {
+            var row = $('#bootstrap-table').bootstrapTable('getSelections')[0];
+            var rows = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
+            if ($.common.isEmpty(row) || rows.length != 1) {
+                $.modal.alertWarning("请选择一条记录");
+                return;
+            }
+            $.modal.confirm("确定生成报价单吗？", function() {
+                var currentId = $.common.isEmpty(formId) ? $('form').attr('id') : formId;
+                console.log("currentId=" + currentId);
+                $.modal.loading("正在导出数据，请稍后...");
+                var paramsJson = $("#" + currentId).serializeArray();
+                paramsJson.push({"name": "quotationId", "value": row.quotationId});
+                $.post($.table._option.exportQuotationExcel, paramsJson, function(result) {
+                    if (result.code == web_status.SUCCESS) {
+                        window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;
+                    } else if (result.code == web_status.WARNING) {
+                        $.modal.alertWarning(result.msg)
+                    } else {
+                        $.modal.alertError(result.msg);
+                    }
+                    $.modal.closeLoading();
+                });
+            });
+        }
+
         /**
          * 预览报价单
          * @param formId

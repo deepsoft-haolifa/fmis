@@ -85,6 +85,9 @@
             <a class="btn btn-success" onclick="$.table.exportExcel()">
                 <i class="fa fa-street-view"></i> 导出
             </a>
+            <a class="btn btn-success" onclick="exportPurchaseContract()">
+                <i class="fa fa-street-view"></i> 导出合同
+            </a>
         </div>
         <div class="col-sm-12 select-table table-striped">
             <table id="bootstrap-table"></table>
@@ -109,6 +112,7 @@
             updateUrl: prefix + "/edit/{id}",
             removeUrl: prefix + "/remove",
             exportUrl: prefix + "/export",
+            exportPurchaseContract: prefix + "/exportPurchaseContract",
             uniqueId: "dataId",
             modalName: "采购管理",
             rowStyle:function (row, index) {
@@ -416,6 +420,32 @@
         console.log(row.dataId + "--row.dataId");
         window.open("../pdfjs/web/viewer.html?file=" + viewUrl + "?id%3D" + row.dataId);
         $.modal.closeLoading();
+    }
+
+    function exportPurchaseContract(formId) {
+        var row = $('#bootstrap-table').bootstrapTable('getSelections')[0];
+        var rows = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
+        if ($.common.isEmpty(row) || rows.length != 1) {
+            $.modal.alertWarning("请选择一条记录");
+            return;
+        }
+        $.modal.confirm("确定导出合同吗？", function () {
+            var currentId = $.common.isEmpty(formId) ? $('form').attr('id') : formId;
+            console.log("currentId=" + currentId);
+            $.modal.loading("正在导出数据，请稍后...");
+            var paramsJson = $("#" + currentId).serializeArray();
+            paramsJson.push({"name": "dataId", "value": row.dataId});
+            $.post($.table._option.exportPurchaseContract, paramsJson, function (result) {
+                if (result.code == web_status.SUCCESS) {
+                    window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;
+                } else if (result.code == web_status.WARNING) {
+                    $.modal.alertWarning(result.msg)
+                } else {
+                    $.modal.alertError(result.msg);
+                }
+                $.modal.closeLoading();
+            });
+        });
     }
 
     function exportPdf(formId) {
