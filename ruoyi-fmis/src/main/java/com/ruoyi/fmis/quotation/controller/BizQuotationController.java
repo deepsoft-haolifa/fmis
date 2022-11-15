@@ -1941,7 +1941,7 @@ public class BizQuotationController extends BaseController {
             cell_15_2.setCellStyle(ExcelProcessDataUtils.cellLeft(workbook));
 
 
-            String filename = ExcelUtil.encodingFilename("报价单");
+            String filename = ExcelUtil.encodingFilenameByXls("报价单");
             OutputStream out = new FileOutputStream(getAbsoluteFile(filename));
             workbook.write(out);
             out.flush();

@@ -753,7 +753,7 @@ public class BizProcessDataController extends BaseController {
             cell_34_4.setCellValue("税    号：" + StringUtils.trim(bizCustomer.getString13()));
             sheet.addMergedRegion(new CellRangeAddress(zz, zz, 4, 7));
 
-            String filename = ExcelUtil.encodingFilename("销售合同");
+            String filename = ExcelUtil.encodingFilenameByXls("销售合同");
             OutputStream out = new FileOutputStream(getAbsoluteFile(filename));
             workbook.write(out);
             out.flush();

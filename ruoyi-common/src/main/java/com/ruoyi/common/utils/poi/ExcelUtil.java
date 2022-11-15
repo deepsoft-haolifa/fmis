@@ -693,6 +693,15 @@ public class ExcelUtil<T>
     }
 
     /**
+     * 编码文件名
+     */
+    public static String encodingFilenameByXls(String filename)
+    {
+        filename = UUID.randomUUID().toString() + "_" + filename + ".xls";
+        return filename;
+    }
+
+    /**
      * 获取下载路径
      * 
      * @param filename 文件名称

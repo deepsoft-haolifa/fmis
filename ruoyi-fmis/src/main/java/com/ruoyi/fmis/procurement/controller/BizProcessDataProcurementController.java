@@ -2388,7 +2388,7 @@ public class BizProcessDataProcurementController extends BaseController {
             cell_34_4.setCellValue("税    号：" + bizSuppliers.getTaxNumber());
             sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 4, 7));
 
-            String filename = ExcelUtil.encodingFilename("销售合同");
+            String filename = ExcelUtil.encodingFilenameByXls("采购合同");
             OutputStream out = new FileOutputStream(getAbsoluteFile(filename));
             workbook.write(out);
             out.flush();
