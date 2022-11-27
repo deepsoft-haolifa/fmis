@@ -1519,33 +1519,70 @@ public class BizProcessDataProcurementController extends BaseController {
             table.addCell(PdfUtil.mergeColLeft("质量保证按国家标准执行：质保期18个月（自出厂日算起）；质保期内如因产品本身质量问题，卖方予以免费更换。", 14, textFont));
 
             table.addCell(PdfUtil.mergeCol("六、", 1, textFont));
-            table.addCell(PdfUtil.mergeCol("包装规范：", 2, textFont));
-            table.addCell(PdfUtil.mergeCol(bizProcessData.getString27(), 6, textFont));
-            table.addCell(PdfUtil.mergeCol("运输方式：", 2, textFont));
-            table.addCell(PdfUtil.mergeCol(bizProcessData.getString9(), 5, textFont));
+            table.addCell(PdfUtil.mergeCol("安装与调试：", 14, textFont));
 
             table.addCell(PdfUtil.mergeCol("七、", 1, textFont));
-            table.addCell(PdfUtil.mergeCol("发货日期：", 2, textFont));
+            table.addCell(PdfUtil.mergeCol("包装方式：", 2, textFont));
+            table.addCell(PdfUtil.mergeCol(bizProcessData.getString27(), 5, textFont));
+            table.addCell(PdfUtil.mergeCol("包装物回收：", 2, textFont));
+            table.addCell(PdfUtil.mergeCol("不回收，由买方自行处理。", 5, textFont));
+
+            table.addCell(PdfUtil.mergeCol("八、", 1, textFont));
+            table.addCell(PdfUtil.mergeCol("交货周期：", 2, textFont));
+            table.addCell(PdfUtil.mergeCol("", 12, textFont));
+
+            table.addCell(PdfUtil.mergeCol("九", 1, textFont));
+            table.addCell(PdfUtil.mergeCol("付款方式：电汇或承兑", 14, textFont));
+
+            table.addCell(PdfUtil.mergeCol("十", 1, textFont));
+            table.addCell(PdfUtil.mergeCol("运输：", 14, textFont));
+
+            table.addCell(PdfUtil.mergeCol("", 1, textFont));
+            table.addCell(PdfUtil.mergeCol("1、运输方式：", 3, textFont));
+            table.addCell(PdfUtil.mergeCol(bizProcessData.getString9(), 2, textFont));
+            table.addCell(PdfUtil.mergeCol("运费:", 2, textFont));
+            table.addCell(PdfUtil.mergeCol(StringUtils.trim(bizProcessData.getString26()), 2, textFont));
+            table.addCell(PdfUtil.mergeCol("是否需要送：", 2, textFont));
+            table.addCell(PdfUtil.mergeCol("送货", 3, textFont));
+
+
+            table.addCell(PdfUtil.mergeCol("", 1, textFont));
+            table.addCell(PdfUtil.mergeCol("2、收货地址信息：", 3, textFont));
+            table.addCell(PdfUtil.mergeCol(StringUtils.trim(bizProcessData.getString9()), 12, textFont));
+            table.addCell(PdfUtil.mergeCol("", 1, textFont));
+            table.addCell(PdfUtil.mergeColLeft("3、其他约定事项：", 14, textFont));
+
+            table.addCell(PdfUtil.mergeCol("十一", 1, textFont));
+            table.addCell(PdfUtil.mergeColLeft("产品所有权自交接时起转移，但买方未按合同约定阶段付款，产品所有权仍属于出卖人所有。", 14, textFont));
+//
+//            table.addCell(PdfUtil.mergeCol("六、", 1, textFont));
+//            table.addCell(PdfUtil.mergeCol("包装规范：", 2, textFont));
+//            table.addCell(PdfUtil.mergeCol(bizProcessData.getString27(), 6, textFont));
+//            table.addCell(PdfUtil.mergeCol("运输方式：", 2, textFont));
+//            table.addCell(PdfUtil.mergeCol(bizProcessData.getString9(), 5, textFont));
+//
+//            table.addCell(PdfUtil.mergeCol("七、", 1, textFont));
+//            table.addCell(PdfUtil.mergeCol("发货日期：", 2, textFont));
             String strDateFormat = "yyyy-MM-dd HH:mm:ss";
             SimpleDateFormat sdf = new SimpleDateFormat(strDateFormat);
-            String date = "";
-            if (bizProcessData.getDatetime3() != null) {
-                date = sdf.format(bizProcessData.getDatetime3());
-            }
-            table.addCell(PdfUtil.mergeCol(date, 6, textFont));
-            table.addCell(PdfUtil.mergeCol("收货信息：", 2, textFont));
-            table.addCell(PdfUtil.mergeCol(bizProcessData.getString28(), 5, textFont));
-            table.addCell(PdfUtil.mergeCol("八、", 1, textFont));
-            table.addCell(PdfUtil.mergeCol("付款方式：", 2, textFont));
-            String contractPaytype = dictDataService.selectDictLabel("contract_paytype", bizProcessData.getString20());
-            table.addCell(PdfUtil.mergeCol(StringUtils.isNotEmpty(contractPaytype) ? contractPaytype : "", 6, textFont));
-            table.addCell(PdfUtil.mergeCol("运费承担：", 2, textFont));
-            table.addCell(PdfUtil.mergeCol(bizProcessData.getString26(), 5, textFont));
-
-            table.addCell(PdfUtil.mergeCol("九、", 1, textFont));
+//            String date = "";
+//            if (bizProcessData.getDatetime3() != null) {
+//                date = sdf.format(bizProcessData.getDatetime3());
+//            }
+//            table.addCell(PdfUtil.mergeCol(date, 6, textFont));
+//            table.addCell(PdfUtil.mergeCol("收货信息：", 2, textFont));
+//            table.addCell(PdfUtil.mergeCol(bizProcessData.getString28(), 5, textFont));
+//            table.addCell(PdfUtil.mergeCol("八、", 1, textFont));
+//            table.addCell(PdfUtil.mergeCol("付款方式：", 2, textFont));
+//            String contractPaytype = dictDataService.selectDictLabel("contract_paytype", bizProcessData.getString20());
+//            table.addCell(PdfUtil.mergeCol(StringUtils.isNotEmpty(contractPaytype) ? contractPaytype : "", 6, textFont));
+//            table.addCell(PdfUtil.mergeCol("运费承担：", 2, textFont));
+//            table.addCell(PdfUtil.mergeCol(bizProcessData.getString26(), 5, textFont));
+//
+            table.addCell(PdfUtil.mergeCol("十二、", 1, textFont));
             table.addCell(PdfUtil.mergeColLeft("违约责任：合同签订后，买卖双方严格执行双方所签订合同的条款，其中一方不履行或不完全履行合同者应承担相应的法律责任；解决合同纠纷方式：双方协商解决，解决不成由卖方所在北京仲裁委员会仲裁。", 14, textFont));
 
-            table.addCell(PdfUtil.mergeCol("十、", 1, textFont));
+            table.addCell(PdfUtil.mergeCol("十三、", 1, textFont));
             table.addCell(PdfUtil.mergeColLeft("本合同一式贰份。双方各执一份，双方签字盖章后生效（传真件有效）。", 14, textFont));
 
 

@@ -532,10 +532,9 @@ public class BizProcessDataController extends BaseController {
             cell_11_1.setCellValue("技术及其他要求：");
             sheet.addMergedRegion(new CellRangeAddress(aa, aa, 1, 2));
             sheet.addMergedRegion(new CellRangeAddress(aa, aa, 3, 7));
-            Cell cell_11_2 = row11.createCell(2);
-            cell_11_2.setCellStyle(cellBottomStyle);
             Cell cell_11_3 = row11.createCell(3);
             cell_11_3.setCellStyle(cellBottomStyle);
+            cell_11_3.setCellValue(StringUtils.trim(bizProcessData.getString25()));
             Cell cell_11_4 = row11.createCell(4);
             cell_11_4.setCellStyle(cellBottomStyle);
             Cell cell_11_5 = row11.createCell(5);
@@ -2750,8 +2749,9 @@ public class BizProcessDataController extends BaseController {
 
 
             table.addCell(PdfUtil.mergeCol("四、", 1, textFont));
-            table.addCell(PdfUtil.mergeColLeft("产品验收标准：按国家标准验收。", 14, textFont));
-            table.addCell(PdfUtil.mergeCol("", 1, textFont));
+            table.addCell(PdfUtil.mergeColLeft("产品验收标准：按国家标准验收，收到货一个月内无反馈问题视为整个合同产品验收合格。", 14, textFont));
+//            table.addCell(PdfUtil.mergeCol("", 1, textFont));
+
             //电汇结算，款到发货；货物采用纸箱包装，采用市内送货运输，运输费用卖方承担
 
             String payRemark = "";
@@ -2818,24 +2818,62 @@ public class BizProcessDataController extends BaseController {
                 payRemark = payRemark + "," + transportType;
             }
 
-            table.addCell(PdfUtil.mergeColLeft("付款及运输：" + payRemark, 14, textFont));
-            table.addCell(PdfUtil.mergeCol("", 1, textFont));
-            //合同签定后5个工作日发货（若未当日回传，发货期则从收到回传之日延后）
-            table.addCell(PdfUtil.mergeColLeft("1、发货日期：" + StringUtils.trim(bizProcessData.getString6()), 14, textFont));
-            table.addCell(PdfUtil.mergeCol("", 1, textFont));
-            table.addCell(PdfUtil.mergeColLeft("2、收  货  人：" + StringUtils.trim(bizProcessData.getString11()) + " " + StringUtils.trim(bizProcessData.getString12()), 14, textFont));
-            table.addCell(PdfUtil.mergeCol("", 1, textFont));
-            table.addCell(PdfUtil.mergeColLeft("3、交货地点：" + StringUtils.trim(bizProcessData.getString9()), 14, textFont));
-            table.addCell(PdfUtil.mergeCol("", 1, textFont));
-            table.addCell(PdfUtil.mergeColLeft("3、运费承担：" + StringUtils.trim(bizProcessData.getString10()), 14, textFont));
+//            table.addCell(PdfUtil.mergeColLeft("付款及运输：" + payRemark, 14, textFont));
+//            table.addCell(PdfUtil.mergeCol("", 1, textFont));
+//            //合同签定后5个工作日发货（若未当日回传，发货期则从收到回传之日延后）
+//            table.addCell(PdfUtil.mergeColLeft("1、发货日期：" + StringUtils.trim(bizProcessData.getString6()), 14, textFont));
+//            table.addCell(PdfUtil.mergeCol("", 1, textFont));
+//            table.addCell(PdfUtil.mergeColLeft("2、收  货  人：" + StringUtils.trim(bizProcessData.getString11()) + " " + StringUtils.trim(bizProcessData.getString12()), 14, textFont));
+//            table.addCell(PdfUtil.mergeCol("", 1, textFont));
+//            table.addCell(PdfUtil.mergeColLeft("3、交货地点：" + StringUtils.trim(bizProcessData.getString9()), 14, textFont));
+//            table.addCell(PdfUtil.mergeCol("", 1, textFont));
+//            table.addCell(PdfUtil.mergeColLeft("3、运费承担：" + StringUtils.trim(bizProcessData.getString10()), 14, textFont));
 
             table.addCell(PdfUtil.mergeCol("五、", 1, textFont));
             table.addCell(PdfUtil.mergeColLeft("质量保证按国家标准执行：质保期12个月（自出厂日算起）；质保期内如因产品本身质量问题，卖方予以免费更换。", 14, textFont));
 
             table.addCell(PdfUtil.mergeCol("六、", 1, textFont));
-            table.addCell(PdfUtil.mergeColLeft("违约责任：合同签订后，买卖双方严格执行双方所签订合同的条款，其中一方不履行或不完全履行合同者应承担相应的法律责任；解决合同纠纷方式：双方协商解决，解决不成由卖方所在北京仲裁委员会仲裁。", 14, textFont));
+            table.addCell(PdfUtil.mergeCol("安装与调试：", 14, textFont));
 
             table.addCell(PdfUtil.mergeCol("七、", 1, textFont));
+            table.addCell(PdfUtil.mergeCol("包装方式：", 2, textFont));
+            table.addCell(PdfUtil.mergeCol(bizProcessData.getString27(), 5, textFont));
+            table.addCell(PdfUtil.mergeCol("包装物回收：", 2, textFont));
+            table.addCell(PdfUtil.mergeCol("不回收，由买方自行处理。", 5, textFont));
+
+            table.addCell(PdfUtil.mergeCol("八、", 1, textFont));
+            table.addCell(PdfUtil.mergeCol("交货周期：", 2, textFont));
+            table.addCell(PdfUtil.mergeCol("", 12, textFont));
+
+            table.addCell(PdfUtil.mergeCol("九", 1, textFont));
+            table.addCell(PdfUtil.mergeCol("付款方式：电汇或承兑", 14, textFont));
+
+            table.addCell(PdfUtil.mergeCol("十", 1, textFont));
+            table.addCell(PdfUtil.mergeCol("运输：", 14, textFont));
+
+            table.addCell(PdfUtil.mergeCol("", 1, textFont));
+            table.addCell(PdfUtil.mergeCol("1、运输方式：", 3, textFont));
+            table.addCell(PdfUtil.mergeCol(transportType, 2, textFont));
+            table.addCell(PdfUtil.mergeCol("运费:", 2, textFont));
+            table.addCell(PdfUtil.mergeCol(StringUtils.trim(bizProcessData.getString10()), 2, textFont));
+            table.addCell(PdfUtil.mergeCol("是否需要送：", 2, textFont));
+            table.addCell(PdfUtil.mergeCol("送货", 3, textFont));
+
+
+            table.addCell(PdfUtil.mergeCol("", 1, textFont));
+            table.addCell(PdfUtil.mergeCol("2、收货地址信息：", 3, textFont));
+            table.addCell(PdfUtil.mergeCol(StringUtils.trim(bizProcessData.getString9()), 12, textFont));
+            table.addCell(PdfUtil.mergeCol("", 1, textFont));
+            table.addCell(PdfUtil.mergeColLeft("3、其他约定事项：", 14, textFont));
+
+            table.addCell(PdfUtil.mergeCol("十一", 1, textFont));
+            table.addCell(PdfUtil.mergeColLeft("产品所有权自交接时起转移，但买方未按合同约定阶段付款，产品所有权仍属于出卖人所有。", 14, textFont));
+
+
+            table.addCell(PdfUtil.mergeCol("十二、", 1, textFont));
+            table.addCell(PdfUtil.mergeColLeft("违约责任：合同签订后，买卖双方严格执行双方所签订合同的条款，其中一方不履行或不完全履行合同者应承担相应的法律责任；解决合同纠纷方式：双方协商解决，解决不成由卖方所在北京仲裁委员会仲裁。", 14, textFont));
+
+            table.addCell(PdfUtil.mergeCol("十三、", 1, textFont));
             table.addCell(PdfUtil.mergeColLeft("本合同一式贰份。双方各执一份，双方签字盖章后生效（传真件有效）。", 14, textFont));
             Paragraph paragraphRemark1 = new Paragraph();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
