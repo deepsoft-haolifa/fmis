@@ -202,6 +202,7 @@
           pc.string2 as productId,pc.string5 as productRef1Id,pc.string6 as productRef1Num,pc.string8 as productRef2Id,pc.string9 as productRef2Num,pc.string11 as actuatorId,
           pc.string3 as productNum,pc.string4 as productCoefficient,pc.string7 as productRef1Coefficient,
           pc.string10 as productRef2Coefficient,pc.string12 as actuatorNum,pc.string13 as actuatorCoefficient,
+          pc.contract_price as contractPrice,
           pr1.name as ref1Name,pr2.name as ref2Name,p.name as productName,ac.name as actuatorName,
           p.price as productPrice,pr1.price as ref1Price,pr2.price as ref2Price,ac.price as actuatorPrice,
 
@@ -1085,6 +1086,7 @@
             <if test="pattachment2Coefficient != null  and pattachment2Coefficient != ''">pattachment2_coefficient,</if>
             <if test="pattachment3Coefficient != null  and pattachment3Coefficient != ''">pattachment3_coefficient,</if>
             <if test="pattachment4Coefficient != null  and pattachment4Coefficient != ''">pattachment4_coefficient,</if>
+            <if test="contractPrice != null  and contractPrice != ''">contract_price,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="dataId != null ">#{dataId},</if>
@@ -1157,6 +1159,8 @@
             <if test="pattachment3Coefficient != null  and pattachment3Coefficient != ''">#{pattachment3Coefficient},
             </if>
             <if test="pattachment4Coefficient != null  and pattachment4Coefficient != ''">#{pattachment4Coefficient},
+            </if>
+            <if test="contractPrice != null  and contractPrice != ''">#{contractPrice},
             </if>
         </trim>
     </insert>

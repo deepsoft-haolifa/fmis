@@ -167,8 +167,6 @@ public class BizProcessChild extends BaseEntity {
     @Setter
     private String p4Status;
 
-
-
     //回货时间
     @Getter
     @Setter
@@ -538,7 +536,9 @@ public class BizProcessChild extends BaseEntity {
     @Getter
     @Setter
     private String productString2;
-
+    @Getter
+    @Setter
+    private double contractPrice;
 
     //产品 end
 

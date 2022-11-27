@@ -471,6 +471,7 @@
                 {field : 'productPrice',title : '底价',editable: false},
                 {field : 'productCostPrice',title : '产品成本价',editable: false,visible: false},
                 {field : 'contractPrice',title : '单价',editable: false},
+                {field : 'string17',title : '整套系数',editable: false},
                 {field : 'totalPrice',title : '总价',editable: false},
                 {field : 'string14',title : '优惠',editable: {type: 'text',emptytext: '0',validate: function(v){ return numberValidate(v)}}},
                 {field : 'productCoefficient',title : '系数',editable: {type: 'text',emptytext: '0',validate: function(v){ return numberValidate(v)}}},
@@ -759,10 +760,11 @@
         var string14 = row["string14"];
         string14 = isEmpty(string14) == true ? 0 : parseFloat(string14);
 
-        var totalSum = parseFloat(parseFloat(productSum) + parseFloat(productRef1Sum) + parseFloat(productRef2Sum) + parseFloat(actuatorSum)
+/*        var totalSum = parseFloat(parseFloat(productSum) + parseFloat(productRef1Sum) + parseFloat(productRef2Sum) + parseFloat(actuatorSum)
             + parseFloat(pattachmentSum) + parseFloat(pattachment1Sum) + parseFloat(pattachment2Sum) + parseFloat(pattachment3Sum) + parseFloat(pattachment4Sum)
-            - parseFloat(string14)).toFixed(0);
-
+            - parseFloat(string14)).toFixed(0);*/
+        var contractPrice = row["contractPrice"];
+        var totalSum = contractPrice * productNum;
         var costProce = parseFloat(productNum * productPrice).toFixed(4) +
             parseFloat(productRef1Num * productRef1Price).toFixed(4) +
             parseFloat(productRef2Num * productRef2Price).toFixed(4) +
