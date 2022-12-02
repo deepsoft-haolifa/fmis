@@ -94,7 +94,10 @@
                 },
                 {
                     field: 'string12',
-                    title: '采购合同号'
+                    title: '采购合同号',
+                    formatter: function (value, row, index) {
+                        return '<a href="javascript:void(0)" onclick="viewExamineDetail(\'' + row.dataId + '\')">'+value+'</a>';
+                    }
                 },
                 {
                     field: 'string10',
@@ -116,11 +119,16 @@
                 {
                     field: 'string5',
                     title: '类别'
-                }/*,
+                },
                 {
                     field: 'supplierName',
                     title: '供应商'
-                }*//*,
+                },
+                {
+                   field: 'detailNum',
+                   title: "数量"
+                },
+                /*,
                 {
                     field : 'string7',
                     title : '订货产品'
@@ -128,7 +136,7 @@
                 {
                     field : 'string8',
                     title : '回传'
-                }*/,
+                }*/
                 {
                     field: 'datetime2',
                     title: '销售合同交付日期'

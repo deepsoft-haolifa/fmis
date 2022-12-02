@@ -141,6 +141,10 @@ public class BizCustomer extends BaseEntity {
     @Getter
     private String allocationDateendTime;
 
+    /** 备案结束日期 */
+    private String recordEndDate;
+
+
     /** 备案日期 */
     @Excel(name = "备案日期")
     private String recordDate;

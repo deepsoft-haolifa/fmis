@@ -210,6 +210,12 @@ public class BizProcessData extends BaseEntity {
     @Setter
     @Getter
     private String queryStatus;
+    /**
+     * 数量
+     */
+    @Setter
+    @Getter
+    private Integer detailNum;
 
     /** 关联业务数据ID */
     @Excel(name = "关联业务数据ID")

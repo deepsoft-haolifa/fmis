@@ -19,6 +19,15 @@
                     </div>
                 </div>
             </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">备案结束日期：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="recordEndDate" th:field="*{recordEndDate}" class="form-control" placeholder="yyyy-MM" type="text">
+                    </div>
+                </div>
+            </div>
 
             <div class="form-group">
                 <label class="col-sm-3 control-label">客户所属商务公司代码：</label>
@@ -230,83 +239,63 @@
 
 
             <div class="form-group">
-                <label class="col-sm-3 control-label">*联系人1姓名：</label>
-                <div class="col-sm-8">
+                <label class="col-sm-2 control-label">*联系人1姓名：</label>
+                <div class="col-sm-2">
                     <input name="contactName" class="form-control" id="contactName" th:field="*{contactName}" type="text" required>
                 </div>
-            </div>
-
-            <div class="form-group">
-                <label class="col-sm-3 control-label">*联系人1电话：</label>
-                <div class="col-sm-8">
-                    <input name="contactPhone" class="form-control" id="contactPhone" th:field="*{contactPhone}" type="text" required>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">联系人1邮箱：</label>
-                <div class="col-sm-8">
-                    <input name="contactEmail" class="form-control" type="text" th:field="*{contactEmail}">
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">联系人1职务：</label>
-                <div class="col-sm-8">
-                    <input name="string1" class="form-control" type="text" th:field="*{string1}">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="col-sm-3 control-label">联系人2姓名：</label>
-                <div class="col-sm-8">
+                <label class="col-sm-2 control-label">联系人2姓名：</label>
+                <div class="col-sm-2">
                     <input name="string2" class="form-control" id="string2" type="text" th:field="*{string2}">
                 </div>
-            </div>
-
-            <div class="form-group">
-                <label class="col-sm-3 control-label">联系人2电话：</label>
-                <div class="col-sm-8">
-                    <input name="string3" class="form-control" id="string3" type="text" th:field="*{string3}">
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">联系人2邮箱：</label>
-                <div class="col-sm-8">
-                    <input name="string4" class="form-control" type="text" th:field="*{string4}">
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">联系人2职务：</label>
-                <div class="col-sm-8">
-                    <input name="string5" class="form-control" type="text" th:field="*{string5}">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="col-sm-3 control-label">联系人3姓名：</label>
-                <div class="col-sm-8">
+                <label class="col-sm-2 control-label">联系人3姓名：</label>
+                <div class="col-sm-2">
                     <input name="string6" class="form-control" id="string6" type="text" th:field="*{string6}">
                 </div>
             </div>
 
             <div class="form-group">
-                <label class="col-sm-3 control-label">联系人3电话：</label>
-                <div class="col-sm-8">
+                <label class="col-sm-2 control-label">*联系人1电话：</label>
+                <div class="col-sm-2">
+                    <input name="contactPhone" class="form-control" id="contactPhone" th:field="*{contactPhone}" type="text" required>
+                </div>
+                <label class="col-sm-2 control-label">联系人2电话：</label>
+                <div class="col-sm-2">
+                    <input name="string3" class="form-control" id="string3" type="text" th:field="*{string3}">
+                </div>
+                <label class="col-sm-2 control-label">联系人3电话：</label>
+                <div class="col-sm-2">
                     <input name="string7" class="form-control" id="string7" type="text" th:field="*{string7}">
                 </div>
             </div>
+
             <div class="form-group">
-                <label class="col-sm-3 control-label">联系人3邮箱：</label>
-                <div class="col-sm-8">
+                <label class="col-sm-2 control-label">联系人1邮箱：</label>
+                <div class="col-sm-2">
+                    <input name="contactEmail" class="form-control" type="text" th:field="*{contactEmail}">
+                </div>
+                <label class="col-sm-2 control-label">联系人2邮箱：</label>
+                <div class="col-sm-2">
+                    <input name="string4" class="form-control" type="text" th:field="*{string4}">
+                </div>
+                <label class="col-sm-2 control-label">联系人3邮箱：</label>
+                <div class="col-sm-2">
                     <input name="string8" class="form-control" type="text" th:field="*{string8}">
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label">联系人3职务：</label>
-                <div class="col-sm-8">
+                <label class="col-sm-2 control-label">联系人1职务：</label>
+                <div class="col-sm-2">
+                    <input name="string1" class="form-control" type="text" th:field="*{string1}">
+                </div>
+                <label class="col-sm-2 control-label">联系人2职务：</label>
+                <div class="col-sm-2">
+                    <input name="string5" class="form-control" type="text" th:field="*{string5}">
+                </div>
+                <label class="col-sm-2 control-label">联系人3职务：</label>
+                <div class="col-sm-2">
                     <input name="string9" class="form-control" type="text" th:field="*{string9}">
                 </div>
             </div>
-
 
             <div class="form-group">
                 <input id="filePaths" name="filePaths" type="hidden" th:field="*{filePaths}">

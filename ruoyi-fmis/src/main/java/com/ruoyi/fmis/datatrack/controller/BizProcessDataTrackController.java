@@ -17,6 +17,8 @@ import com.ruoyi.fmis.data.service.IBizProcessDataService;
 import com.ruoyi.fmis.datatrack.domain.BizProcessDataTrack;
 import com.ruoyi.fmis.datatrack.service.IBizProcessDataTrackService;
 import com.ruoyi.fmis.define.service.IBizProcessDefineService;
+import com.ruoyi.fmis.status.domain.BizDataStatus;
+import com.ruoyi.fmis.status.service.IBizDataStatusService;
 import com.ruoyi.fmis.suppliers.domain.BizSuppliers;
 import com.ruoyi.fmis.suppliers.service.IBizSuppliersService;
 import com.ruoyi.fmis.util.RoleEnum;
@@ -30,6 +32,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -58,6 +61,8 @@ public class BizProcessDataTrackController extends BaseController {
     private IBizProcessDefineService bizProcessDefineService;
     @Autowired
     private ISysRoleService sysRoleService;
+    @Resource
+    private IBizDataStatusService bizDataStatusService;
 
 
     @RequiresPermissions("fmis:processDataTrack:view")
@@ -113,6 +118,16 @@ public class BizProcessDataTrackController extends BaseController {
             data.setLoginUserId(ShiroUtils.getUserId().toString());
             int roleType = sysRoleService.getRoleType(ShiroUtils.getUserId());
             data.setRoleType(roleType + "");
+
+            BizDataStatus queryBizDataStatus = new BizDataStatus();
+            queryBizDataStatus.setString4(data.getDataId().toString());
+            List<BizDataStatus> bizDataStatuses = bizDataStatusService.selectBizDataStatusList(queryBizDataStatus);
+            if (CollectionUtils.isEmpty(bizDataStatuses)) {
+                continue;
+            }
+            Integer num = bizDataStatuses.stream().map(bb -> Integer.valueOf(bb.getString1()))
+                    .reduce(Integer::sum).get();
+            data.setDetailNum(num);
         }
         return getDataTable(list);
     }

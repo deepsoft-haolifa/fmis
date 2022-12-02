@@ -183,7 +183,15 @@
                     <input name="newSupplier" class="form-control" th:field="*{newSupplier}" type="text" placeholder="新供应商输入">
                 </div>
             </div>
-
+            <div class="form-group">
+                <label class="col-sm-3 control-label">供应商颜色：</label>
+                <div class="col-sm-8">
+                    <select name="color" class="form-control m-b" th:with="type=${@dict.getType('color')}">
+                        <option value="">请选择</option>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{color}"></option>
+                    </select>
+                </div>
+            </div>
 
 
             <div class="form-group">
