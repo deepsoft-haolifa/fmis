@@ -63,7 +63,7 @@
         select customer_id, record_date, company_code, area, record_code, owner_user_id, name, project_ame, contact_name, contact_position, contact_phone, contact_email, brand, info, product_info, remark, status, del_flag, create_by, create_time, update_by, update_time,area_code,source,record_type,record_num,telephone,fax,company_address,dept_id,
          customer_level,code_name,industry_division,allocation_date,assign_number,file_number,file_paths,new_status,
          string1,string2,string3,string4,string5,string6,string7,string8,string9,string10,
-         string11,string12,string13,string14,string15,string16,string17,string18,string19,string20
+         string11,string12,string13,string14,string15,string16,string17,string18,string19,string20,level
          from biz_customer
     </sql>
 
@@ -328,6 +328,7 @@
             <if test="string18 != null  and string18 != ''">string18,</if>
             <if test="string19 != null  and string19 != ''">string19,</if>
             <if test="string20 != null  and string20 != ''">string20,</if>
+            <if test="level != null  and level != ''">level,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="recordDate != null ">#{recordDate},</if>
@@ -391,6 +392,7 @@
             <if test="string18 != null  and string18 != ''">#{string18},</if>
             <if test="string19 != null  and string19 != ''">#{string19},</if>
             <if test="string20 != null  and string20 != ''">#{string20},</if>
+            <if test="level != null  and level != ''">#{level},</if>
         </trim>
     </insert>
 
@@ -458,6 +460,7 @@
             <if test="string18 != null  and string18 != ''">string18 = #{string18},</if>
             <if test="string19 != null  and string19 != ''">string19 = #{string19},</if>
             <if test="string20 != null  and string20 != ''">string20 = #{string20},</if>
+            <if test="level != null  and level != ''">level = #{level},</if>
 
         </trim>
         where customer_id = #{customerId}

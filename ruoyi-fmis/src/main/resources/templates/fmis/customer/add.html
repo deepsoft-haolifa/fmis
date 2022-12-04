@@ -47,6 +47,15 @@
                 </div>
             </div>
             <div class="form-group">
+                <label class="col-sm-3 control-label">客户等级：</label>
+                <div class="col-sm-8">
+                    <select name="level" class="form-control m-b" th:with="">
+                        <option t th:text="A" th:value="A">A</option>
+                        <option t th:text="B" th:value="B">B</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
                 <label class="col-sm-3 control-label">客户代号：</label>
                 <div class="col-sm-8">
                     <input name="codeName" class="form-control" type="text">
@@ -111,9 +120,22 @@
             </div>
             -->
             <div class="form-group">    
-                <label class="col-sm-3 control-label">*客户名称：</label>
+                <label class="col-sm-3 control-label" style="color: red;">*客户名称：</label>
                 <div class="col-sm-8">
                     <input name="name" class="form-control" type="text" id="name"  required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label" style="color: red;">*联系人1姓名：</label>
+                <div class="col-sm-8">
+                    <input name="contactName" class="form-control" id="contactName" type="text" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label"  style="color: red;">*联系人1电话：</label>
+                <div class="col-sm-8">
+                    <input name="contactPhone" class="form-control" id="contactPhone" type="text" required>
                 </div>
             </div>
             <!-- 新添加字段 母公司 start -->
@@ -154,12 +176,12 @@
                     <input name="telephone" class="form-control" type="text">
                 </div>
             </div>
-            <div class="form-group">
+            <!--<div class="form-group">
                 <label class="col-sm-3 control-label">联系传真：</label>
                 <div class="col-sm-8">
                     <input name="fax" class="form-control" type="text">
                 </div>
-            </div>
+            </div>-->
             <div class="form-group">
                 <label class="col-sm-3 control-label">公司地址：</label>
                 <div class="col-sm-8">
@@ -210,6 +232,7 @@
                 </div>
             </div>
 
+
             <div class="form-group">    
                 <label class="col-sm-3 control-label">主要产品：</label>
                 <div class="col-sm-8">
@@ -219,19 +242,6 @@
 
 
 
-            <div class="form-group">
-                <label class="col-sm-3 control-label">*联系人1姓名：</label>
-                <div class="col-sm-8">
-                    <input name="contactName" class="form-control" id="contactName" type="text" required>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="col-sm-3 control-label">*联系人1电话：</label>
-                <div class="col-sm-8">
-                    <input name="contactPhone" class="form-control" id="contactPhone" type="text" required>
-                </div>
-            </div>
             <div class="form-group">
                 <label class="col-sm-3 control-label">联系人1邮箱：</label>
                 <div class="col-sm-8">
