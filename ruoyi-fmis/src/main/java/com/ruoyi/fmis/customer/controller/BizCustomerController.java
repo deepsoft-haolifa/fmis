@@ -405,7 +405,7 @@ public class BizCustomerController extends BaseController {
     @PostMapping("/edit")
     @ResponseBody
     public AjaxResult editSave(BizCustomer bizCustomer) {
-
+        bizCustomer.setName(bizCustomer.getName().trim());
         BizCustomer oldCustomer = bizCustomerService.selectBizCustomerById(bizCustomer.getCustomerId());
         String oldOwnerId = StringUtils.trim(oldCustomer.getOwnerUserId());
         String newOldOwnerId = StringUtils.trim(bizCustomer.getOwnerUserId());

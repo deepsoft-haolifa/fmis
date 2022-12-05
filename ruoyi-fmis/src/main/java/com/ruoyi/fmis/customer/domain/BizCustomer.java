@@ -80,6 +80,10 @@ public class BizCustomer extends BaseEntity {
 
     @Setter
     @Getter
+    private String level;
+
+    @Setter
+    @Getter
     private String string9;
 
     @Setter
