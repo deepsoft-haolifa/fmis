@@ -16,6 +16,8 @@ import com.ruoyi.fmis.common.CommonUtils;
 import com.ruoyi.fmis.customer.service.IBizCustomerService;
 import com.ruoyi.fmis.define.service.IBizProcessDefineService;
 import com.ruoyi.fmis.dict.service.IBizDictService;
+import com.ruoyi.fmis.file.domain.BizAccessory;
+import com.ruoyi.fmis.file.service.IBizAccessoryService;
 import com.ruoyi.fmis.pattachment.domain.BizProductAttachment;
 import com.ruoyi.fmis.pattachment.service.IBizProductAttachmentService;
 import com.ruoyi.fmis.product.domain.BizProduct;
@@ -100,6 +102,8 @@ public class BizProcessProcurementtestController extends BaseController {
 
     @Autowired
     private IBizDataStatusService bizDataStatusService;
+    @Autowired
+    private IBizAccessoryService bizAccessoryService;
 
     @GetMapping()
     public String data() {
@@ -239,6 +243,19 @@ public class BizProcessProcurementtestController extends BaseController {
 
         startPage();
         List<BizProcessChild> bizProcessChildList = bizProcessChildService.selectBizTestChildHistoryList(bizProcessData);
+        if (org.apache.commons.collections.CollectionUtils.isNotEmpty(bizProcessChildList)) {
+            bizProcessChildList.stream().forEach(bb -> {
+                BizAccessory bizAccessory = new BizAccessory();
+                bizAccessory.setBizId(Integer.valueOf(bb.getTestId()));
+                bizAccessory.setFileType(4);
+                List<BizAccessory> bizAccessories = bizAccessoryService.selectBizAccessoryByBizId(bizAccessory);
+                if (CollectionUtils.isEmpty(bizAccessories)) {
+                    bb.setHaveFile(0);
+                } else {
+                    bb.setHaveFile(1);
+                }
+            });
+        }
         return getDataTable(bizProcessChildList);
     }
 

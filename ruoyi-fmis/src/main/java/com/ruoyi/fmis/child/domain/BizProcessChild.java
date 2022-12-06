@@ -571,6 +571,13 @@ public class BizProcessChild extends BaseEntity {
     @Getter
     private BizProduct bizProduct;
 
+    /**
+     * 有附件1， 没有附件：0
+     */
+    @Setter
+    @Getter
+    private Integer haveFile;
+
 
     /** 数据ID */
     @Excel(name = "数据ID")
