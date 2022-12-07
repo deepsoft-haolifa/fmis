@@ -30,18 +30,18 @@
 
 
             <div class="form-group">
-                <label class="col-sm-3 control-label">客户区域：</label>
+                <label class="col-sm-3 control-label" style="color: red">*客户区域：</label>
                 <div class="col-sm-8">
-                    <select name="area" class="form-control m-b" th:with="type=${@dict.getType('customer_area')}">
+                    <select name="area" class="form-control m-b" th:with="type=${@dict.getType('customer_area')}" required>
                         <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                     </select>
                 </div>
             </div>
 
             <div class="form-group">
-                <label class="col-sm-3 control-label">客户类别：</label>
+                <label class="col-sm-3 control-label" style="color: red">*客户类别：</label>
                 <div class="col-sm-8">
-                    <select name="customerLevel" id="customerLevel" class="form-control m-b" th:with="type=${@dict.getType('customer_level')}">
+                    <select name="customerLevel" id="customerLevel" class="form-control m-b" th:with="type=${@dict.getType('customer_level')}" required>
                         <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" value="3"></option>
                     </select>
                 </div>
@@ -54,9 +54,9 @@
             </div>
 
             <div class="form-group">
-                <label class="col-sm-3 control-label">行业划分：</label>
+                <label class="col-sm-3 control-label" style="color: red">*行业划分：</label>
                 <div class="col-sm-8">
-                    <select name="industryDivision" class="form-control m-b" th:with="type=${@dict.getType('industry_division')}">
+                    <select name="industryDivision" class="form-control m-b" th:with="type=${@dict.getType('industry_division')}" required>
                         <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                     </select>
                 </div>

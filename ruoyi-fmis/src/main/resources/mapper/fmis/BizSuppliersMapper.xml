@@ -30,14 +30,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="bankNo"    column="bank_no"    />
         <result property="bank"    column="bank"    />
         <result property="taxNumber"    column="tax_number"    />
+        <result property="supplierLevel"    column="supplier_level"    />
     </resultMap>
 
     <sql id="selectBizSuppliersVo">
-        select suppliers_id, name, address, telphone, fax, email, site_url, owner_id, contact, manage_state, market_distribution, target_customer, human_capital_measure, taxpayer, remark, status, del_flag, create_by, create_time, update_by, update_time,nick_name,bank,bank_no,tax_number from biz_suppliers
+        select suppliers_id, name,supplier_level, address, telphone, fax, email, site_url, owner_id, contact, manage_state, market_distribution, target_customer, human_capital_measure, taxpayer, remark, status, del_flag, create_by, create_time, update_by, update_time,nick_name,bank,bank_no,tax_number from biz_suppliers
     </sql>
 
     <sql id="selectBizSuppliersDictVo">
-        select s.suppliers_id, s.name, s.address, s.telphone, s.fax, s.email, s.site_url, u.user_name as owner_id, s.contact, s.manage_state, s.market_distribution, s.target_customer, s.human_capital_measure, s.taxpayer, s.remark, s.status, s.del_flag, s.create_by, s.create_time, s.update_by, s.update_time,s.nick_name,s.bank,s.bank_no,s.tax_number from biz_suppliers s
+        select s.suppliers_id, s.name, s.address,s.supplier_level, s.telphone, s.fax, s.email, s.site_url, u.user_name as owner_id, s.contact, s.manage_state, s.market_distribution, s.target_customer, s.human_capital_measure, s.taxpayer, s.remark, s.status, s.del_flag, s.create_by, s.create_time, s.update_by, s.update_time,s.nick_name,s.bank,s.bank_no,s.tax_number from biz_suppliers s
         join sys_user u on s.owner_id=u.user_id
         left join sys_dept dt on u.dept_id=dt.dept_id
 
@@ -98,6 +99,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="bank != null  and bank != ''">bank,</if>
             <if test="bankNo != null  and bankNo != ''">bank_no,</if>
             <if test="taxNumber != null  and taxNumber != ''">tax_number,</if>
+            <if test="supplierLevel != null  and supplierLevel != ''">supplier_level,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="name != null  and name != ''">#{name},</if>
@@ -124,6 +126,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="bank != null  and bank != ''">#{bank},</if>
             <if test="bankNo != null  and bankNo != ''">#{bankNo},</if>
             <if test="taxNumber != null  and taxNumber != ''"> #{taxNumber},</if>
+            <if test="supplierLevel != null  and supplierLevel != ''"> #{supplierLevel},</if>
          </trim>
     </insert>
 
@@ -154,6 +157,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="bank != null  and bank != ''">bank = #{bank},</if>
             <if test="bankNo != null  and bankNo != ''">bank_no = #{bankNo},</if>
             <if test="taxNumber != null  and taxNumber != ''">tax_number = #{taxNumber},</if>
+            <if test="supplierLevel != null  and supplierLevel != ''">supplier_level = #{supplierLevel},</if>
         </trim>
         where suppliers_id = #{suppliersId}
     </update>
