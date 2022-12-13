@@ -122,7 +122,11 @@
                 </div>-->
                 <label class="col-sm-1 control-label">收货人：</label>
                 <div class="col-sm-2">
-                    <input name="string28" class="form-control" th:field="*{string28}" type="text">
+                    <select name="string28" id="string28" class="form-control m-b" th:with="type=${@dict.getType('infoBody')}">
+                        <option value="0">请选择</option>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{string28}"></option>
+                    </select>
+                   <!-- <input name="string28" class="form-control" th:field="*{string28}" type="text">-->
                 </div>
                 <label class="col-sm-1 control-label">运输方式：</label>
                 <div class="col-sm-2">
