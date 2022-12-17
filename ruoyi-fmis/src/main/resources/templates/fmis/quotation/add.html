@@ -46,21 +46,25 @@
         </div>
 
         <form class="form-horizontal m" id="form-quotation-add">
+            <label class="col-sm-1 control-label">总数量：</label>
+            <div class="col-sm-1">
+                <input name="totalNumber" id="totalNumber" class="form-control" type="text"  readonly>
+            </div>
             <div class="form-group">
                 <label class="col-sm-1 control-label">报价总金额：</label>
-                <div class="col-sm-2">
+                <div class="col-sm-1">
                     <input name="totalPrice" id="totalPrice" class="form-control" type="text"  readonly>
                 </div>
                 <label class="col-sm-1 control-label">优惠金额：</label>
-                <div class="col-sm-2">
+                <div class="col-sm-1">
                     <input name="discount" id="discount" class="form-control" type="text" onkeyup="AmountKeyUp(this)" onblur="calculateTotalPrice()">
                 </div>
                 <label class="col-sm-1 control-label">优惠后金额：</label>
-                <div class="col-sm-2">
+                <div class="col-sm-1">
                     <input name="productTotalPrice" id="productTotalPrice" class="form-control" type="text" readonly>
                 </div>
                 <label class="col-sm-1 control-label">整单系数：</label>
-                <div class="col-sm-2">
+                <div class="col-sm-1">
                     <input name="orderCoefficient" id="orderCoefficient" class="form-control" type="text"  readonly>
                 </div>
             </div>
@@ -656,6 +660,7 @@
             console.log("totalActuatorCost"+totalActuatorCost)
             console.log("totalPriceCost"+totalPriceCost)
             totalCostPriceMap.set("totalCostPrice",totalCostPrice);
+            totalCostPriceMap.set("totalPNumber",productNum);
 
             var totalSum = parseFloat(parseFloat(productSum) + parseFloat(productRef1Sum) + parseFloat(productRef2Sum) + parseFloat(actuatorSum)
                 + parseFloat(pattachmentSum)+ parseFloat(pattachment1Sum)+ parseFloat(pattachment2Sum)+ parseFloat(pattachment3Sum)+ parseFloat(pattachment4Sum)).toFixed(2);
@@ -854,6 +859,7 @@
             var data = $.btTable.bootstrapTable('getData');
             var productTotalPrice = 0;
             var productAllPrice = 0; //不算系数所有产品总和
+            var totalPNumber = 0;
 
             var allTotalCost = 0;
             for (var i = 0; i < data.length; i++) {
@@ -861,12 +867,14 @@
                 var price = calculatePrice(rowData);
                 var totalCostPrice = totalCostPriceMap.get("totalCostPrice");
                 var totalproductAllPrice = totalCostPriceMap.get("productAll");
+                var totalPNumber1 = totalCostPriceMap.get("totalPNumber");
                 console.log("price" + price)
                 console.log("totalCostPrice" + totalCostPrice)
 
                 productTotalPrice = FloatAdd(productTotalPrice,price).toFixed(0);
                 allTotalCost =  FloatAdd(totalCostPrice,allTotalCost).toFixed(0);
                 productAllPrice =  FloatAdd(totalproductAllPrice,productAllPrice).toFixed(0);
+                totalPNumber =  FloatAdd(totalPNumber,totalPNumber1).toFixed(0);
             }
             var specialExpenses = $("#specialExpenses").val();
             if (isEmpty(specialExpenses)) {
@@ -889,6 +897,7 @@
             console.log("2"+allTotalCost)
             console.log("3"+specialExpenses)
             $("#grossPrice").val(grossPrice);
+            $("#totalNumber").val(totalPNumber);
             $("#orderCoefficient").val(parseFloat(totalPrice / parseFloat(productAllPrice)).toFixed(2));
 
         }

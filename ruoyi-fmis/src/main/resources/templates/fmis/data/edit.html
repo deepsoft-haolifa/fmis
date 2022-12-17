@@ -204,6 +204,10 @@
                 <div class="col-sm-2">
                     <input name="price1" id="price1" class="form-control" type="text" th:field="*{price1}" >
                 </div>
+                <label class="col-sm-1 control-label">整单系数：</label>
+                <div class="col-sm-2">
+                    <input name="orderCoefficient" id="orderCoefficient" class="form-control" th:field="*{price15}" type="text"  readonly>
+                </div>
 <!--                <label class="col-sm-1 control-label">优惠金额：</label>-->
 <!--                <div class="col-sm-2">-->
 <!--                    <input name="discount" id="discount" class="form-control" th:field="*{discount}" type="text" onkeyup="AmountKeyUp(this)" onblur="calculateTotalPrice()">-->
@@ -385,6 +389,8 @@
                 dataObj.push({"name": "productParmters", "value": JSON.stringify(productArray)});
                 var grossPrice = $("#grossPrice").val();
                 dataObj.push({"name": "price2", "value": grossPrice});
+                var orderCoefficient = $("#orderCoefficient").val();
+                dataObj.push({"name": "price15", "value": orderCoefficient});
                 $.operate.save(prefix + "/edit", dataObj);
             }
         }
@@ -695,7 +701,7 @@
             console.log("2"+allTotalCost)
             console.log("3"+specialExpenses)
             $("#grossPrice").val(grossPrice);
-            // $("#orderCoefficient").val(parseFloat(totalPrice / parseFloat(productAllPrice)).toFixed(2));
+            $("#orderCoefficient").val(parseFloat(totalPrice / parseFloat(productAllPrice)).toFixed(2));
 
         }
         function calculateContractPriceOnly (row) {
@@ -1048,12 +1054,14 @@
                 || $.common.isEmpty(totalPrice) || "NaN" == $("#price3").val()) {
                 $("#price3").val(0);
             }
+            $("#orderCoefficient").val(parseFloat(totalPrice / parseFloat(productAllPrice)).toFixed(2));
         }
         function loadcalculateTotalPrice () {
             var data = $.btTable.bootstrapTable('getData');
             var productTotalPrice = 0;
             var totalNum = 0;
             var allTotalCost = 0;
+            var productAllPrice = 0; //不算系数所有产品总和
             for (var i = 0; i < data.length; i++) {
                 var rowData = data[i];
                 var price = calculatePrice(rowData);
@@ -1064,6 +1072,7 @@
 
                 var totalCostPrice = totalCostPriceMap.get("totalCostPrice");
                 allTotalCost =  FloatAdd(totalCostPrice,allTotalCost).toFixed(2);
+                // productAllPrice =  FloatAdd(totalproductAllPrice,productAllPrice).toFixed(0);
             }
             var specialExpenses = $("#string14").val();
             if (isEmpty(specialExpenses)) {
@@ -1085,6 +1094,7 @@
                 || $.common.isEmpty(totalPrice) || "NaN" == $("#price3").val()) {
                 $("#price3").val(0);
             }
+            // $("#orderCoefficient").val(parseFloat(totalPrice / parseFloat(productAllPrice)).toFixed(2));
         }
         function calculatePrice (row) {
             var productNum = row["productNum"];
