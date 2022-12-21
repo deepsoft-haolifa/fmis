@@ -1180,12 +1180,16 @@
             var actuatorSum = parseFloat(actuatorNum * actuatorCoefficient * actuatorPrice).toFixed(2);
             var string14 = row["string14"];
             string14 = isEmpty(string14) == true ? 0 : parseFloat(string14);
-
-           /* var totalSum = parseFloat(parseFloat(productSum) + parseFloat(productRef1Sum) + parseFloat(productRef2Sum) + parseFloat(actuatorSum)
-                + parseFloat(pattachmentSum) + parseFloat(pattachment1Sum) + parseFloat(pattachment2Sum) + parseFloat(pattachment3Sum) + parseFloat(pattachment4Sum)
-                - parseFloat(string14)).toFixed(0);*/
             var contractPrice = row["contractPrice"]; //平均价格
-            var totalSum = productNum * contractPrice;
+            console.log("contractPrice = null is:" + isNaN(contractPrice));
+            var totalSum = 0;
+            if (isNaN(contractPrice)){
+                totalSum =  parseFloat(parseFloat(productSum) + parseFloat(productRef1Sum) + parseFloat(productRef2Sum) + parseFloat(actuatorSum)
+                    + parseFloat(pattachmentSum) + parseFloat(pattachment1Sum) + parseFloat(pattachment2Sum) + parseFloat(pattachment3Sum) + parseFloat(pattachment4Sum)
+                    - parseFloat(string14)).toFixed(0);
+            } else {
+                totalSum = productNum * contractPrice;
+            }
             var costProce = parseFloat(productNum * productPrice).toFixed(4) +
                 parseFloat(productRef1Num * productRef1Price).toFixed(4) +
                 parseFloat(productRef2Num * productRef2Price).toFixed(4) +

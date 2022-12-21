@@ -2483,11 +2483,13 @@ public class BizProcessDataController extends BaseController {
                             appendStr = "9";
                         }
                         productName = productName.replaceAll("无头", repStr);
-
-                        if (model.startsWith("D")) {
-                            model = model.substring(1, model.length());
+                        String startS = model.substring(0, 1);
+                        model = model.substring(2, model.length());
+                        model = startS + appendStr + model;
+                        /*if (model.startsWith("D")) {
+                            model = model.substring(2, model.length());
                             model = "D" + appendStr + model;
-                        }
+                        }*/
                         if (endRemark.length() > 0) {
                             endRemark += ",";
                         }
@@ -2510,14 +2512,14 @@ public class BizProcessDataController extends BaseController {
 
                 sumTotalNum = sumTotalNum + Double.parseDouble(productNum);
 
-                Double productTotal = new Double(2);
+                Double productTotal = new Double(0.00);
                 String productCoefficient = bizProduct.getProductCoefficient();
                 if (StringUtils.isNotEmpty(productNum) && productPrice != null &&  productPrice > 0 && StringUtils.isNotEmpty(productCoefficient)) {
                     productTotal = Double.parseDouble(productNum) * productPrice * Double.parseDouble(productCoefficient);
                 }
                 //法兰计算
 
-                Double ref1Total = new Double(2);
+                Double ref1Total = new Double(0.00);
                 String ref1Id = bizProduct.getProductRef1Id();
                 if (StringUtils.isNotEmpty(ref1Id) && !ref1Id.trim().equals("0")) {
                     Double ref1Price = bizProduct.getRef1Price();
@@ -2533,7 +2535,7 @@ public class BizProcessDataController extends BaseController {
                     endRemark += "法兰";
                 }
                 //螺栓计算
-                Double ref2Tota = new Double(2);
+                Double ref2Tota = new Double(0.00);
                 String ref2Id = bizProduct.getProductRef2Id();
                 if (StringUtils.isNotEmpty(ref2Id) && !ref2Id.equals("0")) {
                     Double ref2Price = bizProduct.getRef2Price();
@@ -2550,7 +2552,7 @@ public class BizProcessDataController extends BaseController {
                 }
 
                 //定位器
-                Double pattachmentIdTotal = new Double(2);
+                Double pattachmentIdTotal = new Double(0.00);
                 Long pattachmentId = bizProduct.getPattachmentId();
                 if (pattachmentId != null && pattachmentId > 0L) {
                     Double price = bizProduct.getPattachmentPrice();
@@ -2566,7 +2568,7 @@ public class BizProcessDataController extends BaseController {
                     endRemark += "定位器";
                 }
 
-                Double pattachmentId1Total = new Double(2);
+                Double pattachmentId1Total = new Double(0.00);
                 Long pattachment1Id = bizProduct.getPattachment1Id();
                 if (pattachment1Id != null && pattachment1Id > 0L) {
                     Double price = bizProduct.getPattachment1Price();
@@ -2581,7 +2583,7 @@ public class BizProcessDataController extends BaseController {
                     endRemark += "电磁阀";
                 }
 
-                Double pattachmentId2Total = new Double(2);
+                Double pattachmentId2Total = new Double(0.00);
                 Long pattachment2Id = bizProduct.getPattachment2Id();
                 if (pattachment2Id != null && pattachment2Id > 0L) {
                     Double price = bizProduct.getPattachment2Price();
@@ -2597,7 +2599,7 @@ public class BizProcessDataController extends BaseController {
                 }
 
 
-                Double pattachmentId3Total = new Double(2);
+                Double pattachmentId3Total = new Double(0.00);
                 Long pattachment3Id = bizProduct.getPattachment3Id();
                 if (pattachment3Id != null && pattachment3Id > 0L) {
                     Double price = bizProduct.getPattachment3Price();
@@ -2612,7 +2614,7 @@ public class BizProcessDataController extends BaseController {
                     endRemark += "气源三连件";
                 }
 
-                Double pattachmentId4Total = new Double(2);
+                Double pattachmentId4Total = new Double(0.00);
                 Long pattachment4Id = bizProduct.getPattachment4Id();
                 if (pattachment4Id != null && pattachment4Id > 0L) {
                     Double price = bizProduct.getPattachment4Price();
@@ -2628,7 +2630,7 @@ public class BizProcessDataController extends BaseController {
                 }
 
 
-                Double totalAmount = new Double(2);
+                Double totalAmount = new Double(0.00);
                 totalAmount = productTotal + ref1Total + ref2Tota + actuatorTotal +
                         pattachmentIdTotal + pattachmentId1Total + pattachmentId2Total + pattachmentId3Total + pattachmentId4Total;
 
