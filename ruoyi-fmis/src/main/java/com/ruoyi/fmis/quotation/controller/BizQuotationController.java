@@ -527,7 +527,7 @@ public class BizQuotationController extends BaseController {
             if (bizQuotation.getDiscount()!= null && !bizQuotation.getDiscount().equals("0") && !bizQuotation.getDiscount().equals("0.00")) {
                 table.addCell(PdfUtil.mergeCol("优惠金额：" + bizQuotation.getDiscount(), 1,textFont));//单价
             }
-            table.addCell(PdfUtil.mergeCol("", 1,textFont));//单价
+//            table.addCell(PdfUtil.mergeCol("", 1,textFont));//单价
             table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(sumTotalAmount - Double.parseDouble(bizQuotation.getDiscount())), 1,textFont));//合计
             table.addCell(PdfUtil.mergeCol("", 3,textFont));//备注
 
