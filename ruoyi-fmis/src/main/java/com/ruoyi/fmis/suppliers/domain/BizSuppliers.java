@@ -29,6 +29,9 @@ public class BizSuppliers extends BaseEntity {
     @Excel(name = "电话")
     private String telphone;
 
+    /** 供应商等级 */
+    @Excel(name = "供应商等级")
+    private String supplierLevel;
     /** 传真 */
     @Excel(name = "传真")
     private String fax;
@@ -78,6 +81,9 @@ public class BizSuppliers extends BaseEntity {
 
     /** 是否存在此标识 默认不存在 */
     private boolean flag = false;
+
+    public BizSuppliers() {
+    }
 
     public boolean isFlag()
     {
@@ -274,6 +280,15 @@ public class BizSuppliers extends BaseEntity {
             .append("bank", getBank())
             .append("bankNo", getBankNo())
             .append("taxNumber", getTaxNumber())
+            .append("supplierLevel", getSupplierLevel())
             .toString();
+    }
+
+    public String getSupplierLevel() {
+        return supplierLevel;
+    }
+
+    public void setSupplierLevel(String supplierLevel) {
+        this.supplierLevel = supplierLevel;
     }
 }

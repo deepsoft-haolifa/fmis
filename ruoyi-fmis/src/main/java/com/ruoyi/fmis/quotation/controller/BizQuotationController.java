@@ -427,11 +427,13 @@ public class BizQuotationController extends BaseController {
                             appendStr = "9";
                         }
                         productName = productName.replaceAll("无头",repStr);
-
-                        if (model.startsWith("D")) {
+                        String startS = model.substring(0, 1);
+                        model = model.substring(2, model.length());
+                        model = startS + appendStr + model;
+                       /* if (model.startsWith("D")) {
                             model = model.substring(1,model.length());
                             model = "D" + appendStr + model;
-                        }
+                        }*/
 
                     }
                 }
@@ -525,7 +527,7 @@ public class BizQuotationController extends BaseController {
             if (bizQuotation.getDiscount()!= null && !bizQuotation.getDiscount().equals("0") && !bizQuotation.getDiscount().equals("0.00")) {
                 table.addCell(PdfUtil.mergeCol("优惠金额：" + bizQuotation.getDiscount(), 1,textFont));//单价
             }
-            table.addCell(PdfUtil.mergeCol("", 1,textFont));//单价
+//            table.addCell(PdfUtil.mergeCol("", 1,textFont));//单价
             table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(sumTotalAmount - Double.parseDouble(bizQuotation.getDiscount())), 1,textFont));//合计
             table.addCell(PdfUtil.mergeCol("", 3,textFont));//备注
 

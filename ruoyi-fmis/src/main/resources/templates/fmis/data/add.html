@@ -211,6 +211,10 @@
             <div class="col-sm-2">
                 <input name="price1" id="price1" class="form-control" type="text" >
             </div>
+            <label class="col-sm-1 control-label">整单系数：</label>
+            <div class="col-sm-2">
+                <input name="orderCoefficient" id="orderCoefficient" class="form-control" type="text"  readonly>
+            </div>
 <!--            <label class="col-sm-1 control-label">优惠金额：</label>-->
 <!--            <div class="col-sm-2">-->
 <!--                <input name="discount" id="discount" class="form-control" type="text" onkeyup="AmountKeyUp(this)" onblur="calculateTotalPrice()">-->
@@ -492,6 +496,8 @@
             dataObj.push({"name": "productParmters", "value": JSON.stringify(productArray)});
             var grossPrice = $("#grossPrice").val();
             dataObj.push({"name": "price2", "value": grossPrice});
+            var orderCoefficient = $("#orderCoefficient").val();
+            dataObj.push({"name": "price15", "value": orderCoefficient});
             $.operate.save(prefix + "/add", dataObj);
         }
     }
@@ -783,7 +789,7 @@
         console.log("2"+allTotalCost)
         console.log("3"+specialExpenses)
         $("#grossPrice").val(grossPrice);
-        // $("#orderCoefficient").val(parseFloat(totalPrice / parseFloat(productAllPrice)).toFixed(2));
+        $("#orderCoefficient").val(parseFloat(totalPrice / parseFloat(productAllPrice)).toFixed(2));
 
     }
     function calculateContractPriceOnly (row) {
@@ -1161,6 +1167,7 @@
                 || $.common.isEmpty(totalPrice) || "NaN" == $("#price3").val()) {
                 $("#price3").val(0);
             }
+            $("#orderCoefficient").val(parseFloat(totalPrice / parseFloat(productAllPrice)).toFixed(2));
         }
 
         function calculatePrice(row) {

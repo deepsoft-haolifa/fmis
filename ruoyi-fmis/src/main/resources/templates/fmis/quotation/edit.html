@@ -39,21 +39,25 @@
 
         <form class="form-horizontal m" id="form-quotation-edit" th:object="${bizQuotation}">
             <input name="quotationId" id="quotationId" th:field="*{quotationId}" type="hidden">
+            <label class="col-sm-1 control-label">总数量：</label>
+            <div class="col-sm-1">
+                <input name="totalNumber" id="totalNumber" class="form-control" type="text"  readonly>
+            </div>
             <div class="form-group">
                 <label class="col-sm-1 control-label">报价总金额：</label>
-                <div class="col-sm-2">
+                <div class="col-sm-1">
                     <input name="totalPrice" id="totalPrice" class="form-control" type="text" readonly required>
                 </div>
                 <label class="col-sm-1 control-label">优惠金额：</label>
-                <div class="col-sm-2">
+                <div class="col-sm-1">
                     <input name="discount" id="discount" class="form-control" th:field="*{discount}" type="text" onkeyup="AmountKeyUp(this)" onblur="calculateTotalOnlyPrice()">
                 </div>
                 <label class="col-sm-1 control-label">优惠后金额：</label>
-                <div class="col-sm-2">
+                <div class="col-sm-1">
                     <input name="productTotalPrice" id="productTotalPrice" class="form-control" type="text" readonly required>
                 </div>
                 <label class="col-sm-1 control-label">整单系数：</label>
-                <div class="col-sm-2">
+                <div class="col-sm-1">
                     <input name="orderCoefficient" th:field="*{string18}" id="orderCoefficient" class="form-control" type="text"  readonly>
                 </div>
 
@@ -669,6 +673,7 @@
                 + parseFloat(actuatorNum * actuatorPrice) + parseFloat(pattachmentCount * pattachmentPrice) + parseFloat(pattachment1Count * pattachment1Price)
                 + parseFloat(pattachment2Count * pattachment2Price) + parseFloat(pattachment3Count * pattachment3Price) + parseFloat(pattachment4Count * pattachment4Price)).toFixed(2);
             totalCostPriceMap.set("productAll",productAll);
+            totalCostPriceMap.set("totalPNumber",productNum);
             var string7 = {
                 index : row.rowId,
                 field : "string7",
@@ -881,14 +886,17 @@
             var productTotalPrice = 0;
             var allTotalCost = 0;
             var productAllPrice = 0; //不算系数所有产品总和
+            var totalPNumber = 0;
             for (var i = 0; i < data.length; i++) {
                 var rowData = data[i];
                 var price = calculatePrice(rowData);
                 productTotalPrice = FloatAdd(productTotalPrice,price).toFixed(2);
                 var totalCostPrice = totalCostPriceMap.get("totalCostPrice");
                 var totalproductAllPrice = totalCostPriceMap.get("productAll");
+                var totalPNumber1 = totalCostPriceMap.get("totalPNumber");
                 allTotalCost =  FloatAdd(totalCostPrice,allTotalCost).toFixed(2);
                 productAllPrice =  FloatAdd(totalproductAllPrice,productAllPrice).toFixed(0);
+                totalPNumber =  FloatAdd(totalPNumber,totalPNumber1).toFixed(0);
             }
             var specialExpenses = $("#specialExpenses").val();
             if (isEmpty(specialExpenses)) {
@@ -906,6 +914,7 @@
             //productTotalPrice 毛利 产品金额-成本价格-特殊费用
             var grossPrice = (parseFloat(productTotalPrice) - parseFloat(allTotalCost) - parseFloat(specialExpenses) - parseFloat(discountPrice)).toFixed(2);
             $("#grossPrice").val(grossPrice);
+            $("#totalNumber").val(totalPNumber);
             $("#orderCoefficient").val(parseFloat(totalPrice / parseFloat(productAllPrice)).toFixed(2));
 
         }

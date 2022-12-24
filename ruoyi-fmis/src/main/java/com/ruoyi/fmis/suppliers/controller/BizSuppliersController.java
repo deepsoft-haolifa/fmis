@@ -71,7 +71,7 @@ public class BizSuppliersController extends BaseController {
     public TableDataInfo list(BizSuppliers bizSuppliers) {
         startPage();
         List<BizSuppliers> list = bizSuppliersService.selectBizSuppliersList(bizSuppliers);
-        return getDataTable(list);
+            return getDataTable(list);
     }
 
     @GetMapping("/product")
