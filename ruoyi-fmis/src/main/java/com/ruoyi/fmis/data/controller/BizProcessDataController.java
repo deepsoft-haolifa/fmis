@@ -3142,7 +3142,7 @@ public class BizProcessDataController extends BaseController {
                     }
                 }
             }
-            String payfunc = payRemark;
+
             if (StringUtils.isNotEmpty(transportType)) {
                 payRemark = payRemark + "," + transportType;
             }
@@ -3166,8 +3166,7 @@ public class BizProcessDataController extends BaseController {
 
             table.addCell(PdfUtil.mergeCol("七、", 1, textFont));
             table.addCell(PdfUtil.mergeCol("包装方式：", 2, textFont));
-//            table.addCell(PdfUtil.mergeCol(bizProcessData.getString27(), 5, textFont));
-            table.addCell(PdfUtil.mergeCol("", 5, textFont));
+            table.addCell(PdfUtil.mergeCol(bizProcessData.getString27(), 5, textFont));
             table.addCell(PdfUtil.mergeCol("包装物回收：", 2, textFont));
             table.addCell(PdfUtil.mergeCol("不回收，由买方自行处理。", 5, textFont));
 
@@ -3176,8 +3175,7 @@ public class BizProcessDataController extends BaseController {
             table.addCell(PdfUtil.mergeCol("", 12, textFont));
 
             table.addCell(PdfUtil.mergeCol("九", 1, textFont));
-            table.addCell(PdfUtil.mergeCol("付款方式：" + payfunc, 7, textFont));
-            table.addCell(PdfUtil.mergeCol("付款方法：电汇或承兑", 7, textFont));
+            table.addCell(PdfUtil.mergeCol("付款方式：电汇或承兑", 14, textFont));
 
             table.addCell(PdfUtil.mergeCol("十", 1, textFont));
             table.addCell(PdfUtil.mergeCol("运输：", 14, textFont));
