@@ -306,8 +306,11 @@ public class BizProcessDataController extends BaseController {
     @PostMapping("/exportContract")
     @ResponseBody
     public AjaxResult exportContract(BizProcessData bizProcess) {
-
         try {
+            boolean isSchengchan = false;
+            if (bizProcess != null && bizProcess.getString27() != null) {
+                isSchengchan = true;
+            }
             String toDo = getRequest().getParameter("todo");
             if ("1".equals(toDo)) {
                 bizProcess.setQueryStatus("1");
@@ -436,48 +439,260 @@ public class BizProcessDataController extends BaseController {
             cell_87.setCellStyle(cellTableStyle);
 
             int rowCount = 6;
-            int num = 0;
-            BigDecimal price = new BigDecimal("0");
-            BigDecimal totalPrice = new BigDecimal("0");
+            Double sumTotalNum = new Double(0);
+            Double sumTotalPrice = new Double(0);
+            Double sumTotalAmount = new Double(0);
+            Double sumTotalNumRef1 = new Double(0);
+            Double sumTotalNumRef2 = new Double(0);
+            Double string14D = new Double(0);
+
             if (org.apache.commons.collections4.CollectionUtils.isNotEmpty(bizProcessChildList)) {
                 for (int i = 0; i < bizProcessChildList.size(); i++) {
-                    BizProcessChild bizProcessChild = bizProcessChildList.get(i);
-                    num += StringUtils.isEmpty(bizProcessChild.getProductNum()) ? 0 : Integer.valueOf(bizProcessChild.getProductNum());
-                    price = price.add(new BigDecimal(bizProcessChild.getProductPrice()));
-
-                    BigDecimal a1 = new BigDecimal(bizProcessChild.getProductPrice());
-                    BigDecimal aa = new BigDecimal(bizProcessChild.getProductNum());
-                    Double amount = a1.multiply(aa).doubleValue();
-                    totalPrice = totalPrice.add(new BigDecimal(amount));
+                    BizProcessChild bizProduct = bizProcessChildList.get(i);
+                    String endRemark = "";
                     rowCount++;
+                    string14D += StringUtils.toDouble(bizProduct.getString14());
+                    String productName = bizProduct.getProductName();
+                    String model = bizProduct.getModel();
+                    //执行器计算
+
+                    String actuatorId = bizProduct.getActuatorId();
+                    BizActuator bizActuator = null;
+                    if (StringUtils.isNotEmpty(actuatorId)) {
+                        bizActuator = bizActuatorService.selectBizActuatorById(Long.parseLong(actuatorId));
+                    }
+                    Double actuatorTotal = new Double(0);
+
+                    if (bizActuator != null) {
+                        Double actuatorPrice = bizActuator.getPrice();
+                        String actuatorNum = bizProduct.getActuatorNum();
+                        String actuatorCoefficient = bizProduct.getActuatorCoefficient();
+                        if (StringUtils.isNotEmpty(actuatorNum) && actuatorPrice > 0 && StringUtils.isNotEmpty(actuatorCoefficient)) {
+                            actuatorTotal = Double.parseDouble(actuatorNum) * actuatorPrice * Double.parseDouble(actuatorCoefficient);
+
+                            String type = bizActuator.getString2();
+                            String repStr = "气动";
+                            String appendStr = "6";
+                            if ("1".equals(type)) {
+                                repStr = "电动";
+                                appendStr = "9";
+                            }
+                            productName = productName.replaceAll("无头", repStr);
+                            String startS = model.substring(0, 1);
+                            model = model.substring(2, model.length());
+                            model = startS + appendStr + model;
+                        /*if (model.startsWith("D")) {
+                            model = model.substring(2, model.length());
+                            model = "D" + appendStr + model;
+                        }*/
+                            if (endRemark.length() > 0) {
+                                endRemark += ",";
+                            }
+                            endRemark += "执行器" + " " + bizActuator.getName();
+
+                        }
+                    }
                     Row row = sheet.createRow(rowCount);
                     Cell cell1 = row.createCell(0);
                     cell1.setCellValue(i+1);
                     cell1.setCellStyle(cellTableStyle);
                     Cell cell2 = row.createCell(1);
-                    cell2.setCellValue(bizProcessChild.getProductName());
+                    cell2.setCellValue(productName);
                     cell2.setCellStyle(cellTableStyle);
                     Cell cell3 = row.createCell(2);
-                    cell3.setCellValue(bizProcessChild.getModel());
+                    cell3.setCellValue(bizProduct.getModel());
                     cell3.setCellStyle(cellTableStyle);
                     Cell cell4 = row.createCell(3);
-                    cell4.setCellValue(bizProcessChild.getSpecifications());
+                    cell4.setCellValue(bizProduct.getSpecifications());
                     cell4.setCellStyle(cellTableStyle);
                     Cell cell5 = row.createCell(4);
-                    cell5.setCellValue(bizProcessChild.getProductNum());
+                    cell5.setCellValue(bizProduct.getProductNum());
                     cell5.setCellStyle(cellTableStyle);
+                    //总价计算
+                    Double productPrice = bizProduct.getProductPrice();
+                    String productNum = bizProduct.getProductNum();
+
+                    sumTotalNum = sumTotalNum + Double.parseDouble(productNum);
+
+                    Double productTotal = new Double(0.00);
+                    String productCoefficient = bizProduct.getProductCoefficient();
+                    if (StringUtils.isNotEmpty(productNum) && productPrice != null &&  productPrice > 0 && StringUtils.isNotEmpty(productCoefficient)) {
+                        productTotal = Double.parseDouble(productNum) * productPrice * Double.parseDouble(productCoefficient);
+                    }
+                    //法兰计算
+
+                    Double ref1Total = new Double(0.00);
+                    String ref1Id = bizProduct.getProductRef1Id();
+                    if (StringUtils.isNotEmpty(ref1Id) && !ref1Id.trim().equals("0")) {
+                        Double ref1Price = bizProduct.getRef1Price();
+                        String ref1Num = bizProduct.getProductRef1Num() + "";
+                        String ref1Coefficient = bizProduct.getProductRef1Coefficient();
+                        if (StringUtils.isNotEmpty(ref1Num) && ref1Price != null && ref1Price > 0 && StringUtils.isNotEmpty(ref1Coefficient)) {
+                            ref1Total = Double.parseDouble(ref1Num) * ref1Price * Double.parseDouble(ref1Coefficient);
+                            sumTotalNumRef1 = sumTotalNumRef1 + Double.parseDouble(ref1Num);
+                        }
+                        if (endRemark.length() > 0) {
+                            endRemark += ",";
+                        }
+                        endRemark += "法兰";
+                    }
+                    //螺栓计算
+                    Double ref2Tota = new Double(0.00);
+                    String ref2Id = bizProduct.getProductRef2Id();
+                    if (StringUtils.isNotEmpty(ref2Id) && !ref2Id.equals("0")) {
+                        Double ref2Price = bizProduct.getRef2Price();
+                        String ref2Num = bizProduct.getProductRef2Num() + "";
+                        String ref2Coefficient = bizProduct.getProductRef2Coefficient();
+                        if (StringUtils.isNotEmpty(ref2Num) && ref2Price > 0 && StringUtils.isNotEmpty(ref2Coefficient)) {
+                            ref2Tota = Double.parseDouble(ref2Num) * ref2Price * Double.parseDouble(ref2Coefficient);
+                            sumTotalNumRef2 = sumTotalNumRef2 + Double.parseDouble(ref2Num);
+                        }
+                        if (endRemark.length() > 0) {
+                            endRemark += ",";
+                        }
+                        endRemark += "螺栓";
+                    }
+
+                    //定位器
+                    Double pattachmentIdTotal = new Double(0.00);
+                    Long pattachmentId = bizProduct.getPattachmentId();
+                    if (pattachmentId != null && pattachmentId > 0L) {
+                        Double price = bizProduct.getPattachmentPrice();
+                        Double num = bizProduct.getPattachmentCount();
+                        Double coefficient = bizProduct.getPattachmentCoefficient();
+                        if (price > 0 && num > 0 && coefficient > 0) {
+                            pattachmentIdTotal = price * num * coefficient;
+
+                        }
+                        if (endRemark.length() > 0) {
+                            endRemark += ",";
+                        }
+                        endRemark += "定位器";
+                    }
+
+                    Double pattachmentId1Total = new Double(0.00);
+                    Long pattachment1Id = bizProduct.getPattachment1Id();
+                    if (pattachment1Id != null && pattachment1Id > 0L) {
+                        Double price = bizProduct.getPattachment1Price();
+                        Double num = bizProduct.getPattachment1Count();
+                        Double coefficient = bizProduct.getPattachment1Coefficient();
+                        if (price > 0 && num > 0 && coefficient > 0) {
+                            pattachmentId1Total = price * num * coefficient;
+                        }
+                        if (endRemark.length() > 0) {
+                            endRemark += ",";
+                        }
+                        endRemark += "电磁阀";
+                    }
+
+                    Double pattachmentId2Total = new Double(0.00);
+                    Long pattachment2Id = bizProduct.getPattachment2Id();
+                    if (pattachment2Id != null && pattachment2Id > 0L) {
+                        Double price = bizProduct.getPattachment2Price();
+                        Double num = bizProduct.getPattachment2Count();
+                        Double coefficient = bizProduct.getPattachment2Coefficient();
+                        if (price > 0 && num > 0 && coefficient > 0) {
+                            pattachmentId2Total = price * num * coefficient;
+                        }
+                        if (endRemark.length() > 0) {
+                            endRemark += ",";
+                        }
+                        endRemark += "回信器数";
+                    }
+
+
+                    Double pattachmentId3Total = new Double(0.00);
+                    Long pattachment3Id = bizProduct.getPattachment3Id();
+                    if (pattachment3Id != null && pattachment3Id > 0L) {
+                        Double price = bizProduct.getPattachment3Price();
+                        Double num = bizProduct.getPattachment3Count();
+                        Double coefficient = bizProduct.getPattachment3Coefficient();
+                        if (price > 0 && num > 0 && coefficient > 0) {
+                            pattachmentId3Total = price * num * coefficient;
+                        }
+                        if (endRemark.length() > 0) {
+                            endRemark += ",";
+                        }
+                        endRemark += "气源三连件";
+                    }
+
+                    Double pattachmentId4Total = new Double(0.00);
+                    Long pattachment4Id = bizProduct.getPattachment4Id();
+                    if (pattachment4Id != null && pattachment4Id > 0L) {
+                        Double price = bizProduct.getPattachment4Price();
+                        Double num = bizProduct.getPattachment4Count();
+                        Double coefficient = bizProduct.getPattachment4Coefficient();
+                        if (price > 0 && num > 0 && coefficient > 0) {
+                            pattachmentId4Total = price * num * coefficient;
+                        }
+                        if (endRemark.length() > 0) {
+                            endRemark += ",";
+                        }
+                        endRemark += "可离合减速器";
+                    }
+
+
+                    Double totalAmount = new Double(0.00);
+                    totalAmount = productTotal + ref1Total + ref2Tota + actuatorTotal +
+                            pattachmentIdTotal + pattachmentId1Total + pattachmentId2Total + pattachmentId3Total + pattachmentId4Total;
+
+                    sumTotalAmount = sumTotalAmount + totalAmount;
+//总单价
+                    Double productTotalPrice = Double.valueOf(totalAmount / Double.parseDouble(productNum));
+                    sumTotalPrice = sumTotalPrice + productTotalPrice;
                     Cell cell6 = row.createCell(5);
-                    cell6.setCellValue(bizProcessChild.getProductPrice());
+                    cell6.setCellValue(StringUtils.getDoubleString(productTotalPrice));
                     cell6.setCellStyle(cellTableStyle);
                     Cell cell7 = row.createCell(6);
-                    cell7.setCellValue(amount);
+                    cell7.setCellValue(StringUtils.getDoubleString(totalAmount));
                     cell7.setCellStyle(cellTableStyle);
+
+                    String startRemark = "";
+                    if (StringUtils.isNotEmpty(bizProduct.getValvebodyMaterial())) {
+                        startRemark += "阀体材质：" + bizProduct.getValvebodyMaterial() + ",";
+                    }
+                    if (StringUtils.isNotEmpty(bizProduct.getValveElement())) {
+                        startRemark += "阀芯材质：" + bizProduct.getValveElement() + ",";
+                    }
+                    if (StringUtils.isNotEmpty(bizProduct.getSealingMaterial())) {
+                        startRemark += "密封材质：" + bizProduct.getSealingMaterial() + ",";
+                    }
+                    if (StringUtils.isNotEmpty(bizProduct.getDriveForm())) {
+                        startRemark += "驱动形式：" + bizProduct.getDriveForm() + ",";
+                    }
+                    if (StringUtils.isNotEmpty(bizProduct.getConnectionType())) {
+                        startRemark += "连接方式：" + bizProduct.getConnectionType() + ",";
+                    }
+                    if (StringUtils.isNotEmpty(bizProduct.getString15())) {
+                        startRemark += "颜色：" + bizProduct.getString15() + ",";
+                    }
+                    if (startRemark.length() > 1) {
+                        startRemark = startRemark.substring(0, startRemark.length() - 1);
+                    }
+
                     Cell cell8 = row.createCell(7);
-                    cell8.setCellValue(bizProcessChild.getSealingMaterial());
                     cell8.setCellStyle(cellTableStyle);
+                    if (bizProduct.getString17().equals("其它")) {
+                        endRemark = bizProduct.getRemark();
+                        cell8.setCellValue(bizProduct.getSealingMaterial());
+                    } else {
+                        String text = startRemark;
+                        if (StringUtils.isNotEmpty(endRemark)) {
+                            text = startRemark + " 含" + endRemark;
+                        }
+                        cell8.setCellValue(text);
+                    }
                 }
             }
             int cc = rowCount++;
+            //金额合计
+            String totalDesc = "合计";
+            String string5 = bizProcessData.getString5();
+            if("不含税".equals(string5)) {
+                totalDesc = "不含税价"+totalDesc;
+            } else {
+                totalDesc = "含税价" + totalDesc;
+            }
 
             Row row9 = sheet.createRow(cc);
             Cell cell_90 = row9.createCell(0);
@@ -492,37 +707,69 @@ public class BizProcessDataController extends BaseController {
             Cell cell_93 = row9.createCell(3);
             cell_93.setCellValue("");
             cell_93.setCellStyle(cellTableStyle);
-            sheet.addMergedRegion(new CellRangeAddress(cc, cc, 0, 3));
+            sheet.addMergedRegion(new CellRangeAddress(cc, cc, 0, 2));
             Cell cell_94 = row9.createCell(4);
-            cell_94.setCellValue(num);
+            cell_94.setCellValue(StringUtils.getDoubleString0(sumTotalNum));
             Cell cell_95 = row9.createCell(5);
-            cell_95.setCellValue(price.doubleValue());
+            cell_95.setCellValue("");
             Cell cell_96 = row9.createCell(6);
-            cell_96.setCellValue(totalPrice.doubleValue());
+            cell_96.setCellValue(StringUtils.getDoubleString0(sumTotalAmount));
             Cell cell_97 = row9.createCell(7);
             cell_97.setCellValue("");
             cell_97.setCellStyle(cellTableStyle);
 
+            double discountMoney = sumTotalAmount - string14D;
             int bb = rowCount++;
             Row row10 = sheet.createRow(bb);
             Cell cell_10 = row10.createCell(0);
             cell_10.setCellStyle(cellTableStyle);
-            cell_10.setCellValue("合计人民币金额（大写）：" + StringUtils.convert(totalPrice.doubleValue()) + "（以上价格为含13%税价格）");
-            sheet.addMergedRegion(new CellRangeAddress(bb, bb, 0, 7));
+            cell_10.setCellValue("以上价格是13%增值税价格  人民币：");
             Cell cell_11 = row10.createCell(1);
             cell_11.setCellStyle(cellTableStyle);
             Cell cell_12 = row10.createCell(2);
             cell_12.setCellStyle(cellTableStyle);
+            sheet.addMergedRegion(new CellRangeAddress(bb, bb, 0, 2));
             Cell cell_13 = row10.createCell(3);
             cell_13.setCellStyle(cellTableStyle);
+            cell_13.setCellValue(StringUtils.convert(sumTotalAmount));
             Cell cell_14 = row10.createCell(4);
             cell_14.setCellStyle(cellTableStyle);
             Cell cell_15 = row10.createCell(5);
+            sheet.addMergedRegion(new CellRangeAddress(bb, bb, 3, 5));
             cell_15.setCellStyle(cellTableStyle);
             Cell cell_16 = row10.createCell(6);
             cell_16.setCellStyle(cellTableStyle);
+            cell_16.setCellValue("优惠金额："+ string14D);
             Cell cell_17 = row10.createCell(7);
             cell_17.setCellStyle(cellTableStyle);
+            sheet.addMergedRegion(new CellRangeAddress(bb, bb, 6, 7));
+
+
+            int bbb = rowCount++;
+            Row row100 = sheet.createRow(bbb);
+            Cell cell_101 = row100.createCell(0);
+            cell_101.setCellStyle(cellTableStyle);
+            cell_101.setCellValue("优惠后  人民币：");
+            Cell cell_111 = row100.createCell(1);
+            cell_111.setCellStyle(cellTableStyle);
+            Cell cell_122 = row100.createCell(2);
+            cell_122.setCellStyle(cellTableStyle);
+            sheet.addMergedRegion(new CellRangeAddress(bbb, bbb, 0, 2));
+            Cell cell_133 = row100.createCell(3);
+            cell_133.setCellStyle(cellTableStyle);
+            cell_133.setCellValue(StringUtils.convert(discountMoney));
+            Cell cell_144 = row100.createCell(4);
+            cell_144.setCellStyle(cellTableStyle);
+            Cell cell_155 = row100.createCell(5);
+            sheet.addMergedRegion(new CellRangeAddress(bbb, bbb, 3, 5));
+            cell_155.setCellStyle(cellTableStyle);
+            Cell cell_166 = row100.createCell(6);
+            cell_166.setCellStyle(cellTableStyle);
+            cell_166.setCellValue("优惠合计："+ discountMoney);
+            Cell cell_177 = row100.createCell(7);
+            cell_177.setCellStyle(cellTableStyle);
+            sheet.addMergedRegion(new CellRangeAddress(bbb, bbb, 6, 7));
+
 
             int aa = rowCount++;
             Row row11 = sheet.createRow(aa);
@@ -586,24 +833,30 @@ public class BizProcessDataController extends BaseController {
             Cell cell_16_1 = row16.createCell(1);
             cell_16_1.setCellValue("安装与调试：");
             sheet.addMergedRegion(new CellRangeAddress(hh, hh, 2, 3));
-            ExcelProcessDataUtils.addValidationData(sheet, hh, hh, 2, 2, ExcelProcessDataUtils.anzhuang);
 
             int ii = rowCount++;
             Row row17 = sheet.createRow(ii);
             Cell cell_17_0 = row17.createCell(0);
             cell_17_0.setCellValue("七、");
             Cell cell_17_1 = row17.createCell(1);
-            cell_17_1.setCellValue("包装方式：□木箱 □纸箱 □包装协议  □其他                 ；包装物回收：不回收，由买方自行处理。");
-            sheet.addMergedRegion(new CellRangeAddress(ii, ii, 1, 7));
+            cell_17_1.setCellValue("包装方式：");
+            Cell cell_17_2 = row17.createCell(2);
+            cell_17_2.setCellValue(bizProcessData.getString27());
+            Cell cell_17_3 = row17.createCell(3);
+            cell_17_3.setCellValue("包装物回收：");
+            sheet.addMergedRegion(new CellRangeAddress(ii, ii, 3, 4));
+            Cell cell_17_4 = row17.createCell(5);
+            cell_17_4.setCellValue("不回收，由买方自行处理。");
+            sheet.addMergedRegion(new CellRangeAddress(ii, ii, 5, 6));
+
 
             int jj = rowCount++;
             Row row18 = sheet.createRow(jj);
             Cell cell_18_0 = row18.createCell(0);
             cell_18_0.setCellValue("八、");
             Cell cell_18_1 = row18.createCell(1);
-            cell_18_1.setCellValue("交货周期、");
+            cell_18_1.setCellValue("交货周期：");
             sheet.addMergedRegion(new CellRangeAddress(jj, jj, 2, 3));
-            ExcelProcessDataUtils.addValidationData(sheet, jj, jj, 2, 2, ExcelProcessDataUtils.jioahuozhouqi);
 
             int kk = rowCount++;
             Row row19 = sheet.createRow(kk);
@@ -619,26 +872,100 @@ public class BizProcessDataController extends BaseController {
             Cell cell_20_10 = row20.createCell(1);
             cell_20_10.setCellValue("付款方式：电汇或承兑");
 
+
+            String payRemark = "";
+            String string18 = StringUtils.trim(bizProcessData.getString18());
+            String string7 = StringUtils.trim(bizProcessData.getString7());
+
+            String paymentType = dictDataService.selectDictLabel("payment_type", string18);
+            String transportType = dictDataService.selectDictLabel("transport_type", string7);
+            if (StringUtils.isNotEmpty(paymentType)) {
+                payRemark += paymentType;
+                if ("1".equals(string18)) {
+                    //预付
+                    String string8 = StringUtils.trim(bizProcessData.getString8());
+                    if (StringUtils.isNotEmpty(string8)) {
+                        String string8Name = dictDataService.selectDictLabel("payment_method", string8);
+                        payRemark += " : " + string8Name;
+                    }
+
+                } else if ("2".equals(string18)) {
+                    //账期
+                    String string15 = StringUtils.trim(bizProcessData.getString15());
+                    if (StringUtils.isNotEmpty(string15)) {
+                        String string15Name = dictDataService.selectDictLabel("payment_days", string15);
+//                        payRemark += " : " + string15Name + " " + StringUtils.trim(bizProcessData.getString17()) + " 天";
+                        payRemark += " : " + string15Name;
+                    }
+
+                } else if ("3".equals(string18)) {
+                    //协议付款
+                    if (bizProcessData.getPrice5() != null) {
+                        payRemark += " : 预付" + StringUtils.getDoubleString0(bizProcessData.getPrice5() != null ? bizProcessData.getPrice5() : 0) + " % ";
+                    }
+                    if (bizProcessData.getPrice6() != null) {
+                        payRemark += "发货前付款" + StringUtils.getDoubleString0(bizProcessData.getPrice6() != null ? bizProcessData.getPrice6() : 0) + " % ";
+                    }
+                    if (bizProcessData.getPrice7() != null) {
+                        payRemark += "货到" + StringUtils.getDoubleString0(bizProcessData.getPrice7() != null ? bizProcessData.getPrice7() : 0) + " 天付 ";
+
+                    }
+                    if (bizProcessData.getPrice8() != null) {
+                        payRemark += StringUtils.getDoubleString0(bizProcessData.getPrice8() != null ? bizProcessData.getPrice8() : 0) + " % ";
+
+                    }
+                    if (bizProcessData.getPrice9() != null) {
+                        payRemark += "安装调试" + StringUtils.getDoubleString0(bizProcessData.getPrice9() != null ? bizProcessData.getPrice9() : 0) + " 天 ";
+
+                    }
+                    if (bizProcessData.getPrice10() != null) {
+                        payRemark += "付" + StringUtils.getDoubleString0(bizProcessData.getPrice10() != null ? bizProcessData.getPrice10() : 0) + " % ";
+
+                    }
+                    if (bizProcessData.getPrice11() != null) {
+                        payRemark += "质保金" + StringUtils.getDoubleString0(bizProcessData.getPrice11() != null ? bizProcessData.getPrice11() : 0) + " % ";
+                    }
+                    double count = bizProcessData.getPrice5() + bizProcessData.getPrice6()  + bizProcessData.getPrice8()  + bizProcessData.getPrice10() + bizProcessData.getPrice11();
+                    if ( count != new Double(100)) {
+                        return error("协议付款必须总金额是100%");
+                    }
+                }
+            }
+            String payfunc = payRemark;
+            if (StringUtils.isNotEmpty(transportType)) {
+                payRemark = payRemark + "," + transportType;
+            }
             int mm = rowCount++;
             Row row21 = sheet.createRow(mm);
             Cell cell_21_0 = row21.createCell(1);
             cell_21_0.setCellValue("付款形式：");
-            sheet.addMergedRegion(new CellRangeAddress(ll, mm, 1, 7));
+            Cell cell_21_2 = row21.createCell(2);
+            cell_21_2.setCellValue(payfunc);
+            sheet.addMergedRegion(new CellRangeAddress(mm, mm, 2, 7));
+
 
             int mm0 = rowCount++;
             Row row210 = sheet.createRow(mm0);
             Cell cell_211_0 = row210.createCell(0);
             cell_211_0.setCellValue("十、");
             Cell cell_212_0 = row210.createCell(1);
-            cell_212_0.setCellValue("运输：1、运输方式：");
-            sheet.addMergedRegion(new CellRangeAddress(mm0, mm0, 1, 2));
-            ExcelProcessDataUtils.addValidationData(sheet, mm0, mm0, 3,3, ExcelProcessDataUtils.yunshu);
-            Cell cell_214_0 = row210.createCell(4);
-            cell_214_0.setCellValue("运费");
-            ExcelProcessDataUtils.addValidationData(sheet, mm0, mm0, 5,5, ExcelProcessDataUtils.yunfei);
-            Cell cell_216_0 = row210.createCell(6);
-            cell_216_0.setCellValue("是否需要送");
-            ExcelProcessDataUtils.addValidationData(sheet, mm0, mm0, 7,7, ExcelProcessDataUtils.shifouxuyaosong);
+            cell_212_0.setCellValue("运输：");
+            int nn2 = rowCount++;
+            Row row2101 = sheet.createRow(nn2);
+            Cell cell_211_01 = row2101.createCell(1);
+            cell_211_01.setCellValue("1、运输方式：");
+            sheet.addMergedRegion(new CellRangeAddress(nn2, nn2, 1, 2));
+            Cell cell_212_02 = row2101.createCell(3);
+            cell_212_02.setCellValue(transportType);
+            Cell cell_212_04 = row2101.createCell(4);
+            cell_212_04.setCellValue("运费：");
+            Cell cell_212_05 = row2101.createCell(5);
+            cell_212_05.setCellValue(StringUtils.trim(bizProcessData.getString10()));
+            Cell cell_212_06 = row2101.createCell(6);
+            cell_212_06.setCellValue("是否需要送:");
+            Cell cell_212_07 = row2101.createCell(7);
+            cell_212_07.setCellValue("送货");
+
 
             int nn = rowCount++;
             Row row22 = sheet.createRow(nn);
