@@ -511,9 +511,10 @@ public class BizQuotationController extends BaseController {
                     remark = "";
                 }
                 if (bizProduct.getBizProduct().getSeries().equals("其它")) {
-                    table.addCell(PdfUtil.mergeCol(bizProduct.getRemark(), 4,textFont));
+                    table.addCell(PdfUtil.mergeCol(bizProduct.getString4(), 4,textFont));
                 } else {
-                    table.addCell(PdfUtil.mergeCol(remark, 4,textFont));
+//                    table.addCell(PdfUtil.mergeCol(remark, 4,textFont));
+                    table.addCell(PdfUtil.mergeCol(bizProduct.getString4(), 4,textFont));
                 }
 
 
@@ -526,15 +527,20 @@ public class BizQuotationController extends BaseController {
             table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(sumTotalNum), 1,textFont));//总数量
             if (bizQuotation.getDiscount()!= null && !bizQuotation.getDiscount().equals("0") && !bizQuotation.getDiscount().equals("0.00")) {
                 table.addCell(PdfUtil.mergeCol("优惠金额：" + bizQuotation.getDiscount(), 1,textFont));//单价
+                table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(sumTotalAmount - Double.parseDouble(bizQuotation.getDiscount())), 1,textFont));//合计
+                table.addCell(PdfUtil.mergeCol("", 3,textFont));//备注
+            } else {
+                table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(sumTotalAmount - Double.parseDouble(bizQuotation.getDiscount())), 1,textFont));//合计
+                table.addCell(PdfUtil.mergeCol("", 1,textFont));//优惠金额
+                table.addCell(PdfUtil.mergeCol("", 3,textFont));//备注
             }
 //            table.addCell(PdfUtil.mergeCol("", 1,textFont));//单价
-            table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(sumTotalAmount - Double.parseDouble(bizQuotation.getDiscount())), 1,textFont));//合计
-            table.addCell(PdfUtil.mergeCol("", 3,textFont));//备注
+
 
 
             table.addCell(PdfUtil.mergeColRight("大写人民币合计", 9,textFont));
             table.addCell(PdfUtil.mergeCol(StringUtils.convert(sumTotalAmount), 3,textFont));//合计
-            table.addCell(PdfUtil.mergeCol(bizQuotation.getRemark(), 3,textFont));//备注
+            table.addCell(PdfUtil.mergeCol("", 3,textFont));//备注
 
             // 特别提醒
             Paragraph paragraphRemark = new Paragraph();
@@ -559,6 +565,8 @@ public class BizQuotationController extends BaseController {
             paragraphRemark.add(new Chunk("        3、供货方式： " + payMethod , remarkFont));
             paragraphRemark.add(Chunk.NEWLINE);
             paragraphRemark.add(new Chunk("        4、价格有效期：  " + bizQuotation.getString12() + "   天；", remarkFont));
+            paragraphRemark.add(Chunk.NEWLINE);
+            paragraphRemark.add(new Chunk("        5、备注：" + bizQuotation.getRemark(), remarkFont));
             paragraphRemark.add(Chunk.NEWLINE);
 
 

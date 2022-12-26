@@ -1529,10 +1529,13 @@ public class BizProcessDataProcurementController extends BaseController {
 
             table.addCell(PdfUtil.mergeCol("八、", 1, textFont));
             table.addCell(PdfUtil.mergeCol("交货周期：", 2, textFont));
-            table.addCell(PdfUtil.mergeCol("", 12, textFont));
+            table.addCell(PdfUtil.mergeCol(DateUtils.dateTime(bizProcessData.getDatetime3()), 12, textFont));
 
             table.addCell(PdfUtil.mergeCol("九", 1, textFont));
-            table.addCell(PdfUtil.mergeCol("付款方式：电汇或承兑", 14, textFont));
+            String contractPaytype = dictDataService.selectDictLabel("contract_paytype", bizProcessData.getString20());
+            table.addCell(PdfUtil.mergeCol("付款方式：", 2, textFont));
+            table.addCell(PdfUtil.mergeCol(contractPaytype, 12, textFont));
+//            table.addCell(PdfUtil.mergeCol("付款方式：电汇或承兑", 14, textFont));
 
             table.addCell(PdfUtil.mergeCol("十", 1, textFont));
             table.addCell(PdfUtil.mergeCol("运输：", 14, textFont));
@@ -1548,7 +1551,7 @@ public class BizProcessDataProcurementController extends BaseController {
 
             table.addCell(PdfUtil.mergeCol("", 1, textFont));
             table.addCell(PdfUtil.mergeCol("2、收货地址信息：", 3, textFont));
-            table.addCell(PdfUtil.mergeCol(StringUtils.trim(bizProcessData.getString9()), 12, textFont));
+            table.addCell(PdfUtil.mergeCol(StringUtils.trim(bizProcessData.getString28()), 12, textFont));
             table.addCell(PdfUtil.mergeCol("", 1, textFont));
             table.addCell(PdfUtil.mergeColLeft("3、其他约定事项：", 14, textFont));
 

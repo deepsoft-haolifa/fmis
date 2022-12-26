@@ -132,6 +132,10 @@
             <div class="col-sm-4">
                 <input name="purchaseSpecificRequests" class="form-control" th:field="*{purchaseSpecificRequests}" type="text" readonly>
             </div>
+            <label class="col-sm-1 control-label">优惠金额：</label>
+            <div class="col-sm-2">
+                <input name="price20" class="form-control" th:field="*{price20}" type="text" readonly>
+            </div>
         </div>
 
         <input type="hidden" id="numJsonValue" name="numJsonValue" th:value="${numJsonValue}"/>
