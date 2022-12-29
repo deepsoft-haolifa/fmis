@@ -939,6 +939,7 @@
             var idx = $element.parent().data('index');
             console.log("row.index=" + idx + "--" + row.productId);
             var productId = row.productId;
+            var model = row.model;
             if (field == "ref1Name") {
                 //选择法兰
                 var widthNum = $("#form-quotation-edit").width() - 50;
@@ -969,12 +970,17 @@
                 var heigthNum = $("#form-quotation-edit").height() + 250;
                 var url = prefix + "/selectActuator?productId=" + productId;
                 console.log("widthNum=" + widthNum + "---" + this.innerWidth);
-                $.modal.open("关联执行器", url,widthNum, heigthNum,function (index, layero) {
-                    var iframeWin = layero.find('iframe')[0];
-                    iframeWin.contentWindow.submitHandler(index, layero);
-                    var actuatorJsonParamter = $("#actuatorJsonParamter").val();
-                    setTableValueById(actuatorJsonParamter,productId,idx);
-                });
+                console.log("model:" + model + "--2位：" + model.substring(1,2));
+                if (model.substring(1,2) != '0') {
+                    alert("此产品无需选择执行器")
+                } else {
+                    $.modal.open("关联执行器", url,widthNum, heigthNum,function (index, layero) {
+                        var iframeWin = layero.find('iframe')[0];
+                        iframeWin.contentWindow.submitHandler(index, layero);
+                        var actuatorJsonParamter = $("#actuatorJsonParamter").val();
+                        setTableValueById(actuatorJsonParamter,productId,idx);
+                    });
+                }
             } else if (field == "pattachmentName" || field == "pattachment1Name" || field == "pattachment2Name"
                 || field == "pattachment3Name" || field == "pattachment4Name") {
                 var widthNum = $("#form-quotation-edit").width() - 50;
