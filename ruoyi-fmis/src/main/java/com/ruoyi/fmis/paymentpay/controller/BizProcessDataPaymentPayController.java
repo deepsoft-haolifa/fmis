@@ -244,7 +244,7 @@ public class BizProcessDataPaymentPayController extends BaseController {
             // 借款单还款
             insertBankBillRecord(1, "3", bizProcessData.getString6(), bizProcessData.getString2(), bizProcessData.getDatetime3(), bizProcessData.getBalanceAmount(),
                     String.format("报销单冲抵还款，单号：s%，金额：s%", bizProcessData.getString2(),
-                            bizProcessData.getPrice1()), bizProcessData.getString3(), bizProcessData.getString10(), "");
+                            bizProcessData.getPrice1()), bizProcessData.getString3(), bizProcessData.getString10(), bizProcessData.getString5());
             // 更新状态：借款单单号， 完结状态 ，已结算金额
             updateBorrowingStatusAndAmount(bizProcessData.getBalanceBorrowNo(), 2, bizProcessData.getBalanceAmount());
         }
@@ -255,9 +255,10 @@ public class BizProcessDataPaymentPayController extends BaseController {
             // 生成报销单 放款 记账
             // 更新借款单状态为 部分结清， 结算金额
             // 借款单还款记账
+            //报销单的开户行 string5应该是银行日记账的收付款帐户 pay_account，收款帐户string3是银行曰记账的收款单位collect_company
             insertBankBillRecord(1, "3", bizProcessData.getString6(), bizProcessData.getString2(), bizProcessData.getDatetime3(), bizProcessData.getPrice1(),
                     String.format("报销单冲抵还款，单号：s%，金额：s%", bizProcessData.getString2(),
-                            bizProcessData.getPrice1()), bizProcessData.getString3(), bizProcessData.getString10(), "");
+                            bizProcessData.getPrice1()), bizProcessData.getString3(), bizProcessData.getString10(), bizProcessData.getString5());
             updateBorrowingStatusAndAmount(bizProcessData.getBalanceBorrowNo(), 1, bizProcessData.getPrice1());
 
         }
@@ -277,9 +278,9 @@ public class BizProcessDataPaymentPayController extends BaseController {
         }
         bizBankBill.setPayment(price1);
         bizBankBill.setRemark(remark);
-        bizBankBill.setPayCompany(payer);
+        bizBankBill.setPayCompany(payee);
         bizBankBill.setPayAccount(payAccount);
-        bizBankBill.setCollectCompany(payee);
+        bizBankBill.setCollectCompany(payer);
         bizBankBillService.insertBizBankBill(bizBankBill);
 
     }

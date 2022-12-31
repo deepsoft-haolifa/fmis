@@ -94,14 +94,18 @@
 
 
         <div class="form-group">
-            <label class="col-sm-3 control-label">产品金额：</label>
+            <label class="col-sm-1 control-label">产品金额：</label>
             <div class="col-sm-2">
                 <input name="productTotalPrice" id="productTotalPrice" class="form-control" type="text" readonly>
             </div>
 
-            <label class="col-sm-3 control-label">报价金额：</label>
+            <label class="col-sm-1 control-label">报价金额：</label>
             <div class="col-sm-2">
                 <input name="totalPrice" id="totalPrice" class="form-control" type="text" readonly>
+            </div>
+            <label class="col-sm-1 control-label">整单系数：</label>
+            <div class="col-sm-2">
+                <input name="orderCoefficient" th:field="*{string18}" id="orderCoefficient" class="form-control" type="text"  readonly>
             </div>
         </div>
 
