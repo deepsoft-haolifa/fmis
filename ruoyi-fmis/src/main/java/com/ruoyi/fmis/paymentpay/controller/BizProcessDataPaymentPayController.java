@@ -421,7 +421,7 @@ public class BizProcessDataPaymentPayController extends BaseController {
                     bizBankBill.setRemark(bizProcessData.getRemark());
                     bizBankBill.setPayCompany(bizProcessData.getString10());
                     bizBankBill.setPayAccount(bizProcessData.getString12());
-                    bizBankBill.setCollectCompany(bizProcessData.getString5());
+                    bizBankBill.setCollectCompany(bizProcessData.getString3());
                     bizBankBillService.insertBizBankBill(bizBankBill);
                 }
             }
