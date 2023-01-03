@@ -440,9 +440,9 @@ public class BizQuotationController extends BaseController {
                 table.addCell(PdfUtil.mergeCol(productName, 1,textFont));
 
 
-                table.addCell(PdfUtil.mergeCol(model, 3,textFont));
-                //table.addCell(PdfUtil.mergeCol(bizProductObj.getSpecifications(), 1,textFont));//规格
-                //table.addCell(PdfUtil.mergeCol(bizProductObj.getNominalPressure(), 1));//压力
+                table.addCell(PdfUtil.mergeCol(model, 1,textFont));
+                table.addCell(PdfUtil.mergeCol(bizProductObj.getSpecifications(), 1,textFont));//规格
+                table.addCell(PdfUtil.mergeCol(bizProductObj.getNominalPressure(), 1,textFont));//压力
                 table.addCell(PdfUtil.mergeCol(bizProductObj.getValvebodyMaterial(), 1,textFont));//阀体
                 table.addCell(PdfUtil.mergeCol(bizProductObj.getValveElement(), 1,textFont));//阀芯
                 //table.addCell(PdfUtil.mergeCol("", 1));//阀板
@@ -526,21 +526,22 @@ public class BizQuotationController extends BaseController {
             table.addCell(PdfUtil.mergeColRight("合计", 9,textFont));
             table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(sumTotalNum), 1,textFont));//总数量
             if (bizQuotation.getDiscount()!= null && !bizQuotation.getDiscount().equals("0") && !bizQuotation.getDiscount().equals("0.00")) {
-                table.addCell(PdfUtil.mergeCol("优惠金额：" + bizQuotation.getDiscount(), 1,textFont));//单价
+//                table.addCell(PdfUtil.mergeCol("优惠金额：" + bizQuotation.getDiscount(), 1,textFont));//单价
+                table.addCell(PdfUtil.mergeCol("", 1,textFont));//优惠金额
                 table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(sumTotalAmount - Double.parseDouble(bizQuotation.getDiscount())), 1,textFont));//合计
                 table.addCell(PdfUtil.mergeCol("", 3,textFont));//备注
             } else {
-                table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(sumTotalAmount - Double.parseDouble(bizQuotation.getDiscount())), 1,textFont));//合计
+                table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(sumTotalAmount), 1,textFont));//合计
                 table.addCell(PdfUtil.mergeCol("", 1,textFont));//优惠金额
                 table.addCell(PdfUtil.mergeCol("", 3,textFont));//备注
             }
-            table.addCell(PdfUtil.mergeCol("", 1,textFont));//单价
-            table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(sumTotalAmount - Double.parseDouble(bizQuotation.getDiscount())), 1,textFont));//合计
-            table.addCell(PdfUtil.mergeCol("", 3,textFont));//备注
+            /*table.addCell(PdfUtil.mergeCol("", 1,textFont));//单价
+            table.addCell(PdfUtil.mergeCol("", 1,textFont));//合计
+            table.addCell(PdfUtil.mergeCol("", 3,textFont));//备注*/
 
-
-            table.addCell(PdfUtil.mergeColRight("大写人民币合计", 9,textFont));
-            table.addCell(PdfUtil.mergeCol(StringUtils.convert(sumTotalAmount), 3,textFont));//合计
+            table.addCell(PdfUtil.mergeCol("优惠金额：" + bizQuotation.getDiscount(), 3,textFont));
+            table.addCell(PdfUtil.mergeCol("合计：" + StringUtils.getDoubleString0(sumTotalAmount - Double.parseDouble(bizQuotation.getDiscount())), 3,textFont));
+            table.addCell(PdfUtil.mergeCol("大写人民币合计:" + StringUtils.convert(sumTotalAmount), 6,textFont));
             table.addCell(PdfUtil.mergeCol("", 3,textFont));//备注
 
             // 特别提醒

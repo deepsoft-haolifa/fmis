@@ -36,6 +36,7 @@ import com.ruoyi.fmis.data.domain.ProcessDataEx;
 import com.ruoyi.fmis.data.domain.SaleListExportDTO;
 import com.ruoyi.fmis.data.service.IBizProcessDataService;
 import com.ruoyi.fmis.define.service.IBizProcessDefineService;
+import com.ruoyi.fmis.dict.domain.BizDict;
 import com.ruoyi.fmis.dict.service.IBizDictService;
 import com.ruoyi.fmis.file.domain.BizAccessory;
 import com.ruoyi.fmis.file.service.IBizAccessoryService;
@@ -3167,7 +3168,8 @@ public class BizProcessDataController extends BaseController {
 
             table.addCell(PdfUtil.mergeCol("七、", 1, textFont));
             table.addCell(PdfUtil.mergeCol("包装方式：", 2, textFont));
-            table.addCell(PdfUtil.mergeCol(bizProcessData.getString27(), 5, textFont));
+            table.addCell(PdfUtil.mergeCol("", 5, textFont));
+//            table.addCell(PdfUtil.mergeCol(bizProcessData.getString27(), 5, textFont));
             table.addCell(PdfUtil.mergeCol("包装物回收：", 2, textFont));
             table.addCell(PdfUtil.mergeCol("不回收，由买方自行处理。", 5, textFont));
 
@@ -3176,7 +3178,7 @@ public class BizProcessDataController extends BaseController {
             table.addCell(PdfUtil.mergeCol("", 12, textFont));
 
             table.addCell(PdfUtil.mergeCol("九", 1, textFont));
-            table.addCell(PdfUtil.mergeCol("付款方式：电汇或承兑", 14, textFont));
+            table.addCell(PdfUtil.mergeCol("付款方式：电汇或承兑。 " + "付款形式：" + sysDictDataService.selectDictLabel("payment_method", bizProcessData.getString18()), 14, textFont));
 
             table.addCell(PdfUtil.mergeCol("十", 1, textFont));
             table.addCell(PdfUtil.mergeCol("运输：", 14, textFont));
