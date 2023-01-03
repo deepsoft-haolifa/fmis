@@ -2241,9 +2241,9 @@ public class BizProcessDataProcurementController extends BaseController {
                 for (int i = 0; i < bizProductChildList.size(); i++) {
                     BizProcessChild bizProcessChild = bizProductChildList.get(i);
                     num += StringUtils.isEmpty(bizProcessChild.getProductNum()) ? 0 : Integer.valueOf(bizProcessChild.getProductNum());
-                    price = price.add(new BigDecimal(bizProcessChild.getProductPrice()));
+                    price = price.add(new BigDecimal(bizProcessChild.getProductProcurementPrice()));
 
-                    BigDecimal a1 = new BigDecimal(bizProcessChild.getProductPrice());
+                    BigDecimal a1 = new BigDecimal(bizProcessChild.getProductProcurementPrice());
                     BigDecimal aa = new BigDecimal(bizProcessChild.getProductNum());
                     Double amount = a1.multiply(aa).doubleValue();
                     totalPrice = totalPrice.add(new BigDecimal(amount));
@@ -2265,7 +2265,7 @@ public class BizProcessDataProcurementController extends BaseController {
                     cell5.setCellValue(bizProcessChild.getProductNum());
                     cell5.setCellStyle(cellTableStyle);
                     Cell cell6 = row.createCell(5);
-                    cell6.setCellValue(bizProcessChild.getProductPrice());
+                    cell6.setCellValue(bizProcessChild.getProductProcurementPrice());
                     cell6.setCellStyle(cellTableStyle);
                     Cell cell7 = row.createCell(6);
                     cell7.setCellValue(amount);
@@ -2275,6 +2275,86 @@ public class BizProcessDataProcurementController extends BaseController {
                             + ",密封材质:" + bizProcessChild.getSealingMaterial() + ",驱动形式:" + bizProcessChild.getDriveForm()
                             + ",连接方式:" + bizProcessChild.getConnectionType();
                     cell8.setCellValue(caizhi);
+                    cell8.setCellStyle(cellTableStyle);
+                }
+            }
+
+            List<BizProcessChild> actuatorList = bizProcessChildService.selectBizTestActuatorList(queryBizProcessChild);
+            if (!CollectionUtils.isEmpty(actuatorList)) {
+                for (int i = 0; i < actuatorList.size(); i++) {
+                    BizProcessChild bizProcessChild = actuatorList.get(i);
+                    num += StringUtils.isEmpty(bizProcessChild.getActuatorNum()) ? 0 : Integer.valueOf(bizProcessChild.getActuatorNum());
+                    price = price.add(new BigDecimal(bizProcessChild.getActuatorString6()));
+
+                    BigDecimal a1 = new BigDecimal(bizProcessChild.getActuatorString6());
+                    BigDecimal aa = new BigDecimal(bizProcessChild.getActuatorNum());
+                    Double amount = a1.multiply(aa).doubleValue();
+                    totalPrice = totalPrice.add(new BigDecimal(amount));
+                    rowCount++;
+                    Row row = sheet.createRow(rowCount);
+                    Cell cell1 = row.createCell(0);
+                    cell1.setCellValue(i+1);
+                    cell1.setCellStyle(cellTableStyle);
+                    Cell cell2 = row.createCell(1);
+                    cell2.setCellValue(bizProcessChild.getActuatorName());
+                    cell2.setCellStyle(cellTableStyle);
+                    Cell cell3 = row.createCell(2);
+                    cell3.setCellValue(bizProcessChild.getActuatorString1());
+                    cell3.setCellStyle(cellTableStyle);
+                    Cell cell4 = row.createCell(3);
+                    cell4.setCellValue("");
+                    cell4.setCellStyle(cellTableStyle);
+                    Cell cell5 = row.createCell(4);
+                    cell5.setCellValue(bizProcessChild.getActuatorNum());
+                    cell5.setCellStyle(cellTableStyle);
+                    Cell cell6 = row.createCell(5);
+                    cell6.setCellValue(bizProcessChild.getActuatorString6());
+                    cell6.setCellStyle(cellTableStyle);
+                    Cell cell7 = row.createCell(6);
+                    cell7.setCellValue(amount);
+                    cell7.setCellStyle(cellTableStyle);
+                    Cell cell8 = row.createCell(7);
+                    cell8.setCellValue(bizProcessChild.getString5());
+                    cell8.setCellStyle(cellTableStyle);
+                }
+            }
+
+            List<BizProcessChild> ref1List = bizProcessChildService.selectBizTestRef1List(queryBizProcessChild);
+            if (!CollectionUtils.isEmpty(ref1List)) {
+                for (int i = 0; i < ref1List.size(); i++) {
+                    BizProcessChild bizProcessChild = ref1List.get(i);
+                    num += Double.isNaN(bizProcessChild.getProductRef1Num()) ? 0 : bizProcessChild.getProductRef1Num().intValue();
+                    price = price.add(new BigDecimal(bizProcessChild.getRef1Price()));
+
+                    BigDecimal a1 = new BigDecimal(bizProcessChild.getRef1Price());
+                    BigDecimal aa = new BigDecimal(bizProcessChild.getProductRef1Num());
+                    Double amount = a1.multiply(aa).doubleValue();
+                    totalPrice = totalPrice.add(new BigDecimal(amount));
+                    rowCount++;
+                    Row row = sheet.createRow(rowCount);
+                    Cell cell1 = row.createCell(0);
+                    cell1.setCellValue(i+1);
+                    cell1.setCellStyle(cellTableStyle);
+                    Cell cell2 = row.createCell(1);
+                    cell2.setCellValue(bizProcessChild.getRef1Name());
+                    cell2.setCellStyle(cellTableStyle);
+                    Cell cell3 = row.createCell(2);
+                    cell3.setCellValue(bizProcessChild.getModel());
+                    cell3.setCellStyle(cellTableStyle);
+                    Cell cell4 = row.createCell(3);
+                    cell4.setCellValue(bizProcessChild.getRef1Specifications());
+                    cell4.setCellStyle(cellTableStyle);
+                    Cell cell5 = row.createCell(4);
+                    cell5.setCellValue(bizProcessChild.getProductRef1Num());
+                    cell5.setCellStyle(cellTableStyle);
+                    Cell cell6 = row.createCell(5);
+                    cell6.setCellValue(bizProcessChild.getRef1Price());
+                    cell6.setCellStyle(cellTableStyle);
+                    Cell cell7 = row.createCell(6);
+                    cell7.setCellValue(amount);
+                    cell7.setCellStyle(cellTableStyle);
+                    Cell cell8 = row.createCell(7);
+                    cell8.setCellValue(bizProcessChild.getRef1MaterialRequire());
                     cell8.setCellStyle(cellTableStyle);
                 }
             }
@@ -2408,6 +2488,8 @@ public class BizProcessDataProcurementController extends BaseController {
             cell_18_0.setCellValue("八、");
             Cell cell_18_1 = row18.createCell(1);
             cell_18_1.setCellValue("交货周期:");
+            Cell cell_18_2 = row18.createCell(2);
+            cell_18_2.setCellValue(DateUtils.dateTime(bizProcess.getDatetime3()));
 
             rowCount++;
             Row row19 = sheet.createRow(rowCount);
@@ -2422,9 +2504,10 @@ public class BizProcessDataProcurementController extends BaseController {
             Cell cell_20_0 = row20.createCell(0);
             cell_20_0.setCellValue("九、");
             Cell cell_20_10 = row20.createCell(1);
-            cell_20_10.setCellValue("付款形式：");
+            cell_20_10.setCellValue("付款方式：");
+            String contractPaytype = dictDataService.selectDictLabel("contract_paytype", bizProcess.getString20());
             Cell cell_20_12 = row20.createCell(2);
-            cell_20_12.setCellValue("电汇或承兑：");
+            cell_20_12.setCellValue(contractPaytype);
 
             rowCount++;
             Row row210 = sheet.createRow(rowCount);
@@ -2452,9 +2535,9 @@ public class BizProcessDataProcurementController extends BaseController {
             rowCount++;
             Row row22 = sheet.createRow(rowCount);
             Cell cell_22_1 = row22.createCell(1);
-            cell_22_1.setCellValue("2、收货人及收货地点：");
+            cell_22_1.setCellValue("2、收货地址信息：");
             Cell cell_22_3 = row22.createCell(3);
-            cell_22_3.setCellValue(bizProcess.getString9());
+            cell_22_3.setCellValue(bizProcess.getString28());
             sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 1, 2));
             sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 3, 7));
 
