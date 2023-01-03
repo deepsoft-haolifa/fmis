@@ -1856,6 +1856,7 @@ public class BizQuotationController extends BaseController {
                 cell10.setCellStyle(cellTableStyle);
             }
 
+            int aa1 = rowCount++;
             int aa = rowCount++;
             Row row9 = sheet.createRow(aa);
             row9.setHeight((short) 400);

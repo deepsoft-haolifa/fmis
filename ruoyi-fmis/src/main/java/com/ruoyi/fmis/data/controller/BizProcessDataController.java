@@ -684,6 +684,7 @@ public class BizProcessDataController extends BaseController {
                     }
                 }
             }
+            int cc1 = rowCount++;
             int cc = rowCount++;
             //金额合计
             String totalDesc = "合计";
