@@ -1870,7 +1870,7 @@ public class BizQuotationController extends BaseController {
             cell_95.setCellValue(count);
             cell_95.setCellStyle(cellTableStyle);
             Cell cell_96 = row9.createCell(6);
-            cell_96.setCellValue(unitPrice);
+            cell_96.setCellValue("");
             cell_96.setCellStyle(cellTableStyle);
             Cell cell_97 = row9.createCell(7);
             cell_97.setCellValue(totalPrice);
@@ -1890,19 +1890,26 @@ public class BizQuotationController extends BaseController {
             cell_14.setCellStyle(cellTableStyle);
             sheet.addMergedRegion(new CellRangeAddress(bb, bb, 4, 7));
             Cell cell_18 = row10.createCell(8);
-            cell_18.setCellValue("优惠价：" + bizQuotation.getDiscount());
+            cell_18.setCellValue("优惠金额：" + bizQuotation.getDiscount());
             cell_18.setCellStyle(cellTableStyle);
             sheet.addMergedRegion(new CellRangeAddress(bb, bb, 8, 10));
 
             int cc = rowCount++;
             Row row11 = sheet.createRow(cc);
             row11.setHeight((short) 400);
-            sheet.addMergedRegion(new CellRangeAddress(cc, cc, 0, 7));
-            List<Integer> row11CellList = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 9, 10);
+            Cell cell_11_0 = row11.createCell(0);
+            cell_11_0.setCellValue("      优惠后     人民币：");
+            cell_11_0.setCellStyle(cellTableStyle);
+            sheet.addMergedRegion(new CellRangeAddress(cc, cc, 0, 3));
+            List<Integer> row11CellList = Arrays.asList(1, 2,3, 5, 6, 7, 9, 10);
             ExcelProcessDataUtils.fillInBlankCell(row11, cellRightBlackFont, row11CellList);
-            Cell cell_11_8 = row11.createCell(8);
-            cell_11_8.setCellValue("优惠价人民币：" + StringUtils.convert(Double.parseDouble(bizQuotation.getDiscount())));
-            cell_11_8.setCellStyle(cellTableStyle);
+            Cell cell_114 = row11.createCell(4);
+            cell_114.setCellValue(StringUtils.convert(totalPrice - Double.parseDouble(bizQuotation.getDiscount())));
+            cell_114.setCellStyle(cellTableStyle);
+            sheet.addMergedRegion(new CellRangeAddress(cc, cc, 4, 7));
+            Cell cell_118 = row11.createCell(8);
+            cell_118.setCellValue("优惠合计：" + (totalPrice - Double.parseDouble(bizQuotation.getDiscount())));
+            cell_118.setCellStyle(cellTableStyle);
             sheet.addMergedRegion(new CellRangeAddress(cc, cc, 8, 10));
 
             int dd = rowCount++;
@@ -1923,6 +1930,8 @@ public class BizQuotationController extends BaseController {
             Cell cell_13_2 = row13.createCell(3);
             cell_13_2.setCellValue(bizQuotation.getLeadTime() + "个工作日");
             cell_13_2.setCellStyle(ExcelProcessDataUtils.cellLeft(workbook));
+            sheet.addMergedRegion(new CellRangeAddress(ee, ee, 3, 4));
+
 
             String payMethod = dictDataService.selectDictLabel("payment_method",bizQuotationDict.getPaymentMethod());
             if(payMethod.equals("其他")) {

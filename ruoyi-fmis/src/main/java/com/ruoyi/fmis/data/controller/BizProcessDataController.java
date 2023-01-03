@@ -724,7 +724,7 @@ public class BizProcessDataController extends BaseController {
             Row row10 = sheet.createRow(bb);
             Cell cell_10 = row10.createCell(0);
             cell_10.setCellStyle(cellTableStyle);
-            cell_10.setCellValue("以上价格是13%增值税价格  人民币：");
+            cell_10.setCellValue("以上价格是13%增值税价格,人民币：");
             Cell cell_11 = row10.createCell(1);
             cell_11.setCellStyle(cellTableStyle);
             Cell cell_12 = row10.createCell(2);
