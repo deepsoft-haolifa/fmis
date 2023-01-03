@@ -1846,7 +1846,9 @@ public class BizQuotationController extends BaseController {
                 cell7.setCellValue(v + "");
                 cell7.setCellStyle(cellTableStyle);
                 Cell cell8 = rowi.createCell(8);
-                cell8.setCellValue(bizProductObj.getSealingMaterial());
+                String caizhi = "阀体材质:" + bizProductObj.getValvebodyMaterial() + ";" + "阀芯材质：" + bizProductObj.getValveElement()
+                        + ";" + "密封材质：" + bizProductObj.getSealingMaterial() + ";" + "连接方式：" + bizProductObj.getConnectionType() + "。";
+                cell8.setCellValue(caizhi);
                 cell8.setCellStyle(cellTableStyle);
                 Cell cell9 = rowi.createCell(9);
                 cell9.setCellValue("");
