@@ -860,14 +860,14 @@
             var updateObjOnly = {
                 index : row.rowId,
                 field : "totalPriceOnly",
-                value : parseFloat(totalSum / productNum).toFixed(2)
+                value : parseFloat(totalSum / productNum).toFixed(0)
             };
             $.btTable.bootstrapTable("updateCell",updateObjOnly);
             console.log("productAll:" + productAll);
             var string7 = {
                 index : row.rowId,
                 field : "string7",
-                value : parseFloat(totalSum / productAll).toFixed(2)
+                value : parseFloat(totalSum / productAll).toFixed(0)
             };
             $.btTable.bootstrapTable("updateCell",string7);
             var updateObj = {
@@ -906,13 +906,13 @@
             if (isEmpty(discountPrice)) {
                 discountPrice = 0;
             }
-            $("#productTotalPrice").val(parseFloat(productTotalPrice).toFixed(2) -  parseFloat(discountPrice).toFixed(2));
+            $("#productTotalPrice").val(parseFloat(productTotalPrice).toFixed(0) -  parseFloat(discountPrice).toFixed(0));
             var totalPrice = parseFloat(productTotalPrice) + parseFloat(specialExpenses);
             console.log("totalPrice:---11--" + totalPrice);
-            $("#totalPrice").val(parseFloat(totalPrice).toFixed(2));
+            $("#totalPrice").val(parseFloat(totalPrice).toFixed(0));
 
             //productTotalPrice 毛利 产品金额-成本价格-特殊费用
-            var grossPrice = (parseFloat(productTotalPrice) - parseFloat(allTotalCost) - parseFloat(specialExpenses) - parseFloat(discountPrice)).toFixed(2);
+            var grossPrice = (parseFloat(productTotalPrice) - parseFloat(allTotalCost) - parseFloat(specialExpenses) - parseFloat(discountPrice)).toFixed(0);
             $("#grossPrice").val(grossPrice);
             $("#totalNumber").val(totalPNumber);
             $("#orderCoefficient").val(parseFloat(totalPrice / parseFloat(productAllPrice)).toFixed(2));
@@ -1003,7 +1003,7 @@
                 }
                 var url = prefix + "/selectPattachment?productId=" + productId + "&type=" + busType;
                 if (model.substring(1,2) != '0') {
-                    alert("此产品无需选择执行器")
+                    alert("此产品无需选择此配件")
                 } else {
                     $.modal.open("关联" + busName, url,widthNum, heigthNum,function (index, layero) {
                         var iframeWin = layero.find('iframe')[0];
@@ -1096,10 +1096,10 @@
             $("#productTotalPrice").val(parseFloat(productTotalPrice).toFixed(2) - parseFloat(discountPrice).toFixed(2));
             var totalPrice = parseFloat(productTotalPrice) + parseFloat(specialExpenses);
             console.log("totalPrice:---" + totalPrice);
-            $("#totalPrice").val(parseFloat(totalPrice).toFixed(2));
+            $("#totalPrice").val(parseFloat(totalPrice).toFixed(0));
 
             //productTotalPrice 毛利 产品金额-成本价格-特殊费用
-            var grossPrice = (parseFloat(productTotalPrice) - parseFloat(allTotalCost) - parseFloat(specialExpenses) - parseFloat(discountPrice)).toFixed(2);
+            var grossPrice = (parseFloat(productTotalPrice) - parseFloat(allTotalCost) - parseFloat(specialExpenses) - parseFloat(discountPrice)).toFixed(0);
             $("#grossPrice").val(grossPrice);
         }
         function calPrice (row) {
@@ -1237,7 +1237,7 @@
             var updateObjOnly = {
                 index : row.rowId,
                 field : "totalPrice",
-                value : parseFloat(totalPriceOnly * productNum).toFixed(2)
+                value : parseFloat(totalPriceOnly * productNum).toFixed(0)
             };
             $.btTable.bootstrapTable("updateCell",updateObjOnly);
 

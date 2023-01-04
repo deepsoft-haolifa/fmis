@@ -502,7 +502,7 @@ public class BizQuotationController extends BaseController {
 //                Double productTotalPrice = Double.valueOf(totalAmount / Double.parseDouble(productNum));
 
                 sumTotalPrice = sumTotalPrice + productTotalPrice;
-                table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(productTotalPrice), 1,textFont));//单价
+                table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString(productTotalPrice), 1,textFont));//单价
 
                 table.addCell(PdfUtil.mergeCol(productTotalPrice * Double.parseDouble(productNum) + "", 1,textFont));//合计
 //                table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(totalAmount), 1,textFont));//合计
