@@ -660,7 +660,7 @@
                 || field == "productRef1Num"|| field == "productRef1Coefficient"
                 || field == "productRef2Num"|| field == "productRef2Coefficient"
                 || field == "actuatorNum" || field == "actuatorCoefficient") {
-                calculateTotalPrice();
+                calculateTotalPrice(field);
             }
         }
         function calculateContractPrice() {
@@ -846,6 +846,12 @@
                 value : parseFloat(totalSum / productAll).toFixed(2)
             };
             $.btTable.bootstrapTable("updateCell",string17);
+            var productPrice = {
+                index : row.rowId,
+                field : "productPrice",
+                value : parseFloat(totalPriceOnly / productPrice).toFixed(1)
+            };
+            $.btTable.bootstrapTable("updateCell",productPrice);
             console.log("string17=" + JSON.stringify(string17));
             $.btTable.bootstrapTable("updateCell",updateObj);
             //$("#totalSum_" + productId).val(totalSum);
@@ -1024,7 +1030,7 @@
         function parsePrice (p) {
             return isEmpty(p) == true ? 0 : parseFloat(p);
         }
-        function calculateTotalPrice () {
+        function calculateTotalPrice (col) {
             var data = $.btTable.bootstrapTable('getData');
             var productTotalPrice = 0;
             var totalNum = 0;
@@ -1032,7 +1038,7 @@
             var productAllPrice = 0; //不算系数所有产品总和
             for (var i = 0; i < data.length; i++) {
                 var rowData = data[i];
-                var price = calculatePrice(rowData);
+                var price = calculatePrice(rowData,col);
                 productTotalPrice = FloatAdd(productTotalPrice,price).toFixed(0);
                 var totalproductAllPrice = totalCostPriceMap.get("productAll");
                 var productNum = rowData["productNum"];
@@ -1106,7 +1112,7 @@
             }
             // $("#orderCoefficient").val(parseFloat(totalPrice / parseFloat(productAllPrice)).toFixed(2));
         }
-        function calculatePrice (row) {
+        function calculatePrice (row, field) {
             var productNum = row["productNum"];
             productNum = isEmpty(productNum) == true ? 0 : parseFloat(productNum);
 
@@ -1193,12 +1199,23 @@
             var contractPrice = row["contractPrice"]; //平均价格
             console.log("contractPrice = null is:" + isNaN(contractPrice));
             var totalSum = 0;
-            if (isNaN(contractPrice)){
+            if (isNaN(contractPrice) || field == "productCoefficient"
+                || field == "pattachmentCoefficient" || field == "pattachment1Coefficient" || field == "pattachment2Coefficient" || field == "pattachment3Coefficient"
+                || field == "pattachment4Coefficient" || field == "string14"
+                || field == "productRef1Coefficient"
+                || field == "productRef2Coefficient"
+                || field == "actuatorCoefficient"){
                 totalSum =  parseFloat(parseFloat(productSum) + parseFloat(productRef1Sum) + parseFloat(productRef2Sum) + parseFloat(actuatorSum)
                     + parseFloat(pattachmentSum) + parseFloat(pattachment1Sum) + parseFloat(pattachment2Sum) + parseFloat(pattachment3Sum) + parseFloat(pattachment4Sum)
                     - parseFloat(string14)).toFixed(0);
             } else {
                 totalSum = productNum * contractPrice;
+                var productCoefficient = {
+                    index : row.rowId,
+                    field : "productCoefficient",
+                    value : parseFloat(contractPrice / productPrice).toFixed(1)
+                };
+                $.btTable.bootstrapTable("updateCell",productCoefficient);
             }
             var costProce = parseFloat(productNum * productPrice).toFixed(4) +
                 parseFloat(productRef1Num * productRef1Price).toFixed(4) +

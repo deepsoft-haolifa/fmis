@@ -375,9 +375,9 @@ public class BizQuotationController extends BaseController {
             //第七行 产品数据开始 bizQuotationProducts
             table.addCell(PdfUtil.mergeCol("序号", 1,textFont));
             table.addCell(PdfUtil.mergeCol("名称", 1,textFont));
-            table.addCell(PdfUtil.mergeCol("型号", 3,textFont));
-            //table.addCell(PdfUtil.mergeCol("规格", 1,textFont));
-            //table.addCell(PdfUtil.mergeCol("压力", 1));//不需要
+            table.addCell(PdfUtil.mergeCol("型号", 1,textFont));
+            table.addCell(PdfUtil.mergeCol("规格", 1,textFont));
+            table.addCell(PdfUtil.mergeCol("压力", 1));//不需要
             table.addCell(PdfUtil.mergeCol("阀体材质", 1,textFont));
             table.addCell(PdfUtil.mergeCol("阀芯材质", 1,textFont));
             table.addCell(PdfUtil.mergeCol("密封材质", 1,textFont));
@@ -540,8 +540,8 @@ public class BizQuotationController extends BaseController {
             table.addCell(PdfUtil.mergeCol("", 3,textFont));//备注*/
 
             table.addCell(PdfUtil.mergeCol("优惠金额：" + bizQuotation.getDiscount(), 3,textFont));
-            table.addCell(PdfUtil.mergeCol("合计：" + StringUtils.getDoubleString0(sumTotalAmount - Double.parseDouble(bizQuotation.getDiscount())), 3,textFont));
-            table.addCell(PdfUtil.mergeCol("大写人民币合计:" + StringUtils.convert(sumTotalAmount), 6,textFont));
+            table.addCell(PdfUtil.mergeCol("合计：" + StringUtils.getDoubleString0(sumTotalAmount), 3,textFont));
+            table.addCell(PdfUtil.mergeCol("大写人民币合计:" + StringUtils.convert(sumTotalAmount - Double.parseDouble(bizQuotation.getDiscount())), 6,textFont));
             table.addCell(PdfUtil.mergeCol("", 3,textFont));//备注
 
             // 特别提醒
