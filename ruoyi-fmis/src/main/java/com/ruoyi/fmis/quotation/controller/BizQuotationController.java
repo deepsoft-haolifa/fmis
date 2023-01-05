@@ -1796,8 +1796,8 @@ public class BizQuotationController extends BaseController {
             cell_88.setCellValue("材质");
             cell_88.setCellStyle(cellTableStyle);
             Cell cell_89 = row8.createCell(9);
-            cell_89.setCellValue("配套方案");
             cell_89.setCellStyle(cellTableStyle);
+            sheet.addMergedRegion(new CellRangeAddress(7, 7, 8, 9));
             Cell cell_810 = row8.createCell(10);
             cell_810.setCellValue("备注");
             cell_810.setCellStyle(cellTableStyle);
@@ -1814,7 +1814,7 @@ public class BizQuotationController extends BaseController {
                 rowCount++;
                 serial++;
                 Row rowi = sheet.createRow(rowCount);
-                rowi.setHeight((short) 1000);
+                rowi.setHeight((short) 1200);
                 Cell cell = rowi.createCell(0);
                 cell.setCellValue(serial);
                 cell.setCellStyle(cellTableStyle);
@@ -1852,8 +1852,8 @@ public class BizQuotationController extends BaseController {
                 cell8.setCellValue(caizhi);
                 cell8.setCellStyle(cellTableStyle);
                 Cell cell9 = rowi.createCell(9);
-                cell9.setCellValue("");
                 cell9.setCellStyle(cellTableStyle);
+                sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 8, 9));
                 Cell cell10 = rowi.createCell(10);
                 cell10.setCellValue(bizProduct.getRemark());
                 cell10.setCellStyle(cellTableStyle);
