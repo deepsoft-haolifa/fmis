@@ -217,6 +217,12 @@ public class BizProcessData extends BaseEntity {
     @Getter
     private Integer detailNum;
 
+    /** 科目id */
+    @Setter
+    @Getter
+    private Long subjectsId;
+
+
     /** 关联业务数据ID */
     @Excel(name = "关联业务数据ID")
     private Long bizDataId;
@@ -456,6 +462,10 @@ public class BizProcessData extends BaseEntity {
     @Getter
     @Setter
     private String balanceBorrowNo; // 借款单号
+
+    @Getter
+    @Setter
+    private int shipmentsTotal; // 发货总量
 
 
 

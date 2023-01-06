@@ -84,6 +84,7 @@
         <result property="paymentType"    column="payment_type"    />
         <result property="balanceAmount"    column="balance_amount"    />
         <result property="balanceBorrowNo"    column="balance_borrow_no"    />
+        <result property="shipmentsTotal"    column="shipments_total"    />
     </resultMap>
 
     <select id="selectBizProcessDataByFlowStatus" resultMap="BizProcessDataResult">
@@ -125,7 +126,7 @@
         q.string21,q.string22,q.string23,q.string24,q.string25,q.string26,q.string27,q.string28,q.string29,q.string30,
         q.price11, q.price12, q.price13, q.price14, q.price15, q.price16, q.price17, q.price18, q.price19, q.price20,
         q.datetime1, q.datetime2, q.datetime3, q.datetime4, q.datetime5, q.status, q.del_flag, q.create_by, q.create_time, q.update_by, q.update_time,q.remark,
-        q.except_pay_time,q.purchase_specific_requests,q.payment_type,q.balance_amount,q.balance_borrow_no,q.discount,
+        q.except_pay_time,q.purchase_specific_requests,q.payment_type,q.balance_amount,q.balance_borrow_no,q.discount,q.shipments_total,
         dt1.dept_name as deptName
         from biz_process_data q
         left join sys_dept dt1 on q.string22=dt1.dept_id
@@ -1223,7 +1224,8 @@
         d.create_time, d.update_by, d.update_time,
         d.string21,d.string22,d.string23,d.string24,d.string25,d.string26,d.string27,d.string28,d.string29,d.string30,
         d.price11, d.price12, d.price13, d.price14, d.price15, d.price16, d.price17, d.price18, d.price19, d.price20,
-        d.except_pay_time,d.purchase_specific_requests,d.payment_type,d.balance_amount,d.balance_borrow_no,
+        d.except_pay_time,d.purchase_specific_requests,d.payment_type,d.balance_amount,d.balance_borrow_no, d.subjects_id as subjectsId,
+        d.shipments_total as shipmentsTotal,
         u.user_name as createByName,de.dept_name as deptName,de1.dept_name as deptName1
 
         from biz_process_data d
@@ -1463,6 +1465,7 @@
             <if test="paymentType != null ">payment_type,</if>
             <if test="balanceAmount != null ">balance_amount,</if>
             <if test="balanceBorrowNo != null ">balance_borrow_no,</if>
+            <if test="subjectsId != null ">subjects_id,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="bizDataId != null ">#{bizDataId},</if>
@@ -1542,6 +1545,7 @@
             <if test="paymentType != null ">#{paymentType},</if>
             <if test="balanceAmount != null ">#{balanceAmount},</if>
             <if test="balanceBorrowNo != null ">#{balanceBorrowNo},</if>
+            <if test="subjectsId != null ">#{subjectsId},</if>
         </trim>
     </insert>
 
@@ -1624,6 +1628,9 @@
             <if test="paymentType != null ">payment_type = #{paymentType},</if>
             <if test="balanceAmount != null ">balance_amount = #{balanceAmount},</if>
             <if test="balanceBorrowNo != null  ">balance_borrow_no = #{balanceBorrowNo},</if>
+            <if test="subjectsId != null ">subjects_id = #{subjectsId},</if>
+            <if test="shipmentsTotal != null ">shipments_total = #{shipmentsTotal},</if>
+
         </trim>
         where data_id = #{dataId}
     </update>

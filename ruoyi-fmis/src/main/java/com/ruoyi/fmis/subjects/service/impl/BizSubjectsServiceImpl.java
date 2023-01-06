@@ -43,9 +43,9 @@ public class BizSubjectsServiceImpl implements IBizSubjectsService {
      */
     @Override
     public List<BizSubjects> selectBizSubjectsList(BizSubjects bizSubjects) {
+        List<BizSubjects> bizSubjectsList = bizSubjectsMapper.selectBizSubjectsList(bizSubjects);
         List<BizSubjects> parentList = this.selectBizSubjectsListContainWu();
         Map<Long, String> parentMap = parentList.stream().collect(Collectors.toMap(BizSubjects::getSubjectsId, BizSubjects::getName));
-        List<BizSubjects> bizSubjectsList = bizSubjectsMapper.selectBizSubjectsList(bizSubjects);
         bizSubjectsList.stream().forEach(e -> {
             e.setParentName(parentMap.get(e.getParentId()));
         });

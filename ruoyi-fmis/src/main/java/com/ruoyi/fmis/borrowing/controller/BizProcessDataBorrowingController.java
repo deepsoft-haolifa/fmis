@@ -15,6 +15,8 @@ import com.ruoyi.fmis.customer.service.IBizCustomerService;
 import com.ruoyi.fmis.define.service.IBizProcessDefineService;
 import com.ruoyi.fmis.product.domain.BizProduct;
 import com.ruoyi.fmis.product.service.IBizProductService;
+import com.ruoyi.fmis.subjects.domain.BizSubjects;
+import com.ruoyi.fmis.subjects.service.IBizSubjectsService;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysDept;
 import com.ruoyi.system.domain.SysRole;
@@ -72,7 +74,8 @@ public class BizProcessDataBorrowingController extends BaseController {
     private IBizCustomerService bizCustomerService;
     @Autowired
     private SysDeptMapper sysDeptService;
-
+    @Autowired
+    private IBizSubjectsService bizSubjectsService;
     @RequiresPermissions("fmis:borrowing:view")
     @GetMapping()
     public String data() {
@@ -158,6 +161,14 @@ public class BizProcessDataBorrowingController extends BaseController {
         String dataId = getRequest().getParameter("dataId");
         BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataBorrowingById(Long.parseLong(dataId));
         mmap.put("bizProcessData", bizProcessData);
+        List<BizSubjects> suppliersList = bizSubjectsService.selectBizSubjectsListNoParent(new BizSubjects());
+        for (BizSubjects subjects : suppliersList) {
+            Long supplierId = subjects.getSubjectsId();
+            if (Long.compare(supplierId,bizProcessData.getSubjectsId()) == 0) {
+                subjects.setFlag(true);
+            }
+        }
+        mmap.put("subjects",suppliersList);
         return prefix + "/viewDetail";
     }
 
@@ -198,6 +209,7 @@ public class BizProcessDataBorrowingController extends BaseController {
     public String add(ModelMap mmap) {
         Long deptId = ShiroUtils.getSysUser().getDeptId();
         SysDept sysDept = sysDeptService.selectDeptById(deptId);
+        mmap.put("subjects",bizSubjectsService.selectBizSubjectsListNoParent(new BizSubjects()));
         mmap.put("deptId", deptId);
         mmap.put("deptName", sysDept.getDeptName());
         return prefix + "/add";
@@ -243,7 +255,14 @@ public class BizProcessDataBorrowingController extends BaseController {
     @GetMapping("/edit/{dataId}")
     public String edit(@PathVariable("dataId") Long dataId, ModelMap mmap) {
         BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataBorrowingById(dataId);
-
+        List<BizSubjects> suppliersList = bizSubjectsService.selectBizSubjectsListNoParent(new BizSubjects());
+        for (BizSubjects subjects : suppliersList) {
+            Long supplierId = subjects.getSubjectsId();
+            if (Long.compare(supplierId,bizProcessData.getSubjectsId()) == 0) {
+                subjects.setFlag(true);
+            }
+        }
+        mmap.put("subjects",suppliersList);
         mmap.put("bizProcessData", bizProcessData);
         return prefix + "/edit";
     }
