@@ -2657,4 +2657,596 @@ public class BizProcessDataProcurementController extends BaseController {
             return AjaxResult.error();
         }
     }
+
+    /**
+     * 导出采购合同北京系统给山西系统下单导出
+     */
+    @PostMapping("/exportPurchaseContractToShanXi")
+    @ResponseBody
+    public AjaxResult exportPurchaseContractToShanXi(BizProcessData bizProcessDataParamter) {
+        try {
+            String id = bizProcessDataParamter.getDataId().toString();
+            BizProcessData bizProcess = bizProcessDataService.selectBizProcessDataById(Long.parseLong(id));
+
+            Workbook workbook = new HSSFWorkbook();
+            CellStyle cellStyle = workbook.createCellStyle();
+            cellStyle.setWrapText(true);
+            Sheet sheet = workbook.createSheet("红马订单");
+            Row row1 = sheet.createRow(0);
+            Cell cell_title_1 = row1.createCell(0);
+            cell_title_1.setCellValue("    如无问题，请尽快回传及付款，以免影响交货期！回传电话：010-67171220。");
+            CellStyle cellCenterss = ExcelProcessDataUtils.cellCenter(workbook);
+            cell_title_1.setCellStyle(cellCenterss);
+            CellRangeAddress cra0 = new CellRangeAddress(0, 0, 0, 10);
+            sheet.addMergedRegion(cra0);
+
+            // 单元格样式
+            CellStyle cellLeft = ExcelProcessDataUtils.cellLeft(workbook);
+            Row row2 = sheet.createRow(1);
+            row2.setHeight((short) 500);
+
+            CellRangeAddress cra1 = new CellRangeAddress(1, 1, 0, 10);
+            sheet.addMergedRegion(cra1);
+            Cell cell_title_2 = row2.createCell(0);
+            cell_title_2.setCellValue("产品销售合同");
+            CellStyle cellTitle = ExcelProcessDataUtils.titleCell(workbook);
+            cell_title_2.setCellStyle(cellTitle);
+
+
+            Row row3 = sheet.createRow(2);
+            Cell cell_30 = row3.createCell(1);
+            cell_30.setCellValue("需方：" + bizProcess.getString1());
+            cell_30.setCellStyle(cellLeft);
+            sheet.addMergedRegion(new CellRangeAddress(2, 2, 1, 4));
+//            Cell cell_34 = row3.createCell(4);
+//            cell_34.setCellValue("签订地点：");
+//            cell_34.setCellStyle(cellLeft);
+//            Cell cell_35 = row3.createCell(5);
+//            cell_35.setCellValue(bizProcess.getString24());
+//            cell_35.setCellStyle(cellLeft);
+//            Cell cell_36 = row3.createCell(6);
+//            cell_36.setCellValue("合同编号：");
+//            cell_36.setCellStyle(cellLeft);
+//            Cell cell_37 = row3.createCell(7);
+//            cell_37.setCellValue(bizProcess.getString12());
+//            cell_37.setCellStyle(cellLeft);
+
+            Row row4 = sheet.createRow(3);
+            String string6 = bizProcess.getString6();
+            String string6Name = "";
+            BizSuppliers bizSuppliers = null;
+            if (StringUtils.isNotEmpty(string6)) {
+                bizSuppliers = bizSuppliersService.selectBizSuppliersById(Long.parseLong(string6));
+                if (bizSuppliers != null) {
+                    string6Name = bizSuppliers.getName();
+                }
+            }
+            Cell cell_40 = row4.createCell(1);
+            cell_40.setCellValue("供方：" + string6Name);
+            cell_40.setCellStyle(cellLeft);
+            sheet.addMergedRegion(new CellRangeAddress(3, 3, 1, 4));
+
+            Row row5 = sheet.createRow(4);
+            Cell cell_50 = row5.createCell(1);
+            cell_50.setCellValue("合同编号：" + bizProcess.getString12());
+            cell_50.setCellStyle(cellLeft);
+            sheet.addMergedRegion(new CellRangeAddress(4, 4, 1, 4));
+            Row row6 = sheet.createRow(5);
+            Cell cell_60 = row6.createCell(1);
+            cell_60.setCellValue("签订日期："+ DateUtils.dateTime(bizProcess.getCreateTime()));
+            cell_60.setCellStyle(cellLeft);
+            sheet.addMergedRegion(new CellRangeAddress(5, 5, 1, 4));
+
+            Row row7 = sheet.createRow(6);
+            Cell cell_70 = row7.createCell(1);
+            cell_70.setCellValue("为保障买卖双方的合法权益，根据现行《民法典》及有关法律规定，经友好协商，一致同意按下列条款签订本合同。");
+            cell_70.setCellStyle(cellLeft);
+            sheet.addMergedRegion(new CellRangeAddress(6, 6, 1, 10));
+
+
+            Row row88 = sheet.createRow(7);
+            Cell cell_800 = row88.createCell(0);
+            cell_800.setCellValue("一、");
+            cell_800.setCellStyle(cellCenterss);
+            Cell cell_811 = row88.createCell(1);
+            cell_811.setCellValue("供货内容：");
+            cell_811.setCellStyle(cellCenterss);
+            sheet.addMergedRegion(new CellRangeAddress(7, 7, 1, 10));
+
+            CellStyle cellBottomStyle = ExcelProcessDataUtils.createBottomStyle(workbook);
+            BizProcessChild queryBizProcessChild = new BizProcessChild();
+            queryBizProcessChild.setDataId(bizProcessDataParamter.getDataId());
+            List<BizProcessChild> bizProductChildList = bizProcessChildService.selectBizTestProductList(queryBizProcessChild);
+            CellStyle cellTableStyle = ExcelProcessDataUtils.cellTableStyle(workbook);
+
+            Row row77 = sheet.createRow(8);
+            Cell cell_80 = row77.createCell(0);
+            cell_80.setCellValue("序号");
+            cell_80.setCellStyle(cellTableStyle);
+            Cell cell_81 = row77.createCell(1);
+            cell_81.setCellValue("产品ID");
+            cell_81.setCellStyle(cellTableStyle);
+            Cell cell_82 = row77.createCell(2);
+            cell_82.setCellValue("名称");
+            cell_82.setCellStyle(cellTableStyle);
+            Cell cell_83 = row77.createCell(3);
+            cell_83.setCellValue("标签属性");
+            cell_83.setCellStyle(cellTableStyle);
+            Cell cell_84 = row77.createCell(4);
+            cell_84.setCellValue("规格");
+            cell_84.setCellStyle(cellTableStyle);
+            Cell cell_85 = row77.createCell(5);
+            cell_85.setCellValue("颜色");
+            cell_85.setCellStyle(cellTableStyle);
+            Cell cell_86 = row77.createCell(6);
+            cell_86.setCellValue("数量");
+            cell_86.setCellStyle(cellTableStyle);
+            Cell cell_87 = row77.createCell(7);
+            cell_87.setCellValue("单价");
+            cell_87.setCellStyle(cellTableStyle);
+            Cell cell_88 = row77.createCell(8);
+            cell_88.setCellValue("合计");
+            cell_88.setCellStyle(cellTableStyle);
+            Cell cell_89 = row77.createCell(9);
+            cell_89.setCellValue("材质");
+            cell_89.setCellStyle(cellTableStyle);
+            Cell cell_810 = row77.createCell(10);
+            cell_810.setCellValue("备注");
+            cell_810.setCellStyle(cellTableStyle);
+
+            int rowCount = 8;
+            int num = 0;
+            BigDecimal price = new BigDecimal("0");
+            BigDecimal totalPrice = new BigDecimal("0");
+
+
+            if (!CollectionUtils.isEmpty(bizProductChildList)) {
+                for (int i = 0; i < bizProductChildList.size(); i++) {
+                    BizProcessChild bizProcessChild = bizProductChildList.get(i);
+                    num += StringUtils.isEmpty(bizProcessChild.getProductNum()) ? 0 : Integer.valueOf(bizProcessChild.getProductNum());
+                    price = price.add(new BigDecimal(bizProcessChild.getProductProcurementPrice()));
+
+                    BigDecimal a1 = new BigDecimal(bizProcessChild.getProductProcurementPrice());
+                    BigDecimal aa = new BigDecimal(bizProcessChild.getProductNum());
+                    Double amount = a1.multiply(aa).doubleValue();
+                    totalPrice = totalPrice.add(new BigDecimal(amount));
+                    rowCount++;
+                    Row row = sheet.createRow(rowCount);
+                    Cell cell1 = row.createCell(0);
+                    cell1.setCellValue(i+1);
+                    cell1.setCellStyle(cellTableStyle);
+                    Cell cell2 = row.createCell(1);
+                    cell2.setCellValue(bizProcessChild.getModel());
+                    cell2.setCellStyle(cellTableStyle);
+                    Cell cell3 = row.createCell(2);
+                    cell3.setCellValue(bizProcessChild.getProductName());
+                    cell3.setCellStyle(cellTableStyle);
+                    Cell cell4 = row.createCell(3);
+                    cell4.setCellValue(bizProcessChild.getSeries());
+                    cell4.setCellStyle(cellTableStyle);
+                    Cell cell5 = row.createCell(4);
+                    cell5.setCellValue(bizProcessChild.getSpecifications());
+                    cell5.setCellStyle(cellTableStyle);
+                    Cell cell6 = row.createCell(5);
+                    cell6.setCellValue(bizProcessChild.getColor());
+                    cell6.setCellStyle(cellTableStyle);
+                    Cell cell7 = row.createCell(6);
+                    cell7.setCellValue(bizProcessChild.getProductNum());
+                    cell7.setCellStyle(cellTableStyle);
+                    Cell cell8 = row.createCell(7);
+                    cell8.setCellValue(bizProcessChild.getProductProcurementPrice());
+                    cell8.setCellStyle(cellTableStyle);
+                    Cell cell9 = row.createCell(8);
+                    cell9.setCellValue(amount);
+                    cell9.setCellStyle(cellTableStyle);
+                    Cell cell10 = row.createCell(9);
+                    String caizhi = "阀体:" + bizProcessChild.getValvebodyMaterial() + ",阀芯:" + bizProcessChild.getValveElement()
+                            + ",密封材质:" + bizProcessChild.getSealingMaterial() + ",驱动形式:" + bizProcessChild.getDriveForm()
+                            + ",连接方式:" + bizProcessChild.getConnectionType();
+                    cell10.setCellValue(caizhi);
+                    cell10.setCellStyle(cellTableStyle);
+                    Cell cell111 = row.createCell(10);
+                    cell111.setCellValue(bizProcessChild.getRemark());
+                    cell111.setCellStyle(cellTableStyle);
+                }
+            }
+
+            List<BizProcessChild> actuatorList = bizProcessChildService.selectBizTestActuatorList(queryBizProcessChild);
+            if (!CollectionUtils.isEmpty(actuatorList)) {
+                for (int i = 0; i < actuatorList.size(); i++) {
+                    BizProcessChild bizProcessChild = actuatorList.get(i);
+                    num += StringUtils.isEmpty(bizProcessChild.getActuatorNum()) ? 0 : Integer.valueOf(bizProcessChild.getActuatorNum());
+                    price = price.add(new BigDecimal(bizProcessChild.getActuatorString6()));
+
+                    BigDecimal a1 = new BigDecimal(bizProcessChild.getActuatorString6());
+                    BigDecimal aa = new BigDecimal(bizProcessChild.getActuatorNum());
+                    Double amount = a1.multiply(aa).doubleValue();
+                    totalPrice = totalPrice.add(new BigDecimal(amount));
+                    rowCount++;
+                    Row row = sheet.createRow(rowCount);
+                    Cell cell1 = row.createCell(0);
+                    cell1.setCellValue(i+1);
+                    cell1.setCellStyle(cellTableStyle);
+                    Cell cell2 = row.createCell(1);
+                    cell2.setCellValue(bizProcessChild.getActuatorString1());
+                    cell2.setCellStyle(cellTableStyle);
+                    Cell cell3 = row.createCell(2);
+                    cell3.setCellValue(bizProcessChild.getActuatorName());
+                    cell3.setCellStyle(cellTableStyle);
+                    Cell cell4 = row.createCell(3);
+                    cell4.setCellValue(bizProcessChild.getActuatorString3());
+                    cell4.setCellStyle(cellTableStyle);
+                    Cell cell5 = row.createCell(4);
+                    cell5.setCellValue("");
+                    cell5.setCellStyle(cellTableStyle);
+                    Cell cell6 = row.createCell(5);
+                    cell6.setCellValue(bizProcessChild.getColor());
+                    cell6.setCellStyle(cellTableStyle);
+                    Cell cell7 = row.createCell(6);
+                    cell7.setCellValue(bizProcessChild.getActuatorNum());
+                    cell7.setCellStyle(cellTableStyle);
+                    Cell cell8 = row.createCell(7);
+                    cell8.setCellValue(bizProcessChild.getActuatorString6());
+                    cell8.setCellStyle(cellTableStyle);
+                    Cell cell9 = row.createCell(8);
+                    cell9.setCellValue(amount);
+                    cell9.setCellStyle(cellTableStyle);
+                    Cell cell10 = row.createCell(9);
+                    cell10.setCellValue(bizProcessChild.getString5());
+                    cell10.setCellStyle(cellTableStyle);
+                    Cell cell111 = row.createCell(10);
+                    cell111.setCellValue(bizProcessChild.getRemark());
+                    cell111.setCellStyle(cellTableStyle);
+                }
+            }
+
+            List<BizProcessChild> ref1List = bizProcessChildService.selectBizTestRef1List(queryBizProcessChild);
+            if (!CollectionUtils.isEmpty(ref1List)) {
+                for (int i = 0; i < ref1List.size(); i++) {
+                    BizProcessChild bizProcessChild = ref1List.get(i);
+                    num += Double.isNaN(bizProcessChild.getProductRef1Num()) ? 0 : bizProcessChild.getProductRef1Num().intValue();
+                    price = price.add(new BigDecimal(bizProcessChild.getRef1Price()));
+
+                    BigDecimal a1 = new BigDecimal(bizProcessChild.getRef1Price());
+                    BigDecimal aa = new BigDecimal(bizProcessChild.getProductRef1Num());
+                    Double amount = a1.multiply(aa).doubleValue();
+                    totalPrice = totalPrice.add(new BigDecimal(amount));
+                    rowCount++;
+                    Row row = sheet.createRow(rowCount);
+                    Cell cell1 = row.createCell(0);
+                    cell1.setCellValue(i+1);
+                    cell1.setCellStyle(cellTableStyle);
+                    Cell cell2 = row.createCell(1);
+                    cell2.setCellValue(bizProcessChild.getModel());
+                    cell2.setCellStyle(cellTableStyle);
+                    Cell cell3 = row.createCell(2);
+                    cell3.setCellValue(bizProcessChild.getRef1Name());
+                    cell3.setCellStyle(cellTableStyle);
+                    Cell cell4 = row.createCell(3);
+                    cell4.setCellValue("");
+                    cell4.setCellStyle(cellTableStyle);
+                    Cell cell5 = row.createCell(4);
+                    cell5.setCellValue(bizProcessChild.getRef1Specifications());
+                    cell5.setCellStyle(cellTableStyle);
+                    Cell cell6 = row.createCell(5);
+                    cell6.setCellValue("");
+                    cell6.setCellStyle(cellTableStyle);
+                    Cell cell7 = row.createCell(6);
+                    cell7.setCellValue(bizProcessChild.getProductRef1Num());
+                    cell7.setCellStyle(cellTableStyle);
+                    Cell cell8 = row.createCell(7);
+                    cell8.setCellValue(bizProcessChild.getRef1Price());
+                    cell8.setCellStyle(cellTableStyle);
+                    Cell cell9 = row.createCell(8);
+                    cell9.setCellValue(amount);
+                    cell9.setCellStyle(cellTableStyle);
+                    Cell cell10 = row.createCell(9);
+                    cell10.setCellValue(bizProcessChild.getRef1MaterialRequire());
+                    cell10.setCellStyle(cellTableStyle);
+                    Cell cell111 = row.createCell(10);
+                    cell111.setCellValue(bizProcessChild.getRemark());
+                    cell111.setCellStyle(cellTableStyle);
+                }
+            }
+            rowCount++;
+            Row row9 = sheet.createRow(rowCount);
+            Cell cell_90 = row9.createCell(0);
+            cell_90.setCellValue("");
+            cell_90.setCellStyle(cellTableStyle);
+            Cell cell_91 = row9.createCell(1);
+            cell_91.setCellValue("合计");
+            cell_91.setCellStyle(cellTableStyle);
+            Cell cell_92 = row9.createCell(2);
+            cell_92.setCellValue("");
+            cell_92.setCellStyle(cellTableStyle);
+            Cell cell_93 = row9.createCell(3);
+            cell_93.setCellValue("");
+            cell_93.setCellStyle(cellTableStyle);
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 1, 3));
+            Cell cell_94 = row9.createCell(4);
+            cell_94.setCellStyle(cellTableStyle);
+            Cell cell_95 = row9.createCell(5);
+            cell_95.setCellStyle(cellTableStyle);
+            Cell cell_96 = row9.createCell(6);
+            cell_96.setCellValue(num);
+            Cell cell_97 = row9.createCell(7);
+            cell_97.setCellStyle(cellTableStyle);
+            Cell cell_98 = row9.createCell(8);
+            cell_98.setCellValue(totalPrice.doubleValue());
+            cell_98.setCellStyle(cellTableStyle);
+            Cell cell_99 = row9.createCell(9);
+            cell_99.setCellStyle(cellTableStyle);
+            Cell cell_910 = row9.createCell(10);
+            cell_910.setCellStyle(cellTableStyle);
+
+            rowCount++;
+            Row row10 = sheet.createRow(rowCount);
+            Cell cell_10 = row10.createCell(0);
+            cell_10.setCellStyle(cellTableStyle);
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 1, 3));
+            Cell cell_11 = row10.createCell(1);
+            cell_11.setCellValue("优惠后价格");
+            cell_11.setCellStyle(cellTableStyle);
+            Cell cell_12 = row10.createCell(2);
+            cell_12.setCellStyle(cellTableStyle);
+            Cell cell_13 = row10.createCell(3);
+            cell_13.setCellStyle(cellTableStyle);
+            Cell cell_14 = row10.createCell(4);
+            cell_14.setCellStyle(cellTableStyle);
+            Cell cell_15 = row10.createCell(5);
+            cell_15.setCellStyle(cellTableStyle);
+            Cell cell_16 = row10.createCell(6);
+            cell_16.setCellValue(num);
+            cell_16.setCellStyle(cellTableStyle);
+            Cell cell_17 = row10.createCell(7);
+            cell_17.setCellStyle(cellTableStyle);
+            Cell cell_18 = row10.createCell(8);
+            cell_18.setCellValue(totalPrice.doubleValue());
+            cell_18.setCellStyle(cellTableStyle);
+            Cell cell_19 = row10.createCell(9);
+            cell_19.setCellStyle(cellTableStyle);
+            Cell cell_110 = row10.createCell(10);
+            cell_110.setCellStyle(cellTableStyle);
+
+            rowCount++;
+            Row row101 = sheet.createRow(rowCount);
+            Cell cell_101 = row101.createCell(0);
+            cell_101.setCellStyle(cellTableStyle);
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 1, 3));
+            Cell cell_111 = row101.createCell(1);
+            cell_111.setCellValue("以上价格均为含税价格");
+            cell_111.setCellStyle(cellTableStyle);
+            Cell cell_122 = row101.createCell(2);
+            cell_122.setCellStyle(cellTableStyle);
+            Cell cell_133 = row101.createCell(3);
+            cell_133.setCellStyle(cellTableStyle);
+            Cell cell_144 = row101.createCell(4);
+            cell_144.setCellStyle(cellTableStyle);
+            cell_144.setCellValue(StringUtils.convert(totalPrice.doubleValue()));
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 4, 10));
+            Cell cell_155 = row101.createCell(5);
+            cell_155.setCellStyle(cellTableStyle);
+            Cell cell_166 = row101.createCell(6);
+            cell_166.setCellStyle(cellTableStyle);
+            Cell cell_177 = row101.createCell(7);
+            cell_177.setCellStyle(cellTableStyle);
+            Cell cell_188 = row101.createCell(8);
+            cell_188.setCellStyle(cellTableStyle);
+            Cell cell_199 = row101.createCell(9);
+            cell_199.setCellStyle(cellTableStyle);
+            Cell cell_1101 = row101.createCell(10);
+            cell_1101.setCellStyle(cellTableStyle);
+
+            rowCount++;
+            Row row11 = sheet.createRow(rowCount);
+            Cell cell_11_0 = row11.createCell(0);
+            cell_11_0.setCellValue("二、");
+            cell_11_0.setCellStyle(cellCenterss);
+            Cell cell_11_1 = row11.createCell(1);
+            cell_11_1.setCellValue("特殊要求：");
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 2, 10));
+            Cell cell_11_2 = row11.createCell(2);
+            cell_11_2.setCellValue("1.独立包装，装箱清单已随发货单下发，更改装箱清单时务必标注客户合同号及材料编号,箱里箱外各放一份，切勿忘记，谢谢配合！注：只放我方提供的附件清单！附空白的装箱清单1份。");
+
+            rowCount++;
+            Row row12 = sheet.createRow(rowCount);
+            row12.setRowStyle(cellLeft);
+            Cell cell_12_0 = row12.createCell(0);
+            cell_12_0.setCellValue("三、");
+            cell_12_0.setCellStyle(cellCenterss);
+            Cell cell_12_1 = row12.createCell(1);
+            cell_12_1.setCellValue("随货资料：");
+            Cell cell_12_2 = row12.createCell(2);
+            cell_12_2.setCellValue("安装使用说明书/产品合格证");
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 2, 5));
+            Cell cell_12_6 = row12.createCell(6);
+            cell_12_6.setCellValue("标    牌：");
+            Cell cell_12_7 = row12.createCell(7);
+            cell_12_7.setCellValue("好利标牌");
+
+            rowCount++;
+            Row row13 = sheet.createRow(rowCount);
+            row13.setRowStyle(cellLeft);
+            Cell cell_13_0 = row13.createCell(0);
+            cell_13_0.setCellValue("四、");
+            cell_13_0.setCellStyle(cellCenterss);
+
+            Cell cell_13_1 = row13.createCell(1);
+            cell_13_1.setCellValue("验收标准：");
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 2, 10));
+            Cell cell_13_2 = row13.createCell(2);
+            cell_13_2.setCellValue("国家标准 验收");
+
+            rowCount++;
+            Row row14 = sheet.createRow(rowCount);
+            Cell cell_14_0 = row14.createCell(0);
+            cell_14_0.setCellValue("五、");
+            cell_14_0.setCellStyle(cellCenterss);
+
+            Cell cell_14_1 = row14.createCell(1);
+            cell_14_1.setCellValue("质量保证：");
+            Cell cell_14_2 = row14.createCell(2);
+            cell_14_2.setCellValue("质保期 18个月 (自客户签收日期)");
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 2, 10));
+
+            rowCount++;
+            Row row16 = sheet.createRow(rowCount);
+            Cell cell_16_0 = row16.createCell(0);
+            cell_16_0.setCellValue("六、");
+            cell_16_0.setCellStyle(cellCenterss);
+
+            Cell cell_16_1 = row16.createCell(1);
+            cell_16_1.setCellValue("包装规范：");
+            Cell cell_16_2 = row16.createCell(2);
+            cell_16_2.setCellValue(bizProcess.getString27());
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 2, 5));
+            Cell cell_16_6 = row16.createCell(6);
+            cell_16_6.setCellValue("运输方式：");
+            Cell cell_16_7 = row16.createCell(7);
+            cell_16_7.setCellValue(bizProcess.getString9());
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 7, 10));
+
+            rowCount++;
+            Row row17 = sheet.createRow(rowCount);
+            Cell cell_17_0 = row17.createCell(0);
+            cell_17_0.setCellValue("七、");
+            cell_17_0.setCellStyle(cellCenterss);
+
+            Cell cell_17_1 = row17.createCell(1);
+            cell_17_1.setCellValue("发货日期：");
+            Cell cell_17_2 = row17.createCell(2);
+            cell_17_2.setCellValue(DateUtils.dateTime(bizProcess.getDatetime3()));
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 2, 5));
+            Cell cell_17_3 = row17.createCell(6);
+            cell_17_3.setCellValue("收货信息：");
+            Cell cell_17_4 = row17.createCell(7);
+            cell_17_4.setCellValue(bizProcess.getString28());
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 7, 10));
+
+            rowCount++;
+            Row row18 = sheet.createRow(rowCount);
+            Cell cell_18_0 = row18.createCell(0);
+            cell_18_0.setCellValue("八、");
+            cell_18_0.setCellStyle(cellCenterss);
+
+            Cell cell_18_1 = row18.createCell(1);
+            cell_18_1.setCellValue("付款方式:");
+            Cell cell_18_2 = row18.createCell(2);
+            String contractPaytype = dictDataService.selectDictLabel("contract_paytype", bizProcess.getString20());
+            cell_18_2.setCellValue(contractPaytype);
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 2, 5));
+            Cell cell_18_3 = row17.createCell(6);
+            cell_18_3.setCellValue("运费承担：");
+            Cell cell_18_4 = row17.createCell(7);
+            cell_18_4.setCellValue(bizProcess.getString26());
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 7, 10));
+
+            rowCount++;
+            Row row20 = sheet.createRow(rowCount);
+            Cell cell_20_0 = row20.createCell(0);
+            cell_20_0.setCellValue("九、");
+            cell_20_0.setCellStyle(cellCenterss);
+
+            Cell cell_20_10 = row20.createCell(1);
+            cell_20_10.setCellValue("违约责任：");
+            Cell cell_20_12 = row20.createCell(2);
+            cell_20_12.setCellValue("合同签订后，买卖双方严格执行双方所签订合同的条款，其中一方不履行或不完全履行合同者应承担相应的法律责任。");
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 2, 10));
+
+            rowCount++;
+            Row row210 = sheet.createRow(rowCount);
+            Cell cell_211_0 = row210.createCell(0);
+            cell_211_0.setCellValue("十、");
+            cell_211_0.setCellStyle(cellCenterss);
+
+            Cell cell_212_0 = row210.createCell(1);
+            cell_212_0.setCellValue("解决合同纠纷方式：双方协商解决，解决不成由买方所在工商局经济合同仲裁委员会仲裁或法院起诉。");
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 1, 10));
+
+            rowCount++;
+            Row row24 = sheet.createRow(rowCount);
+            Cell cell_24_1 = row24.createCell(0);
+            cell_24_1.setCellValue("十一、");
+            cell_24_1.setCellStyle(cellCenterss);
+
+            Cell cell_24_2 = row24.createCell(1);
+            cell_24_2.setCellValue("本合同一式贰份，双方各执一份，双方盖章后生效（传真件有效）。");
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 1, 10));
+
+            rowCount++;
+            Row row27 = sheet.createRow(rowCount);
+            Cell cell_27_1 = row27.createCell(1);
+            cell_27_1.setCellValue("需方：");
+            Cell cell_27_2 = row27.createCell(2);
+            cell_27_2.setCellValue(bizProcess.getString1());
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 2, 5));
+            Cell cell_27_4 = row27.createCell(6);
+            cell_27_4.setCellValue("供方：");
+            Cell cell_27_7 = row27.createCell(7);
+            cell_27_7.setCellValue(string6Name);
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 7, 10));
+
+            rowCount++;
+            Row row30 = sheet.createRow(rowCount);
+            Cell cell_30_1 = row30.createCell(1);
+            cell_30_1.setCellValue("委托代理人：");
+            Cell cell_30_2 = row30.createCell(2);
+            cell_30_2.setCellValue("");
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 2, 5));
+            Cell cell_30_4 = row30.createCell(6);
+            cell_30_4.setCellValue("委托代理人：");
+            Cell cell_30_7 = row30.createCell(7);
+            cell_30_7.setCellValue(bizSuppliers.getHumanCapitalMeasure());
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 7, 10));
+
+            rowCount++;
+            Row row31 = sheet.createRow(rowCount);
+            Cell cell_31_1 = row31.createCell(1);
+            cell_31_1.setCellValue("电     话：");
+            Cell cell_31_2 = row31.createCell(2);
+            cell_31_2.setCellValue(Util.jsonObject.getJSONObject(bizProcess.getString1()).getString("phone"));
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 2, 5));
+            Cell cell_31_4 = row31.createCell(6);
+            cell_31_4.setCellValue("电     话：");
+            Cell cell_31_7 = row31.createCell(7);
+            cell_31_7.setCellValue(bizSuppliers.getTelphone());
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 7, 10));
+
+            rowCount++;
+            Row row32 = sheet.createRow(rowCount);
+            Cell cell_32_1 = row32.createCell(1);
+            cell_32_1.setCellValue("传     真：");
+            Cell cell_32_2 = row32.createCell(2);
+            cell_32_2.setCellValue(Util.jsonObject.getJSONObject(bizProcess.getString1()).getString("faxNo"));
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 2, 5));
+            Cell cell_32_4 = row32.createCell(6);
+            cell_32_4.setCellValue("传     真：");
+            Cell cell_32_7 = row32.createCell(7);
+            cell_32_7.setCellValue(bizSuppliers.getFax());
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 7, 10));
+
+            rowCount++;
+            Row row33 = sheet.createRow(rowCount);
+            Cell cell_33_1 = row33.createCell(1);
+            cell_33_1.setCellValue("地     址：");
+            Cell cell_33_2 = row33.createCell(2);
+            cell_33_2.setCellValue(Util.jsonObject.getJSONObject(bizProcess.getString1()).getString("address"));
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 2, 5));
+            Cell cell_33_4 = row33.createCell(6);
+            cell_33_4.setCellValue("地     址");
+            Cell cell_33_7 = row33.createCell(7);
+            cell_33_7.setCellValue(bizSuppliers.getAddress());
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 7, 10));
+
+            String filename = ExcelUtil.encodingFilenameByXls("红马合同");
+            OutputStream out = new FileOutputStream(getAbsoluteFile(filename));
+            workbook.write(out);
+            out.flush();
+            out.close();
+            return AjaxResult.success(filename);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return AjaxResult.error();
+        }
+    }
 }

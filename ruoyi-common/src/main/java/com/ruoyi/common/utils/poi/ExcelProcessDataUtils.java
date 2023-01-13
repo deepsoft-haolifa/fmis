@@ -60,6 +60,13 @@ public class ExcelProcessDataUtils {
         return cellLeft;
     }
 
+    public static CellStyle cellCenter (Workbook workbook) {
+        CellStyle cellLeft = workbook.createCellStyle();
+        cellLeft.setAlignment(HorizontalAlignment.CENTER);
+        cellLeft.setWrapText(true);
+        return cellLeft;
+    }
+
     public static CellStyle cellRight (Workbook workbook) {
         CellStyle cellLeft = workbook.createCellStyle();
         cellLeft.setAlignment(HorizontalAlignment.RIGHT);
