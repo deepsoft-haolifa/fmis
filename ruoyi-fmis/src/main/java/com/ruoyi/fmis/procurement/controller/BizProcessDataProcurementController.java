@@ -3238,7 +3238,7 @@ public class BizProcessDataProcurementController extends BaseController {
             cell_33_7.setCellValue(bizSuppliers.getAddress());
             sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 7, 10));
 
-            String filename = ExcelUtil.encodingFilenameByXls("红马合同");
+            String filename = ExcelUtil.encodingFilenameByXls("侯马合同");
             OutputStream out = new FileOutputStream(getAbsoluteFile(filename));
             workbook.write(out);
             out.flush();
