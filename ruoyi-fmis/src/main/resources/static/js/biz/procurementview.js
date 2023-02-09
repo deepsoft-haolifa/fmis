@@ -81,12 +81,32 @@ $(function() {
             {
                 field : 'string25',
                 title : '特殊要求'
-            }
+            },
+            {
+                title : '操作',
+                formatter: function (value, row, index) {
+                    var isAtt = row.isAtt;
+                    console.info("isAtt="+isAtt)
+                    var actions = [];
+                    if (isAtt == 1) {
+                        actions.push('<a class="btn btn-success btn-xs " + href="javascript:void(0)" onclick="viewTestFile(' + row.dataId + "," + 2 + ')"><i class="fa fa-save"></i>查看附件</a>');
+                    }
+                    return actions.join('');
+                } }
         ]
     };
     // $.table.clear;
     $.table.init(options);
 });
+
+function viewTestFile(bizId, fileType) {
+    var url = ctx + "fmis/file/list/view?bizId=" + bizId + "&fileType=" + fileType;
+    var widthNum = this.innerWidth - 50;
+    var heigthNum = this.innerHeight - 50;
+    $.modal.openNoEnter("附件查看", url, widthNum, heigthNum, function () {
+        $.modal.closeAll();
+    });
+}
 var overAllIds = new Array();  //全局数组
 var numberMap = new Map();
 var priceMap = new Map();

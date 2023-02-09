@@ -2671,7 +2671,7 @@ public class BizProcessDataProcurementController extends BaseController {
             Workbook workbook = new HSSFWorkbook();
             CellStyle cellStyle = workbook.createCellStyle();
             cellStyle.setWrapText(true);
-            Sheet sheet = workbook.createSheet("红马订单");
+            Sheet sheet = workbook.createSheet("候马订单");
             Row row1 = sheet.createRow(0);
             Cell cell_title_1 = row1.createCell(0);
             cell_title_1.setCellValue("    如无问题，请尽快回传及付款，以免影响交货期！回传电话：010-67171220。");
@@ -3046,7 +3046,7 @@ public class BizProcessDataProcurementController extends BaseController {
             cell_11_1.setCellValue("特殊要求：");
             sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 2, 10));
             Cell cell_11_2 = row11.createCell(2);
-            cell_11_2.setCellValue("1.独立包装，装箱清单已随发货单下发，更改装箱清单时务必标注客户合同号及材料编号,箱里箱外各放一份，切勿忘记，谢谢配合！注：只放我方提供的附件清单！附空白的装箱清单1份。");
+            cell_11_2.setCellValue(StringUtils.trim(bizProcess.getPurchaseSpecificRequests()));
 
             rowCount++;
             Row row12 = sheet.createRow(rowCount);
@@ -3118,9 +3118,9 @@ public class BizProcessDataProcurementController extends BaseController {
             cell_17_2.setCellValue(DateUtils.dateTime(bizProcess.getDatetime3()));
             sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 2, 5));
             Cell cell_17_3 = row17.createCell(6);
-            cell_17_3.setCellValue("收货信息：");
+            cell_17_3.setCellValue("运费承担：");
             Cell cell_17_4 = row17.createCell(7);
-            cell_17_4.setCellValue(bizProcess.getString28());
+            cell_17_4.setCellValue(bizProcess.getString26());
             sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 7, 10));
 
             rowCount++;
@@ -3135,12 +3135,11 @@ public class BizProcessDataProcurementController extends BaseController {
             String contractPaytype = dictDataService.selectDictLabel("contract_paytype", bizProcess.getString20());
             cell_18_2.setCellValue(contractPaytype);
             sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 2, 5));
-            Cell cell_18_3 = row17.createCell(6);
-            cell_18_3.setCellValue("运费承担：");
-            Cell cell_18_4 = row17.createCell(7);
-            cell_18_4.setCellValue(bizProcess.getString26());
+            Cell cell_188_3 = row18.createCell(6);
+            cell_188_3.setCellValue("收货信息：");
+            Cell cell_188_4 = row18.createCell(7);
+            cell_188_4.setCellValue(bizProcess.getString28());
             sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 7, 10));
-
             rowCount++;
             Row row20 = sheet.createRow(rowCount);
             Cell cell_20_0 = row20.createCell(0);

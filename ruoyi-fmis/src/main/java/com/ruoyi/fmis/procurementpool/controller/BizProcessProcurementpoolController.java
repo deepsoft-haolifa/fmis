@@ -18,6 +18,8 @@ import com.ruoyi.fmis.common.CommonUtils;
 import com.ruoyi.fmis.customer.service.IBizCustomerService;
 import com.ruoyi.fmis.define.service.IBizProcessDefineService;
 import com.ruoyi.fmis.dict.service.IBizDictService;
+import com.ruoyi.fmis.file.domain.BizAccessory;
+import com.ruoyi.fmis.file.service.IBizAccessoryService;
 import com.ruoyi.fmis.product.domain.BizProduct;
 import com.ruoyi.fmis.product.service.IBizProductService;
 import com.ruoyi.fmis.quotationproduct.domain.BizQuotationProduct;
@@ -80,6 +82,8 @@ public class BizProcessProcurementpoolController extends BaseController {
 
     @Autowired
     private RedisUtil redisUtil;
+    @Autowired
+    private IBizAccessoryService bizAccessoryService;
 
     @RequiresPermissions("fmis:procurementpool:view")
     @GetMapping()
@@ -183,6 +187,16 @@ public class BizProcessProcurementpoolController extends BaseController {
                             }
                         }
                     }
+                }
+                //是否有附件
+                BizAccessory bizAccessory = new BizAccessory();
+                bizAccessory.setBizId(Integer.valueOf(data.getDataId() + ""));
+                bizAccessory.setFileType(Integer.valueOf(2));
+                List<com.ruoyi.fmis.file.domain.BizAccessory>  list1 = bizAccessoryService.selectBizAccessoryByBizId(bizAccessory);
+                if (list1 != null && list1.size() > 0) {
+                    data.setIsAtt(1);
+                } else {
+                    data.setIsAtt(0);
                 }
                 newList.add(data);
             }

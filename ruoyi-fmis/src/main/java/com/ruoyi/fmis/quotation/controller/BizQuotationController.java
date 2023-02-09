@@ -377,7 +377,7 @@ public class BizQuotationController extends BaseController {
             table.addCell(PdfUtil.mergeCol("名称", 1,textFont));
             table.addCell(PdfUtil.mergeCol("型号", 1,textFont));
             table.addCell(PdfUtil.mergeCol("规格", 1,textFont));
-            table.addCell(PdfUtil.mergeCol("压力", 1));//不需要
+            table.addCell(PdfUtil.mergeCol("压力", 1,textFont));//不需要
             table.addCell(PdfUtil.mergeCol("阀体材质", 1,textFont));
             table.addCell(PdfUtil.mergeCol("阀芯材质", 1,textFont));
             table.addCell(PdfUtil.mergeCol("密封材质", 1,textFont));
@@ -528,7 +528,7 @@ public class BizQuotationController extends BaseController {
             if (bizQuotation.getDiscount()!= null && !bizQuotation.getDiscount().equals("0") && !bizQuotation.getDiscount().equals("0.00")) {
 //                table.addCell(PdfUtil.mergeCol("优惠金额：" + bizQuotation.getDiscount(), 1,textFont));//单价
                 table.addCell(PdfUtil.mergeCol("", 1,textFont));//优惠金额
-                table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(sumTotalAmount - Double.parseDouble(bizQuotation.getDiscount())), 1,textFont));//合计
+                table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(sumTotalAmount), 1,textFont));//合计
                 table.addCell(PdfUtil.mergeCol("", 3,textFont));//备注
             } else {
                 table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(sumTotalAmount), 1,textFont));//合计
@@ -540,7 +540,7 @@ public class BizQuotationController extends BaseController {
             table.addCell(PdfUtil.mergeCol("", 3,textFont));//备注*/
 
             table.addCell(PdfUtil.mergeCol("优惠金额：" + bizQuotation.getDiscount(), 3,textFont));
-            table.addCell(PdfUtil.mergeCol("合计：" + StringUtils.getDoubleString0(sumTotalAmount), 3,textFont));
+            table.addCell(PdfUtil.mergeCol("合计：" + StringUtils.getDoubleString0(sumTotalAmount - Double.parseDouble(bizQuotation.getDiscount())), 3,textFont));
             table.addCell(PdfUtil.mergeCol("大写人民币合计:" + StringUtils.convert(sumTotalAmount - Double.parseDouble(bizQuotation.getDiscount())), 6,textFont));
             table.addCell(PdfUtil.mergeCol("", 3,textFont));//备注
 

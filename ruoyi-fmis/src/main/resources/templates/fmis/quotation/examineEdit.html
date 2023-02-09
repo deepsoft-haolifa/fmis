@@ -94,7 +94,7 @@
 
 
         <div class="form-group">
-            <label class="col-sm-1 control-label">产品金额：</label>
+            <label class="col-sm-3 control-label">产品金额：</label>
             <div class="col-sm-2">
                 <input name="productTotalPrice" id="productTotalPrice" class="form-control" type="text" readonly>
             </div>
@@ -108,14 +108,23 @@
                 <input name="orderCoefficient" th:field="*{string18}" id="orderCoefficient" class="form-control" type="text"  readonly>
             </div>
         </div>
-
+        <div class="form-group">
+            <label class="col-sm-3 control-label">优惠金额：</label>
+            <div class="col-sm-2">
+                <input name="discount" id="discount" class="form-control" th:field="*{discount}" type="text" onkeyup="AmountKeyUp(this)" onblur="calculateTotalOnlyPrice()">
+            </div>
+            <label class="col-sm-1 control-label">优惠后金额：</label>
+            <div class="col-sm-2">
+                <input name="discountAfter" id="discountAfter" class="form-control" type="text" readonly required>
+            </div>
+        </div>
         <div class="form-group">
             <label class="col-sm-3 control-label">毛利：</label>
             <div class="col-sm-2">
                 <input name="grossPrice" id="grossPrice" class="form-control" type="text"  readonly>
             </div>
             <label class="col-sm-1 control-label">备注：</label>
-            <div class="col-sm-6">
+            <div class="col-sm-2">
                 <input name="remark" th:field="*{remark}" readonly class="form-control" type="text" >
             </div>
         </div>
@@ -355,6 +364,12 @@
         }
     }
 
+
+    function calculateDiscount (row) {
+        var discount = row["discount"];
+        return isEmpty(discount) == true ? 0 : parseFloat(discount).toFixed(4);
+    }
+
     function calculatePrice (row) {
         var productNum = row["productNum"];
         productNum = isEmpty(productNum) == true ? 0 : parseFloat(productNum);
@@ -504,9 +519,12 @@
         var data = $.btTable.bootstrapTable('getData');
         var productTotalPrice = 0;
         var allTotalCost = 0;
+        var discount = 0;
         for (var i = 0; i < data.length; i++) {
             var rowData = data[i];
             var price = calculatePrice(rowData);
+            var discountPrice = calculateDiscount(rowData);
+            discount = FloatAdd(discount,discountPrice).toFixed(4);
             productTotalPrice = FloatAdd(productTotalPrice,price).toFixed(4);
             var totalCostPrice = totalCostPriceMap.get("totalCostPrice");
             allTotalCost =  FloatAdd(totalCostPrice,allTotalCost).toFixed(4);
@@ -520,6 +538,8 @@
         var totalPrice = parseFloat(productTotalPrice);
         $("#totalPrice").val(parseFloat(totalPrice).toFixed(4));
 
+        var discountprice = parseFloat(productTotalPrice) - parseFloat(discount);
+        $("#discountAfter").val(discountprice);
         //productTotalPrice 毛利 产品金额-成本价格-特殊费用
         var grossPrice = (parseFloat(productTotalPrice) - parseFloat(allTotalCost) - parseFloat(specialExpenses)).toFixed(2);
         $("#grossPrice").val(grossPrice);
