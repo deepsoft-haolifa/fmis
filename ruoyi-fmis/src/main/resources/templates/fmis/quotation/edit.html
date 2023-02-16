@@ -689,9 +689,12 @@
             var productTotalPrice = 0;
             var productAllPrice = 0; //不算系数所有产品总和
             var allTotalCost = 0;
+            var productNum = 0;
             for (var i = 0; i < data.length; i++) {
                 var rowData = data[i];
                 var price = calculateOnlyPrice(rowData);
+                productNum += rowData["productNum"];
+                console.log("ccccccccc:"+productNum);
                 var totalCostPrice = totalCostPriceMap.get("totalCostPrice");
                 var totalproductAllPrice = totalCostPriceMap.get("productAll");
                 console.log("price" + price)
@@ -701,6 +704,7 @@
                 allTotalCost =  FloatAdd(totalCostPrice,allTotalCost).toFixed(0);
                 productAllPrice =  FloatAdd(totalproductAllPrice,productAllPrice).toFixed(0);
             }
+            $("#totalNumber").val(productNum);
             var specialExpenses = $("#specialExpenses").val();
             if (isEmpty(specialExpenses)) {
                 specialExpenses = 0;
@@ -893,7 +897,9 @@
                 productTotalPrice = FloatAdd(productTotalPrice,price).toFixed(2);
                 var totalCostPrice = totalCostPriceMap.get("totalCostPrice");
                 var totalproductAllPrice = totalCostPriceMap.get("productAll");
-                var totalPNumber1 = totalCostPriceMap.get("totalPNumber");
+                // var totalPNumber1 = totalCostPriceMap.get("totalPNumber");
+                var totalPNumber1 = rowData["productNum"];
+
                 allTotalCost =  FloatAdd(totalCostPrice,allTotalCost).toFixed(2);
                 productAllPrice =  FloatAdd(totalproductAllPrice,productAllPrice).toFixed(0);
                 totalPNumber =  FloatAdd(totalPNumber,totalPNumber1).toFixed(0);
@@ -1077,14 +1083,18 @@
             var data = $.btTable.bootstrapTable('getData');
             var productTotalPrice = 0;
             var allTotalCost = 0;
+            var productNum = 0;
             for (var i = 0; i < data.length; i++) {
                 var rowData = data[i];
                 console.log("calPrice rowData:" + rowData);
                 var price = calPrice(rowData);
+                var productNum1 = rowData["productNum"];
+                productNum = FloatAdd(productNum, productNum1);
                 productTotalPrice = FloatAdd(productTotalPrice, price).toFixed(2);
                 var totalCostPrice = totalCostPriceMap.get("totalCostPrice");
                 allTotalCost = FloatAdd(totalCostPrice, allTotalCost).toFixed(2);
             }
+            $("#totalNumber").val(productNum);
             var specialExpenses = $("#specialExpenses").val();
             if (isEmpty(specialExpenses)) {
                 specialExpenses = 0;
