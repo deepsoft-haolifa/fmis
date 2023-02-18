@@ -1201,7 +1201,7 @@
             var totalSum = 0;
             if (isNaN(contractPrice) || field == "productCoefficient"
                 || field == "pattachmentCoefficient" || field == "pattachment1Coefficient" || field == "pattachment2Coefficient" || field == "pattachment3Coefficient"
-                || field == "pattachment4Coefficient" || field == "string14"
+                || field == "pattachment4Coefficient"
                 || field == "productRef1Coefficient"
                 || field == "productRef2Coefficient"
                 || field == "actuatorCoefficient"){
@@ -1209,11 +1209,11 @@
                     + parseFloat(pattachmentSum) + parseFloat(pattachment1Sum) + parseFloat(pattachment2Sum) + parseFloat(pattachment3Sum) + parseFloat(pattachment4Sum)
                     - parseFloat(string14)).toFixed(0);
             } else {
-                totalSum = productNum * contractPrice;
+                totalSum = productNum * contractPrice - parseFloat(string14).toFixed(0);
                 var productCoefficient = {
                     index : row.rowId,
                     field : "productCoefficient",
-                    value : parseFloat(contractPrice / productPrice).toFixed(1)
+                    value : parseFloat(productPrice / productPrice).toFixed(1)
                 };
                 $.btTable.bootstrapTable("updateCell",productCoefficient);
             }
