@@ -63,6 +63,7 @@
 <th:block th:include="include :: bootstrap-editable-css" />
 <th:block th:include="include :: bootstrap-table-editable-js" />
 <script th:inline="javascript">
+    var supplierTypeData = [[${@dict.getType('supplier_type')}]];
     var prefix = ctx + "fmis/procurement";
     $("#form-data-edit").validate({
         focusCleanup: true
