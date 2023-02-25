@@ -634,12 +634,14 @@ public class BizProcessDataController extends BaseController {
 
 
                     Double totalAmount = new Double(0.00);
-                    totalAmount = productTotal + ref1Total + ref2Tota + actuatorTotal +
-                            pattachmentIdTotal + pattachmentId1Total + pattachmentId2Total + pattachmentId3Total + pattachmentId4Total;
+                    /*totalAmount = productTotal + ref1Total + ref2Tota + actuatorTotal +
+                            pattachmentIdTotal + pattachmentId1Total + pattachmentId2Total + pattachmentId3Total + pattachmentId4Total;*/
+                    totalAmount = bizProduct.getContractPrice() * Integer.valueOf(productNum);
 
                     sumTotalAmount = sumTotalAmount + totalAmount;
 //总单价
-                    Double productTotalPrice = Double.valueOf(totalAmount / Double.parseDouble(productNum));
+//                    Double productTotalPrice = Double.valueOf(totalAmount / Double.parseDouble(productNum));
+                    Double productTotalPrice = Double.valueOf(bizProduct.getContractPrice());
                     sumTotalPrice = sumTotalPrice + productTotalPrice;
                     Cell cell6 = row.createCell(5);
                     cell6.setCellValue(StringUtils.getDoubleString(productTotalPrice));

@@ -85,14 +85,12 @@ $(function() {
             {
                 title : '操作',
                 formatter: function (value, row, index) {
+                    var isAtt = row.isAtt;
+                    console.info("isAtt="+isAtt)
                     var actions = [];
-                    console.log("----"+row["string30"] +  row["string30"] == '2')
-                    if (row["string30"] == '2') {
-                        actions.push('<a class="btn btn-success btn-xs  href="javascript:void(0)" onclick="jixuchuli(\'' + row.dataId + '\')"><i class="fa fa-edit"></i> 继续处理</a> ');
-                    } else {
-                        actions.push('<a class="btn btn-success btn-xs  href="javascript:void(0)" onclick="caigouwancheng(\'' + row.dataId + '\')"><i class="fa fa-edit"></i> 处理完成</a> ');
+                    if (isAtt == 1) {
+                        actions.push('<a class="btn btn-success btn-xs " + href="javascript:void(0)" onclick="viewTestFile(' + row.dataId + "," + 2 + ')"><i class="fa fa-save"></i>查看附件</a>');
                     }
-
                     return actions.join('');
                 } }
         ]
