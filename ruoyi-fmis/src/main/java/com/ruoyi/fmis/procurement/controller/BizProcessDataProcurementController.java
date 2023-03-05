@@ -2182,22 +2182,33 @@ public class BizProcessDataProcurementController extends BaseController {
             cell_48.setCellValue("");
             cell_48.setCellStyle(cellLeft);
 
-            Row row5 = sheet.createRow(4);
+            Row row44 = sheet.createRow(4);
+            row44.setHeight((short) 600);
+            Cell cell_440 = row44.createCell(0);
+            row44.setRowStyle(cellLeft);
+            cell_440.setCellValue("销售合同号：");
+            sheet.addMergedRegion(new CellRangeAddress(4, 4, 0, 1));
+            Cell cell_441 = row44.createCell(2);
+            cell_441.setCellStyle(cellLeft);
+            cell_441.setCellValue(bizProcess.getString3());
+            sheet.addMergedRegion(new CellRangeAddress(4, 4, 2, 3));
+
+            Row row5 = sheet.createRow(5);
             row5.setHeight((short) 600);
             Cell cell_50 = row5.createCell(0);
             row5.setRowStyle(cellLeft);
             cell_50.setCellValue("为保障买卖双方的合法权益，根据现行《民法典》及有关法律规定，经友好协商，一致同意按下列条款签订本合同。");
-            sheet.addMergedRegion(new CellRangeAddress(4, 4, 0, 7));
+            sheet.addMergedRegion(new CellRangeAddress(5, 5, 0, 7));
             cell_50.setCellStyle(cellLeft);
 
-            Row row6 = sheet.createRow(5);
+            Row row6 = sheet.createRow(6);
             Cell cell_60 = row6.createCell(0);
             cell_60.setCellValue("一、");
             cell_60.setCellStyle(cellLeft);
             Cell cell_61 = row6.createCell(1);
             cell_61.setCellValue("供货内容：");
             cell_61.setCellStyle(cellLeft);
-            sheet.addMergedRegion(new CellRangeAddress(5, 5, 1, 7));
+            sheet.addMergedRegion(new CellRangeAddress(6, 6, 1, 7));
 
             CellStyle cellBottomStyle = ExcelProcessDataUtils.createBottomStyle(workbook);
             BizProcessChild queryBizProcessChild = new BizProcessChild();
@@ -2205,7 +2216,7 @@ public class BizProcessDataProcurementController extends BaseController {
             List<BizProcessChild> bizProductChildList = bizProcessChildService.selectBizTestProductList(queryBizProcessChild);
             CellStyle cellTableStyle = ExcelProcessDataUtils.cellTableStyle(workbook);
 
-            Row row7 = sheet.createRow(6);
+            Row row7 = sheet.createRow(7);
             Cell cell_80 = row7.createCell(0);
             cell_80.setCellValue("序号");
             cell_80.setCellStyle(cellTableStyle);
@@ -2231,7 +2242,7 @@ public class BizProcessDataProcurementController extends BaseController {
             cell_87.setCellValue("材质说明");
             cell_87.setCellStyle(cellTableStyle);
 
-            int rowCount = 6;
+            int rowCount = 7;
             int num = 0;
             BigDecimal price = new BigDecimal("0");
             BigDecimal totalPrice = new BigDecimal("0");

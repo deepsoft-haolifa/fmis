@@ -46,18 +46,6 @@
                                                 <input type="text" name="string1" id="string1"/>
                                             </li>
                                             <li>
-                                                <p>控制电路：</p>
-                                                <input type="text" name="controlCircuit" id="controlCircuit"/>
-                                            </li>
-                                            <li>
-                                                <p>适用电压：</p>
-                                                <input type="text" name="adaptableVoltage" id="adaptableVoltage"/>
-                                            </li>
-                                            <li>
-                                                <p>型号：</p>
-                                                <input type="text" name="string1" id="string1"/>
-                                            </li>
-                                            <li>
                                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="search1()"><i class="fa fa-search"></i>&nbsp;搜索</a>
                                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="searchAll1()"><i class="fa fa-search"></i>&nbsp;搜索全部</a>
                                             </li>
@@ -132,12 +120,12 @@
 
         function search1 () {
             $("#string61").val("0");
-            var data = {"name":$("#name1").val(),"string2":"1","string6":$("#string61").val()};
+            var data = {"string1":$("#string1").val(),"name":$("#name1").val(),"string2":"1","string6":$("#string61").val()};
             $.table.search('formId','bootstrap-table',data);
         }
         function searchAll1 () {
             $("#string61").val("1");
-            var data = {"name":$("#name1").val(),"string2":"1","string6":$("#string61").val()};
+            var data = {"string1":$("#string1").val(),"name":$("#name1").val(),"string2":"1","string6":$("#string61").val()};
             $.table.search('formId','bootstrap-table',data);
         }
         function search2 () {

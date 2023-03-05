@@ -256,6 +256,9 @@
                     field : 'assignNumber',
                     title : '分配次数',
                     formatter: function(value, row, index) {
+                        if (value == null || value == '') {
+                            value = 0;
+                        }
                         return value+"次"
                     }
                 },
