@@ -201,6 +201,9 @@ public class BizProduct extends BaseEntity {
     @Excel(name = "产品单价 销售底价")
     private Double price;
 
+    /** 产品面价 */
+    @Excel(name = "产品面价")
+    private Double facePrice;
     @Excel(name = "采购价")
     private Double procurementPrice;
     public void setProcurementPrice(Double procurementPrice) {
@@ -335,6 +338,14 @@ public class BizProduct extends BaseEntity {
         return delFlag;
     }
 
+    public Double getFacePrice() {
+        return facePrice;
+    }
+
+    public void setFacePrice(Double facePrice) {
+        this.facePrice = facePrice;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -351,6 +362,7 @@ public class BizProduct extends BaseEntity {
             .append("valveElement", getValveElement())
             .append("driveForm", getDriveForm())
             .append("price", getPrice())
+            .append("facePrice", getFacePrice())
             .append("supplier", getSupplier())
             .append("remark", getRemark())
             .append("status", getStatus())

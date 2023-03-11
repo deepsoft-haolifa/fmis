@@ -65,6 +65,8 @@ public class BizProductImport {
     private String costPrice;
     @Excel(name = "销售底价（元）")
     private String price;
+    @Excel(name = "面价（元）")
+    private String facePrice;
 
 
 

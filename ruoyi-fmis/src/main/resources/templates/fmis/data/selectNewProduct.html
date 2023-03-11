@@ -197,8 +197,8 @@
                     }
                 },
                 {
-                    field : 'price',
-                    title : '产品单价'
+                    field : 'facePrice',
+                    title : '面价'
                 },
                 {
                     field : 'costPrice',
@@ -339,7 +339,7 @@
         var productJsonArray = [];
         var selectRows = $.btTable.bootstrapTable('getSelections');
         for (var i = 0; i < selectRows.length; i++) {
-            var price = selectRows[i].price;
+            var facePrice = selectRows[i].facePrice;
             var name = selectRows[i].name;
             var rowData = {
                 productId: selectRows[i].productId,
@@ -355,7 +355,7 @@
                 driveForm:selectRows[i].driveForm,
                 connectionType:selectRows[i].connectionType,
                 productNum:"0",
-                productPrice:selectRows[i].price,
+                productPrice:selectRows[i].facePrice,
 
 
                 productCostPrice:selectRows[i].costPrice,

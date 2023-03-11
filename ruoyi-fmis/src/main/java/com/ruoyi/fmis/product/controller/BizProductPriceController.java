@@ -697,6 +697,7 @@ public class BizProductPriceController extends BaseController {
                     bizProduct.setSealingMaterial(sealingMaterialId.toString());
                     bizProduct.setDriveForm(driveFormId.toString());
                     bizProduct.setPrice(Double.parseDouble(product.getPrice()));
+                    bizProduct.setFacePrice(Double.parseDouble(product.getFacePrice()));
                     bizProduct.setSupplier(bizSuppliers.getSuppliersId().toString());
                     bizProduct.setColor(product.getColor());
                     bizProduct.setString4(product.getString4());
