@@ -2396,17 +2396,18 @@ public class BizProcessDataController extends BaseController {
          * 如果系数0.9--1.0，必须由销售副总审核，流程结束，
          * 如果报价系数大于1.0--1.1则由区域经理审批完成后流程结束；
          * 如果系数大于1.1，则由部门销售经理审核完成后流程结束
+         * 总经理46% 副总 43% 区域经理40% 销售经理 32。5% 销售员30%
          */
         minCoefficient = Double.parseDouble(totalPrice) / price;
-        if (minCoefficient < 0.88) {
+        if (minCoefficient < 0.57) {
 
             normalFlag = "5";
-        } else if ((minCoefficient >= 0.88 && minCoefficient < 0.95)) {
+        } else if ((minCoefficient >= 0.57 && minCoefficient < 0.6)) {
             if (num < 5) {
                 normalFlag = "4";
                 num = 4;
             }
-        } else if ((minCoefficient >= 0.95 && minCoefficient < 1)) {
+        } else if ((minCoefficient >= 0.6 && minCoefficient < 0.675)) {
             if (num < 4) {
                 normalFlag = "3";
                 num = 3;
