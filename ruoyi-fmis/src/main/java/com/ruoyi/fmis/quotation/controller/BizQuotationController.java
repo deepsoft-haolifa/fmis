@@ -998,7 +998,7 @@ public class BizQuotationController extends BaseController {
                         && Double.parseDouble(productRef2Coefficient) > 0) {
                     minCoefficient = Double.parseDouble(productRef2Coefficient);
                 }*/
-                String productAllCoefficient = bizQuotationProduct.getString6();
+                String productAllCoefficient = bizQuotationProduct.getString7();
                 if (StringUtils.isNotEmpty(productAllCoefficient) && Double.parseDouble(productAllCoefficient) < minCoefficient
                         && Double.parseDouble(productAllCoefficient) > 0) {
                     minCoefficient = Double.parseDouble(productAllCoefficient);
@@ -1067,6 +1067,7 @@ public class BizQuotationController extends BaseController {
              *
              * 总经理46% 副总 43% 区域经理40% 销售经理 32。5% 销售员30%
          */
+        minCoefficient = Double.parseDouble(totalPrice) / price;
             if (minCoefficient < 0.57) {
                 normalFlag = "5";
             }else if ((minCoefficient >= 0.57 && minCoefficient < 0.6)) {
