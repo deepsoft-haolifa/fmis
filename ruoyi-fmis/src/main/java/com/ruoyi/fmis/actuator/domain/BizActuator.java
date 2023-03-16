@@ -72,6 +72,18 @@ public class BizActuator extends BaseEntity {
     @Excel(name = "价格")
     private Double price;
 
+    public Double getFacePrice() {
+        return facePrice;
+    }
+
+    public void setFacePrice(Double facePrice) {
+        this.facePrice = facePrice;
+    }
+
+    /** 价格 */
+    @Excel(name = "面价")
+    private Double facePrice;
+
     /** 备用1 型号*/
     private String string1;
 
@@ -319,6 +331,7 @@ public class BizActuator extends BaseEntity {
             .append("qualityLevel", getQualityLevel())
             .append("explosionLevel", getExplosionLevel())
             .append("price", getPrice())
+            .append("facePrice", getFacePrice())
             .append("remark", getRemark())
             .append("string1", getString1())
             .append("string2", getString2())

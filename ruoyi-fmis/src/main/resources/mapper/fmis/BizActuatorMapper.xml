@@ -18,6 +18,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="qualityLevel"    column="quality_level"    />
         <result property="explosionLevel"    column="explosion_level"    />
         <result property="price"    column="price"    />
+        <result property="facePrice"    column="face_price"    />
         <result property="remark"    column="remark"    />
         <result property="string1"    column="string1"    />
         <result property="string2"    column="string2"    />
@@ -64,7 +65,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <sql id="selectBizActuatorForRefVo">
 
 		select distinct a.actuator_id, a.name, a.brand, a.manufacturer, a.setup_type, a.output_torque, a.action_type, a.control_circuit,
-		a.adaptable_voltage, a.protection_level, a.quality_level, a.explosion_level, a.price, a.remark, a.string1,
+		a.adaptable_voltage, a.protection_level, a.quality_level, a.explosion_level, a.price,a.face_price, a.remark, a.string1,
 		a.string2, a.string3, a.string4, a.string5, a.string6, a.string7, a.string8, a.string9, a.string10,
 		 a.status, a.del_flag, a.create_by, a.create_time, a.update_by, a.update_time,s.nick_name as supplier
 		from biz_actuator a
@@ -121,6 +122,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="qualityLevel != null  and qualityLevel != ''">quality_level,</if>
             <if test="explosionLevel != null  and explosionLevel != ''">explosion_level,</if>
             <if test="price != null ">price,</if>
+            <if test="facePrice != null ">face_price,</if>
             <if test="remark != null  and remark != ''">remark,</if>
             <if test="string1 != null  and string1 != ''">string1,</if>
             <if test="string2 != null  and string2 != ''">string2,</if>
@@ -154,6 +156,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="qualityLevel != null  and qualityLevel != ''">#{qualityLevel},</if>
             <if test="explosionLevel != null  and explosionLevel != ''">#{explosionLevel},</if>
             <if test="price != null ">#{price},</if>
+            <if test="face_price != null ">#{facePrice},</if>
             <if test="remark != null  and remark != ''">#{remark},</if>
             <if test="string1 != null  and string1 != ''">#{string1},</if>
             <if test="string2 != null  and string2 != ''">#{string2},</if>

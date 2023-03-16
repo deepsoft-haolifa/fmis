@@ -216,7 +216,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
           qp.product_num as productNum,qp.product_coefficient as productCoefficient,qp.product_ref1_coefficient as productRef1Coefficient,
           qp.product_ref2_coefficient as productRef2Coefficient,qp.actuator_num as actuatorNum,qp.actuator_coefficient as actuatorCoefficient,qp.total_price_only as totalPriceOnly,
           pr1.name as ref1Name,pr2.name as ref2Name,p.name as productName,ac.name as actuatorName,
-          p.price as productPrice,pr1.price as ref1Price,pr2.price as ref2Price,ac.price as actuatorPrice,concat(q.quotation_id,'-',qp.product_id) as quotationProductId,
+          p.price as productPrice,pr1.price as ref1Price,pr2.price as ref2Price,ac.face_price as actuatorPrice,concat(q.quotation_id,'-',qp.product_id) as quotationProductId,
 
           d9.name as series, p.model, d1.name as specifications, d2.name as nominal_pressure,
           d3.name as connection_type, d6.name as valvebody_material, p.valve_material,
