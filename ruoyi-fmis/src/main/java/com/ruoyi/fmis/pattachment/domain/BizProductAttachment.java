@@ -142,6 +142,17 @@ public class BizProductAttachment extends BaseEntity {
     @Excel(name = "销售底价")
     private Double basePrice;
 
+    public Double getFacePrice() {
+        return facePrice;
+    }
+
+    public void setFacePrice(Double facePrice) {
+        this.facePrice = facePrice;
+    }
+
+    @Excel(name = "销售底价")
+    private Double facePrice;
+
     /** 销售价 */
     @Excel(name = "销售价")
     private Double price;
@@ -537,6 +548,7 @@ public class BizProductAttachment extends BaseEntity {
             .append("settlementPrice", getSettlementPrice())
             .append("basePrice", getBasePrice())
             .append("price", getPrice())
+            .append("facePrice", getFacePrice())
             .append("string1", getString1())
             .append("string2", getString2())
             .append("string3", getString3())

@@ -43,7 +43,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <sql id="selectBizActuatorVo">
         select a.actuator_id, a.name, a.brand, a.manufacturer, a.setup_type, a.output_torque, a.action_type, a.control_circuit, a.adaptable_voltage,
-        a.protection_level, a.quality_level, a.explosion_level, a.price, a.remark, a.string1, a.string2, a.string3, a.string4, a.string5,
+        a.protection_level, a.quality_level, a.explosion_level, a.price, a.face_price,a.remark, a.string1, a.string2, a.string3, a.string4, a.string5,
         a.string6, a.string7, a.string8, a.string9, a.string10, a.status, a.del_flag, a.create_by, a.create_time, a.update_by, a.update_time ,
         s.nick_name as supplier,a.color,a.press
         from biz_actuator a

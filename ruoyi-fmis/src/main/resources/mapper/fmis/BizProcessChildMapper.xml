@@ -204,7 +204,7 @@
           pc.string10 as productRef2Coefficient,pc.string12 as actuatorNum,pc.string13 as actuatorCoefficient,
           pc.contract_price as contractPrice,
           pr1.name as ref1Name,pr2.name as ref2Name,p.name as productName,ac.name as actuatorName,
-          p.face_price as productPrice,pr1.price as ref1Price,pr2.price as ref2Price,ac.price as actuatorPrice,
+          p.face_price as productPrice,pr1.price as ref1Price,pr2.price as ref2Price,ac.face_price as actuatorPrice,
           p.color,
           d9.name as series, p.model, d1.name as specifications, d2.name as nominalPressure,
           d3.name as connectionType, d6.name as valvebodyMaterial,
@@ -465,7 +465,7 @@
         select pd.string3 guishudanwei,
         (case when ds.data_status='1' then ds.string1 else sum(pc.string12) end) as actuatorNum,
         pc.string13 as actuatorCoefficient,
-        a.name as actuatorName,a.price as actuatorPrice,a.actuator_id as actuatorId,
+        a.name as actuatorName,a.face_price as actuatorPrice,a.actuator_id as actuatorId,
         a.brand as actuatorBrand,a.manufacturer as actuatorManufacturer,a.string4 as actuatorString4,
         a.string1 as actuatorString1,a.setup_type as actuatorSetupType,a.output_torque as actuatorOutputTorque,
         a.string3 as actuatorString3,a.action_type as actuatorActionType,a.control_circuit as actuatorControlCircuit,a.adaptable_voltage as actuatorAdaptableVoltage,
@@ -511,7 +511,7 @@
     <sql id="selectBizTestActuatorVo">
     select
       ds.string1 as actuatorNum,sn.remark,a.press as pressure,a.color,a.string5,
-          a.name as actuatorName,a.price as actuatorPrice,a.actuator_id as actuatorId,ds.string4 as dataId,ds.child_id as childId,ds.status_id as statusId,
+          a.name as actuatorName,a.face_price as actuatorPrice,a.actuator_id as actuatorId,ds.string4 as dataId,ds.child_id as childId,ds.status_id as statusId,
           a.brand as actuatorBrand,a.manufacturer as actuatorManufacturer,a.string4 as actuatorString4,
           a.string1 as actuatorString1,a.setup_type as actuatorSetupType,a.output_torque as actuatorOutputTorque,
           a.string3 as actuatorString3,a.action_type as actuatorActionType,a.control_circuit as actuatorControlCircuit,a.adaptable_voltage as actuatorAdaptableVoltage,

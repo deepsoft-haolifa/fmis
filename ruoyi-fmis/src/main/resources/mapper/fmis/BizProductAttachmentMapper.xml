@@ -37,6 +37,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="settlementPrice"    column="settlement_price"    />
         <result property="basePrice"    column="base_price"    />
         <result property="price"    column="price"    />
+        <result property="facePrice"    column="face_price"    />
         <result property="string1"    column="string1"    />
         <result property="string2"    column="string2"    />
         <result property="string3"    column="string3"    />
@@ -66,8 +67,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         pa.english_specifications, pa.chinese_packaging, pa.english_packaging,
         pa.chinese_unit, pa.english_unit, pa.pressure, pa.material, pa.bar_code, pa.customs_bh,
          pa.handling_fee, pa.color, pa.developer, pa.goods_category, pa.supplier, pa.box,
-         pa.innerbox_count, pa.bulk, pa.l, pa.w, pa.h, pa.gross_weight, pa.net_weight, pa.cost_price,
-         pa.settlement_price, pa.base_price, pa.price, pa.string1, pa.string2, pa.string3, pa.string4,
+         pa.innerbox_count, pa.bulk, pa.l, pa.w, pa.h, pa.gross_weight, pa.net_weight, pa.cost_price,pa.face_price,
+         pa.settlement_price, pa.base_price,pa.face_price, pa.price, pa.string1, pa.string2, pa.string3, pa.string4,
           pa.string5, pa.string6, pa.string7, pa.string8, pa.string9, pa.string10, pa.remark,
           pa.status, pa.del_flag, pa.create_by, pa.create_time, pa.update_by, pa.update_time,
           s.nick_name as supplierName
@@ -162,6 +163,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="costPrice != null ">cost_price,</if>
             <if test="settlementPrice != null ">settlement_price,</if>
             <if test="basePrice != null ">base_price,</if>
+            <if test="facePrice != null ">face_price,</if>
             <if test="basePrice != null ">price,</if>
             <if test="string1 != null  and string1 != ''">string1,</if>
             <if test="string2 != null  and string2 != ''">string2,</if>
@@ -212,7 +214,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="costPrice != null ">#{costPrice},</if>
             <if test="settlementPrice != null ">#{settlementPrice},</if>
             <if test="basePrice != null ">#{basePrice},</if>
-            <if test="basePrice != null ">#{basePrice},</if>
+            <if test="facePrice != null ">#{facePrice},</if>
             <if test="string1 != null  and string1 != ''">#{string1},</if>
             <if test="string2 != null  and string2 != ''">#{string2},</if>
             <if test="string3 != null  and string3 != ''">#{string3},</if>
@@ -266,6 +268,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="costPrice != null ">cost_price = #{costPrice},</if>
             <if test="settlementPrice != null ">settlement_price = #{settlementPrice},</if>
             <if test="basePrice != null ">base_price = #{basePrice},</if>
+            <if test="facePrice != null ">face_price = #{facePrice},</if>
             <if test="basePrice != null ">price = #{basePrice},</if>
             <if test="string1 != null  and string1 != ''">string1 = #{string1},</if>
             <if test="string2 != null  and string2 != ''">string2 = #{string2},</if>
