@@ -8,6 +8,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.fmis.Constant;
+import com.ruoyi.fmis.actuator.service.IBizActuatorService;
 import com.ruoyi.fmis.child.domain.BizProcessChild;
 import com.ruoyi.fmis.child.service.IBizProcessChildService;
 import com.ruoyi.fmis.common.BizConstants;
@@ -21,6 +22,9 @@ import com.ruoyi.fmis.invoice.bean.InvoiceRespVo;
 import com.ruoyi.fmis.invoice.bean.export.InvoiceExportDTO;
 import com.ruoyi.fmis.product.domain.BizProduct;
 import com.ruoyi.fmis.product.service.IBizProductService;
+import com.ruoyi.fmis.productref.service.IBizProductRefService;
+import com.ruoyi.fmis.quotation.domain.BizQuotation;
+import com.ruoyi.fmis.quotation.service.IBizQuotationService;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysRole;
 import com.ruoyi.system.service.ISysRoleService;
@@ -69,6 +73,14 @@ public class BizProcessDataInvoiceController extends BaseController {
 
     @Autowired
     private IBizCustomerService bizCustomerService;
+
+    @Autowired
+    private IBizQuotationService bizQuotationService;
+    @Autowired
+    private IBizProductRefService bizProductRefService;
+
+    @Autowired
+    private IBizActuatorService bizActuatorService;
 
     @RequiresPermissions("fmis:invoice:view")
     @GetMapping()
@@ -430,5 +442,74 @@ public class BizProcessDataInvoiceController extends BaseController {
         List<InvoiceExportDTO> list = bizProcessChildService.yyInvoiceExport(invoiceReqVo);
         ExcelUtil<InvoiceExportDTO> util = new ExcelUtil<InvoiceExportDTO>(InvoiceExportDTO.class);
         return util.exportMergeEasyExcel(list, "销项发票开票信息导出",0,8);
+    }
+    @GetMapping("/viewDetail")
+    public String viewDetail(ModelMap mmap) {
+        String dataId = getRequest().getParameter("dataId");
+        BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataById(Long.parseLong(dataId));
+
+
+        String bizId = bizProcessData.getBizId();
+        Map<String, SysRole> flowMap = bizProcessDefineService.getRoleFlowMap(bizId);
+        String userFlowStatus = "";
+        if (!CollectionUtils.isEmpty(flowMap)) {
+            userFlowStatus = flowMap.keySet().iterator().next();
+            bizProcessData.setRoleType(userFlowStatus);
+        }
+
+        BizProcessChild queryBizProcessChild = new BizProcessChild();
+        queryBizProcessChild.setDataId(bizProcessData.getDataId());
+        List<BizProcessChild> bizProcessChildList = bizProcessChildService.selectBizProcessChildList(queryBizProcessChild);
+        String productNames = "";
+        String productIds = "";
+        if (!CollectionUtils.isEmpty(bizProcessChildList)) {
+            for (BizProcessChild bizProcessChild : bizProcessChildList) {
+                String productId = bizProcessChild.getString2();
+                String otherId = bizProcessChild.getString1() + "-" + productId;
+
+                bizProcessChild.setParamterId(otherId);
+
+                productIds += otherId + ",";
+                String quotationId = bizProcessChild.getString1();
+                if (StringUtils.isNotEmpty(quotationId)) {
+                    BizQuotation bizQuotation = bizQuotationService.selectBizQuotationById(Long.parseLong(quotationId));
+                    productNames += bizQuotation.getString1() + ",";
+                    bizProcessChild.setBizQuotation(bizQuotation);
+
+                }
+
+                BizProduct bizProduct = null;
+                BizProduct queryBizProduct = new BizProduct();
+                queryBizProduct.setProductId(Long.parseLong(productId));
+                List<BizProduct> bizProductList = bizProductService.selectBizProductList(queryBizProduct);
+                if (!CollectionUtils.isEmpty(bizProductList)) {
+                    bizProduct = bizProductList.get(0);
+                }
+
+                bizProcessChild.setBizProduct(bizProduct);
+                String ref1Id = bizProcessChild.getString5();
+                if (StringUtils.isNotEmpty(ref1Id)) {
+                    bizProcessChild.setRef1(bizProductRefService.selectBizProductRefById(Long.parseLong(ref1Id)));
+                }
+                String ref2Id = bizProcessChild.getString8();
+                if (StringUtils.isNotEmpty(ref2Id)) {
+                    bizProcessChild.setRef2(bizProductRefService.selectBizProductRefById(Long.parseLong(ref2Id)));
+                }
+                String actuatorId = bizProcessChild.getString11();
+                if (StringUtils.isNotEmpty(actuatorId)) {
+                    bizProcessChild.setBizActuator(bizActuatorService.selectBizActuatorById(Long.parseLong(actuatorId)));
+                }
+            }
+            bizProcessData.setBizProcessChildList(bizProcessChildList);
+        }
+        String customerId = bizProcessData.getString2();
+        if (StringUtils.isNotEmpty(customerId)) {
+            bizProcessData.setBizCustomer(bizCustomerService.selectBizCustomerById(Long.parseLong(customerId)));
+        }
+        mmap.put("quotationNames", productNames);
+        mmap.put("quotationIds", productIds);
+        mmap.put("bizProcessData", bizProcessData);
+        mmap.put("userFlowStatus", userFlowStatus);
+        return prefix + "/viewDetail";
     }
 }

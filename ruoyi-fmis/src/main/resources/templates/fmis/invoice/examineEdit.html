@@ -128,8 +128,8 @@
 
             <div class="ibox float-e-margins" th:each="qp:${bizProcessData.bizProcessChildList}"
                  th:id="'productDiv_' + ${qp.string1}">
-                <h5 th:text="${qp.string2}"></h5>
 
+                <a th:data-id="${qp.bizProcessData.dataId}" class="btn btn-success btn-xs " href="javascript:void(0)" onclick="viewExamineDetail(this.getAttribute('data-id'))"> <h5 th:text="${qp.string2}"></h5> </a>
                 <div class='form-group'>
                     <label class='control-label col-sm-3'>合同编号：</label>
                     <div class='col-sm-2'>
@@ -242,7 +242,12 @@
         minView: "month",
         autoclose: true
     });
-
+    function viewExamineDetail(dataId) {
+        var url = prefix + "/viewDetail?dataId=" + dataId;
+        $.modal.openNoEnter("详情", url, $(window).width(), $(window).height(), function () {
+            $.modal.closeAll();
+        });
+    }
 </script>
 </body>
 </html>
