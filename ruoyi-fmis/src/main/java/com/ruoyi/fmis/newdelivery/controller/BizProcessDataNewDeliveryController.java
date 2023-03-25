@@ -282,6 +282,7 @@ public class BizProcessDataNewDeliveryController extends BaseController {
                 BizProcessChild bizProcessChild = JSONObject.parseObject(json.toJSONString(), BizProcessChild.class);
                 if (StringUtils.isNotEmpty(bizProcessChild.getString1())) {
                     bizProcessChild.setDataId(dataId);
+                    bizProcessChild.setPrice1(bizProcessChild.getPrice1() * Double.parseDouble(bizProcessChild.getString4()));
                     bizProcessChildService.insertBizProcessChild(bizProcessChild);
                 }
             }
