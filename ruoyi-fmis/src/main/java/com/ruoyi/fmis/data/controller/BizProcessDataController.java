@@ -860,6 +860,8 @@ public class BizProcessDataController extends BaseController {
             cell_18_0.setCellValue("八、");
             Cell cell_18_1 = row18.createCell(1);
             cell_18_1.setCellValue("交货周期：");
+            Cell cell_18_2 = row18.createCell(2);
+            cell_18_2.setCellValue(bizProcessData.getString6());
             sheet.addMergedRegion(new CellRangeAddress(jj, jj, 2, 3));
 
             int kk = rowCount++;
@@ -3178,7 +3180,7 @@ public class BizProcessDataController extends BaseController {
 
             table.addCell(PdfUtil.mergeCol("八、", 1, textFont));
             table.addCell(PdfUtil.mergeCol("交货周期：", 2, textFont));
-            table.addCell(PdfUtil.mergeCol("", 12, textFont));
+            table.addCell(PdfUtil.mergeCol(bizProcessData.getString6(), 12, textFont));
 
             table.addCell(PdfUtil.mergeCol("九", 1, textFont));
             table.addCell(PdfUtil.mergeCol("付款方式：电汇或承兑。 " + "付款形式：" + sysDictDataService.selectDictLabel("payment_method", bizProcessData.getString18()), 14, textFont));
