@@ -111,8 +111,8 @@
             </div>
             <label class="col-sm-1 control-label">包装方式：</label>
             <div class="col-sm-2">
-                <select name="string27" id="string27" class="form-control m-b" th:with="type=${@dict.getType('baozhuangfangshi')}">
-                    <option value="0">请选择</option>
+                <select name="string27" id="string27" disabled class="form-control m-b" th:with="type=${@dict.getType('baozhuangfangshi')}">
+                    <option value="0">默认</option>
                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{string27}"></option>
                 </select>
             </div>
