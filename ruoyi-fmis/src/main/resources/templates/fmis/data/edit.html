@@ -120,6 +120,13 @@
                         </select>
                     </div>
                 </div>
+                <label class="col-sm-1 control-label">包装方式：</label>
+                <div class="col-sm-2">
+                    <select name="string27" id="string27" class="form-control m-b" th:with="type=${@dict.getType('baozhuangfangshi')}">
+                        <option value="0">请选择</option>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{string27}"></option>
+                    </select>
+                </div>
                 <div id="divString15" class="form-inline" style="display: none">
                     <label class="col-sm-1 control-label">账期：</label>
                     <div class="col-sm-2">
@@ -238,7 +245,7 @@
 
                 <label class="col-sm-1 control-label">生产要求：</label>
                 <div class="col-sm-5">
-                    <input name="string27" id="string27" class="form-control" th:field="*{string27}" type="text" >
+                    <input name="string28" id="string28" class="form-control" th:field="*{string28}" type="text" >
                 </div>
             </div>
             <input type="hidden" id="productOperationType" name="productOperationType" value="0">

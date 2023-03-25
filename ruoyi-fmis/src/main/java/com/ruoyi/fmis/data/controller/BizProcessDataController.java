@@ -3173,7 +3173,7 @@ public class BizProcessDataController extends BaseController {
 
             table.addCell(PdfUtil.mergeCol("七、", 1, textFont));
             table.addCell(PdfUtil.mergeCol("包装方式：", 2, textFont));
-            table.addCell(PdfUtil.mergeCol("", 5, textFont));
+            table.addCell(PdfUtil.mergeCol(bizProcessData.getString27(), 5, textFont));
 //            table.addCell(PdfUtil.mergeCol(bizProcessData.getString27(), 5, textFont));
             table.addCell(PdfUtil.mergeCol("包装物回收：", 2, textFont));
             table.addCell(PdfUtil.mergeCol("不回收，由买方自行处理。", 5, textFont));
