@@ -531,8 +531,8 @@ public class BizQuotationController extends BaseController {
                 table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(sumTotalAmount), 1,textFont));//合计
                 table.addCell(PdfUtil.mergeCol("", 3,textFont));//备注
             } else {
-                table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(sumTotalAmount), 1,textFont));//合计
                 table.addCell(PdfUtil.mergeCol("", 1,textFont));//优惠金额
+                table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(sumTotalAmount), 1,textFont));//合计
                 table.addCell(PdfUtil.mergeCol("", 3,textFont));//备注
             }
             /*table.addCell(PdfUtil.mergeCol("", 1,textFont));//单价
