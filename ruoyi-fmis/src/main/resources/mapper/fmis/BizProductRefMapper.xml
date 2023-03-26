@@ -13,6 +13,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="valvebodyMaterial"    column="valvebody_material"    />
         <result property="materialRequire"    column="material_require"    />
         <result property="price"    column="price"    />
+        <result property="facePrice"    column="face_price"    />
         <result property="remark"    column="remark"    />
         <result property="suppliersId"    column="suppliers_id"    />
         <result property="string1"    column="string1"    />
@@ -39,7 +40,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
     <sql id="selectBizProductRefDictVo">
-      select distinct pr.product_ref_id, pr.name, pr.type, pr.model, d1.name as specifications, d2.name as valvebody_material, pr.material_require, pr.price,
+      select distinct pr.product_ref_id, pr.name, pr.type, pr.model, d1.name as specifications, d2.name as valvebody_material, pr.material_require, pr.price,pr.face_price,
 	    pr.remark, pr.suppliers_id, pr.string1, pr.string2, pr.string3, pr.string4, pr.string5, pr.string6, pr.string7, pr.string8,
 	    pr.string9, pr.string10, pr.status, pr.del_flag, pr.create_by, pr.create_time, pr.update_by, pr.update_time,s.name as  suppliersName
 	 from biz_product_ref pr
@@ -75,6 +76,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="valvebodyMaterial != null  and valvebodyMaterial != ''">valvebody_material,</if>
             <if test="materialRequire != null  and materialRequire != ''">material_require,</if>
             <if test="price != null ">price,</if>
+            <if test="facePrice != null ">face_price,</if>
             <if test="remark != null  and remark != ''">remark,</if>
             <if test="suppliersId != null ">suppliers_id,</if>
             <if test="string1 != null  and string1 != ''">string1,</if>
@@ -102,6 +104,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="valvebodyMaterial != null  and valvebodyMaterial != ''">#{valvebodyMaterial},</if>
             <if test="materialRequire != null  and materialRequire != ''">#{materialRequire},</if>
             <if test="price != null ">#{price},</if>
+            <if test="facePrice != null ">#{facePrice},</if>
             <if test="remark != null  and remark != ''">#{remark},</if>
             <if test="suppliersId != null ">#{suppliersId},</if>
             <if test="string1 != null  and string1 != ''">#{string1},</if>
@@ -133,6 +136,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="valvebodyMaterial != null  and valvebodyMaterial != ''">valvebody_material = #{valvebodyMaterial},</if>
             <if test="materialRequire != null  and materialRequire != ''">material_require = #{materialRequire},</if>
             <if test="price != null ">price = #{price},</if>
+            <if test="facePrice != null ">face_price = #{facePrice},</if>
             <if test="remark != null  and remark != ''">remark = #{remark},</if>
             <if test="suppliersId != null ">suppliers_id = #{suppliersId},</if>
             <if test="string1 != null  and string1 != ''">string1 = #{string1},</if>

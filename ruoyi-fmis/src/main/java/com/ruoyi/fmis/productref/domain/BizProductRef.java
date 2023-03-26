@@ -44,6 +44,10 @@ public class BizProductRef extends BaseEntity {
     @Excel(name = "单价")
     private Double price;
 
+    /** 单价 */
+    @Excel(name = "单价")
+    private Double facePrice;
+
     /** 供应商 */
     @Excel(name = "供应商")
     private Long suppliersId;
@@ -241,6 +245,14 @@ public class BizProductRef extends BaseEntity {
         return delFlag;
     }
 
+    public Double getFacePrice() {
+        return facePrice;
+    }
+
+    public void setFacePrice(Double facePrice) {
+        this.facePrice = facePrice;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -252,6 +264,7 @@ public class BizProductRef extends BaseEntity {
             .append("valvebodyMaterial", getValvebodyMaterial())
             .append("materialRequire", getMaterialRequire())
             .append("price", getPrice())
+            .append("facePrice", getFacePrice())
             .append("remark", getRemark())
             .append("suppliersId", getSuppliersId())
             .append("string1", getString1())
