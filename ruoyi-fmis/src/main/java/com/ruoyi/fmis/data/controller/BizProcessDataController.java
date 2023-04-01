@@ -2803,7 +2803,7 @@ public class BizProcessDataController extends BaseController {
 
                 Double actuatorTotal = new Double(0);
                 if (bizActuator != null) {
-                    Double actuatorPrice = bizActuator.getPrice();
+                    Double actuatorPrice = bizProduct.getActuatorPrice();
                     String actuatorNum = bizProduct.getActuatorNum();
                     String actuatorCoefficient = bizProduct.getActuatorCoefficient();
                     if (StringUtils.isNotEmpty(actuatorNum) && actuatorPrice > 0 && StringUtils.isNotEmpty(actuatorCoefficient)) {
@@ -2968,11 +2968,13 @@ public class BizProcessDataController extends BaseController {
                 totalAmount = productTotal + ref1Total + ref2Tota + actuatorTotal +
                         pattachmentIdTotal + pattachmentId1Total + pattachmentId2Total + pattachmentId3Total + pattachmentId4Total;
 
-                sumTotalAmount = sumTotalAmount + totalAmount;
 
                 //总单价
                 Double productTotalPrice = Double.valueOf(totalAmount / Double.parseDouble(productNum));
                 sumTotalPrice = sumTotalPrice + productTotalPrice;
+                productTotalPrice = bizProduct.getContractPrice(); //单价
+                totalAmount =  productTotalPrice * Double.parseDouble(productNum);
+                sumTotalAmount = sumTotalAmount + totalAmount;
                 if (!isSchengchan) {
                     table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString(productTotalPrice), 1, textFont));//单价
 

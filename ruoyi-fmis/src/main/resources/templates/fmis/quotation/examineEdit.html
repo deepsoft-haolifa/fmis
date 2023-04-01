@@ -523,8 +523,8 @@
         for (var i = 0; i < data.length; i++) {
             var rowData = data[i];
             var price = calculatePrice(rowData);
-            var discountPrice = calculateDiscount(rowData);
-            discount = FloatAdd(discount,discountPrice).toFixed(4);
+            // var discountPrice = calculateDiscount(rowData);
+            // discount = FloatAdd(discount,discountPrice).toFixed(4);
             productTotalPrice = FloatAdd(productTotalPrice,price).toFixed(4);
             var totalCostPrice = totalCostPriceMap.get("totalCostPrice");
             allTotalCost =  FloatAdd(totalCostPrice,allTotalCost).toFixed(4);
@@ -537,7 +537,11 @@
         // var totalPrice = parseFloat(productTotalPrice) + parseFloat(specialExpenses);
         var totalPrice = parseFloat(productTotalPrice);
         $("#totalPrice").val(parseFloat(totalPrice).toFixed(4));
-
+        discount = $("#discount").val();
+        console.log("discountPrice:" + discount)
+        if (isEmpty(discount)) {
+            discount = 0;
+        }
         var discountprice = parseFloat(productTotalPrice) - parseFloat(discount);
         $("#discountAfter").val(discountprice);
         //productTotalPrice 毛利 产品金额-成本价格-特殊费用
