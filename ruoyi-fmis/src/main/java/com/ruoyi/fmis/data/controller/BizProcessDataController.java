@@ -3066,7 +3066,7 @@ public class BizProcessDataController extends BaseController {
 
             table.addCell(PdfUtil.mergeColRight("大写人民币合计", 5, textFont));
             if (!isSchengchan) {
-                table.addCell(PdfUtil.mergeCol(StringUtils.convert(sumTotalNum), 3, textFont));//合计
+                table.addCell(PdfUtil.mergeCol(StringUtils.convert(sumTotalAmount), 3, textFont));//合计
             } else {
                 table.addCell(PdfUtil.mergeCol("", 3, textFont));//合计
             }

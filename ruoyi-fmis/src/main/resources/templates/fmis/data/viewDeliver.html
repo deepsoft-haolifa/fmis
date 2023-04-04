@@ -25,7 +25,7 @@
 
             <label class="col-sm-1 control-label">客户代号：</label>
             <div class="col-sm-2">
-                <input name="string4" class="form-control"  type="text" th:value="*{bizCustomer.name}">
+                <input name="string4" class="form-control"  type="text" th:value="*{bizCustomer.codeName}">
             </div>
 
 
@@ -267,7 +267,7 @@
                 }
             },
                 {field : 'rowId',title : '序号',visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
-                {field : 'childId',title : 'childId',visible: true},
+                {field : 'childId',title : 'childId',visible: false},
                 {field : 'quotationId',title : 'quotationId',visible: false},
                 {field : 'string20',title : 'string20',visible: false},
                 {field : 'quotationName',title : '报价单号',editable: false},

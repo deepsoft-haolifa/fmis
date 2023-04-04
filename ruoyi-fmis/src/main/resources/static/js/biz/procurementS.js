@@ -94,7 +94,6 @@ $(function() {
                     }
                     var isAtt = row.isAtt;
                     console.info("isAtt prsss="+isAtt)
-                    var actions = [];
                     if (isAtt == 1) {
                         actions.push('<a class="btn btn-success btn-xs " + href="javascript:void(0)" onclick="viewTestFile(' + row.dataId + "," + 2 + ')"><i class="fa fa-save"></i>查看附件</a>');
                     }
