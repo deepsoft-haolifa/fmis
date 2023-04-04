@@ -206,6 +206,10 @@
                     visible: false
                 },
                 {
+                    field : 'color',
+                    title : '颜色'
+                },
+                {
                     field : 'supplier',
                     title : '供应商代号'
                 },
@@ -356,6 +360,7 @@
                 connectionType:selectRows[i].connectionType,
                 productNum:"0",
                 productPrice:selectRows[i].facePrice,
+                string15:selectRows[i].color,
 
 
                 productCostPrice:selectRows[i].costPrice,
@@ -402,7 +407,7 @@
                 pattachment4Count:"0",
                 pattachment4Coefficient:"0",
                 string14: "0",
-                string15: "RAL5010高光",
+                // string15: "RAL5010高光",
                 productRemark:""
             };
             productJsonArray.push(rowData);

@@ -2638,10 +2638,10 @@ public class BizProcessDataProcurementController extends BaseController {
                     cell1.setCellValue(i+1);
                     cell1.setCellStyle(cellTableStyle);
                     Cell cell2 = row.createCell(1);
-                    cell2.setCellValue("");
+                    cell2.setCellValue(bizProcessChild.getChineseName());
                     cell2.setCellStyle(cellTableStyle);
                     Cell cell3 = row.createCell(2);
-                    cell3.setCellValue(bizProcessChild.getChineseName());
+                    cell3.setCellValue("");
                     cell3.setCellStyle(cellTableStyle);
                     Cell cell4 = row.createCell(3);
                     cell4.setCellValue(bizProcessChild.getChineseSpecifications());

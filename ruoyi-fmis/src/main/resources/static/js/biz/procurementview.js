@@ -86,7 +86,7 @@ $(function() {
                 title : '操作',
                 formatter: function (value, row, index) {
                     var isAtt = row.isAtt;
-                    console.info("isAtt="+isAtt)
+                    console.info("isAtt11123334lll="+isAtt)
                     var actions = [];
                     if (isAtt == 1) {
                         actions.push('<a class="btn btn-success btn-xs " + href="javascript:void(0)" onclick="viewTestFile(' + row.dataId + "," + 2 + ')"><i class="fa fa-save"></i>查看附件</a>');
@@ -100,6 +100,7 @@ $(function() {
 });
 
 function viewTestFile(bizId, fileType) {
+    console.log("view view test")
     var url = ctx + "fmis/file/list/view?bizId=" + bizId + "&fileType=" + fileType;
     var widthNum = this.innerWidth - 50;
     var heigthNum = this.innerHeight - 50;

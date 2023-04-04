@@ -85,8 +85,15 @@ $(function() {
             {
                 title : '操作',
                 formatter: function (value, row, index) {
+                    var actions = [];
+                    console.log("----"+row["string30"] +  row["string30"] == '2')
+                    if (row["string30"] == '2') {
+                        actions.push('<a class="btn btn-success btn-xs  href="javascript:void(0)" onclick="jixuchuli(\'' + row.dataId + '\')"><i class="fa fa-edit"></i> 继续处理</a> ');
+                    } else {
+                        actions.push('<a class="btn btn-success btn-xs  href="javascript:void(0)" onclick="caigouwancheng(\'' + row.dataId + '\')"><i class="fa fa-edit"></i> 处理完成</a> ');
+                    }
                     var isAtt = row.isAtt;
-                    console.info("isAtt="+isAtt)
+                    console.info("isAtt prsss="+isAtt)
                     var actions = [];
                     if (isAtt == 1) {
                         actions.push('<a class="btn btn-success btn-xs " + href="javascript:void(0)" onclick="viewTestFile(' + row.dataId + "," + 2 + ')"><i class="fa fa-save"></i>查看附件</a>');
@@ -1713,6 +1720,15 @@ function jixuchuli(dataId) {
     $.modal.confirm("确定要继续处理？", function () {
         var url = ctx + "fmis/procurement/jixuchuli/" + dataId;
         $.operate.submit(url, "post", "json", "");
+    });
+}
+function viewTestFile(bizId, fileType) {
+    console.log("viewfile")
+    var url = ctx + "fmis/file/list/view?bizId=" + bizId + "&fileType=" + fileType;
+    var widthNum = this.innerWidth - 50;
+    var heigthNum = this.innerHeight - 50;
+    $.modal.openNoEnter("附件查看", url, widthNum, heigthNum, function () {
+        $.modal.closeAll();
     });
 }
 
