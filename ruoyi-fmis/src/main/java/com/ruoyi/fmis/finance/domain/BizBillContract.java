@@ -40,7 +40,6 @@ public class BizBillContract extends BaseEntity {
     /** 财务审批状态（0 未审核；1.审核通过；2.审核不通过） */
     private Integer auditStatus;
 
-
     /** 销售订单号 */
     private String saleContractNo;
     /** 创建者名称 */

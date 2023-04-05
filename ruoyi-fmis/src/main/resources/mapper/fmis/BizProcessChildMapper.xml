@@ -58,6 +58,7 @@
         <result property="pressure" column="press"/>
         <result property="color" column="color"/>
         <result property="processMode" column="process_mode"/>
+        <result property="codeName" column="code_name"/>
 
     </resultMap>
 
@@ -158,9 +159,10 @@
         c.string3, c.string4, c.string5, c.string6, c.string7, c.string8, c.string9, c.string10,
         sum(c.string11) string11, c.string12,  sum(c.string13) string13, c.string14, c.string15, sum(c.string16) string16, c.string17,
         c.string18, c.string19, c.string20, c.datetime1, c.datetime2, c.datetime3, c.datetime4,
-        c.datetime5, c.status, c.del_flag, c.create_by, c.create_time, c.update_by, c.update_time
+        c.datetime5, c.status, c.del_flag, c.create_by, c.create_time, c.update_by, c.update_time,bc.code_name
         from biz_process_child c
-
+        LEFT JOIN biz_process_data d ON c.data_id = d.data_id
+        LEFT JOIN biz_customer bc ON bc.customer_id = d.string4
     </sql>
 
     <select id="selectBizProcessChildInventoryList" parameterType="BizProcessChild" resultMap="BizProcessChildResult">
@@ -181,6 +183,7 @@
             <if test="string4 != null  and string4 != ''"> and c.string4 like concat('%', #{string4}, '%')</if>
             <if test="string5 != null  and string5 != ''"> and c.string5 like concat('%', #{string5}, '%')</if>
             <if test="productName != null  and productName != ''"> and c.string6 like concat('%', #{productName}, '%')</if>
+            <if test="codeName != null  and codeName != ''"> and bc.code_name like concat('%', #{codeName}, '%')</if>
         </where>
         group by c.child_id,c.string5,c.string6,c.string7
         order by c.create_time desc,c.string5,c.string6 desc

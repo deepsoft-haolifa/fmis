@@ -24,6 +24,10 @@
                     <input type="text" name="string5" id="string5"/>
                 </li>
                 <li>
+                    <p>客户代号：</p>
+                    <input type="text" name="codeName" id="codeName"/>
+                </li>
+                <li>
                     <p>名称：</p>
                     <input type="text" name="string6" id="string6"/>
                 </li>
@@ -73,6 +77,7 @@
                 /*{field : 'string3',title : '报检单号',editable: false},
                 {field : 'string4',title : '采购合同号'},*/
                 {field : 'string5',title : '销售合同号',editable: false},
+                {field : 'codeName',title : '客户代号',editable: false},
                 {field : 'string2',title : '类型',formatter: function(value, row, index) {
                         var actions = [];
                         if (value == 1) {
