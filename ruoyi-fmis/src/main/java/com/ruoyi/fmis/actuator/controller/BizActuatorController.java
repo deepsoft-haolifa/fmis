@@ -99,9 +99,10 @@ public class BizActuatorController extends BaseController {
 
             if (StringUtils.isNotEmpty(specifications) && bizActuator.getString6().equals("0")) {
                 BizDict bizDict = bizDictService.selectBizDictById(Long.parseLong(specifications));
-                if (bizDict != null) {
+               /* if (bizDict != null) {
                     bizActuator.setString1(bizDict.getName());
-                }
+                }*/
+                bizActuator.setString1(specifications);
             }
 
             String nominalPressure = bizProduct.getNominalPressure();

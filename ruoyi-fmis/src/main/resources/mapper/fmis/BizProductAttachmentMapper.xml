@@ -58,7 +58,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectBizProductAttachmentVo">
-        select attachment_id, type, bh, chinese_name, chinese_specifications, english_name, english_specifications, chinese_packaging, english_packaging, chinese_unit, english_unit, pressure, material, bar_code, customs_bh, handling_fee, color, developer, goods_category, supplier, box, innerbox_count, bulk, l, w, h, gross_weight, net_weight, cost_price, settlement_price, base_price, price, string1, string2, string3, string4, string5, string6, string7, string8, string9, string10, remark, status, del_flag, create_by, create_time, update_by, update_time from biz_product_attachment
+        select attachment_id, type, bh, chinese_name, chinese_specifications, english_name, english_specifications, chinese_packaging, english_packaging, chinese_unit, english_unit, pressure, material, bar_code, customs_bh, handling_fee, color, developer, goods_category, supplier, box, innerbox_count, bulk, l, w, h, gross_weight, net_weight, cost_price, settlement_price, base_price,face_price, price, string1, string2, string3, string4, string5, string6, string7, string8, string9, string10, remark, status, del_flag, create_by, create_time, update_by, update_time from biz_product_attachment
     </sql>
 
 

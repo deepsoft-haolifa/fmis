@@ -35,7 +35,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectBizProductRefVo">
-        select product_ref_id, name, type, model, specifications, valvebody_material, material_require, price, remark, suppliers_id, string1, string2, string3, string4, string5, string6, string7, string8, string9, string10, status, del_flag, create_by, create_time, update_by, update_time from biz_product_ref
+        select product_ref_id, name, type, model, specifications, valvebody_material, material_require, price,face_price, remark, suppliers_id, string1, string2, string3, string4, string5, string6, string7, string8, string9, string10, status, del_flag, create_by, create_time, update_by, update_time from biz_product_ref
     </sql>
 
 

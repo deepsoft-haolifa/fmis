@@ -721,6 +721,7 @@ public class BizProductController extends BaseController {
                     bizProduct.setCostPrice(Double.parseDouble(product.getCostPrice()));
                     bizProduct.setRemark(product.getRemark());
                     bizProduct.setString3(product.getValveShaft());
+                    bizProduct.setFacePrice(Double.parseDouble(product.getFacePrice()));
                     if (product.getString5() != null && product.getString5().equals("是")) {
                         bizProduct.setString5("yes");
                     }
