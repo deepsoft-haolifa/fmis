@@ -29,15 +29,27 @@
                     </select>
                 </div>
             </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">类别：</label>
+                <div class="col-sm-8">
+                    <select name="series" id="series" class="form-control select2-multiple"> <!--multiple-->
+                        <option value="">请选择</option>
+                        <option th:each="series:${seriesSelect}" th:value="${series.dictId}" th:text="${series.name} + '_' + ${series.code}"></option>
+                    </select>
+                    <!--
+                    <input name="series" class="form-control" type="text">
+                    -->
+                </div>
+            </div>
             <div class="form-group">    
                 <label class="col-sm-3 control-label">阀门规格：</label>
                 <div class="col-sm-8">
+                    <select name="specifications" onchange="generateProductModel()" id="specifications" class="form-control select2-multiple" ><option value="">请选择</option></select>
 
-
-                    <select name="valveType" id="valveType" class="form-control select2-multiple" > <!--multiple-->
+                   <!-- <select name="valveType" id="valveType" class="form-control select2-multiple" > &lt;!&ndash;multiple&ndash;&gt;
                         <option value="">请选择</option>
                         <option th:each="specification:${specifications}" th:value="${specification.dictId}" th:text="${specification.name} "></option>
-                    </select>
+                    </select>-->
 
                 </div>
             </div>
@@ -109,6 +121,203 @@
         function submitHandler() {
             if ($.validate.form()) {
                 $.operate.save(prefix + "/add", $('#form-actuatorRef-add').serialize());
+            }
+        }
+        /**
+         * 生成产品型号ID
+         * 系列(D或者字典)+驱动形式+连接方式+结构形式+密封材质+阀芯材质-公称压力+阀体材质
+         * @param obj
+         */
+        function generateProductModel () {
+            var modelId = "";
+            var string1 = $("#string1").find("option:selected").text();
+            if ($.common.startWith(string1,"D")) {
+                string1 = "D";
+            }
+            if ($.common.startWith(string1,"A")) {
+                string1 = "A";
+            }
+            if ($.common.startWith(string1,"G")) {
+                string1 = "G";
+            }
+            if ($.common.startWith(string1,"H")) {
+                string1 = "H";
+            }
+            if ($.common.startWith(string1,"J")) {
+                string1 = "J";
+            }
+            if ($.common.startWith(string1,"L")) {
+                string1 = "L";
+            }
+            if ($.common.startWith(string1,"U")) {
+                string1 = "U";
+            }
+            if ($.common.startWith(string1,"Z")) {
+                string1 = "Z";
+            }
+            if ($.common.startWith(string1,"Q")) {
+                string1 = "Q";
+            }
+            if ($.common.startWith(string1,"Y")) {
+                string1 = "Y";
+            }
+            if ($.common.startWith(string1,"GL")) {
+                string1 = "GL";
+            }
+            if ($.common.startWith(string1,"GD")) {
+                string1 = "GD";
+            }
+            if ($.common.startWith(string1,"XK")) {
+                string1 = "XK";
+            }
+            if ($.common.startWith(string1,"PQ")) {
+                string1 = "PQ";
+            }
+            if ($.common.startWith(string1,"TJ")) {
+                string1 = "TJ";
+            }
+            if ($.common.startWith(string1,"S")) {
+                string1 = "S";
+            }
+            if ($.common.startWith(string1,"PH")) {
+                string1 = "PH";
+            }
+            modelId += string1;
+            if ($.common.isEmpty(string1)) {
+                return;
+            }
+            var driveForm = $("#driveForm").val();
+            if ($.common.isEmpty(driveForm)) {
+                return;
+            }
+            if (specificationArrayDict == null) {
+                return;
+            }
+            modelId += getDictCode("driveMode",driveForm);
+
+            var connectionType = $("#connectionType").val();
+            if ($.common.isEmpty(connectionType)) {
+                return;
+            }
+            modelId += getDictCode("linkType",connectionType);
+            //结构形式 可以空着
+            var structuralStyle = $("#structuralStyle").val();
+            if ($.common.isEmpty(structuralStyle)) {
+                return;
+            }
+            modelId += getDictCode("structuralStyle",structuralStyle);
+
+            var sealingMaterial = $("#sealingMaterial").val();
+            if ($.common.isEmpty(sealingMaterial)) {
+                return;
+            }
+            modelId += getDictCode("sealingMaterial",sealingMaterial);
+
+            var valveElement = $("#valveElement").val();
+            if ($.common.isEmpty(valveElement)) {
+                return;
+            }
+            modelId += getDictCode("spoolMaterial",valveElement);
+
+
+            modelId += "-";
+
+            var nominalPressure = $("#nominalPressure").val();
+            if ($.common.isEmpty(nominalPressure)) {
+                return;
+            }
+            modelId += getDictCode("nominalPressure",nominalPressure);
+
+            var valvebodyMaterial = $("#valvebodyMaterial").val();
+            if ($.common.isEmpty(valvebodyMaterial)) {
+                return;
+            }
+            modelId += getDictCode("bodyMaterial",valvebodyMaterial);
+
+            modelId += "-";
+
+            /*var specifications = $("#specifications").val();
+            if ($.common.isEmpty(specifications)) {
+                return;
+            }
+            modelId += getDictCode("specification",specifications);*/
+
+            $("#model").val(modelId);
+        }
+        function getDictCode (dictType,dataId) {
+            var datas = specificationArrayDict[dictType];
+            for (var i = 0; i < datas.length; i++) {
+                var selObj = datas[i];
+                if (dataId == selObj.dictId) {
+                    return selObj.code;
+                }
+            }
+            return "";
+        }
+    var specificationArrayDict = null;
+        $("#series").change(function (){
+            var series = $("#series").val();
+            specificationArrayDict = null;
+            console.log("series=" + series);
+            if (series == null || series == "请选择" || series == "") {
+                $("#specifications").html("");
+                $("#nominalPressure").html("");
+                $("#connectionType").html("");
+                $("#sealingMaterial").html("");
+                $("#valveElement").html("");
+                $("#driveForm").html("");
+                $("#valvebodyMaterial").html("");
+                $("#structuralStyle").html("");
+                $("#string1").html("");
+                return;
+            }
+            var string1All = $("#series").find("option:selected").text();
+            var string1 = string1All.split("_")[1];
+            //string1AddOptions(string1);
+            generateProductModel();
+            $.ajax({
+                url:prefix + "/findProductTypeDict",
+                type : "post",
+                data : {"dictId" : series},
+                success : function (data) {
+                    var specificationArray = data["specification"];
+                    specificationArrayDict = data;
+                    setDataToOption(specificationArray,"specifications");
+                    //nominalPressure
+                    var nominalPressures = data["nominalPressure"];
+                    setDataToOption(nominalPressures,"nominalPressure");
+
+                    var linkTypes = data["linkType"];
+                    setDataToOption(linkTypes,"connectionType");
+
+                    var sealingMaterials = data["sealingMaterial"];
+                    setDataToOption(sealingMaterials,"sealingMaterial");
+
+                    var spoolMaterials = data["spoolMaterial"];//valveElement
+                    setDataToOption(spoolMaterials,"valveElement");
+
+                    var driveModes = data["driveMode"];
+                    setDataToOption(driveModes,"driveForm");
+
+                    //bodyMaterial
+                    var bodyMaterials = data["bodyMaterial"];
+                    setDataToOption(bodyMaterials,"valvebodyMaterial");
+
+                    var structuralStyles = data["structuralStyle"];
+                    setDataToOption(structuralStyles,"structuralStyle");
+
+                    var seriesTypes = data["seriesType"];
+                    setDataToOption(seriesTypes,"string1");
+
+                }
+            })
+        });
+        function setDataToOption(dataArray,selectId) {
+            $("#" + selectId).html("");
+            $("#" + selectId).append("<option value=''>请选择</option>")
+            for (var i = 0; i < dataArray.length; i++) {
+                var specificationObj = dataArray[i];
+                $("#" + selectId).append("<option value='" + specificationObj.dictId + "'>" + specificationObj.name + "</option>")
             }
         }
     </script>

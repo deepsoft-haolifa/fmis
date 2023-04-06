@@ -170,14 +170,14 @@
         <where>
             1=1
             <!-- 合同中合计的数量 -->
-            <if test="string7 != null  and string7 != ''">and ifnull(string13,0)=0 and c.data_id=0</if>
+            <if test="string7 != null  and string7 != ''">and ifnull(c.string13,0)=0 and c.data_id=0</if>
             <!--<if test="string6 != null  and string6 != ''">and concat(string5,',') like concat('%', #{string5}, '%') and ifnull(string14,'0') = '1' and ifnull(string13,0) > 0 and string20='0'</if>-->
             <if test="string6 != null  and string6 != ''">and c.string6 like concat('%', #{string6}, '%')</if>
             <!-- 审核通过的发货 -->
             <if test="string8 != null  and string8 != ''">
                 and c.data_id in (select data_id from biz_process_data where biz_id='newdelivery' and normal_flag=flow_status)
             </if>
-            <if test="dataId != null">and data_id = #{dataId}</if>
+            <if test="dataId != null">and c.data_id = #{dataId}</if>
 
             <if test="string3 != null  and string3 != ''"> and c.string3 like concat('%', #{string3}, '%')</if>
             <if test="string4 != null  and string4 != ''"> and c.string4 like concat('%', #{string4}, '%')</if>

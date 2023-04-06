@@ -156,7 +156,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="qualityLevel != null  and qualityLevel != ''">#{qualityLevel},</if>
             <if test="explosionLevel != null  and explosionLevel != ''">#{explosionLevel},</if>
             <if test="price != null ">#{price},</if>
-            <if test="face_price != null ">#{facePrice},</if>
+            <if test="facePrice != null ">#{facePrice},</if>
             <if test="remark != null  and remark != ''">#{remark},</if>
             <if test="string1 != null  and string1 != ''">#{string1},</if>
             <if test="string2 != null  and string2 != ''">#{string2},</if>

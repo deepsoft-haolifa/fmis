@@ -215,6 +215,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="settlementPrice != null ">#{settlementPrice},</if>
             <if test="basePrice != null ">#{basePrice},</if>
             <if test="facePrice != null ">#{facePrice},</if>
+            <if test="basePrice != null ">#{basePrice},</if>
             <if test="string1 != null  and string1 != ''">#{string1},</if>
             <if test="string2 != null  and string2 != ''">#{string2},</if>
             <if test="string3 != null  and string3 != ''">#{string3},</if>

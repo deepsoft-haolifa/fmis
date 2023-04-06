@@ -97,7 +97,7 @@ public class BizActuatorController extends BaseController {
         if (bizProduct != null) {
             String specifications = bizProduct.getSpecifications();
 
-            if (StringUtils.isNotEmpty(specifications) && bizActuator.getString6().equals("0")) {
+            if (StringUtils.isNotEmpty(specifications) && bizActuator.getString7() != null && bizActuator.getString7().equals("-1")) {
                 BizDict bizDict = bizDictService.selectBizDictById(Long.parseLong(specifications));
                /* if (bizDict != null) {
                     bizActuator.setString1(bizDict.getName());

@@ -2,6 +2,7 @@ package com.ruoyi.fmis.actuatorref.controller;
 
 import java.util.List;
 
+import com.alibaba.fastjson.JSONObject;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.fmis.common.BizConstants;
 import com.ruoyi.fmis.dict.service.IBizDictService;
@@ -80,10 +81,16 @@ public class BizActuatorRefController extends BaseController {
      */
     @GetMapping("/add")
     public String add(ModelMap mmap) {
-        mmap.put("specifications",bizDictService.selectProductDictForParentType(BizConstants.specificationCode,0L));
+        mmap.put("seriesSelect",bizDictService.selectBizDictByProductType(BizConstants.productTypeCode));
+//        mmap.put("specifications",bizDictService.selectProductDictForParentType(BizConstants.specificationCode,0L));
         mmap.put("nominalPressures",bizDictService.selectProductDictForParentType(BizConstants.nominalPressure,0L));
 
         return prefix + "/add";
+    }
+    @PostMapping("/findProductTypeDict")
+    @ResponseBody
+    public JSONObject findProductTypeDict(Long dictId) {
+        return bizDictService.selectProductTypeDict(dictId);
     }
 
     /**
