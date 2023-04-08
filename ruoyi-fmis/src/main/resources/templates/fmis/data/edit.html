@@ -569,7 +569,7 @@
                     {field : 'string17',title : '整套系数',editable: false},
                     {field : 'contractPrice',title : '单价',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
                     {field : 'totalPrice',title : '总价',editable: false},
-                    {field : 'string14',title : '优惠',editable: {type: 'text',emptytext: '0',validate: function(v){ return numberValidate(v)}}},
+                    {field : 'string14',visible: false,title : '优惠',editable: {type: 'text',emptytext: '0',validate: function(v){ return numberValidate(v)}}},
                     {field : 'productCoefficient',title : '系数',editable: {type: 'text',emptytext: '0',validate: function(v){ return numberValidate(v)}}},
                     {field : 'actuatorId',title : 'actuatorId',visible: false},
                     {field : 'actuatorName',title : '执行器名称',editable: false},
@@ -1382,7 +1382,8 @@
             string14 = isEmpty(string14) == true ? 0 : parseFloat(string14);
             var contractPrice = row["contractPrice"]; //平均价格
             console.log("contractPrice = null is:" + isNaN(contractPrice));
-            var totalSum = 0;
+            var totalSum = contractPrice * productNum;
+            /*var totalSum = 0;
             if (isNaN(contractPrice) || field == "productCoefficient"
                 || field == "pattachmentCoefficient" || field == "pattachment1Coefficient" || field == "pattachment2Coefficient" || field == "pattachment3Coefficient"
                 || field == "pattachment4Coefficient"
@@ -1394,14 +1395,14 @@
                     - parseFloat(string14)).toFixed(0);
             } else {
                 totalSum = productNum * contractPrice - parseFloat(string14).toFixed(0);
-               /* var productCoefficient = {
+               /!* var productCoefficient = {
                     index : row.rowId,
                     field : "productCoefficient",
                     value : parseFloat(productPrice / productPrice).toFixed(1)
                 };
                 if (productCoefficient)
-                    $.btTable.bootstrapTable("updateCell",productCoefficient);*/
-            }
+                    $.btTable.bootstrapTable("updateCell",productCoefficient);*!/
+            }*/
             var costProce = parseFloat(productNum * productPrice).toFixed(4) +
                 parseFloat(productRef1Num * productRef1Price).toFixed(4) +
                 parseFloat(productRef2Num * productRef2Price).toFixed(4) +

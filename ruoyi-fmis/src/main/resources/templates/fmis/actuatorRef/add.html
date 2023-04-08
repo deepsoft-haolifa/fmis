@@ -44,7 +44,7 @@
             <div class="form-group">    
                 <label class="col-sm-3 control-label">阀门规格：</label>
                 <div class="col-sm-8">
-                    <select name="specifications" onchange="generateProductModel()" id="specifications" class="form-control select2-multiple" ><option value="">请选择</option></select>
+                    <select name="valveType" onchange="generateProductModel()" id="valveType" class="form-control select2-multiple" ><option value="">请选择</option></select>
 
                    <!-- <select name="valveType" id="valveType" class="form-control select2-multiple" > &lt;!&ndash;multiple&ndash;&gt;
                         <option value="">请选择</option>
@@ -260,7 +260,7 @@
             specificationArrayDict = null;
             console.log("series=" + series);
             if (series == null || series == "请选择" || series == "") {
-                $("#specifications").html("");
+                $("#valveType").html("");
                 $("#nominalPressure").html("");
                 $("#connectionType").html("");
                 $("#sealingMaterial").html("");
@@ -282,7 +282,7 @@
                 success : function (data) {
                     var specificationArray = data["specification"];
                     specificationArrayDict = data;
-                    setDataToOption(specificationArray,"specifications");
+                    setDataToOption(specificationArray,"valveType");
                     //nominalPressure
                     var nominalPressures = data["nominalPressure"];
                     setDataToOption(nominalPressures,"nominalPressure");
