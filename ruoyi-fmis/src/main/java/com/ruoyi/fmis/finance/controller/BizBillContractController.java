@@ -203,7 +203,7 @@ public class BizBillContractController extends BaseController {
         BizBankBill updateBill = new BizBankBill();
         if (totalAmount >= collectionMoney) {
             // 将分解状态更改为分解完成
-            updateBill.setContractStatus("1");
+            updateBill.setContractStatus("2");
         } else {
             updateBill.setContractStatus("0");
         }

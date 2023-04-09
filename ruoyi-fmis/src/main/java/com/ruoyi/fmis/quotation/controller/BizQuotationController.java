@@ -1775,10 +1775,10 @@ public class BizQuotationController extends BaseController {
             cell_80.setCellValue("序号");
             cell_80.setCellStyle(cellTableStyle);
             Cell cell_81 = row8.createCell(1);
-            cell_81.setCellValue("产品ID");
+            cell_81.setCellValue("名称");
             cell_81.setCellStyle(cellTableStyle);
             Cell cell_82 = row8.createCell(2);
-            cell_82.setCellValue("名称");
+            cell_82.setCellValue("型号");
             cell_82.setCellStyle(cellTableStyle);
             Cell cell_83 = row8.createCell(3);
             cell_83.setCellValue("压力");
@@ -1818,14 +1818,38 @@ public class BizQuotationController extends BaseController {
                 serial++;
                 Row rowi = sheet.createRow(rowCount);
                 rowi.setHeight((short) 1200);
+
+                String productName = bizProductObj.getName();
+                String model = bizProductObj.getModel();
+
+                BizActuator bizActuator = bizProduct.getBizActuator();
+                if (Objects.nonNull(bizActuator)) {
+                    Double actuatorPrice = bizActuator.getPrice();
+                    String actuatorNum = bizProduct.getActuatorNum();
+                    String actuatorCoefficient = bizProduct.getActuatorCoefficient();
+                    if (StringUtils.isNotEmpty(actuatorNum) && actuatorPrice > 0 && StringUtils.isNotEmpty(actuatorCoefficient)) {
+
+                        String type = bizActuator.getString2();
+                        String repStr = "气动";
+                        String appendStr = "6";
+                        if ("1".equals(type)) {
+                            repStr = "电动";
+                            appendStr = "9";
+                        }
+                        productName = productName.replaceAll("无头",repStr);
+                        String startS = model.substring(0, 1);
+                        model = model.substring(2, model.length());
+                        model = startS + appendStr + model;
+                    }
+                }
                 Cell cell = rowi.createCell(0);
                 cell.setCellValue(serial);
                 cell.setCellStyle(cellTableStyle);
                 Cell cell1 = rowi.createCell(1);
-                cell1.setCellValue(bizProductObj.getModel());
+                cell1.setCellValue(productName);
                 cell1.setCellStyle(cellTableStyle);
                 Cell cell2 = rowi.createCell(2);
-                cell2.setCellValue(bizProductObj.getName());
+                cell2.setCellValue(model);
                 cell2.setCellStyle(cellTableStyle);
                 Cell cell3 = rowi.createCell(3);
                 cell3.setCellValue(bizProductObj.getNominalPressure());
