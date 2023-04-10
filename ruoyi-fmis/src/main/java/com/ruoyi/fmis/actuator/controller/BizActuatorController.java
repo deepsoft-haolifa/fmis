@@ -102,7 +102,7 @@ public class BizActuatorController extends BaseController {
                /* if (bizDict != null) {
                     bizActuator.setString1(bizDict.getName());
                 }*/
-                bizActuator.setString1(specifications);
+                bizActuator.setString10(specifications);
             }
 
             String nominalPressure = bizProduct.getNominalPressure();
