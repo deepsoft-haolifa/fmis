@@ -94,4 +94,13 @@ public interface ISysDeptService
     public String checkDeptNameUnique(SysDept dept);
 
     public String getDeptRemarkForUserPdf (SysUser sysUser);
-}
+
+    /**
+     * 通过部门ID查询向上所有的部门ID
+     * @param deptId
+     * @return
+     */
+    public List<Long> selectDeptList(Long deptId);
+
+
+    }

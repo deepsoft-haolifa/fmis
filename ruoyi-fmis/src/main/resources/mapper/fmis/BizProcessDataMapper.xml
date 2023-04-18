@@ -1672,4 +1672,10 @@
         select  * from biz_process_data where biz_id='borrowing' and flow_status = normal_flag and string11 ='1' and create_by=#{userId}
     </select>
 
+    <update id="updateBizProcessDataByBizIdAndString12" parameterType="BizProcessData">
+        update biz_process_data set status = #{status}
+        where biz_id = #{bizId} and string12 = #{string12}
+    </update>
+
+
 </mapper>

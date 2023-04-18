@@ -1,5 +1,6 @@
 package com.ruoyi.fmis.invoice.service;
 
+import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.fmis.invoice.bean.BizInvoice;
 import java.util.List;
 
@@ -32,7 +33,7 @@ public interface IBizInvoiceService {
      * @param bizInvoice 发票信息（进项发票）
      * @return 结果
      */
-    public int insertBizInvoice(BizInvoice bizInvoice);
+    public AjaxResult insertBizInvoice(BizInvoice bizInvoice);
 
     /**
      * 修改发票信息（进项发票）

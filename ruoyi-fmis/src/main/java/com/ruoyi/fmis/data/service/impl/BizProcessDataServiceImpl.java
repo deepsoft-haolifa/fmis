@@ -1247,4 +1247,10 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
     public List<BizProcessData> selectAllBorrowingWithNoPayAndAgree(Long userId) {
         return bizProcessDataMapper.selectAllBorrowingWithNoPayAndAgree(userId);
     }
+
+    @Override
+    public int updateBizProcessDataByBizIdAndString12(BizProcessData bizProcessData) {
+        bizProcessData.setUpdateTime(DateUtils.getNowDate());
+        return bizProcessDataMapper.updateBizProcessDataByBizIdAndString12(bizProcessData);
+    }
 }

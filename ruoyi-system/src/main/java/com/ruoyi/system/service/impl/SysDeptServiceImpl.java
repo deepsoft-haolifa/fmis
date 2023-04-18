@@ -299,4 +299,26 @@ public class SysDeptServiceImpl implements ISysDeptService
         getDeptRemarkForUserPdf(sysDept.getParentId(),sysDepts);
     }
 
+    /**
+     * 通过部门ID查询向上所有的部门ID
+     * @param deptId
+     * @return
+     */
+    @Override
+    public List<Long> selectDeptList(Long deptId) {
+        SysDept sysDept = selectDeptById(deptId);
+        List<Long> deptList = new ArrayList<>();
+        selectTreeUp(sysDept.getParentId(), deptList);
+        return deptList;
+    }
+
+    private void selectTreeUp(Long parentId, List<Long> deptList) {
+        if (parentId == 0) {
+            return;
+        }
+        SysDept sysDept = deptMapper.selectDeptById(parentId);
+        deptList.add(sysDept.getDeptId());
+        selectTreeUp(sysDept.getParentId(), deptList);
+    }
+
 }

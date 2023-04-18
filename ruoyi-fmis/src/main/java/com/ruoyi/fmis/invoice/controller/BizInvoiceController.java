@@ -62,6 +62,7 @@ public class BizInvoiceController extends BaseController {
     }
 
     /**
+     *
      * 导出发票信息（进项发票）列表
      */
     @RequiresPermissions("fmis:bizInvoice:export")
@@ -92,7 +93,7 @@ public class BizInvoiceController extends BaseController {
     @PostMapping("/add")
     @ResponseBody
     public AjaxResult addSave(BizInvoice bizInvoice) {
-        return toAjax(bizInvoiceService.insertBizInvoice(bizInvoice));
+        return bizInvoiceService.insertBizInvoice(bizInvoice);
     }
 
     /**

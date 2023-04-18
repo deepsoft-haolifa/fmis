@@ -1,6 +1,9 @@
 package com.ruoyi.fmis.quotationtrack.controller;
 
 import java.util.List;
+
+import com.ruoyi.common.core.page.PageDomain;
+import com.ruoyi.common.core.page.TableSupport;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -51,8 +54,8 @@ public class BizQuotationTrackController extends BaseController {
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(BizQuotationTrack bizQuotationTrack) {
-        startPage();
-        List<BizQuotationTrack> list = bizQuotationTrackService.selectBizQuotationTrackList(bizQuotationTrack);
+        PageDomain pageDomain = TableSupport.buildPageRequest();
+        List<BizQuotationTrack> list = bizQuotationTrackService.selectBizQuotationTrackList(bizQuotationTrack, pageDomain);
         return getDataTable(list);
     }
 
@@ -63,7 +66,7 @@ public class BizQuotationTrackController extends BaseController {
     @PostMapping("/export")
     @ResponseBody
     public AjaxResult export(BizQuotationTrack bizQuotationTrack) {
-        List<BizQuotationTrack> list = bizQuotationTrackService.selectBizQuotationTrackList(bizQuotationTrack);
+        List<BizQuotationTrack> list = bizQuotationTrackService.selectBizQuotationTrackList(bizQuotationTrack, null);
         ExcelUtil<BizQuotationTrack> util = new ExcelUtil<BizQuotationTrack>(BizQuotationTrack.class);
         return util.exportExcel(list, "quotationtrack");
     }
@@ -95,7 +98,7 @@ public class BizQuotationTrackController extends BaseController {
 
         BizQuotationTrack bizQuotationTrack = new BizQuotationTrack();
         bizQuotationTrack.setTrackId(trackId);
-        List<BizQuotationTrack> list = bizQuotationTrackService.selectBizQuotationTrackList(bizQuotationTrack);
+        List<BizQuotationTrack> list = bizQuotationTrackService.selectBizQuotationTrackList(bizQuotationTrack, null);
 
         mmap.put("bizQuotationTrack", list.get(0));
         return prefix + "/edit";

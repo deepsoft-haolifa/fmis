@@ -60,6 +60,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="contacts != null  and contacts != ''"> and t.contacts like concat('%', #{contacts}, '%')</if>
             <if test="contactPhone != null  and contactPhone != ''"> and t.contact_phone like concat('%', #{contactPhone}, '%')</if>
             <if test="fax != null  and fax != ''"> and t.fax like concat('%', #{fax}, '%')</if>
+            <if test="deptIdList != null and deptIdList.size > 0">
+                and u.dept_id in
+                <foreach item="deptId" collection="deptIdList" open="(" separator="," close=")">
+                    #{deptId}
+                </foreach>
+            </if>
+            <if test="userId != null"> or q.create_by = #{userId}</if>
         </where>
     </select>
     

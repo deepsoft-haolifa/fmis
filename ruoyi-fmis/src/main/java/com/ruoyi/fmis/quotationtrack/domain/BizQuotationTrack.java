@@ -7,6 +7,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 报价追踪对象 biz_quotation_track
@@ -150,6 +151,13 @@ public class BizQuotationTrack extends BaseEntity {
     @Getter
     @Setter
     private String companyCode;
+    @Getter
+    @Setter
+    private List<Long> deptIdList;
+    @Getter
+    @Setter
+    private Long userId;
+
 
 
 
