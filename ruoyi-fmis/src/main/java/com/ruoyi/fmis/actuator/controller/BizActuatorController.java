@@ -291,6 +291,7 @@ public class BizActuatorController extends BaseController {
                     newBizActuator.setString9(StringUtils.trim(actuatorImport.getString9()));
                     newBizActuator.setPress(StringUtils.trim(actuatorImport.getPress()));
                     newBizActuator.setColor(StringUtils.trim(actuatorImport.getColor()));
+                    newBizActuator.setFacePrice(StringUtils.toDouble(actuatorImport.getFacePrice()));
 
 
                     if ("2".equals(type)) {

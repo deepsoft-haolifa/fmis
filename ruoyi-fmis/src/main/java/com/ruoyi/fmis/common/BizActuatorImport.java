@@ -86,6 +86,7 @@ public class BizActuatorImport {
     private String color;
     @Excel(name = "压力")
     private String press;
-
+    @Excel(name = "面价（元）")
+    private String facePrice;
 
 }
