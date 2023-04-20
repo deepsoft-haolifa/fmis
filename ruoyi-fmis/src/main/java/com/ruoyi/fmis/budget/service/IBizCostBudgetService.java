@@ -68,6 +68,14 @@ public interface IBizCostBudgetService {
      */
     public List<BizSubjects> selectByDeptId(Long deptId);
 
+    /**
+     * 查询费用预算列表没权限
+     *
+     * @param bizCostBudget 费用预算
+     * @return 费用预算集合
+     */
+    public List<BizCostBudget> selectBizCostBudgetList2(BizCostBudget bizCostBudget);
+
 
 
 }

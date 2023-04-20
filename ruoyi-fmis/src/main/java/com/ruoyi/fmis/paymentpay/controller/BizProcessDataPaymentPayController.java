@@ -422,7 +422,7 @@ public class BizProcessDataPaymentPayController extends BaseController {
                     bizCostBudget.setY(year);
                     bizCostBudget.setM(month);
                     bizCostBudget.setSubjectsId(Long.valueOf(subjectId));
-                    List<BizCostBudget> list = bizCostBudgetService.selectBizCostBudgetList(bizCostBudget);
+                    List<BizCostBudget> list = bizCostBudgetService.selectBizCostBudgetList2(bizCostBudget);
                     if (org.apache.commons.collections4.CollectionUtils.isNotEmpty(list)) {
                         BizCostBudget bizCostBudget1 = list.get(0);
                         Double amount1 = bizCostBudget1.getAmount();

@@ -108,4 +108,16 @@ public class BizCostBudgetServiceImpl implements IBizCostBudgetService {
         List<BizSubjects> bizSubjects = bizSubjectsService.selectBizSubjectsListNoParent(new BizSubjects());
         return bizSubjects.stream().filter(e -> subjectsIdSet.contains(e.getSubjectsId())).collect(Collectors.toList());
     }
+
+
+    /**
+     * 查询费用预算列表没有权限
+     *
+     * @param bizCostBudget 费用预算
+     * @return 费用预算
+     */
+    @Override
+    public List<BizCostBudget> selectBizCostBudgetList2(BizCostBudget bizCostBudget) {
+        return bizCostBudgetMapper.selectBizCostBudgetList2(bizCostBudget);
+    }
 }

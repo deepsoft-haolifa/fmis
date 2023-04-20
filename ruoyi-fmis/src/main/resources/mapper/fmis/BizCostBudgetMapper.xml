@@ -172,4 +172,19 @@
         </foreach>
     </delete>
 
+
+
+    <select id="selectBizCostBudgetList2" parameterType="BizCostBudget" resultMap="BizCostBudgetResult">
+        select b.budget_id, b.name, b.d, b.y, b.m, b.dept_id, b.subjects_id, b.amount, b.string1, b.string2, b.string3, b.string4, b.string5, b.string6, b.string7, b.string8,
+        b.string9, b.string10, b.remark, b.status, b.del_flag, b.create_by, b.create_time, b.update_by, b.update_time
+        from biz_cost_budget b
+        <where>
+            <if test="y != null  and y != ''">and b.y=#{y}</if>
+            <if test="m != null  and m != ''">and b.m=#{m}</if>
+            <if test="subjectsId != null  and subjectsId != ''">and b.subjects_id=#{subjectsId}</if>
+            <if test="amount != null ">and b.amount = #{amount}</if>
+            <if test="deptId != null ">and b.dept_id = #{deptId}</if>
+        </where>
+    </select>
+
 </mapper>
