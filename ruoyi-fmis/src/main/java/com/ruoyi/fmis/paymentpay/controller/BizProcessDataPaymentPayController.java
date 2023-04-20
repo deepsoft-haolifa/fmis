@@ -5,7 +5,10 @@ import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.fmis.budget.domain.BizCostBudget;
+import com.ruoyi.fmis.budget.service.IBizCostBudgetService;
 import com.ruoyi.fmis.child.domain.BizProcessChild;
 import com.ruoyi.fmis.child.service.IBizProcessChildService;
 import com.ruoyi.fmis.data.domain.BizProcessData;
@@ -26,6 +29,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import java.util.*;
 
 /**
@@ -47,6 +51,8 @@ public class BizProcessDataPaymentPayController extends BaseController {
 
     @Autowired
     private IBizBillService bizBillService;
+    @Resource
+    private IBizCostBudgetService bizCostBudgetService;
 
 
     @RequiresPermissions("fmis:paymentpay:view")
@@ -393,6 +399,40 @@ public class BizProcessDataPaymentPayController extends BaseController {
         int updateReturn = bizProcessDataService.updateBizProcessData(bizProcessData);
         if (updateReturn > 0 && "1".equals(bizProcessData.getString11())) {
             String bookingType = bizProcessData.getString13();
+            // 科目核减
+            // 部门ID
+            String deptId = bizProcessData.getString6();
+
+            BizProcessChild bizProcessChild = new BizProcessChild();
+            bizProcessChild.setDataId(bizProcessData.getDataId());
+            List<BizProcessChild> bizProcessChildList = bizProcessChildService.selectBizProcessChildList(bizProcessChild);
+            if (org.apache.commons.collections4.CollectionUtils.isNotEmpty(bizProcessChildList)) {
+                bizProcessChildList.stream().forEach(cc -> {
+                    // 报销时间
+                    Date datetime1 = cc.getDatetime1();
+                    // 科目ID
+                    String subjectId = cc.getString2();
+                    // 报销金额
+                    Double amount = cc.getPrice1();
+                    String dateStr = DateUtils.parseDateToStr(DateUtils.YYYY_MM, datetime1);
+                    String year = dateStr.substring(0, 4);
+                    String month = dateStr.substring(5, 7);
+                    BizCostBudget bizCostBudget = new BizCostBudget();
+                    bizCostBudget.setDeptId(Long.valueOf(deptId));
+                    bizCostBudget.setY(year);
+                    bizCostBudget.setM(month);
+                    bizCostBudget.setSubjectsId(Long.valueOf(subjectId));
+                    List<BizCostBudget> list = bizCostBudgetService.selectBizCostBudgetList(bizCostBudget);
+                    if (org.apache.commons.collections4.CollectionUtils.isNotEmpty(list)) {
+                        BizCostBudget bizCostBudget1 = list.get(0);
+                        Double amount1 = bizCostBudget1.getAmount();
+                        // 预算扣除
+                        double v = amount1 - amount;
+                        bizCostBudget1.setAmount(v);
+                        bizCostBudgetService.updateBizCostBudget(bizCostBudget1);
+                    }
+                });
+            }
             if ("1".equals(bookingType)) {
                 // 添加现金日记账
                 if (!bizBillService.existsByCertificateNumber(bizProcessData.getString2())) {

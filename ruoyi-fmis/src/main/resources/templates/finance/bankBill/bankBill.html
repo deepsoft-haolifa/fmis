@@ -68,10 +68,10 @@
             <a class="btn btn-success" onclick="addPayUrl()" shiro:hasPermission="finance:bankBill:addPay">
                 <i class="fa fa-plus"></i> 添加付款
             </a>
-            <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"
-               shiro:hasPermission="finance:bankBill:remove">
-                <i class="fa fa-remove"></i> 删除
-            </a>
+<!--            <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"-->
+<!--               shiro:hasPermission="finance:bankBill:remove">-->
+<!--                <i class="fa fa-remove"></i> 删除-->
+<!--            </a>-->
             <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="finance:bankBill:yyExport">
                 <i class="fa fa-download"></i> 导出
             </a>
@@ -210,7 +210,7 @@
                         if (type === '2') {
                             actions.push('<a class="btn btn-success btn-xs ' + editPayFlag + '" href="javascript:void(0)" onclick="editPayUrl(\'' + row.billId + '\')"><i class="fa fa-edit"></i> 编辑付款</a> ');
                         }
-                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.billId + '\')"><i class="fa fa-remove"></i> 删除</a>');
+                        // actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.billId + '\')"><i class="fa fa-remove"></i> 删除</a>');
                         return actions.join('');
                     }
                 }]
