@@ -80,9 +80,9 @@ spring:
   #redis
   redis:
     database: 0           # Redis服务器数据库
-    host: 118.190.89.223    # Redis服务器地址
-    port: 6380            # Redis服务器连接端口
-    password: beidou123      # Redis服务器连接密码（默认为空）
+    host: 47.105.36.56    # Redis服务器地址
+    port: 6379            # Redis服务器连接端口
+    password: haolifa6379      # Redis服务器连接密码（默认为空）
     timeout: 6000ms       # 连接超时时间（毫秒）
     jedis:
       pool:

@@ -106,11 +106,12 @@
                 return;
             }
 
-            if (supplierMap.size != 1) {
+            if (supplierMap.size > 1) {
+                console.log("supplierMap.size:" + supplierMap.size)
                 $.modal.alertWarning("请选择同一个供应商的数据");
                 return;
             }
-            if (guishudanwei.size != 1) {
+            if (guishudanwei.size > 1) {
                 $.modal.alertWarning("多个归属单位不能合并");
                 return;
             }
