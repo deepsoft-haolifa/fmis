@@ -958,6 +958,9 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
                 flowStatus = "-" + currentUserFlowStatus;
             }
         }
+        if (flowStatus.equals("-")) {
+            flowStatus = "0";
+        }
         bizProcessData.setFlowStatus(flowStatus);
 
         /**

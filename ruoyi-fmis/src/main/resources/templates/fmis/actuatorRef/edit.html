@@ -34,7 +34,7 @@
                 <div class="col-sm-8">
                     <select name="series" id="series" class="form-control select2-multiple"> <!--multiple-->
                         <option value="">请选择</option>
-                        <option th:each="series:${seriesSelect}" th:value="${series.dictId}" th:text="${series.name} + '_' + ${series.code}"></option>
+                        <option th:each="series:${seriesSelect}" th:value="${series.dictId}" th:text="${series.name}" th:selected="${series.flag}"></option>
                     </select>
                     <!--
                     <input name="series" class="form-control" type="text">
@@ -284,6 +284,9 @@
                     //nominalPressure
                     var nominalPressures = data["nominalPressure"];
                     setDataToOption(nominalPressures,"nominalPressure");
+
+                    var seriesSelect = data["seriesSelect"];
+                    setDataToOption(seriesSelect,"seriesSelect");
 
                     var linkTypes = data["linkType"];
                     setDataToOption(linkTypes,"connectionType");

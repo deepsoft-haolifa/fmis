@@ -29,6 +29,10 @@ public class BizActuatorRef extends BaseEntity {
     @Excel(name = "介质类型")
     private String mediaType;
 
+    /** 类别 */
+    @Excel(name = "类别")
+    private String series;
+
     /** 阀门规格 对应产品表规格 */
     @Excel(name = "阀门规格 对应产品表规格")
     private String valveType;
@@ -262,6 +266,7 @@ public class BizActuatorRef extends BaseEntity {
             .append("brand", getBrand())
             .append("driveType", getDriveType())
             .append("mediaType", getMediaType())
+            .append("series", getSeries())
             .append("valveType", getValveType())
             .append("topFlange", getTopFlange())
             .append("pressure", getPressure())
@@ -287,5 +292,13 @@ public class BizActuatorRef extends BaseEntity {
             .append("updateBy", getUpdateBy())
             .append("updateTime", getUpdateTime())
             .toString();
+    }
+
+    public String getSeries() {
+        return series;
+    }
+
+    public void setSeries(String series) {
+        this.series = series;
     }
 }
