@@ -1593,7 +1593,23 @@ public class BizProcessDataController extends BaseController {
                 bizProcessData.setNormalFlag(key);
             }
         }
-        String conNo = "XS-" + DateUtils.dateTimeNow();
+        List<BizProcessData> bizProcessDataList = bizProcessDataService.selectLastBizProcessDataListRef(bizProcessData);
+        String sNo = "001";  //序列号
+        if (bizProcessDataList.size() > 0) {
+            BizProcessData bizProcessData1 = bizProcessDataList.get(0);
+            sNo = bizProcessData1.getString1().substring(6, bizProcessData1.getString1().length());
+            if (Integer.valueOf(sNo) < 9) {
+                int num = Integer.valueOf(sNo) + 1;
+                sNo = "00" + num + "";
+            } else if (Integer.valueOf(sNo) > 9 && Integer.valueOf(sNo) < 99) {
+                int num = Integer.valueOf(sNo) + 1;
+                sNo = "0" + num + "";
+            } else {
+                int num = Integer.valueOf(sNo) + 1;
+                sNo = num + "";
+            }
+        }
+        String conNo = "HL" + DateUtils.getNewDate() + sNo;
         bizProcessData.setString1(conNo);
 
         setNormalFlag(bizProcessData, productArrayStr);

@@ -164,4 +164,6 @@ public interface BizProcessDataMapper {
     List<BizProcessData> selectAllBorrowingWithNoPayAndAgree(Long userId);
 
     int updateBizProcessDataByBizIdAndString12(BizProcessData bizProcessData);
+
+    public List<BizProcessData> selectLastBizProcessDataListRef(BizProcessData bizProcessData);
 }

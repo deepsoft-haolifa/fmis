@@ -48,7 +48,15 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils
     {
         return dateTimeNow(YYYY_MM_DD);
     }
-
+    public static String getNewDate()
+    {
+        return dateTimeNow("yyMM");
+    }
+    public static void main(String[] args) {
+        System.out.println("HL2304009".substring(6,9));
+        System.out.println(Integer.parseInt("015"));
+        System.out.println(getNewDate());
+    }
     public static final String getTime()
     {
         return dateTimeNow(YYYY_MM_DD_HH_MM_SS);

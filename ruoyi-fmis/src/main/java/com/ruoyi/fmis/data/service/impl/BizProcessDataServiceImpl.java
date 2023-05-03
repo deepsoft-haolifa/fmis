@@ -1256,4 +1256,9 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
         bizProcessData.setUpdateTime(DateUtils.getNowDate());
         return bizProcessDataMapper.updateBizProcessDataByBizIdAndString12(bizProcessData);
     }
+
+    @Override
+    public List<BizProcessData> selectLastBizProcessDataListRef(BizProcessData bizProcessData) {
+        return bizProcessDataMapper.selectLastBizProcessDataListRef(bizProcessData);
+    }
 }
