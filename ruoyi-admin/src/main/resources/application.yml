@@ -69,9 +69,9 @@ spring:
   servlet:
      multipart:
        # 单个文件大小
-       max-file-size:  10MB
+       max-file-size:  20MB
        # 设置总上传的文件大小
-       max-request-size:  20MB
+       max-request-size:  40MB
   # 服务模块
   devtools:
     restart:
@@ -154,6 +154,6 @@ xss:
   # 过滤开关
   enabled: true
   # 排除链接（多个用逗号分隔）
-  excludes: /system/notice/*
+  excludes: /system/notice/*,/pdfjs/*
   # 匹配链接
   urlPatterns: /system/*,/monitor/*,/tool/*

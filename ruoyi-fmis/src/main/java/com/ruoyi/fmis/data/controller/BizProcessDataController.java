@@ -285,7 +285,7 @@ public class BizProcessDataController extends BaseController {
                 if (judgCanDelivery(data.getDataId())) {
                     data.setCanDelivery(1);
                 }
-                //是否有附件
+               /* //是否有附件
                 BizAccessory bizAccessory = new BizAccessory();
                 bizAccessory.setBizId(Integer.valueOf(data.getDataId() + ""));
                 bizAccessory.setFileType(Integer.valueOf(2));
@@ -294,9 +294,22 @@ public class BizProcessDataController extends BaseController {
                     data.setIsAtt(1);
                 } else {
                     data.setIsAtt(0);
-                }
+                }*/
             }
         }
+        for (BizProcessData data : list) {
+            //是否有附件
+            BizAccessory bizAccessory = new BizAccessory();
+            bizAccessory.setBizId(Integer.valueOf(data.getDataId() + ""));
+            bizAccessory.setFileType(Integer.valueOf(2));
+            List<com.ruoyi.fmis.file.domain.BizAccessory>  list1 = bizAccessoryService.selectBizAccessoryByBizId(bizAccessory);
+            if (list1 != null && list1.size() > 0) {
+                data.setIsAtt(1);
+            } else {
+                data.setIsAtt(0);
+            }
+        }
+
         return getDataTable(list);
     }
 
@@ -489,7 +502,7 @@ public class BizProcessDataController extends BaseController {
                             if (endRemark.length() > 0) {
                                 endRemark += ",";
                             }
-                            endRemark += "执行器" + " " + bizActuator.getName();
+                            endRemark += "执行器" + " " + bizActuator.getName()+ " " + bizActuator.getAdaptableVoltage();
 
                         }
                     }
@@ -933,7 +946,7 @@ public class BizProcessDataController extends BaseController {
                     }
                     double count = bizProcessData.getPrice5() + bizProcessData.getPrice6()  + bizProcessData.getPrice8()  + bizProcessData.getPrice10() + bizProcessData.getPrice11();
                     if ( count != new Double(100)) {
-                        return error("协议付款必须总金额是100%");
+//                        return error("协议付款必须总金额是100%");
                     }
                 }
             }
@@ -2843,7 +2856,7 @@ public class BizProcessDataController extends BaseController {
                         if (endRemark.length() > 0) {
                             endRemark += ",";
                         }
-                        endRemark += "执行器" + " " + bizActuator.getName();
+                        endRemark += "执行器" + " " + bizActuator.getName()  + " " + bizActuator.getAdaptableVoltage();
 
                     }
                 }
@@ -3163,7 +3176,7 @@ public class BizProcessDataController extends BaseController {
                     }
                     double count = bizProcessData.getPrice5() + bizProcessData.getPrice6()  + bizProcessData.getPrice8()  + bizProcessData.getPrice10() + bizProcessData.getPrice11();
                     if ( count != new Double(100)) {
-                        return error("协议付款必须总金额是100%");
+//                        return error("协议付款必须总金额是100%");
                     }
                 }
             }
@@ -3660,7 +3673,7 @@ public class BizProcessDataController extends BaseController {
                     if (endRemark.length() > 0) {
                         endRemark += ",";
                     }
-                    endRemark += "执行器" + " " + bizActuator.getName();
+                    endRemark += "执行器" + " " + bizActuator.getName() + " " + bizActuator.getAdaptableVoltage();
 
                 }
             }

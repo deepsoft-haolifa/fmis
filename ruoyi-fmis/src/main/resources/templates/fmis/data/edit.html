@@ -317,6 +317,39 @@
         }
 
         function submitHandler() {
+            var payType = $("#string18").val();
+            var price5 = $("#price5").val();
+            var price6 = $("#price6").val();
+            var price7 = $("#price7").val();
+            var price8 = $("#price8").val();
+            var price9 = $("#price9").val();
+            var price10 = $("#price10").val();
+            var price11 = $("#price11").val();
+            if (payType == 3) {
+                var cp =0;
+                if(!isNaN(parseInt(price5))) {
+                    cp = cp + parseInt(price5)
+                }
+                if(!isNaN(parseInt(price6))) {
+                    cp = cp + parseInt(price6)
+                }
+                if(!isNaN(parseInt(price8))) {
+                    cp = cp + parseInt(price8)
+                }
+                if(!isNaN(parseInt(price10))) {
+                    cp = cp + parseInt(price10)
+                }
+                if(!isNaN(parseInt(price11))) {
+                    cp = cp + parseInt(price11)
+                }
+
+                console.log(cp);
+                console.log(cp != 100);
+                if (cp != 100) {
+                    $.modal.alertWarning("协议付款需要100%");
+                    return;
+                }
+            }
             if ($.validate.form()) {
                 var dataObj = $('#form-data-edit').serializeArray();
                 //计算是否正常
