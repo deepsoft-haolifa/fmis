@@ -256,11 +256,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <delete id="deleteBizProductById" parameterType="Long">
-        delete from biz_product where product_id = #{productId}
+    update biz_product set del_flag='1' where product_id = #{productId}
+        /*delete from biz_product where product_id = #{productId}*/
     </delete>
 
     <delete id="deleteBizProductByIds" parameterType="String">
-        delete from biz_product where product_id in 
+        /*delete from biz_product where product_id in */
+        update biz_product set del_flag='1' where product_id in
         <foreach item="productId" collection="array" open="(" separator="," close=")">
             #{productId}
         </foreach>

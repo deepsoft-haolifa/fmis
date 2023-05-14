@@ -301,6 +301,19 @@
     </form>
 
     <div class="form-horizontal m form-group">
+        <label class="col-sm-1 control-label">系数设置：</label>
+        <div class='col-sm-1'>
+            <input class='form-control' type='text' id="productCoefficientAll" onblur="setCoefficientAll(1)"  placeholder='产品系数' onkeyup="AmountKeyUp(this)" required/>
+        </div>
+        <div class='col-sm-1'>
+            <input class='form-control' type='text' id="actuatorCoefficientAll" onblur="setCoefficientAll(2)"  placeholder='执行器系数' onkeyup="AmountKeyUp(this)" required/>
+        </div>
+        <div class='col-sm-1'>
+            <input class='form-control' type='text' id="productRef1CoefficientAll" onblur="setCoefficientAll(3)"  placeholder='法兰系数' onkeyup="AmountKeyUp(this)" required/>
+        </div>
+        <div class='col-sm-1'>
+            <input class='form-control' type='text' id="productRef2CoefficientAll" onblur="setCoefficientAll(4)" placeholder='螺栓系数' onkeyup="AmountKeyUp(this)" required/>
+        </div>
         <div class='col-sm-5 form-inline'>
             <a class="btn btn-success btn-sm" onclick="insertRowQ()">
                 <i class="fa fa-plus"></i> 报价单新增
@@ -365,7 +378,56 @@
             $("#divString16").css({'display': 'block'});
         }
     });
+    function setCoefficientAll (type) {
+        //type 1=产品 2=执行器 3=法兰 4=螺栓
+        var productArray = new Array();
+        var productCoefficientAll = $("#productCoefficientAll").val();
+        var actuatorCoefficientAll = $("#actuatorCoefficientAll").val();
+        var productRef1CoefficientAll = $("#productRef1CoefficientAll").val();
+        var productRef2CoefficientAll = $("#productRef2CoefficientAll").val();
 
+        var data = $.btTable.bootstrapTable('getData');
+        var productArray = new Array();
+        if (data == null || data.length == 0) {
+            return;
+        }
+        for (var i = 0; i < data.length; i++) {
+            var rowData = data[i];
+            var productObj = new Object();
+            var productId =  rowData["productId"];
+            if (type == 1 && !isEmpty(productCoefficientAll)) {
+                var updateObj = {
+                    index : rowData.rowId,
+                    field : "productCoefficient",
+                    value : productCoefficientAll
+                };
+                $.btTable.bootstrapTable("updateCell",updateObj);
+            } else if (type == 2 && !isEmpty(actuatorCoefficientAll)) {
+                var updateObj = {
+                    index : rowData.rowId,
+                    field : "actuatorCoefficient",
+                    value : actuatorCoefficientAll
+                };
+                $.btTable.bootstrapTable("updateCell",updateObj);
+            } else if (type == 3 && !isEmpty(productRef1CoefficientAll)) {
+                var updateObj = {
+                    index : rowData.rowId,
+                    field : "productRef1Coefficient",
+                    value : productRef1CoefficientAll
+                };
+                $.btTable.bootstrapTable("updateCell",updateObj);
+            } else if (type == 4 && !isEmpty(productRef2CoefficientAll)) {
+                var updateObj = {
+                    index : rowData.rowId,
+                    field : "productRef2Coefficient",
+                    value : productRef2CoefficientAll
+                };
+                $.btTable.bootstrapTable("updateCell",updateObj);
+            }
+        }
+        calculateTotalPrice();
+
+    }
     function selectDeptTree() {
         var treeId = $("#string22").val();
         var deptId = $.common.isEmpty(treeId) ? "100" : $("#string22").val();
