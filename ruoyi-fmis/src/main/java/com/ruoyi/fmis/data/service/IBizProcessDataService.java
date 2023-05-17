@@ -172,6 +172,6 @@ public interface IBizProcessDataService {
     List<BizProcessData> selectAllBorrowingWithNoPayAndAgree(Long userId);
 
     public int updateBizProcessDataByBizIdAndString12(BizProcessData bizProcessData);
-
+    public List<BizProcessData> selectLastBizProcessDataListRef(BizProcessData bizProcessData);
 
     }

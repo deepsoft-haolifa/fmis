@@ -768,7 +768,8 @@
             var totalSum = parseFloat(parseFloat(productSum) + parseFloat(productRef1Sum) + parseFloat(productRef2Sum) + parseFloat(actuatorSum)
                 + parseFloat(pattachmentSum) + parseFloat(pattachment1Sum) + parseFloat(pattachment2Sum) + parseFloat(pattachment3Sum) + parseFloat(pattachment4Sum)
                 - parseFloat(string14)).toFixed(0);
-
+            var contractPrice = row["contractPrice"];
+            var totalSum = contractPrice * productNum;
             var costProce = parseFloat(productNum * productPrice).toFixed(4) +
                 parseFloat(productRef1Num * productRef1Price).toFixed(4) +
                 parseFloat(productRef2Num * productRef2Price).toFixed(4) +

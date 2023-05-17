@@ -343,6 +343,7 @@
         }
 
         function getProductSum (productId) {
+            console.log("shizhelijisuan")
             //产品数量 产品系数 价格
             var productNum = $("#productNum_" + productId).val();
             productNum = isEmpty(productNum) == true ? 0 : parseFloat(productNum);

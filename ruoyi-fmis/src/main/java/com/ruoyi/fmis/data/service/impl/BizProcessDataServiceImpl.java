@@ -958,6 +958,9 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
                 flowStatus = "-" + currentUserFlowStatus;
             }
         }
+        if (flowStatus.equals("-")) {
+            flowStatus = "0";
+        }
         bizProcessData.setFlowStatus(flowStatus);
 
         /**
@@ -1252,5 +1255,10 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
     public int updateBizProcessDataByBizIdAndString12(BizProcessData bizProcessData) {
         bizProcessData.setUpdateTime(DateUtils.getNowDate());
         return bizProcessDataMapper.updateBizProcessDataByBizIdAndString12(bizProcessData);
+    }
+
+    @Override
+    public List<BizProcessData> selectLastBizProcessDataListRef(BizProcessData bizProcessData) {
+        return bizProcessDataMapper.selectLastBizProcessDataListRef(bizProcessData);
     }
 }

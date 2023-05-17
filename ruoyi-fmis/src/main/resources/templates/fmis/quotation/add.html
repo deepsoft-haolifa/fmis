@@ -5,10 +5,12 @@
 </head>
 <body class="white-bg">
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
-
+        <div class="form-group " >
+            <label class="col-sm-12 control-label red-bg">因后台公式系数与单价修改冲突，选配执行器或配件时，请不要先修改无头阀的单价，如需要修改请选择完后修改单价</label>
+        </div>
 
         <div class="form-horizontal m form-group">
-            <label class="col-sm-3 control-label">系数设置：</label>
+            <label class="col-sm-1 control-label">系数设置：</label>
             <div class='col-sm-1'>
                 <input class='form-control' type='text' id="productCoefficientAll" onblur="setCoefficientAll(1)"  placeholder='产品系数' onkeyup="AmountKeyUp(this)" required/>
             </div>
@@ -21,7 +23,7 @@
             <div class='col-sm-1'>
                 <input class='form-control' type='text' id="productRef2CoefficientAll" onblur="setCoefficientAll(4)" placeholder='螺栓系数' onkeyup="AmountKeyUp(this)" required/>
             </div>
-            <div class='col-sm-2'>
+            <div class='col-sm-5'>
                 <a class="btn btn-success btn-sm" onclick="insertRow()">
                     <i class="fa fa-plus"></i> 新增
                 </a>

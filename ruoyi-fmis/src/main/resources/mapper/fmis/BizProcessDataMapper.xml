@@ -1676,6 +1676,9 @@
         update biz_process_data set status = #{status}
         where biz_id = #{bizId} and string12 = #{string12}
     </update>
+    <select id="selectLastBizProcessDataListRef" parameterType="BizProcessData" resultMap="BizProcessDataResult">
+        SELECT string1 FROM biz_process_data WHERE  biz_id = 'contract' and  DATE_FORMAT( create_time, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
+        ORDER BY create_time desc limit 1
 
-
+    </select>
 </mapper>

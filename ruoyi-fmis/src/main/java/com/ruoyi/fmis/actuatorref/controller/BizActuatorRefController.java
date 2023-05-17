@@ -113,6 +113,7 @@ public class BizActuatorRefController extends BaseController {
 
         Long valveType = 0L;
         Long pressure = 0L;
+        Long series = 0L;
         if (StringUtils.isNotEmpty(bizActuatorRef.getValveType())) {
             valveType = Long.parseLong(bizActuatorRef.getValveType());
         }
@@ -120,9 +121,13 @@ public class BizActuatorRefController extends BaseController {
         if (StringUtils.isNotEmpty(bizActuatorRef.getPressure())) {
             pressure = Long.parseLong(bizActuatorRef.getPressure());
         }
+        if (StringUtils.isNotEmpty(bizActuatorRef.getSeries())) {
+            series = Long.parseLong(bizActuatorRef.getSeries());
+        }
 
         mmap.put("specifications",bizDictService.selectProductDictForParentType(BizConstants.specificationCode,valveType));
         mmap.put("nominalPressures",bizDictService.selectProductDictForParentType(BizConstants.nominalPressure,pressure));
+        mmap.put("seriesSelect",bizDictService.selectProductDictForParentType(BizConstants.productTypeCode,series));
 
 
         mmap.put("bizActuatorRef", bizActuatorRef);

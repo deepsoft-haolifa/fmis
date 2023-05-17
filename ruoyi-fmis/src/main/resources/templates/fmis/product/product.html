@@ -75,7 +75,7 @@
                                 <p>阀轴：</p>
                                 <select name="string3" class="form-control m-b" th:with="type=${@dict.getType('valve_shaft')}">
                                     <option value="">请选择</option>
-                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictLabel}"></option>
                                 </select>
                             </li>
 
@@ -231,7 +231,11 @@
                 {
                     field : 'price',
                     title : '销售底价'
-                }, {
+                },
+                    {
+                        field : 'procurementPrice',
+                        title : '采购价'
+                    }, {
                         field : 'facePrice',
                         title : '面价'
                     },
@@ -239,6 +243,10 @@
                     field : 'supplier', 
                     title : '供应商代号'
                 },
+                    {
+                        field : 'supplierName',
+                        title : '供应商名称'
+                    },
                 {
                     field : 'color',
                     title : '供应商颜色'

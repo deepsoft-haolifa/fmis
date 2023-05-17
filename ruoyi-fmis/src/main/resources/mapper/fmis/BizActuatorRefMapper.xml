@@ -9,6 +9,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="brand"    column="brand"    />
         <result property="driveType"    column="drive_type"    />
         <result property="mediaType"    column="media_type"    />
+        <result property="series"    column="series"    />
         <result property="valveType"    column="valve_type"    />
         <result property="topFlange"    column="top_flange"    />
         <result property="pressure"    column="pressure"    />
@@ -36,13 +37,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectBizActuatorRefVo">
-        select ar_id, brand, drive_type, media_type, valve_type, top_flange, pressure, torsion, multiplying_power, drive_mode, fit_type, string1, string2, string3, string4, string5, string6, string7, string8, string9, string10, remark, status, del_flag, create_by, create_time, update_by, update_time from biz_actuator_ref
+        select ar_id, brand, drive_type, media_type,series, valve_type, top_flange, pressure, torsion, multiplying_power, drive_mode, fit_type, string1, string2, string3, string4, string5, string6, string7, string8, string9, string10, remark, status, del_flag, create_by, create_time, update_by, update_time from biz_actuator_ref
     </sql>
 
     <sql id="selectBizActuatorRefDictVo">
-      select ar.ar_id, ar.brand, ar.drive_type, ar.media_type, d1.name as valve_type, ar.top_flange, d2.name as pressure, ar.torsion, ar.multiplying_power, ar.drive_mode, ar.fit_type, ar.string1, ar.string2, ar.string3, ar.string4, ar.string5, ar.string6, ar.string7, ar.string8, ar.string9, ar.string10, ar.remark, ar.status, ar.del_flag, ar.create_by, ar.create_time, ar.update_by, ar.update_time from biz_actuator_ref ar
+      select ar.ar_id, ar.brand, ar.drive_type, ar.media_type, d3.NAME AS series,d1.name as valve_type, ar.top_flange, d2.name as pressure, ar.torsion, ar.multiplying_power, ar.drive_mode, ar.fit_type, ar.string1, ar.string2, ar.string3, ar.string4, ar.string5, ar.string6, ar.string7, ar.string8, ar.string9, ar.string10, ar.remark, ar.status, ar.del_flag, ar.create_by, ar.create_time, ar.update_by, ar.update_time from biz_actuator_ref ar
         left join biz_dict d1 on d1.dict_id=ar.valve_type
 	    left join biz_dict d2 on d2.dict_id=ar.pressure
+        LEFT JOIN biz_dict d3 ON d3.dict_id = ar.series
     </sql>
 
     <select id="selectBizActuatorRefList" parameterType="BizActuatorRef" resultMap="BizActuatorRefResult">
@@ -67,6 +69,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="brand != null  and brand != ''">brand,</if>
             <if test="driveType != null  and driveType != ''">drive_type,</if>
             <if test="mediaType != null  and mediaType != ''">media_type,</if>
+            <if test="series != null  and series != ''">series,</if>
             <if test="valveType != null  and valveType != ''">valve_type,</if>
             <if test="topFlange != null  and topFlange != ''">top_flange,</if>
             <if test="pressure != null  and pressure != ''">pressure,</if>
@@ -96,6 +99,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="brand != null  and brand != ''">#{brand},</if>
             <if test="driveType != null  and driveType != ''">#{driveType},</if>
             <if test="mediaType != null  and mediaType != ''">#{mediaType},</if>
+            <if test="series != null  and series != ''">#{series},</if>
             <if test="valveType != null  and valveType != ''">#{valveType},</if>
             <if test="topFlange != null  and topFlange != ''">#{topFlange},</if>
             <if test="pressure != null  and pressure != ''">#{pressure},</if>
@@ -129,6 +133,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="brand != null  and brand != ''">brand = #{brand},</if>
             <if test="driveType != null  and driveType != ''">drive_type = #{driveType},</if>
             <if test="mediaType != null  and mediaType != ''">media_type = #{mediaType},</if>
+            <if test="series != null  and series != ''">series = #{series},</if>
             <if test="valveType != null  and valveType != ''">valve_type = #{valveType},</if>
             <if test="topFlange != null  and topFlange != ''">top_flange = #{topFlange},</if>
             <if test="pressure != null  and pressure != ''">pressure = #{pressure},</if>
