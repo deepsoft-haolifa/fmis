@@ -54,6 +54,7 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.CollectionUtils;
@@ -123,6 +124,8 @@ public class BizQuotationController extends BaseController {
 
     @Autowired
     private IBizProductService bizProductService;
+    @Value("${pdf.ownerPassword}")
+    private String ownerPassword;
 
     @RequiresPermissions("fmis:quotation:view")
     @GetMapping()
@@ -279,7 +282,7 @@ public class BizQuotationController extends BaseController {
                 writer = PdfWriter.getInstance(document, new FileOutputStream(filePath));
             }
             // 只读
-            writer.setEncryption(null, null, PdfWriter.ALLOW_PRINTING, PdfWriter.STANDARD_ENCRYPTION_128);
+            writer.setEncryption(null, ownerPassword.getBytes(), PdfWriter.ALLOW_PRINTING, PdfWriter.STANDARD_ENCRYPTION_128);
             //设置字体样式
             //正常
             Font textFont = PdfUtil.getPdfChineseFont(7,Font.NORMAL);

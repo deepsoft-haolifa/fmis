@@ -70,6 +70,7 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.CellRangeAddressList;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
@@ -147,6 +148,8 @@ public class BizProcessDataController extends BaseController {
 
     @Autowired
     private RedisUtil redisUtil;
+    @Value("${pdf.ownerPassword}")
+    private String ownerPassword;
 
 
     @RequiresPermissions("fmis:data:view")
@@ -2637,7 +2640,7 @@ public class BizProcessDataController extends BaseController {
                 writer = PdfWriter.getInstance(document, new FileOutputStream(filePath));
             }
             // 只读
-            writer.setEncryption(null, null, PdfWriter.ALLOW_PRINTING, PdfWriter.STANDARD_ENCRYPTION_128);
+            writer.setEncryption(null, ownerPassword.getBytes(), PdfWriter.ALLOW_PRINTING, PdfWriter.STANDARD_ENCRYPTION_128);
             //设置字体样式
             //正常
             Font textFont = PdfUtil.getPdfChineseFont(10, Font.NORMAL);
