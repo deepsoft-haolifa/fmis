@@ -2786,7 +2786,9 @@ public class BizProcessDataController extends BaseController {
 
             table.addCell(PdfUtil.mergeCol("签订日期：", 2, textFont));
             table.addCell(PdfUtil.mergeCol(DateUtils.dateTime(bizProcessData.getCreateTime()), 5, textFont));
-
+            // 第三行
+            table.addCell(PdfUtil.mergeCol("项目名称：", 2, textFont));
+            table.addCell(PdfUtil.mergeCol("", 13, textFont));
 
             table.addCell(PdfUtil.mergeCol("为保障买卖双方的合法权益，根据《合同法》及有关法律规定，买卖双方经友好协商，一致同意按下列条款签订本合同。", 15, textFont));
 
@@ -3245,7 +3247,13 @@ public class BizProcessDataController extends BaseController {
             table.addCell(PdfUtil.mergeCol("2、收货地址信息：", 3, textFont));
             table.addCell(PdfUtil.mergeCol(StringUtils.trim(bizProcessData.getString9()), 12, textFont));
             table.addCell(PdfUtil.mergeCol("", 1, textFont));
-            table.addCell(PdfUtil.mergeColLeft("3、其他约定事项：", 14, textFont));
+            table.addCell(PdfUtil.mergeColLeft("3、收货人：", 3, textFont));
+            table.addCell(PdfUtil.mergeCol(bizProcessData.getString11(), 2, textFont));
+            table.addCell(PdfUtil.mergeCol("电话", 2, textFont));
+            table.addCell(PdfUtil.mergeCol(bizProcessData.getString12(), 7, textFont));
+
+            table.addCell(PdfUtil.mergeCol("", 1, textFont));
+            table.addCell(PdfUtil.mergeColLeft("4、其他约定事项：", 14, textFont));
 
             table.addCell(PdfUtil.mergeCol("十一", 1, textFont));
             table.addCell(PdfUtil.mergeColLeft("产品所有权自交接时起转移，但买方未按合同约定阶段付款，产品所有权仍属于出卖人所有。", 14, textFont));
