@@ -14,7 +14,7 @@ public class Util {
     public static void init(){
         JSONObject jsonObject1 = new JSONObject();
         jsonObject1.put("name", "北京好利阀业集团有限公司");
-        jsonObject1.put("phone", "010-89215233");
+        jsonObject1.put("phone", "010-89215299");
         jsonObject1.put("bank", "中国农业银行北京榆垡支行");
         jsonObject1.put("bankNo", "11111401040001485");
         jsonObject1.put("faxNo", "91110115802867079B");

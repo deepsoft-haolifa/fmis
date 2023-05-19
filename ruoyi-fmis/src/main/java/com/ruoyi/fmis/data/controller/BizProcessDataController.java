@@ -2659,7 +2659,7 @@ public class BizProcessDataController extends BaseController {
             PdfPTable tbSubtitle = new PdfPTable(1);
             PdfPCell cellSubtitle = new PdfPCell();
             if (!isSchengchan) {
-                paragraph0 = new Paragraph("    " + companyName + "    如无问题，请尽快回传及付款，以免影响交货期！回传电话：010-67171220。", textFont);
+                paragraph0 = new Paragraph("    " + companyName + "    如无问题，请尽快回传及付款，以免影响交货期！", textFont);
                 paragraph0.setAlignment(Paragraph.ALIGN_CENTER);
                 paragraph = new Paragraph("产品购销合同", titleFont);
                 paragraph.setAlignment(Paragraph.ALIGN_CENTER);
@@ -2767,6 +2767,9 @@ public class BizProcessDataController extends BaseController {
                 }
             }
 
+            if (companyName.equals("北京好利阀业集团有限公司")) {
+                remark10 = "010-89218833";
+            }
             // 第一行
             table.addCell(PdfUtil.mergeCol("卖方：", 2, textFont));
             table.addCell(PdfUtil.mergeCol(companyName, 6, textFont));
@@ -3266,7 +3269,7 @@ public class BizProcessDataController extends BaseController {
             table.addCell(PdfUtil.mergeColLeft("本合同一式贰份。双方各执一份，双方签字盖章后生效（传真件有效）。", 14, textFont));
             Paragraph paragraphRemark1 = new Paragraph();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-            Paragraph datePar = new Paragraph("打印日期：" + sdf.format(new Date()), PdfUtil.getPdfChineseFont());
+//            Paragraph datePar = new Paragraph("打印日期：" + sdf.format(new Date()), PdfUtil.getPdfChineseFont());
             if (!isSchengchan) {
                 table.addCell(PdfUtil.mergeCol("", 1, textFont));
                 table.addCell(PdfUtil.mergeColLeft("单位名称：" + companyName + "", 7, textFont));
@@ -3314,8 +3317,8 @@ public class BizProcessDataController extends BaseController {
                 paragraphRemark1.setAlignment(Paragraph.ALIGN_RIGHT);*/
 
 
-                datePar.setAlignment(Element.ALIGN_RIGHT);
-                datePar.setSpacingBefore(20);
+//                datePar.setAlignment(Element.ALIGN_RIGHT);
+//                datePar.setSpacingBefore(20);
             }
 
 
@@ -3332,7 +3335,7 @@ public class BizProcessDataController extends BaseController {
             document.add(table);
             //document.add(paragraphRemark);
             document.add(paragraphRemark1);
-            document.add(datePar);
+//            document.add(datePar);
 
             // step 5
             document.close();
