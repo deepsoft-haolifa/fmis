@@ -1543,13 +1543,20 @@ public class BizProcessDataProcurementController extends BaseController {
             table.addCell(PdfUtil.mergeCol("十", 1, textFont));
             table.addCell(PdfUtil.mergeCol("运输：", 14, textFont));
 
-            table.addCell(PdfUtil.mergeCol("", 1, textFont));
-            table.addCell(PdfUtil.mergeCol("1、运输方式：", 3, textFont));
-            table.addCell(PdfUtil.mergeCol(bizProcessData.getString9(), 2, textFont));
+           /* table.addCell(PdfUtil.mergeCol("", 1, textFont));
+            table.addCell(PdfUtil.mergeCol("1、运输方式：", 2, textFont));
+            table.addCell(PdfUtil.mergeCol(bizProcessData.getString9() + " 联系人:" + bizProcessData.getString11() + " 电话:" + bizProcessData.getString12(), 3, textFont));
             table.addCell(PdfUtil.mergeCol("运费:", 2, textFont));
             table.addCell(PdfUtil.mergeCol(StringUtils.trim(bizProcessData.getString26()), 2, textFont));
             table.addCell(PdfUtil.mergeCol("是否需要送：", 2, textFont));
-            table.addCell(PdfUtil.mergeCol("送货", 3, textFont));
+            table.addCell(PdfUtil.mergeCol("送货", 3, textFont));*/
+
+            table.addCell(PdfUtil.mergeCol("", 1, textFont));
+            table.addCell(PdfUtil.mergeCol("1、运输方式：" +bizProcessData.getString9(), 3, textFont));
+            table.addCell(PdfUtil.mergeCol(" 联系人:" + bizProcessData.getString11(), 3, textFont));
+            table.addCell(PdfUtil.mergeCol(" 电话:" + bizProcessData.getString12(), 3, textFont));
+            table.addCell(PdfUtil.mergeCol("运费:" + StringUtils.trim(bizProcessData.getString26()), 2, textFont));
+            table.addCell(PdfUtil.mergeCol("是否需要送：送货", 3, textFont));
 
 
             table.addCell(PdfUtil.mergeCol("", 1, textFont));
@@ -2827,7 +2834,7 @@ public class BizProcessDataProcurementController extends BaseController {
             cell_211_01.setCellValue("1、运输方式：");
             sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 1, 2));
             Cell cell_212_02 = row2101.createCell(3);
-            cell_212_02.setCellValue(bizProcess.getString9());
+            cell_212_02.setCellValue(bizProcess.getString9() + " 联系人:" + bizProcess.getString11() + " 电话:" + bizProcess.getString12());
             Cell cell_212_04 = row2101.createCell(4);
             cell_212_04.setCellValue("运费：");
             Cell cell_212_05 = row2101.createCell(5);

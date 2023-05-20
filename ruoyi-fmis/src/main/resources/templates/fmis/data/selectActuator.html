@@ -344,21 +344,25 @@
             var selName;
             var selRow;
             var costPrice;
+            var actuatorString1;
             if (rows1.length == 1) {
                 selActuatorId = rows1[0].actuatorId;
                 selName = rows1[0].name;
                 selRow = rows1[0];
                 costPrice = rows1[0].string9;
+                actuatorString1 = rows1[0].string1;
             } else {
                 selActuatorId = rows2[0].actuatorId;
                 selName = rows2[0].name;
                 selRow = rows2[0];
                 costPrice = rows2[0].string9;
+                actuatorString1 = rows2[0].string1;
             }
 
             var rowData = {
                 actuatorId : selActuatorId,
                 actuatorName:selName,
+                actuatorString1:actuatorString1,
                 actuatorPrice:selRow.facePrice,
                 actuatorNum:"0",
                 actuatorCoefficient:"0",

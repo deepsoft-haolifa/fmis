@@ -505,7 +505,7 @@ public class BizProcessDataController extends BaseController {
                             if (endRemark.length() > 0) {
                                 endRemark += ",";
                             }
-                            endRemark += "执行器" + " " + bizActuator.getName()+ " " + bizActuator.getAdaptableVoltage();
+                            endRemark += "执行器" + " " + bizActuator.getName()+ " " + bizActuator.getString1();
 
                         }
                     }
@@ -892,7 +892,19 @@ public class BizProcessDataController extends BaseController {
             Cell cell_20_0 = row20.createCell(0);
             cell_20_0.setCellValue("九、");
             Cell cell_20_10 = row20.createCell(1);
-            cell_20_10.setCellValue("付款方式：电汇或承兑");
+//            cell_20_10.setCellValue("付款方式：电汇或承兑");
+
+            if(bizProcessData.getString18().equals("1")) {
+                cell_20_10.setCellValue("付款方式:" + sysDictDataService.selectDictLabel("payment_type", bizProcessData.getString18()) + "  付款形式：" + sysDictDataService.selectDictLabel("payment_method", bizProcessData.getString18()));
+            }
+            if(bizProcessData.getString18().equals("2")) {
+                cell_20_10.setCellValue("付款方式:" + sysDictDataService.selectDictLabel("payment_type", bizProcessData.getString18()) + "  付款形式：" + sysDictDataService.selectDictLabel("payment_days", bizProcessData.getString18()));
+            }
+            if(bizProcessData.getString18().equals("3")) {
+                cell_20_10.setCellValue("付款方式:" + sysDictDataService.selectDictLabel("payment_type", bizProcessData.getString18()) + "  付款形式：" +
+                        "预付：" + bizProcessData.getPrice5() + "%，发货前付款："+ bizProcessData.getPrice6() + "%，货到："+ bizProcessData.getPrice7()  + "天付"+ bizProcessData.getPrice8()
+                        + "%， 安装调试" + bizProcessData.getPrice9() + "天 付"+ bizProcessData.getPrice10()  + "%，质保金"+ bizProcessData.getPrice11()  + "%");
+            }
 
 
             String payRemark = "";
@@ -978,7 +990,7 @@ public class BizProcessDataController extends BaseController {
             cell_211_01.setCellValue("1、运输方式：");
             sheet.addMergedRegion(new CellRangeAddress(nn2, nn2, 1, 2));
             Cell cell_212_02 = row2101.createCell(3);
-            cell_212_02.setCellValue(transportType);
+            cell_212_02.setCellValue(transportType + " 联系人:" + bizProcessData.getString11() + " 电话:" + bizProcessData.getString12());
             Cell cell_212_04 = row2101.createCell(4);
             cell_212_04.setCellValue("运费：");
             Cell cell_212_05 = row2101.createCell(5);
@@ -1617,7 +1629,7 @@ public class BizProcessDataController extends BaseController {
             if (Integer.valueOf(sNo) < 9) {
                 int num = Integer.valueOf(sNo) + 1;
                 sNo = "00" + num + "";
-            } else if (Integer.valueOf(sNo) > 9 && Integer.valueOf(sNo) < 99) {
+            } else if (Integer.valueOf(sNo) >= 9 && Integer.valueOf(sNo) < 99) {
                 int num = Integer.valueOf(sNo) + 1;
                 sNo = "0" + num + "";
             } else {
@@ -2432,9 +2444,9 @@ public class BizProcessDataController extends BaseController {
          * 如果系数大于1.1，则由部门销售经理审核完成后流程结束
          * 总经理46% 副总 43% 区域经理40% 销售经理 32。5% 销售员30%
          */
-        minCoefficient = Double.parseDouble(totalPrice) / price;
+//        minCoefficient = Double.parseDouble(totalPrice) / price;
+        minCoefficient = bizProcessData.getPrice15();
         if (minCoefficient < 0.57) {
-
             normalFlag = "5";
         } else if ((minCoefficient >= 0.57 && minCoefficient < 0.6)) {
             if (num < 5) {
@@ -2864,7 +2876,7 @@ public class BizProcessDataController extends BaseController {
                         if (endRemark.length() > 0) {
                             endRemark += ",";
                         }
-                        endRemark += "执行器" + " " + bizActuator.getName()  + " " + bizActuator.getAdaptableVoltage();
+                        endRemark += "执行器" + " " + bizActuator.getName()  + " " + bizActuator.getString1();
 
                     }
                 }
@@ -3238,12 +3250,13 @@ public class BizProcessDataController extends BaseController {
             table.addCell(PdfUtil.mergeCol("运输：", 14, textFont));
 
             table.addCell(PdfUtil.mergeCol("", 1, textFont));
-            table.addCell(PdfUtil.mergeCol("1、运输方式：", 3, textFont));
-            table.addCell(PdfUtil.mergeCol(transportType, 2, textFont));
-            table.addCell(PdfUtil.mergeCol("运费:", 2, textFont));
-            table.addCell(PdfUtil.mergeCol(StringUtils.trim(bizProcessData.getString10()), 2, textFont));
-            table.addCell(PdfUtil.mergeCol("是否需要送：", 2, textFont));
-            table.addCell(PdfUtil.mergeCol("送货", 3, textFont));
+            table.addCell(PdfUtil.mergeCol("1、运输方式：" +transportType, 3, textFont));
+            table.addCell(PdfUtil.mergeCol(" 联系人:" + bizProcessData.getString11(), 3, textFont));
+            table.addCell(PdfUtil.mergeCol(" 电话:" + bizProcessData.getString12(), 3, textFont));
+            table.addCell(PdfUtil.mergeCol("运费:" + StringUtils.trim(bizProcessData.getString10()), 2, textFont));
+            table.addCell(PdfUtil.mergeCol("是否需要送：送货", 3, textFont));
+
+//            table.addCell(PdfUtil.mergeCol("送货", 3, textFont));
 
 
             table.addCell(PdfUtil.mergeCol("", 1, textFont));
@@ -3697,7 +3710,7 @@ public class BizProcessDataController extends BaseController {
                     if (endRemark.length() > 0) {
                         endRemark += ",";
                     }
-                    endRemark += "执行器" + " " + bizActuator.getName() + " " + bizActuator.getAdaptableVoltage();
+                    endRemark += "执行器" + " " + bizActuator.getName() + " " + bizActuator.getString1();
 
                 }
             }

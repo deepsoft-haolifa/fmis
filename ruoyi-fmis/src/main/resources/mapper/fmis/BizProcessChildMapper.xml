@@ -407,7 +407,7 @@
 
         /*group by  p.model,p.specifications,p.string1,p.string5*/
         group by  p.product_id
-        order by p.model,isnull(p.string5),p.new_supplier,productNum desc
+        order by p.model,p.series,p.specifications,isnull(p.string5),p.new_supplier,productNum desc
     </select>
 
 
