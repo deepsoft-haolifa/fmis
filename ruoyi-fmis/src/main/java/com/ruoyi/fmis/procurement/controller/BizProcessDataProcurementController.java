@@ -2368,7 +2368,7 @@ public class BizProcessDataProcurementController extends BaseController {
             CellRangeAddress cra1 = new CellRangeAddress(0, 0, 0, 7);
             sheet.addMergedRegion(cra1);
             Cell cell_title_1 = row1.createCell(0);
-            cell_title_1.setCellValue("产品销售合同");
+            cell_title_1.setCellValue("产品购销合同");
             CellStyle cellTitle = ExcelProcessDataUtils.titleCell(workbook);
             cell_title_1.setCellStyle(cellTitle);
 

@@ -122,13 +122,6 @@
                     </select>
                 </div>
             </div>
-            <label class="col-sm-1 control-label">包装方式：</label>
-            <div class="col-sm-2">
-                <select name="string27" id="string27" class="form-control m-b" th:with="type=${@dict.getType('baozhuangfangshi')}">
-                    <option value="0">默认</option>
-                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                </select>
-            </div>
             <div id="divString15" class="form-inline"  style="display: none">
                 <label class="col-sm-1 control-label">账期：</label>
                 <div class="col-sm-2">
@@ -136,7 +129,7 @@
                         <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                     </select>
                 </div>
-                <!--<input name="string17" id="string17" onkeyup="AmountKeyUp(this)" class="form-control" style="width: 45px">-->天
+                <!--<input name="string17" id="string17" onkeyup="AmountKeyUp(this)" class="form-control" style="width: 45px">天-->
             </div>
             <div id="divString16" style="display: none">
                 <!--
@@ -157,7 +150,13 @@
                     </select> -->
                 </div>
             </div>
-
+            <label class="col-sm-1 control-label">包装方式：</label>
+            <div class="col-sm-2">
+                <select name="string27" id="string27" class="form-control m-b" th:with="type=${@dict.getType('baozhuangfangshi')}">
+                    <option value="0">默认</option>
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                </select>
+            </div>
 
         </div>
 
