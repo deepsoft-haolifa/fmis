@@ -824,7 +824,7 @@ public class BizProcessDataController extends BaseController {
             Cell cell_13_0 = row13.createCell(0);
             cell_13_0.setCellValue("四、");
             Cell cell_13_1 = row13.createCell(1);
-            cell_13_1.setCellValue("产品验收：按国家标准验收，收到货一个月内无反馈问题视为整个合同产品验收合格。");
+            cell_13_1.setCellValue("产品验收：按国家标准验收，收到货一个月内无反馈问题视为整个合同产品验收合格，若需方在验收期内对产品质量有异议的，应当通过书面形式（或其他约定的刑事）向供方提出，验收期内未提出的，视为验收合格，需方不得以供货方未完成供货义务或履行瑕疵为由主张违约责任。");
             sheet.addMergedRegion(new CellRangeAddress(ee, ee, 1, 7));
 
             int ff = rowCount++;
@@ -843,7 +843,7 @@ public class BizProcessDataController extends BaseController {
             Row row15 = sheet.createRow(gg);
             row15.setRowStyle(cellLeft);
             Cell cell_15_0 = row15.createCell(2);
-            cell_15_0.setCellValue("若买方原因致使产品留置卖方，超过6个月未发产品开始计时质保服务，质保期内如出现产品本身质量问题，卖方免费进行维修，不能维修予以更换（售后现场限国内）。");
+            cell_15_0.setCellValue("供方仅对产品质量本身的问题承担质量保证义务，因需方原因或其他不可归责于供方的原因导致产品出现问题的，供方不承担质量保证义务，在此情形下，如需维修或退换的，需方应另行支付相应的费用，若需方原因致使产品留置供方，超过6个月未发产品开始计时质保服务。");
             sheet.addMergedRegion(new CellRangeAddress(gg, gg, 2, 7));
 
             int hh = rowCount++;
@@ -883,7 +883,7 @@ public class BizProcessDataController extends BaseController {
             int kk = rowCount++;
             Row row19 = sheet.createRow(kk);
             Cell cell_19_0 = row19.createCell(2);
-            cell_19_0.setCellValue("若买方原因推迟发货，超过3个月卖方开始按天收取货值的1‰仓储费，不支持退换货。");
+            cell_19_0.setCellValue("若因需方原因致使供方推迟发货，超过3个月的，每超出1日，供方按货值的1‰收取仓储费，且对于尚未发货的产品不支持退换货；产品运送至需方指定地点即视为供方完成交付义务。");
             sheet.addMergedRegion(new CellRangeAddress(kk, kk, 2, 7));
             cell_19_0.setCellStyle(cellLeft);
 
@@ -1000,17 +1000,28 @@ public class BizProcessDataController extends BaseController {
             Cell cell_212_07 = row2101.createCell(7);
             cell_212_07.setCellValue("送货");
 
+            int nn1 = rowCount++;
+            Row row221 = sheet.createRow(nn1);
+            Cell cell_221_1 = row221.createCell(1);
+            cell_221_1.setCellValue("3、收货人：");
+            Cell cell_222_1 = row221.createCell(2);
+            cell_222_1.setCellValue(bizProcessData.getString11());
+            Cell cell_223_1 = row221.createCell(3);
+            cell_223_1.setCellValue("电话：");
+            Cell cell_224_1 = row221.createCell(4);
+            cell_224_1.setCellValue(bizProcessData.getString12());
+            sheet.addMergedRegion(new CellRangeAddress(nn1, nn1, 4, 6));
 
             int nn = rowCount++;
             Row row22 = sheet.createRow(nn);
             Cell cell_22_1 = row22.createCell(1);
-            cell_22_1.setCellValue("2、收货地址信息：" + StringUtils.trim(bizProcessData.getString9()));
+            cell_22_1.setCellValue("3、收货地址信息：" + StringUtils.trim(bizProcessData.getString9()));
             sheet.addMergedRegion(new CellRangeAddress(nn, nn, 1, 7));
 
             int oo = rowCount++;
             Row row23 = sheet.createRow(oo);
             Cell cell_23_1 = row23.createCell(1);
-            cell_23_1.setCellValue("3、其他约定事项：");
+            cell_23_1.setCellValue("4、其他约定事项：");
             sheet.addMergedRegion(new CellRangeAddress(oo, oo, 1, 7));
 
             int pp = rowCount++;
@@ -1019,7 +1030,7 @@ public class BizProcessDataController extends BaseController {
             Cell cell_24_1 = row24.createCell(0);
             cell_24_1.setCellValue("十一、");
             Cell cell_24_2 = row24.createCell(1);
-            cell_24_2.setCellValue("产品所有权自交接时起转移，但买方未按合同约定阶段付款，产品所有权仍属于出卖人所有。");
+            cell_24_2.setCellValue("产品毁损灭失的风险自需方收货时转由需方承担。买方未按合同约定的时间和方式付清相应货款的，产品所有权仍归属于供方所有，产品发生毁损灭失的，需方应承担赔偿全部责任。");
             sheet.addMergedRegion(new CellRangeAddress(pp, pp, 1, 7));
 
             int qq = rowCount++;
@@ -1028,7 +1039,8 @@ public class BizProcessDataController extends BaseController {
             Cell cell_25_1 = row25.createCell(0);
             cell_25_1.setCellValue("十二、");
             Cell cell_25_2 = row25.createCell(1);
-            cell_25_2.setCellValue("违约责任：合同签订后，买卖双方严格执行双方所签订合同的条款，其中一方不履行或不完全履行合同者应承担相应的法律责任；解决合同纠纷方式：双方协商解决，解决不成由卖方所在地仲裁委员会仲裁。");
+            cell_25_2.setCellValue("违约责任：合同签订后，买卖双方严格执行双方所签订合同的条款，其中一方不履行或不完全履行合同者应承担相应的法律责任；\n" +
+                    "解决合同纠纷方式：因本合同产生的争议，双方应友好协商解决，协商不成的由供方所在地仲裁委员会仲裁。");
             sheet.addMergedRegion(new CellRangeAddress(qq, qq, 1, 7));
             cell_25_2.setCellStyle(cellLeft);
 
@@ -3136,7 +3148,7 @@ public class BizProcessDataController extends BaseController {
 
 
             table.addCell(PdfUtil.mergeCol("四、", 1, textFont));
-            table.addCell(PdfUtil.mergeColLeft("产品验收标准：按国家标准验收，收到货一个月内无反馈问题视为整个合同产品验收合格。", 14, textFont));
+            table.addCell(PdfUtil.mergeColLeft("产品验收：按国家标准验收，收到货一个月内无反馈问题视为整个合同产品验收合格，若需方在验收期内对产品质量有异议的，应当通过书面形式（或其他约定的刑事）向供方提出，验收期内未提出的，视为验收合格，需方不得以供货方未完成供货义务或履行瑕疵为由主张违约责任。", 14, textFont));
 //            table.addCell(PdfUtil.mergeCol("", 1, textFont));
 
             //电汇结算，款到发货；货物采用纸箱包装，采用市内送货运输，运输费用卖方承担
@@ -3218,6 +3230,8 @@ public class BizProcessDataController extends BaseController {
 
             table.addCell(PdfUtil.mergeCol("五、", 1, textFont));
             table.addCell(PdfUtil.mergeColLeft("质量保证按国家标准执行：质保期12个月（自出厂日算起）；质保期内如因产品本身质量问题，卖方予以免费更换。", 14, textFont));
+            table.addCell(PdfUtil.mergeColLeft("", 1, textFont));
+            table.addCell(PdfUtil.mergeColLeft("供方仅对产品质量本身的问题承担质量保证义务，因需方原因或其他不可归责于供方的原因导致产品出现问题的，供方不承担质量保证义务，在此情形下，如需维修或退换的，需方应另行支付相应的费用，若需方原因致使产品留置供方，超过6个月未发产品开始计时质保服务。", 14, textFont));
 
             table.addCell(PdfUtil.mergeCol("六、", 1, textFont));
             table.addCell(PdfUtil.mergeCol("安装与调试：", 14, textFont));
@@ -3232,6 +3246,8 @@ public class BizProcessDataController extends BaseController {
             table.addCell(PdfUtil.mergeCol("八、", 1, textFont));
             table.addCell(PdfUtil.mergeCol("交货周期：", 2, textFont));
             table.addCell(PdfUtil.mergeCol(bizProcessData.getString6(), 12, textFont));
+            table.addCell(PdfUtil.mergeCol("", 1, textFont));
+            table.addCell(PdfUtil.mergeCol("若因需方原因致使供方推迟发货，超过3个月的，每超出1日，供方按货值的1‰收取仓储费，且对于尚未发货的产品不支持退换货；产品运送至需方指定地点即视为供方完成交付义务。", 14, textFont));
 
             table.addCell(PdfUtil.mergeCol("九", 1, textFont));
             if(bizProcessData.getString18().equals("1")) {
@@ -3272,11 +3288,12 @@ public class BizProcessDataController extends BaseController {
             table.addCell(PdfUtil.mergeColLeft("4、其他约定事项：", 14, textFont));
 
             table.addCell(PdfUtil.mergeCol("十一", 1, textFont));
-            table.addCell(PdfUtil.mergeColLeft("产品所有权自交接时起转移，但买方未按合同约定阶段付款，产品所有权仍属于出卖人所有。", 14, textFont));
+            table.addCell(PdfUtil.mergeColLeft("产品毁损灭失的风险自需方收货时转由需方承担。买方未按合同约定的时间和方式付清相应货款的，产品所有权仍归属于供方所有，产品发生毁损灭失的，需方应承担赔偿全部责任。", 14, textFont));
 
 
             table.addCell(PdfUtil.mergeCol("十二、", 1, textFont));
-            table.addCell(PdfUtil.mergeColLeft("违约责任：合同签订后，买卖双方严格执行双方所签订合同的条款，其中一方不履行或不完全履行合同者应承担相应的法律责任；解决合同纠纷方式：双方协商解决，解决不成由卖方所在北京仲裁委员会仲裁。", 14, textFont));
+            table.addCell(PdfUtil.mergeColLeft("违约责任：合同签订后，买卖双方严格执行双方所签订合同的条款，其中一方不履行或不完全履行合同者应承担相应的法律责任；\n" +
+                    "解决合同纠纷方式：因本合同产生的争议，双方应友好协商解决，协商不成的由供方所在地仲裁委员会仲裁。", 14, textFont));
 
             table.addCell(PdfUtil.mergeCol("十三、", 1, textFont));
             table.addCell(PdfUtil.mergeColLeft("本合同一式贰份。双方各执一份，双方签字盖章后生效（传真件有效）。", 14, textFont));
