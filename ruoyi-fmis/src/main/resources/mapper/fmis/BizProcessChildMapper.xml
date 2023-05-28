@@ -205,7 +205,7 @@
           pc.string3 as productNum,pc.string4 as productCoefficient,pc.string7 as productRef1Coefficient,
           pc.string10 as productRef2Coefficient,pc.string12 as actuatorNum,pc.string13 as actuatorCoefficient,
           pc.contract_price as contractPrice,
-          pr1.name as ref1Name,pr2.name as ref2Name,p.name as productName,ac.name as actuatorName,
+          pr1.name as ref1Name,pr2.name as ref2Name,p.name as productName,ac.name as actuatorName,ac.string1 AS actuatorString1,
           p.face_price as productPrice,pr1.price as ref1Price,pr2.price as ref2Price,ac.face_price as actuatorPrice,
           p.color,
           d9.name as series, p.model, d1.name as specifications, d2.name as nominalPressure,
