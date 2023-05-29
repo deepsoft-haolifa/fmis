@@ -959,7 +959,23 @@ public class BizProcessDataController extends BaseController {
                     if (bizProcessData.getPrice11() != null) {
                         payRemark += "质保金" + StringUtils.getDoubleString0(bizProcessData.getPrice11() != null ? bizProcessData.getPrice11() : 0) + " % ";
                     }
-                    double count = bizProcessData.getPrice5() + bizProcessData.getPrice6()  + bizProcessData.getPrice8()  + bizProcessData.getPrice10() + bizProcessData.getPrice11();
+//                    double count = bizProcessData.getPrice5() + bizProcessData.getPrice6()  + bizProcessData.getPrice8()  + bizProcessData.getPrice10() + bizProcessData.getPrice11();
+                    double count = 0;
+                    if (bizProcessData.getPrice5() !=null) {
+                        count = count + bizProcessData.getPrice5();
+                    }
+                    if (bizProcessData.getPrice6() !=null) {
+                        count = count + bizProcessData.getPrice6();
+                    }
+                    if (bizProcessData.getPrice8() !=null) {
+                        count = count + bizProcessData.getPrice8();
+                    }
+                    if (bizProcessData.getPrice10() !=null) {
+                        count = count + bizProcessData.getPrice10();
+                    }
+                    if (bizProcessData.getPrice11() !=null) {
+                        count = count + bizProcessData.getPrice11();
+                    }
                     if ( count != new Double(100)) {
 //                        return error("协议付款必须总金额是100%");
                     }
@@ -3206,7 +3222,24 @@ public class BizProcessDataController extends BaseController {
                     if (bizProcessData.getPrice11() != null) {
                         payRemark += "质保金" + StringUtils.getDoubleString0(bizProcessData.getPrice11() != null ? bizProcessData.getPrice11() : 0) + " % ";
                     }
-                    double count = bizProcessData.getPrice5() + bizProcessData.getPrice6()  + bizProcessData.getPrice8()  + bizProcessData.getPrice10() + bizProcessData.getPrice11();
+//                    double count = bizProcessData.getPrice5() + bizProcessData.getPrice6()  + bizProcessData.getPrice8()  + bizProcessData.getPrice10() + bizProcessData.getPrice11();
+                    double count = 0;
+                    if (bizProcessData.getPrice5() !=null) {
+                        count = count + bizProcessData.getPrice5();
+                    }
+                    if (bizProcessData.getPrice6() !=null) {
+                        count = count + bizProcessData.getPrice6();
+                    }
+                    if (bizProcessData.getPrice8() !=null) {
+                        count = count + bizProcessData.getPrice8();
+                    }
+                    if (bizProcessData.getPrice10() !=null) {
+                        count = count + bizProcessData.getPrice10();
+                    }
+                    if (bizProcessData.getPrice11() !=null) {
+                        count = count + bizProcessData.getPrice11();
+                    }
+
                     if ( count != new Double(100)) {
 //                        return error("协议付款必须总金额是100%");
                     }
