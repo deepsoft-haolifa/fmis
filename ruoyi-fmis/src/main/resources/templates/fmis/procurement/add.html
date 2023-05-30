@@ -44,7 +44,7 @@
 
             </div>
             <div class="form-group">
-                <label class="col-sm-1 control-label">类别：</label>
+                <label class="col-sm-1 control-label"><span style="color: red; ">*</span>类别：</label>
                 <div class="col-sm-2">
                     <select name="string5" id="string5" class="form-control m-b" th:with="type=${@dict.getType('purchase_type')}">
                         <option value="0">请选择</option>
@@ -55,7 +55,7 @@
 
 
 
-                <label class="col-sm-1 control-label">供应商：</label>
+                <label class="col-sm-1 control-label"><span style="color: red; ">*</span>供应商：</label>
                 <div class="col-sm-2">
                     <select name="string6" style="pointer-events: none;" id="string6" class="form-control select2-multiple" > <!--multiple-->
                         <option value="">请选择</option>
@@ -76,16 +76,16 @@
                         <input name="datetime2" class="form-control" placeholder="yyyy-MM-dd" type="text"  th:value="*{string6}">
                     </div>
                 </div>
-                <label class="col-sm-1 control-label">供应商发货日期：</label>
+                <label class="col-sm-1 control-label"><span style="color: red; ">*</span>供应商发货日期：</label>
                 <div class="col-sm-2">
                     <div class="input-group date">
                         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input name="datetime3" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                        <input name="datetime3" class="form-control" placeholder="yyyy-MM-dd" type="text" required>
                     </div>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-1 control-label">包装规范：</label>
+                <label class="col-sm-1 control-label"><span style="color: red; ">*</span>包装规范：</label>
                 <div class="col-sm-2">
                    <!-- <input name="string27" class="form-control" type="text">-->
                     <select name="string27" id="string27" class="form-control m-b" th:with="type=${@dict.getType('baozhuangguifan')}">
@@ -93,7 +93,7 @@
                         <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                     </select>
                 </div>
-                <label class="col-sm-1 control-label">交货地点：</label>
+                <label class="col-sm-1 control-label"><span style="color: red; ">*</span>交货地点：</label>
                 <div class="col-sm-2">
                     <!--<input name="string24" class="form-control" type="text">-->
                     <select name="string24" id="string24" class="form-control m-b" th:with="type=${@dict.getType('jiaohuodidian')}">
@@ -105,7 +105,7 @@
 <!--                <div class="col-sm-2">-->
 <!--                    <input name="string25" class="form-control" type="text">-->
 <!--                </div>-->
-                <label class="col-sm-1 control-label">运费承担：</label>
+                <label class="col-sm-1 control-label"><span style="color: red; ">*</span>运费承担：</label>
                 <div class="col-sm-2">
                     <select name="string26" id="string26" class="form-control m-b" th:with="type=${@dict.getType('buyer')}">
                         <option value="0">请选择</option>
@@ -120,7 +120,7 @@
                 <div class="col-sm-2">
                     <input name="string8" class="form-control" type="text">
                 </div>-->
-                <label class="col-sm-1 control-label">收货人：</label>
+                <label class="col-sm-1 control-label"><span style="color: red; ">*</span>收货人：</label>
                 <div class="col-sm-2">
                     <select name="string28" id="string28" class="form-control m-b" th:with="type=${@dict.getType('infoBody')}">
                         <option value="0">请选择</option>
@@ -128,7 +128,7 @@
                     </select>
                     <!--<input name="string28" class="form-control" type="text">-->
                 </div>
-                <label class="col-sm-1 control-label">运输方式：</label>
+                <label class="col-sm-1 control-label"><span style="color: red; ">*</span>运输方式：</label>
                 <div class="col-sm-2">
                     <!--<input name="string9" class="form-control" type="text">-->
                     <select name="string9" id="string9" class="form-control m-b" th:with="type=${@dict.getType('yunshufangshi')}">
@@ -136,7 +136,7 @@
                         <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                     </select>
                 </div>
-                <label class="col-sm-1 control-label">付款方式：</label>
+                <label class="col-sm-1 control-label"><span style="color: red; ">*</span>付款方式：</label>
                 <div class="col-sm-2">
                     <select name="string20" id="string20" class="form-control m-b" th:with="type=${@dict.getType('contract_paytype')}">
                         <option value="0">请选择</option>
@@ -184,7 +184,34 @@
                 $.modal.alertWarning("请至少选择一条记录");
                 return;
             }
-
+            if ($("#string5").val() == "0") {
+                $.modal.alertWarning("类别不能为空");
+                return;
+            }
+            if ($("#string27").val() == "0") {
+                $.modal.alertWarning("包装规范不能为空");
+                return;
+            }
+            if ($("#string24").val() == "0") {
+                $.modal.alertWarning("交货地点不能为空");
+                return;
+            }
+            if ($("#string26").val() == "0") {
+                $.modal.alertWarning("运费承担不能为空");
+                return;
+            }
+            if ($("#string28").val() == "0") {
+                $.modal.alertWarning("收货人不能为空");
+                return;
+            }
+            if ($("#string9").val() == "0") {
+                $.modal.alertWarning("运输方式不能为空");
+                return;
+            }
+            if ($("#string20").val() == "0") {
+                $.modal.alertWarning("付款方式不能为空");
+                return;
+            }
             console.log("vali=" + vali);
             if (vali) {
 

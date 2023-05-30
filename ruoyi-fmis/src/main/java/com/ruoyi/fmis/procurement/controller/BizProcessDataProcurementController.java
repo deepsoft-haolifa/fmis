@@ -72,6 +72,7 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.ruoyi.common.utils.itextpdf.PdfUtil.getAbsoluteFile;
 
@@ -116,7 +117,7 @@ public class BizProcessDataProcurementController extends BaseController {
     @Autowired
     private IBizSuppliersService bizSuppliersService;
     @Autowired
-    private IBizProcessDataTrackService bizProcessDataTrackService;
+    private ISysDictDataService sysDictDataService;
 
     @Autowired
     private IBizPayPlanService bizPayPlanService;
@@ -2363,7 +2364,7 @@ public class BizProcessDataProcurementController extends BaseController {
             // 单元格样式
             CellStyle cellLeft = ExcelProcessDataUtils.cellLeft(workbook);
             Row row1 = sheet.createRow(0);
-            row1.setHeight((short) 500);
+            row1.setHeight((short) 600);
 
             CellRangeAddress cra1 = new CellRangeAddress(0, 0, 0, 7);
             sheet.addMergedRegion(cra1);
@@ -2373,7 +2374,7 @@ public class BizProcessDataProcurementController extends BaseController {
             cell_title_1.setCellStyle(cellTitle);
 
             Row row2 = sheet.createRow(1);
-            row2.setHeight((short) 500);
+            row2.setHeight((short) 600);
             Cell cell_26 = row2.createCell(5);
             cell_26.setCellValue("合同编号：");
             cell_26.setCellStyle(cellLeft);
@@ -2383,7 +2384,7 @@ public class BizProcessDataProcurementController extends BaseController {
             sheet.addMergedRegion(new CellRangeAddress(1, 1, 6, 7));
 
             Row row3 = sheet.createRow(2);
-            row3.setHeight((short) 500);
+            row3.setHeight((short) 600);
 
             Cell cell_30 = row3.createCell(0);
             cell_30.setCellValue("甲方（买方）：" + bizProcess.getString1());
@@ -2398,7 +2399,7 @@ public class BizProcessDataProcurementController extends BaseController {
             sheet.addMergedRegion(new CellRangeAddress(2, 2, 6, 7));
 
             Row row4 = sheet.createRow(3);
-            row4.setHeight((short) 500);
+            row4.setHeight((short) 600);
 
             String string6 = bizProcess.getString6();
             String string6Name = "";
@@ -2746,14 +2747,25 @@ public class BizProcessDataProcurementController extends BaseController {
             Cell cell_12_1 = row12.createCell(1);
             cell_12_1.setCellValue("质量要求：符合国家及行业标准或卖方企业标准；产品合格证、标牌：");
             sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 1, 5));
-            ExcelProcessDataUtils.addValidationData(sheet, rowCount, rowCount, 6, 6, ExcelProcessDataUtils.biaopai);
+            Cell cell_12_6 = row12.createCell(6);
+            String string19 = bizProcess.getString19();
+            String biaopai = "好利";
+            if (StringUtils.isNotEmpty(string19)) {
+                List<SysDictData> dictDataList = sysDictDataService.selectDictDataByType("product_logo");
+                Map<String, String> collect = dictDataList.stream().collect(Collectors.toMap(SysDictData::getDictValue, SysDictData::getDictLabel, (a, b) -> a));
+                biaopai = collect.get(string19);
+            }
+            cell_12_6.setCellValue(biaopai);
 
             rowCount++;
             Row row13 = sheet.createRow(rowCount);
+            row13.setHeight((short) 1500);
+
             row13.setRowStyle(cellLeft);
             Cell cell_13_0 = row13.createCell(0);
             cell_13_0.setCellValue("四、");
             Cell cell_13_1 = row13.createCell(1);
+            cell_13_1.setCellStyle(cellLeft);
             cell_13_1.setCellValue("产品验收：按国家标准验收，甲方若有要求按甲方要求验收，验收合格以甲方签字为准；在验收期限内，需方对瑕疵产品有权无条件拒收，或要求供方换货，如更换之后的产品仍未达到验收标准的，需方有权要求退回。对于需方拒收或退回的产品，供方应在指定的期限内退还相应的货款。");
             sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 1, 7));
 
@@ -2771,8 +2783,11 @@ public class BizProcessDataProcurementController extends BaseController {
 
             rowCount++;
             Row row15 = sheet.createRow(rowCount);
+            row15.setHeight((short) 1800);
+
             row15.setRowStyle(cellLeft);
             Cell cell_15_0 = row15.createCell(2);
+            cell_15_0.setCellStyle(cellLeft);
             cell_15_0.setCellValue("需方有权在质保期内对货物质量表示异议，供方在接到需方异议后应在3日内处理，否决即视为默认接收异议和处理意见，质保期内如出现产品本身质量问题，供方免费进行维修，不能维修予以更换，甲方若有因产品售后罚款及处理费用等损失的由乙方负责承担，供方未履行质量保证义务的，需方有权拒绝退还质保金，并要求供方另行支付合同总价款20%的违约金。");
             sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 2, 7));
 
@@ -2793,6 +2808,7 @@ public class BizProcessDataProcurementController extends BaseController {
             cell_17_2.setCellValue(bizProcess.getString27());
             Cell cell_17_3 = row17.createCell(3);
             cell_17_3.setCellValue("但确保产品能被保护。");
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 3, 4));
             Cell cell_17_4 = row17.createCell(5);
             cell_17_4.setCellValue("包装物回收：");
             Cell cell_17_5 = row17.createCell(6);
@@ -2808,6 +2824,7 @@ public class BizProcessDataProcurementController extends BaseController {
             Cell cell_18_2 = row18.createCell(2);
 //            cell_18_2.setCellValue(DateUtils.dateTime(bizProcess.getDatetime2()));
             cell_18_2.setCellValue("合同生效日起   天发货，若有推迟发货超过5天，每天收取1%合同额违约金，并有权取消合同。");
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 2, 7));
 
 //            rowCount++;
 //            Row row19 = sheet.createRow(rowCount);
@@ -2845,15 +2862,11 @@ public class BizProcessDataProcurementController extends BaseController {
             cell_212_04.setCellValue("运费：");
             Cell cell_212_05 = row2101.createCell(5);
             cell_212_05.setCellValue(bizProcess.getString26());
-            Cell cell_212_06 = row2101.createCell(6);
-            cell_212_06.setCellValue("是否需要送:");
-            Cell cell_212_07 = row2101.createCell(7);
-            cell_212_07.setCellValue("送货");
 
             rowCount++;
             Row row22 = sheet.createRow(rowCount);
             Cell cell_22_1 = row22.createCell(1);
-            cell_22_1.setCellValue("2、收货地址信息：");
+            cell_22_1.setCellValue("2、收货人及收货地点：");
             Cell cell_22_3 = row22.createCell(3);
             cell_22_3.setCellValue(bizProcess.getString28());
             sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 1, 2));
@@ -2861,8 +2874,10 @@ public class BizProcessDataProcurementController extends BaseController {
 
             rowCount++;
             Row row23 = sheet.createRow(rowCount);
+            row23.setHeight((short) 900);
             Cell cell_23_1 = row23.createCell(1);
             cell_23_1.setCellValue("3、产品运送至需方指定地点并由指定收货人签收后，视为供方完成交付义务，在供方完成交付义务之前，产品在运输途中毁损、灭失的风险均由供方承担，需方不承担任何责任。");
+            cell_23_1.setCellStyle(cellLeft);
             sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 1, 7));
 
             rowCount++;
@@ -2881,17 +2896,17 @@ public class BizProcessDataProcurementController extends BaseController {
 
             rowCount++;
             Row row25 = sheet.createRow(rowCount);
-            row25.setHeight((short) 800);
+            row25.setHeight((short) 1800);
             Cell cell_25_1 = row25.createCell(0);
             cell_25_1.setCellValue("十二、");
             Cell cell_25_2 = row25.createCell(1);
-            cell_25_2.setCellValue("违约责任：供需双方在合同交往中供方应遵守商业道德廉洁从业，供方违反商业道德和廉洁从业尊则给与甲方人员回扣、礼金等即为违约，给需方造成损失的应双倍赔偿损失。合同签订后，买卖双方严格执行双方所签订合同的条款，其中一方不履行或不完全履行合同者应承担相应的法律责任；\n" +
-                    "解决合同纠纷方式：因本合同产生的争议，双方应友好协商解决，协商不成的，任何一方均有权向需方所在地人民法院提起诉讼。");
+            cell_25_2.setCellValue("违约责任：供需双方在合同交往中供方应遵守商业道德廉洁从业，供方违反商业道德和廉洁从业尊则给与甲方人员回扣、礼金等即为违约，给需方造成损失的应双倍赔偿损失。合同签订后，买卖双方严格执行双方所签订合同的条款，其中一方不履行或不完全履行合同者应承担相应的法律责任；解决合同纠纷方式：因本合同产生的争议，双方应友好协商解决，协商不成的，任何一方均有权向需方所在地人民法院提起诉讼。");
             sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 1, 7));
             cell_25_2.setCellStyle(cellLeft);
 
             rowCount++;
             Row row26 = sheet.createRow(rowCount);
+            row26.setHeight((short) 600);
             Cell cell_26_1 = row26.createCell(0);
             cell_26_1.setCellValue("十三、");
             Cell cell_26_2 = row26.createCell(1);
@@ -3124,7 +3139,7 @@ public class BizProcessDataProcurementController extends BaseController {
             BigDecimal price = new BigDecimal("0");
             BigDecimal totalPrice = new BigDecimal("0");
 
-
+            String label = "等级:A;系列:%sA";
             if (!CollectionUtils.isEmpty(bizProductChildList)) {
                 for (int i = 0; i < bizProductChildList.size(); i++) {
                     BizProcessChild bizProcessChild = bizProductChildList.get(i);
@@ -3147,7 +3162,7 @@ public class BizProcessDataProcurementController extends BaseController {
                     cell3.setCellValue(bizProcessChild.getProductName());
                     cell3.setCellStyle(cellTableStyle);
                     Cell cell4 = row.createCell(3);
-                    cell4.setCellValue(bizProcessChild.getSeries());
+                    cell4.setCellValue(String.format(label, bizProcessChild.getSpecifications()));
                     cell4.setCellStyle(cellTableStyle);
                     Cell cell5 = row.createCell(4);
                     cell5.setCellValue(bizProcessChild.getSpecifications());
@@ -3248,7 +3263,7 @@ public class BizProcessDataProcurementController extends BaseController {
                     cell3.setCellValue(bizProcessChild.getRef1Name());
                     cell3.setCellStyle(cellTableStyle);
                     Cell cell4 = row.createCell(3);
-                    cell4.setCellValue("");
+                    cell4.setCellValue(String.format(label, bizProcessChild.getRef1Specifications()));
                     cell4.setCellStyle(cellTableStyle);
                     Cell cell5 = row.createCell(4);
                     cell5.setCellValue(bizProcessChild.getRef1Specifications());

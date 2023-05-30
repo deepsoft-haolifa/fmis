@@ -25,10 +25,11 @@
 
                             <li>
                                 <p>阀门规格：</p>
-                                <select name="valveType" id="valveType" class="form-control select2-multiple" > <!--multiple-->
-                                    <option value="">全部</option>
-                                    <option th:each="specification:${specifications}" th:value="${specification.dictId}" th:text="${specification.name} "></option>
-                                </select>
+<!--                                <select name="valveType" id="valveType" class="form-control select2-multiple" > &lt;!&ndash;multiple&ndash;&gt;-->
+<!--                                    <option value="">全部</option>-->
+<!--                                    <option th:each="specification:${specifications}" th:value="${specification.dictId}" th:text="${specification.name} "></option>-->
+<!--                                </select>-->
+                                <input type="valveType" name="valveType"/>
                             </li>
 
                             <li>
