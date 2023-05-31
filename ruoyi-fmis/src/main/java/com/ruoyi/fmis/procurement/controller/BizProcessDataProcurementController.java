@@ -3162,7 +3162,7 @@ public class BizProcessDataProcurementController extends BaseController {
                     cell3.setCellValue(bizProcessChild.getProductName());
                     cell3.setCellStyle(cellTableStyle);
                     Cell cell4 = row.createCell(3);
-                    cell4.setCellValue(String.format(label, bizProcessChild.getSpecifications()));
+                    cell4.setCellValue(String.format(label, bizProcessChild.getSeries()));
                     cell4.setCellStyle(cellTableStyle);
                     Cell cell5 = row.createCell(4);
                     cell5.setCellValue(bizProcessChild.getSpecifications());
@@ -3263,7 +3263,7 @@ public class BizProcessDataProcurementController extends BaseController {
                     cell3.setCellValue(bizProcessChild.getRef1Name());
                     cell3.setCellStyle(cellTableStyle);
                     Cell cell4 = row.createCell(3);
-                    cell4.setCellValue(String.format(label, bizProcessChild.getRef1Specifications()));
+                    cell4.setCellValue(String.format(label, bizProcessChild.getSeries()));
                     cell4.setCellStyle(cellTableStyle);
                     Cell cell5 = row.createCell(4);
                     cell5.setCellValue(bizProcessChild.getRef1Specifications());
