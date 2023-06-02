@@ -293,11 +293,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <delete id="deleteBizProductAttachmentById" parameterType="Long">
-        delete from biz_product_attachment where attachment_id = #{attachmentId}
+       /* delete from biz_product_attachment where attachment_id = #{attachmentId}*/
+        update biz_product_attachment set del_flag='1' where attachment_id = #{attachmentId}
     </delete>
 
     <delete id="deleteBizProductAttachmentByIds" parameterType="String">
-        delete from biz_product_attachment where attachment_id in 
+       <!-- delete from biz_product_attachment where attachment_id in
+        <foreach item="attachmentId" collection="array" open="(" separator="," close=")">
+            #{attachmentId}
+        </foreach> -->
+        update biz_product_attachment set del_flag='1' where attachment_id in
         <foreach item="attachmentId" collection="array" open="(" separator="," close=")">
             #{attachmentId}
         </foreach>

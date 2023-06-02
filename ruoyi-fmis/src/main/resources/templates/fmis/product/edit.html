@@ -13,7 +13,7 @@
             <div class="form-group">    
                 <label class="col-sm-3 control-label">产品名称：</label>
                 <div class="col-sm-8">
-                    <input name="name" th:field="*{name}" class="form-control" type="text">
+                    <input name="name" th:field="*{name}" class="form-control" type="text" readonly>
                 </div>
             </div>
 
@@ -28,7 +28,7 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">类别：</label>
                 <div class="col-sm-8">
-                    <select name="series" id="series" class="form-control select2-multiple" > <!--multiple-->
+                    <select name="series" id="series" class="form-control select2-multiple" disabled="disabled"> <!--multiple-->
                         <option>请选择</option>
                         <option th:each="series:${seriesSelect}" th:value="${series.dictId}" th:text="${series.name} + '_' + ${series.code}" ></option>
                     </select>
@@ -38,7 +38,7 @@
                 <label class="col-sm-3 control-label">系列：</label>
                 <div class="col-sm-8">
                     <input type="hidden" id="string1Text" th:value="*{string1}">
-                    <select name="string1" id="string1" class="form-control select2-multiple"> <!--multiple-->
+                    <select name="string1" id="string1" class="form-control select2-multiple" disabled="disabled"> <!--multiple-->
                         <option value="">请选择</option>
                     </select>
                 </div>
@@ -46,21 +46,21 @@
             <div class="form-group">    
                 <label class="col-sm-3 control-label">产品型号：</label>
                 <div class="col-sm-8">
-                    <input name="model" th:field="*{model}" class="form-control" type="text">
+                    <input name="model" th:field="*{model}" class="form-control" type="text" readonly>
                 </div>
             </div>
 
             <div class="form-group">
                 <label class="col-sm-3 control-label">好利型号：</label>
                 <div class="col-sm-8">
-                    <input name="string4" id="string4" th:field="*{string4}" class="form-control"  type="text">
+                    <input name="string4" id="string4" th:field="*{string4}" class="form-control"  type="text" readonly>
                 </div>
             </div>
 
             <div class="form-group">
                 <label class="col-sm-3 control-label">规格：</label>
                 <div class="col-sm-8">
-                    <select name="specifications" onchange="generateProductModel()" id="specifications" class="form-control select2-multiple" ><option value="">请选择</option></select>
+                    <select name="specifications" onchange="generateProductModel()" id="specifications" class="form-control select2-multiple" disabled="disabled"><option value="">请选择</option></select>
                 </div>
             </div>
 
@@ -89,7 +89,7 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">阀体材质：</label>
                 <div class="col-sm-8">
-                    <select name="valvebodyMaterial" onchange="generateProductModel()" id="valvebodyMaterial" class="form-control select2-multiple" ><option value="">请选择</option></select>
+                    <select name="valvebodyMaterial" onchange="generateProductModel()" id="valvebodyMaterial" class="form-control select2-multiple" disabled="disabled"><option value="">请选择</option></select>
                 </div>
             </div>
 
@@ -105,20 +105,20 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">密封材质：</label>
                 <div class="col-sm-8">
-                    <select name="sealingMaterial" onchange="generateProductModel()" id="sealingMaterial" class="form-control select2-multiple" ><option value="">请选择</option></select>
+                    <select name="sealingMaterial" onchange="generateProductModel()" id="sealingMaterial" class="form-control select2-multiple" disabled="disabled"><option value="">请选择</option></select>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 control-label">阀芯材质：</label>
                 <div class="col-sm-8">
-                    <select name="valveElement" onchange="generateProductModel()" id="valveElement" class="form-control select2-multiple" ><option value="">请选择</option></select>
+                    <select name="valveElement" onchange="generateProductModel()" id="valveElement" class="form-control select2-multiple" disabled="disabled"><option value="">请选择</option></select>
                 </div>
             </div>
 
             <div class="form-group">
                 <label class="col-sm-3 control-label">阀轴：</label>
                 <div class="col-sm-8">
-                    <select name="string3" class="form-control m-b" th:with="type=${@dict.getType('valve_shaft')}">
+                    <select name="string3" class="form-control m-b" th:with="type=${@dict.getType('valve_shaft')}" disabled="disabled">
                         <option value="">请选择</option>
                         <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictLabel}" th:field="*{string3}"></option>
                     </select>
@@ -128,7 +128,7 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">驱动形式：</label>
                 <div class="col-sm-8">
-                    <select name="driveForm" onchange="generateProductModel()" id="driveForm" class="form-control select2-multiple" ><option value="">请选择</option></select>
+                    <select name="driveForm" onchange="generateProductModel()" id="driveForm" class="form-control select2-multiple" disabled="disabled" ><option value="">请选择</option></select>
                 </div>
             </div>
 
@@ -182,7 +182,7 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">供应商名称：</label>
                 <div class="col-sm-8">
-                    <select name="supplier" id="supplier" class="form-control select2-multiple" > <!--multiple-->
+                    <select name="supplier" id="supplier" class="form-control select2-multiple" disabled="disabled"> <!--multiple-->
                         <option value="">请选择</option>
                         <option th:each="supplier:${suppliers}" th:value="${supplier.suppliersId}" th:text="${supplier.name}" th:selected="${supplier.flag}"></option>
                     </select>

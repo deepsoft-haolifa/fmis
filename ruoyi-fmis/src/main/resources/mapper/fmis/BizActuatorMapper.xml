@@ -220,11 +220,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <delete id="deleteBizActuatorById" parameterType="Long">
-        delete from biz_actuator where actuator_id = #{actuatorId}
+       /* delete from biz_actuator where actuator_id = #{actuatorId}*/
+        update biz_actuator set del_flag='1' where actuator_id = #{actuatorId}
     </delete>
 
     <delete id="deleteBizActuatorByIds" parameterType="String">
-        delete from biz_actuator where actuator_id in 
+       <!-- delete from biz_actuator where actuator_id in
+        <foreach item="actuatorId" collection="array" open="(" separator="," close=")">
+            #{actuatorId}
+        </foreach>-->
+        update biz_actuator set del_flag='1' where actuator_id in
         <foreach item="actuatorId" collection="array" open="(" separator="," close=")">
             #{actuatorId}
         </foreach>

@@ -160,11 +160,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <delete id="deleteBizProductRefById" parameterType="Long">
-        delete from biz_product_ref where product_ref_id = #{productRefId}
+       /* delete from biz_product_ref where product_ref_id = #{productRefId}*/
+        update biz_product_ref set del_flag='1' where product_ref_id = #{productRefId}
     </delete>
 
     <delete id="deleteBizProductRefByIds" parameterType="String">
-        delete from biz_product_ref where product_ref_id in 
+       <!-- delete from biz_product_ref where product_ref_id in
+        <foreach item="productRefId" collection="array" open="(" separator="," close=")">
+            #{productRefId}
+        </foreach>-->
+        update biz_product_ref set del_flag='1' where product_ref_id  in
         <foreach item="productRefId" collection="array" open="(" separator="," close=")">
             #{productRefId}
         </foreach>
