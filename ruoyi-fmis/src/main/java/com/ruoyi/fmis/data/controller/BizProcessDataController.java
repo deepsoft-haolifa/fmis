@@ -370,7 +370,7 @@ public class BizProcessDataController extends BaseController {
             }
 
             Cell cell_30 = row3.createCell(0);
-            cell_30.setCellValue("卖方：");
+            cell_30.setCellValue("买方：");
             cell_30.setCellStyle(cellLeft);
             Cell cell_31 = row3.createCell(1);
             cell_31.setCellValue(bizCustomer.getName());
@@ -393,7 +393,7 @@ public class BizProcessDataController extends BaseController {
                 companyName = sysDictDataService.selectDictLabel("supplier_type", bizProcessData.getString3());
             }
             Cell cell_40 = row4.createCell(0);
-            cell_40.setCellValue("买方");
+            cell_40.setCellValue("卖方");
             cell_40.setCellStyle(cellLeft);
             Cell cell_41 = row4.createCell(1);
             cell_41.setCellValue(companyName);
