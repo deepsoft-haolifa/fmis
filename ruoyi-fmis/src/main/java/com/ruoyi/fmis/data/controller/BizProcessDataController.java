@@ -368,12 +368,12 @@ public class BizProcessDataController extends BaseController {
             if (StringUtils.isNotEmpty(customerId)) {
                 bizCustomer = bizCustomerService.selectBizCustomerById(Long.parseLong(customerId));
             }
-
+            String companyName = "北京好利阀业集团有限公司";
             Cell cell_30 = row3.createCell(0);
             cell_30.setCellValue("买方：");
             cell_30.setCellStyle(cellLeft);
             Cell cell_31 = row3.createCell(1);
-            cell_31.setCellValue(bizCustomer.getName());
+            cell_31.setCellValue(companyName);
             cell_31.setCellStyle(cellLeft);
             sheet.addMergedRegion(new CellRangeAddress(2, 2, 1, 3));
             Cell cell_36 = row3.createCell(4);
@@ -388,7 +388,6 @@ public class BizProcessDataController extends BaseController {
             Row row4 = sheet.createRow(3);
             row4.setHeight((short) 600);
 
-            String companyName = "北京好利阀业集团有限公司";
             if (!StringUtils.isEmpty(bizProcessData.getString3()) && !bizProcessData.getString3().equals("0")) {
                 companyName = sysDictDataService.selectDictLabel("supplier_type", bizProcessData.getString3());
             }
@@ -396,7 +395,7 @@ public class BizProcessDataController extends BaseController {
             cell_40.setCellValue("卖方：");
             cell_40.setCellStyle(cellLeft);
             Cell cell_41 = row4.createCell(1);
-            cell_41.setCellValue(companyName);
+            cell_41.setCellValue(bizCustomer.getName());
             cell_41.setCellStyle(cellLeft);
             sheet.addMergedRegion(new CellRangeAddress(3, 3, 1, 3));
             Cell cell_44 = row4.createCell(4);

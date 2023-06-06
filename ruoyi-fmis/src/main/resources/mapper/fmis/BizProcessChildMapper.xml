@@ -329,7 +329,7 @@
       join biz_process_child pc1 on pc1.data_id=#{dataId} and pc1.string2=p1.product_id
         <if test="supplierId != null and supplierId != ''">and p1.supplier=#{supplierId} </if>
     ) -->
-        1=1
+        1=1 and p.del_flag=0
     </sql>
     <sql id="selectBizChildProductVo">
         /*临时用18*/
@@ -369,7 +369,7 @@
       join biz_process_child pc1 on pc1.data_id=#{dataId} and pc1.string2=p1.product_id
         <if test="supplierId != null and supplierId != ''">and p1.supplier=#{supplierId} </if>
     ) -->
-        1=1
+        1=1 and p.del_flag=0
     </sql>
     <select id="selectBizChildProductList" parameterType="BizProcessChild" resultMap="BizProcessChildResult">
         <include refid="selectBizChildProductVo"/>
@@ -491,7 +491,7 @@
         <if test="supplierId != null and supplierId != ''">and a1.string10=#{supplierId} </if>
     ) and a.quality_level=#{levelLabel}-->
 
-        1=1
+        1=1 and a.del_flag=0
     </sql>
     <select id="selectBizChildActuatorList" parameterType="BizProcessChild" resultMap="BizProcessChildResult">
         <include refid="selectBizChildActuatorVo"/>
@@ -566,7 +566,7 @@
         left join biz_dict d2 on d2.dict_id=pr.valvebody_material
         left join biz_suppliers s on s.suppliers_id=pr.suppliers_id
         where
-        pr.type=1
+        pr.type=1 and pr.del_flag=0
         <!--
         concat(pr.name,pr.model,pr.specifications) in (
       select concat(p1.name,p1.model,p1.specifications) from biz_product_ref p1
@@ -647,7 +647,7 @@
         left join biz_suppliers s on s.suppliers_id=pr.suppliers_id
         where
 
-        pr.type=2
+        pr.type=2 and pr.del_flag=0
         <!--
         concat(pr.name,pr.model,pr.valvebody_material) in (
       select concat(p1.name,p1.model,p1.valvebody_material) from biz_product_ref p1
@@ -692,7 +692,7 @@
     left join biz_dict d1 on d1.dict_id=pr.specifications
 	 left join biz_dict d2 on d2.dict_id=pr.valvebody_material
 	 left join biz_suppliers s on s.suppliers_id=pr.suppliers_id
-    where 1=1 and pr.type=2
+    where 1=1
     </sql>
     <select id="selectBizTestRef2List" parameterType="BizProcessChild" resultMap="BizProcessChildResult">
         <include refid="selectBizTestRef2Vo"/>
@@ -726,7 +726,7 @@
         left join biz_data_status ds on ds.child_id=pc.child_id and ds.string2=pa.attachment_id
         join biz_process_data pd on pc.data_id=pd.data_id
         left join biz_suppliers s on s.suppliers_id=pa.supplier
-        where pa.type=1
+        where pa.type=1 and pa.del_flag=0
         <!--
         concat(pa.chinese_name,pa.chinese_specifications) in (
          select concat(p1.chinese_name,p1.chinese_specifications) from biz_product_attachment p1
@@ -810,7 +810,7 @@
         left join biz_data_status ds on ds.child_id=pc.child_id and ds.string2=pa.attachment_id
         join biz_process_data pd on pc.data_id=pd.data_id
         left join biz_suppliers s on s.suppliers_id=pa.supplier
-        where pa.type=2
+        where pa.type=2 and pa.del_flag=0
         <!--
         concat(pa.chinese_name,pa.chinese_specifications) in (
           select concat(p1.chinese_name,p1.chinese_specifications) from biz_product_attachment p1
@@ -855,7 +855,7 @@
         join biz_process_data pd on pc.data_id=pd.data_id
         left join biz_suppliers s on s.suppliers_id=pa.supplier
         where
-        pa.type=3
+        pa.type=3 and pa.del_flag=0
         <!--
         concat(pa.chinese_name,pa.chinese_specifications) in (
           select concat(p1.chinese_name,p1.chinese_specifications) from biz_product_attachment p1
@@ -898,7 +898,7 @@
         left join biz_data_status ds on ds.child_id=pc.child_id and ds.string2=pa.attachment_id
         join biz_process_data pd on pc.data_id=pd.data_id
         left join biz_suppliers s on s.suppliers_id=pa.supplier
-        where pa.type=4
+        where pa.type=4 and pa.del_flag=0
         <!--
         concat(pa.chinese_name,pa.chinese_specifications) in (
           select concat(p1.chinese_name,p1.chinese_specifications) from biz_product_attachment p1
@@ -940,7 +940,7 @@
         left join biz_data_status ds on ds.child_id=pc.child_id and ds.string2=pa.attachment_id
         join biz_process_data pd on pc.data_id=pd.data_id
         left join biz_suppliers s on s.suppliers_id=pa.supplier
-        where pa.type=5
+        where pa.type=5 and pa.del_flag=0
         <!--
         concat(pa.chinese_name,pa.chinese_specifications) in (
           select concat(p1.chinese_name,p1.chinese_specifications) from biz_product_attachment p1
