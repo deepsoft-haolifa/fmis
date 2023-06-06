@@ -393,7 +393,7 @@ public class BizProcessDataController extends BaseController {
                 companyName = sysDictDataService.selectDictLabel("supplier_type", bizProcessData.getString3());
             }
             Cell cell_40 = row4.createCell(0);
-            cell_40.setCellValue("卖方");
+            cell_40.setCellValue("卖方：");
             cell_40.setCellStyle(cellLeft);
             Cell cell_41 = row4.createCell(1);
             cell_41.setCellValue(companyName);
