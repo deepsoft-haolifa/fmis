@@ -288,8 +288,8 @@ public class BizProductController extends BaseController {
                         levelMap.put(sysDictData.getDictLabel(),sysDictData);
                     }
                 }
-                //所有 产品
-                List<BizProduct> existProductList = bizProductService.selectBizProductListNoAuth(new BizProduct());
+                //所有 产品 包括删除的产品
+                List<BizProduct> existProductList = bizProductService.selectBizProductListNoAuthNodel(new BizProduct());
                 Map<String,BizProduct> existProductMap = new HashMap<>();
                 if (!CollectionUtils.isEmpty(existProductList)) {
                     for (BizProduct bizProduct : existProductList) {
@@ -726,6 +726,9 @@ public class BizProductController extends BaseController {
                         bizProduct.setString5("yes");
                     }
                     if (existProductMap.containsKey(existKey)) {
+                        if (bizProduct.getDelFlag() != "0") {
+                            bizProduct.setDelFlag("0");
+                        }
                         bizProductService.updateBizProduct(bizProduct);
                         updateCount++;
                     } else {

@@ -889,12 +889,12 @@
                 value : parseFloat(totalSum / productAll).toFixed(2)
             };
             $.btTable.bootstrapTable("updateCell",string17);
-            var productPrice = {
+            var productCoefficient = {
                 index : row.rowId,
-                field : "productPrice",
+                field : "productCoefficient",
                 value : parseFloat(totalPriceOnly / productPrice).toFixed(1)
             };
-            $.btTable.bootstrapTable("updateCell",productPrice);
+            $.btTable.bootstrapTable("updateCell",productCoefficient);
             console.log("string17=" + JSON.stringify(string17));
             $.btTable.bootstrapTable("updateCell",updateObj);
             //$("#totalSum_" + productId).val(totalSum);

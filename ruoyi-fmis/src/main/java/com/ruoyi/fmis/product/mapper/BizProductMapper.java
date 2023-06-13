@@ -25,6 +25,7 @@ public interface BizProductMapper {
      * @return 业务产品集合
      */
     public List<BizProduct> selectBizProductList(BizProduct bizProduct);
+    public List<BizProduct> selectBizProductListNodel(BizProduct bizProduct);
 
     /**
      * 新增业务产品

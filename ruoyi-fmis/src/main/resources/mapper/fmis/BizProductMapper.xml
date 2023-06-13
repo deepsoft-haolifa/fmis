@@ -80,6 +80,38 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     </sql>
 
+    <sql id="selectBizProductNameVoNodel">
+        select p.product_id,d9.code as string1, p.name, d.name as series, p.model, d1.name as specifications, d2.name as nominal_pressure, d3.name as connection_type, d6.name as valvebody_material, p.valve_material, d4.name as sealing_material, d5.name as valve_element, d7.name as drive_form,d8.name as structural_style,
+        p.price, p.face_price facePrice,s.nick_name as supplier,s.name as supplierName, p.remark, p.status, p.del_flag, p.create_by, p.create_time,
+        p.update_by, p.update_time,p.new_supplier,
+        p.medium,p.temperature,p.other,p.string2,p.string3,p.string4,p.string5,p.procurement_price,p.cost_price,d9.code as string1,p.string2,p.string3,p.string4,p.string5,p.color
+
+        from biz_product p
+        left join biz_dict d on  d.parent_id=1 and p.series=d.dict_id
+        left join biz_dict d1 on d1.parent_type='specification' and d1.dict_id=p.specifications
+        left join biz_dict d2 on d2.parent_type='nominal_pressure' and d2.dict_id=p.nominal_pressure
+        left join biz_dict d3 on d3.parent_type='link_type' and d3.dict_id=p.connection_type
+        left join biz_dict d4 on d4.parent_type='sealing_material' and d4.dict_id=p.sealing_material
+        left join biz_dict d5 on d5.parent_type='spool_material' and d5.dict_id=p.valve_element
+        left join biz_dict d6 on d6.parent_type='body_material' and d6.dict_id=p.valvebody_material
+        left join biz_dict d7 on d7.parent_type='drive_mode' and d7.dict_id=p.drive_form
+        left join biz_dict d8 on d8.parent_type='structural_type' and d8.dict_id=p.structural_style
+        left join biz_dict d9 on d9.parent_type='series_type' and d9.dict_id=p.string1
+        <if test="nickName == null  or nickName == ''">
+            left join biz_suppliers s on s.suppliers_id=p.supplier
+        </if>
+        <if test="nickName != null  and nickName != ''">
+            join biz_suppliers s on s.suppliers_id=p.supplier and s.nick_name like concat('%', #{nickName}, '%')
+        </if>
+        left join sys_user u on u.user_id=p.create_by
+        left join sys_dept dt on u.dept_id=dt.dept_id
+
+        where 1 = 1
+        <!-- left join sys_dict_data dd1 on dd1.dict_type='product_level' and dd1.dict_value=c.string2 -->
+        <!-- 数据范围过滤 ${params.dataScope}-->
+
+    </sql>
+
 
     <sql id="selectBizProductVo">
       select product_id, name, series, model, new_supplier,specifications, nominal_pressure, connection_type, valvebody_material, valve_material, sealing_material, valve_element, drive_form, price,face_price, supplier, remark, status, del_flag, create_by, create_time, update_by, update_time,structural_style,medium,temperature,other,string1,string2,string3,string4,string5,procurement_price,cost_price,color from biz_product
@@ -121,6 +153,45 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
             <if test="string4 != null  and string4 != ''"> and p.string4 like concat('%', #{string4}, '%')</if>
             <if test="string5 != null  and string5 != ''"> and p.string5 = #{string5}</if>
+
+        order by d.name,cast(REPLACE(d1.name,'DN','') as signed)
+    </select>
+
+    <select id="selectBizProductListNodel" parameterType="BizProduct" resultMap="BizProductResult">
+        <include refid="selectBizProductNameVoNodel"/>
+
+        <if test="productId != null  and productId != ''"> and p.product_id = #{productId}</if>
+        <if test="name != null  and name != ''"> and p.name like concat('%', #{name}, '%')</if>
+        <if test="series != null  and series != ''"> and p.series = #{series}</if>
+        <if test="modelEq != null  and modelEq != ''"> and p.model=#{modelEq}</if>
+        <if test="model != null  and model != ''"> and p.model like concat('%', #{model}, '%')</if>
+        <if test="specifications != null  and specifications != ''"> and p.specifications = #{specifications}</if>
+
+        <if test="specificationsName != null  and specificationsName != ''"> and d1.name = #{specificationsName}</if>
+        <if test="seriesName != null  and seriesName != ''"> and d9.name = #{seriesName}</if>
+
+        <if test="nominalPressure != null  and nominalPressure != ''"> and p.nominal_pressure = #{nominalPressure}</if>
+        <if test="connectionType != null  and connectionType != ''"> and p.connection_type = #{connectionType}</if>
+        <if test="valvebodyMaterial != null  and valvebodyMaterial != ''"> and p.valvebody_material = #{valvebodyMaterial}</if>
+        <if test="valveMaterial != null  and valveMaterial != ''"> and p.valve_material = #{valveMaterial}</if>
+        <if test="sealingMaterial != null  and sealingMaterial != ''"> and p.sealing_material = #{sealingMaterial}</if>
+        <if test="valveElement != null  and valveElement != ''"> and p.valve_element = #{valveElement}</if>
+        <if test="driveForm != null  and driveForm != ''"> and p.drive_form = #{driveForm}</if>
+        <if test="price != null "> and p.price = #{price}</if>
+        <if test="facePrice != null "> and p.face_price = #{facePrice}</if>
+        <if test="supplier != null  and supplier != ''"> and p.supplier = #{supplier}</if>
+        <if test="status != null  and status != ''"> and p.status = #{status}</if>
+        <if test="structuralStyle != null  and structuralStyle != ''"> and p.structural_style = #{structuralStyle}</if>
+
+        <if test="medium != null  and medium != ''"> and p.medium = #{medium}</if>
+        <if test="temperature != null  and temperature != ''"> and p.temperature = #{temperature}</if>
+        <if test="other != null  and other != ''"> and p.other = #{other}</if>
+
+        <if test="string1 != null  and string1 != ''"> and p.string1 = #{string1}</if>
+        <if test="string3 != null  and string3 != ''"> and p.string3 = #{string3}</if>
+
+        <if test="string4 != null  and string4 != ''"> and p.string4 like concat('%', #{string4}, '%')</if>
+        <if test="string5 != null  and string5 != ''"> and p.string5 = #{string5}</if>
 
         order by d.name,cast(REPLACE(d1.name,'DN','') as signed)
     </select>

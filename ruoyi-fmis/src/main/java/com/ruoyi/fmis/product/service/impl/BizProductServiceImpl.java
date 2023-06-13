@@ -52,6 +52,11 @@ public class BizProductServiceImpl implements IBizProductService {
     public List<BizProduct> selectBizProductListNoAuth(BizProduct bizProduct) {
         return bizProductMapper.selectBizProductList(bizProduct);
     }
+
+    @Override
+    public List<BizProduct> selectBizProductListNoAuthNodel(BizProduct bizProduct) {
+        return bizProductMapper.selectBizProductListNodel(bizProduct);
+    }
     /**
      * 新增业务产品
      *
