@@ -34,7 +34,9 @@
             </div>
 
             <div class="btn-group-sm" id="toolbar" role="group">
-
+                <a class="btn btn-success" onclick="exportNewdelivery()">
+                    <i class="fa fa-street-view"></i> 导出发货通知单
+                </a>
             </div>
             <div class="col-sm-12 select-table table-striped">
                 <table id="bootstrap-table"></table>
@@ -55,6 +57,7 @@
                 updateUrl: prefix + "/edit/{id}",
                 removeUrl: prefix + "/remove",
                 exportUrl: prefix + "/export",
+                exportNewdeliveryUrl: prefix + "/exportNewdelivery",
                 modalName: "发货列表",
                 rowStyle:function (row, index) {
                     if(row.flowStatus != null && row.flowStatus < 0) {
@@ -182,6 +185,32 @@
             // var url = prefix + "/viewDeliver?dataId=" + dataId;
             console.log(url)
             $.modal.openFullBtnName("详情", url,$(window).width(),$(window).height(),'申请发货');
+        }
+
+        function exportNewdelivery(formId) {
+            var row = $('#bootstrap-table').bootstrapTable('getSelections')[0];
+            var rows = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
+            if ($.common.isEmpty(row) || rows.length != 1) {
+                $.modal.alertWarning("请选择一条记录");
+                return;
+            }
+            $.modal.confirm("确定导出发货单吗？", function () {
+                var currentId = $.common.isEmpty(formId) ? $('form').attr('id') : formId;
+                console.log("currentId=" + currentId);
+                $.modal.loading("正在导出数据，请稍后...");
+                var paramsJson = $("#" + currentId).serializeArray();
+                paramsJson.push({"name": "dataId", "value": row.dataId});
+                $.post($.table._option.exportNewdeliveryUrl, paramsJson, function (result) {
+                    if (result.code == web_status.SUCCESS) {
+                        window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;
+                    } else if (result.code == web_status.WARNING) {
+                        $.modal.alertWarning(result.msg)
+                    } else {
+                        $.modal.alertError(result.msg);
+                    }
+                    $.modal.closeLoading();
+                });
+            });
         }
     </script>
 </body>

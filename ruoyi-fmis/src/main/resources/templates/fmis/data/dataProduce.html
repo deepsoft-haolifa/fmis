@@ -47,6 +47,9 @@
             <a class="btn btn-success" onclick="viewPdf()">
                 <i class="fa fa-street-view"></i> 预览合同
             </a>
+            <a class="btn btn-success" onclick="exportListForProduceExcel()">
+                <i class="fa fa-street-view"></i> 导出生产单
+            </a>
         </div>
         <div class="col-sm-12 select-table table-striped">
             <table id="bootstrap-table"></table>
@@ -76,6 +79,7 @@
             updateUrl: prefix + "/edit/{id}",
             removeUrl: prefix + "/remove",
             exportUrl: prefix + "/export",
+            exportListForProduceExcel: prefix + "/exportListForProduceExcel",
             modalName: "合同管理",
             uniqueId: "dataId",
             columns: [{
@@ -274,6 +278,31 @@
     }
 
 
+    function exportListForProduceExcel(formId) {
+        var row = $('#bootstrap-table').bootstrapTable('getSelections')[0];
+        var rows = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
+        if ($.common.isEmpty(row) || rows.length != 1) {
+            $.modal.alertWarning("请选择一条记录");
+            return;
+        }
+        $.modal.confirm("确定导出生产单吗？", function () {
+            var currentId = $.common.isEmpty(formId) ? $('form').attr('id') : formId;
+            console.log("currentId=" + currentId);
+            $.modal.loading("正在导出数据，请稍后...");
+            var paramsJson = $("#" + currentId).serializeArray();
+            paramsJson.push({"name": "dataId", "value": row.dataId});
+            $.post($.table._option.exportListForProduceExcel, paramsJson, function (result) {
+                if (result.code == web_status.SUCCESS) {
+                    window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;
+                } else if (result.code == web_status.WARNING) {
+                    $.modal.alertWarning(result.msg)
+                } else {
+                    $.modal.alertError(result.msg);
+                }
+                $.modal.closeLoading();
+            });
+        });
+    }
     /**
      * 预览报价单
      * @param formId

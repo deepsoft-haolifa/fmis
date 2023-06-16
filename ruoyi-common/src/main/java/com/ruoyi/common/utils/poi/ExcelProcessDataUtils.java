@@ -95,6 +95,27 @@ public class ExcelProcessDataUtils {
         return cellLeft;
     }
 
+    public static CellStyle cellCenterBlackFont (Workbook workbook) {
+        CellStyle cellLeft = workbook.createCellStyle();
+        cellLeft.setAlignment(HorizontalAlignment.CENTER);
+        //下边框
+        cellLeft.setBorderBottom(BorderStyle.THIN);
+        //cellLeft
+        cellLeft.setBorderLeft(BorderStyle.THIN);
+        //上边框
+        cellLeft.setBorderTop(BorderStyle.THIN);
+        //右边框
+        cellLeft.setBorderRight(BorderStyle.THIN);
+        //增加垂直居中样式
+        cellLeft.setVerticalAlignment(VerticalAlignment.CENTER);
+        //自动换行样式增加
+        cellLeft.setWrapText(true);
+        org.apache.poi.ss.usermodel.Font font = workbook.createFont();
+        font.setFontName("黑体");
+        cellLeft.setFont(font);
+        return cellLeft;
+    }
+
 
     public static CellStyle strongBlackCenter (Workbook workbook) {
         CellStyle cellTitle = workbook.createCellStyle();
@@ -113,6 +134,16 @@ public class ExcelProcessDataUtils {
         org.apache.poi.ss.usermodel.Font font = workbook.createFont();
         font.setFontName("黑体");
         font.setFontHeightInPoints((short) 16);//设置字体大小
+        cellTitle.setFont(font);
+        return cellTitle;
+    }
+
+
+    public static CellStyle cellCenterBlack (Workbook workbook) {
+        CellStyle cellTitle = workbook.createCellStyle();
+        cellTitle.setAlignment(HorizontalAlignment.CENTER);
+        org.apache.poi.ss.usermodel.Font font = workbook.createFont();
+        font.setFontName("黑体");
         cellTitle.setFont(font);
         return cellTitle;
     }
