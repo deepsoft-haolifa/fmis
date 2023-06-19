@@ -381,7 +381,7 @@ public class BizProcessDataController extends BaseController {
             cell_36.setCellStyle(cellLeft);
             sheet.addMergedRegion(new CellRangeAddress(2, 2, 4, 5));
             Cell cell_37 = row3.createCell(6);
-            cell_37.setCellValue(bizProcessData.getString1());
+            cell_37.setCellValue(bizCustomer.getCodeName());
             cell_37.setCellStyle(cellLeft);
             sheet.addMergedRegion(new CellRangeAddress(2, 2, 6, 7));
 
@@ -443,22 +443,25 @@ public class BizProcessDataController extends BaseController {
             Cell cell_81 = row7.createCell(1);
             cell_81.setCellValue("名称");
             cell_81.setCellStyle(cellTableStyle);
-            Cell cell_82 = row7.createCell(2);
+            Cell cell_811 = row7.createCell(2);
+            cell_811.setCellValue("系列");
+            cell_811.setCellStyle(cellTableStyle);
+            Cell cell_82 = row7.createCell(3);
             cell_82.setCellValue("型号");
             cell_82.setCellStyle(cellTableStyle);
-            Cell cell_83 = row7.createCell(3);
+            Cell cell_83 = row7.createCell(4);
             cell_83.setCellValue("规格");
             cell_83.setCellStyle(cellTableStyle);
-            Cell cell_84 = row7.createCell(4);
+            Cell cell_84 = row7.createCell(5);
             cell_84.setCellValue("数量");
             cell_84.setCellStyle(cellTableStyle);
-            Cell cell_85 = row7.createCell(5);
+            Cell cell_85 = row7.createCell(6);
             cell_85.setCellValue("单价");
             cell_85.setCellStyle(cellTableStyle);
-            Cell cell_86 = row7.createCell(6);
+            Cell cell_86 = row7.createCell(7);
             cell_86.setCellValue("金额");
             cell_86.setCellStyle(cellTableStyle);
-            Cell cell_87 = row7.createCell(7);
+            Cell cell_87 = row7.createCell(8);
             cell_87.setCellValue("材质说明");
             cell_87.setCellStyle(cellTableStyle);
 
@@ -523,13 +526,16 @@ public class BizProcessDataController extends BaseController {
                     Cell cell2 = row.createCell(1);
                     cell2.setCellValue(productName);
                     cell2.setCellStyle(cellTableStyle);
-                    Cell cell3 = row.createCell(2);
+                    Cell cell21 = row.createCell(2);
+                    cell21.setCellValue(bizProduct.getSeries());
+                    cell21.setCellStyle(cellTableStyle);
+                    Cell cell3 = row.createCell(3);
                     cell3.setCellValue(bizProduct.getModel());
                     cell3.setCellStyle(cellTableStyle);
-                    Cell cell4 = row.createCell(3);
+                    Cell cell4 = row.createCell(4);
                     cell4.setCellValue(bizProduct.getSpecifications());
                     cell4.setCellStyle(cellTableStyle);
-                    Cell cell5 = row.createCell(4);
+                    Cell cell5 = row.createCell(5);
                     cell5.setCellValue(bizProduct.getProductNum());
                     cell5.setCellStyle(cellTableStyle);
                     //总价计算
@@ -666,10 +672,10 @@ public class BizProcessDataController extends BaseController {
 //                    Double productTotalPrice = Double.valueOf(totalAmount / Double.parseDouble(productNum));
                     Double productTotalPrice = Double.valueOf(bizProduct.getContractPrice());
                     sumTotalPrice = sumTotalPrice + productTotalPrice;
-                    Cell cell6 = row.createCell(5);
+                    Cell cell6 = row.createCell(6);
                     cell6.setCellValue(StringUtils.getDoubleString(productTotalPrice));
                     cell6.setCellStyle(cellTableStyle);
-                    Cell cell7 = row.createCell(6);
+                    Cell cell7 = row.createCell(7);
                     cell7.setCellValue(StringUtils.getDoubleString(totalAmount));
                     cell7.setCellStyle(cellTableStyle);
 
@@ -696,7 +702,7 @@ public class BizProcessDataController extends BaseController {
                         startRemark = startRemark.substring(0, startRemark.length() - 1);
                     }
 
-                    Cell cell8 = row.createCell(7);
+                    Cell cell8 = row.createCell(8);
                     cell8.setCellStyle(cellTableStyle);
                     if (bizProduct.getString17().equals("其它")) {
                         endRemark = bizProduct.getRemark();
@@ -737,26 +743,27 @@ public class BizProcessDataController extends BaseController {
             sheet.addMergedRegion(new CellRangeAddress(cc, cc, 0, 2));
             Cell cell_94 = row9.createCell(4);
             cell_94.setCellStyle(cellTableStyle);
-            cell_94.setCellValue(StringUtils.getDoubleString0(sumTotalNum));
             Cell cell_95 = row9.createCell(5);
-            cell_95.setCellValue("");
+            cell_95.setCellValue(StringUtils.getDoubleString0(sumTotalNum));
             cell_95.setCellStyle(cellTableStyle);
             Cell cell_96 = row9.createCell(6);
             cell_96.setCellStyle(cellTableStyle);
-            cell_96.setCellValue(StringUtils.getDoubleString0(sumTotalAmount));
-            Cell cell_97 = row9.createCell(7);
-            cell_97.setCellValue("");
-            cell_97.setCellStyle(cellTableStyle);
-
             double discountMoney = sumTotalAmount - string14D;
+            Cell cell_97 = row9.createCell(7);
+            cell_97.setCellValue(StringUtils.getDoubleString0(discountMoney));
+            cell_97.setCellStyle(cellTableStyle);
+            Cell cell_98 = row9.createCell(8);
+            cell_98.setCellValue("优惠价：" + string14D);
+            cell_98.setCellStyle(cellTableStyle);
+
             int bb = rowCount++;
             Row row10 = sheet.createRow(bb);
             Cell cell_10 = row10.createCell(0);
             cell_10.setCellStyle(cellTableStyle);
-            cell_10.setCellValue("合计人民币金额（大写）：" + StringUtils.convert(sumTotalAmount) + "（以上价格为含13%税价格）");
-            List<Integer> row3CellList = Arrays.asList(1, 2, 3, 4, 5, 6, 7);
+            cell_10.setCellValue("合计人民币金额（大写）：" + StringUtils.convert(discountMoney) + "（以上价格为含13%税价格）， 优惠价：" + StringUtils.convert(string14D));
+            List<Integer> row3CellList = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8);
             ExcelProcessDataUtils.fillInBlankCell(row10, cellTableStyle, row3CellList);
-            sheet.addMergedRegion(new CellRangeAddress(bb, bb, 0, 7));
+            sheet.addMergedRegion(new CellRangeAddress(bb, bb, 0, 8));
 
             int aa = rowCount++;
             Row row11 = sheet.createRow(aa);
@@ -1028,7 +1035,7 @@ public class BizProcessDataController extends BaseController {
             Cell cell_24_1 = row24.createCell(0);
             cell_24_1.setCellValue("十一、");
             Cell cell_24_2 = row24.createCell(1);
-            cell_24_2.setCellValue("产品毁损灭失的风险自需方收货时转由需方承担。买方未按合同约定的时间和方式付清相应货款的，产品所有权仍归属于供方所有，产品发生毁损灭失的，需方应承担赔偿全部责任。");
+            cell_24_2.setCellValue("产品毁损灭失的风险自需方收货时转由需方承担。需方未按合同约定的时间和方式付清相应货款的，产品所有权仍归属于供方所有，产品发生毁损灭失的，需方应承担赔偿全部责任。");
             cell_24_2.setCellStyle(cellLeft);
             sheet.addMergedRegion(new CellRangeAddress(pp, pp, 1, 7));
 
@@ -1038,7 +1045,7 @@ public class BizProcessDataController extends BaseController {
             Cell cell_25_1 = row25.createCell(0);
             cell_25_1.setCellValue("十二、");
             Cell cell_25_2 = row25.createCell(1);
-            cell_25_2.setCellValue("违约责任：合同签订后，买卖双方严格执行双方所签订合同的条款，其中一方不履行或不完全履行合同者应承担相应的法律责任；解决合同纠纷方式：因本合同产生的争议，双方应友好协商解决，协商不成的由供方所在地仲裁委员会仲裁。");
+            cell_25_2.setCellValue("违约责任：合同签订后，买卖双方严格执行双方所签订合同的条款，其中一方不履行或不完全履行合同者应承担相应的法律责任；解决合同纠纷方式：因本合同产生的争议，双方应友好协商解决，协商不成的由供方住所地人民法院起诉。");
             sheet.addMergedRegion(new CellRangeAddress(qq, qq, 1, 7));
             cell_25_2.setCellStyle(cellLeft);
 

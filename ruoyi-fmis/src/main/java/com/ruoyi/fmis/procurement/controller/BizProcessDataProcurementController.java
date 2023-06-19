@@ -2369,7 +2369,7 @@ public class BizProcessDataProcurementController extends BaseController {
             CellRangeAddress cra1 = new CellRangeAddress(0, 0, 0, 7);
             sheet.addMergedRegion(cra1);
             Cell cell_title_1 = row1.createCell(0);
-            cell_title_1.setCellValue("产品购销合同");
+            cell_title_1.setCellValue("采购合同");
             CellStyle cellTitle = ExcelProcessDataUtils.titleCell(workbook);
             cell_title_1.setCellStyle(cellTitle);
 
@@ -2387,7 +2387,7 @@ public class BizProcessDataProcurementController extends BaseController {
             row3.setHeight((short) 600);
 
             Cell cell_30 = row3.createCell(0);
-            cell_30.setCellValue("甲方（买方）：" + bizProcess.getString1());
+            cell_30.setCellValue("甲方（需方）：" + bizProcess.getString1());
             cell_30.setCellStyle(cellLeft);
             sheet.addMergedRegion(new CellRangeAddress(2, 2, 0, 4));
             Cell cell_34 = row3.createCell(5);
@@ -2411,7 +2411,7 @@ public class BizProcessDataProcurementController extends BaseController {
                 }
             }
             Cell cell_40 = row4.createCell(0);
-            cell_40.setCellValue("乙方（卖方）：" + string6Name);
+            cell_40.setCellValue("乙方（供方）：" + string6Name);
             cell_40.setCellStyle(cellLeft);
             sheet.addMergedRegion(new CellRangeAddress(3, 3, 0, 4));
             Cell cell_44 = row4.createCell(5);
@@ -2470,12 +2470,18 @@ public class BizProcessDataProcurementController extends BaseController {
             Cell cell_87 = row7.createCell(7);
             cell_87.setCellValue("材质说明");
             cell_87.setCellStyle(cellTableStyle);
+            Cell cell_88 = row7.createCell(8);
+            cell_88.setCellValue("流转单号");
+            cell_88.setCellStyle(cellTableStyle);
+            Cell cell_89 = row7.createCell(9);
+            cell_89.setCellValue("备注");
+            cell_89.setCellStyle(cellTableStyle);
 
             int rowCount = 7;
             int num = 0;
             BigDecimal price = new BigDecimal("0");
             BigDecimal totalPrice = new BigDecimal("0");
-
+            Double string14D = new Double(0);
 
             if (!CollectionUtils.isEmpty(bizProductChildList)) {
                 for (int i = 0; i < bizProductChildList.size(); i++) {
@@ -2487,6 +2493,8 @@ public class BizProcessDataProcurementController extends BaseController {
                     BigDecimal aa = new BigDecimal(bizProcessChild.getProductNum());
                     Double amount = a1.multiply(aa).doubleValue();
                     totalPrice = totalPrice.add(new BigDecimal(amount));
+                    string14D += StringUtils.toDouble(bizProcessChild.getString14());
+
                     rowCount++;
                     Row row = sheet.createRow(rowCount);
                     Cell cell1 = row.createCell(0);
@@ -2516,6 +2524,12 @@ public class BizProcessDataProcurementController extends BaseController {
                             + ",连接方式:" + bizProcessChild.getConnectionType();
                     cell8.setCellValue(caizhi);
                     cell8.setCellStyle(cellTableStyle);
+                    Cell cell9 = row.createCell(8);
+                    cell9.setCellValue("");
+                    cell9.setCellStyle(cellTableStyle);
+                    Cell cell10 = row.createCell(9);
+                    cell10.setCellValue(bizProcessChild.getRemark());
+                    cell10.setCellStyle(cellTableStyle);
                 }
             }
 
@@ -2530,6 +2544,8 @@ public class BizProcessDataProcurementController extends BaseController {
                     BigDecimal aa = new BigDecimal(bizProcessChild.getActuatorNum());
                     Double amount = a1.multiply(aa).doubleValue();
                     totalPrice = totalPrice.add(new BigDecimal(amount));
+                    string14D += StringUtils.toDouble(bizProcessChild.getString14());
+
                     rowCount++;
                     Row row = sheet.createRow(rowCount);
                     Cell cell1 = row.createCell(0);
@@ -2556,6 +2572,12 @@ public class BizProcessDataProcurementController extends BaseController {
                     Cell cell8 = row.createCell(7);
                     cell8.setCellValue(bizProcessChild.getString5());
                     cell8.setCellStyle(cellTableStyle);
+                    Cell cell9 = row.createCell(8);
+                    cell9.setCellValue("");
+                    cell9.setCellStyle(cellTableStyle);
+                    Cell cell10 = row.createCell(9);
+                    cell10.setCellValue(bizProcessChild.getRemark());
+                    cell10.setCellStyle(cellTableStyle);
                 }
             }
 
@@ -2570,6 +2592,8 @@ public class BizProcessDataProcurementController extends BaseController {
                     BigDecimal aa = new BigDecimal(bizProcessChild.getProductRef1Num());
                     Double amount = a1.multiply(aa).doubleValue();
                     totalPrice = totalPrice.add(new BigDecimal(amount));
+                    string14D += StringUtils.toDouble(bizProcessChild.getString14());
+
                     rowCount++;
                     Row row = sheet.createRow(rowCount);
                     Cell cell1 = row.createCell(0);
@@ -2596,6 +2620,12 @@ public class BizProcessDataProcurementController extends BaseController {
                     Cell cell8 = row.createCell(7);
                     cell8.setCellValue(bizProcessChild.getRef1MaterialRequire());
                     cell8.setCellStyle(cellTableStyle);
+                    Cell cell9 = row.createCell(8);
+                    cell9.setCellValue("");
+                    cell9.setCellStyle(cellTableStyle);
+                    Cell cell10 = row.createCell(9);
+                    cell10.setCellValue(bizProcessChild.getRemark());
+                    cell10.setCellStyle(cellTableStyle);
                 }
             }
             List<BizProcessChild> ref2List = bizProcessChildService.selectBizTestRef2List(queryBizProcessChild);
@@ -2609,6 +2639,8 @@ public class BizProcessDataProcurementController extends BaseController {
                     BigDecimal aa = new BigDecimal(bizProcessChild.getProductRef2Num());
                     Double amount = a1.multiply(aa).doubleValue();
                     totalPrice = totalPrice.add(new BigDecimal(amount));
+                    string14D += StringUtils.toDouble(bizProcessChild.getString14());
+
                     rowCount++;
                     Row row = sheet.createRow(rowCount);
                     Cell cell1 = row.createCell(0);
@@ -2635,6 +2667,12 @@ public class BizProcessDataProcurementController extends BaseController {
                     Cell cell8 = row.createCell(7);
                     cell8.setCellValue("");
                     cell8.setCellStyle(cellTableStyle);
+                    Cell cell9 = row.createCell(8);
+                    cell9.setCellValue("");
+                    cell9.setCellStyle(cellTableStyle);
+                    Cell cell10 = row.createCell(9);
+                    cell10.setCellValue(bizProcessChild.getRemark());
+                    cell10.setCellStyle(cellTableStyle);
                 }
             }
             List<BizProcessChild> paList = bizProcessChildService.selectBizTestPAList(queryBizProcessChild);
@@ -2648,6 +2686,8 @@ public class BizProcessDataProcurementController extends BaseController {
                     BigDecimal aa = new BigDecimal(bizProcessChild.getPattachmentCount());
                     Double amount = a1.multiply(aa).doubleValue();
                     totalPrice = totalPrice.add(new BigDecimal(amount));
+                    string14D += StringUtils.toDouble(bizProcessChild.getString14());
+
                     rowCount++;
                     Row row = sheet.createRow(rowCount);
                     Cell cell1 = row.createCell(0);
@@ -2674,6 +2714,12 @@ public class BizProcessDataProcurementController extends BaseController {
                     Cell cell8 = row.createCell(7);
                     cell8.setCellValue(bizProcessChild.getMaterial());
                     cell8.setCellStyle(cellTableStyle);
+                    Cell cell9 = row.createCell(8);
+                    cell9.setCellValue("");
+                    cell9.setCellStyle(cellTableStyle);
+                    Cell cell10 = row.createCell(9);
+                    cell10.setCellValue(bizProcessChild.getRemark());
+                    cell10.setCellStyle(cellTableStyle);
                 }
             }
             rowCount++;
@@ -2698,8 +2744,14 @@ public class BizProcessDataProcurementController extends BaseController {
             Cell cell_96 = row9.createCell(6);
             cell_96.setCellValue(totalPrice.doubleValue());
             Cell cell_97 = row9.createCell(7);
-            cell_97.setCellValue("");
+            cell_97.setCellValue("优惠价：");
             cell_97.setCellStyle(cellTableStyle);
+            Cell cell_98 = row9.createCell(8);
+            cell_98.setCellValue(string14D);
+            cell_98.setCellStyle(cellTableStyle);
+            Cell cell_99 = row9.createCell(9);
+            cell_99.setCellValue("");
+            cell_99.setCellStyle(cellTableStyle);
 
             rowCount++;
             Row row10 = sheet.createRow(rowCount);
@@ -2721,6 +2773,11 @@ public class BizProcessDataProcurementController extends BaseController {
             cell_16.setCellStyle(cellTableStyle);
             Cell cell_17 = row10.createCell(7);
             cell_17.setCellStyle(cellTableStyle);
+            Cell cell_18 = row10.createCell(8);
+            cell_18.setCellStyle(cellTableStyle);
+            Cell cell_19 = row10.createCell(9);
+            cell_19.setCellStyle(cellTableStyle);
+
 
             rowCount++;
             Row row11 = sheet.createRow(rowCount);
@@ -2900,7 +2957,7 @@ public class BizProcessDataProcurementController extends BaseController {
             Cell cell_25_1 = row25.createCell(0);
             cell_25_1.setCellValue("十二、");
             Cell cell_25_2 = row25.createCell(1);
-            cell_25_2.setCellValue("违约责任：供需双方在合同交往中供方应遵守商业道德廉洁从业，供方违反商业道德和廉洁从业尊则给与甲方人员回扣、礼金等即为违约，给需方造成损失的应双倍赔偿损失。合同签订后，买卖双方严格执行双方所签订合同的条款，其中一方不履行或不完全履行合同者应承担相应的法律责任；解决合同纠纷方式：因本合同产生的争议，双方应友好协商解决，协商不成的，任何一方均有权向需方所在地人民法院提起诉讼。");
+            cell_25_2.setCellValue("违约责任：供需双方在合同交往中供方应遵守商业道德廉洁从业，供方违反商业道德和廉洁从业尊则给与甲方人员回扣、礼金等即为违约，给需方造成损失的应双倍赔偿损失。合同签订后，买卖双方严格执行双方所签订合同的条款，其中一方不履行或不完全履行合同者应承担相应的法律责任；解决合同纠纷方式：因本合同产生的争议，双方应友好协商解决，协商不成的，任何一方均有权向需方住所地仲裁委员会仲裁。");
             sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 1, 7));
             cell_25_2.setCellStyle(cellLeft);
 
