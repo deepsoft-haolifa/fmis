@@ -126,6 +126,9 @@ public class BizProcessProcurementpoolController extends BaseController {
         if (StringUtils.isNotEmpty(bizProcessData.getString3()) && bizProcessData.getString3().startsWith("XS")) {
             newBizProcessData.setString5(bizProcessData.getString3());
         }
+        if (bizProcessData.getString30() != null && bizProcessData.getString30().equals("2")) {
+            startPage(); //已完成处理分页查询
+        }
         //startPage();
         List<BizProcessData> list = bizProcessDataService.selectBizProcessDataListXs(newBizProcessData);
         newBizProcessData.setString1(bizProcessData.getString1());
