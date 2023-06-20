@@ -2360,7 +2360,7 @@ public class BizProcessDataProcurementController extends BaseController {
             Workbook workbook = new HSSFWorkbook();
             CellStyle cellStyle = workbook.createCellStyle();
             cellStyle.setWrapText(true);
-            Sheet sheet = workbook.createSheet("采购合同");
+            Sheet sheet = workbook.createSheet("产品采购合同");
             // 单元格样式
             CellStyle cellLeft = ExcelProcessDataUtils.cellLeft(workbook);
             Row row1 = sheet.createRow(0);
@@ -2369,7 +2369,7 @@ public class BizProcessDataProcurementController extends BaseController {
             CellRangeAddress cra1 = new CellRangeAddress(0, 0, 0, 7);
             sheet.addMergedRegion(cra1);
             Cell cell_title_1 = row1.createCell(0);
-            cell_title_1.setCellValue("采购合同");
+            cell_title_1.setCellValue("产品采购合同");
             CellStyle cellTitle = ExcelProcessDataUtils.titleCell(workbook);
             cell_title_1.setCellStyle(cellTitle);
 
@@ -2452,31 +2452,39 @@ public class BizProcessDataProcurementController extends BaseController {
             Cell cell_81 = row7.createCell(1);
             cell_81.setCellValue("名称");
             cell_81.setCellStyle(cellTableStyle);
-            Cell cell_82 = row7.createCell(2);
+            Cell cell_811 = row7.createCell(2);
+            cell_811.setCellValue("系列");
+            cell_811.setCellStyle(cellTableStyle);
+            Cell cell_82 = row7.createCell(3);
             cell_82.setCellValue("型号");
             cell_82.setCellStyle(cellTableStyle);
-            Cell cell_83 = row7.createCell(3);
+            Cell cell_83 = row7.createCell(4);
             cell_83.setCellValue("规格");
             cell_83.setCellStyle(cellTableStyle);
-            Cell cell_84 = row7.createCell(4);
+            Cell cell_84 = row7.createCell(5);
             cell_84.setCellValue("数量");
             cell_84.setCellStyle(cellTableStyle);
-            Cell cell_85 = row7.createCell(5);
+            Cell cell_85 = row7.createCell(6);
             cell_85.setCellValue("单价");
             cell_85.setCellStyle(cellTableStyle);
-            Cell cell_86 = row7.createCell(6);
+            Cell cell_86 = row7.createCell(7);
             cell_86.setCellValue("金额");
             cell_86.setCellStyle(cellTableStyle);
-            Cell cell_87 = row7.createCell(7);
+            Cell cell_87 = row7.createCell(8);
             cell_87.setCellValue("材质说明");
             cell_87.setCellStyle(cellTableStyle);
-            Cell cell_88 = row7.createCell(8);
+            Cell cell_88 = row7.createCell(9);
             cell_88.setCellValue("流转单号");
             cell_88.setCellStyle(cellTableStyle);
-            Cell cell_89 = row7.createCell(9);
+            Cell cell_89 = row7.createCell(10);
             cell_89.setCellValue("备注");
             cell_89.setCellStyle(cellTableStyle);
 
+            String customerId = bizProcess.getString4();
+            BizCustomer bizCustomer = new BizCustomer();
+            if (StringUtils.isNotEmpty(customerId)) {
+                bizCustomer = bizCustomerService.selectBizCustomerById(Long.parseLong(customerId));
+            }
             int rowCount = 7;
             int num = 0;
             BigDecimal price = new BigDecimal("0");
@@ -2503,31 +2511,38 @@ public class BizProcessDataProcurementController extends BaseController {
                     Cell cell2 = row.createCell(1);
                     cell2.setCellValue(bizProcessChild.getProductName());
                     cell2.setCellStyle(cellTableStyle);
-                    Cell cell3 = row.createCell(2);
+                    Cell cell22 = row.createCell(2);
+                    cell22.setCellValue(bizProcessChild.getSeries());
+                    cell22.setCellStyle(cellTableStyle);
+                    Cell cell3 = row.createCell(3);
                     cell3.setCellValue(bizProcessChild.getModel());
                     cell3.setCellStyle(cellTableStyle);
-                    Cell cell4 = row.createCell(3);
+                    Cell cell4 = row.createCell(4);
                     cell4.setCellValue(bizProcessChild.getSpecifications());
                     cell4.setCellStyle(cellTableStyle);
-                    Cell cell5 = row.createCell(4);
+                    Cell cell5 = row.createCell(5);
                     cell5.setCellValue(bizProcessChild.getProductNum());
                     cell5.setCellStyle(cellTableStyle);
-                    Cell cell6 = row.createCell(5);
+                    Cell cell6 = row.createCell(6);
                     cell6.setCellValue(bizProcessChild.getProductProcurementPrice());
                     cell6.setCellStyle(cellTableStyle);
-                    Cell cell7 = row.createCell(6);
+                    Cell cell7 = row.createCell(7);
                     cell7.setCellValue(amount);
                     cell7.setCellStyle(cellTableStyle);
-                    Cell cell8 = row.createCell(7);
+                    Cell cell8 = row.createCell(8);
                     String caizhi = "阀体:" + bizProcessChild.getValvebodyMaterial() + ",阀芯:" + bizProcessChild.getValveElement()
                             + ",密封材质:" + bizProcessChild.getSealingMaterial() + ",驱动形式:" + bizProcessChild.getDriveForm()
                             + ",连接方式:" + bizProcessChild.getConnectionType();
                     cell8.setCellValue(caizhi);
                     cell8.setCellStyle(cellTableStyle);
-                    Cell cell9 = row.createCell(8);
-                    cell9.setCellValue("");
+                    Cell cell9 = row.createCell(9);
+                    if (StringUtils.isBlank(bizCustomer.getCodeName())) {
+                        cell9.setCellValue(bizProcess.getString10());
+                    } else {
+                        cell9.setCellValue(bizProcess.getString10() + " " + bizCustomer.getCodeName());
+                    }
                     cell9.setCellStyle(cellTableStyle);
-                    Cell cell10 = row.createCell(9);
+                    Cell cell10 = row.createCell(10);
                     cell10.setCellValue(bizProcessChild.getRemark());
                     cell10.setCellStyle(cellTableStyle);
                 }
@@ -2554,28 +2569,34 @@ public class BizProcessDataProcurementController extends BaseController {
                     Cell cell2 = row.createCell(1);
                     cell2.setCellValue(bizProcessChild.getActuatorName());
                     cell2.setCellStyle(cellTableStyle);
-                    Cell cell3 = row.createCell(2);
+                    Cell cell22 = row.createCell(2);
+                    cell22.setCellValue(bizProcessChild.getSeries());
+                    cell22.setCellStyle(cellTableStyle);
+                    Cell cell3 = row.createCell(3);
                     cell3.setCellValue(bizProcessChild.getActuatorString1());
                     cell3.setCellStyle(cellTableStyle);
-                    Cell cell4 = row.createCell(3);
+                    Cell cell4 = row.createCell(4);
                     cell4.setCellValue("");
                     cell4.setCellStyle(cellTableStyle);
-                    Cell cell5 = row.createCell(4);
+                    Cell cell5 = row.createCell(5);
                     cell5.setCellValue(bizProcessChild.getActuatorNum());
                     cell5.setCellStyle(cellTableStyle);
-                    Cell cell6 = row.createCell(5);
+                    Cell cell6 = row.createCell(6);
                     cell6.setCellValue(bizProcessChild.getActuatorString6());
                     cell6.setCellStyle(cellTableStyle);
-                    Cell cell7 = row.createCell(6);
+                    Cell cell7 = row.createCell(7);
                     cell7.setCellValue(amount);
                     cell7.setCellStyle(cellTableStyle);
-                    Cell cell8 = row.createCell(7);
+                    Cell cell8 = row.createCell(8);
                     cell8.setCellValue(bizProcessChild.getString5());
                     cell8.setCellStyle(cellTableStyle);
-                    Cell cell9 = row.createCell(8);
-                    cell9.setCellValue("");
-                    cell9.setCellStyle(cellTableStyle);
-                    Cell cell10 = row.createCell(9);
+                    Cell cell9 = row.createCell(9);
+                    if (StringUtils.isBlank(bizCustomer.getCodeName())) {
+                        cell9.setCellValue(bizProcess.getString10());
+                    } else {
+                        cell9.setCellValue(bizProcess.getString10() + " " + bizCustomer.getCodeName());
+                    }                    cell9.setCellStyle(cellTableStyle);
+                    Cell cell10 = row.createCell(10);
                     cell10.setCellValue(bizProcessChild.getRemark());
                     cell10.setCellStyle(cellTableStyle);
                 }
@@ -2602,28 +2623,34 @@ public class BizProcessDataProcurementController extends BaseController {
                     Cell cell2 = row.createCell(1);
                     cell2.setCellValue(bizProcessChild.getRef1Name());
                     cell2.setCellStyle(cellTableStyle);
-                    Cell cell3 = row.createCell(2);
+                    Cell cell22 = row.createCell(2);
+                    cell22.setCellValue(bizProcessChild.getSeries());
+                    cell22.setCellStyle(cellTableStyle);
+                    Cell cell3 = row.createCell(3);
                     cell3.setCellValue(bizProcessChild.getModel());
                     cell3.setCellStyle(cellTableStyle);
-                    Cell cell4 = row.createCell(3);
+                    Cell cell4 = row.createCell(4);
                     cell4.setCellValue(bizProcessChild.getRef1Specifications());
                     cell4.setCellStyle(cellTableStyle);
-                    Cell cell5 = row.createCell(4);
+                    Cell cell5 = row.createCell(5);
                     cell5.setCellValue(bizProcessChild.getProductRef1Num());
                     cell5.setCellStyle(cellTableStyle);
-                    Cell cell6 = row.createCell(5);
+                    Cell cell6 = row.createCell(6);
                     cell6.setCellValue(bizProcessChild.getRef1Price());
                     cell6.setCellStyle(cellTableStyle);
-                    Cell cell7 = row.createCell(6);
+                    Cell cell7 = row.createCell(7);
                     cell7.setCellValue(amount);
                     cell7.setCellStyle(cellTableStyle);
-                    Cell cell8 = row.createCell(7);
+                    Cell cell8 = row.createCell(8);
                     cell8.setCellValue(bizProcessChild.getRef1MaterialRequire());
                     cell8.setCellStyle(cellTableStyle);
-                    Cell cell9 = row.createCell(8);
-                    cell9.setCellValue("");
-                    cell9.setCellStyle(cellTableStyle);
-                    Cell cell10 = row.createCell(9);
+                    Cell cell9 = row.createCell(9);
+                    if (StringUtils.isBlank(bizCustomer.getCodeName())) {
+                        cell9.setCellValue(bizProcess.getString10());
+                    } else {
+                        cell9.setCellValue(bizProcess.getString10() + " " + bizCustomer.getCodeName());
+                    }                    cell9.setCellStyle(cellTableStyle);
+                    Cell cell10 = row.createCell(10);
                     cell10.setCellValue(bizProcessChild.getRemark());
                     cell10.setCellStyle(cellTableStyle);
                 }
@@ -2649,28 +2676,34 @@ public class BizProcessDataProcurementController extends BaseController {
                     Cell cell2 = row.createCell(1);
                     cell2.setCellValue(bizProcessChild.getRef2Name());
                     cell2.setCellStyle(cellTableStyle);
-                    Cell cell3 = row.createCell(2);
+                    Cell cell22 = row.createCell(2);
+                    cell22.setCellValue(bizProcessChild.getSeries());
+                    cell22.setCellStyle(cellTableStyle);
+                    Cell cell3 = row.createCell(3);
                     cell3.setCellValue(bizProcessChild.getModel());
                     cell3.setCellStyle(cellTableStyle);
-                    Cell cell4 = row.createCell(3);
+                    Cell cell4 = row.createCell(4);
                     cell4.setCellValue("");
                     cell4.setCellStyle(cellTableStyle);
-                    Cell cell5 = row.createCell(4);
+                    Cell cell5 = row.createCell(5);
                     cell5.setCellValue(bizProcessChild.getProductRef2Num());
                     cell5.setCellStyle(cellTableStyle);
-                    Cell cell6 = row.createCell(5);
+                    Cell cell6 = row.createCell(6);
                     cell6.setCellValue(bizProcessChild.getRef2Price());
                     cell6.setCellStyle(cellTableStyle);
-                    Cell cell7 = row.createCell(6);
+                    Cell cell7 = row.createCell(7);
                     cell7.setCellValue(amount);
                     cell7.setCellStyle(cellTableStyle);
-                    Cell cell8 = row.createCell(7);
+                    Cell cell8 = row.createCell(8);
                     cell8.setCellValue("");
                     cell8.setCellStyle(cellTableStyle);
-                    Cell cell9 = row.createCell(8);
-                    cell9.setCellValue("");
-                    cell9.setCellStyle(cellTableStyle);
-                    Cell cell10 = row.createCell(9);
+                    Cell cell9 = row.createCell(9);
+                    if (StringUtils.isBlank(bizCustomer.getCodeName())) {
+                        cell9.setCellValue(bizProcess.getString10());
+                    } else {
+                        cell9.setCellValue(bizProcess.getString10() + " " + bizCustomer.getCodeName());
+                    }                    cell9.setCellStyle(cellTableStyle);
+                    Cell cell10 = row.createCell(10);
                     cell10.setCellValue(bizProcessChild.getRemark());
                     cell10.setCellStyle(cellTableStyle);
                 }
@@ -2696,28 +2729,34 @@ public class BizProcessDataProcurementController extends BaseController {
                     Cell cell2 = row.createCell(1);
                     cell2.setCellValue(bizProcessChild.getChineseName());
                     cell2.setCellStyle(cellTableStyle);
-                    Cell cell3 = row.createCell(2);
+                    Cell cell22 = row.createCell(2);
+                    cell22.setCellValue(bizProcessChild.getSeries());
+                    cell22.setCellStyle(cellTableStyle);
+                    Cell cell3 = row.createCell(3);
                     cell3.setCellValue("");
                     cell3.setCellStyle(cellTableStyle);
-                    Cell cell4 = row.createCell(3);
+                    Cell cell4 = row.createCell(4);
                     cell4.setCellValue(bizProcessChild.getChineseSpecifications());
                     cell4.setCellStyle(cellTableStyle);
-                    Cell cell5 = row.createCell(4);
+                    Cell cell5 = row.createCell(5);
                     cell5.setCellValue(bizProcessChild.getPattachmentCount());
                     cell5.setCellStyle(cellTableStyle);
-                    Cell cell6 = row.createCell(5);
+                    Cell cell6 = row.createCell(6);
                     cell6.setCellValue(bizProcessChild.getCostPrice());
                     cell6.setCellStyle(cellTableStyle);
-                    Cell cell7 = row.createCell(6);
+                    Cell cell7 = row.createCell(7);
                     cell7.setCellValue(amount);
                     cell7.setCellStyle(cellTableStyle);
-                    Cell cell8 = row.createCell(7);
+                    Cell cell8 = row.createCell(8);
                     cell8.setCellValue(bizProcessChild.getMaterial());
                     cell8.setCellStyle(cellTableStyle);
-                    Cell cell9 = row.createCell(8);
-                    cell9.setCellValue("");
-                    cell9.setCellStyle(cellTableStyle);
-                    Cell cell10 = row.createCell(9);
+                    Cell cell9 = row.createCell(9);
+                    if (StringUtils.isBlank(bizCustomer.getCodeName())) {
+                        cell9.setCellValue(bizProcess.getString10());
+                    } else {
+                        cell9.setCellValue(bizProcess.getString10() + " " + bizCustomer.getCodeName());
+                    }                    cell9.setCellStyle(cellTableStyle);
+                    Cell cell10 = row.createCell(10);
                     cell10.setCellValue(bizProcessChild.getRemark());
                     cell10.setCellStyle(cellTableStyle);
                 }
@@ -2738,27 +2777,34 @@ public class BizProcessDataProcurementController extends BaseController {
             cell_93.setCellStyle(cellTableStyle);
             sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 0, 3));
             Cell cell_94 = row9.createCell(4);
-            cell_94.setCellValue(num);
+            cell_94.setCellValue("");
             Cell cell_95 = row9.createCell(5);
-            cell_95.setCellValue("");
+            cell_95.setCellValue(num);
             Cell cell_96 = row9.createCell(6);
-            cell_96.setCellValue(totalPrice.doubleValue());
+            cell_96.setCellValue("");
             Cell cell_97 = row9.createCell(7);
-            cell_97.setCellValue("优惠价：");
             cell_97.setCellStyle(cellTableStyle);
+            cell_97.setCellValue(totalPrice.doubleValue());
             Cell cell_98 = row9.createCell(8);
-            cell_98.setCellValue(string14D);
+            if (!string14D.equals(new Double(0))) {
+                cell_98.setCellValue("优惠价：");
+            }
             cell_98.setCellStyle(cellTableStyle);
             Cell cell_99 = row9.createCell(9);
-            cell_99.setCellValue("");
+            if (!string14D.equals(new Double(0))) {
+                cell_99.setCellValue(string14D);
+            }
             cell_99.setCellStyle(cellTableStyle);
+            Cell cell_100 = row9.createCell(10);
+            cell_100.setCellStyle(cellTableStyle);
+
 
             rowCount++;
             Row row10 = sheet.createRow(rowCount);
             Cell cell_10 = row10.createCell(0);
             cell_10.setCellStyle(cellTableStyle);
             cell_10.setCellValue("合计人民币金额（大写）：" + StringUtils.convert(totalPrice.doubleValue()) + "（以上价格为含13%税价格）");
-            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 0, 7));
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 0, 10));
             Cell cell_11 = row10.createCell(1);
             cell_11.setCellStyle(cellTableStyle);
             Cell cell_12 = row10.createCell(2);
@@ -2777,6 +2823,8 @@ public class BizProcessDataProcurementController extends BaseController {
             cell_18.setCellStyle(cellTableStyle);
             Cell cell_19 = row10.createCell(9);
             cell_19.setCellStyle(cellTableStyle);
+            Cell cell_119 = row10.createCell(10);
+            cell_119.setCellStyle(cellTableStyle);
 
 
             rowCount++;
@@ -2790,6 +2838,7 @@ public class BizProcessDataProcurementController extends BaseController {
             Cell cell_11_2 = row11.createCell(2);
             cell_11_2.setCellStyle(cellBottomStyle);
             Cell cell_11_3 = row11.createCell(3);
+            cell_11_3.setCellValue(bizProcess.getPurchaseSpecificRequests());
             cell_11_3.setCellStyle(cellBottomStyle);
             Cell cell_11_4 = row11.createCell(4);
             cell_11_4.setCellStyle(cellBottomStyle);

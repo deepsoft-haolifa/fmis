@@ -46,4 +46,11 @@ public class Common {
         // headers.put("User-Agent", "Mozilla/5.0 (Linux; Android 5.0; SM-G900P Build/LRX21T) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.70 Mobile Safari/537.36");
         return headers;
     }
+
+    public static void main(String[] args) {
+        Double a = 0.0;
+        if (a.equals(new Double(0))) {
+            System.out.println(a);
+        }
+    }
 }
