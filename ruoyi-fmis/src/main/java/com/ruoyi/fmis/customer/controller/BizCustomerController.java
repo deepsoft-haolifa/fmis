@@ -233,6 +233,12 @@ public class BizCustomerController extends BaseController {
     @PostMapping("/add")
     @ResponseBody
     public AjaxResult addSave(BizCustomer bizCustomer) {
+
+        String checkCustomerName = checkCustomerName(bizCustomer);
+        if (StringUtils.equals(BizConstants.VALIDATE_IS_EXIST,checkCustomerName)){
+            throw new BusinessException("客户名重复");
+        }
+
         bizCustomer.setName(bizCustomer.getName().trim());
         bizCustomer.setContactName(bizCustomer.getContactName().trim());
         bizCustomer.setContactPhone(bizCustomer.getContactPhone().trim());

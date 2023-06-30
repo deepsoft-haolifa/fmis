@@ -99,6 +99,10 @@ public class BizCustomerServiceImpl implements IBizCustomerService {
      */
     @Override
     public int insertBizCustomer(BizCustomer bizCustomer) {
+
+
+
+
         Long fileNumberN = bizCustomerMapper.selectCustomerFileNumber();
         if (fileNumberN == null) {
             fileNumberN = 1L;

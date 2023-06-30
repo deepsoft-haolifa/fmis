@@ -9,7 +9,7 @@
 <body class="white-bg">
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
         <form class="form-horizontal m" id="form-customer-add">
-            <div class="form-group">    
+            <div class="form-group">
                 <label class="col-sm-3 control-label">初次备案日期：</label>
                 <div class="col-sm-8">
                     <div class="input-group date">
@@ -95,7 +95,7 @@
 
 
             <!--
-            <div class="form-group">    
+            <div class="form-group">
                 <label class="col-sm-3 control-label">项目备案号：</label>
                 <div class="col-sm-8">
                     <input name="recordCode" class="form-control" type="text">
@@ -112,14 +112,14 @@
                 </div>
             </div>
             <!--
-            <div class="form-group">    
+            <div class="form-group">
                 <label class="col-sm-3 control-label">业务负责人：</label>
                 <div class="col-sm-8">
                     <input name="ownerUserId" class="form-control" type="text">
                 </div>
             </div>
             -->
-            <div class="form-group">    
+            <div class="form-group">
                 <label class="col-sm-3 control-label" style="color: red">*客户名称：</label>
                 <div class="col-sm-8">
                     <input name="name" class="form-control" type="text" id="name"  required>
@@ -208,7 +208,7 @@
             <!-- 新添加字段 end -->
 
 
-            <div class="form-group">    
+            <div class="form-group">
                 <label class="col-sm-3 control-label">项目名称：</label>
                 <div class="col-sm-8">
                     <input name="projectAme" class="form-control" type="text">
@@ -218,7 +218,7 @@
 
 
 
-            <div class="form-group">    
+            <div class="form-group">
                 <label class="col-sm-3 control-label">品牌：</label>
                 <div class="col-sm-8">
                     <select name="brand" class="form-control m-b" th:with="type=${@dict.getType('customer_brand')}">
@@ -227,7 +227,7 @@
                 </div>
             </div>
 
-            <div class="form-group">    
+            <div class="form-group">
                 <label class="col-sm-3 control-label">主要产品：</label>
                 <div class="col-sm-8">
                     <input name="productInfo" class="form-control" type="text">
@@ -446,6 +446,8 @@
                 var data = $('#form-customer-add').serializeArray();
                 var userIds = $.form.selectSelects("user");
                 data.push({"name": "ownerUserId", "value": userIds});
+                data.push({"name": "status", "value": 0});
+                data.push({"name": "customerId", "value": 0});
                 $.operate.save(prefix + "/add", data);
             }
         }
