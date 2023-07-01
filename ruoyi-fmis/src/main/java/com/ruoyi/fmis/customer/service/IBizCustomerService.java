@@ -28,6 +28,7 @@ public interface IBizCustomerService {
      */
     public List<BizCustomer> selectBizCustomerList(BizCustomer bizCustomer);
     public List<BizCustomer> selectBizCustomerListByName(BizCustomer bizCustomer);
+    public List<BizCustomer> checkBizCustomerListByName(BizCustomer bizCustomer);
 
 
     public List<BizCustomer> selectBizCustomerListNoAuth(BizCustomer bizCustomer);

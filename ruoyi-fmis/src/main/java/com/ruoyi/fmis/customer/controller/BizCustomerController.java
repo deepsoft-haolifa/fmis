@@ -259,7 +259,7 @@ public class BizCustomerController extends BaseController {
         }
         BizCustomer queryBizCustomer = new BizCustomer();
         queryBizCustomer.setName(name.trim());
-        List<BizCustomer> list = bizCustomerService.selectBizCustomerListByName(queryBizCustomer);
+        List<BizCustomer> list = bizCustomerService.checkBizCustomerListByName(queryBizCustomer);
         Iterator<BizCustomer> iterator = list.iterator();
         while(iterator.hasNext()){
             BizCustomer o = iterator.next();
