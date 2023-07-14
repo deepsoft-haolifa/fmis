@@ -885,20 +885,7 @@ public class BizProcessDataController extends BaseController {
             Cell cell_20_0 = row20.createCell(0);
             cell_20_0.setCellValue("九、");
             Cell cell_20_10 = row20.createCell(1);
-//            cell_20_10.setCellValue("付款方式：电汇或承兑");
-
-            if(bizProcessData.getString18().equals("1")) {
-                cell_20_10.setCellValue("付款方式:" + sysDictDataService.selectDictLabel("payment_type", bizProcessData.getString18()) + "  付款形式：" + sysDictDataService.selectDictLabel("payment_method", bizProcessData.getString18()));
-            }
-            if(bizProcessData.getString18().equals("2")) {
-                cell_20_10.setCellValue("付款方式:" + sysDictDataService.selectDictLabel("payment_type", bizProcessData.getString18()) + "  付款形式：" + sysDictDataService.selectDictLabel("payment_days", bizProcessData.getString18()));
-            }
-            if(bizProcessData.getString18().equals("3")) {
-                cell_20_10.setCellValue("付款方式:" + sysDictDataService.selectDictLabel("payment_type", bizProcessData.getString18()) + "  付款形式：" +
-                        "预付：" + bizProcessData.getPrice5() + "%，发货前付款："+ bizProcessData.getPrice6() + "%，货到："+ bizProcessData.getPrice7()  + "天付"+ bizProcessData.getPrice8()
-                        + "%， 安装调试" + bizProcessData.getPrice9() + "天 付"+ bizProcessData.getPrice10()  + "%，质保金"+ bizProcessData.getPrice11()  + "%");
-            }
-
+            cell_20_10.setCellValue("付款方式:" + sysDictDataService.selectDictLabel("payment_type", bizProcessData.getString18()));
 
             String payRemark = "";
             String string18 = StringUtils.trim(bizProcessData.getString18());
@@ -3277,10 +3264,10 @@ public class BizProcessDataController extends BaseController {
 
             table.addCell(PdfUtil.mergeCol("九", 1, textFont));
             if(bizProcessData.getString18().equals("1")) {
-                table.addCell(PdfUtil.mergeCol("付款方式:" + sysDictDataService.selectDictLabel("payment_type", bizProcessData.getString18()) + "  付款形式：" + sysDictDataService.selectDictLabel("payment_method", bizProcessData.getString18()), 14, textFont));
+                table.addCell(PdfUtil.mergeCol("付款方式:" + sysDictDataService.selectDictLabel("payment_type", bizProcessData.getString18()) + "  付款形式：" + payRemark, 14, textFont));
             }
             if(bizProcessData.getString18().equals("2")) {
-                table.addCell(PdfUtil.mergeCol("付款方式:" + sysDictDataService.selectDictLabel("payment_type", bizProcessData.getString18()) + "  付款形式：" + sysDictDataService.selectDictLabel("payment_days", bizProcessData.getString18()), 14, textFont));
+                table.addCell(PdfUtil.mergeCol("付款方式:" + sysDictDataService.selectDictLabel("payment_type", bizProcessData.getString18()) + "  付款形式：" + payRemark, 14, textFont));
             }
             if(bizProcessData.getString18().equals("3")) {
                 table.addCell(PdfUtil.mergeCol("付款方式:" + sysDictDataService.selectDictLabel("payment_type", bizProcessData.getString18()) + "  付款形式：" +
