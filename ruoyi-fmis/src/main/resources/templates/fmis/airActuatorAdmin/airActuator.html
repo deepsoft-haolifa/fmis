@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('电动执行器列表')" />
+    <th:block th:include="include :: header('气动执行器列表-管理员')" />
 </head>
 <body class="gray-bg">
      <div class="container-div">
@@ -13,7 +13,7 @@
                             <li>
                                 <p>产品名称：</p>
                                 <input type="text" name="name"/>
-                                <input type="hidden" name="string2" value="1"/>
+                                <input type="hidden" name="string2" value="2"/>
                             </li>
 
                             <li>
@@ -47,7 +47,6 @@
                <!-- <a class="btn btn-success" onclick="openImportExcel()" shiro:hasPermission="fmis:actuator:import">
                     <i class="fa fa-remove"></i> 导入
                 </a>-->
-            </a>
             </div>
             <div class="col-sm-12 select-table table-striped">
                 <table id="bootstrap-table"></table>
@@ -58,7 +57,7 @@
     <script th:inline="javascript">
         var editFlag = [[${@permission.hasPermi('fmis:actuator:edit')}]];
         var removeFlag = [[${@permission.hasPermi('fmis:actuator:remove')}]];
-        var prefix = ctx + "fmis/actuator";
+        var prefix = ctx + "fmis/airActuatorAdmin";
         var setupTypeData = [[${@dict.getType('actuator_setup_type')}]];
         $(function() {
             var options = {
@@ -80,77 +79,55 @@
                     field : 'name', 
                     title : '产品名称'
                 },
+                    {
+                        field : 'string7',
+                        title : '系列'
+                    },
+
                 {
                     field : 'brand', 
                     title : '执行器品牌'
                 },
                 {
                     field : 'manufacturer', 
-                    title : '供应商'
+                    title : '生产厂家'
                 },
                     {
-                        field : 'string4',
-                        title : '供应商代码'
+                        field : 'supplier',
+                        title : '供应商'
                     },
                 {
                     field : 'string1',
                     title : '型号'
                 },
                 {
-                    field : 'setupType',
-                    title : '安装形式',
-                    formatter: function(value, row, index) {
-                        return $.table.selectDictLabel(setupTypeData, value);
-                    }
+                    field : 'string3',
+                    title : '类别'
                 },
-                    {
-                        field : 'color',
-                        title : '颜色'
-                    },
-                    {
-                        field : 'string5',
-                        title : '材质'
-                    },
+                {
+                    field : 'string4',
+                    title : '气缸形式'
+                },
+                {
+                    field : 'string5',
+                    title : '材质'
+                },
                     {
                         field : 'press',
                         title : '压力'
                     },
-                {
-                    field : 'outputTorque', 
-                    title : '输出力距'
-                },
                     {
-                        field : 'string3',
-                        title : '系列'
+                        field : 'color',
+                        title : '颜色'
                     },
-                {
-                    field : 'actionType', 
-                    title : '开启时间'
-                },
-                {
-                    field : 'controlCircuit', 
-                    title : '控制电路'
-                },
-                {
-                    field : 'adaptableVoltage', 
-                    title : '适用电压'
-                },
-                {
-                    field : 'protectionLevel', 
-                    title : '防护等级'
-                }/*,
                 {
                     field : 'qualityLevel', 
                     title : '品质等级'
-                }*/,
-                {
-                    field : 'explosionLevel', 
-                    title : '防爆等级'
-                }/*,
+                },
                 {
                     field : 'string6',
                     title : '采购价'
-                }*/,
+                },
                     {
                         field : 'facePrice',
                         title : '面价'

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('电动执行器列表')" />
+    <th:block th:include="include :: header('电动执行器列表-管理员')" />
 </head>
 <body class="gray-bg">
      <div class="container-div">
@@ -58,7 +58,7 @@
     <script th:inline="javascript">
         var editFlag = [[${@permission.hasPermi('fmis:actuator:edit')}]];
         var removeFlag = [[${@permission.hasPermi('fmis:actuator:remove')}]];
-        var prefix = ctx + "fmis/actuator";
+        var prefix = ctx + "fmis/actuatorAdmin";
         var setupTypeData = [[${@dict.getType('actuator_setup_type')}]];
         $(function() {
             var options = {
@@ -146,11 +146,11 @@
                 {
                     field : 'explosionLevel', 
                     title : '防爆等级'
-                }/*,
+                },
                 {
                     field : 'string6',
                     title : '采购价'
-                }*/,
+                },
                     {
                         field : 'facePrice',
                         title : '面价'
