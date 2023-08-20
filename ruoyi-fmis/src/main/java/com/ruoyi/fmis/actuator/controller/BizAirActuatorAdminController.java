@@ -50,7 +50,7 @@ public class BizAirActuatorAdminController extends BaseController {
     @RequiresPermissions("fmis:airActuator:viewAdmin")
     @GetMapping()
     public String actuator() {
-        return prefix + "/airActuatorAdmin";
+        return prefix + "/airActuator";
     }
 
 

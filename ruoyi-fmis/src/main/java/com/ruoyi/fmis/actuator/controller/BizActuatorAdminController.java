@@ -56,7 +56,7 @@ public class BizActuatorAdminController extends BaseController {
     @RequiresPermissions("fmis:actuator:viewAdmin")
     @GetMapping()
     public String actuator() {
-        return prefix + "/actuatorAdmin";
+        return prefix + "/actuator";
     }
 
     @Autowired
