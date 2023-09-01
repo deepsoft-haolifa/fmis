@@ -256,6 +256,7 @@ public class BizSuppliersController extends BaseController {
                 bizProductImport.setString5(bizProduct1.getString5());
                 bizProductImport.setCostPrice(bizProduct1.getCostPrice() + "");
                 bizProductImport.setPrice(bizProduct1.getPrice() + "");
+                bizProductImport.setFacePrice(bizProduct1.getFacePrice() + "");
                 bizProductImports.add(bizProductImport);
                 i++;
             }
