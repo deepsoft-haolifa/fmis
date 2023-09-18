@@ -196,7 +196,7 @@ public class BizProcessProcurementtestController extends BaseController {
                 String childId = bizDataStatus.getChildId().toString();
                 String num = bizDataStatus.getString1();
                 String bizDataId = bizDataStatus.getString2();
-                String parentContractId = bizDataStatus.getString3();
+                Integer parentContractId = bizDataStatus.getString3();
                 String levelValue = bizDataStatus.getString5();
                 JSONObject jsonObject = new JSONObject();
                 String k = type + "_" + childId + "_" + bizDataId + "_" + parentContractId + "_" + levelValue;

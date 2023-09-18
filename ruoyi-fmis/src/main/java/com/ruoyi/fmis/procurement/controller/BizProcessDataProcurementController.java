@@ -377,7 +377,7 @@ public class BizProcessDataProcurementController extends BaseController {
                 String childId = bizDataStatus.getChildId().toString();
                 String num = bizDataStatus.getString1();
                 String bizDataId = bizDataStatus.getString2();
-                String parentContractId = bizDataStatus.getString3();
+                Integer parentContractId = bizDataStatus.getString3();
                 String levelValue = bizDataStatus.getString5();
                 JSONObject jsonObject = new JSONObject();
                 String k = type + "_" + childId + "_" + bizDataId + "_" + parentContractId + "_" + levelValue;
@@ -549,14 +549,14 @@ public class BizProcessDataProcurementController extends BaseController {
                 if (bizDataStatus.getType().equals("9")) {
                     bizDataStatus.setP4ProPrice(bizDataStatus.getCaigoujia());
                 }*/
-                dataIds.add(bizDataStatus.getString3());//销售id
+                dataIds.add(bizDataStatus.getString3() + "");//销售id
                 bizDataStatus.setString4(bizProcessData.getDataId().toString());//采购id
                 bizDataStatusService.insertBizDataStatus(bizDataStatus);
                 if (dataIdCount.containsKey(bizDataStatus.getString3())) {
                     int idCount = dataIdCount.get(bizDataStatus.getString3()) + 1;
-                    dataIdCount.put(bizDataStatus.getString3(), idCount);
+                    dataIdCount.put(bizDataStatus.getString3() + "", idCount);
                 } else {
-                    dataIdCount.put(bizDataStatus.getString3(), 1);
+                    dataIdCount.put(bizDataStatus.getString3() + "", 1);
                 }
             }
         }
@@ -661,10 +661,10 @@ public class BizProcessDataProcurementController extends BaseController {
             for (int i = 0; i < productArray.size(); i++) {
                 JSONObject json = productArray.getJSONObject(i);
                 BizDataStatus bizDataStatus = JSONObject.parseObject(json.toJSONString(), BizDataStatus.class);
-                String contractNo = bizDataStatus.getString3();
-                if (StringUtils.isNotEmpty(contractNo)) {
+                Integer contractNo = bizDataStatus.getString3();
+                if (StringUtils.isNotEmpty(contractNo + "")) {
                     if (!contractNoList.contains(contractNo)) {
-                        contractNoList.add(contractNo);
+                        contractNoList.add(contractNo + "");
                     }
                 }
             }
@@ -712,15 +712,15 @@ public class BizProcessDataProcurementController extends BaseController {
              * 查询 质检这个合同下的所有产品数据
              * 对比数量
              */
-            String contractId = bizDataStatus.getString3();
+            Integer contractId = bizDataStatus.getString3();
             if (!contractMap.containsKey(contractId)) {
                 List<BizDataStatus> bizDataStatusList = new ArrayList<>();
                 bizDataStatusList.add(bizDataStatus);
-                contractMap.put(contractId, bizDataStatusList);
+                contractMap.put(contractId + "", bizDataStatusList);
             } else {
                 List<BizDataStatus> bizDataStatusList = contractMap.get(contractId);
                 bizDataStatusList.add(bizDataStatus);
-                contractMap.put(contractId, bizDataStatusList);
+                contractMap.put(contractId + "", bizDataStatusList);
             }
         }
         //contractMap=质检这个合同下的所有产品数据
@@ -731,7 +731,7 @@ public class BizProcessDataProcurementController extends BaseController {
             List<BizProcessChild> contractChildList = bizProcessChildService.selectBizQuotationProductList(bizProcessChild);
             //已经质检的所有数据
             BizDataStatus bizDataStatus = new BizDataStatus();
-            bizDataStatus.setString3(contractId);
+            bizDataStatus.setString3(Integer.parseInt(contractId));
             List<BizDataStatus> bizDataStatusList = bizDataStatusService.selectBizDataStatusList(bizDataStatus);
             String string23 = "1";
 
@@ -816,7 +816,7 @@ public class BizProcessDataProcurementController extends BaseController {
                 String childId = bizDataStatus.getChildId().toString();
                 String num = bizDataStatus.getString1();
                 String bizDataId = bizDataStatus.getString2();
-                String parentContractId = bizDataStatus.getString3();
+                Integer parentContractId = bizDataStatus.getString3();
                 String levelValue = bizDataStatus.getString5();
                 JSONObject jsonObject = new JSONObject();
                 String k = type + "_" + childId + "_" + bizDataId + "_" + parentContractId + "_" + levelValue;
@@ -861,7 +861,7 @@ public class BizProcessDataProcurementController extends BaseController {
                 String childId = bizDataStatus.getChildId().toString();
                 String num = bizDataStatus.getString1();
                 String bizDataId = bizDataStatus.getString2();
-                String parentContractId = bizDataStatus.getString3();
+                Integer parentContractId = bizDataStatus.getString3();
                 String levelValue = bizDataStatus.getString5();
                 JSONObject jsonObject = new JSONObject();
                 String k = type + "_" + childId + "_" + bizDataId + "_" + parentContractId + "_" + levelValue;
@@ -906,7 +906,7 @@ public class BizProcessDataProcurementController extends BaseController {
                 String childId = bizDataStatus.getChildId().toString();
                 String num = bizDataStatus.getString1();
                 String bizDataId = bizDataStatus.getString2();
-                String parentContractId = bizDataStatus.getString3();
+                Integer parentContractId = bizDataStatus.getString3();
                 String levelValue = bizDataStatus.getString5();
                 JSONObject jsonObject = new JSONObject();
                 String k = type + "_" + childId + "_" + bizDataId + "_" + parentContractId + "_" + levelValue;
@@ -953,7 +953,7 @@ public class BizProcessDataProcurementController extends BaseController {
                 String childId = bizDataStatus.getChildId().toString();
                 String num = bizDataStatus.getString1();
                 String bizDataId = bizDataStatus.getString2();
-                String parentContractId = bizDataStatus.getString3();
+                Integer parentContractId = bizDataStatus.getString3();
                 String levelValue = bizDataStatus.getString5();
                 JSONObject jsonObject = new JSONObject();
                 String k = type + "_" + childId + "_" + bizDataId + "_" + parentContractId + "_" + levelValue;

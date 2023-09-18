@@ -78,7 +78,7 @@ public class BizDataStatus extends BaseEntity {
 
     /** 备用3 */
     @Excel(name = "备用3")
-    private String string3;
+    private Integer string3;
 
     /** 备用4 */
     @Excel(name = "备用4")
@@ -229,13 +229,15 @@ public class BizDataStatus extends BaseEntity {
     public String getString2() {
         return string2;
     }
-    public void setString3(String string3) {
+
+    public Integer getString3() {
+        return string3;
+    }
+
+    public void setString3(Integer string3) {
         this.string3 = string3;
     }
 
-    public String getString3() {
-        return string3;
-    }
     public void setString4(String string4) {
         this.string4 = string4;
     }
