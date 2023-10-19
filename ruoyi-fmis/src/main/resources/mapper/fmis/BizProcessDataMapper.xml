@@ -247,7 +247,7 @@
         q.string3, q.string4, q.string5, q.string6, q.string7, q.string8, q.string9, q.string10, q.string11,
         q.string12, q.string13, q.string14, q.string15, q.string16, q.string17, q.string18, q.string19, q.string20,
         q.datetime1, q.datetime2, q.datetime3, q.datetime4, q.datetime5, q.status, q.del_flag, q.create_by,
-        q.create_time, q.update_by, q.update_time,ct.name as customerName,bs.name as suppliersName,
+        q.create_time, q.update_by, q.update_time,ct.name as customerName,ct.code_name as codeName, bs.name as suppliersName,
         q.string21,q.string22,q.string23,q.string24,q.string25,q.string26,q.string27,q.string28,q.string29,q.string30,
         q.price11, q.price12, q.price13, q.price14, q.price15, q.price16, q.price17, q.price18, q.price19, q.price20,
         dt1.dept_name as deptName,u.user_name as createByName,q.except_pay_time,q.purchase_specific_requests,q.payment_type,q.balance_amount,q.balance_borrow_no

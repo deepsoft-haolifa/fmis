@@ -1537,7 +1537,7 @@ public class BizProcessDataProcurementController extends BaseController {
 
 
             table.addCell(PdfUtil.mergeCol("六、", 1, textFont));
-            table.addCell(PdfUtil.mergeCol("安装与调试：", 14, textFont));
+            table.addCell(PdfUtil.mergeCol("安装与调试：电话指导", 14, textFont));
 
             table.addCell(PdfUtil.mergeCol("七、", 1, textFont));
             table.addCell(PdfUtil.mergeCol("包装方式：", 2, textFont));
@@ -1612,7 +1612,7 @@ public class BizProcessDataProcurementController extends BaseController {
 //
             table.addCell(PdfUtil.mergeCol("十二、", 1, textFont));
             table.addCell(PdfUtil.mergeColLeft("违约责任：供需双方在合同交往中供方应遵守商业道德廉洁从业，供方违反商业道德和廉洁从业尊则给与甲方人员回扣、礼金等即为违约，给需方造成损失的应双倍赔偿损失。合同签订后，买卖双方严格执行双方所签订合同的条款，其中一方不履行或不完全履行合同者应承担相应的法律责任；\n" +
-                    "解决合同纠纷方式：因本合同产生的争议，双方应友好协商解决，协商不成的，任何一方均有权向需方所在地人民法院提起诉讼。", 14, textFont));
+                    "促裁委员会：因本合同产生的争议，双方应友好协商解决，协商不成的，任何一方均有权向需方所在地人民法院提起诉讼。", 14, textFont));
 
             table.addCell(PdfUtil.mergeCol("十三、", 1, textFont));
             table.addCell(PdfUtil.mergeColLeft("本合同一式贰份。双方各执一份，双方签字盖章后生效（传真件有效）。", 14, textFont));
@@ -1657,10 +1657,10 @@ public class BizProcessDataProcurementController extends BaseController {
             table.addCell(PdfUtil.mergeColLeft("地    址：" + Util.jsonObject.getJSONObject(companyName).getString("address"), 7, textFont));
             table.addCell(PdfUtil.mergeColLeft("地    址：" + bizSuppliers.getAddress() == null ? "" : bizSuppliers.getAddress(), 7, textFont));
 
-            Paragraph paragraphRemark1 = new Paragraph();
-            Font remarkFont1 = PdfUtil.getPdfChineseFont(7, Font.NORMAL);
-            paragraphRemark1.add(new Chunk("总经理销售及投诉电话：" + StringUtils.trim(remark10), remarkFont1));
-            paragraphRemark1.setAlignment(Paragraph.ALIGN_RIGHT);
+//            Paragraph paragraphRemark1 = new Paragraph();
+//            Font remarkFont1 = PdfUtil.getPdfChineseFont(7, Font.NORMAL);
+//            paragraphRemark1.add(new Chunk("总经理销售及投诉电话：" + StringUtils.trim(remark10), remarkFont1));
+//            paragraphRemark1.setAlignment(Paragraph.ALIGN_RIGHT);
 
             /*paragraphRemark1.add(new Chunk(remark1, remarkFont1));
             paragraphRemark1.add(Chunk.NEWLINE);
@@ -1688,7 +1688,7 @@ public class BizProcessDataProcurementController extends BaseController {
             // step 4 写入内容
             document.add(table);
             //document.add(paragraphRemark);
-            document.add(paragraphRemark1);
+//            document.add(paragraphRemark1);
 //            document.add(datePar);
 
             // step 5
@@ -2356,6 +2356,25 @@ public class BizProcessDataProcurementController extends BaseController {
         try {
             String id = bizProcessDataParamter.getDataId().toString();
             BizProcessData bizProcess = bizProcessDataService.selectBizProcessDataById(Long.parseLong(id));
+            String contractNoStr = "";
+            for (String contractNo : bizProcess.getString10().split(",")) {
+                BizProcessData bizProcessData = new BizProcessData();
+                bizProcessData.setString1(contractNo);
+                bizProcessData.setBizId("contract");
+                bizProcessData.setQueryStatus("0");
+                List<BizProcessData> list = bizProcessDataService.selectBizProcessDataListRef(bizProcessData);
+                if (org.apache.commons.collections4.CollectionUtils.isNotEmpty(list)) {
+                    String codeName = list.get(0).getCodeName();
+                    if (StringUtils.isNotEmpty(codeName)) {
+                        contractNoStr += contractNo + "-" + codeName + ",";
+                    } else {
+                        contractNoStr += contractNo + ",";
+                    }
+                }
+            }
+            if (contractNoStr.contains(",")) {
+                contractNoStr = contractNoStr.substring(0, contractNoStr.length()-1);
+            }
 
             Workbook workbook = new HSSFWorkbook();
             CellStyle cellStyle = workbook.createCellStyle();
@@ -2366,7 +2385,7 @@ public class BizProcessDataProcurementController extends BaseController {
             Row row1 = sheet.createRow(0);
             row1.setHeight((short) 600);
 
-            CellRangeAddress cra1 = new CellRangeAddress(0, 0, 0, 7);
+            CellRangeAddress cra1 = new CellRangeAddress(0, 0, 0, 10);
             sheet.addMergedRegion(cra1);
             Cell cell_title_1 = row1.createCell(0);
             cell_title_1.setCellValue("产品采购合同");
@@ -2378,10 +2397,11 @@ public class BizProcessDataProcurementController extends BaseController {
             Cell cell_26 = row2.createCell(5);
             cell_26.setCellValue("合同编号：");
             cell_26.setCellStyle(cellLeft);
-            Cell cell_27 = row2.createCell(6);
+            sheet.addMergedRegion(new CellRangeAddress(1, 1, 5, 7));
+            Cell cell_27 = row2.createCell(8);
             cell_27.setCellValue(bizProcess.getString12());
             cell_27.setCellStyle(cellLeft);
-            sheet.addMergedRegion(new CellRangeAddress(1, 1, 6, 7));
+            sheet.addMergedRegion(new CellRangeAddress(1, 1, 8, 10));
 
             Row row3 = sheet.createRow(2);
             row3.setHeight((short) 600);
@@ -2393,10 +2413,11 @@ public class BizProcessDataProcurementController extends BaseController {
             Cell cell_34 = row3.createCell(5);
             cell_34.setCellValue("签订地点：");
             cell_34.setCellStyle(cellLeft);
-            Cell cell_35 = row3.createCell(6);
+            sheet.addMergedRegion(new CellRangeAddress(2, 2, 5, 7));
+            Cell cell_35 = row3.createCell(8);
             cell_35.setCellValue(bizProcess.getString24());
             cell_35.setCellStyle(cellLeft);
-            sheet.addMergedRegion(new CellRangeAddress(2, 2, 6, 7));
+            sheet.addMergedRegion(new CellRangeAddress(2, 2, 8, 10));
 
             Row row4 = sheet.createRow(3);
             row4.setHeight((short) 600);
@@ -2417,17 +2438,18 @@ public class BizProcessDataProcurementController extends BaseController {
             Cell cell_44 = row4.createCell(5);
             cell_44.setCellValue("签订日期：");
             cell_44.setCellStyle(cellLeft);
-            Cell cell_46 = row4.createCell(6);
+            sheet.addMergedRegion(new CellRangeAddress(3, 3, 5, 7));
+            Cell cell_46 = row4.createCell(8);
             cell_46.setCellValue(DateUtils.dateTime(bizProcess.getCreateTime()));
             cell_46.setCellStyle(cellLeft);
-            sheet.addMergedRegion(new CellRangeAddress(3, 3, 6, 7));
+            sheet.addMergedRegion(new CellRangeAddress(3, 3, 8, 10));
 
             Row row5 = sheet.createRow(5);
             row5.setHeight((short) 600);
             Cell cell_50 = row5.createCell(0);
             row5.setRowStyle(cellLeft);
             cell_50.setCellValue("为保障买卖双方的合法权益，根据现行《民法典》及有关法律规定，经友好协商，一致同意按下列条款签订本合同。");
-            sheet.addMergedRegion(new CellRangeAddress(5, 5, 0, 7));
+            sheet.addMergedRegion(new CellRangeAddress(5, 5, 0, 10));
             cell_50.setCellStyle(cellLeft);
 
             Row row6 = sheet.createRow(6);
@@ -2437,7 +2459,7 @@ public class BizProcessDataProcurementController extends BaseController {
             Cell cell_61 = row6.createCell(1);
             cell_61.setCellValue("供货内容：");
             cell_61.setCellStyle(cellLeft);
-            sheet.addMergedRegion(new CellRangeAddress(6, 6, 1, 7));
+            sheet.addMergedRegion(new CellRangeAddress(6, 6, 1, 10));
 
             CellStyle cellBottomStyle = ExcelProcessDataUtils.createBottomStyle(workbook);
             BizProcessChild queryBizProcessChild = new BizProcessChild();
@@ -2480,11 +2502,6 @@ public class BizProcessDataProcurementController extends BaseController {
             cell_89.setCellValue("备注");
             cell_89.setCellStyle(cellTableStyle);
 
-            String customerId = bizProcess.getString4();
-            BizCustomer bizCustomer = new BizCustomer();
-            if (StringUtils.isNotEmpty(customerId)) {
-                bizCustomer = bizCustomerService.selectBizCustomerById(Long.parseLong(customerId));
-            }
             int rowCount = 7;
             int num = 0;
             BigDecimal price = new BigDecimal("0");
@@ -2532,15 +2549,11 @@ public class BizProcessDataProcurementController extends BaseController {
                     Cell cell8 = row.createCell(8);
                     String caizhi = "阀体:" + bizProcessChild.getValvebodyMaterial() + ",阀芯:" + bizProcessChild.getValveElement()
                             + ",密封材质:" + bizProcessChild.getSealingMaterial() + ",驱动形式:" + bizProcessChild.getDriveForm()
-                            + ",连接方式:" + bizProcessChild.getConnectionType();
+                            + ",连接方式:" + bizProcessChild.getConnectionType() + ",阀轴材质：" + bizProcessChild.getValveShaft();
                     cell8.setCellValue(caizhi);
                     cell8.setCellStyle(cellTableStyle);
                     Cell cell9 = row.createCell(9);
-                    if (StringUtils.isBlank(bizCustomer.getCodeName())) {
-                        cell9.setCellValue(bizProcess.getString10());
-                    } else {
-                        cell9.setCellValue(bizProcess.getString10() + " " + bizCustomer.getCodeName());
-                    }
+                    cell9.setCellValue(contractNoStr);
                     cell9.setCellStyle(cellTableStyle);
                     Cell cell10 = row.createCell(10);
                     cell10.setCellValue(bizProcessChild.getRemark());
@@ -2591,11 +2604,8 @@ public class BizProcessDataProcurementController extends BaseController {
                     cell8.setCellValue(bizProcessChild.getString5());
                     cell8.setCellStyle(cellTableStyle);
                     Cell cell9 = row.createCell(9);
-                    if (StringUtils.isBlank(bizCustomer.getCodeName())) {
-                        cell9.setCellValue(bizProcess.getString10());
-                    } else {
-                        cell9.setCellValue(bizProcess.getString10() + " " + bizCustomer.getCodeName());
-                    }                    cell9.setCellStyle(cellTableStyle);
+                    cell9.setCellValue(contractNoStr);
+                    cell9.setCellStyle(cellTableStyle);
                     Cell cell10 = row.createCell(10);
                     cell10.setCellValue(bizProcessChild.getRemark());
                     cell10.setCellStyle(cellTableStyle);
@@ -2645,11 +2655,8 @@ public class BizProcessDataProcurementController extends BaseController {
                     cell8.setCellValue(bizProcessChild.getRef1MaterialRequire());
                     cell8.setCellStyle(cellTableStyle);
                     Cell cell9 = row.createCell(9);
-                    if (StringUtils.isBlank(bizCustomer.getCodeName())) {
-                        cell9.setCellValue(bizProcess.getString10());
-                    } else {
-                        cell9.setCellValue(bizProcess.getString10() + " " + bizCustomer.getCodeName());
-                    }                    cell9.setCellStyle(cellTableStyle);
+                    cell9.setCellValue(contractNoStr);
+                    cell9.setCellStyle(cellTableStyle);
                     Cell cell10 = row.createCell(10);
                     cell10.setCellValue(bizProcessChild.getRemark());
                     cell10.setCellStyle(cellTableStyle);
@@ -2698,11 +2705,8 @@ public class BizProcessDataProcurementController extends BaseController {
                     cell8.setCellValue("");
                     cell8.setCellStyle(cellTableStyle);
                     Cell cell9 = row.createCell(9);
-                    if (StringUtils.isBlank(bizCustomer.getCodeName())) {
-                        cell9.setCellValue(bizProcess.getString10());
-                    } else {
-                        cell9.setCellValue(bizProcess.getString10() + " " + bizCustomer.getCodeName());
-                    }                    cell9.setCellStyle(cellTableStyle);
+                    cell9.setCellValue(contractNoStr);
+                    cell9.setCellStyle(cellTableStyle);
                     Cell cell10 = row.createCell(10);
                     cell10.setCellValue(bizProcessChild.getRemark());
                     cell10.setCellStyle(cellTableStyle);
@@ -2751,11 +2755,8 @@ public class BizProcessDataProcurementController extends BaseController {
                     cell8.setCellValue(bizProcessChild.getMaterial());
                     cell8.setCellStyle(cellTableStyle);
                     Cell cell9 = row.createCell(9);
-                    if (StringUtils.isBlank(bizCustomer.getCodeName())) {
-                        cell9.setCellValue(bizProcess.getString10());
-                    } else {
-                        cell9.setCellValue(bizProcess.getString10() + " " + bizCustomer.getCodeName());
-                    }                    cell9.setCellStyle(cellTableStyle);
+                    cell9.setCellValue(contractNoStr);
+                    cell9.setCellStyle(cellTableStyle);
                     Cell cell10 = row.createCell(10);
                     cell10.setCellValue(bizProcessChild.getRemark());
                     cell10.setCellStyle(cellTableStyle);
@@ -2786,13 +2787,15 @@ public class BizProcessDataProcurementController extends BaseController {
             cell_97.setCellStyle(cellTableStyle);
             cell_97.setCellValue(totalPrice.doubleValue());
             Cell cell_98 = row9.createCell(8);
-            if (!string14D.equals(new Double(0))) {
+            // 优惠金额
+            Double preferentialPrice = bizProcess.getPrice20();
+            if (Objects.nonNull(preferentialPrice) && !new Double(0).equals(preferentialPrice)) {
                 cell_98.setCellValue("优惠价：");
             }
             cell_98.setCellStyle(cellTableStyle);
             Cell cell_99 = row9.createCell(9);
-            if (!string14D.equals(new Double(0))) {
-                cell_99.setCellValue(string14D);
+            if (Objects.nonNull(preferentialPrice) &&  !new Double(0).equals(preferentialPrice)) {
+                cell_99.setCellValue(preferentialPrice);
             }
             cell_99.setCellStyle(cellTableStyle);
             Cell cell_100 = row9.createCell(10);
@@ -2803,7 +2806,14 @@ public class BizProcessDataProcurementController extends BaseController {
             Row row10 = sheet.createRow(rowCount);
             Cell cell_10 = row10.createCell(0);
             cell_10.setCellStyle(cellTableStyle);
-            cell_10.setCellValue("合计人民币金额（大写）：" + StringUtils.convert(totalPrice.doubleValue()) + "（以上价格为含13%税价格）");
+            double totalPricePrefer = 0;
+            if (Objects.nonNull(preferentialPrice) &&  !new Double(0).equals(preferentialPrice)) {
+                cell_98.setCellValue("优惠价：");
+                totalPricePrefer = totalPrice.doubleValue() - preferentialPrice;
+            } else {
+                totalPricePrefer = totalPrice.doubleValue();
+            }
+            cell_10.setCellValue("合计人民币金额（大写）：" + StringUtils.convert(totalPricePrefer) + "（以上价格为含13%税价格）");
             sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 0, 10));
             Cell cell_11 = row10.createCell(1);
             cell_11.setCellStyle(cellTableStyle);
@@ -2834,7 +2844,7 @@ public class BizProcessDataProcurementController extends BaseController {
             Cell cell_11_1 = row11.createCell(1);
             cell_11_1.setCellValue("技术及其他要求：");
             sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 1, 2));
-            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 3, 7));
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 3, 10));
             Cell cell_11_2 = row11.createCell(2);
             cell_11_2.setCellStyle(cellBottomStyle);
             Cell cell_11_3 = row11.createCell(3);
@@ -2844,6 +2854,17 @@ public class BizProcessDataProcurementController extends BaseController {
             cell_11_4.setCellStyle(cellBottomStyle);
             Cell cell_11_5 = row11.createCell(5);
             cell_11_5.setCellStyle(cellBottomStyle);
+            Cell cell_11_6 = row11.createCell(6);
+            cell_11_6.setCellStyle(cellBottomStyle);
+            Cell cell_11_7 = row11.createCell(7);
+            cell_11_7.setCellStyle(cellBottomStyle);
+            Cell cell_11_8 = row11.createCell(8);
+            cell_11_8.setCellStyle(cellBottomStyle);
+            Cell cell_11_9 = row11.createCell(9);
+            cell_11_9.setCellStyle(cellBottomStyle);
+            Cell cell_11_10 = row11.createCell(10);
+            cell_11_10.setCellStyle(cellBottomStyle);
+
 
             rowCount++;
             Row row12 = sheet.createRow(rowCount);
@@ -2852,8 +2873,8 @@ public class BizProcessDataProcurementController extends BaseController {
             cell_12_0.setCellValue("三、");
             Cell cell_12_1 = row12.createCell(1);
             cell_12_1.setCellValue("质量要求：符合国家及行业标准或卖方企业标准；产品合格证、标牌：");
-            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 1, 5));
-            Cell cell_12_6 = row12.createCell(6);
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 1, 7));
+            Cell cell_12_6 = row12.createCell(8);
             String string19 = bizProcess.getString19();
             String biaopai = "好利";
             if (StringUtils.isNotEmpty(string19)) {
@@ -2862,10 +2883,11 @@ public class BizProcessDataProcurementController extends BaseController {
                 biaopai = collect.get(string19);
             }
             cell_12_6.setCellValue(biaopai);
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 8, 10));
 
             rowCount++;
             Row row13 = sheet.createRow(rowCount);
-            row13.setHeight((short) 1500);
+            row13.setHeight((short) 1300);
 
             row13.setRowStyle(cellLeft);
             Cell cell_13_0 = row13.createCell(0);
@@ -2873,7 +2895,7 @@ public class BizProcessDataProcurementController extends BaseController {
             Cell cell_13_1 = row13.createCell(1);
             cell_13_1.setCellStyle(cellLeft);
             cell_13_1.setCellValue("产品验收：按国家标准验收，甲方若有要求按甲方要求验收，验收合格以甲方签字为准；在验收期限内，需方对瑕疵产品有权无条件拒收，或要求供方换货，如更换之后的产品仍未达到验收标准的，需方有权要求退回。对于需方拒收或退回的产品，供方应在指定的期限内退还相应的货款。");
-            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 1, 7));
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 1, 10));
 
             rowCount++;
             Row row14 = sheet.createRow(rowCount);
@@ -2881,21 +2903,22 @@ public class BizProcessDataProcurementController extends BaseController {
             cell_14_0.setCellValue("五、");
             Cell cell_14_1 = row14.createCell(1);
             cell_14_1.setCellValue("产品质保：");
-            Cell cell_14_2 = row14.createCell(2);
+            Cell cell_14_2 = row14.createCell(3);
             cell_14_2.setCellValue("自出厂之日算起，");
-            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 2, 3));
-            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 4, 5));
-            ExcelProcessDataUtils.addValidationData(sheet, rowCount, rowCount, 4, 4, ExcelProcessDataUtils.baozhiqi);
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 1, 2));
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 3, 5));
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 6, 7));
+            ExcelProcessDataUtils.addValidationData(sheet, rowCount, rowCount, 6, 7, ExcelProcessDataUtils.baozhiqi);
 
             rowCount++;
             Row row15 = sheet.createRow(rowCount);
-            row15.setHeight((short) 1800);
+            row15.setHeight((short) 1500);
 
             row15.setRowStyle(cellLeft);
             Cell cell_15_0 = row15.createCell(2);
             cell_15_0.setCellStyle(cellLeft);
             cell_15_0.setCellValue("需方有权在质保期内对货物质量表示异议，供方在接到需方异议后应在3日内处理，否决即视为默认接收异议和处理意见，质保期内如出现产品本身质量问题，供方免费进行维修，不能维修予以更换，甲方若有因产品售后罚款及处理费用等损失的由乙方负责承担，供方未履行质量保证义务的，需方有权拒绝退还质保金，并要求供方另行支付合同总价款20%的违约金。");
-            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 2, 7));
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 2, 10));
 
             rowCount++;
             Row row16 = sheet.createRow(rowCount);
@@ -2903,6 +2926,9 @@ public class BizProcessDataProcurementController extends BaseController {
             cell_16_0.setCellValue("六、");
             Cell cell_16_1 = row16.createCell(1);
             cell_16_1.setCellValue("安装与调试：");
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 1, 2));
+            Cell cell_16_2 = row16.createCell(3);
+            cell_16_2.setCellValue("电话指导");
 
             rowCount++;
             Row row17 = sheet.createRow(rowCount);
@@ -2912,14 +2938,13 @@ public class BizProcessDataProcurementController extends BaseController {
             cell_17_1.setCellValue("包装方式：");
             Cell cell_17_2 = row17.createCell(2);
             cell_17_2.setCellValue(bizProcess.getString27());
-            Cell cell_17_3 = row17.createCell(3);
-            cell_17_3.setCellValue("但确保产品能被保护。");
-            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 3, 4));
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 2, 4));
             Cell cell_17_4 = row17.createCell(5);
             cell_17_4.setCellValue("包装物回收：");
-            Cell cell_17_5 = row17.createCell(6);
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 5, 6));
+            Cell cell_17_5 = row17.createCell(7);
             cell_17_5.setCellValue("不回收，由甲方自行处理。");
-            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 6, 7));
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 7, 10));
 
             rowCount++;
             Row row18 = sheet.createRow(rowCount);
@@ -2928,9 +2953,8 @@ public class BizProcessDataProcurementController extends BaseController {
             Cell cell_18_1 = row18.createCell(1);
             cell_18_1.setCellValue("交货周期:");
             Cell cell_18_2 = row18.createCell(2);
-//            cell_18_2.setCellValue(DateUtils.dateTime(bizProcess.getDatetime2()));
             cell_18_2.setCellValue("合同生效日起   天发货，若有推迟发货超过5天，每天收取1%合同额违约金，并有权取消合同。");
-            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 2, 7));
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 2, 10));
 
 //            rowCount++;
 //            Row row19 = sheet.createRow(rowCount);
@@ -2949,6 +2973,7 @@ public class BizProcessDataProcurementController extends BaseController {
             String contractPaytype = dictDataService.selectDictLabel("contract_paytype", bizProcess.getString20());
             Cell cell_20_12 = row20.createCell(2);
             cell_20_12.setCellValue(contractPaytype);
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 2, 10));
 
             rowCount++;
             Row row210 = sheet.createRow(rowCount);
@@ -2976,21 +3001,21 @@ public class BizProcessDataProcurementController extends BaseController {
             Cell cell_22_3 = row22.createCell(3);
             cell_22_3.setCellValue(bizProcess.getString28());
             sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 1, 2));
-            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 3, 7));
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 3, 10));
 
             rowCount++;
             Row row23 = sheet.createRow(rowCount);
-            row23.setHeight((short) 900);
+            row23.setHeight((short) 700);
             Cell cell_23_1 = row23.createCell(1);
             cell_23_1.setCellValue("3、产品运送至需方指定地点并由指定收货人签收后，视为供方完成交付义务，在供方完成交付义务之前，产品在运输途中毁损、灭失的风险均由供方承担，需方不承担任何责任。");
             cell_23_1.setCellStyle(cellLeft);
-            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 1, 7));
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 1, 10));
 
             rowCount++;
             Row row231 = sheet.createRow(rowCount);
             Cell cell_231_1 = row231.createCell(1);
             cell_231_1.setCellValue("4、其他约定事项：                                                                   。");
-            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 1, 7));
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 1, 10));
 
             rowCount++;
             Row row24 = sheet.createRow(rowCount);
@@ -2998,99 +3023,100 @@ public class BizProcessDataProcurementController extends BaseController {
             cell_24_1.setCellValue("十一、");
             Cell cell_24_2 = row24.createCell(1);
             cell_24_2.setCellValue("产品所有权自交接时起转移，月结供应商以甲方收货入库上账开始执行相关付款手续。");
-            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 1, 7));
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 1, 10));
 
             rowCount++;
             Row row25 = sheet.createRow(rowCount);
-            row25.setHeight((short) 1800);
+            row25.setHeight((short) 1300);
             Cell cell_25_1 = row25.createCell(0);
             cell_25_1.setCellValue("十二、");
             Cell cell_25_2 = row25.createCell(1);
-            cell_25_2.setCellValue("违约责任：供需双方在合同交往中供方应遵守商业道德廉洁从业，供方违反商业道德和廉洁从业尊则给与甲方人员回扣、礼金等即为违约，给需方造成损失的应双倍赔偿损失。合同签订后，买卖双方严格执行双方所签订合同的条款，其中一方不履行或不完全履行合同者应承担相应的法律责任；解决合同纠纷方式：因本合同产生的争议，双方应友好协商解决，协商不成的，任何一方均有权向需方住所地仲裁委员会仲裁。");
-            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 1, 7));
+            cell_25_2.setCellValue("违约责任：供需双方在合同交往中供方应遵守商业道德廉洁从业，供方违反商业道德和廉洁从业尊则给与甲方人员回扣、礼金等即为违约，给需方造成损失的应双倍赔偿损失。合同签订后，买卖双方严格执行双方所签订合同的条款，其中一方不履行或不完全履行合同者应承担相应的法律责任；促裁委员会：因本合同产生的争议，双方应友好协商解决，协商不成的，任何一方均有权向需方住所地仲裁委员会仲裁。");
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 1, 10));
             cell_25_2.setCellStyle(cellLeft);
 
             rowCount++;
             Row row26 = sheet.createRow(rowCount);
-            row26.setHeight((short) 600);
+            row26.setHeight((short) 300);
             Cell cell_26_1 = row26.createCell(0);
             cell_26_1.setCellValue("十三、");
             Cell cell_26_2 = row26.createCell(1);
             cell_26_2.setCellValue("本合同双方盖章生效，复印件同等有效，一式两份，双方各持一份，具有同等法律效力。");
-            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 1, 7));
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 1, 10));
             cell_26_2.setCellStyle(cellLeft);
 
             rowCount++;
             rowCount++;
             Row row27 = sheet.createRow(rowCount);
-            Cell cell_27_1 = row27.createCell(1);
+            Cell cell_27_1 = row27.createCell(0);
             cell_27_1.setCellValue("单位名称：" + bizProcess.getString1() + "（章）");
-            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 1, 3));
-            Cell cell_27_4 = row27.createCell(4);
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 0, 4));
+            Cell cell_27_4 = row27.createCell(5);
             cell_27_4.setCellValue("单位名称：" + string6Name + "（章）");
-            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 4, 7));
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 5, 10));
 
             rowCount++;
             Row row28 = sheet.createRow(rowCount);
-            Cell cell_28_1 = row28.createCell(1);
+            Cell cell_28_1 = row28.createCell(0);
             cell_28_1.setCellValue("单位地址：" + Util.jsonObject.getJSONObject(bizProcess.getString1()).getString("address"));
-            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 1, 3));
-            Cell cell_28_4 = row28.createCell(4);
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 0, 4));
+            Cell cell_28_4 = row28.createCell(5);
             cell_28_4.setCellValue("单位地址：" + bizSuppliers.getAddress());
-            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 4, 7));
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 5, 10));
 
             rowCount++;
             Row row29 = sheet.createRow(rowCount);
-            Cell cell_29_1 = row29.createCell(1);
+            Cell cell_29_1 = row29.createCell(0);
             cell_29_1.setCellValue("法定代表人：");
-            Cell cell_29_4 = row29.createCell(4);
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 0, 4));
+            Cell cell_29_4 = row29.createCell(5);
             cell_29_4.setCellValue("法定代表人：");
-            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 4, 7));
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 5, 10));
 
             rowCount++;
             Row row30 = sheet.createRow(rowCount);
-            Cell cell_30_1 = row30.createCell(1);
+            Cell cell_30_1 = row30.createCell(0);
             cell_30_1.setCellValue("委托代理人：");
-            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 1, 3));
-            Cell cell_30_4 = row30.createCell(4);
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 0, 4));
+            Cell cell_30_4 = row30.createCell(5);
             cell_30_4.setCellValue("委托代理人：" + bizSuppliers.getHumanCapitalMeasure());
-            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 4, 7));
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 5, 10));
 
             rowCount++;
             Row row31 = sheet.createRow(rowCount);
-            Cell cell_31_1 = row31.createCell(1);
+            Cell cell_31_1 = row31.createCell(0);
             cell_31_1.setCellValue("电     话：" + Util.jsonObject.getJSONObject(bizProcess.getString1()).getString("phone"));
-            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 1, 3));
-            Cell cell_31_4 = row31.createCell(4);
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 0, 4));
+            Cell cell_31_4 = row31.createCell(5);
             cell_31_4.setCellValue("电     话：" + bizSuppliers.getTelphone());
-            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 4, 7));
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 5, 10));
 
             rowCount++;
             Row row32 = sheet.createRow(rowCount);
-            Cell cell_32_1 = row32.createCell(1);
+            Cell cell_32_1 = row32.createCell(0);
             cell_32_1.setCellValue("开户银行：" + Util.jsonObject.getJSONObject(bizProcess.getString1()).getString("bank"));
-            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 1, 3));
-            Cell cell_32_4 = row32.createCell(4);
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 0, 4));
+            Cell cell_32_4 = row32.createCell(5);
             cell_32_4.setCellValue("开户银行：" + bizSuppliers.getBank() == null ? "" : bizSuppliers.getBank());
-            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 4, 7));
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 5, 10));
 
             rowCount++;
             Row row33 = sheet.createRow(rowCount);
-            Cell cell_33_1 = row33.createCell(1);
+            Cell cell_33_1 = row33.createCell(0);
             cell_33_1.setCellValue("帐    号：" + Util.jsonObject.getJSONObject(bizProcess.getString1()).getString("bankNo"));
-            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 1, 3));
-            Cell cell_33_4 = row33.createCell(4);
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 0, 4));
+            Cell cell_33_4 = row33.createCell(5);
             cell_33_4.setCellValue("帐    号：" + bizSuppliers.getBankNo());
-            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 4, 7));
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 5, 10));
 
             rowCount++;
             Row row34 = sheet.createRow(rowCount);
-            Cell cell_34_1 = row34.createCell(1);
+            Cell cell_34_1 = row34.createCell(0);
             cell_34_1.setCellValue("税    号：" + Util.jsonObject.getJSONObject(bizProcess.getString1()).getString("faxNo"));
-            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 1, 3));
-            Cell cell_34_4 = row34.createCell(4);
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 0, 4));
+            Cell cell_34_4 = row34.createCell(5);
             cell_34_4.setCellValue("税    号：" + bizSuppliers.getTaxNumber());
-            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 4, 7));
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 5, 10));
 
             String filename = ExcelUtil.encodingFilenameByXls("采购合同");
             OutputStream out = new FileOutputStream(getAbsoluteFile(filename));
@@ -3113,7 +3139,25 @@ public class BizProcessDataProcurementController extends BaseController {
         try {
             String id = bizProcessDataParamter.getDataId().toString();
             BizProcessData bizProcess = bizProcessDataService.selectBizProcessDataById(Long.parseLong(id));
-
+            String contractNoStr = "";
+            for (String contractNo : bizProcess.getString10().split(",")) {
+                BizProcessData bizProcessData = new BizProcessData();
+                bizProcessData.setString1(contractNo);
+                bizProcessData.setBizId("contract");
+                bizProcessData.setQueryStatus("0");
+                List<BizProcessData> list = bizProcessDataService.selectBizProcessDataListRef(bizProcessData);
+                if (org.apache.commons.collections4.CollectionUtils.isNotEmpty(list)) {
+                    String codeName = list.get(0).getCodeName();
+                    if (StringUtils.isNotEmpty(codeName)) {
+                        contractNoStr += contractNo + "-" + codeName + ",";
+                    } else {
+                        contractNoStr += contractNo + ",";
+                    }
+                }
+            }
+            if (contractNoStr.contains(",")) {
+                contractNoStr = contractNoStr.substring(0, contractNoStr.length()-1);
+            }
             Workbook workbook = new HSSFWorkbook();
             CellStyle cellStyle = workbook.createCellStyle();
             cellStyle.setWrapText(true);
@@ -3174,7 +3218,7 @@ public class BizProcessDataProcurementController extends BaseController {
 
             Row row5 = sheet.createRow(4);
             Cell cell_50 = row5.createCell(1);
-            cell_50.setCellValue("合同编号：" + bizProcess.getString12());
+            cell_50.setCellValue("合同编号：" + contractNoStr);
             cell_50.setCellStyle(cellLeft);
             sheet.addMergedRegion(new CellRangeAddress(4, 4, 1, 4));
             Row row6 = sheet.createRow(5);
@@ -3288,7 +3332,7 @@ public class BizProcessDataProcurementController extends BaseController {
                     Cell cell10 = row.createCell(9);
                     String caizhi = "阀体:" + bizProcessChild.getValvebodyMaterial() + ",阀芯:" + bizProcessChild.getValveElement()
                             + ",密封材质:" + bizProcessChild.getSealingMaterial() + ",驱动形式:" + bizProcessChild.getDriveForm()
-                            + ",连接方式:" + bizProcessChild.getConnectionType();
+                            + ",连接方式:" + bizProcessChild.getConnectionType() + ",阀轴材质：" + bizProcessChild.getValveShaft();
                     cell10.setCellValue(caizhi);
                     cell10.setCellStyle(cellTableStyle);
                     Cell cell111 = row.createCell(10);
@@ -3585,37 +3629,17 @@ public class BizProcessDataProcurementController extends BaseController {
             cell_188_3.setCellValue("收货信息：");
             Cell cell_188_4 = row18.createCell(7);
             cell_188_4.setCellValue(bizProcess.getString28());
-            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 7, 10));
+            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 7, 12));
+
             rowCount++;
             Row row20 = sheet.createRow(rowCount);
+            row20.setHeight((short) 900);
             Cell cell_20_0 = row20.createCell(0);
             cell_20_0.setCellValue("九、");
             cell_20_0.setCellStyle(cellCenterss);
-
             Cell cell_20_10 = row20.createCell(1);
-            cell_20_10.setCellValue("违约责任：");
-            Cell cell_20_12 = row20.createCell(2);
-            cell_20_12.setCellValue("合同签订后，买卖双方严格执行双方所签订合同的条款，其中一方不履行或不完全履行合同者应承担相应的法律责任。");
-            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 2, 10));
-
-            rowCount++;
-            Row row210 = sheet.createRow(rowCount);
-            Cell cell_211_0 = row210.createCell(0);
-            cell_211_0.setCellValue("十、");
-            cell_211_0.setCellStyle(cellCenterss);
-
-            Cell cell_212_0 = row210.createCell(1);
-            cell_212_0.setCellValue("解决合同纠纷方式：双方协商解决，解决不成由买方所在工商局经济合同仲裁委员会仲裁或法院起诉。");
-            sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 1, 10));
-
-            rowCount++;
-            Row row24 = sheet.createRow(rowCount);
-            Cell cell_24_1 = row24.createCell(0);
-            cell_24_1.setCellValue("十一、");
-            cell_24_1.setCellStyle(cellCenterss);
-
-            Cell cell_24_2 = row24.createCell(1);
-            cell_24_2.setCellValue("本合同一式贰份，双方各执一份，双方盖章后生效（传真件有效）。");
+            cell_20_10.setCellValue("违约责任：合同签订后，买卖双方严格执行双方所签订合同的条款，其中一方不履行或不完全履行合同者应承担相应的法律责任。促裁委员会：双方协商解决，解决不成由买方所在工商局经济合同仲裁委员会仲裁或法院起诉。本合同一式贰份，双方各执一份，双方盖章后生效（传真件有效）。");
+            cell_20_10.setCellStyle(cellLeft);
             sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 1, 10));
 
             rowCount++;
@@ -3879,7 +3903,7 @@ public class BizProcessDataProcurementController extends BaseController {
                     Cell cell8 = row.createCell(8);
                     String caizhi = "阀体:" + bizProcessChild.getValvebodyMaterial() + ",阀芯:" + bizProcessChild.getValveElement()
                             + ",密封材质:" + bizProcessChild.getSealingMaterial() + ",驱动形式:" + bizProcessChild.getDriveForm()
-                            + ",连接方式:" + bizProcessChild.getConnectionType();
+                            + ",连接方式:" + bizProcessChild.getConnectionType() + ",阀轴材质：" + bizProcessChild.getValveShaft();
                     cell8.setCellValue(caizhi);
                     cell8.setCellStyle(cellTableStyle);
                     Cell cell9 = row.createCell(9);
@@ -4353,7 +4377,7 @@ public class BizProcessDataProcurementController extends BaseController {
             Cell cell_25_1 = row25.createCell(0);
             cell_25_1.setCellValue("十二、");
             Cell cell_25_2 = row25.createCell(1);
-            cell_25_2.setCellValue("违约责任：供需双方在合同交往中供方应遵守商业道德廉洁从业，供方违反商业道德和廉洁从业尊则给与甲方人员回扣、礼金等即为违约，给需方造成损失的应双倍赔偿损失。合同签订后，买卖双方严格执行双方所签订合同的条款，其中一方不履行或不完全履行合同者应承担相应的法律责任；解决合同纠纷方式：因本合同产生的争议，双方应友好协商解决，协商不成的，任何一方均有权向需方住所地仲裁委员会仲裁。");
+            cell_25_2.setCellValue("违约责任：供需双方在合同交往中供方应遵守商业道德廉洁从业，供方违反商业道德和廉洁从业尊则给与甲方人员回扣、礼金等即为违约，给需方造成损失的应双倍赔偿损失。合同签订后，买卖双方严格执行双方所签订合同的条款，其中一方不履行或不完全履行合同者应承担相应的法律责任；促裁委员会：因本合同产生的争议，双方应友好协商解决，协商不成的，任何一方均有权向需方住所地仲裁委员会仲裁。");
             sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 1, 7));
             cell_25_2.setCellStyle(cellLeft);
 

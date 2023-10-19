@@ -676,6 +676,7 @@ public class BizProcessDataServiceImpl implements IBizProcessDataService {
                             bizProcessChild.setValveElement(newBizProduct.getValveElement());
                             bizProcessChild.setDriveForm(newBizProduct.getDriveForm());
                             bizProcessChild.setConnectionType(newBizProduct.getConnectionType());
+                            bizProcessChild.setRemark(newBizProduct.getRemark());
                         }
                     }
                 }

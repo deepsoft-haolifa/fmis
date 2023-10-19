@@ -554,6 +554,8 @@ initChildProductTable = function(index, row, $detail) {
                     return actions;
                 }},
             {field : 'model',title : '型号',editable: false},
+            {field : 'specifications',title : '规格',editable: false},
+            {field : 'nominalPressure',title : '压力',editable: false},
             {field : 'series',title : '系列',editable: false},
             {field : 'productNum',title : '数量',editable: {type: 'text',validate: function(v,r){ return numberValidate(v)}}},
             /*{field : 'productProcurementPrice',title : '采购价',editable: false},
@@ -574,8 +576,6 @@ initChildProductTable = function(index, row, $detail) {
             {field : 'supplierName',title : '供应商',editable: false},
             {field : 'supplierId',title : 'supplierId',visible: false},
 
-            {field : 'specifications',title : '规格',editable: false},
-            {field : 'nominalPressure',title : '压力',editable: false},
             {field : 'valvebodyMaterial',title : '阀体',editable: false},
             {field : 'valveElement',title : '阀芯',editable: false},
             {field : 'sealingMaterial',title : '密封材质',editable: false},

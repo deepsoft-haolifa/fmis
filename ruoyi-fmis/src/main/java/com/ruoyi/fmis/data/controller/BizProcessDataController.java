@@ -4108,7 +4108,7 @@ public class BizProcessDataController extends BaseController {
                     cell1.setCellValue(i+1);
                     cell1.setCellStyle(cellTableStyle);
                     Cell cell2 = row.createCell(1);
-                    cell2.setCellValue(bizProduct.getModel());
+                    cell2.setCellValue(bizProduct.getModel() + "_" +  bizProduct.getSeries());
                     cell2.setCellStyle(cellTableStyle);
                     Cell cell3 = row.createCell(2);
                     cell3.setCellValue("");
@@ -4127,9 +4127,10 @@ public class BizProcessDataController extends BaseController {
                     cell7.setCellStyle(cellTableStyle);
                     Cell cell8 = row.createCell(7);
                     if (StringUtils.isNotEmpty(bizProduct.getProductNum())) {
-                        count += Integer.valueOf(bizProduct.getProductNum());
+                        Integer productNum = Integer.valueOf(bizProduct.getProductNum());
+                        count += productNum;
+                        cell8.setCellValue(productNum);
                     }
-                    cell8.setCellValue(bizProduct.getProductNum());
                     cell8.setCellStyle(cellTableStyle);
                     //法兰计算
                     String ref1Id = bizProduct.getProductRef1Id();
@@ -4204,6 +4205,9 @@ public class BizProcessDataController extends BaseController {
                     if (StringUtils.isNotEmpty(bizProduct.getString15())) {
                         startRemark += "颜色：" + bizProduct.getString15() + ",";
                     }
+                    if (StringUtils.isNotEmpty(bizProduct.getValveShaft())) {
+                        startRemark += "阀轴材质：" + bizProduct.getValveShaft() + ",";
+                    }
                     if (startRemark.length() > 1) {
                         startRemark = startRemark.substring(0, startRemark.length() - 1);
                     }
@@ -4258,7 +4262,7 @@ public class BizProcessDataController extends BaseController {
             cell_11_0.setCellValue("三、");
             Cell cell_11_1 = row11.createCell(1);
             cell_11_1.setCellValue("生产要求：");
-            Cell cell_11_3 = row11.createCell(3);
+            Cell cell_11_3 = row11.createCell(2);
             cell_11_3.setCellValue(StringUtils.trim(bizProcessData.getString28()));
             sheet.addMergedRegion(new CellRangeAddress(aa, aa, 2, 10));
 

@@ -222,6 +222,11 @@ public class BizProcessData extends BaseEntity {
     @Getter
     private Long subjectsId;
 
+    /** 客户代码 */
+    @Setter
+    @Getter
+    private String codeName;
+
 
     /** 关联业务数据ID */
     @Excel(name = "关联业务数据ID")

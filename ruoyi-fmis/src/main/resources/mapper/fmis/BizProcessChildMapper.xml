@@ -219,6 +219,7 @@
           s.name as supplier, p.new_supplier,
           p.medium,p.temperature,p.other,d9.name as productString1,
           p.string2 as productString2,ac.name as actuatorName,pc.string14,pc.string15,pc.string20,
+          p.string3 as valveShaft,
           /*dd.dict_label as levelLabel,*/
 
 
