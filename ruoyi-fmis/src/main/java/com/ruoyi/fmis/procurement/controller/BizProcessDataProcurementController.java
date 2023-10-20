@@ -1748,7 +1748,7 @@ public class BizProcessDataProcurementController extends BaseController {
                 // 第 n 行
                 h_n(receiptSheet, rowIdx, borderCellStyle, i, bizProcessChild);
                 orderSize += Integer.parseInt(bizProcessChild.getProductNum());
-                arrivalSize += bizProcessChild.getStayNum();
+                arrivalSize += Objects.isNull(bizProcessChild.getStayNum()) ? 0 : bizProcessChild.getStayNum();
             }
         }
         List<BizProcessChild> actuatorList = bizProcessChildService.selectBizTestActuatorList(queryBizProcessChild);
@@ -1787,8 +1787,15 @@ public class BizProcessDataProcurementController extends BaseController {
                 cellValue7.setCellValue(bizProcessChild.getContractNo());
                 XSSFCell cellValue8 = rowList.createCell(7);// 实际到货数
                 cellValue8.setCellValue(bizProcessChild.getStayNum());
-                XSSFCell cellValue9 = rowList.createCell(8);// 备注
-                cellValue9.setCellValue(Objects.isNull(bizProcessChild.getRemark()) ? "" : bizProcessChild.getRemark());
+                XSSFCell cellValue9 = rowList.createCell(8);// 合格数量
+                cellValue9.setCellValue(Objects.isNull(bizProcessChild.getYesNum()) ? "" : bizProcessChild.getYesNum());
+                XSSFCell cellValue10 = rowList.createCell(9);// 不合格数量
+                cellValue10.setCellValue(Objects.isNull(bizProcessChild.getNoNum()) ? "" : bizProcessChild.getNoNum());
+                XSSFCell cellValue11 = rowList.createCell(10);// 不合格原因
+                cellValue11.setCellValue(Objects.isNull(bizProcessChild.getSnRemark()) ? "" : bizProcessChild.getSnRemark());
+
+                XSSFCell cellValue12 = rowList.createCell(11);// 备注
+                cellValue12.setCellValue(Objects.isNull(bizProcessChild.getRemark()) ? "" : bizProcessChild.getRemark());
 // 设置单元格样式
                 cellValue1.setCellStyle(borderCellStyle);
                 cellValue2.setCellStyle(borderCellStyle);
@@ -1799,6 +1806,9 @@ public class BizProcessDataProcurementController extends BaseController {
                 cellValue7.setCellStyle(borderCellStyle);
                 cellValue8.setCellStyle(borderCellStyle);
                 cellValue9.setCellStyle(borderCellStyle);
+                cellValue10.setCellStyle(borderCellStyle);
+                cellValue11.setCellStyle(borderCellStyle);
+                cellValue12.setCellStyle(borderCellStyle);
                 orderSize += Integer.parseInt(bizProcessChild.getActuatorNum());
                 arrivalSize += bizProcessChild.getStayNum();
             }
@@ -1841,8 +1851,15 @@ public class BizProcessDataProcurementController extends BaseController {
                 cellValue7.setCellValue(bizProcessChild.getContractNo());
                 XSSFCell cellValue8 = rowList.createCell(7);// 实际到货数
                 cellValue8.setCellValue(bizProcessChild.getStayNum());
-                XSSFCell cellValue9 = rowList.createCell(8);// 备注
-                cellValue9.setCellValue(Objects.isNull(bizProcessChild.getRemark()) ? "" : bizProcessChild.getRemark());
+                XSSFCell cellValue9 = rowList.createCell(8);// 合格数量
+                cellValue9.setCellValue(Objects.isNull(bizProcessChild.getYesNum()) ? "" : bizProcessChild.getYesNum());
+                XSSFCell cellValue10 = rowList.createCell(9);// 不合格数量
+                cellValue10.setCellValue(Objects.isNull(bizProcessChild.getNoNum()) ? "" : bizProcessChild.getNoNum());
+                XSSFCell cellValue11 = rowList.createCell(10);// 不合格原因
+                cellValue11.setCellValue(Objects.isNull(bizProcessChild.getSnRemark()) ? "" : bizProcessChild.getSnRemark());
+
+                XSSFCell cellValue12 = rowList.createCell(11);// 备注
+                cellValue12.setCellValue(Objects.isNull(bizProcessChild.getRemark()) ? "" : bizProcessChild.getRemark());
 // 设置单元格样式
                 cellValue1.setCellStyle(borderCellStyle);
                 cellValue2.setCellStyle(borderCellStyle);
@@ -1853,6 +1870,9 @@ public class BizProcessDataProcurementController extends BaseController {
                 cellValue7.setCellStyle(borderCellStyle);
                 cellValue8.setCellStyle(borderCellStyle);
                 cellValue9.setCellStyle(borderCellStyle);
+                cellValue10.setCellStyle(borderCellStyle);
+                cellValue11.setCellStyle(borderCellStyle);
+                cellValue12.setCellStyle(borderCellStyle);
                 orderSize += bizProcessChild.getProductRef1Num().intValue();
                 arrivalSize += bizProcessChild.getStayNum();
             }
@@ -1895,9 +1915,16 @@ public class BizProcessDataProcurementController extends BaseController {
                 cellValue7.setCellValue(bizProcessChild.getContractNo());
                 XSSFCell cellValue8 = rowList.createCell(7);// 实际到货数
                 cellValue8.setCellValue(bizProcessChild.getStayNum());
-                XSSFCell cellValue9 = rowList.createCell(8);// 备注
-                cellValue9.setCellValue(Objects.isNull(bizProcessChild.getRemark()) ? "" : bizProcessChild.getRemark());
-// 设置单元格样式
+                XSSFCell cellValue9 = rowList.createCell(8);// 合格数量
+                cellValue9.setCellValue(Objects.isNull(bizProcessChild.getYesNum()) ? "" : bizProcessChild.getYesNum());
+                XSSFCell cellValue10 = rowList.createCell(9);// 不合格数量
+                cellValue10.setCellValue(Objects.isNull(bizProcessChild.getNoNum()) ? "" : bizProcessChild.getNoNum());
+                XSSFCell cellValue11 = rowList.createCell(10);// 不合格原因
+                cellValue11.setCellValue(Objects.isNull(bizProcessChild.getSnRemark()) ? "" : bizProcessChild.getSnRemark());
+
+                XSSFCell cellValue12 = rowList.createCell(11);// 备注
+                cellValue12.setCellValue(Objects.isNull(bizProcessChild.getRemark()) ? "" : bizProcessChild.getRemark());
+// 设置
                 cellValue1.setCellStyle(borderCellStyle);
                 cellValue2.setCellStyle(borderCellStyle);
                 cellValue3.setCellStyle(borderCellStyle);
@@ -1907,6 +1934,9 @@ public class BizProcessDataProcurementController extends BaseController {
                 cellValue7.setCellStyle(borderCellStyle);
                 cellValue8.setCellStyle(borderCellStyle);
                 cellValue9.setCellStyle(borderCellStyle);
+                cellValue10.setCellStyle(borderCellStyle);
+                cellValue11.setCellStyle(borderCellStyle);
+                cellValue12.setCellStyle(borderCellStyle);
                 orderSize += bizProcessChild.getProductRef2Num().intValue();
                 arrivalSize += bizProcessChild.getStayNum();
             }
@@ -1949,9 +1979,16 @@ public class BizProcessDataProcurementController extends BaseController {
                 cellValue7.setCellValue(bizProcessChild.getContractNo());
                 XSSFCell cellValue8 = rowList.createCell(7);// 实际到货数
                 cellValue8.setCellValue(bizProcessChild.getStayNum());
-                XSSFCell cellValue9 = rowList.createCell(8);// 备注
-                cellValue9.setCellValue(Objects.isNull(bizProcessChild.getRemark()) ? "" : bizProcessChild.getRemark());
-// 设置单元格样式
+                XSSFCell cellValue9 = rowList.createCell(8);// 合格数量
+                cellValue9.setCellValue(Objects.isNull(bizProcessChild.getYesNum()) ? "" : bizProcessChild.getYesNum());
+                XSSFCell cellValue10 = rowList.createCell(9);// 不合格数量
+                cellValue10.setCellValue(Objects.isNull(bizProcessChild.getNoNum()) ? "" : bizProcessChild.getNoNum());
+                XSSFCell cellValue11 = rowList.createCell(10);// 不合格原因
+                cellValue11.setCellValue(Objects.isNull(bizProcessChild.getSnRemark()) ? "" : bizProcessChild.getSnRemark());
+
+                XSSFCell cellValue12 = rowList.createCell(11);// 备注
+                cellValue12.setCellValue(Objects.isNull(bizProcessChild.getRemark()) ? "" : bizProcessChild.getRemark());
+// 设置
                 cellValue1.setCellStyle(borderCellStyle);
                 cellValue2.setCellStyle(borderCellStyle);
                 cellValue3.setCellStyle(borderCellStyle);
@@ -1961,6 +1998,9 @@ public class BizProcessDataProcurementController extends BaseController {
                 cellValue7.setCellStyle(borderCellStyle);
                 cellValue8.setCellStyle(borderCellStyle);
                 cellValue9.setCellStyle(borderCellStyle);
+                cellValue10.setCellStyle(borderCellStyle);
+                cellValue11.setCellStyle(borderCellStyle);
+                cellValue12.setCellStyle(borderCellStyle);
                 orderSize +=  bizProcessChild.getPattachmentCount().intValue(); //Integer.parseInt(bizProcessChild.getPattachmentCount() + "");
                 arrivalSize += bizProcessChild.getStayNum();
             }
@@ -1993,6 +2033,9 @@ public class BizProcessDataProcurementController extends BaseController {
         XSSFCell cell7 = row4.createCell(7);
         cell7.setCellValue(arrivalSize);
         XSSFCell cell8 = row4.createCell(8);
+        XSSFCell cell9 = row4.createCell(9);
+        XSSFCell cell10 = row4.createCell(10);
+        XSSFCell cell11 = row4.createCell(11);
         cell1.setCellStyle(borderCellStyle);
         cell2.setCellStyle(borderCellStyle);
         cell3.setCellStyle(borderCellStyle);
@@ -2001,12 +2044,15 @@ public class BizProcessDataProcurementController extends BaseController {
         cell6.setCellStyle(borderCellStyle);
         cell7.setCellStyle(borderCellStyle);
         cell8.setCellStyle(borderCellStyle);
+        cell9.setCellStyle(borderCellStyle);
+        cell10.setCellStyle(borderCellStyle);
+        cell11.setCellStyle(borderCellStyle);
 
         // 备注栏
         //
         rowIdx++;
         XSSFRow row5 = receiptSheet.createRow(rowIdx);
-        CellRangeAddress region4 = new CellRangeAddress(rowIdx, rowIdx, 1, 8);
+        CellRangeAddress region4 = new CellRangeAddress(rowIdx, rowIdx, 1, 11);
         receiptSheet.addMergedRegion(region4);
         XSSFCell remark = row5.createCell(0);
         remark.setCellValue("备注");
@@ -2032,7 +2078,7 @@ public class BizProcessDataProcurementController extends BaseController {
         receiptSheet.addMergedRegion(region7);
         CellRangeAddress region5 = new CellRangeAddress(rowIdx, rowIdx, 4, 5);
         receiptSheet.addMergedRegion(region5);
-        CellRangeAddress region6 = new CellRangeAddress(rowIdx, rowIdx, 7, 8);
+        CellRangeAddress region6 = new CellRangeAddress(rowIdx, rowIdx, 7, 11);
         receiptSheet.addMergedRegion(region6);
         RegionUtil.setBorderRight(BorderStyle.THIN, region7, receiptSheet);
         RegionUtil.setBorderTop(BorderStyle.THIN, region7, receiptSheet);
@@ -2053,32 +2099,35 @@ public class BizProcessDataProcurementController extends BaseController {
         testResultValue.setCellValue("");
         testResultValue.setCellStyle(topCellStyle);
         XSSFCell factoryCheckKey = row6.createCell(6);
-        factoryCheckKey.setCellValue("工厂验收：");
+        factoryCheckKey.setCellValue("库房确认：");
         factoryCheckKey.setCellStyle(topCellStyle);
-        XSSFCell factoryCheckValue = row6.createCell(7);
+        XSSFCell factoryCheckValue = row6.createCell(11);
         factoryCheckValue.setCellValue("");
         factoryCheckValue.setCellStyle(rightCellStyle);
 
 
         rowIdx++;
         XSSFRow row7 = receiptSheet.createRow(rowIdx);
-        XSSFCell cell9 = row7.createCell(0);
-        XSSFCell cell10 = row7.createCell(1);
-        XSSFCell cell11 = row7.createCell(2);
+        XSSFCell cell90 = row7.createCell(0);
+        XSSFCell cell101 = row7.createCell(1);
+        XSSFCell cell121 = row7.createCell(2);
         XSSFCell cell12 = row7.createCell(3);
         XSSFCell cell13 = row7.createCell(4);
         XSSFCell cell14 = row7.createCell(5);
         XSSFCell cell15 = row7.createCell(6);
         XSSFCell cell16 = row7.createCell(7);
         XSSFCell cell17 = row7.createCell(8);
+        XSSFCell cell181 = row7.createCell(9);
+        XSSFCell cell191 = row7.createCell(10);
+        XSSFCell cell201 = row7.createCell(11);
         XSSFCellStyle leftCellStyle2 = workbook.createCellStyle();
         leftCellStyle2.setBorderLeft(BorderStyle.THIN);
-        cell9.setCellStyle(leftCellStyle2);
+        cell90.setCellStyle(leftCellStyle2);
         XSSFCellStyle rightCellStyle2 = workbook.createCellStyle();
         rightCellStyle2.setBorderRight(BorderStyle.THIN);
-        cell11.setCellStyle(rightCellStyle2);
+        cell121.setCellStyle(rightCellStyle2);
         cell4.setCellStyle(rightCellStyle2);
-        cell17.setCellStyle(rightCellStyle2);
+        cell201.setCellStyle(rightCellStyle2);
         cell14.setCellStyle(rightCellStyle2);
 
         rowIdx++;
@@ -2115,7 +2164,13 @@ public class BizProcessDataProcurementController extends BaseController {
         cell_4.setCellValue("经办人：");
         cell_4.setCellStyle(lastBottomStyle);
         XSSFCell cell21 = row8.createCell(8);
-        cell21.setCellStyle(lastRightStyle);
+        cell21.setCellStyle(lastBottomStyle);
+        XSSFCell cell21111 = row8.createCell(9);
+        cell21111.setCellStyle(lastBottomStyle);
+        XSSFCell cell2111 = row8.createCell(10);
+        cell2111.setCellStyle(lastBottomStyle);
+        XSSFCell cell211 = row8.createCell(11);
+        cell211.setCellStyle(lastRightStyle);
 
         // 设置默认列宽
         receiptSheet.setDefaultColumnWidth(15);
@@ -2168,9 +2223,16 @@ public class BizProcessDataProcurementController extends BaseController {
         XSSFCell cellValue7 = rowList.createCell(6);// 内销合同号
         cellValue7.setCellValue(bizProcessChild.getContractNo());
         XSSFCell cellValue8 = rowList.createCell(7);// 实际到货数
-        cellValue8.setCellValue(bizProcessChild.getStayNum());
-        XSSFCell cellValue9 = rowList.createCell(8);// 备注
-        cellValue9.setCellValue(Objects.isNull(bizProcessChild.getRemark()) ? "" : bizProcessChild.getRemark());
+        cellValue8.setCellValue(Objects.isNull(bizProcessChild.getStayNum()) ? 0 : bizProcessChild.getStayNum());
+        XSSFCell cellValue9 = rowList.createCell(8);// 合格数量
+        cellValue9.setCellValue(Objects.isNull(bizProcessChild.getYesNum()) ? "" : bizProcessChild.getYesNum());
+        XSSFCell cellValue10 = rowList.createCell(9);// 不合格数量
+        cellValue10.setCellValue(Objects.isNull(bizProcessChild.getNoNum()) ? "" : bizProcessChild.getNoNum());
+        XSSFCell cellValue11 = rowList.createCell(10);// 不合格原因
+        cellValue11.setCellValue(Objects.isNull(bizProcessChild.getSnRemark()) ? "" : bizProcessChild.getSnRemark());
+
+        XSSFCell cellValue12 = rowList.createCell(11);// 备注
+        cellValue12.setCellValue(Objects.isNull(bizProcessChild.getRemark()) ? "" : bizProcessChild.getRemark());
 // 设置单元格样式
         cellValue1.setCellStyle(borderCellStyle);
         cellValue2.setCellStyle(borderCellStyle);
@@ -2181,6 +2243,9 @@ public class BizProcessDataProcurementController extends BaseController {
         cellValue7.setCellStyle(borderCellStyle);
         cellValue8.setCellStyle(borderCellStyle);
         cellValue9.setCellStyle(borderCellStyle);
+        cellValue10.setCellStyle(borderCellStyle);
+        cellValue11.setCellStyle(borderCellStyle);
+        cellValue12.setCellStyle(borderCellStyle);
     }
 
     private XSSFCellStyle buildXssfCellStyle(XSSFWorkbook workbook) {
@@ -2215,8 +2280,14 @@ public class BizProcessDataProcurementController extends BaseController {
         cellKey7.setCellValue("内销合同号");
         XSSFCell cellKey8 = row3.createCell(7);// 实际到货数
         cellKey8.setCellValue("实际到货数");
-        XSSFCell cellKey9 = row3.createCell(8);// 备注
-        cellKey9.setCellValue("备注");
+        XSSFCell cellKey9 = row3.createCell(8);// 实际到货数
+        cellKey9.setCellValue("合格数");
+        XSSFCell cellKey10 = row3.createCell(9);// 实际到货数
+        cellKey10.setCellValue("不合格数");
+        XSSFCell cellKey11 = row3.createCell(10);// 实际到货数
+        cellKey11.setCellValue("不合格原因");
+        XSSFCell cellKey12 = row3.createCell(11);// 备注
+        cellKey12.setCellValue("备注");
 
         // 设置单元格样式
         cellKey1.setCellStyle(borderCellStyle);
@@ -2266,7 +2337,7 @@ public class BizProcessDataProcurementController extends BaseController {
         receiptSheet.addMergedRegion(region);
         CellRangeAddress region1 = new CellRangeAddress(rowIdx, rowIdx, 4, 5);
         receiptSheet.addMergedRegion(region1);
-        CellRangeAddress region2 = new CellRangeAddress(rowIdx, rowIdx, 7, 8);
+        CellRangeAddress region2 = new CellRangeAddress(rowIdx, rowIdx, 7, 11);
         receiptSheet.addMergedRegion(region2);
 
         // 加粗
@@ -2282,7 +2353,7 @@ public class BizProcessDataProcurementController extends BaseController {
         supplierKeyCell.setCellValue("供方：");
         supplierKeyCell.setCellStyle(boldStyle);
         XSSFCell supplierValueCell = row2.createCell(1);
-        supplierValueCell.setCellValue(bizSuppliers.getName());
+        supplierValueCell.setCellValue(bizSuppliers.getNickName());
         supplierValueCell.setCellStyle(thinStyle);
         RegionUtil.setBorderBottom(BorderStyle.DOUBLE, region, receiptSheet);
         RegionUtil.setBorderTop(BorderStyle.DOUBLE, region, receiptSheet);
@@ -2305,7 +2376,7 @@ public class BizProcessDataProcurementController extends BaseController {
 
     private void h_1(XSSFWorkbook workbook, XSSFSheet receiptSheet, int rowIdx) {
         XSSFRow row = receiptSheet.createRow(rowIdx);
-        receiptSheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 8));
+        receiptSheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 11));
         XSSFCell title = row.createCell(0);
 
         XSSFFont headfont = workbook.createFont();
@@ -2317,7 +2388,7 @@ public class BizProcessDataProcurementController extends BaseController {
         headstyle.setAlignment(HorizontalAlignment.CENTER);// 左右居中
         headstyle.setVerticalAlignment(VerticalAlignment.CENTER);// 上下居中
         headstyle.setLocked(true);
-        title.setCellValue("验收单");
+        title.setCellValue("验收入库单");
         title.setCellStyle(headstyle);
     }
 

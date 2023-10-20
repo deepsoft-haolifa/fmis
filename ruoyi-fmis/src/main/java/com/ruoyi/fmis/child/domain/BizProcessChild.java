@@ -590,6 +590,12 @@ public class BizProcessChild extends BaseEntity {
     @Setter
     @Getter
     private String valveShaft;
+    /**
+     * 不合格原因
+     */
+    @Setter
+    @Getter
+    private String snRemark;
 
     /** 数据ID */
     @Excel(name = "数据ID")
