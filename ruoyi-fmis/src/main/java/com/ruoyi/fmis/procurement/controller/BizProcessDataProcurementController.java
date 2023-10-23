@@ -3377,7 +3377,7 @@ public class BizProcessDataProcurementController extends BaseController {
                     cell1.setCellValue(i+1);
                     cell1.setCellStyle(cellTableStyle);
                     Cell cell2 = row.createCell(1);
-                    cell2.setCellValue(bizProcessChild.getModel() + "-" + bizProcessChild.getSpecifications());
+                    cell2.setCellValue(bizProcessChild.getModel());
                     cell2.setCellStyle(cellTableStyle);
                     Cell cell3 = row.createCell(2);
                     cell3.setCellValue(bizProcessChild.getProductName());
