@@ -21,8 +21,10 @@ public class ProcessDataEx extends BaseEntity {
     private String specifications;
     @Excel(name = "系列")
     private String string1;
-    @Excel(name = "销售底价")
+    @Excel(name = "面价")
     private String productPrice;
+    @Excel(name = "单位")
+    private String contractPriceUnit;
 
     @Excel(name = "系数")
     private String productCoefficient;
