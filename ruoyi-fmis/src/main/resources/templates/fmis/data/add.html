@@ -900,6 +900,7 @@
         $("#orderCoefficient").val(parseFloat(totalPrice / parseFloat(productAllPrice)).toFixed(2));
 
     }
+    //修改单价计算
     function calculateContractPriceOnly (row) {
         var productNum = row["productNum"];
         productNum = isEmpty(productNum) == true ? 0 : parseFloat(productNum);
@@ -1247,6 +1248,7 @@
         function parsePrice (p) {
             return isEmpty(p) == true ? 0 : parseFloat(p);
         }
+        //修改系数计算
         function calculateTotalPrice() {
             var data = $.btTable.bootstrapTable('getData');
             var productTotalPrice = 0;
@@ -1291,7 +1293,7 @@
             }
             $("#orderCoefficient").val(parseFloat(totalPrice / parseFloat(productAllPrice)).toFixed(2));
         }
-
+        //修改数量单价计算
         function calculatePrice(row) {
             var productNum = row["productNum"];
             productNum = isEmpty(productNum) == true ? 0 : parseFloat(productNum);
@@ -1382,7 +1384,7 @@
                 + parseFloat(pattachmentSum) + parseFloat(pattachment1Sum) + parseFloat(pattachment2Sum) + parseFloat(pattachment3Sum) + parseFloat(pattachment4Sum)
                 - parseFloat(string14)).toFixed(0);
 
-            var costProce = parseFloat(productNum * productPrice).toFixed(4) +
+            /*var costProce = parseFloat(productNum * productPrice).toFixed(4) +
                 parseFloat(productRef1Num * productRef1Price).toFixed(4) +
                 parseFloat(productRef2Num * productRef2Price).toFixed(4) +
                 parseFloat(actuatorNum * actuatorPrice).toFixed(4) +
@@ -1393,7 +1395,7 @@
                 parseFloat(pattachment4Count * pattachment2Price).toFixed(2);
             costProce = parseFloat(costProce).toFixed(0);
 
-            console.log("totalSum=" + totalSum + " costProce=" + costProce);
+            console.log("totalSum=" + totalSum + " costProce=" + costProce);*/
 
             var productCostPrice = parsePrice(row["productCostPrice"]);
             var totalPriceCost = parseFloat(productNum * productCostPrice).toFixed(2);
@@ -1433,11 +1435,11 @@
             $.btTable.bootstrapTable("updateCell",string17);
 
             //判断低于销售底价
-            if (totalSum < costProce) {
+           /* if (totalSum < costProce) {
                 row.error = "1";
             } else {
                 row.error = "";
-            }
+            }*/
 
             var updateObj = {
                 index: row.rowId,
