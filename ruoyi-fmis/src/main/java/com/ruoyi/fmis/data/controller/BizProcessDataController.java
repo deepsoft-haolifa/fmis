@@ -2327,9 +2327,21 @@ public class BizProcessDataController extends BaseController {
         } else if (StringUtils.isNotEmpty(totalPrice) && Double.parseDouble(totalPrice) >= 500000) {
             normalFlag = "4";
             num = 4;
+            if (bizProcessData.getString26().equals("36")) {
+                normalFlag = "5";
+                num = 5;
+            }
         } else if (StringUtils.isNotEmpty(totalPrice) && Double.parseDouble(totalPrice) >= 200000) {
             normalFlag = "3";
             num = 3;
+            if (bizProcessData.getString26().equals("24")) {
+                normalFlag = "4";
+                num = 4;
+            }
+            if (bizProcessData.getString26().equals("36")) {
+                normalFlag = "5";
+                num = 5;
+            }
         }
         String payType = bizProcessData.getString18();
         String payType1 = bizProcessData.getString8();
