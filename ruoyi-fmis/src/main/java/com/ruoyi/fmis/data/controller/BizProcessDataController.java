@@ -84,6 +84,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.URLEncoder;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -3524,7 +3525,14 @@ public class BizProcessDataController extends BaseController {
             processDataEx.setSpecifications(bizProcessChild.getSpecifications());
             processDataEx.setProductPrice(bizProcessChild.getProductPrice() + "");
             processDataEx.setContractPriceUnit("元");
-            processDataEx.setProductCoefficient(bizProcessChild.getProductCoefficient() + "");
+            // 单价
+            double contractPrice = bizProcessChild.getContractPrice();
+            // 面价
+            Double productPrice = bizProcessChild.getProductPrice();
+            BigDecimal contractPriceBig = new BigDecimal(contractPrice + "");
+            BigDecimal productPriceBig = new BigDecimal(productPrice + "");
+            BigDecimal divide = contractPriceBig.divide(productPriceBig, 2);
+            processDataEx.setProductCoefficient(divide.toString());
             processDataExes.add(processDataEx);
         }
         ExcelUtil<ProcessDataEx> util = new ExcelUtil<ProcessDataEx>(ProcessDataEx.class);

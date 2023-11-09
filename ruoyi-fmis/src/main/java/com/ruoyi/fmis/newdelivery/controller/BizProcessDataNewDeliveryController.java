@@ -542,7 +542,12 @@ public class BizProcessDataNewDeliveryController extends BaseController {
             cell_title_1.setCellValue("北京好利阀业集团有限公司发货单");
             CellStyle titleCell = ExcelProcessDataUtils.titleCell(workbook);
             cell_title_1.setCellStyle(titleCell);
-
+            Cell cell_title_8 = row1.createCell(8);
+            String contractSerial = "";
+            if (StringUtils.isNotEmpty(bizProcessData.getString1())) {
+                contractSerial = bizProcessData.getString1().replace("HL", "");
+            }
+            cell_title_8.setCellValue("发货单编号：" + contractSerial);
             Row row3 = sheet.createRow(1);
             row3.setHeight((short) 700);
             Cell cell_30 = row3.createCell(0);
@@ -700,7 +705,7 @@ public class BizProcessDataNewDeliveryController extends BaseController {
             cell_60.setCellValue("备注：");
             cell_60.setCellStyle(cellCenterBlackFont);
             Cell cell_61 = row6.createCell(1);
-            cell_61.setCellValue("现场补货急用，请帮忙安排。");
+            cell_61.setCellValue(bizProcessData.getString11());
             cell_61.setCellStyle(cellCenterBlackFont);
             sheet.addMergedRegion(new CellRangeAddress(bb, bb, 1, 11));
             List<Integer> row7CellList = Arrays.asList(2, 3, 4, 5, 6, 7, 8, 9, 10, 11);
@@ -719,6 +724,8 @@ public class BizProcessDataNewDeliveryController extends BaseController {
             row8.setHeight((short) 500);
             Cell cell_90 = row8.createCell(0);
             cell_90.setCellValue("财务：");
+            Cell cell_901 = row8.createCell(1);
+            cell_901.setCellValue("吕文文");
             cell_90.setCellStyle(cellCenterBlack);
             Cell cell_91 = row8.createCell(4);
             cell_91.setCellValue("审核：");
@@ -733,7 +740,7 @@ public class BizProcessDataNewDeliveryController extends BaseController {
             cell_94.setCellValue("客户编号：");
             cell_94.setCellStyle(cellCenterBlack);
             Cell cell_95 = row8.createCell(11);
-            cell_95.setCellValue(bizProcessData.getString4());
+            cell_95.setCellValue(bizProcessData.getString1());
             cell_95.setCellStyle(cellCenterBlack);
 
             String filename = ExcelUtil.encodingFilenameByXls("发货单");
