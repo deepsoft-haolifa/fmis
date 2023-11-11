@@ -94,6 +94,13 @@
                                 </div>
                             </li>
                             <li>
+                                <p>产品等级：</p>
+                                <select name="string2" class="form-control m-b" th:with="type=${@dict.getType('product_level')}">
+                                    <option value="">请选择</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
                                 <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
                             </li>
@@ -244,10 +251,10 @@
                 },
                 {
                     field : 'string2',
-                    title : '产品等级',
+                    title : '产品等级'/*,
                     formatter: function(value, row, index) {
                         return $.table.selectDictLabel(string2Datas, value);
-                    }
+                    }*/
                 },
                 {
                     field : 'facePrice',

@@ -45,7 +45,13 @@
                             <p>规格：</p>
                             <select name="specifications" id="specifications" class="form-control select2-multiple" ><option value="">请选择</option></select>
                         </li>
-
+                        <li>
+                            <p>产品等级：</p>
+                            <select name="string2" class="form-control m-b" th:with="type=${@dict.getType('product_level')}">
+                                <option value="">请选择</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                            </select>
+                        </li>
                         <li>
                             <p>公称压力：</p>
                             <select name="nominalPressure" id="nominalPressure" class="form-control select2-multiple" ><option value="">请选择</option></select>
@@ -191,10 +197,10 @@
 
                 {
                     field : 'string2',
-                    title : '产品等级',
+                    title : '产品等级'/*,
                     formatter: function(value, row, index) {
                         return $.table.selectDictLabel(string2Datas, value);
-                    }
+                    }*/
                 },
                 {
                     field : 'facePrice',

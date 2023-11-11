@@ -149,6 +149,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="other != null  and other != ''"> and p.other = #{other}</if>
 
             <if test="string1 != null  and string1 != ''"> and p.string1 = #{string1}</if>
+            <if test="string2 != null  and string2 != ''"> and p.string2 = #{string2}</if>
             <if test="string3 != null  and string3 != ''"> and p.string3 = #{string3}</if>
 
             <if test="string4 != null  and string4 != ''"> and p.string4 like concat('%', #{string4}, '%')</if>
