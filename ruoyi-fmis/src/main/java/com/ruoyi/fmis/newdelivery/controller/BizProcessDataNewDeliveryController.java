@@ -536,18 +536,21 @@ public class BizProcessDataNewDeliveryController extends BaseController {
 
             Row row1 = sheet.createRow(0);
             row1.setHeight((short) 700);
-            CellRangeAddress cra1 = new CellRangeAddress(0, 0, 0, 11);
+            CellRangeAddress cra1 = new CellRangeAddress(0, 0, 0, 9);
             sheet.addMergedRegion(cra1);
             Cell cell_title_1 = row1.createCell(0);
             cell_title_1.setCellValue("北京好利阀业集团有限公司发货单");
             CellStyle titleCell = ExcelProcessDataUtils.titleCell(workbook);
             cell_title_1.setCellStyle(titleCell);
-            Cell cell_title_8 = row1.createCell(8);
+            Cell cell_title_8 = row1.createCell(10);
             String contractSerial = "";
             if (StringUtils.isNotEmpty(bizProcessData.getString1())) {
                 contractSerial = bizProcessData.getString1().replace("HL", "");
             }
             cell_title_8.setCellValue("发货单编号：" + contractSerial);
+            CellRangeAddress cra111 = new CellRangeAddress(0, 0, 10, 11);
+            sheet.addMergedRegion(cra111);
+
             Row row3 = sheet.createRow(1);
             row3.setHeight((short) 700);
             Cell cell_30 = row3.createCell(0);
@@ -564,10 +567,14 @@ public class BizProcessDataNewDeliveryController extends BaseController {
             Cell cell_314 = row3.createCell(5);
             cell_314.setCellValue(bizProcessData.getString1());
             cell_314.setCellStyle(cellCenterBlackFont);
-            sheet.addMergedRegion(new CellRangeAddress(1, 1, 5, 8));
-            Cell cell_317 = row3.createCell(9);
-            cell_317.setCellValue("运输方式：");
+            Cell cell_317 = row3.createCell(7);
             cell_317.setCellStyle(cellCenterBlackFont);
+            Cell cell_318 = row3.createCell(8);
+            cell_318.setCellStyle(cellCenterBlackFont);
+            sheet.addMergedRegion(new CellRangeAddress(1, 1, 5, 8));
+            Cell cell_319 = row3.createCell(9);
+            cell_319.setCellValue("运输方式：");
+            cell_319.setCellStyle(cellCenterBlackFont);
             Cell cell_320 = row3.createCell(10);
             List<SysDictData> dictDataList = sysDictDataService.selectDictDataByType("transport_type");
             Map<String, String> transportTypeMap = dictDataList.stream().collect(Collectors.toMap(SysDictData::getDictValue, SysDictData::getDictLabel, (a, b) -> a));
@@ -705,7 +712,7 @@ public class BizProcessDataNewDeliveryController extends BaseController {
             cell_60.setCellValue("备注：");
             cell_60.setCellStyle(cellCenterBlackFont);
             Cell cell_61 = row6.createCell(1);
-            cell_61.setCellValue(bizProcessData.getString11());
+            cell_61.setCellValue(bizProcessData.getString25());
             cell_61.setCellStyle(cellCenterBlackFont);
             sheet.addMergedRegion(new CellRangeAddress(bb, bb, 1, 11));
             List<Integer> row7CellList = Arrays.asList(2, 3, 4, 5, 6, 7, 8, 9, 10, 11);
@@ -718,6 +725,9 @@ public class BizProcessDataNewDeliveryController extends BaseController {
             cell_80.setCellValue("是否要求物流返回签收单：");
             cell_80.setCellStyle(cellCenterBlack);
             sheet.addMergedRegion(new CellRangeAddress(cc, cc, 0, 2));
+            Cell cell_83 = row7.createCell(3);
+            cell_83.setCellValue(bizProcessData.getString11());
+            cell_83.setCellStyle(cellCenterBlack);
 
             int ee = rowCount++;
             Row row8 = sheet.createRow(ee);

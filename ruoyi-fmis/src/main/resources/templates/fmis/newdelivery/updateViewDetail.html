@@ -146,8 +146,14 @@
             <div class="form-group " >
                 <label class="col-sm-1 control-label">特殊要求：</label>
                 <div class="col-sm-2">
-                    <input name="string11" class="form-control" th:field="*{string11}"  type="text">
+                    <select name="string11" id="string11" class="form-control m-b">
+                        <option  th:text="是"  th:value="是" th:field="*{string11}"></option>
+                        <option  th:text="否"  th:value="否" th:field="*{string11}"></option>
+                    </select>
                 </div>
+<!--                <div class="col-sm-2">-->
+<!--                    <input name="string11" class="form-control" th:field="*{string11}"  type="text">-->
+<!--                </div>-->
 
 
                 <label class="col-sm-1 control-label">是否送货：</label>
