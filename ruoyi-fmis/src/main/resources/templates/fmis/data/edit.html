@@ -583,6 +583,16 @@
                 columns: [{
                     checkbox: true
                 },
+                    {
+                        title: '操作',
+                        align: 'left',
+                        formatter: function(value, row, index) {
+                            var actions = [];
+                            var productId = row["productId"]
+                            actions.push('<a class="btn btn-danger btn-xs" href="#" onclick="removeProduct(' + productId + ')"><i class="fa fa-remove"></i>删除</a>');
+                            return actions.join('');
+                        }
+                    },
                     {field : 'rowId',title : '序号',visible: true,formatter:function(value,row,index){row.rowId = index;return index+1;}},
 
                     {field : 'quotationId',title : 'quotationId',visible: false},
@@ -665,17 +675,8 @@
                     {field : 'pattachment4CostPrice',title : '成本价',editable: false,visible: false},
                     {field : 'pattachment4Count',title : '可离合减速器数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
                     {field : 'pattachment4Coefficient',title : '可离合减速器系数',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
-                    {field : 'color',title : '颜色',editable: true},
-                    {
-                        title: '操作',
-                        align: 'left',
-                        formatter: function(value, row, index) {
-                            var actions = [];
-                            var productId = row["productId"]
-                            actions.push('<a class="btn btn-danger btn-xs" href="#" onclick="removeProduct(' + productId + ')"><i class="fa fa-remove"></i>删除</a>');
-                            return actions.join('');
-                        }
-                    }]
+                    {field : 'color',title : '颜色',editable: true}
+                    ]
             };
             $.table.init(options);
 
