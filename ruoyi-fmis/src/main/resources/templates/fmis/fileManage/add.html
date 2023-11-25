@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('文件管理')" />
+    <th:block th:include="include :: bootstrap-fileinput-css" />
+</head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-pattachment-add">
+        <input type="hidden" name="type" value="1"/>
+       <!-- <div class="form-group">
+            <label class="col-sm-3 control-label">文件名称：</label>
+            <div class="col-sm-8">
+                <input name="fileName" class="form-control" type="text">
+            </div>
+        </div>-->
+        <div class="form-group">
+            <label class="col-sm-3 control-label">文件分类：</label>
+            <div class="col-sm-8">
+                <select name="fileClassfiy" id="fileClassfiy" class="form-control m-b" th:with="type=${@dict.getType('fileClassify')}">
+                    <option value="">请选择</option>
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                </select>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="modal fade" id="loadingModal">
+    <div style="width: 200px;height:20px; z-index: 20000; position: absolute; text-align: center; left: 50%; top: 50%;margin-left:-100px;margin-top:-10px">
+        <div class="progress progress-striped active" style="margin-bottom: 0;">
+            <div class="progress-bar" style="width: 100%;"></div>
+        </div>
+        <h5>正在上传...</h5>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>附件上传 </h5>
+                </div>
+                <div class="ibox-content">
+                    <ul  id="errorMsgDiv" class="text-danger">
+                    </ul>
+                    <ul  id="successMsgDiv" class="text-success">
+                    </ul>
+                </div>
+                <div class="ibox-content">
+                    <div class="form-group">
+                        <label class="font-noraml">附件上传</label>
+                        <input id="file_paths_" type="file" name="file" multiple data-min-file-count="1" data-theme="fas" class="imgFile form-control">
+                        <input id="filePaths" name="filePaths" type="hidden">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: bootstrap-fileinput-js" />
+<script type="text/javascript">
+    // var editFlag = [[${@permission.hasPermi('fmis:suppliers:edit')}]];
+    // var removeFlag = [[${@permission.hasPermi('fmis:suppliers:remove')}]];
+    var fileName = $("#fileName").value;
+    // var fileClassfiy = $("fileClassfiy").value;
+
+
+    $(document).ready(function () {
+        $("#file_paths_").fileinput({
+            'theme': 'explorer-fas',
+            'uploadUrl': ctx + 'fmis/fileManage/upload',
+            dropZoneTitle: "请通过拖拽文件放到这里",
+            allowedFileExtensions: ['xlsx','xls','jpg','jpeg','png','pdf'],
+            msgFilesTooMany: "选择上传的文件数量({n}) 超过允许的最大数值{m}！",
+            maxFileCount:1,
+            showUpload: false,
+            overwriteInitial: false,
+            initialPreviewAsData: true
+        }).on("filebatchselected", function(event, files) {
+            $(this).fileinput("upload");
+        }).on("fileuploaded", function(event, data) {
+            $("#loadingModal").modal('show');
+            console.log("data.data=" + data.response.data);
+            $("#filePaths").val(data.response.data);
+            var fileClassfiy = $("#fileClassfiy").val();
+            console.log("fileClassfiy=----", fileClassfiy, '    fileName=', fileName);
+            $.ajax({
+                url: ctx + "fmis/fileManage/add", //请求的url地址
+                dataType:"json", //返回格式为json
+                async:true,//请求是否异步，默认为异步，这也是ajax重要特性
+                data:{"fileName":  data.response.data, 'fileClassfiy':fileClassfiy}, //参数值
+                type:"POST", //请求方式
+                success:function(retData){
+                    //请求成功时处理
+                    $("#errorMsgDiv").html("");
+                    $("#successMsgDiv").html("");
+                    var retSuccessData = retData.data;
+                    var retError = retData.error;
+                    if (retError != null && retError.length > 0) {
+                        //存在错误数据
+                        var errorMsgDiv = "";
+                        for (var i = 0; i < retError.length; i++) {
+                            var errorJson = retError[i];
+                            var msg = errorJson["msg"];
+                            errorMsgDiv += "<li>" + msg + "</li>";
+                        }
+                        $("#errorMsgDiv").html(errorMsgDiv);
+                    } else {
+                        var successMsgDiv = "";
+                        for (var i = 0; i < retSuccessData.length; i++) {
+                            var successJson = retSuccessData[i];
+                            var msg = successJson["msg"];
+                            successMsgDiv += "<li>" + msg + "</li>";
+                        }
+                        $("#successMsgDiv").html(successMsgDiv);
+                    }
+                    $("#loadingModal").modal('hide');
+                }
+            });
+        });
+    });
+    function submitHandler() {
+        $.modal.close();
+    }
+</script>
+</body>
+</html>

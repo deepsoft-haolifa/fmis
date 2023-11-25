@@ -120,6 +120,11 @@ public class Global
     {
         return getConfig("ruoyi.filePath");
     }
+
+    public static String getManagerFilePath()
+    {
+        return getConfig("ruoyi.managerFilePath");
+    }
     public static String getFileUrl()
     {
         return getConfig("ruoyi.fileUrl");

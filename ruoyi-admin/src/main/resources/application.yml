@@ -17,6 +17,7 @@ ruoyi:
 
   #filePath: /Users/liuyaofei/IdeaProjects/fmis-process/uploadPath/
   filePath: /home/img/images/
+  managerFilePath: /home/file/
 #  filePath: /Users/chenjianchao/img/
   fileUrl: https://oa.haolifa.com:8088/images
 
