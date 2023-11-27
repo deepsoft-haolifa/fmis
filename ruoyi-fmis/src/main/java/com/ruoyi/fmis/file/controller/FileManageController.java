@@ -94,10 +94,18 @@ public class FileManageController extends BaseController {
     public void previewFile() throws IOException {
         String fileName = getRequest().getParameter("fileName");
 //        String filePath = "/home/img/images/"+fileName;
-        String filePath = Global.getManagerFilePath();
+        String filePath = Global.getManagerFilePath() + "/" + fileName;
         HttpServletResponse response = getResponse();
         if(fileName.endsWith("pdf") || fileName.endsWith("PDF")) {
             response.setContentType("application/pdf");
+        } else if (fileName.endsWith("txt")) {
+            response.setContentType("text/plain");
+        } else if (fileName.endsWith("zip")) {
+            response.setContentType("application/zip");
+        } else if (fileName.endsWith("xls")) {
+            response.setContentType("application/vnd.ms-excel");
+        } else if (fileName.endsWith("xlsm") || fileName.endsWith("xlsx")) {
+            response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         } else {
             response.setContentType("image/jpeg");
         }
