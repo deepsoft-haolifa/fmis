@@ -623,7 +623,7 @@ public class BizProcessDataController extends BaseController {
                         if (endRemark.length() > 0) {
                             endRemark += ",";
                         }
-                        BizProductAttachment bizProductAttachment = bizProductAttachmentService.selectBizProductAttachmentById(pattachmentId);
+                        BizProductAttachment bizProductAttachment = bizProductAttachmentService.selectBizProductAttachmentById(pattachment1Id);
                         endRemark += "电磁阀" + " " + bizProductAttachment.getChineseName() + " " + bizProductAttachment.getBh();
                     }
 
