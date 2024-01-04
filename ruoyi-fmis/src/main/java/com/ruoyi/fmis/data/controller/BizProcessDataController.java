@@ -794,12 +794,9 @@ public class BizProcessDataController extends BaseController {
             Cell cell_11_1 = row11.createCell(1);
             cell_11_1.setCellValue("技术及其他要求：");
             sheet.addMergedRegion(new CellRangeAddress(aa, aa, 1, 2));
-            sheet.addMergedRegion(new CellRangeAddress(aa, aa, 3, 11));
             Cell cell_11_3 = row11.createCell(3);
             cell_11_3.setCellValue(StringUtils.trim(bizProcessData.getString25()));
-            List<Integer> row11CellList = Arrays.asList(3,4,5,6,7, 8, 9, 10, 11);
-            ExcelProcessDataUtils.fillInBlankCell(row11, cellBottomStyle, row11CellList);
-
+            sheet.addMergedRegion(new CellRangeAddress(aa, aa, 3, 11));
 
             int dd = rowCount++;
             Row row12 = sheet.createRow(dd);
