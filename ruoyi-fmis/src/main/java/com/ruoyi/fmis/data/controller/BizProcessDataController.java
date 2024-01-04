@@ -503,9 +503,10 @@ public class BizProcessDataController extends BaseController {
                     Double actuatorTotal = new Double(0);
 
                     if (bizActuator != null) {
-                        Double actuatorPrice = bizActuator.getPrice();
+                        Double actuatorPrice = bizActuator.getFacePrice();
                         String actuatorNum = bizProduct.getActuatorNum();
                         String actuatorCoefficient = bizProduct.getActuatorCoefficient();
+                        logger.info(actuatorNum,actuatorPrice,actuatorCoefficient);
                         if (StringUtils.isNotEmpty(actuatorNum) && actuatorPrice > 0 && StringUtils.isNotEmpty(actuatorCoefficient)) {
                             actuatorTotal = Double.parseDouble(actuatorNum) * actuatorPrice * Double.parseDouble(actuatorCoefficient);
 
@@ -539,7 +540,7 @@ public class BizProcessDataController extends BaseController {
                     cell2.setCellValue(productName);
                     cell2.setCellStyle(cellTableStyle);
                     Cell cell3 = row.createCell(2);
-                    cell3.setCellValue(bizProduct.getModel());
+                    cell3.setCellValue(model);
                     cell3.setCellStyle(cellTableStyle);
                     Cell cell4 = row.createCell(3);
                     cell4.setCellValue(bizProduct.getSpecifications());
@@ -599,6 +600,7 @@ public class BizProcessDataController extends BaseController {
                         Double price = bizProduct.getPattachmentPrice();
                         Double num = bizProduct.getPattachmentCount();
                         Double coefficient = bizProduct.getPattachmentCoefficient();
+                        BizProductAttachment bizProductAttachment = bizProductAttachmentService.selectBizProductAttachmentById(pattachmentId);
                         if (price > 0 && num > 0 && coefficient > 0) {
                             pattachmentIdTotal = price * num * coefficient;
 
@@ -606,7 +608,7 @@ public class BizProcessDataController extends BaseController {
                         if (endRemark.length() > 0) {
                             endRemark += ",";
                         }
-                        endRemark += "定位器";
+                        endRemark += "定位器" + " " + bizProductAttachment.getChineseName() + " " + bizProductAttachment.getBh();
                     }
 
                     Double pattachmentId1Total = new Double(0.00);
@@ -621,7 +623,8 @@ public class BizProcessDataController extends BaseController {
                         if (endRemark.length() > 0) {
                             endRemark += ",";
                         }
-                        endRemark += "电磁阀";
+                        BizProductAttachment bizProductAttachment = bizProductAttachmentService.selectBizProductAttachmentById(pattachment1Id);
+                        endRemark += "电磁阀" + " " + bizProductAttachment.getChineseName() + " " + bizProductAttachment.getBh();
                     }
 
                     Double pattachmentId2Total = new Double(0.00);
@@ -636,7 +639,8 @@ public class BizProcessDataController extends BaseController {
                         if (endRemark.length() > 0) {
                             endRemark += ",";
                         }
-                        endRemark += "回信器数";
+                        BizProductAttachment bizProductAttachment = bizProductAttachmentService.selectBizProductAttachmentById(pattachment2Id);
+                        endRemark += "回信器数" + " " + bizProductAttachment.getChineseName() + " " + bizProductAttachment.getBh();
                     }
 
 
@@ -652,7 +656,8 @@ public class BizProcessDataController extends BaseController {
                         if (endRemark.length() > 0) {
                             endRemark += ",";
                         }
-                        endRemark += "气源三连件";
+                        BizProductAttachment bizProductAttachment = bizProductAttachmentService.selectBizProductAttachmentById(pattachment3Id);
+                        endRemark += "气源三连件" + " " + bizProductAttachment.getChineseName() + " " + bizProductAttachment.getBh();
                     }
 
                     Double pattachmentId4Total = new Double(0.00);
@@ -667,6 +672,7 @@ public class BizProcessDataController extends BaseController {
                         if (endRemark.length() > 0) {
                             endRemark += ",";
                         }
+                        BizProductAttachment bizProductAttachment = bizProductAttachmentService.selectBizProductAttachmentById(pattachment4Id);
                         endRemark += "可离合减速器";
                     }
 
