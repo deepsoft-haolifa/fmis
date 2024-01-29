@@ -142,4 +142,8 @@ public interface IBizProcessChildService {
      * @return
      */
     public List<InvoiceExportDTO> yyInvoiceExport(InvoiceReqVo invoiceReqVo);
+
+    List<BizProcessChild> selectExportBizChildProductList(BizProcessChild queryBizProcessChild);
+
+
 }

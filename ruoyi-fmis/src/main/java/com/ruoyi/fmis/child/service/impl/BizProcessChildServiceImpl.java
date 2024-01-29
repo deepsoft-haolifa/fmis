@@ -265,4 +265,9 @@ public class BizProcessChildServiceImpl implements IBizProcessChildService {
         }
         return newList;
     }
+
+    @Override
+    public List<BizProcessChild> selectExportBizChildProductList(BizProcessChild bizProcessChild) {
+        return bizProcessChildMapper.selectExportBizChildProductList(bizProcessChild);
+    }
 }

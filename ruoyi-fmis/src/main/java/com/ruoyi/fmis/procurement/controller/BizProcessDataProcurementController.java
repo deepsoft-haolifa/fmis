@@ -1285,10 +1285,12 @@ public class BizProcessDataProcurementController extends BaseController {
 
 
             //产品信息
-            BizProcessChild queryProductChild = new BizProcessChild();
-            queryProductChild.setDataId(bizProcessData.getDataId());
-            //List<BizProcessChild> bizProductChildList = bizProcessChildService.selectBizChildProductList(queryBizProcessChild);
-            List<BizProcessChild> bizProductChildList = bizProcessChildService.selectBizTestProductList(queryBizProcessChild);
+            BizProcessChild queryBizProcessChild22 = new BizProcessChild();
+            queryBizProcessChild22.setProcurementId(String.valueOf(bizProcessDataParamter.getDataId()));
+            queryBizProcessChild22.setBizEditFlag("2");
+            queryBizProcessChild22.setString2("1");
+            queryBizProcessChild22.setLevelValue("1");
+            List<BizProcessChild> bizProductChildList = bizProcessChildService.selectExportBizChildProductList(queryBizProcessChild22);
 
             //第七行 产品数据开始 bizQuotationProducts
             table.addCell(PdfUtil.mergeCol("序号", 1, textFont));
@@ -2533,9 +2535,16 @@ public class BizProcessDataProcurementController extends BaseController {
             sheet.addMergedRegion(new CellRangeAddress(6, 6, 1, 10));
 
             CellStyle cellBottomStyle = ExcelProcessDataUtils.createBottomStyle(workbook);
+//            BizProcessChild queryBizProcessChild = new BizProcessChild();
+//            queryBizProcessChild.setDataId(bizProcessDataParamter.getDataId());
+//            List<BizProcessChild> bizProductChildList = bizProcessChildService.selectBizTestProductList(queryBizProcessChild);
             BizProcessChild queryBizProcessChild = new BizProcessChild();
-            queryBizProcessChild.setDataId(bizProcessDataParamter.getDataId());
-            List<BizProcessChild> bizProductChildList = bizProcessChildService.selectBizTestProductList(queryBizProcessChild);
+            queryBizProcessChild.setProcurementId(String.valueOf(bizProcessDataParamter.getDataId()));
+            queryBizProcessChild.setBizEditFlag("2");
+            queryBizProcessChild.setString2("1");
+            queryBizProcessChild.setLevelValue("1");
+            List<BizProcessChild> bizProductChildList = bizProcessChildService.selectExportBizChildProductList(queryBizProcessChild);
+
             CellStyle cellTableStyle = ExcelProcessDataUtils.cellTableStyle(workbook);
 
             Row row7 = sheet.createRow(7);

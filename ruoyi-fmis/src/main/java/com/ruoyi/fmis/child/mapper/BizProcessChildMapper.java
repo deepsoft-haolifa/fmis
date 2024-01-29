@@ -123,4 +123,7 @@ public interface BizProcessChildMapper {
 
 
     List<InvoiceExportDTO> yyInvoiceExport(InvoiceReqVo invoiceReqVo);
+
+    public List<BizProcessChild> selectExportBizChildProductList(BizProcessChild bizProcessChild);
+
 }
