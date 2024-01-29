@@ -1286,7 +1286,7 @@ public class BizProcessDataProcurementController extends BaseController {
 
             //产品信息
             BizProcessChild queryBizProcessChild22 = new BizProcessChild();
-            queryBizProcessChild22.setProcurementId(String.valueOf(bizProcessDataParamter.getDataId()));
+            queryBizProcessChild22.setProcurementId(String.valueOf(bizProcessData.getDataId()));
             queryBizProcessChild22.setBizEditFlag("2");
             queryBizProcessChild22.setString2("1");
             queryBizProcessChild22.setLevelValue("1");
