@@ -424,6 +424,7 @@
                     productObj["contractPrice"] = rowData["contractPrice"];
                     productObj["string14"] = rowData["string14"];
                     productObj["string15"] = rowData["string15"];
+                    productObj["remark"] = rowData["remark"];
 
                     //productObj["remark"] = $("#productRemark_" + productId).val();
                     productArray.push(productObj);
@@ -675,7 +676,8 @@
                     {field : 'pattachment4CostPrice',title : '成本价',editable: false,visible: false},
                     {field : 'pattachment4Count',title : '可离合减速器数量',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
                     {field : 'pattachment4Coefficient',title : '可离合减速器系数',editable: {type: 'text',validate: function(v){ return numberValidate(v)}}},
-                    {field : 'color',title : '颜色',editable: true}
+                    {field : 'color',title : '颜色',editable: true},
+                    {field : 'remark',title : '备注',editable: true}
                     ]
             };
             $.table.init(options);

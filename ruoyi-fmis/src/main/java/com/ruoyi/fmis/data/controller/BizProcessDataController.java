@@ -3352,7 +3352,7 @@ public class BizProcessDataController extends BaseController {
 
             table.addCell(PdfUtil.mergeCol("十二、", 1, textFont));
             table.addCell(PdfUtil.mergeColLeft("违约责任：合同签订后，买卖双方严格执行双方所签订合同的条款，其中一方不履行或不完全履行合同者应承担相应的法律责任；\n" +
-                    "解决合同纠纷方式：因本合同产生的争议，双方应友好协商解决，协商不成的由供方所在地仲裁委员会仲裁。", 14, textFont));
+                    "解决合同纠纷方式：因本合同产生的争议，双方应友好协商解决，协商不成的由供方所在地人民法院起诉。", 14, textFont));
 
             table.addCell(PdfUtil.mergeCol("十三、", 1, textFont));
             table.addCell(PdfUtil.mergeColLeft("本合同一式贰份。双方各执一份，双方签字盖章后生效（传真件有效）。", 14, textFont));

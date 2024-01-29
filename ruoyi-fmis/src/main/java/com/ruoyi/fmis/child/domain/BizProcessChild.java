@@ -596,6 +596,12 @@ public class BizProcessChild extends BaseEntity {
     @Setter
     @Getter
     private String snRemark;
+    /**
+     *
+     */
+    @Setter
+    @Getter
+    private String remark;
 
     /** 数据ID */
     @Excel(name = "数据ID")
