@@ -59,6 +59,7 @@
         <result property="color" column="color"/>
         <result property="processMode" column="process_mode"/>
         <result property="codeName" column="codeName"/>
+        <result property="productCoefficient" column="productCoefficient"/>
 
     </resultMap>
 
@@ -1699,7 +1700,8 @@
         ds.p1_status as p1Status,ds.p2_status as p2Status,ds.p3_status as p3Status,ds.p4_status as p4Status,pc.data_id
         as dataId,pc.child_id as childId,ds.data_status as dataStatus,
         ds.string4 as procurementId,'A' as levelValue,s.suppliers_id as supplierId,pd.string1 as contractNo,pd.string25
-        as contractSpecial
+        as contractSpecial, pc.string4 as productCoefficient
+
         from biz_product p
         join
         (select ds.string2 product_id,pc1.* from biz_data_status ds, biz_process_child pc1 where ds.child_id=pc1.child_id and ds.type=1) as pc on p.product_id = pc.product_id
@@ -1732,6 +1734,7 @@
         <if test="dataStatus == -1">and ds.data_status is null</if>
 
         <if test="supplierId != null and supplierId != ''">and s.suppliers_id=#{supplierId}</if>
+        <if test="dataId != null">and pd.data_id = #{dataId}</if>
 
         <!-- 备选产品信息 暂时不做 -->
         <if test="levelValue == -2">and</if>

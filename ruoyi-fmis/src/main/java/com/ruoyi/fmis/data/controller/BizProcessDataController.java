@@ -339,11 +339,8 @@ public class BizProcessDataController extends BaseController {
             BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataById(bizId);
             //产品信息
             BizProcessChild queryBizProcessChild22 = new BizProcessChild();
-            queryBizProcessChild22.setProcurementId(String.valueOf(bizProcessData.getDataId()));
-            queryBizProcessChild22.setBizEditFlag("2");
-            queryBizProcessChild22.setString2("1");
-            queryBizProcessChild22.setLevelValue("1");
-            List<BizProcessChild> bizProductChildList = bizProcessChildService.selectExportBizChildProductList(queryBizProcessChild22);
+            queryBizProcessChild22.setDataId(bizProcessData.getDataId());
+            List<BizProcessChild> bizProductChildList = bizProcessChildService.selectBizQuotationProductList(queryBizProcessChild22);
 
             Workbook workbook = new HSSFWorkbook();
             CellStyle cellStyle = workbook.createCellStyle();
@@ -479,6 +476,9 @@ public class BizProcessDataController extends BaseController {
             sheet.addMergedRegion(new CellRangeAddress(7, 7, 7, 11));
             List<Integer> row1CellList = Arrays.asList(8, 9, 10, 11);
             ExcelProcessDataUtils.fillInBlankCell(row7, cellTableStyle, row1CellList);
+            Cell cell_88 = row7.createCell(12);
+            cell_88.setCellValue("备注");
+            cell_88.setCellStyle(cellTableStyle);
 
             int rowCount = 7;
             Double sumTotalNum = new Double(0);
@@ -725,7 +725,7 @@ public class BizProcessDataController extends BaseController {
 
                     Cell cell8 = row.createCell(7);
                     cell8.setCellStyle(cellTableStyle);
-                    if (bizProduct.getString17().equals("其它")) {
+                    if (StringUtils.isNotEmpty(bizProduct.getString17()) && bizProduct.getString17().equals("其它")) {
                         endRemark = bizProduct.getRemark();
                         cell8.setCellValue(bizProduct.getSealingMaterial());
                     } else {
@@ -738,7 +738,9 @@ public class BizProcessDataController extends BaseController {
                     sheet.addMergedRegion(new CellRangeAddress(rowCount, rowCount, 7, 11));
                     List<Integer> rowICellList = Arrays.asList(8, 9, 10, 11);
                     ExcelProcessDataUtils.fillInBlankCell(row, cellTableStyle, rowICellList);
-
+                    Cell cell88 = row.createCell(12);
+                    cell88.setCellStyle(cellTableStyle);
+                    cell88.setCellValue(bizProduct.getRemark());
                 }
             }
             int cc1 = rowCount++;
@@ -2687,11 +2689,8 @@ public class BizProcessDataController extends BaseController {
         }
         //产品信息
         BizProcessChild queryBizProcessChild22 = new BizProcessChild();
-        queryBizProcessChild22.setProcurementId(String.valueOf(bizProcessData.getDataId()));
-        queryBizProcessChild22.setBizEditFlag("2");
-        queryBizProcessChild22.setString2("1");
-        queryBizProcessChild22.setLevelValue("1");
-        List<BizProcessChild> bizProductChildList = bizProcessChildService.selectExportBizChildProductList(queryBizProcessChild22);
+        queryBizProcessChild22.setDataId(bizProcessData.getDataId());
+        List<BizProcessChild> bizProductChildList = bizProcessChildService.selectBizQuotationProductList(queryBizProcessChild22);
         try {
 
 
@@ -2874,7 +2873,8 @@ public class BizProcessDataController extends BaseController {
             table.addCell(PdfUtil.mergeCol("数量", 1, textFont));
             table.addCell(PdfUtil.mergeCol("单价", 1, textFont));
             table.addCell(PdfUtil.mergeCol("合计", 1, textFont));
-            table.addCell(PdfUtil.mergeCol("材质说明", 7, textFont));
+            table.addCell(PdfUtil.mergeCol("材质说明", 5, textFont));
+            table.addCell(PdfUtil.mergeCol("备注", 2, textFont));
 
             Double sumTotalNum = new Double(0);
             Double sumTotalPrice = new Double(0);
@@ -3114,16 +3114,18 @@ public class BizProcessDataController extends BaseController {
                 if (startRemark.length() > 1) {
                     startRemark = startRemark.substring(0, startRemark.length() - 1);
                 }
-                if (bizProduct.getString17().equals("其它")) {
+                if (StringUtils.isNotEmpty(bizProduct.getRemark())) {
                     endRemark = bizProduct.getRemark();
-                    table.addCell(PdfUtil.mergeCol(endRemark, 7, textFont));
+                    table.addCell(PdfUtil.mergeCol(endRemark, 5, textFont));
                 } else {
                     String text = startRemark;
                     if (StringUtils.isNotEmpty(endRemark)) {
                         text = startRemark + " 含" + endRemark;
                     }
-                    table.addCell(PdfUtil.mergeCol(text, 7, textFont));
+                    table.addCell(PdfUtil.mergeCol(text, 5, textFont));
                 }
+                table.addCell(PdfUtil.mergeCol(bizProduct.getRemark(), 2, textFont));
+
 
             }
 
@@ -4003,13 +4005,9 @@ public class BizProcessDataController extends BaseController {
         try {
             BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataById(dataId);
             //产品信息
-            //产品信息
             BizProcessChild queryBizProcessChild22 = new BizProcessChild();
-            queryBizProcessChild22.setProcurementId(String.valueOf(bizProcessData.getDataId()));
-            queryBizProcessChild22.setBizEditFlag("2");
-            queryBizProcessChild22.setString2("1");
-            queryBizProcessChild22.setLevelValue("1");
-            List<BizProcessChild> bizProductChildList = bizProcessChildService.selectExportBizChildProductList(queryBizProcessChild22);
+            queryBizProcessChild22.setDataId(bizProcessData.getDataId());
+            List<BizProcessChild> bizProductChildList = bizProcessChildService.selectBizQuotationProductList(queryBizProcessChild22);
 
             Workbook workbook = new HSSFWorkbook();
             CellStyle cellStyle = workbook.createCellStyle();
