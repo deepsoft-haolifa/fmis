@@ -338,9 +338,12 @@ public class BizProcessDataController extends BaseController {
             Long bizId = bizProcess.getDataId();
             BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataById(bizId);
             //产品信息
-            BizProcessChild queryBizProcessChild = new BizProcessChild();
-            queryBizProcessChild.setDataId(bizProcessData.getDataId());
-            List<BizProcessChild> bizProcessChildList = bizProcessChildService.selectBizQuotationProductList(queryBizProcessChild);
+            BizProcessChild queryBizProcessChild22 = new BizProcessChild();
+            queryBizProcessChild22.setProcurementId(String.valueOf(bizProcessData.getDataId()));
+            queryBizProcessChild22.setBizEditFlag("2");
+            queryBizProcessChild22.setString2("1");
+            queryBizProcessChild22.setLevelValue("1");
+            List<BizProcessChild> bizProductChildList = bizProcessChildService.selectExportBizChildProductList(queryBizProcessChild22);
 
             Workbook workbook = new HSSFWorkbook();
             CellStyle cellStyle = workbook.createCellStyle();
@@ -485,9 +488,9 @@ public class BizProcessDataController extends BaseController {
             Double sumTotalNumRef2 = new Double(0);
             Double string14D = new Double(0);
 
-            if (org.apache.commons.collections4.CollectionUtils.isNotEmpty(bizProcessChildList)) {
-                for (int i = 0; i < bizProcessChildList.size(); i++) {
-                    BizProcessChild bizProduct = bizProcessChildList.get(i);
+            if (org.apache.commons.collections4.CollectionUtils.isNotEmpty(bizProductChildList)) {
+                for (int i = 0; i < bizProductChildList.size(); i++) {
+                    BizProcessChild bizProduct = bizProductChildList.get(i);
                     String endRemark = "";
                     rowCount++;
                     string14D += StringUtils.toDouble(bizProduct.getString14());
@@ -2683,9 +2686,12 @@ public class BizProcessDataController extends BaseController {
             productLogoValue = dictDataService.selectDictLabel("product_logo", bizProcessData.getString19());
         }
         //产品信息
-        BizProcessChild queryBizProcessChild = new BizProcessChild();
-        queryBizProcessChild.setDataId(bizProcessData.getDataId());
-        List<BizProcessChild> bizProcessChildList = bizProcessChildService.selectBizQuotationProductList(queryBizProcessChild);
+        BizProcessChild queryBizProcessChild22 = new BizProcessChild();
+        queryBizProcessChild22.setProcurementId(String.valueOf(bizProcessData.getDataId()));
+        queryBizProcessChild22.setBizEditFlag("2");
+        queryBizProcessChild22.setString2("1");
+        queryBizProcessChild22.setLevelValue("1");
+        List<BizProcessChild> bizProductChildList = bizProcessChildService.selectExportBizChildProductList(queryBizProcessChild22);
         try {
 
 
@@ -2880,11 +2886,11 @@ public class BizProcessDataController extends BaseController {
             //优惠 string14
             Double string14D = new Double(0);
 
-            for (int i = 0; i < bizProcessChildList.size(); i++) {
+            for (int i = 0; i < bizProductChildList.size(); i++) {
 
                 String endRemark = "";
 
-                BizProcessChild bizProduct = bizProcessChildList.get(i);
+                BizProcessChild bizProduct = bizProductChildList.get(i);
 
                 string14D += StringUtils.toDouble(bizProduct.getString14());
                 table.addCell(PdfUtil.mergeCol("" + (i + 1), 1, textFont));
@@ -3997,9 +4003,13 @@ public class BizProcessDataController extends BaseController {
         try {
             BizProcessData bizProcessData = bizProcessDataService.selectBizProcessDataById(dataId);
             //产品信息
-            BizProcessChild queryBizProcessChild = new BizProcessChild();
-            queryBizProcessChild.setDataId(bizProcessData.getDataId());
-            List<BizProcessChild> bizProcessChildList = bizProcessChildService.selectBizQuotationProductList(queryBizProcessChild);
+            //产品信息
+            BizProcessChild queryBizProcessChild22 = new BizProcessChild();
+            queryBizProcessChild22.setProcurementId(String.valueOf(bizProcessData.getDataId()));
+            queryBizProcessChild22.setBizEditFlag("2");
+            queryBizProcessChild22.setString2("1");
+            queryBizProcessChild22.setLevelValue("1");
+            List<BizProcessChild> bizProductChildList = bizProcessChildService.selectExportBizChildProductList(queryBizProcessChild22);
 
             Workbook workbook = new HSSFWorkbook();
             CellStyle cellStyle = workbook.createCellStyle();
@@ -4126,9 +4136,9 @@ public class BizProcessDataController extends BaseController {
 
             int rowCount = 6;
             int count = 0;
-            if (org.apache.commons.collections4.CollectionUtils.isNotEmpty(bizProcessChildList)) {
-                for (int i = 0; i < bizProcessChildList.size(); i++) {
-                    BizProcessChild bizProduct = bizProcessChildList.get(i);
+            if (org.apache.commons.collections4.CollectionUtils.isNotEmpty(bizProductChildList)) {
+                for (int i = 0; i < bizProductChildList.size(); i++) {
+                    BizProcessChild bizProduct = bizProductChildList.get(i);
                     String endRemark = "";
                     rowCount++;
                     String productName = bizProduct.getProductName();
