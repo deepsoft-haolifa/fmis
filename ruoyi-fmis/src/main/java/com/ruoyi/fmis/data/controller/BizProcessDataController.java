@@ -3114,9 +3114,10 @@ public class BizProcessDataController extends BaseController {
                 if (startRemark.length() > 1) {
                     startRemark = startRemark.substring(0, startRemark.length() - 1);
                 }
-                if (StringUtils.isNotEmpty(bizProduct.getRemark())) {
+                if (StringUtils.isNotEmpty(bizProduct.getString17()) && bizProduct.getString17().equals("其它")) {
                     endRemark = bizProduct.getRemark();
-                    table.addCell(PdfUtil.mergeCol(endRemark, 5, textFont));
+                    String sealingMaterial = bizProduct.getSealingMaterial();
+                    table.addCell(PdfUtil.mergeCol(sealingMaterial, 5, textFont));
                 } else {
                     String text = startRemark;
                     if (StringUtils.isNotEmpty(endRemark)) {
