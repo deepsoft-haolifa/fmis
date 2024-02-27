@@ -2535,15 +2535,15 @@ public class BizProcessDataProcurementController extends BaseController {
             sheet.addMergedRegion(new CellRangeAddress(6, 6, 1, 10));
 
             CellStyle cellBottomStyle = ExcelProcessDataUtils.createBottomStyle(workbook);
-//            BizProcessChild queryBizProcessChild = new BizProcessChild();
-//            queryBizProcessChild.setDataId(bizProcessDataParamter.getDataId());
-//            List<BizProcessChild> bizProductChildList = bizProcessChildService.selectBizTestProductList(queryBizProcessChild);
             BizProcessChild queryBizProcessChild = new BizProcessChild();
-            queryBizProcessChild.setProcurementId(String.valueOf(bizProcessDataParamter.getDataId()));
-            queryBizProcessChild.setBizEditFlag("2");
-            queryBizProcessChild.setString2("1");
-            queryBizProcessChild.setLevelValue("1");
-            List<BizProcessChild> bizProductChildList = bizProcessChildService.selectExportBizChildProductList(queryBizProcessChild);
+            queryBizProcessChild.setDataId(bizProcessDataParamter.getDataId());
+            List<BizProcessChild> bizProductChildList = bizProcessChildService.selectBizTestProductList(queryBizProcessChild);
+//            BizProcessChild queryBizProcessChild = new BizProcessChild();
+//            queryBizProcessChild.setProcurementId(String.valueOf(bizProcessDataParamter.getDataId()));
+//            queryBizProcessChild.setBizEditFlag("2");
+//            queryBizProcessChild.setString2("1");
+//            queryBizProcessChild.setLevelValue("1");
+//            List<BizProcessChild> bizProductChildList = bizProcessChildService.selectExportBizChildProductList(queryBizProcessChild);
 
             CellStyle cellTableStyle = ExcelProcessDataUtils.cellTableStyle(workbook);
 
