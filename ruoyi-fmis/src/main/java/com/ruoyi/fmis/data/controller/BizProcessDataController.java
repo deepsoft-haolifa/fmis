@@ -3019,7 +3019,7 @@ public class BizProcessDataController extends BaseController {
                     if (endRemark.length() > 0) {
                         endRemark += ",";
                     }
-                    endRemark += "电磁阀";
+                    endRemark += "电磁阀:" + bizProduct.getPattachment1Name() + "," + bizProduct.getPattachment1ChineseName() + "," + bizProduct.getPattachment1Material();
                 }
 
                 Double pattachmentId2Total = new Double(0.00);
@@ -3034,7 +3034,7 @@ public class BizProcessDataController extends BaseController {
                     if (endRemark.length() > 0) {
                         endRemark += ",";
                     }
-                    endRemark += "回信器数";
+                    endRemark += "回信器数："  + bizProduct.getPattachment2Name() + "," + bizProduct.getPattachment2ChineseName() + "," + bizProduct.getPattachment2Material();;
                 }
 
 
@@ -4224,7 +4224,7 @@ public class BizProcessDataController extends BaseController {
                         if (endRemark.length() > 0) {
                             endRemark += ",";
                         }
-                        endRemark += "电磁阀";
+                        endRemark += "电磁阀:" + bizProduct.getPattachment1Name() + "," + bizProduct.getPattachment1ChineseName() + "," + bizProduct.getPattachment1Material();
                     }
 
                     Long pattachment2Id = bizProduct.getPattachment2Id();
@@ -4232,7 +4232,7 @@ public class BizProcessDataController extends BaseController {
                         if (endRemark.length() > 0) {
                             endRemark += ",";
                         }
-                        endRemark += "回信器数";
+                        endRemark += "回信器数："  + bizProduct.getPattachment2Name() + "," + bizProduct.getPattachment2ChineseName() + "," + bizProduct.getPattachment2Material();;
                     }
                     Long pattachment3Id = bizProduct.getPattachment3Id();
                     if (pattachment3Id != null && pattachment3Id > 0L) {

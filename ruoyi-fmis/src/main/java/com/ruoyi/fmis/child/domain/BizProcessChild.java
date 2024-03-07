@@ -317,7 +317,19 @@ public class BizProcessChild extends BaseEntity {
     private String pattachment1Name;
     @Getter
     @Setter
+    private String pattachment1Material;
+    @Getter
+    @Setter
+    private String pattachment1ChineseName;
+    @Getter
+    @Setter
     private String pattachment2Name;
+    @Getter
+    @Setter
+    private String pattachment2Material;
+    @Getter
+    @Setter
+    private String pattachment2ChineseName;
     @Getter
     @Setter
     private String pattachment3Name;
