@@ -2980,7 +2980,7 @@ public class BizProcessDataController extends BaseController {
                     Double ref2Price = bizProduct.getRef2Price();
                     String ref2Num = bizProduct.getProductRef2Num() + "";
                     String ref2Coefficient = bizProduct.getProductRef2Coefficient();
-                    if (StringUtils.isNotEmpty(ref2Num) && ref2Price > 0 && StringUtils.isNotEmpty(ref2Coefficient)) {
+                    if (StringUtils.isNotEmpty(ref2Num) && Objects.nonNull(ref2Price) && ref2Price > 0 && StringUtils.isNotEmpty(ref2Coefficient)) {
                         ref2Tota = Double.parseDouble(ref2Num) * ref2Price * Double.parseDouble(ref2Coefficient);
                         sumTotalNumRef2 = sumTotalNumRef2 + Double.parseDouble(ref2Num);
                     }
@@ -2997,7 +2997,7 @@ public class BizProcessDataController extends BaseController {
                     Double price = bizProduct.getPattachmentPrice();
                     Double num = bizProduct.getPattachmentCount();
                     Double coefficient = bizProduct.getPattachmentCoefficient();
-                    if (price > 0 && num > 0 && coefficient > 0) {
+                    if (Objects.nonNull(price) && price > 0 && Objects.nonNull(num) && num > 0 && Objects.nonNull(coefficient) && coefficient > 0) {
                         pattachmentIdTotal = price * num * coefficient;
 
                     }
@@ -3013,7 +3013,7 @@ public class BizProcessDataController extends BaseController {
                     Double price = bizProduct.getPattachment1Price();
                     Double num = bizProduct.getPattachment1Count();
                     Double coefficient = bizProduct.getPattachment1Coefficient();
-                    if (price > 0 && num > 0 && coefficient > 0) {
+                    if (Objects.nonNull(price) && price > 0 && Objects.nonNull(num) && num > 0 && Objects.nonNull(coefficient) && coefficient > 0) {
                         pattachmentId1Total = price * num * coefficient;
                     }
                     if (endRemark.length() > 0) {
@@ -3028,7 +3028,7 @@ public class BizProcessDataController extends BaseController {
                     Double price = bizProduct.getPattachment2Price();
                     Double num = bizProduct.getPattachment2Count();
                     Double coefficient = bizProduct.getPattachment2Coefficient();
-                    if (price > 0 && num > 0 && coefficient > 0) {
+                    if (Objects.nonNull(price) && price > 0 && Objects.nonNull(num) && num > 0 && Objects.nonNull(coefficient) && coefficient > 0) {
                         pattachmentId2Total = price * num * coefficient;
                     }
                     if (endRemark.length() > 0) {
@@ -3044,7 +3044,7 @@ public class BizProcessDataController extends BaseController {
                     Double price = bizProduct.getPattachment3Price();
                     Double num = bizProduct.getPattachment3Count();
                     Double coefficient = bizProduct.getPattachment3Coefficient();
-                    if (price > 0 && num > 0 && coefficient > 0) {
+                    if (Objects.nonNull(price) && price > 0 && Objects.nonNull(num) && num > 0 && Objects.nonNull(coefficient) && coefficient > 0) {
                         pattachmentId3Total = price * num * coefficient;
                     }
                     if (endRemark.length() > 0) {
@@ -3059,7 +3059,7 @@ public class BizProcessDataController extends BaseController {
                     Double price = bizProduct.getPattachment4Price();
                     Double num = bizProduct.getPattachment4Count();
                     Double coefficient = bizProduct.getPattachment4Coefficient();
-                    if (price > 0 && num > 0 && coefficient > 0) {
+                    if (Objects.nonNull(price) && price > 0 && Objects.nonNull(num) && num > 0 && Objects.nonNull(coefficient) && coefficient > 0) {
                         pattachmentId4Total = price * num * coefficient;
                     }
                     if (endRemark.length() > 0) {
