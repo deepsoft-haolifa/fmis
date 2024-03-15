@@ -604,7 +604,7 @@ public class BizProcessDataController extends BaseController {
                         Double num = bizProduct.getPattachmentCount();
                         Double coefficient = bizProduct.getPattachmentCoefficient();
                         BizProductAttachment bizProductAttachment = bizProductAttachmentService.selectBizProductAttachmentById(pattachmentId);
-                        if (price > 0 && num > 0 && coefficient > 0) {
+                        if (Objects.nonNull(price) && price > 0 && Objects.nonNull(num) && num > 0 && Objects.nonNull(coefficient) && coefficient > 0) {
                             pattachmentIdTotal = price * num * coefficient;
 
                         }
