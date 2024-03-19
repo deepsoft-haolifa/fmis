@@ -218,6 +218,10 @@
             <div class="col-sm-2">
                 <input name="price15" id="price15" class="form-control" type="text" th:field="*{price15}" readonly>
             </div>
+            <label class="col-sm-1 control-label">优惠金额：</label>
+            <div class="col-sm-2">
+                <input name="discount" id="discount" class="form-control" th:field="*{discount}" type="text" onkeyup="AmountKeyUp(this)" onblur="calculateTotalPrice()">
+            </div>
         </div>
         <input type="hidden" id="productOperationType" name="productOperationType" value="0">
         <!-- 选择产品传参 -->

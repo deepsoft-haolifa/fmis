@@ -260,6 +260,10 @@
             <div class="col-sm-2">
                 <input name="orderCoefficient" id="orderCoefficient" class="form-control" type="text"  readonly>
             </div>
+            <label class="col-sm-1 control-label">优惠金额：</label>
+            <div class="col-sm-2">
+                <input name="discount" id="discount" class="form-control" type="text" onkeyup="AmountKeyUp(this)" onblur="calculateTotalPrice()">
+            </div>
         </div>
 
         <!--
