@@ -493,7 +493,6 @@ public class BizProcessDataController extends BaseController {
                     BizProcessChild bizProduct = bizProductChildList.get(i);
                     String endRemark = "";
                     rowCount++;
-                    string14D += StringUtils.toDouble(bizProduct.getString14());
                     String productName = bizProduct.getProductName();
                     String model = bizProduct.getModel();
                     //执行器计算
@@ -773,20 +772,25 @@ public class BizProcessDataController extends BaseController {
             cell_94.setCellStyle(cellTableStyle);
             Cell cell_95 = row9.createCell(5);
             cell_95.setCellStyle(cellTableStyle);
-            double discountMoney = sumTotalAmount - string14D;
+            String discount = bizProcessData.getDiscount();
+            Double discountDouble = new Double(0);
+            if (StringUtils.isNotEmpty(discount)) {
+                discountDouble = Double.parseDouble(discount);
+            }
+            double discountMoney = sumTotalAmount - discountDouble;
             Cell cell_96 = row9.createCell(6);
             cell_96.setCellStyle(cellTableStyle);
             cell_96.setCellValue(StringUtils.getDoubleString0(discountMoney));
-            Cell cell_97 = row9.createCell(7);
-            cell_97.setCellStyle(cellTableStyle);
-            if (string14D.equals(new Double(0))) {
-                cell_97.setCellValue("");
-            } else {
-                cell_97.setCellValue("优惠价：" + string14D);
-            }
-            sheet.addMergedRegion(new CellRangeAddress(cc, cc, 7, 11));
             List<Integer> rowICellList = Arrays.asList(7, 8, 9, 10, 11);
             ExcelProcessDataUtils.fillInBlankCell(row9, cellTableStyle, rowICellList);
+            sheet.addMergedRegion(new CellRangeAddress(cc, cc, 7, 11));
+            Cell cell_97 = row9.createCell(7);
+            cell_97.setCellStyle(cellTableStyle);
+            if (discountDouble.equals(new Double(0))) {
+                cell_97.setCellValue("");
+            } else {
+                cell_97.setCellValue("优惠价：" + discountDouble);
+            }
 
 
             int bb = rowCount++;
@@ -3153,14 +3157,19 @@ public class BizProcessDataController extends BaseController {
             }
 
 
-//            double discountMoney = sumTotalAmount - string14D;
-            if (string14D > 0) {
+            String discount = bizProcessData.getDiscount();
+            Double discountDouble = new Double(0);
+            if (StringUtils.isNotEmpty(discount)) {
+                discountDouble = Double.parseDouble(discount);
+            }
+            double discountMoney = sumTotalAmount - discountDouble;
+            if (discountDouble > 0) {
                 if (!isSchengchan) {
                     table.addCell(PdfUtil.mergeColRight("优惠后合同总金额", 5, textFont));//4
                     table.addCell(PdfUtil.mergeCol("", 1, textFont));//总数量
                     table.addCell(PdfUtil.mergeCol("", 1, textFont));//单价
-                    table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(sumTotalAmount), 1, textFont));//合计
-                    table.addCell(PdfUtil.mergeCol("", 7, textFont));//备注
+                    table.addCell(PdfUtil.mergeCol(StringUtils.getDoubleString0(discountMoney), 1, textFont));//合计
+                    table.addCell(PdfUtil.mergeCol("优惠价："+StringUtils.getDoubleString0(discountDouble), 7, textFont));//备注
                 } else {
                     table.addCell(PdfUtil.mergeColRight("优惠后合同总金额", 5, textFont));//4
                     table.addCell(PdfUtil.mergeCol("", 1, textFont));//总数量
@@ -3174,7 +3183,7 @@ public class BizProcessDataController extends BaseController {
 
             table.addCell(PdfUtil.mergeColRight("大写人民币合计", 5, textFont));
             if (!isSchengchan) {
-                table.addCell(PdfUtil.mergeCol(StringUtils.convert(sumTotalAmount), 3, textFont));//合计
+                table.addCell(PdfUtil.mergeCol(StringUtils.convert(discountMoney), 3, textFont));//合计
             } else {
                 table.addCell(PdfUtil.mergeCol("", 3, textFont));//合计
             }
