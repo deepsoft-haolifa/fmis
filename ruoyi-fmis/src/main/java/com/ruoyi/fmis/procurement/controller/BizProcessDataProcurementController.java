@@ -4586,7 +4586,15 @@ public class BizProcessDataProcurementController extends BaseController {
                         supplier = bizSuppliers.getNickName();
                     }
                 }
-                String orderDate = DateUtils.dateTime(bizProcess.getDatetime3());
+                String orderDate = DateUtils.dateTime(bizProcess.getDatetime2());
+                String supplierDate = DateUtils.dateTime(bizProcess.getDatetime3());
+                String customerId = bizProcess.getString4();
+                BizCustomer bizCustomer = new BizCustomer();
+                if (StringUtils.isNotEmpty(customerId)) {
+                    bizCustomer = bizCustomerService.selectBizCustomerById(Long.parseLong(customerId));
+                }
+                String customer = bizCustomer.getCodeName();
+                String type = bizProcess.getString5();
 
                 if (!CollectionUtils.isEmpty(bizProductChildList)) {
                     for (int i = 0; i < bizProductChildList.size(); i++) {
@@ -4601,7 +4609,13 @@ public class BizProcessDataProcurementController extends BaseController {
                         exportVO.setShippingLocation(address);
                         exportVO.setOrderDate(orderDate);
                         exportVO.setOrderNo(orderNo);
+                        exportVO.setSupplierDate(supplierDate);
+                        exportVO.setType(type);
+                        exportVO.setCustomer(customer);
 
+
+                        exportVO.setValvebodyMaterial(bizProcessChild.getValvebodyMaterial());
+                        exportVO.setSerial(bizProcessChild.getSeries());
                         exportVO.setModel(bizProcessChild.getModel());
                         exportVO.setName(bizProcessChild.getProductName());
                         exportVO.setSpecifications(bizProcessChild.getSpecifications());
@@ -4633,7 +4647,12 @@ public class BizProcessDataProcurementController extends BaseController {
                         exportVO.setShippingLocation(address);
                         exportVO.setOrderDate(orderDate);
                         exportVO.setOrderNo(orderNo);
+                        exportVO.setSupplierDate(supplierDate);
+                        exportVO.setType(type);
+                        exportVO.setCustomer(customer);
 
+                        exportVO.setValvebodyMaterial(bizProcessChild.getValvebodyMaterial());
+                        exportVO.setSerial(bizProcessChild.getActuatorString3());
                         exportVO.setModel(bizProcessChild.getActuatorString1());
                         exportVO.setName(bizProcessChild.getActuatorName());
                         exportVO.setSpecifications("");
@@ -4661,7 +4680,12 @@ public class BizProcessDataProcurementController extends BaseController {
                         exportVO.setShippingLocation(address);
                         exportVO.setOrderDate(orderDate);
                         exportVO.setOrderNo(orderNo);
+                        exportVO.setSupplierDate(supplierDate);
+                        exportVO.setType(type);
+                        exportVO.setCustomer(customer);
 
+                        exportVO.setValvebodyMaterial(bizProcessChild.getValvebodyMaterial());
+                        exportVO.setSerial(bizProcessChild.getSeries());
                         exportVO.setModel(bizProcessChild.getActuatorString1());
                         exportVO.setName(bizProcessChild.getRef1Name());
                         exportVO.setSpecifications(bizProcessChild.getRef1Specifications());

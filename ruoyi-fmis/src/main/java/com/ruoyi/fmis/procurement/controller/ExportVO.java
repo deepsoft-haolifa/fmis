@@ -39,6 +39,16 @@ public class ExportVO {
     private String shippingLocation;
     @ExcelHandle(name = "订单要求日期")
     private String orderDate;
+    @ExcelHandle(name = "供应商发货日期")
+    private String supplierDate;
+    @ExcelHandle(name = "类别")
+    private String type;
+    @ExcelHandle(name = "客户代号")
+    private String customer;
+    @ExcelHandle(name = "阀体材质")
+    private String valvebodyMaterial;
+    @ExcelHandle(name = "系列")
+    private String serial;
     @ExcelHandle(name = "备注")
     private String remark;
 
