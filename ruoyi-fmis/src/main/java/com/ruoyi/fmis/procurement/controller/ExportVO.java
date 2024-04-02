@@ -26,9 +26,9 @@ public class ExportVO {
     @ExcelHandle(name = "数量")
     private String number;
     @ExcelHandle(name = "单价")
-    private String unitPrice;
+    private Double unitPrice;
     @ExcelHandle(name = "总价")
-    private String totalPrice;
+    private Double totalPrice;
     @ExcelHandle(name = "材质要求")
     private String materialRequirements;
     @ExcelHandle(name = "订单号")
@@ -37,6 +37,8 @@ public class ExportVO {
     private String shippingLocation;
     @ExcelHandle(name = "订单要求日期")
     private String orderDate;
+    @ExcelHandle(name = "备注")
+    private String remark;
 
 
 

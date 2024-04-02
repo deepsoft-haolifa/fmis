@@ -91,6 +91,9 @@
             <a class="btn btn-success" onclick="exportPurchaseContractToShanXi()">
                 <i class="fa fa-street-view"></i> 导出侯马订单
             </a>
+            <a class="btn btn-success" onclick="exportReminderList()">
+                <i class="fa fa-street-view"></i> 导出催货单
+            </a>
             <a class="btn btn-success" onclick="exportPurchaseContractForOther()">
                 <i class="fa fa-street-view"></i> 导出代采商
             </a>
@@ -121,6 +124,7 @@
             exportPurchaseContract: prefix + "/exportPurchaseContract",
             exportPurchaseContractForOther: prefix + "/exportPurchaseContractForOther",
             exportPurchaseContractToShanXi: prefix + "/exportPurchaseContractToShanXi",
+            exportReminderList: prefix + "/exportReminderList",
             uniqueId: "dataId",
             modalName: "采购管理",
             rowStyle:function (row, index) {
@@ -470,6 +474,37 @@
             var paramsJson = $("#" + currentId).serializeArray();
             paramsJson.push({"name": "dataId", "value": row.dataId});
             $.post($.table._option.exportPurchaseContractToShanXi, paramsJson, function (result) {
+                if (result.code == web_status.SUCCESS) {
+                    window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;
+                } else if (result.code == web_status.WARNING) {
+                    $.modal.alertWarning(result.msg)
+                } else {
+                    $.modal.alertError(result.msg);
+                }
+                $.modal.closeLoading();
+            });
+        });
+    }
+
+    function exportReminderList(formId) {
+        var row = $('#bootstrap-table').bootstrapTable('getSelections');
+        var rows = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
+        if ($.common.isEmpty(row)) {
+            $.modal.alertWarning("请选择一条记录");
+            return;
+        }
+        var dataList = new Array;
+        for (let i = 0; i < row.length; i++) {
+            dataList.push(row[i].dataId);
+        }
+        console.log("dataList=" + dataList);
+        $.modal.confirm("确定导出催货表吗？", function () {
+            var currentId = $.common.isEmpty(formId) ? $('form').attr('id') : formId;
+            console.log("currentId=" + currentId);
+            $.modal.loading("正在导出数据，请稍后...");
+            var paramsJson = $("#" + currentId).serializeArray();
+            paramsJson.push({"name": "dataId", "value": dataList});
+            $.post($.table._option.exportReminderList, paramsJson, function (result) {
                 if (result.code == web_status.SUCCESS) {
                     window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;
                 } else if (result.code == web_status.WARNING) {
