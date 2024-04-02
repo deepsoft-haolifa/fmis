@@ -4583,10 +4583,7 @@ public class BizProcessDataProcurementController extends BaseController {
                 if (StringUtils.isNotEmpty(bizProcess.getString6())) {
                     BizSuppliers bizSuppliers = bizSuppliersService.selectBizSuppliersById(Long.parseLong(bizProcess.getString6()));
                     if (Objects.nonNull(bizSuppliers)) {
-                        supplier = bizSuppliers.getName();
-                        if (StringUtils.isNotBlank(supplier) && supplier.length() > 4) {
-                            supplier = supplier.substring(0, 4);
-                        }
+                        supplier = bizSuppliers.getNickName();
                     }
                 }
                 String orderDate = DateUtils.dateTime(bizProcess.getDatetime3());
