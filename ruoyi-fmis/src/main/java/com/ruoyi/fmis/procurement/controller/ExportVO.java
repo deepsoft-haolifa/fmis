@@ -13,8 +13,8 @@ public class ExportVO {
 
     @ExcelHandle(name = "下单日期")
     private String createTime;
-    @ExcelHandle(name = "合同编号")
-    private String contractNumber;
+    @ExcelHandle(name = "订单号")
+    private String orderNo;
     @ExcelHandle(name = "供应商")
     private String supplier;
     @ExcelHandle(name = "型号")
@@ -33,8 +33,8 @@ public class ExportVO {
     private Double totalPrice;
     @ExcelHandle(name = "材质要求")
     private String materialRequirements;
-    @ExcelHandle(name = "订单号")
-    private String orderNo;
+    @ExcelHandle(name = "合同编号")
+    private String contractNumber;
     @ExcelHandle(name = "发货地点")
     private String shippingLocation;
     @ExcelHandle(name = "订单要求日期")
