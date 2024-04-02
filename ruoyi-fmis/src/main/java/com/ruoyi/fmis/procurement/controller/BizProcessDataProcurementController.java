@@ -4579,12 +4579,14 @@ public class BizProcessDataProcurementController extends BaseController {
                 Date createTime = bizProcess.getCreateTime();
                 String orderNo = bizProcess.getString12();
                 String supplier = "";
-                String address = "";
+                String address = bizProcess.getString24();
                 if (StringUtils.isNotEmpty(bizProcess.getString6())) {
                     BizSuppliers bizSuppliers = bizSuppliersService.selectBizSuppliersById(Long.parseLong(bizProcess.getString6()));
                     if (Objects.nonNull(bizSuppliers)) {
-                        address = bizSuppliers.getAddress();
                         supplier = bizSuppliers.getName();
+                        if (StringUtils.isNotBlank(supplier) && supplier.length() > 4) {
+                            supplier = supplier.substring(0, 4);
+                        }
                     }
                 }
                 String orderDate = DateUtils.dateTime(bizProcess.getDatetime3());
@@ -4608,6 +4610,7 @@ public class BizProcessDataProcurementController extends BaseController {
                         exportVO.setSpecifications(bizProcessChild.getSpecifications());
                         exportVO.setNumber(bizProcessChild.getProductNum());
                         exportVO.setUnitPrice(bizProcessChild.getProductProcurementPrice());
+                        exportVO.setPressure(bizProcessChild.getNominalPressure());
                         exportVO.setTotalPrice(amount);
                         String caizhi = "阀体:" + bizProcessChild.getValvebodyMaterial() + ",阀芯:" + bizProcessChild.getValveElement()
                                 + ",密封材质:" + bizProcessChild.getSealingMaterial() + ",驱动形式:" + bizProcessChild.getDriveForm()
@@ -4639,6 +4642,7 @@ public class BizProcessDataProcurementController extends BaseController {
                         exportVO.setSpecifications("");
                         exportVO.setNumber(bizProcessChild.getActuatorNum());
                         exportVO.setUnitPrice(Double.valueOf(bizProcessChild.getActuatorString6()));
+                        exportVO.setPressure(bizProcessChild.getNominalPressure());
                         exportVO.setTotalPrice(amount);
                         exportVO.setMaterialRequirements(bizProcessChild.getString5());
                         exportVO.setRemark(bizProcessChild.getRemark());
@@ -4665,6 +4669,7 @@ public class BizProcessDataProcurementController extends BaseController {
                         exportVO.setName(bizProcessChild.getRef1Name());
                         exportVO.setSpecifications(bizProcessChild.getRef1Specifications());
                         exportVO.setNumber(String.valueOf(bizProcessChild.getProductRef1Num()));
+                        exportVO.setPressure(bizProcessChild.getNominalPressure());
                         exportVO.setUnitPrice(bizProcessChild.getRef1Price());
                         exportVO.setTotalPrice(amount);
                         exportVO.setMaterialRequirements(bizProcessChild.getRef1MaterialRequire());

@@ -23,6 +23,8 @@ public class ExportVO {
     private String name;
     @ExcelHandle(name = "规格")
     private String specifications;
+    @ExcelHandle(name = "压力")
+    private String pressure;
     @ExcelHandle(name = "数量")
     private String number;
     @ExcelHandle(name = "单价")
